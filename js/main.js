@@ -2,8 +2,7 @@
 // for the presence of the template element's content attribute.
 if ('content' in document.createElement('template')) {
     const table = new Table("producttable", "productrow");
-    table.addRow("1235646565", "Stuff");
-    table.addRow("0384928528", "Acme Kidney Beans 2");
+    DATA.forEach(it => table.addRow(...Object.values(it)))
     Array(10).fill().map((_, i) => i)
         .forEach((i) => table.addRow(i, `Stuff ${i}`));
 } else {

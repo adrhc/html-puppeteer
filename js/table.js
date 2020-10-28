@@ -1,3 +1,8 @@
+const DATA = [
+    {code: "1235646565", name: "Stuff"},
+    {code: "0384928528", name: "Acme Kidney Beans 2"}
+]
+
 class Table {
     constructor(tableId, rowTemplateId) {
         this.tableElem = document.getElementById(tableId);
