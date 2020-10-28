@@ -91,3 +91,8 @@ h1 {
 h1 span {
   color: #167F92;
 }
+
+.editor {
+  font-weight: bold;
+  color: blueviolet;
+}
