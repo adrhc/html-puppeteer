@@ -1,31 +1,45 @@
-const DATA = [
-    {code: "1235646565", name: "Stuff"},
-    {code: "0384928528", name: "Acme Kidney Beans 2"}
-]
-
 class Table {
-    constructor(tableId, rowTemplateId, editorTemplateId) {
+    constructor(tableId) {
         this.tableElem = document.getElementById(tableId);
         this.tbody = this.tableElem.tBodies[0]; // HTMLTableSectionElement
-        this.rowTemplateContent = document.getElementById(rowTemplateId).content;
-        this.editorTemplateContent = document.getElementById(editorTemplateId).content;
-        this.rowTemplateElem = this.rowTemplateContent.firstElementChild;
-        this.editorTemplateElem = this.editorTemplateContent.firstElementChild;
     }
 
-    insertRow(index) {
+    deleteRow(index) {
+        this.tbody.deleteRow(index);
+    }
+
+    insertRow(index, rowTemplateElem, cellData) {
+        const rowClone = rowTemplateElem.cloneNode(true);
         const row = this.tbody.insertRow(index);
-        const clone = this.editorTemplateElem.cloneNode(true);
-        row.appendChild(clone);
+        for (let i = 0; i < rowTemplateElem.childElementCount; i++) {
+            // alternative 1
+            // const cell = row.insertCell();
+            // const field = rowTemplateElem.children[i].firstElementChild.cloneNode(true);
+            // field.value = cellData[field.name];
+            // cell.appendChild(field);
+
+            // alternative 2
+            row.append(...rowClone.childNodes.values());
+        }
+        for (let p in cellData) {
+            if (!cellData.hasOwnProperty(p)) {
+                continue;
+            }
+            const cell = row.cells.namedItem(p);
+            if (!cell) {
+                continue;
+            }
+            cell.children.namedItem(p).value = cellData[p];
+        }
     }
 
-    addRow() {
+    appendRow(rowTemplateElem, ...cellData) {
         // Clone the new row and insert it into the table
-        const clone = this.rowTemplateElem.cloneNode(true);
+        const clone = rowTemplateElem.cloneNode(true);
         // const clone = rowTemplateContent.cloneNode(true);
         // console.log(clone);
         const td = clone.querySelectorAll("td");
-        [...arguments].forEach((_, i) => td[i].textContent = arguments[i]);
+        cellData.forEach((_, i) => td[i].textContent = cellData[i]);
         this.tbody.appendChild(clone);
     };
 }

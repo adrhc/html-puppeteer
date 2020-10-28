@@ -20,17 +20,19 @@
     </table>
 
     <template id="productrow">
-        <tr>
-            <td>col1</td>
-            <td>col2</td>
+        <tr ondblclick="view.activateEditor(this)">
+            <td data-id="code">col1</td>
+            <td data-id="name">col2</td>
         </tr>
     </template>
 
     <template id="editor">
-        <td colspan="2" class="editor">row editor</td>
+        <td class="editor" id="code"><input type="text" name="code"></td>
+        <td class="editor" id="name"><input type="text" name="name"></td>
     </template>
 
     <script src="js/table.js"></script>
+    <script src="js/main-view.js"></script>
     <script src="js/main.js"></script>
 </body>
 
