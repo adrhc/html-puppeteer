@@ -12,14 +12,18 @@ class MainView {
             return;
         }
         this.table.deleteRow(this.editIndex);
-        this.table.insertRow(this.editIndex, this.rowTemplateElem, this.data[this.editIndex]);
+        const cellData = this.data[this.editIndex];
+        this.table.insertRow(this.editIndex, this.rowTemplateElem,
+            (cell) => cell.textContent = cellData[cell.dataset['name']]);
     }
 
     activateEditor(rowElem) {
         this.cancelEdit();
         this.editIndex = rowElem.rowIndex - 1;
         this.table.deleteRow(this.editIndex);
-        this.table.insertRow(this.editIndex, this.editorTemplateContent, this.data[this.editIndex]);
+        const cellData = this.data[this.editIndex];
+        this.table.insertRow(this.editIndex, this.editorTemplateContent,
+            (cell) => cell.firstElementChild.value = cellData[cell.firstElementChild.name]);
     }
 
     render() {

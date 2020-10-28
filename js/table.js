@@ -8,9 +8,11 @@ class Table {
         this.tbody.deleteRow(index);
     }
 
-    insertRow(index, rowTemplateElem, cellData) {
+    insertRow(index, rowTemplateElem, cellDataLoader) {
         const rowClone = rowTemplateElem.cloneNode(true);
         const row = this.tbody.insertRow(index);
+        // todo: copy the ondblclick from template
+        // row.ondblclick = eval(rowClone.getAttribute('ondblclick'));
         // filling the row
         for (let i = 0; i < rowTemplateElem.childElementCount; i++) {
             row.append(...rowClone.childNodes.values());
@@ -18,11 +20,7 @@ class Table {
         // filling the cell/field values
         for (let i = 0; i < row.cells.length; i++) {
             const cell = row.cells[i];
-            if (cell.childElementCount) {
-                cell.firstElementChild.value = cellData[cell.firstElementChild.name];
-            } else {
-                cell.textContent = cellData[cell.dataset['name']];
-            }
+            cellDataLoader(cell);
         }
     }
 
