@@ -11,25 +11,18 @@ class Table {
     insertRow(index, rowTemplateElem, cellData) {
         const rowClone = rowTemplateElem.cloneNode(true);
         const row = this.tbody.insertRow(index);
+        // filling the row
         for (let i = 0; i < rowTemplateElem.childElementCount; i++) {
-            // alternative 1
-            // const cell = row.insertCell();
-            // const field = rowTemplateElem.children[i].firstElementChild.cloneNode(true);
-            // field.value = cellData[field.name];
-            // cell.appendChild(field);
-
-            // alternative 2
             row.append(...rowClone.childNodes.values());
         }
-        for (let p in cellData) {
-            if (!cellData.hasOwnProperty(p)) {
-                continue;
+        // filling the cell/field values
+        for (let i = 0; i < row.cells.length; i++) {
+            const cell = row.cells[i];
+            if (cell.childElementCount) {
+                cell.firstElementChild.value = cellData[cell.firstElementChild.name];
+            } else {
+                cell.textContent = cellData[cell.dataset['name']];
             }
-            const cell = row.cells.namedItem(p);
-            if (!cell) {
-                continue;
-            }
-            cell.children.namedItem(p).value = cellData[p];
         }
     }
 
