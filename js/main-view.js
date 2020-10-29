@@ -24,9 +24,8 @@ class MainView {
             return;
         }
         this.table.deleteRow(this.editIndex);
-        const rowData = this.data[this.editIndex];
         this.table.insertRow(this.editIndex, this.rowTemplateElem,
-            (cell) => this.showReadOnlyCell(cell, rowData),
+            (cell) => this.showReadOnlyCell(cell, this.data[this.editIndex]),
             this.setRowEventHandlers.bind(this));
     }
 
