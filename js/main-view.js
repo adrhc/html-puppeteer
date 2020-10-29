@@ -11,14 +11,22 @@ class MainView {
         row.ondblclick = () => this.activateEditor(row);
     }
 
+    showReadOnlyCell(cell, rowData) {
+        cell.textContent = rowData[cell.dataset['name']];
+    }
+
+    showEditableCell(cell, rowData) {
+        cell.firstElementChild.value = rowData[cell.firstElementChild.name];
+    }
+
     cancelEdit() {
-        if (!this.editIndex) {
+        if (this.editIndex == null || this.editIndex < 0) {
             return;
         }
         this.table.deleteRow(this.editIndex);
-        const cellData = this.data[this.editIndex];
+        const rowData = this.data[this.editIndex];
         this.table.insertRow(this.editIndex, this.rowTemplateElem,
-            (cell) => cell.textContent = cellData[cell.dataset['name']],
+            (cell) => this.showReadOnlyCell(cell, rowData),
             this.setRowEventHandlers.bind(this));
     }
 
@@ -26,9 +34,15 @@ class MainView {
         this.cancelEdit();
         this.editIndex = rowElem.rowIndex - 1;
         this.table.deleteRow(this.editIndex);
-        const cellData = this.data[this.editIndex];
+        const rowData = this.data[this.editIndex];
         this.table.insertRow(this.editIndex, this.editorTemplateContent,
-            (cell) => cell.firstElementChild.value = cellData[cell.firstElementChild.name]);
+            (cell) => {
+                if (cell.firstElementChild) {
+                    this.showEditableCell(cell, rowData)
+                } else {
+                    this.showReadOnlyCell(cell, rowData)
+                }
+            });
     }
 
     render() {

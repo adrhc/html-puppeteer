@@ -1,9 +1,9 @@
 // Test to see if the browser supports the HTML template element by checking
 // for the presence of the template element's content attribute.
 if ('content' in document.createElement('template')) {
-    const DATA = Array(10).fill()
+    const DATA = Array(8).fill()
         .map((_, i) => {
-            return {code: Math.random(), name: `Stuff ${i}`};
+            return {nr: i + 1, code: Math.random(), name: `Stuff ${i}`};
         });
     window['view'] = new MainView(DATA);
     view.render();

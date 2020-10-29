@@ -11,6 +11,7 @@
 <table id="producttable" class="responstable">
     <thead>
     <tr>
+        <th>#</th>
         <th>UPC_Code</th>
         <th>Product_Name</th>
     </tr>
@@ -22,12 +23,14 @@
 
 <template id="productrow">
     <tr>
-        <td data-name="code">col1</td>
-        <td data-name="name">col2</td>
+        <td data-name="nr">nr</td>
+        <td data-name="code">code</td>
+        <td data-name="name">name</td>
     </tr>
 </template>
 
 <template id="editor">
+    <td data-name="nr" class="editor"></td>
     <td data-name="code" class="editor"><input type="text" name="code"></td>
     <td data-name="name" class="editor"><input type="text" name="name"></td>
 </template>
