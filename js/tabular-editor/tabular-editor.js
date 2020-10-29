@@ -12,13 +12,13 @@ class TabularEditor {
         if (!this.selectedItem) {
             return;
         }
-        this.selectedItem.hide(); // removes the editor
+        this.selectedItem.hide(); // remove the editor
         this.selectedItem = new ReadOnlyRow(this.context, this.table, this.readOnlyRowTemplate)
         this.selectedItem.render(this.configureEventHandlers.bind(this));
     }
 
     activateEditor(rowElem) {
-        // deactivates the previously opened editor if any
+        // deactivate the previously opened editor if any
         this.deactivateEditor();
         this.context.selectedIndex = rowElem.rowIndex - 1;
         this.selectedItem = new ReadOnlyRow(this.context, this.table, this.readOnlyRowTemplate);
