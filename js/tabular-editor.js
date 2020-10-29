@@ -1,4 +1,4 @@
-class MainView {
+class TabularEditor {
     constructor(data) {
         this.data = data;
         this.entityView = new EntityView();

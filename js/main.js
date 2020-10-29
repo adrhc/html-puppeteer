@@ -5,8 +5,7 @@ if ('content' in document.createElement('template')) {
         .map((_, i) => {
             return {nr: i + 1, code: Math.random(), name: `Stuff ${i}`};
         });
-    window['view'] = new MainView(DATA);
-    view.init();
+    new TabularEditor(DATA).init();
 } else {
     // Find another way to add the rows to the table because
     // the HTML template element is not supported.
