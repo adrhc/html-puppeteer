@@ -8,7 +8,7 @@ class TabularEditor {
         this.editorTemplate = editorTemplate;
     }
 
-    deactivateEditor() {
+    restoreReadOnlyView() {
         if (!this.selectedItem) {
             return;
         }
@@ -19,7 +19,7 @@ class TabularEditor {
 
     activateEditor(rowElem) {
         // deactivate the previously opened editor if any
-        this.deactivateEditor();
+        this.restoreReadOnlyView();
         this.context.selectedIndex = rowElem.rowIndex - 1;
         this.selectedItem = new ReadOnlyRow(this.context, this.table, this.readOnlyRowTemplate);
         this.selectedItem.hide();
