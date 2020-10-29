@@ -53,7 +53,7 @@ If you like this solution, you might also want to check out the 1.0 version:
 .responstable td {
   display: block;
   word-wrap: break-word;
-  max-width: 7em;
+  /*max-width: 7em;*/
 }
 .responstable td:first-child {
   display: table-cell;
@@ -67,7 +67,7 @@ If you like this solution, you might also want to check out the 1.0 version:
 }
 .responstable th, .responstable td {
   text-align: left;
-  margin: .5em 1em;
+  /*margin: .5em 1em;*/
 }
 @media (min-width: 480px) {
   .responstable th, .responstable td {
