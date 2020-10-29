@@ -1,32 +1,39 @@
 class EntityView {
-    constructor(table, editIndex) {
-        this.table = table;
-        this.editIndex = editIndex;
+    constructor() {
+        this.table = new Table("producttable");
+        this.rowTemplateContent = document.getElementById("productrow").content;
+        this.rowTemplateElem = this.rowTemplateContent.firstElementChild;
+        this.editorTemplateContent = document.getElementById("editor").content;
     }
 
     createEditor() {
-        this.table.insertRow(this.editIndex, this.editorTemplateContent,
-            (cell) => new PropertyView(cell, this.getEditedData()).showValue());
+        this.table.insertRow(this.editedPosition, this.editorTemplateContent,
+            (cell) => new PropertyView(cell, this.data).showValue());
     }
 
-    createEntityView() {
-        this.table.insertRow(this.editIndex, this.rowTemplateElem,
-            (cell) => new PropertyView(cell, this.getEditedData()).showValue(),
-            this.configureEventHandlers.bind(this));
+    createReadOnlyView(eventHandlersConfigurer) {
+        this.table.insertRow(this.editedPosition, this.rowTemplateElem,
+            (cell) => new PropertyView(cell, this.data).showValue(),
+            eventHandlersConfigurer);
     }
 
     /**
      * the "representation" could be the read-only view or the editor
      */
-    removeEntityRepresentation() {
-        this.table.deleteRow(this.editIndex);
-    }
-
-    getEditedData() {
-        return this.data[this.editIndex];
+    removeRepresentation() {
+        this.table.deleteRow(this.editedPosition);
     }
 
     isEditorActive() {
-        return this.editIndex >= 0;
+        return this.editedPosition >= 0;
+    }
+
+    setEdited(index, data) {
+        this.editedPosition = index;
+        this.data = data;
+    }
+
+    init(data, eventHandlersConfigurer) {
+        this.table.appendRow(this.rowTemplateElem, data, eventHandlersConfigurer);
     }
 }
