@@ -6,7 +6,7 @@ class TabularEditorState {
         this.items = items;
     }
 
-    selectItem(index) {
-        this.selectedIndex = index;
+    selectionExists() {
+        return this.selectedIndex >= 0;
     }
 }

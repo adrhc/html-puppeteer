@@ -1,6 +1,4 @@
 class TabularEditor {
-    selectedItem = undefined;
-
     constructor(items, tableId, readOnlyRowTemplate, editorTemplate) {
         this.context = new TabularEditorState(items);
         this.table = new Table(tableId);
@@ -8,34 +6,39 @@ class TabularEditor {
         this.editorTemplate = editorTemplate;
     }
 
-    restoreReadOnlyView() {
-        if (!this.selectedItem) {
+    deactivateEditorImpl() {
+        if (!this.context.selectionExists()) {
             return;
         }
-        this.selectedItem.hide(); // remove the editor
-        this.selectedItem = new ReadOnlyRow(this.context, this.table, this.readOnlyRowTemplate)
-        this.selectedItem.render(this.configureEventHandlers.bind(this));
+        let view = new EditableRow(this.context, this.table, this.editorTemplate);
+        view.hide(); // remove the editor
+        view = new ReadOnlyRow(this.context, this.table, this.readOnlyRowTemplate)
+        view.render(this.configureEventHandlers.bind(this));
     }
 
-    activateEditor(rowElem) {
+    activateEditorImpl() {
+        let view = new ReadOnlyRow(this.context, this.table, this.readOnlyRowTemplate);
+        view.hide();
+        view = new EditableRow(this.context, this.table, this.editorTemplate);
+        view.render();
+    }
+
+    selectItem(rowElem) {
         // deactivate the previously opened editor if any
-        this.restoreReadOnlyView();
+        this.deactivateEditorImpl();
         this.context.selectedIndex = rowElem.rowIndex - 1;
-        this.selectedItem = new ReadOnlyRow(this.context, this.table, this.readOnlyRowTemplate);
-        this.selectedItem.hide();
-        this.selectedItem = new EditableRow(this.context, this.table, this.editorTemplate);
-        this.selectedItem.render();
+        this.activateEditorImpl();
     }
 
     init() {
-        this.selectedItem = new ReadOnlyRow(this.context, this.table, this.readOnlyRowTemplate)
+        const readOnlyRow = new ReadOnlyRow(this.context, this.table, this.readOnlyRowTemplate)
         this.context.items.forEach((it, i) => {
             this.context.selectedIndex = i;
-            this.selectedItem.render(this.configureEventHandlers.bind(this));
+            readOnlyRow.render(this.configureEventHandlers.bind(this));
         })
     }
 
     configureEventHandlers(row) {
-        row.ondblclick = () => this.activateEditor(row);
+        row.ondblclick = () => this.selectItem(row);
     }
 }
