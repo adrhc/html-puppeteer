@@ -8,6 +8,29 @@ class TabularEditor {
         this.editableRow = new EditableRow(this.context, this.table, this.editorTemplate);
     }
 
+    /**
+     * event
+     */
+    selectItem(rowElem) {
+        // deactivate the previously opened editor if any
+        this.deactivateEditorImpl();
+        this.context.selectedIndex = rowElem.rowIndex - 1;
+        this.activateEditorImpl();
+    }
+
+    /**
+     * initializer
+     */
+    render() {
+        this.context.items.forEach((it, i) => {
+            this.context.selectedIndex = i;
+            this.readOnlyRow.render(this.handlersSetter());
+        })
+    }
+
+    /**
+     * private
+     */
     deactivateEditorImpl() {
         if (!this.context.selectionExists()) {
             return;
@@ -16,25 +39,17 @@ class TabularEditor {
         this.readOnlyRow.render(this.handlersSetter());
     }
 
+    /**
+     * private
+     */
     activateEditorImpl() {
         this.readOnlyRow.hide(); // remove the read-only row
         this.editableRow.render();
     }
 
-    selectItem(rowElem) {
-        // deactivate the previously opened editor if any
-        this.deactivateEditorImpl();
-        this.context.selectedIndex = rowElem.rowIndex - 1;
-        this.activateEditorImpl();
-    }
-
-    render() {
-        this.context.items.forEach((it, i) => {
-            this.context.selectedIndex = i;
-            this.readOnlyRow.render(this.handlersSetter());
-        })
-    }
-
+    /**
+     * private
+     */
     handlersSetter() {
         const handlers = (row) => {
             row.ondblclick = () => this.selectItem(row);
