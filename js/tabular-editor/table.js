@@ -4,6 +4,12 @@ class Table {
         this.tbody = this.tableElem.tBodies[0]; // HTMLTableSectionElement
     }
 
+    deleteAllRows() {
+        while (this.tbody.rows.length) {
+            this.tbody.deleteRow(0);
+        }
+    }
+
     deleteRow(index) {
         this.tbody.deleteRow(index);
     }
