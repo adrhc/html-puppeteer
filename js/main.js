@@ -6,7 +6,7 @@ if ('content' in document.createElement('template')) {
             return {nr: i + 1, code: Math.random(), name: `Stuff ${i}`};
         });
     new TabularEditor(DATA, "producttable",
-        "readOnlyRowTemplate", "editorTemplate").init();
+        "readOnlyRowTemplate", "editorTemplate").render();
 } else {
     // Find another way to add the rows to the table because
     // the HTML template element is not supported.
