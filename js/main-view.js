@@ -19,7 +19,7 @@ class MainView {
         cell.firstElementChild.value = rowData[cell.firstElementChild.name];
     }
 
-    cancelEdit() {
+    deactivateEditor() {
         if (this.editIndex == null || this.editIndex < 0) {
             return;
         }
@@ -31,7 +31,7 @@ class MainView {
     }
 
     activateEditor(rowElem) {
-        this.cancelEdit();
+        this.deactivateEditor();
         this.editIndex = rowElem.rowIndex - 1;
         this.table.deleteRow(this.editIndex);
         const rowData = this.data[this.editIndex];
