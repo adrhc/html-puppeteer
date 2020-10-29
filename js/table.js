@@ -8,29 +8,31 @@ class Table {
         this.tbody.deleteRow(index);
     }
 
-    insertRow(index, rowTemplateElem, cellDataLoader) {
-        const rowClone = rowTemplateElem.cloneNode(true);
+    insertRow(index, cellsContainerTmpl, cellManipulator, rowManipulator) {
+        const cellsCTEClone = cellsContainerTmpl.cloneNode(true);
         const row = this.tbody.insertRow(index);
-        // todo: copy the ondblclick from template
-        // row.ondblclick = eval(rowClone.getAttribute('ondblclick'));
+        if (rowManipulator) {
+            rowManipulator(row);
+        }
         // filling the row
-        for (let i = 0; i < rowTemplateElem.childElementCount; i++) {
-            row.append(...rowClone.childNodes.values());
+        for (let i = 0; i < cellsContainerTmpl.childElementCount; i++) {
+            row.append(...cellsCTEClone.childNodes.values());
         }
         // filling the cell/field values
         for (let i = 0; i < row.cells.length; i++) {
             const cell = row.cells[i];
-            cellDataLoader(cell);
+            cellManipulator(cell);
         }
     }
 
-    appendRow(rowTemplateElem, ...cellData) {
+    appendRow(rowTmpl, cellData, rowManipulator) {
         // Clone the new row and insert it into the table
-        const clone = rowTemplateElem.cloneNode(true);
-        // const clone = rowTemplateContent.cloneNode(true);
-        // console.log(clone);
-        const td = clone.querySelectorAll("td");
-        cellData.forEach((_, i) => td[i].textContent = cellData[i]);
-        this.tbody.appendChild(clone);
+        const rowClone = rowTmpl.cloneNode(true);
+        if (rowManipulator) {
+            rowManipulator(rowClone);
+        }
+        const cellDataArray = [...Object.values(cellData)];
+        cellDataArray.forEach((_, i) => rowClone.cells[i].textContent = cellDataArray[i]);
+        this.tbody.appendChild(rowClone);
     };
 }

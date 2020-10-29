@@ -7,6 +7,10 @@ class MainView {
         this.editorTemplateContent = document.getElementById("editor").content;
     }
 
+    setRowEventHandlers(row) {
+        row.ondblclick = () => this.activateEditor(row);
+    }
+
     cancelEdit() {
         if (!this.editIndex) {
             return;
@@ -14,7 +18,8 @@ class MainView {
         this.table.deleteRow(this.editIndex);
         const cellData = this.data[this.editIndex];
         this.table.insertRow(this.editIndex, this.rowTemplateElem,
-            (cell) => cell.textContent = cellData[cell.dataset['name']]);
+            (cell) => cell.textContent = cellData[cell.dataset['name']],
+            this.setRowEventHandlers.bind(this));
     }
 
     activateEditor(rowElem) {
@@ -27,6 +32,7 @@ class MainView {
     }
 
     render() {
-        this.data.forEach(it => this.table.appendRow(this.rowTemplateElem, ...Object.values(it)))
+        this.data.forEach(it => this.table
+            .appendRow(this.rowTemplateElem, it, this.setRowEventHandlers.bind(this)))
     }
 }
