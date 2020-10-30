@@ -25,7 +25,7 @@ class TabularEditor {
     render() {
         this.context.items.forEach((it, i) => {
             this.context.selectedIndex = i;
-            this.renderReadOnlyRow();
+            this.renderReadOnlySelection();
         })
         this.context.selectedIndex = undefined;
     }
@@ -43,13 +43,13 @@ class TabularEditor {
      */
     changeSelectionToReadOnly() {
         this.editableRow.hide(); // remove the editor
-        this.renderReadOnlyRow();
+        this.renderReadOnlySelection();
     }
 
     /**
      * private
      */
-    renderReadOnlyRow() {
+    renderReadOnlySelection() {
         this.readOnlyRow.render();
         this.configureRowEventHandlers();
     }
