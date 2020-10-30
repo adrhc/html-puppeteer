@@ -4,55 +4,64 @@ class TabularEditor {
         this.table = new Table(tableId);
         this.readOnlyRowTemplate = readOnlyRowTemplate;
         this.editorTemplate = editorTemplate;
-        this.readOnlyRow = new ReadOnlyRow(this.context, this.table, this.readOnlyRowTemplate);
-        this.editableRow = new EditableRow(this.context, this.table, this.editorTemplate);
     }
 
     /**
      * event handler
      */
     selectItem(rowElem) {
-        if (!this.context.selectionExists()) {
-            return;
+        if (this.context.selectionExists()) {
+            this.context.selectedRow.hide();
+            this.makeReadOnlyRow(this.context.selectedIndex);
         }
-        this.makeReadOnlyRow();
-        this.context.selectedIndex = rowElem.rowIndex - 1;
-        this.makeEditableRow();
+        this.makeEditableRow(rowElem.rowIndex - 1)
     }
 
     /**
      * initializer
      */
     render() {
-        this.context.items.forEach((it, i) => {
-            this.context.selectedIndex = i;
-            this.readOnlyRow.render();
-            this.setRowEventsHandlers();
-        })
+        this.context.items.forEach((it, i) => this.makeReadOnlyRow(i));
+        this.context.selectedRow = undefined;
     }
 
     /**
      * private
      */
-    makeReadOnlyRow() {
-        this.editableRow.hide(); // remove the editor
-        this.readOnlyRow.render();
-        this.setRowEventsHandlers();
+    makeEditableRow(index) {
+        this.context.selectedRow = this.editableRow(index);
+        this.context.selectedRow.hide();
+        this.context.selectedRow.render();
     }
 
     /**
      * private
      */
-    makeEditableRow() {
-        this.readOnlyRow.hide(); // remove the read-only row
-        this.editableRow.render();
+    makeReadOnlyRow(index) {
+        this.context.selectedRow = this.readOnlyRow(index);
+        this.context.selectedRow.render();
+        this.configureRowEventHandlers();
     }
 
     /**
      * private
      */
-    setRowEventsHandlers() {
-        const row = this.table.getRowAt(this.context.selectedIndex);
+    configureRowEventHandlers() {
+        const row = this.context.selectedRow.htmlTableRowElement;
         row.ondblclick = () => this.selectItem(row);
+    }
+
+    /**
+     * private
+     */
+    readOnlyRow(index) {
+        return new ReadOnlyRow(index, this.context.items[index], this.table, this.readOnlyRowTemplate);
+    }
+
+    /**
+     * private
+     */
+    editableRow(index) {
+        return new EditableRow(index, this.context.items[index], this.table, this.editorTemplate);
     }
 }

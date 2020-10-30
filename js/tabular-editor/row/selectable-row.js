@@ -1,16 +1,21 @@
 class SelectableRow {
-    constructor(tabularEditorState, table, templateId) {
-        this.context = tabularEditorState;
+    constructor(index, values, table, templateId) {
+        this.index = index;
+        this.values = values;
         this.table = table;
         this.templateId = templateId;
     }
 
     hide() {
-        this.table.deleteRow(this.context.selectedIndex);
+        this.table.deleteRow(this.index);
     }
 
-    get rowData() {
-        return this.context.items[this.context.selectedIndex];
+    nameOf(cell) {
+        return cell.dataset['name'];
+    }
+
+    get htmlTableRowElement() {
+        return this.table.getRowAt(this.index);
     }
 
     get tmplContent() {

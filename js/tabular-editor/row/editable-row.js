@@ -1,14 +1,10 @@
 class EditableRow extends ReadOnlyRow {
-    constructor(tabularEditorState, table, editorTemplate) {
-        super(tabularEditorState, table, editorTemplate);
+    constructor(index, values, table, editorTemplate) {
+        super(index, values, table, editorTemplate);
     }
 
     render() {
-        this.table.insertRow(this.context.selectedIndex, this.tmplContent, this.renderCell.bind(this));
-    }
-
-    renderEditableCell(cell) {
-        cell.firstElementChild.value = this.rowData[cell.firstElementChild.name];
+        this.table.insertRow(this.index, this.tmplContent, this.renderCell.bind(this));
     }
 
     renderCell(cell) {
@@ -17,5 +13,9 @@ class EditableRow extends ReadOnlyRow {
         } else {
             super.renderCell(cell);
         }
+    }
+
+    renderEditableCell(cell) {
+        cell.firstElementChild.value = this.values[cell.firstElementChild.name];
     }
 }
