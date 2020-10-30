@@ -1,17 +1,7 @@
 class Table {
     constructor(tableId) {
-        this.tableElem = document.getElementById(tableId);
-        this.tbody = this.tableElem.tBodies[0]; // HTMLTableSectionElement
-    }
-
-    deleteAllRows() {
-        while (this.tbody.rows.length) {
-            this.tbody.deleteRow(0);
-        }
-    }
-
-    deleteRow(index) {
-        this.tbody.deleteRow(index);
+        this.tableId = tableId;
+        this.tbody = this.tBody()[0];
     }
 
     insertRow(index, cellsContainerTmpl, cellManipulator) {
@@ -25,11 +15,26 @@ class Table {
         }
     }
 
+    deleteRow(index) {
+        this.tbody.deleteRow(index);
+    }
+
+    deleteAllRows() {
+        this.tBody().empty();
+    }
+
     /**
      * @param index
      * @returns {*|HTMLTableRowElement|string}
      */
     getRowAt(index) {
         return this.tbody.rows[index];
+    }
+
+    /**
+     * private
+     */
+    tBody() {
+        return $(`#${this.tableId} > tbody`);
     }
 }
