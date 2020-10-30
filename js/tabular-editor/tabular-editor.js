@@ -12,12 +12,11 @@ class TabularEditor {
      * event handler
      */
     selectItem(rowElem) {
-        if (!this.context.selectionExists()) {
-            return;
+        if (this.context.selectionExists()) {
+            this.changeSelectionToReadOnly();
         }
-        this.makeReadOnlyRow();
         this.context.selectedIndex = rowElem.rowIndex - 1;
-        this.makeEditableRow();
+        this.changeSelectionToEditable();
     }
 
     /**
@@ -26,24 +25,15 @@ class TabularEditor {
     render() {
         this.context.items.forEach((it, i) => {
             this.context.selectedIndex = i;
-            this.readOnlyRow.render();
-            this.setRowEventsHandlers();
+            this.renderReadOnlyRow();
         })
+        this.context.selectedIndex = undefined;
     }
 
     /**
      * private
      */
-    makeReadOnlyRow() {
-        this.editableRow.hide(); // remove the editor
-        this.readOnlyRow.render();
-        this.setRowEventsHandlers();
-    }
-
-    /**
-     * private
-     */
-    makeEditableRow() {
+    changeSelectionToEditable() {
         this.readOnlyRow.hide(); // remove the read-only row
         this.editableRow.render();
     }
@@ -51,7 +41,23 @@ class TabularEditor {
     /**
      * private
      */
-    setRowEventsHandlers() {
+    changeSelectionToReadOnly() {
+        this.editableRow.hide(); // remove the editor
+        this.renderReadOnlyRow();
+    }
+
+    /**
+     * private
+     */
+    renderReadOnlyRow() {
+        this.readOnlyRow.render();
+        this.configureRowEventHandlers();
+    }
+
+    /**
+     * private
+     */
+    configureRowEventHandlers() {
         const row = this.table.getRowAt(this.context.selectedIndex);
         row.ondblclick = () => this.selectItem(row);
     }
