@@ -9,13 +9,15 @@ class TabularEditor {
     }
 
     /**
-     * event
+     * event handler
      */
     selectItem(rowElem) {
-        // deactivate the previously opened editor if any
-        this.deactivateEditorImpl();
+        if (!this.context.selectionExists()) {
+            return;
+        }
+        this.makeReadOnlyRow();
         this.context.selectedIndex = rowElem.rowIndex - 1;
-        this.activateEditorImpl();
+        this.makeEditableRow();
     }
 
     /**
@@ -24,25 +26,24 @@ class TabularEditor {
     render() {
         this.context.items.forEach((it, i) => {
             this.context.selectedIndex = i;
-            this.readOnlyRow.render(this.handlersSetter());
+            this.readOnlyRow.render();
+            this.setRowEventsHandlers();
         })
     }
 
     /**
      * private
      */
-    deactivateEditorImpl() {
-        if (!this.context.selectionExists()) {
-            return;
-        }
+    makeReadOnlyRow() {
         this.editableRow.hide(); // remove the editor
-        this.readOnlyRow.render(this.handlersSetter());
+        this.readOnlyRow.render();
+        this.setRowEventsHandlers();
     }
 
     /**
      * private
      */
-    activateEditorImpl() {
+    makeEditableRow() {
         this.readOnlyRow.hide(); // remove the read-only row
         this.editableRow.render();
     }
@@ -50,10 +51,8 @@ class TabularEditor {
     /**
      * private
      */
-    handlersSetter() {
-        const handlers = (row) => {
-            row.ondblclick = () => this.selectItem(row);
-        }
-        return handlers.bind(this);
+    setRowEventsHandlers() {
+        const row = this.table.getRowAt(this.context.selectedIndex);
+        row.ondblclick = () => this.selectItem(row);
     }
 }

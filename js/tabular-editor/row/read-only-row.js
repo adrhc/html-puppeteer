@@ -3,9 +3,9 @@ class ReadOnlyRow extends SelectableRow {
         super(tabularEditorState, table, readOnlyRowTemplate);
     }
 
-    render(eventHandlersConfigurer) {
-        this.table.insertRow(this.context.selectedIndex, this.tmplContent.firstElementChild,
-            this.renderCell.bind(this), eventHandlersConfigurer);
+    render() {
+        this.table.insertRow(this.context.selectedIndex,
+            this.tmplContent.firstElementChild, this.renderCell.bind(this));
     }
 
     renderCell(cell) {
