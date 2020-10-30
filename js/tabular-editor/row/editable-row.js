@@ -7,15 +7,25 @@ class EditableRow extends ReadOnlyRow {
         this.table.insertRow(this.context.selectedIndex, this.tmplContent, this.renderCell.bind(this));
     }
 
-    renderEditableCell(cell) {
-        cell.firstElementChild.value = this.rowData[cell.firstElementChild.name];
-    }
-
     renderCell(cell) {
-        if (cell.firstElementChild) {
+        if (this.isEditableCell(cell)) {
             this.renderEditableCell(cell);
         } else {
             super.renderCell(cell);
         }
+    }
+
+    /**
+     * private
+     */
+    renderEditableCell(cell) {
+        cell.firstElementChild.value = this.rowData[cell.firstElementChild.name];
+    }
+
+    /**
+     * private
+     */
+    isEditableCell(cell) {
+        return !!cell.firstElementChild;
     }
 }
