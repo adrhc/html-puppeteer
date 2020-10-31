@@ -36,20 +36,19 @@ class RowView {
      * private
      */
     cellHasField(cell) {
-        return !!cell.firstElementChild;
+        return this.getCellField(cell).length > 0;
     }
 
     /**
      * private
      */
     putCellFieldValue(cell) {
+        this.getCellField(cell).val(this.getDataFor(cell));
+    }
+
+    getCellField(cell) {
         const name = this.getCellName(cell);
-        const field = $(`#${name}`);
-        if (field.length) {
-            field.val(this.getDataFor(cell));
-        } else {
-            cell.firstElementChild.value = this.getDataFor(cell);
-        }
+        return $(cell).find(`input[name='${name}']`)
     }
 
     /**
