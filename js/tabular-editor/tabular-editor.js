@@ -1,11 +1,11 @@
 class TabularEditor {
     constructor(items, tableId, readOnlyRowTemplate, editorTemplate) {
         this.context = new TabularEditorState(items);
-        this.table = new Table(tableId);
+        this.table = new TableView(tableId);
         this.readOnlyRowTemplate = readOnlyRowTemplate;
         this.editorTemplate = editorTemplate;
-        this.readOnlyRow = new ReadOnlyRow(this.context, this.table, this.readOnlyRowTemplate);
-        this.editableRow = new EditableRow(this.context, this.table, this.editorTemplate);
+        this.readOnlyRow = new RowView(this.context, this.table, this.readOnlyRowTemplate);
+        this.editableRow = new RowView(this.context, this.table, this.editorTemplate);
     }
 
     /**
@@ -35,7 +35,7 @@ class TabularEditor {
      */
     changeSelectionToEditable() {
         this.readOnlyRow.hide(); // remove the read-only row
-        this.editableRow.render();
+        this.editableRow.show();
     }
 
     /**
@@ -50,7 +50,7 @@ class TabularEditor {
      * private
      */
     renderReadOnlySelection() {
-        this.readOnlyRow.render();
+        this.readOnlyRow.show();
         this.configureRowEventHandlers();
     }
 
