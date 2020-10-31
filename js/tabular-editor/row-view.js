@@ -43,14 +43,28 @@ class RowView {
      * private
      */
     putCellFieldValue(cell) {
-        cell.firstElementChild.value = this.rowData[cell.firstElementChild.name];
+        const name = this.getCellName(cell);
+        const field = $(`#${name}`);
+        if (field.length) {
+            field.val(this.getDataFor(cell));
+        } else {
+            cell.firstElementChild.value = this.getDataFor(cell);
+        }
     }
 
     /**
      * private
      */
     putCellTextValue(cell) {
-        cell.textContent = this.rowData[cell.dataset['name']];
+        cell.textContent = this.getDataFor(cell);
+    }
+
+    getDataFor(cell) {
+        return this.rowData[this.getCellName(cell)];
+    }
+
+    getCellName(cell) {
+        return cell.dataset['name'];
     }
 
     get rowData() {

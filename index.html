@@ -4,6 +4,7 @@
 <head>
     <title>JavaScript DOM test</title>
     <link rel="stylesheet" href="css/table.css">
+    <link rel="stylesheet" href="css/table-buttons.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
@@ -32,8 +33,18 @@
 <template id="editorTemplate">
     <tr>
         <td data-name="nr" class="editor"></td>
-        <td data-name="code" class="editor"><input type="text" name="code"></td>
-        <td data-name="name" class="editor"><input type="text" name="name"></td>
+        <td data-name="code" class="editor">
+            <input type="text" name="code">
+        </td>
+        <td data-name="name" class="editor">
+            <div class="last-cell name">
+                <input type="text" name="name" id="name">
+            </div>
+            <div class="last-cell buttons">
+                <button type="button">Save</button>
+                <button type="button" class="cancel">Cancel</button>
+            </div>
+        </td>
     </tr>
 </template>
 
