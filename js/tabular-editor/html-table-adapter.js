@@ -1,9 +1,17 @@
-class TableView {
+/**
+ * Role: adapter to HTMLTableElement
+ */
+class HtmlTableAdapter {
     constructor(tableId) {
         this.tableId = tableId;
         this.tbody = this.tBody()[0];
     }
 
+    /**
+     * @param index
+     * @param rowTemplateId
+     * @returns {HTMLTableRowElement}
+     */
     createRow(index, rowTemplateId) {
         const row = this.tbody.insertRow(index);
         row.innerHTML = $(`#${rowTemplateId}`).html();

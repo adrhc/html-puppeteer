@@ -1,12 +1,12 @@
 class TabularEditorState {
     items = undefined;
-    selectedIndex = -1;
+    selectedRow = -1;
 
     constructor(items) {
         this.items = items;
     }
 
     selectionExists() {
-        return this.selectedIndex >= 0;
+        return this.selectedRow >= 0;
     }
 }

@@ -1,17 +1,24 @@
+/**
+ * Role: represent visually a row
+ */
 class RowView {
-    constructor(tabularEditorState, table, rowTemplateId) {
+    constructor(tabularEditorState, table, rowTemplateId, rowEventHandlersConfigFn) {
         this.context = tabularEditorState;
         this.table = table;
         this.rowTemplateId = rowTemplateId;
+        this.rowEventHandlersConfigFn = rowEventHandlersConfigFn;
     }
 
     hide() {
-        this.table.deleteRow(this.context.selectedIndex);
+        this.table.deleteRow(this.context.selectedRow);
     }
 
     show() {
-        const row = this.table.createRow(this.context.selectedIndex, this.rowTemplateId);
+        const row = this.table.createRow(this.context.selectedRow, this.rowTemplateId);
         Array.from(row.cells).forEach(cell => this.putCellValue(cell));
+        if (this.rowEventHandlersConfigFn) {
+            this.rowEventHandlersConfigFn(row);
+        }
     }
 
     /**
@@ -47,6 +54,6 @@ class RowView {
     }
 
     get rowData() {
-        return this.context.items[this.context.selectedIndex];
+        return this.context.items[this.context.selectedRow];
     }
 }
