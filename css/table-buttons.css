@@ -1,3 +1,10 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v7.0.29,
+* Autoprefixer: v9.7.6
+* Browsers: last 50 version
+*/
+
 .last-cell  {
     display: block;
     /*border-style: solid;*/
@@ -9,8 +16,8 @@
 
 .last-cell.name input {
     width: 100%;
-    width: -moz-available;
     width: -webkit-fill-available;
+    width: -moz-available;
     width: fill-available;
 }
 
