@@ -2,25 +2,26 @@
  * Role: capture all table events
  */
 class TabularEditor {
-    constructor(items, tableId, readOnlyRowTemplate, editorTemplate) {
+    constructor(items, tableId, readOnlyRowTmpl, editorRowTmpl) {
         this.context = new TabularEditorState(items);
         this.table = new HtmlTableAdapter(tableId);
-        this.readOnlyRowTemplate = readOnlyRowTemplate;
-        this.editorTemplate = editorTemplate;
-        this.readOnlyRow = new RowView(this.context, this.table,
-            this.readOnlyRowTemplate, this.rowEventHandlersConfigFn.bind(this));
-        this.editableRow = new RowView(this.context, this.table, this.editorTemplate);
+        this.readOnlyRowTmpl = readOnlyRowTmpl;
+        this.editorRowTmpl = editorRowTmpl;
+        this.readOnlyRow = new RowView(this.context, this.table, this.readOnlyRowTmpl);
+        this.editableRow = new RowView(this.context, this.table, this.editorRowTmpl);
+        this.configureRowEvents();
     }
 
     /**
      * event handler
      */
-    selectItem(rowElem) {
-        if (this.context.selectionExists()) {
-            this.switchRepresentation(this.editableRow, this.readOnlyRow);
+    onRowSelected(ev) {
+        const tabularEditor = ev.data;
+        if (tabularEditor.context.selectionExists()) {
+            tabularEditor.switchRepresentation(tabularEditor.editableRow, tabularEditor.readOnlyRow);
         }
-        this.context.selectedRow = rowElem.rowIndex - 1;
-        this.switchRepresentation(this.readOnlyRow, this.editableRow);
+        tabularEditor.context.selectedRow = this.rowIndex - 1;
+        tabularEditor.switchRepresentation(tabularEditor.readOnlyRow, tabularEditor.editableRow);
     }
 
     /**
@@ -47,10 +48,8 @@ class TabularEditor {
 
     /**
      * private method
-     *
-     * @param row for which to configure the event handlers
      */
-    rowEventHandlersConfigFn(row) {
-        row.ondblclick = () => this.selectItem(row);
+    configureRowEvents() {
+        $(`#${this.table.tableId} tbody`).on('dblclick', 'tr', this, this.onRowSelected);
     }
 }

@@ -22,7 +22,7 @@
     </tbody>
 </table>
 
-<template id="readOnlyRowTemplate">
+<template id="readOnlyRowTmpl">
     <tr>
         <td data-name="nr">nr</td>
         <td data-name="code">code</td>
@@ -30,7 +30,7 @@
     </tr>
 </template>
 
-<template id="editorTemplate">
+<template id="editorRowTmpl">
     <tr>
         <td data-name="nr" class="editor"></td>
         <td data-name="code" class="editor">
@@ -41,16 +41,14 @@
                 <input type="text" name="name">
             </div>
             <div class="last-cell buttons">
-                <button type="button">Save</button>
-                <button type="button" class="cancel">Cancel</button>
+                <button type="button">Cancel</button>
+                <button type="button" class="float-right">Save</button>
             </div>
         </td>
     </tr>
 </template>
 
 <script src="js/tabular-editor/html-table-adapter.js"></script>
-<!--<script src="js/cell-view.js"></script>-->
-<!--<script src="js/entity-view.js"></script>-->
 <script src="js/tabular-editor/row-view.js"></script>
 <script src="js/tabular-editor/tabular-editor-state.js"></script>
 <script src="js/tabular-editor/tabular-editor.js"></script>

@@ -4,7 +4,7 @@
 class HtmlTableAdapter {
     constructor(tableId) {
         this.tableId = tableId;
-        this.tbody = this.tBody()[0];
+        this.tbody = this.tBody(0);
     }
 
     /**
@@ -37,7 +37,11 @@ class HtmlTableAdapter {
     /**
      * private
      */
-    tBody() {
-        return $(`#${this.tableId} > tbody`);
+    tBody(index) {
+        if (index >= 0) {
+            return $(`#${this.tableId} > tbody`)[index];
+        } else {
+            return $(`#${this.tableId} > tbody`);
+        }
     }
 }

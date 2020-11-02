@@ -2,11 +2,10 @@
  * Role: represent visually a row
  */
 class RowView {
-    constructor(tabularEditorState, table, rowTemplateId, rowEventHandlersConfigFn) {
+    constructor(tabularEditorState, table, rowTemplateId) {
         this.context = tabularEditorState;
         this.table = table;
         this.rowTemplateId = rowTemplateId;
-        this.rowEventHandlersConfigFn = rowEventHandlersConfigFn;
     }
 
     hide() {
@@ -16,9 +15,6 @@ class RowView {
     show() {
         const row = this.table.createRow(this.context.selectedRow, this.rowTemplateId);
         Array.from(row.cells).forEach(cell => this.putCellValue(cell));
-        if (this.rowEventHandlersConfigFn) {
-            this.rowEventHandlersConfigFn(row);
-        }
     }
 
     /**
