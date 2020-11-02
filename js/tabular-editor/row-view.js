@@ -47,6 +47,9 @@ class RowView {
         this.getCellField(cell).val(this.getDataFor(cell));
     }
 
+    /**
+     * private
+     */
     getCellField(cell) {
         const name = this.getCellName(cell);
         return $(cell).find(`input[name='${name}']`)
@@ -59,14 +62,23 @@ class RowView {
         cell.textContent = this.getDataFor(cell);
     }
 
+    /**
+     * private
+     */
     getDataFor(cell) {
         return this.rowData[this.getCellName(cell)];
     }
 
+    /**
+     * private
+     */
     getCellName(cell) {
         return cell.dataset['name'];
     }
 
+    /**
+     * private
+     */
     get rowData() {
         return this.context.items[this.context.selectedRow];
     }
