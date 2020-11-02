@@ -37,17 +37,6 @@ class TabularEditor {
 
     /**
      * private method
-     *
-     * @param from: the representation to hide
-     * @param to: the representation to show
-     */
-    switchRowView(from, to) {
-        from.hide();
-        to.show();
-    }
-
-    /**
-     * private method
      */
     configureRowEvents() {
         $(`#${this.table.tableId} tbody`).on('dblclick', 'tr', this, this.onRowSelected);

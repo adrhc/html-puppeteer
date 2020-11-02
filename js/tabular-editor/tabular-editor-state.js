@@ -1,6 +1,5 @@
 class TabularEditorState {
-    items = undefined;
-    selectedRow = -1;
+    selectedRow = undefined;
 
     constructor(items) {
         this.items = items;
