@@ -8,6 +8,11 @@ class RowView {
         this.rowTemplateId = rowTemplateId;
     }
 
+    switchTo(toRowView) {
+        this.hide();
+        toRowView.show();
+    }
+
     hide() {
         this.table.deleteRow(this.context.selectedRow);
     }

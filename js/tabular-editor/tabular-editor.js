@@ -13,15 +13,15 @@ class TabularEditor {
     }
 
     /**
-     * event handler
+     * row selection event handler
      */
     onRowSelected(ev) {
         const tabularEditor = ev.data;
         if (tabularEditor.context.selectionExists()) {
-            tabularEditor.switchRepresentation(tabularEditor.editableRow, tabularEditor.readOnlyRow);
+            tabularEditor.editableRow.switchTo(tabularEditor.readOnlyRow);
         }
         tabularEditor.context.selectedRow = this.rowIndex - 1;
-        tabularEditor.switchRepresentation(tabularEditor.readOnlyRow, tabularEditor.editableRow);
+        tabularEditor.readOnlyRow.switchTo(tabularEditor.editableRow);
     }
 
     /**
@@ -41,7 +41,7 @@ class TabularEditor {
      * @param from: the representation to hide
      * @param to: the representation to show
      */
-    switchRepresentation(from, to) {
+    switchRowView(from, to) {
         from.hide();
         to.show();
     }

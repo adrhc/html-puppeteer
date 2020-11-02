@@ -27,14 +27,6 @@ class HtmlTableAdapter {
     }
 
     /**
-     * @param rowIndex
-     * @returns {*|HTMLTableRowElement|string}
-     */
-    getRowAt(rowIndex) {
-        return this.tbody.rows[rowIndex];
-    }
-
-    /**
      * private
      */
     tBody(index) {
