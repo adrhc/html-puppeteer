@@ -17,6 +17,9 @@ class TabularEditor {
      */
     onRowSelected(ev) {
         const tabularEditor = ev.data;
+        if (tabularEditor.context.selectedRow === this.rowIndex - 1) {
+            return false;
+        }
         if (tabularEditor.context.selectionExists()) {
             tabularEditor.editableRow.switchTo(tabularEditor.readOnlyRow);
         }
