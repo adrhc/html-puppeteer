@@ -1,12 +1,22 @@
 class TabularEditorState {
-    selectedRow = undefined;
+    selectedIndex = undefined;
 
     constructor(items) {
         this.items = items;
     }
 
     selectionExists() {
-        return this.selectedRow >= 0;
+        return this.selectedIndex >= 0;
+    }
+
+    selectedIsPersistent() {
+        return this.items && this.items.length > this.selectedIndex &&
+            $.isNumeric(this.items[this.selectedIndex].id);
+    }
+
+    removeSelected() {
+        this.items.splice(this.selectedIndex, 1);
+        this.selectedIndex = undefined;
     }
 
     get items() {

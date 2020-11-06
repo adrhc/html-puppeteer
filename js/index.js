@@ -10,9 +10,9 @@ if ('content' in document.createElement('template')) {
             options.data = JSON.stringify(options.data);
         }
     });
-    $(document).ready(() => {
+    $(() => {
         new TabularEditor("persontable",
-            "readOnlyRowTmpl", "editorRowTmpl").render();
+            "readOnlyRowTmpl", "editorRowTmpl").show();
     })
 } else {
     // Find another way to add the rows to the table because

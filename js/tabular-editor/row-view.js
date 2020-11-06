@@ -14,11 +14,11 @@ class RowView {
     }
 
     hide() {
-        this.table.deleteRow(this.context.selectedRow);
+        this.table.deleteRow(this.context.selectedIndex);
     }
 
     show() {
-        const row = this.table.createRow(this.context.selectedRow, this.rowTemplateId);
+        const row = this.table.createRow(this.context.selectedIndex, this.rowTemplateId);
         Array.from(row.cells).map(cell => new HtmlCellAdapter(cell))
             .forEach(cellAdapter => this.setCellValue(cellAdapter));
     }
@@ -39,6 +39,6 @@ class RowView {
      * private
      */
     get state() {
-        return this.context.items[this.context.selectedRow];
+        return this.context.items[this.context.selectedIndex];
     }
 }
