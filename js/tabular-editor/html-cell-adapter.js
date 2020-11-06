@@ -24,12 +24,11 @@ class HtmlCellAdapter {
     }
 
     prependTextNode(text) {
+        if (text == null) {
+            return;
+        }
         const textNode = document.createTextNode(text);
         this.cell.prepend(textNode);
-    }
-
-    putTextValue(text) {
-        this.cell.textContent = text;
     }
 
     /**

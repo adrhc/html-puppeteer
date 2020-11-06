@@ -1,4 +1,6 @@
-class PersonsStore {
+class PersonsRepository {
+    URL = "http://127.0.0.1:8011/persons";
+
     /**
      * @returns {*}
      */
@@ -13,5 +15,13 @@ class PersonsStore {
             .catch(() => {
                 return $.getJSON("test/persons.json");
             });
+    }
+
+    update(person) {
+        return $.ajax({
+            url: this.URL,
+            method: "PUT",
+            data: person,
+        });
     }
 }

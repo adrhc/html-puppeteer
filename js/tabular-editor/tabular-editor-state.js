@@ -8,4 +8,12 @@ class TabularEditorState {
     selectionExists() {
         return this.selectedRow >= 0;
     }
+
+    get items() {
+        return this._items;
+    }
+
+    set items(items) {
+        this._items = items == null ? [] : items;
+    }
 }
