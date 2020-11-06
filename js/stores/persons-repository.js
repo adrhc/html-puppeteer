@@ -17,11 +17,11 @@ class PersonsRepository {
             });
     }
 
-    update(person) {
+    save(person) {
         return $.ajax({
             url: this.URL,
-            method: "PUT",
+            method: person.id == null || person.id === "" ? "POST" : "PUT",
             data: person,
-        });
+        }).then(it => person.id = it.id);
     }
 }

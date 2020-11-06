@@ -50,8 +50,12 @@ class TabularEditor {
         const tabularEditor = ev.data;
         const person = tabularEditor.formUtils.objectifyForm();
         console.log("onBtnSave:\n", person);
-        tabularEditor.repo.update(person)
-            .then(() => alert("Saved!"))
+        tabularEditor.repo.save(person)
+            .then(() => {
+                tabularEditor.context.items.splice(tabularEditor.context.selectedRow, 1, person);
+                tabularEditor.editableRow.switchTo(tabularEditor.readOnlyRow);
+                tabularEditor.context.selectedRow = undefined;
+            })
             .catch((jqXHR, textStatus, errorThrown) => {
                 console.log(textStatus, errorThrown);
                 alert(textStatus);
@@ -82,7 +86,7 @@ class TabularEditor {
      */
     configureTableEvents() {
         $(`#${this.table.tableId} thead`).on('dblclick', 'tr', this, this.onHeadSelected);
-        // this.table.tBody().on('dblclick', 'tr', this, this.onRowSelected);
+        this.table.tBody().on('dblclick', 'tr', this, this.onRowSelected);
         this.table.tBody().on('click', '#cancel', this, this.onBtnCancel);
         this.table.tBody().on('click', '#save', this, this.onBtnSave);
     }
