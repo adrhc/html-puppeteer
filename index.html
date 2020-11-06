@@ -9,12 +9,12 @@
 </head>
 
 <body>
-<table id="producttable" class="responstable">
+<table id="persontable" class="responstable">
     <thead>
     <tr>
-        <th>#</th>
-        <th data-th="Details"><span>UPC_Code</span></th>
-        <th>Product_Name</th>
+        <th>id</th>
+        <th data-th="Details"><span>First name</span></th>
+        <th>Last name</th>
     </tr>
     </thead>
     <tbody>
@@ -24,21 +24,21 @@
 
 <template id="readOnlyRowTmpl">
     <tr>
-        <td data-name="nr">nr</td>
-        <td data-name="code">code</td>
-        <td data-name="name">name</td>
+        <td data-name="id">id</td>
+        <td data-name="firstName">firstName</td>
+        <td data-name="lastName">lastName</td>
     </tr>
 </template>
 
 <template id="editorRowTmpl">
     <tr>
-        <td data-name="nr" class="editor"></td>
-        <td data-name="code" class="editor">
-            <input type="text" name="code">
+        <td data-name="id" class="editor"></td>
+        <td data-name="firstName" class="editor">
+            <input type="text" name="firstName">
         </td>
-        <td data-name="name" class="editor">
-            <div class="last-cell name">
-                <input type="text" name="name">
+        <td data-name="lastName" class="editor">
+            <div class="last-cell lastName">
+                <input type="text" name="lastName">
             </div>
             <div class="last-cell buttons">
                 <button type="button">Cancel</button>
@@ -53,7 +53,7 @@
 <script src="js/tabular-editor/tabular-editor-state.js"></script>
 <script src="js/tabular-editor/tabular-editor.js"></script>
 <script src="js/stores/products-store.js"></script>
-<script src="js/main.js"></script>
+<script src="js/index.js"></script>
 </body>
 
 </html>

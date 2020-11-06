@@ -4,7 +4,7 @@ if ('content' in document.createElement('template')) {
     $(document).ready(() => {
         new ProductsStore().get().then((prods) => {
             console.log(prods);
-            new TabularEditor(prods, "producttable",
+            new TabularEditor(prods, "persontable",
                 "readOnlyRowTmpl", "editorRowTmpl").render();
         });
     })

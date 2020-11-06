@@ -3,6 +3,6 @@ class ProductsStore {
      * @returns {*}
      */
     get() {
-        return $.ajax("test/products.json");
+        return $.getJSON("test/persons.json");
     }
 }

@@ -10,11 +10,11 @@
     /*border-style: solid;*/
 }
 
-.last-cell.name {
+.last-cell.lastName {
     padding-bottom: 5px;
 }
 
-.last-cell.name input {
+.last-cell.lastName input {
     width: 100%;
     width: -webkit-fill-available;
     width: -moz-available;
