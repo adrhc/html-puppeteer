@@ -72,11 +72,24 @@ class TabularEditor {
      */
     createItem() {
         if (this.context.selectionExists()) {
-            this.editableRow.switchTo(this.readOnlyRow);
+            this.cancelEdit();
         }
         this.context.items.splice(0, 0, {});
         this.context.selectedIndex = 0;
         this.editableRow.show();
+    }
+
+    /**
+     * private method
+     */
+    switchItemView(selectedIndex) {
+        if (this.context.selectedIndex === selectedIndex) {
+            return false;
+        }
+        const prevIdx = this.context.selectedIndex;
+        const rowRemoved = this.context.selectionExists() && this.cancelEdit();
+        this.context.selectedIndex = rowRemoved && prevIdx < selectedIndex ? selectedIndex - 1 : selectedIndex;
+        this.readOnlyRow.switchTo(this.editableRow);
     }
 
     /**
@@ -94,19 +107,6 @@ class TabularEditor {
             this.context.removeSelected();
         }
         return !isPersisted;
-    }
-
-    /**
-     * private method
-     */
-    switchItemView(selectedIndex) {
-        if (this.context.selectedIndex === selectedIndex) {
-            return false;
-        }
-        const prevIdx = this.context.selectedIndex;
-        const rowRemoved = this.context.selectionExists() && this.cancelEdit();
-        this.context.selectedIndex = rowRemoved && prevIdx < selectedIndex ? selectedIndex - 1 : selectedIndex;
-        this.readOnlyRow.switchTo(this.editableRow);
     }
 
     /**
