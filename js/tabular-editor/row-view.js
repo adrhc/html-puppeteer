@@ -26,60 +26,22 @@ class RowView {
      * private
      */
     putCellValue(cell) {
-        if (this.cellHasField(cell)) {
-            this.putCellFieldValue(cell);
+        const cellAdapter = new HtmlCellAdapter(cell);
+        const cellValue = this.state[cellAdapter.getName()];
+        if (cellAdapter.hasChildField()) {
+            if (cellAdapter.hasHiddenChildField()) {
+                cellAdapter.prependTextNode(cellValue);
+            }
+            cellAdapter.putChildFieldValue(cellValue);
         } else {
-            this.putCellTextValue(cell);
+            cellAdapter.putTextValue(cellValue);
         }
     }
 
     /**
      * private
      */
-    cellHasField(cell) {
-        return this.getCellField(cell).length > 0;
-    }
-
-    /**
-     * private
-     */
-    putCellFieldValue(cell) {
-        this.getCellField(cell).val(this.getDataFor(cell));
-    }
-
-    /**
-     * private
-     */
-    getCellField(cell) {
-        const name = this.getCellName(cell);
-        return $(cell).find(`input[name='${name}']`)
-    }
-
-    /**
-     * private
-     */
-    putCellTextValue(cell) {
-        cell.textContent = this.getDataFor(cell);
-    }
-
-    /**
-     * private
-     */
-    getDataFor(cell) {
-        return this.rowData[this.getCellName(cell)];
-    }
-
-    /**
-     * private
-     */
-    getCellName(cell) {
-        return cell.dataset['name'];
-    }
-
-    /**
-     * private
-     */
-    get rowData() {
+    get state() {
         return this.context.items[this.context.selectedRow];
     }
 }
