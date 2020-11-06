@@ -30,7 +30,8 @@ class TabularEditor {
 
     onBtnCancel(ev) {
         const tabularEditor = ev.data;
-        console.log("onBtnCancel:\n", tabularEditor.formUtils.objectifyForm());
+        tabularEditor.editableRow.switchTo(tabularEditor.readOnlyRow);
+        tabularEditor.context.selectedRow = undefined;
     }
 
     onBtnSave(ev) {
