@@ -19,19 +19,19 @@ class RowView {
 
     show() {
         const row = this.table.createRow(this.context.selectedRow, this.rowTemplateId);
-        Array.from(row.cells).forEach(cell => this.putCellValue(cell));
+        Array.from(row.cells).map(cell => new HtmlCellAdapter(cell))
+            .forEach(cellAdapter => this.setCellValue(cellAdapter));
     }
 
     /**
      * private
      */
-    putCellValue(cell) {
-        const cellAdapter = new HtmlCellAdapter(cell);
-        const cellValue = this.state[cellAdapter.getName()];
+    setCellValue(cellAdapter) {
+        const cellValue = this.state[cellAdapter.name];
         if (!cellAdapter.hasChildField() || cellAdapter.hasHiddenChildField()) {
             cellAdapter.prependTextNode(cellValue);
         } else {
-            cellAdapter.putChildFieldValue(cellValue);
+            cellAdapter.setChildFieldValue(cellValue);
         }
     }
 

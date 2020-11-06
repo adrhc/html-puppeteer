@@ -14,12 +14,10 @@ class HtmlCellAdapter {
     }
 
     hasHiddenChildField() {
-        const name = this.getName();
-        // return $(this.cell).find(`input[name='${name}'][type='hidden']`).length > 0;
         return this.getChildField(this.cell).is(":hidden");
     }
 
-    putChildFieldValue(text) {
+    setChildFieldValue(text) {
         this.getChildField(this.cell).val(text);
     }
 
@@ -35,14 +33,13 @@ class HtmlCellAdapter {
      * private
      */
     getChildField() {
-        const name = this.getName(this.cell);
-        return $(this.cell).find(`input[name='${name}']`)
+        return $(this.cell).find(`input[name='${this.name}']`)
     }
 
     /**
      * private
      */
-    getName() {
+    get name() {
         return this.cell.dataset['name'];
     }
 }

@@ -20,7 +20,7 @@ class PersonsRepository {
     save(person) {
         return $.ajax({
             url: this.URL,
-            method: person.id == null || person.id === "" ? "POST" : "PUT",
+            method: $.isNumeric(person.id) ? "PUT" : "POST",
             data: person,
         }).then(it => person.id = it.id);
     }
