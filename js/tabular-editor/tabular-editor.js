@@ -9,7 +9,8 @@ class TabularEditor {
         this.editorRowTmpl = editorRowTmpl;
         this.readOnlyRow = new RowView(this.context, this.table, this.readOnlyRowTmpl);
         this.editableRow = new RowView(this.context, this.table, this.editorRowTmpl);
-        this.configureRowEvents();
+        this.formUtils = new FormUtils("editorForm");
+        this.configureTableEvents();
     }
 
     /**
@@ -27,6 +28,16 @@ class TabularEditor {
         tabularEditor.readOnlyRow.switchTo(tabularEditor.editableRow);
     }
 
+    onBtnCancel(ev) {
+        const tabularEditor = ev.data;
+        console.log("onBtnCancel:\n", tabularEditor.formUtils.objectifyForm());
+    }
+
+    onBtnSave(ev) {
+        const tabularEditor = ev.data;
+        console.log("onBtnSave:\n", tabularEditor.formUtils.objectifyForm());
+    }
+
     /**
      * initializer
      */
@@ -41,7 +52,9 @@ class TabularEditor {
     /**
      * private method
      */
-    configureRowEvents() {
-        $(`#${this.table.tableId} tbody`).on('dblclick', 'tr', this, this.onRowSelected);
+    configureTableEvents() {
+        this.table.tBody().on('dblclick', 'tr', this, this.onRowSelected);
+        this.table.tBody().on('click', '#cancel', this, this.onBtnCancel);
+        this.table.tBody().on('click', '#save', this, this.onBtnSave);
     }
 }
