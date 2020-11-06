@@ -2,7 +2,7 @@
 // for the presence of the template element's content attribute.
 if ('content' in document.createElement('template')) {
     $(document).ready(() => {
-        new ProductsStore().get().then((prods) => {
+        new PersonsStore().get().then((prods) => {
             console.log(prods);
             new TabularEditor(prods, "persontable",
                 "readOnlyRowTmpl", "editorRowTmpl").render();
