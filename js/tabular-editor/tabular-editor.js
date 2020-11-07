@@ -3,34 +3,33 @@
  */
 class TabularEditor {
     constructor(tableId, readOnlyRowTmpl, editorRowTmpl) {
-        this.context = new TabularEditorState();
+        this.state = new TabularEditorState();
         this.table = new HtmlTableAdapter(tableId);
         this.readOnlyRowTmpl = readOnlyRowTmpl;
         this.editorRowTmpl = editorRowTmpl;
-        this.readOnlyRow = new RowView(this.context, this.table, this.readOnlyRowTmpl);
-        this.editableRow = new RowView(this.context, this.table, this.editorRowTmpl);
+        this.readOnlyRow = new RowView(this.state, this.table, this.readOnlyRowTmpl);
+        this.editableRow = new RowView(this.state, this.table, this.editorRowTmpl);
         this.formUtils = new FormUtils("editorForm");
         this.repo = new PersonsRepository();
         this.configureTableEvents();
     }
 
     /**
-     * row selection event handler
-     */
-    onItemSelection(ev) {
-        ev.data.switchItemView(this.rowIndex - 1);
-    }
-
-    /**
      * header selection event handler
      */
-    onHeadSelected(ev) {
+    onHeadSelection(ev) {
         const tabularEditor = ev.data;
-        if (tabularEditor.context.selectionExists() &&
-            !tabularEditor.context.selectedIsPersistent()) {
+        if (tabularEditor.state.notPersistentSelectionExists()) {
             return false;
         }
         tabularEditor.createItem();
+    }
+
+    /**
+     * row selection event handler
+     */
+    onItemSelection(ev) {
+        ev.data.switchSelectionTo(this.rowIndex - 1);
     }
 
     /**
@@ -46,15 +45,10 @@ class TabularEditor {
     onSave(ev) {
         const tabularEditor = ev.data;
         const person = tabularEditor.formUtils.objectifyForm();
-        console.log("onSave:\n", person);
         tabularEditor.repo.save(person)
             .then(() => {
-                tabularEditor.context.items.splice(tabularEditor.context.selectedIndex, 1, person);
+                tabularEditor.state.replaceItem(person);
                 tabularEditor.cancelEdit();
-            })
-            .catch((jqXHR, textStatus, errorThrown) => {
-                console.log(textStatus, errorThrown);
-                alert(textStatus);
             });
     }
 
@@ -71,42 +65,43 @@ class TabularEditor {
      * private method
      */
     createItem() {
-        if (this.context.selectionExists()) {
+        if (this.state.selectionExists()) {
             this.cancelEdit();
         }
-        this.context.items.splice(0, 0, {});
-        this.context.selectedIndex = 0;
+        this.state.createAndSelectEmptyItem(0);
         this.editableRow.show();
     }
 
     /**
      * private method
      */
-    switchItemView(selectedIndex) {
-        if (this.context.selectedIndex === selectedIndex) {
+    switchSelectionTo(selectedIndex) {
+        if (this.state.isIndexSelected(selectedIndex)) {
+            // index already selected, nothing else to do here
             return false;
         }
-        const prevIdx = this.context.selectedIndex;
-        const rowRemoved = this.context.selectionExists() && this.cancelEdit();
-        this.context.selectedIndex = rowRemoved && prevIdx < selectedIndex ? selectedIndex - 1 : selectedIndex;
+        const prevSelItemWasRemoved = this.state.selectionExists() && this.cancelEdit();
+        const prevSelItemPositionIsBeforeNewSelection = this.state.selectedIndex < selectedIndex;
+        const removedRowsPositionedBeforeNewSelectedOneExist = prevSelItemWasRemoved && prevSelItemPositionIsBeforeNewSelection ? 1 : 0;
+        this.state.selectedIndex = selectedIndex - removedRowsPositionedBeforeNewSelectedOneExist;
         this.readOnlyRow.switchTo(this.editableRow);
     }
 
     /**
      * private method
      *
-     * @returns true when the row was removed from table
+     * @returns true when a row was removed from table but not replaced
      */
     cancelEdit() {
-        const isPersisted = this.context.selectedIsPersistent();
-        if (isPersisted) {
+        const selectionIsPersistent = this.state.selectionIsPersistent();
+        if (selectionIsPersistent) {
             this.editableRow.switchTo(this.readOnlyRow);
-            this.context.selectedIndex = undefined;
+            this.state.cancelSelection();
         } else {
             this.readOnlyRow.hide();
-            this.context.removeSelected();
+            this.state.removeSelectedItem();
         }
-        return !isPersisted;
+        return !selectionIsPersistent;
     }
 
     /**
@@ -114,19 +109,19 @@ class TabularEditor {
      */
     renderItems(persons) {
         console.log("persons:\n", persons);
-        this.context.items = persons;
-        this.context.items.forEach((_, i) => {
-            this.context.selectedIndex = i;
+        this.state.items = persons;
+        this.state.items.forEach((_, i) => {
+            this.state.selectedIndex = i;
             this.readOnlyRow.show();
         })
-        this.context.selectedIndex = undefined;
+        this.state.cancelSelection();
     }
 
     /**
      * private method
      */
     configureTableEvents() {
-        $(`#${this.table.tableId} thead`).on('dblclick', 'tr', this, this.onHeadSelected);
+        $(`#${this.table.tableId} thead`).on('dblclick', 'tr', this, this.onHeadSelection);
         this.table.tBody().on('dblclick', 'tr', this, this.onItemSelection);
         this.table.tBody().on('click', '#cancel', this, this.onCancel);
         this.table.tBody().on('click', '#save', this, this.onSave);
