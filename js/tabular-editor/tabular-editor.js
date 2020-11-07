@@ -55,6 +55,10 @@ class TabularEditor {
             .then(() => {
                 tabularEditor.state.replaceItem(person);
                 tabularEditor.cancelEdit();
+            })
+            .catch((jqXHR, textStatus, errorThrown) => {
+                console.log(textStatus, errorThrown);
+                alert(textStatus);
             });
     }
 

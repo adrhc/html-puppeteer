@@ -19,11 +19,6 @@ class PersonsRepository {
             url: this.URL,
             method: $.isNumeric(person.id) ? "PUT" : "POST",
             data: person,
-        })
-            .then(it => person.id = it.id)
-            .catch((jqXHR, textStatus, errorThrown) => {
-                console.log(textStatus, errorThrown);
-                alert(textStatus);
-            });
+        }).then(it => person.id = it.id);
     }
 }
