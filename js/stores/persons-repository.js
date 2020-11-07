@@ -5,7 +5,7 @@ class PersonsRepository {
      * @returns {*}
      */
     get() {
-        return $.getJSON("http://127.0.0.1:8011/persons")
+        return $.getJSON(this.URL)
             .then(data => data.hasOwnProperty("_embedded") ? data._embedded.persons : data)
             .catch((jqXHR, textStatus, errorThrown) => {
                 console.log(textStatus, errorThrown);
@@ -18,6 +18,26 @@ class PersonsRepository {
         return $.ajax({
             url: this.URL,
             method: $.isNumeric(person.id) ? "PUT" : "POST",
+            data: person,
+        }).then(it => ObjectUtils.prototype.copyUsingTemplate(it, person));
+    }
+
+    update(person) {
+        return $.ajax({
+            url: `${this.URL}/${person.id}`,
+            method: "PUT",
+            data: person,
+        }).then(it => {
+            const result = ObjectUtils.prototype.copyUsingTemplate(it, person);
+            result.id = it.id;
+            return result;
+        });
+    }
+
+    insert(person) {
+        return $.ajax({
+            url: this.URL,
+            method: "POST",
             data: person,
         }).then(it => ObjectUtils.prototype.copyUsingTemplate(it, person));
     }
