@@ -9,7 +9,7 @@ class TabularEditor {
         this.editorRowTmpl = editorRowTmpl;
         this.readOnlyRow = new RowView(this.state, this.table, this.readOnlyRowTmpl);
         this.editableRow = new RowView(this.state, this.table, this.editorRowTmpl);
-        this.formUtils = new FormUtils("editorForm");
+        this.formUtils = new FormsHelper("editorForm");
         this.repo = new PersonsRepository();
         this.configureTableEvents();
     }

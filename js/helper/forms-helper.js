@@ -1,4 +1,4 @@
-class FormUtils {
+class FormsHelper {
     constructor(formId) {
         this.formId = formId;
     }

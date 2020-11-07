@@ -6,7 +6,7 @@ class PersonsRepository {
      */
     get() {
         return $.getJSON(this.URL)
-            .then(data => data.hasOwnProperty("_embedded") ? data._embedded.persons : data)
+            .then(data => RestUtils.prototype.unwrapHAL(data))
             .catch((jqXHR, textStatus, errorThrown) => {
                 console.log(textStatus, errorThrown);
                 alert(`${textStatus}! loading fallback data`);
@@ -15,11 +15,12 @@ class PersonsRepository {
     }
 
     save(person) {
-        return $.ajax({
-            url: this.URL,
-            method: $.isNumeric(person.id) ? "PUT" : "POST",
-            data: person,
-        }).then(it => ObjectUtils.prototype.copyUsingTemplate(it, person));
+        let result;
+        if ($.isNumeric(person.id)) {
+            return this.update(person);
+        } else {
+            return this.insert(person);
+        }
     }
 
     update(person) {
@@ -27,11 +28,7 @@ class PersonsRepository {
             url: `${this.URL}/${person.id}`,
             method: "PUT",
             data: person,
-        }).then(it => {
-            const result = ObjectUtils.prototype.copyUsingTemplate(it, person);
-            result.id = it.id;
-            return result;
-        });
+        }).then(it => RestUtils.prototype.unwrapHAL(it));
     }
 
     insert(person) {
@@ -39,6 +36,6 @@ class PersonsRepository {
             url: this.URL,
             method: "POST",
             data: person,
-        }).then(it => ObjectUtils.prototype.copyUsingTemplate(it, person));
+        }).then(it => RestUtils.prototype.unwrapHAL(it));
     }
 }
