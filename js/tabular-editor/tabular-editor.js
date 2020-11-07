@@ -46,6 +46,7 @@ class TabularEditor {
         const person = tabularEditor.formUtils.objectifyForm();
         tabularEditor.repo.save(person)
             .then((savedPerson) => {
+                console.log(savedPerson);
                 tabularEditor.state.replaceItem(savedPerson);
                 tabularEditor.cancelEdit();
             })
