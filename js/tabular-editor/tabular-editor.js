@@ -39,27 +39,27 @@ class TabularEditor {
     }
 
     /**
-     * cancel button
-     */
-    onCancel(ev) {
-        ev.data.cancelEdit();
-    }
-
-    /**
-     * save button
+     * save event handler
      */
     onSave(ev) {
         const tabularEditor = ev.data;
         const person = tabularEditor.formUtils.objectifyForm();
         tabularEditor.repo.save(person)
-            .then(() => {
-                tabularEditor.state.replaceItem(person);
+            .then((savedPerson) => {
+                tabularEditor.state.replaceItem(savedPerson);
                 tabularEditor.cancelEdit();
             })
             .catch((jqXHR, textStatus, errorThrown) => {
                 console.log(textStatus, errorThrown);
                 alert(textStatus);
             });
+    }
+
+    /**
+     * cancel event handler
+     */
+    onCancel(ev) {
+        ev.data.cancelEdit();
     }
 
     /**

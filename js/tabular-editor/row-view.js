@@ -28,10 +28,13 @@ class RowView {
      */
     setCellValue(cellAdapter) {
         const cellValue = this.state[cellAdapter.name];
-        if (!cellAdapter.hasChildField() || cellAdapter.hasHiddenChildField()) {
-            cellAdapter.prependTextNode(cellValue);
-        } else {
+        if (cellAdapter.hasChildField()) {
+            if (cellAdapter.hasHiddenChildField()) {
+                cellAdapter.prependTextNode(cellValue);
+            }
             cellAdapter.setChildFieldValue(cellValue);
+        } else {
+            cellAdapter.prependTextNode(cellValue);
         }
     }
 
