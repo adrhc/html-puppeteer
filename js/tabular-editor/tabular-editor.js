@@ -29,7 +29,13 @@ class TabularEditor {
      * row selection event handler
      */
     onItemSelection(ev) {
-        ev.data.switchSelectionTo(this.rowIndex - 1);
+        const tabularEditor = ev.data;
+        const selectedIndex = this.rowIndex - 1;
+        if (tabularEditor.state.isIndexSelected(selectedIndex)) {
+            // index already selected, nothing else to do here
+            return false;
+        }
+        tabularEditor.switchSelectionTo(selectedIndex);
     }
 
     /**
@@ -76,12 +82,9 @@ class TabularEditor {
      * private method
      */
     switchSelectionTo(selectedIndex) {
-        if (this.state.isIndexSelected(selectedIndex)) {
-            // index already selected, nothing else to do here
-            return false;
-        }
+        const currentlySelectedIndex = this.state.selectedIndex;
         const prevSelItemWasRemoved = this.state.selectionExists() && this.cancelEdit();
-        const prevSelItemPositionIsBeforeNewSelection = this.state.selectedIndex < selectedIndex;
+        const prevSelItemPositionIsBeforeNewSelection = currentlySelectedIndex < selectedIndex;
         const removedRowsPositionedBeforeNewSelectedOneExist =
             prevSelItemWasRemoved && prevSelItemPositionIsBeforeNewSelection ? 1 : 0;
         this.state.selectedIndex = selectedIndex - removedRowsPositionedBeforeNewSelectedOneExist;
