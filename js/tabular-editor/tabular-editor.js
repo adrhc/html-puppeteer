@@ -82,7 +82,8 @@ class TabularEditor {
         }
         const prevSelItemWasRemoved = this.state.selectionExists() && this.cancelEdit();
         const prevSelItemPositionIsBeforeNewSelection = this.state.selectedIndex < selectedIndex;
-        const removedRowsPositionedBeforeNewSelectedOneExist = prevSelItemWasRemoved && prevSelItemPositionIsBeforeNewSelection ? 1 : 0;
+        const removedRowsPositionedBeforeNewSelectedOneExist =
+            prevSelItemWasRemoved && prevSelItemPositionIsBeforeNewSelection ? 1 : 0;
         this.state.selectedIndex = selectedIndex - removedRowsPositionedBeforeNewSelectedOneExist;
         this.readOnlyRow.switchTo(this.editableRow);
     }
