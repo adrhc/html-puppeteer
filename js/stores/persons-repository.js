@@ -15,7 +15,6 @@ class PersonsRepository {
     }
 
     save(person) {
-        let result;
         if ($.isNumeric(person.id)) {
             return this.update(person);
         } else {
