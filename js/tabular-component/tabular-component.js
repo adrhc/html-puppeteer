@@ -68,7 +68,9 @@ class TabularComponent {
      */
     show() {
         this.repo.get().then((persons) => {
-            this.renderItems(persons);
+            console.log("persons:\n", persons);
+            this.state.items = persons;
+            this.renderWithMustache(persons);
         });
     }
 
@@ -113,12 +115,16 @@ class TabularComponent {
         return !selectionIsPersistent;
     }
 
+    renderWithMustache(persons) {
+        const templateHtml = $("#tableBodyTmpl").html();
+        const renderedHtml = Mustache.render(templateHtml, {persons: persons})
+        $(`#${this.table.tableId} > tbody`).html(renderedHtml);
+    }
+
     /**
      * private method
      */
     renderItems(persons) {
-        console.log("persons:\n", persons);
-        this.state.items = persons;
         this.state.items.forEach((_, i) => {
             this.state.selectedIndex = i;
             this.readOnlyRow.show();

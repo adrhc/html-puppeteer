@@ -1,10 +1,10 @@
 # js commands
 ### delete all rows
 ```javascript 1.8
-var table = new HtmlTableAdapter('persontable');
+var table = new HtmlTableAdapter('personsTable');
 table.deleteAllRows();
 ```
 ### add rows
 ```javascript 1.8
-new TabularComponent(DATA, "persontable", "readOnlyRowTmpl", "editorRowTmpl").render();
+new TabularComponent(DATA, "personsTable", "readOnlyRowTmpl", "editorRowTmpl").render();
 ```

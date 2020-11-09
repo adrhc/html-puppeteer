@@ -11,7 +11,7 @@ if ('content' in document.createElement('template')) {
         }
     });
     $(() => {
-        new TabularComponent("persontable",
+        new TabularComponent("personsTable",
             "readOnlyRowTmpl", "editorRowTmpl").show();
     })
 } else {

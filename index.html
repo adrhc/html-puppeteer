@@ -6,11 +6,12 @@
     <link rel="stylesheet" href="css/table.css">
     <link rel="stylesheet" href="css/table-buttons.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/mustache@latest"></script>
 </head>
 
 <body>
 <form id="editorForm">
-    <table id="persontable" class="responstable">
+    <table id="personsTable" class="responstable">
         <thead>
         <tr>
             <th>Id</th>
@@ -18,11 +19,19 @@
             <th>Last name</th>
         </tr>
         </thead>
-        <tbody>
-        <!-- existing data could optionally be included here -->
-        </tbody>
+        <tbody></tbody>
     </table>
 </form>
+
+<template id="tableBodyTmpl">
+    {{#persons}}
+    <tr>
+        <td data-name="id">{{id}}</td>
+        <td data-name="firstName">{{firstName}}</td>
+        <td data-name="lastName">{{lastName}}</td>
+    </tr>
+    {{/persons}}
+</template>
 
 <template id="readOnlyRowTmpl">
     <tr>
