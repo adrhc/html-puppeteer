@@ -8,7 +8,7 @@ class TabularComponent {
         this.readOnlyRowTmpl = readOnlyRowTmpl;
         this.editorRowTmpl = editorRowTmpl;
         this.readOnlyRow = new TabularRow(this.state, this.table, this.readOnlyRowTmpl);
-        this.editableRow = new TabularRow(this.state, this.table, this.editorRowTmpl);
+        this.editableRow = new TabularEditableRow(this.state, this.table, this.editorRowTmpl);
         this.formUtils = new FormsHelper("editorForm");
         this.repo = new PersonsRepository();
         this.configureTableEvents();
