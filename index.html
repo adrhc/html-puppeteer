@@ -35,23 +35,23 @@
 
 <template id="readOnlyRowTmpl">
     <tr>
-        <td data-name="id"></td>
-        <td data-name="firstName"></td>
-        <td data-name="lastName"></td>
+        <td data-name="id">{{id}}</td>
+        <td data-name="firstName">{{firstName}}</td>
+        <td data-name="lastName">{{lastName}}</td>
     </tr>
 </template>
 
 <template id="editorRowTmpl">
     <tr>
-        <td data-name="id" class="editor">
-            <input type="hidden" name="id" value="">
+        <td data-name="id" class="editor">{{id}}
+            <input type="hidden" name="id" value="{{id}}">
         </td>
         <td data-name="firstName" class="editor">
-            <input type="text" name="firstName">
+            <input type="text" name="firstName" value="{{firstName}}">
         </td>
         <td data-name="lastName" class="editor">
             <div class="last-cell lastName">
-                <input type="text" name="lastName">
+                <input type="text" name="lastName" value="{{lastName}}">
             </div>
             <div class="last-cell buttons">
                 <button type="button" id="cancel">Cancel</button>
@@ -64,7 +64,6 @@
 <script src="js/util/rest-utils.js"></script>
 <script src="js/helper/forms-helper.js"></script>
 <script src="js/adapter/html-table-adapter.js"></script>
-<script src="js/adapter/html-cell-adapter.js"></script>
 <script src="js/tabular-component/tabular-row.js"></script>
 <script src="js/tabular-component/tabular-state.js"></script>
 <script src="js/tabular-component/tabular-component.js"></script>

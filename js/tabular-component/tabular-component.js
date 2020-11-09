@@ -82,7 +82,7 @@ class TabularComponent {
             this.cancelEdit();
         }
         this.state.createAndSelectEmptyItem(0);
-        this.editableRow.show();
+        this.editableRow.show(true);
     }
 
     /**

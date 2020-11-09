@@ -2,14 +2,13 @@
  * Role: represent visually a row
  */
 class TabularRow {
-    constructor(tabularEditorState, table, rowTemplateId) {
+    constructor(tabularEditorState, table, rowTmpl) {
         this.context = tabularEditorState;
         this.table = table;
-        this.rowTemplateId = rowTemplateId;
+        this.rowTmpl = rowTmpl;
     }
 
     switchTo(toRowView) {
-        this.hide();
         toRowView.show();
     }
 
@@ -17,25 +16,8 @@ class TabularRow {
         this.table.deleteRow(this.context.selectedIndex);
     }
 
-    show() {
-        const row = this.table.createRow(this.context.selectedIndex, this.rowTemplateId);
-        Array.from(row.cells).map(cell => new HtmlCellAdapter(cell))
-            .forEach(cellAdapter => this.setCellValue(cellAdapter));
-    }
-
-    /**
-     * private
-     */
-    setCellValue(cellAdapter) {
-        const cellValue = this.state[cellAdapter.name];
-        if (cellAdapter.hasChildField()) {
-            if (cellAdapter.hasHiddenChildField()) {
-                cellAdapter.prependTextNode(cellValue);
-            }
-            cellAdapter.setChildFieldValue(cellValue);
-        } else {
-            cellAdapter.prependTextNode(cellValue);
-        }
+    show(create) {
+        this.table.renderRow(this.context.selectedIndex, this.state, this.rowTmpl, !create);
     }
 
     /**
