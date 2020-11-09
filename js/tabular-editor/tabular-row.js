@@ -1,7 +1,7 @@
 /**
  * Role: represent visually a row
  */
-class RowView {
+class TabularRow {
     constructor(tabularEditorState, table, rowTemplateId) {
         this.context = tabularEditorState;
         this.table = table;

@@ -1,4 +1,4 @@
-class TabularEditorState {
+class TabularState {
     selectedIndex = undefined;
 
     constructor(items) {
