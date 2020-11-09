@@ -95,7 +95,7 @@ class TabularComponent {
         const removedRowsPositionedBeforeNewSelectedOneExist =
             prevSelItemWasRemoved && prevSelItemPositionIsBeforeNewSelection ? 1 : 0;
         this.state.selectedIndex = selectedIndex - removedRowsPositionedBeforeNewSelectedOneExist;
-        this.readOnlyRow.switchTo(this.editableRow);
+        this.editableRow.show();
     }
 
     /**
@@ -106,7 +106,7 @@ class TabularComponent {
     cancelEdit() {
         const selectionIsPersistent = this.state.selectionIsPersistent();
         if (selectionIsPersistent) {
-            this.editableRow.switchTo(this.readOnlyRow);
+            this.readOnlyRow.show();
             this.state.cancelSelection();
         } else {
             this.readOnlyRow.hide();

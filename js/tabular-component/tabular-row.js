@@ -8,10 +8,6 @@ class TabularRow {
         this.rowTmpl = rowTmpl;
     }
 
-    switchTo(toRowView) {
-        toRowView.show();
-    }
-
     hide() {
         this.table.deleteRow(this.context.selectedIndex);
     }
