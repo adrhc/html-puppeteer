@@ -2,9 +2,9 @@
  * Role: capture all table events
  */
 class TabularComponent {
-    constructor(tableId, readOnlyRowTmpl, editorRowTmpl) {
+    constructor(tableId, bodyTmpl, readOnlyRowTmpl, editorRowTmpl) {
         this.state = new TabularState();
-        this.table = new HtmlTableAdapter(tableId);
+        this.table = new HtmlTableAdapter(tableId, bodyTmpl);
         this.readOnlyRowTmpl = readOnlyRowTmpl;
         this.editorRowTmpl = editorRowTmpl;
         this.readOnlyRow = new TabularRow(this.state, this.table, this.readOnlyRowTmpl);
@@ -70,7 +70,7 @@ class TabularComponent {
         this.repo.get().then((persons) => {
             console.log("persons:\n", persons);
             this.state.items = persons;
-            this.renderWithMustache(persons);
+            this.table.renderBody({persons: persons});
         });
     }
 
@@ -113,23 +113,6 @@ class TabularComponent {
             this.state.removeSelectedItem();
         }
         return !selectionIsPersistent;
-    }
-
-    renderWithMustache(persons) {
-        const templateHtml = $("#tableBodyTmpl").html();
-        const renderedHtml = Mustache.render(templateHtml, {persons: persons})
-        $(`#${this.table.tableId} > tbody`).html(renderedHtml);
-    }
-
-    /**
-     * private method
-     */
-    renderItems(persons) {
-        this.state.items.forEach((_, i) => {
-            this.state.selectedIndex = i;
-            this.readOnlyRow.show();
-        })
-        this.state.cancelSelection();
     }
 
     /**

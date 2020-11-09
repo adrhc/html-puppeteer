@@ -2,8 +2,9 @@
  * Role: adapter to HTMLTableElement
  */
 class HtmlTableAdapter {
-    constructor(tableId) {
+    constructor(tableId, bodyTmpl) {
         this.tableId = tableId;
+        this.bodyTmpl = bodyTmpl;
         this.tbody = this.tBody(0);
     }
 
@@ -35,5 +36,11 @@ class HtmlTableAdapter {
         } else {
             return $(`#${this.tableId} > tbody`);
         }
+    }
+
+    renderBody(data) {
+        const bodyTmplHtml = $(`#${this.bodyTmpl}`).html();
+        const renderedHtml = Mustache.render(bodyTmplHtml, data)
+        this.tBody().html(renderedHtml);
     }
 }
