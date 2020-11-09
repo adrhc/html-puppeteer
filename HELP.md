@@ -6,5 +6,5 @@ table.deleteAllRows();
 ```
 ### add rows
 ```javascript 1.8
-new TabularEditor(DATA, "persontable", "readOnlyRowTmpl", "editorRowTmpl").render();
+new TabularComponent(DATA, "persontable", "readOnlyRowTmpl", "editorRowTmpl").render();
 ```

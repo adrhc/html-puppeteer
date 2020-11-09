@@ -1,7 +1,7 @@
 /**
  * Role: capture all table events
  */
-class TabularEditor {
+class TabularComponent {
     constructor(tableId, readOnlyRowTmpl, editorRowTmpl) {
         this.state = new TabularState();
         this.table = new HtmlTableAdapter(tableId);
