@@ -3,8 +3,8 @@ class TabularEditableRow extends TabularRow {
         super(tabularEditorState, table, rowTmpl);
     }
 
-    show(create) {
-        super.show(create);
+    show(asNew) {
+        super.show(asNew);
         this.focusFirstInput();
     }
 

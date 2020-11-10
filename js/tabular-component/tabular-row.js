@@ -1,5 +1,5 @@
 /**
- * Role: represent visually a row
+ * Role: represent the rendering capabilities of TabularComponent at row level
  */
 class TabularRow {
     constructor(tabularEditorState, table, rowTmpl) {
@@ -12,8 +12,8 @@ class TabularRow {
         this.table.deleteRow(this.context.selectedIndex);
     }
 
-    show(create) {
-        this.table.renderRow(this.context.selectedIndex, this.state, this.rowTmpl, !create);
+    show(asNew) {
+        this.table.renderRow(this.context.selectedIndex, this.state, this.rowTmpl, !asNew);
     }
 
     /**
