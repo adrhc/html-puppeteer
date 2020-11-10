@@ -12,10 +12,10 @@ class TabularEditableRow extends TabularRow {
      * private method
      */
     focusFirstInput() {
-        const row = this.table.tBody().find("tr").eq(this.context.selectedIndex);
-        const inputToFocus = row.find("input[name='firstName']:visible");
-        if (inputToFocus.length) {
-            inputToFocus.focus();
+        const $row = this.table.tBody().find("tr").eq(this.context.selectedIndex);
+        const $inputToFocus = $row.find("input[name='firstName']:visible");
+        if ($inputToFocus.length) {
+            $inputToFocus.focus();
         }
     }
 }
