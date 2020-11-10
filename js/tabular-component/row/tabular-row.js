@@ -1,5 +1,6 @@
 /**
- * Role: represent the rendering capabilities of TabularComponent at row level
+ * Represent the rendering capabilities of TabularComponent at row level.
+ * Reacts to "row"-level state changes.
  */
 class TabularRow {
     constructor(tabularEditorState, table, rowTmpl) {
