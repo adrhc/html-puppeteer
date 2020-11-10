@@ -25,11 +25,11 @@ class HtmlTableAdapter {
         this.tBody().html(renderedHtml);
     }
 
-    renderRow(index, data, rowTmpl, replace) {
+    renderRow(index, data, rowTmpl, replaceExisting) {
         const rowTmplHtml = $(`#${rowTmpl}`).html();
         const renderedHtml = Mustache.render(rowTmplHtml, data)
         const rowAtIndex = this.tBody().find("tr").eq(index);
-        if (replace) {
+        if (replaceExisting) {
             rowAtIndex.replaceWith(renderedHtml);
         } else {
             const row = $(renderedHtml);
