@@ -27,30 +27,30 @@
 <template id="tableBodyTmpl">
     {{#persons}}
     <tr>
-        <td data-name="id">{{id}}</td>
-        <td data-name="firstName">{{firstName}}</td>
-        <td data-name="lastName">{{lastName}}</td>
+        <td>{{id}}</td>
+        <td>{{firstName}}</td>
+        <td>{{lastName}}</td>
     </tr>
     {{/persons}}
 </template>
 
 <template id="readOnlyRowTmpl">
     <tr>
-        <td data-name="id">{{id}}</td>
-        <td data-name="firstName">{{firstName}}</td>
-        <td data-name="lastName">{{lastName}}</td>
+        <td>{{id}}</td>
+        <td>{{firstName}}</td>
+        <td>{{lastName}}</td>
     </tr>
 </template>
 
 <template id="editorRowTmpl">
     <tr>
-        <td data-name="id" class="editor">{{id}}
+        <td class="editor">{{id}}
             <input type="hidden" name="id" value="{{id}}">
         </td>
-        <td data-name="firstName" class="editor">
+        <td class="editor">
             <input type="text" name="firstName" value="{{firstName}}">
         </td>
-        <td data-name="lastName" class="editor">
+        <td class="editor">
             <div class="last-cell lastName">
                 <input type="text" name="lastName" value="{{lastName}}">
             </div>
