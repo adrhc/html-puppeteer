@@ -1,0 +1,13 @@
+/*<body><div>x</div></body>*/
+div {
+    width: 100px;
+    height: 100px;
+    border-style: solid;
+    line-height: 100%;
+    position: relative;
+    left: 100px;
+    top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
