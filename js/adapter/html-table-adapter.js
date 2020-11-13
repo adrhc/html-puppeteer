@@ -8,7 +8,7 @@ class HtmlTableAdapter {
     }
 
     deleteRow(index) {
-        this.tBody().find("tr").eq(index).remove();
+        this.tBody().find(`tr:eq(${index})`).remove();
     }
 
     deleteAllRows() {
