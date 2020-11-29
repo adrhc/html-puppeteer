@@ -46,7 +46,7 @@ class TabularState {
      * @returns {boolean}
      */
     notSavedItemExists() {
-        return this.selectionExists() && !this.selectionIsPersistent();
+        return this.selectionExists() && !this.selectionIsPersisted();
     }
 
     /**
@@ -59,7 +59,7 @@ class TabularState {
     /**
      * @returns {boolean|*}
      */
-    selectionIsPersistent() {
+    selectionIsPersisted() {
         return this.items.length > this.selectedIndex &&
             $.isNumeric(this.items[this.selectedIndex].id);
     }

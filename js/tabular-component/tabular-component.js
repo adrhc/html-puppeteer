@@ -48,7 +48,7 @@ class TabularComponent {
             .then((savedPerson) => {
                 console.log(savedPerson);
                 tabularEditor.state.replaceItem(savedPerson);
-                tabularEditor.cancelEdit();
+                tabularEditor.clearSelection();
             })
             .catch((jqXHR, textStatus, errorThrown) => {
                 console.log(textStatus, errorThrown);
@@ -60,7 +60,7 @@ class TabularComponent {
      * cancel event handler
      */
     onBtnCancel(ev) {
-        ev.data.cancelEdit();
+        ev.data.clearSelection();
     }
 
     /**
@@ -79,7 +79,7 @@ class TabularComponent {
      */
     createItem() {
         if (this.state.selectionExists()) {
-            this.cancelEdit();
+            this.clearSelection();
         }
         this.state.createAndSelectEmptyItem(0);
         this.editableRow.show(true);
@@ -90,11 +90,11 @@ class TabularComponent {
      */
     switchSelectionTo(selectedIndex) {
         const currentlySelectedIndex = this.state.selectedIndex;
-        const prevSelItemWasRemoved = this.state.selectionExists() && this.cancelEdit();
+        const prevSelItemWasRemoved = this.state.selectionExists() && this.clearSelection();
         const prevSelItemPositionIsBeforeNewSelection = currentlySelectedIndex < selectedIndex;
-        const removedRowsPositionedBeforeNewSelectedOneExist =
+        const removedRowPositionedBeforeNewSelectionExists =
             prevSelItemWasRemoved && prevSelItemPositionIsBeforeNewSelection ? 1 : 0;
-        this.state.selectedIndex = selectedIndex - removedRowsPositionedBeforeNewSelectedOneExist;
+        this.state.selectedIndex = selectedIndex - removedRowPositionedBeforeNewSelectionExists;
         this.editableRow.show();
     }
 
@@ -103,16 +103,16 @@ class TabularComponent {
      *
      * @returns true when a row was removed from table but not replaced
      */
-    cancelEdit() {
-        const selectionIsPersistent = this.state.selectionIsPersistent();
-        if (selectionIsPersistent) {
+    clearSelection() {
+        const selectionIsPersisted = this.state.selectionIsPersisted();
+        if (selectionIsPersisted) {
             this.readOnlyRow.show();
             this.state.cancelSelection();
         } else {
             this.readOnlyRow.hide();
             this.state.removeSelectedItem();
         }
-        return !selectionIsPersistent;
+        return !selectionIsPersisted;
     }
 
     /**
