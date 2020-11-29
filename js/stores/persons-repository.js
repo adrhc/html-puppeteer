@@ -4,7 +4,7 @@ class PersonsRepository {
     /**
      * @returns {*}
      */
-    get() {
+    getAll() {
         return $.getJSON(this.URL)
             .then(data => RestUtils.prototype.unwrapHAL(data))
             .catch((jqXHR, textStatus, errorThrown) => {

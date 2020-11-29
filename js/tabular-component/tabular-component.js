@@ -11,7 +11,7 @@ class TabularComponent {
         this.editableRow = new TabularEditableRow(this.state, this.table, this.editableRowTmpl);
         this.formUtils = new FormsHelper("editorForm");
         this.repo = new PersonsRepository();
-        this.configureTableEvents();
+        this.configureEvents();
     }
 
     /**
@@ -67,7 +67,7 @@ class TabularComponent {
      * initializer
      */
     show() {
-        this.repo.get().then((persons) => {
+        this.repo.getAll().then((persons) => {
             console.log("persons:\n", persons);
             this.state.items = persons;
             this.table.renderBody({persons: persons});
@@ -118,7 +118,7 @@ class TabularComponent {
     /**
      * private method
      */
-    configureTableEvents() {
+    configureEvents() {
         this.table.thead().on('dblclick', 'tr', this, this.onHeadSelection);
         this.table.tbody().on('dblclick', 'tr', this, this.onItemSelection);
         this.table.tbody().on('click', '#cancel', this, this.onCancel);
