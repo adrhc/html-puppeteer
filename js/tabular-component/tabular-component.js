@@ -19,7 +19,7 @@ class TabularComponent {
      */
     onTHeadDblclick(ev) {
         const tabularEditor = ev.data;
-        if (tabularEditor.state.notPersistentSelectionExists()) {
+        if (tabularEditor.state.notSavedItemExists()) {
             return false;
         }
         tabularEditor.createItem();

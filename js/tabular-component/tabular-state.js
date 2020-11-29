@@ -45,7 +45,7 @@ class TabularState {
      *
      * @returns {boolean}
      */
-    notPersistentSelectionExists() {
+    notSavedItemExists() {
         return this.selectionExists() && !this.selectionIsPersistent();
     }
 
