@@ -119,9 +119,9 @@ class TabularComponent {
      * private method
      */
     configureTableEvents() {
-        $(`#${this.table.tableId} thead`).on('dblclick', 'tr', this, this.onHeadSelection);
-        this.table.tBody().on('dblclick', 'tr', this, this.onItemSelection);
-        this.table.tBody().on('click', '#cancel', this, this.onCancel);
-        this.table.tBody().on('click', '#save', this, this.onSave);
+        this.table.thead().on('dblclick', 'tr', this, this.onHeadSelection);
+        this.table.tbody().on('dblclick', 'tr', this, this.onItemSelection);
+        this.table.tbody().on('click', '#cancel', this, this.onCancel);
+        this.table.tbody().on('click', '#save', this, this.onSave);
     }
 }

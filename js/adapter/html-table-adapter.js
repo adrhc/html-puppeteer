@@ -8,21 +8,25 @@ class HtmlTableAdapter {
     }
 
     deleteRow(index) {
-        this.tBody().find(`tr:eq(${index})`).remove();
+        this.tbody().find(`tr:eq(${index})`).remove();
     }
 
     deleteAllRows() {
-        this.tBody().empty();
+        this.tbody().empty();
     }
 
-    tBody() {
+    tbody() {
         return $(`#${this.tableId} > tbody`);
+    }
+
+    thead() {
+        return $(`#${this.tableId} > thead`);
     }
 
     renderBody(data) {
         const bodyTmplHtml = $(`#${this.bodyTmpl}`).html();
         const renderedHtml = Mustache.render(bodyTmplHtml, data)
-        this.tBody().html(renderedHtml);
+        this.tbody().html(renderedHtml);
     }
 
     /**
@@ -34,7 +38,7 @@ class HtmlTableAdapter {
     renderRow(index, data, rowTmpl, replaceExisting) {
         const rowTmplHtml = $(`#${rowTmpl}`).html();
         const renderedHtml = Mustache.render(rowTmplHtml, data)
-        const $rowAtIndex = this.tBody().find("tr").eq(index);
+        const $rowAtIndex = this.tbody().find("tr").eq(index);
         if (replaceExisting) {
             $rowAtIndex.replaceWith(renderedHtml);
         } else {
@@ -42,7 +46,7 @@ class HtmlTableAdapter {
             if ($rowAtIndex.length) {
                 $rowAtIndex.before(row);
             } else {
-                this.tBody().append(row);
+                this.tbody().append(row);
             }
         }
     }
