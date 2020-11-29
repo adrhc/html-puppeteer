@@ -25,6 +25,12 @@ class HtmlTableAdapter {
         this.tBody().html(renderedHtml);
     }
 
+    /**
+     * @param index: row index
+     * @param data: row cell values
+     * @param rowTmpl: row HTML template
+     * @param replaceExisting: whether to replace or append a new row
+     */
     renderRow(index, data, rowTmpl, replaceExisting) {
         const rowTmplHtml = $(`#${rowTmpl}`).html();
         const renderedHtml = Mustache.render(rowTmplHtml, data)
