@@ -17,7 +17,7 @@ class TabularComponent {
     /**
      * header selection event handler
      */
-    onHeadSelection(ev) {
+    onTHeadDblclick(ev) {
         const tabularEditor = ev.data;
         if (tabularEditor.state.notPersistentSelectionExists()) {
             return false;
@@ -28,7 +28,7 @@ class TabularComponent {
     /**
      * row selection event handler
      */
-    onItemSelection(ev) {
+    onRowDblclick(ev) {
         const tabularEditor = ev.data;
         const selectedIndex = this.rowIndex - 1;
         if (tabularEditor.state.isIndexSelected(selectedIndex)) {
@@ -41,14 +41,14 @@ class TabularComponent {
     /**
      * save event handler
      */
-    onSave(ev) {
+    onBtnSave(ev) {
         const tabularEditor = ev.data;
         const person = tabularEditor.formUtils.objectifyForm();
         tabularEditor.repo.save(person)
             .then((savedPerson) => {
                 console.log(savedPerson);
                 tabularEditor.state.replaceItem(savedPerson);
-                tabularEditor.cancelEdit();
+                tabularEditor.cancelEdit(); v
             })
             .catch((jqXHR, textStatus, errorThrown) => {
                 console.log(textStatus, errorThrown);
@@ -59,14 +59,14 @@ class TabularComponent {
     /**
      * cancel event handler
      */
-    onCancel(ev) {
+    onBtnCancel(ev) {
         ev.data.cancelEdit();
     }
 
     /**
      * initializer
      */
-    show() {
+    show()      {
         this.repo.getAll().then((persons) => {
             console.log("persons:\n", persons);
             this.state.items = persons;
@@ -119,9 +119,9 @@ class TabularComponent {
      * private method
      */
     configureEvents() {
-        this.table.thead().on('dblclick', 'tr', this, this.onHeadSelection);
-        this.table.tbody().on('dblclick', 'tr', this, this.onItemSelection);
-        this.table.tbody().on('click', '#cancel', this, this.onCancel);
-        this.table.tbody().on('click', '#save', this, this.onSave);
+        this.table.thead().on('dblclick', 'tr', this, this.onTHeadDblclick);
+        this.table.tbody().on('dblclick', 'tr', this, this.onRowDblclick);
+        this.table.tbody().on('click', '#cancel', this, this.onBtnCancel);
+        this.table.tbody().on('click', '#save', this, this.onBtnSave);
     }
 }
