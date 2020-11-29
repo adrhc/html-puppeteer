@@ -19,10 +19,6 @@ class HtmlTableAdapter {
         return $(`#${this.tableId} > tbody`);
     }
 
-    thead() {
-        return $(`#${this.tableId} > thead`);
-    }
-
     renderBody(data) {
         const bodyTmplHtml = $(`#${this.bodyTmpl}`).html();
         const renderedHtml = Mustache.render(bodyTmplHtml, data)

@@ -119,7 +119,7 @@ class TabularComponent {
      * private method
      */
     configureEvents() {
-        this.table.thead().on('dblclick', 'tr', this, this.onTHeadDblclick);
+        $('#newItemBtn').on('dblclick', this, this.onTHeadDblclick);
         this.table.tbody()
             .on('dblclick', 'tr', this, this.onRowDblclick)
             .on('click', '#cancel', this, this.onBtnCancel)
