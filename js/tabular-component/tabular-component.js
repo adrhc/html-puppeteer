@@ -89,9 +89,8 @@ class TabularComponent {
      * private method
      */
     switchSelectionTo(selectedIndex) {
-        const currentlySelectedIndex = this.state.selectedIndex;
-        const prevSelItemWasRemoved = this.state.selectionExists() && this.clearSelection();
-        const prevSelItemPositionIsBeforeNewSelection = currentlySelectedIndex < selectedIndex;
+        const prevSelItemPositionIsBeforeNewSelection = this.state.selectedIndex < selectedIndex;
+        const prevSelItemWasRemoved = this.clearSelection();
         const removedRowPositionedBeforeNewSelectionExists =
             prevSelItemWasRemoved && prevSelItemPositionIsBeforeNewSelection ? 1 : 0;
         this.state.selectedIndex = selectedIndex - removedRowPositionedBeforeNewSelectionExists;
@@ -101,9 +100,12 @@ class TabularComponent {
     /**
      * private method
      *
-     * @returns true when a row was removed from table but not replaced
+     * @returns true when a row was removed instead of replaced
      */
     clearSelection() {
+        if (!this.state.selectionExists()) {
+            return false;
+        }
         const selectionIsPersisted = this.state.selectionIsPersisted();
         if (selectionIsPersisted) {
             this.readOnlyRow.show();
