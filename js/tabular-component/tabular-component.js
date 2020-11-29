@@ -48,7 +48,7 @@ class TabularComponent {
             .then((savedPerson) => {
                 console.log(savedPerson);
                 tabularEditor.state.replaceItem(savedPerson);
-                tabularEditor.cancelEdit(); v
+                tabularEditor.cancelEdit();
             })
             .catch((jqXHR, textStatus, errorThrown) => {
                 console.log(textStatus, errorThrown);
@@ -66,7 +66,7 @@ class TabularComponent {
     /**
      * initializer
      */
-    show()      {
+    show() {
         this.repo.getAll().then((persons) => {
             console.log("persons:\n", persons);
             this.state.items = persons;
@@ -120,8 +120,9 @@ class TabularComponent {
      */
     configureEvents() {
         this.table.thead().on('dblclick', 'tr', this, this.onTHeadDblclick);
-        this.table.tbody().on('dblclick', 'tr', this, this.onRowDblclick);
-        this.table.tbody().on('click', '#cancel', this, this.onBtnCancel);
-        this.table.tbody().on('click', '#save', this, this.onBtnSave);
+        this.table.tbody()
+            .on('dblclick', 'tr', this, this.onRowDblclick)
+            .on('click', '#cancel', this, this.onBtnCancel)
+            .on('click', '#save', this, this.onBtnSave);
     }
 }
