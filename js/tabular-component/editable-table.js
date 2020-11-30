@@ -51,7 +51,7 @@ class EditableTable {
             .then((savedPerson) => {
                 console.log(savedPerson);
                 const stateChangeResult = tabularEditor.state.replaceItemForSelection(savedPerson, true);
-                tabularEditor.readOnlyRow.show(stateChangeResult.newTabularItemState);
+                tabularEditor.readOnlyRow.show(stateChangeResult.newRowState);
             })
             .catch((jqXHR, textStatus, errorThrown) => {
                 console.log(textStatus, errorThrown);
@@ -85,7 +85,7 @@ class EditableTable {
      * changes come in pairs: a row (previous) is hidden while another (new one) is shown (as editable)
      */
     refresh(stateChangeResult) {
-        if (stateChangeResult.prevTabularItemState === stateChangeResult.newTabularItemState) {
+        if (stateChangeResult.prevRowState === stateChangeResult.newRowState) {
             // selection not changed, do nothing
             return;
         }
@@ -93,21 +93,21 @@ class EditableTable {
         // dropping previous view
         if (stateChangeResult.prevIsRemoved) {
             // previous selection is removed: remove the related row
-            this.readOnlyRow.hide(stateChangeResult.prevTabularItemState);
-        } else if (stateChangeResult.prevTabularItemState) {
+            this.readOnlyRow.hide(stateChangeResult.prevRowState);
+        } else if (stateChangeResult.prevRowState) {
             // previous selection exists: change it to read-only
-            this.readOnlyRow.show(stateChangeResult.prevTabularItemState);
+            this.readOnlyRow.show(stateChangeResult.prevRowState);
         }
 
         // "activating" the new view
-        if (!stateChangeResult.newTabularItemState) {
+        if (!stateChangeResult.newRowState) {
             // no row to display (aka there's no new view)
-        } else if (stateChangeResult.newTabularItemState.selected) {
+        } else if (stateChangeResult.newRowState.selected) {
             // change row's view to editable
-            this.editableRow.show(stateChangeResult.newTabularItemState, stateChangeResult.newIsCreated);
+            this.editableRow.show(stateChangeResult.newRowState, stateChangeResult.newIsCreated);
         } else {
             // change row's view to read-only
-            this.readOnlyRow.show(stateChangeResult.newTabularItemState, stateChangeResult.newIsCreated);
+            this.readOnlyRow.show(stateChangeResult.newRowState, stateChangeResult.newIsCreated);
         }
     }
 

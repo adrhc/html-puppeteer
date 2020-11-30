@@ -1,7 +1,7 @@
 class StateChanges {
-    constructor(prevItemState, newItemState, prevIsRemoved, newIsCreated) {
-        this.prevTabularItemState = prevItemState;
-        this.newTabularItemState = newItemState;
+    constructor(prevRowState, newRowState, prevIsRemoved, newIsCreated) {
+        this.prevRowState = prevRowState;
+        this.newRowState = newRowState;
         this.prevIsRemoved = prevIsRemoved;
         this.newIsCreated = newIsCreated;
     }
