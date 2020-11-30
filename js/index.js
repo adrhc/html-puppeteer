@@ -9,9 +9,11 @@ if (Modernizr.template) {
         }
     });
     $(() => {
-        new EditableTable("personsTable", "tableBodyTmpl",
-            "readOnlyRowTmpl", "editableRowTmpl", "editorForm")
-            .show();
+        const htmlTableAdapter = new HtmlTableAdapter("personsTable", "tableBodyTmpl");
+        const readOnlyRow = new ReadOnlyRow(htmlTableAdapter, "readOnlyRowTmpl");
+        const editableRow = new EditableRow(htmlTableAdapter, "editableRowTmpl");
+        const formUtils = new FormsHelper("editorForm");
+        new EditableTable(htmlTableAdapter, readOnlyRow, editableRow, formUtils).show();
     })
 } else {
     // Find another way to add the rows to the table because

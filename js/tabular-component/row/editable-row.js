@@ -1,18 +1,18 @@
 class EditableRow extends ReadOnlyRow {
-    constructor(table, rowTmpl) {
-        super(table, rowTmpl);
+    constructor(htmlTableAdapter, rowTmpl) {
+        super(htmlTableAdapter, rowTmpl);
     }
 
-    show(tabularRowState, asNew) {
-        super.show(tabularRowState, asNew);
-        this.focusFirstInput(tabularRowState.index);
+    show(rowState, asNew) {
+        super.show(rowState, asNew);
+        this.focusFirstInput(rowState.index);
     }
 
     /**
      * private method
      */
     focusFirstInput(index) {
-        const $row = this.table.tbody().find("tr").eq(index);
+        const $row = this.htmlTableAdapter.tbody().find("tr").eq(index);
         const $inputToFocus = $row.find("input[name='firstName']:visible");
         if ($inputToFocus.length) {
             $inputToFocus.focus();

@@ -2,14 +2,12 @@
  * Role: capture all table events
  */
 class EditableTable {
-    constructor(tableId, bodyTmpl, readOnlyRowTmpl, editableRowTmpl, editorForm) {
+    constructor(htmlTableAdapter, readOnlyRow, editableRow, formUtils) {
+        this.htmlTableAdapter = htmlTableAdapter;
+        this.readOnlyRow = readOnlyRow;
+        this.editableRow = editableRow;
+        this.formUtils = formUtils;
         this.state = new TableState();
-        this.table = new HtmlTableAdapter(tableId, bodyTmpl);
-        this.readOnlyRowTmpl = readOnlyRowTmpl;
-        this.editableRowTmpl = editableRowTmpl;
-        this.readOnlyRow = new ReadOnlyRow(this.table, this.readOnlyRowTmpl);
-        this.editableRow = new EditableRow(this.table, this.editableRowTmpl);
-        this.formUtils = new FormsHelper(editorForm);
         this.repo = new PersonsRepository();
         this.configureEvents();
     }
@@ -18,40 +16,40 @@ class EditableTable {
      * header selection event handler
      */
     onTHeadDblclick(ev) {
-        const tabularEditor = ev.data;
-        if (tabularEditor.state.transientSelectionExists()) {
+        const editableTable = ev.data;
+        if (editableTable.state.transientSelectionExists()) {
             // new empty row is already available for edit
             return false;
         }
-        const stateChangeResult = tabularEditor.state.createEmptySelection(0);
-        tabularEditor.refresh(stateChangeResult);
+        const stateChangeResult = editableTable.state.createEmptySelection(0);
+        editableTable.refresh(stateChangeResult);
     }
 
     /**
      * row selection event handler
      */
     onRowDblclick(ev) {
-        const tabularEditor = ev.data;
+        const editableTable = ev.data;
         const selectedIndex = this.rowIndex - 1;
-        if (tabularEditor.state.isIndexSelected(selectedIndex)) {
+        if (editableTable.state.isIndexSelected(selectedIndex)) {
             // index is already selected, nothing else to do here
             return false;
         }
-        const stateChangeResult = tabularEditor.state.switchSelectionTo(selectedIndex);
-        tabularEditor.refresh(stateChangeResult);
+        const stateChangeResult = editableTable.state.switchSelectionTo(selectedIndex);
+        editableTable.refresh(stateChangeResult);
     }
 
     /**
      * save event handler
      */
     onBtnSave(ev) {
-        const tabularEditor = ev.data;
-        const person = tabularEditor.formUtils.objectifyForm();
-        tabularEditor.repo.save(person)
+        const editableTable = ev.data;
+        const person = editableTable.formUtils.objectifyForm();
+        editableTable.repo.save(person)
             .then((savedPerson) => {
                 console.log(savedPerson);
-                const stateChangeResult = tabularEditor.state.replaceItemForSelection(savedPerson, true);
-                tabularEditor.readOnlyRow.show(stateChangeResult.newRowState);
+                const stateChangeResult = editableTable.state.replaceItemForSelection(savedPerson, true);
+                editableTable.readOnlyRow.show(stateChangeResult.newRowState);
             })
             .catch((jqXHR, textStatus, errorThrown) => {
                 console.log(textStatus, errorThrown);
@@ -63,9 +61,9 @@ class EditableTable {
      * cancel event handler
      */
     onBtnCancel(ev) {
-        const tabularEditor = ev.data;
-        const stateChangeResult = tabularEditor.state.cancelSelection();
-        tabularEditor.refresh(stateChangeResult);
+        const editableTable = ev.data;
+        const stateChangeResult = editableTable.state.cancelSelection();
+        editableTable.refresh(stateChangeResult);
     }
 
     /**
@@ -75,7 +73,7 @@ class EditableTable {
         this.repo.getAll().then((persons) => {
             console.log("persons:\n", persons);
             this.state.items = persons;
-            this.table.renderBody({persons: persons});
+            this.htmlTableAdapter.renderBody({persons: persons});
         });
     }
 
@@ -116,7 +114,7 @@ class EditableTable {
      */
     configureEvents() {
         $('#newItemBtn').on('dblclick', this, this.onTHeadDblclick);
-        this.table.tbody()
+        this.htmlTableAdapter.tbody()
             .on('dblclick', 'tr', this, this.onRowDblclick)
             .on('click', '#cancel', this, this.onBtnCancel)
             .on('click', '#save', this, this.onBtnSave);

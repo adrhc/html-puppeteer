@@ -1,8 +1,8 @@
 # js commands
 ### delete all rows
 ```javascript 1.8
-var table = new HtmlTableAdapter('personsTable');
-table.deleteAllRows();
+var htmlTableAdapter = new HtmlTableAdapter('personsTable');
+htmlTableAdapter.deleteAllRows();
 ```
 ### add rows
 ```javascript 1.8

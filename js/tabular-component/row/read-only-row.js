@@ -2,16 +2,16 @@
  * Represent the rendering capabilities of EditableTable at row level.
  */
 class ReadOnlyRow {
-    constructor(table, rowTmpl) {
-        this.table = table;
+    constructor(htmlTableAdapter, rowTmpl) {
+        this.htmlTableAdapter = htmlTableAdapter;
         this.rowTmpl = rowTmpl;
     }
 
-    hide(tabularRowState) {
-        this.table.deleteRow(tabularRowState.index);
+    hide(rowState) {
+        this.htmlTableAdapter.deleteRow(rowState.index);
     }
 
-    show(tabularRowState, asNew) {
-        this.table.renderRow(tabularRowState.index, tabularRowState.cellValues, this.rowTmpl, !asNew);
+    show(rowState, asNew) {
+        this.htmlTableAdapter.renderRow(rowState.index, rowState.cellValues, this.rowTmpl, !asNew);
     }
 }
