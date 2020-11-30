@@ -1,18 +1,18 @@
 class TabularEditableRow extends TabularRow {
-    constructor(tabularEditorState, table, rowTmpl) {
-        super(tabularEditorState, table, rowTmpl);
+    constructor(table, rowTmpl) {
+        super(table, rowTmpl);
     }
 
-    show(asNew) {
-        super.show(asNew);
-        this.focusFirstInput();
+    show(tabularRowState, asNew) {
+        super.show(tabularRowState, asNew);
+        this.focusFirstInput(tabularRowState.index);
     }
 
     /**
      * private method
      */
-    focusFirstInput() {
-        const $row = this.table.tbody().find("tr").eq(this.context.selectedIndex);
+    focusFirstInput(index) {
+        const $row = this.table.tbody().find("tr").eq(index);
         const $inputToFocus = $row.find("input[name='firstName']:visible");
         if ($inputToFocus.length) {
             $inputToFocus.focus();

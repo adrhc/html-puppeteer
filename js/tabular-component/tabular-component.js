@@ -2,14 +2,14 @@
  * Role: capture all table events
  */
 class TabularComponent {
-    constructor(tableId, bodyTmpl, readOnlyRowTmpl, editableRowTmpl) {
+    constructor(tableId, bodyTmpl, readOnlyRowTmpl, editableRowTmpl, editorForm) {
         this.state = new TabularState();
         this.table = new HtmlTableAdapter(tableId, bodyTmpl);
         this.readOnlyRowTmpl = readOnlyRowTmpl;
         this.editableRowTmpl = editableRowTmpl;
-        this.readOnlyRow = new TabularRow(this.state, this.table, this.readOnlyRowTmpl);
-        this.editableRow = new TabularEditableRow(this.state, this.table, this.editableRowTmpl);
-        this.formUtils = new FormsHelper("editorForm");
+        this.readOnlyRow = new TabularRow(this.table, this.readOnlyRowTmpl);
+        this.editableRow = new TabularEditableRow(this.table, this.editableRowTmpl);
+        this.formUtils = new FormsHelper(editorForm);
         this.repo = new PersonsRepository();
         this.configureEvents();
     }
@@ -19,10 +19,12 @@ class TabularComponent {
      */
     onTHeadDblclick(ev) {
         const tabularEditor = ev.data;
-        if (tabularEditor.state.notSavedItemExists()) {
+        if (tabularEditor.state.transientSelectionExists()) {
+            // new empty row is already available for edit
             return false;
         }
-        tabularEditor.createItem();
+        const stateChangeResult = tabularEditor.state.createEmptySelection(0);
+        tabularEditor.switchSelectionTo(stateChangeResult);
     }
 
     /**
@@ -32,10 +34,11 @@ class TabularComponent {
         const tabularEditor = ev.data;
         const selectedIndex = this.rowIndex - 1;
         if (tabularEditor.state.isIndexSelected(selectedIndex)) {
-            // index already selected, nothing else to do here
+            // index is already selected, nothing else to do here
             return false;
         }
-        tabularEditor.switchSelectionTo(selectedIndex);
+        const stateChangeResult = tabularEditor.state.switchSelectionTo(selectedIndex);
+        tabularEditor.switchSelectionTo(stateChangeResult);
     }
 
     /**
@@ -47,8 +50,8 @@ class TabularComponent {
         tabularEditor.repo.save(person)
             .then((savedPerson) => {
                 console.log(savedPerson);
-                tabularEditor.state.replaceItem(savedPerson);
-                tabularEditor.clearSelection();
+                const stateChangeResult = tabularEditor.state.replaceItemForSelection(savedPerson, true);
+                tabularEditor.readOnlyRow.show(stateChangeResult.newTabularItemState);
             })
             .catch((jqXHR, textStatus, errorThrown) => {
                 console.log(textStatus, errorThrown);
@@ -60,7 +63,9 @@ class TabularComponent {
      * cancel event handler
      */
     onBtnCancel(ev) {
-        ev.data.clearSelection();
+        const tabularEditor = ev.data;
+        const stateChangeResult = tabularEditor.state.cancelSelection();
+        tabularEditor.readOnlyRow.show(stateChangeResult.prevTabularItemState);
     }
 
     /**
@@ -77,44 +82,19 @@ class TabularComponent {
     /**
      * private method
      */
-    createItem() {
-        if (this.state.selectionExists()) {
-            this.clearSelection();
+    switchSelectionTo(stateChangeResult) {
+        if (stateChangeResult.prevTabularItemState === stateChangeResult.newTabularItemState) {
+            // selection not changed, do nothing
+            return;
+        } else if (stateChangeResult.prevIsRemoved) {
+            // previous selection is removed: remove the related row
+            this.readOnlyRow.hide(stateChangeResult.prevTabularItemState);
+        } else if (stateChangeResult.prevTabularItemState) {
+            // previous selection exists: change it to read-only
+            this.readOnlyRow.show(stateChangeResult.prevTabularItemState);
         }
-        this.state.createAndSelectEmptyItem(0);
-        this.editableRow.show(true);
-    }
-
-    /**
-     * private method
-     */
-    switchSelectionTo(selectedIndex) {
-        const prevSelItemPositionIsBeforeNewSelection = this.state.selectedIndex < selectedIndex;
-        const prevSelItemWasRemoved = this.clearSelection();
-        const removedRowPositionedBeforeNewSelectionExists =
-            prevSelItemWasRemoved && prevSelItemPositionIsBeforeNewSelection ? 1 : 0;
-        this.state.selectedIndex = selectedIndex - removedRowPositionedBeforeNewSelectionExists;
-        this.editableRow.show();
-    }
-
-    /**
-     * private method
-     *
-     * @returns true when a row was removed instead of replaced
-     */
-    clearSelection() {
-        if (!this.state.selectionExists()) {
-            return false;
-        }
-        const selectionIsPersisted = this.state.selectionIsPersisted();
-        if (selectionIsPersisted) {
-            this.readOnlyRow.show();
-            this.state.cancelSelection();
-        } else {
-            this.readOnlyRow.hide();
-            this.state.removeSelectedItem();
-        }
-        return !selectionIsPersisted;
+        // make new selection editable
+        this.editableRow.show(stateChangeResult.newTabularItemState, stateChangeResult.newIsCreated);
     }
 
     /**

@@ -10,7 +10,8 @@ if (Modernizr.template) {
     });
     $(() => {
         new TabularComponent("personsTable", "tableBodyTmpl",
-            "readOnlyRowTmpl", "editableRowTmpl").show();
+            "readOnlyRowTmpl", "editableRowTmpl", "editorForm")
+            .show();
     })
 } else {
     // Find another way to add the rows to the table because
