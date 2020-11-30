@@ -24,7 +24,7 @@ class TabularComponent {
             return false;
         }
         const stateChangeResult = tabularEditor.state.createEmptySelection(0);
-        tabularEditor.switchSelectionTo(stateChangeResult);
+        tabularEditor.refresh(stateChangeResult);
     }
 
     /**
@@ -38,7 +38,7 @@ class TabularComponent {
             return false;
         }
         const stateChangeResult = tabularEditor.state.switchSelectionTo(selectedIndex);
-        tabularEditor.switchSelectionTo(stateChangeResult);
+        tabularEditor.refresh(stateChangeResult);
     }
 
     /**
@@ -65,7 +65,7 @@ class TabularComponent {
     onBtnCancel(ev) {
         const tabularEditor = ev.data;
         const stateChangeResult = tabularEditor.state.cancelSelection();
-        tabularEditor.switchSelectionTo(stateChangeResult);
+        tabularEditor.refresh(stateChangeResult);
     }
 
     /**
@@ -81,13 +81,16 @@ class TabularComponent {
 
     /**
      * private method
+     *
+     * changes come in pairs: a row (previous) is hidden while another (new one) is shown (as editable)
      */
-    switchSelectionTo(stateChangeResult) {
+    refresh(stateChangeResult) {
         if (stateChangeResult.prevTabularItemState === stateChangeResult.newTabularItemState) {
             // selection not changed, do nothing
             return;
         }
-        // removing row's previous view
+
+        // dropping previous view
         if (stateChangeResult.prevIsRemoved) {
             // previous selection is removed: remove the related row
             this.readOnlyRow.hide(stateChangeResult.prevTabularItemState);
@@ -95,9 +98,10 @@ class TabularComponent {
             // previous selection exists: change it to read-only
             this.readOnlyRow.show(stateChangeResult.prevTabularItemState);
         }
-        // displaying the row's new view
+
+        // "activating" the new view
         if (!stateChangeResult.newTabularItemState) {
-            // no row to display
+            // no row to display (aka there's no new view)
         } else if (stateChangeResult.newTabularItemState.selected) {
             // change row's view to editable
             this.editableRow.show(stateChangeResult.newTabularItemState, stateChangeResult.newIsCreated);
