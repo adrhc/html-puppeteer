@@ -1,4 +1,4 @@
-class TabularEditableRow extends TabularRow {
+class EditableRow extends ReadOnlyRow {
     constructor(table, rowTmpl) {
         super(table, rowTmpl);
     }

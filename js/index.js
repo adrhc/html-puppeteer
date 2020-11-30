@@ -9,7 +9,7 @@ if (Modernizr.template) {
         }
     });
     $(() => {
-        new TabularComponent("personsTable", "tableBodyTmpl",
+        new EditableTable("personsTable", "tableBodyTmpl",
             "readOnlyRowTmpl", "editableRowTmpl", "editorForm")
             .show();
     })

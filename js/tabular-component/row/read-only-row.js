@@ -1,8 +1,7 @@
 /**
- * Represent the rendering capabilities of TabularComponent at row level.
- * Reacts to "row"-level state changes.
+ * Represent the rendering capabilities of EditableTable at row level.
  */
-class TabularRow {
+class ReadOnlyRow {
     constructor(table, rowTmpl) {
         this.table = table;
         this.rowTmpl = rowTmpl;

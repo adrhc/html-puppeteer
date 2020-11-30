@@ -1,14 +1,14 @@
 /**
  * Role: capture all table events
  */
-class TabularComponent {
+class EditableTable {
     constructor(tableId, bodyTmpl, readOnlyRowTmpl, editableRowTmpl, editorForm) {
-        this.state = new TabularState();
+        this.state = new TableState();
         this.table = new HtmlTableAdapter(tableId, bodyTmpl);
         this.readOnlyRowTmpl = readOnlyRowTmpl;
         this.editableRowTmpl = editableRowTmpl;
-        this.readOnlyRow = new TabularRow(this.table, this.readOnlyRowTmpl);
-        this.editableRow = new TabularEditableRow(this.table, this.editableRowTmpl);
+        this.readOnlyRow = new ReadOnlyRow(this.table, this.readOnlyRowTmpl);
+        this.editableRow = new EditableRow(this.table, this.editableRowTmpl);
         this.formUtils = new FormsHelper(editorForm);
         this.repo = new PersonsRepository();
         this.configureEvents();

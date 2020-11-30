@@ -1,4 +1,4 @@
-class TabularState {
+class TableState {
     _selectedIndex = undefined;
 
     constructor(items, selectedIndex) {
@@ -102,14 +102,14 @@ class TabularState {
         if (!this.selectionExists()) {
             return undefined;
         }
-        return new TabularItemState(true, this._selectedIndex, this.selectedItem);
+        return new RowState(true, this._selectedIndex, this.selectedItem);
     }
 
     getStateAt(index) {
         if (!this._items || !this._items.length) {
             return undefined;
         }
-        return new TabularItemState(this.isIndexSelected(index), index, this._items[index]);
+        return new RowState(this.isIndexSelected(index), index, this._items[index]);
     }
 
     /**
