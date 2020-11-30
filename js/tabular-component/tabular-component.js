@@ -65,7 +65,7 @@ class TabularComponent {
     onBtnCancel(ev) {
         const tabularEditor = ev.data;
         const stateChangeResult = tabularEditor.state.cancelSelection();
-        tabularEditor.readOnlyRow.show(stateChangeResult.prevTabularItemState);
+        tabularEditor.switchSelectionTo(stateChangeResult);
     }
 
     /**
@@ -86,15 +86,25 @@ class TabularComponent {
         if (stateChangeResult.prevTabularItemState === stateChangeResult.newTabularItemState) {
             // selection not changed, do nothing
             return;
-        } else if (stateChangeResult.prevIsRemoved) {
+        }
+        // removing row's previous view
+        if (stateChangeResult.prevIsRemoved) {
             // previous selection is removed: remove the related row
             this.readOnlyRow.hide(stateChangeResult.prevTabularItemState);
         } else if (stateChangeResult.prevTabularItemState) {
             // previous selection exists: change it to read-only
             this.readOnlyRow.show(stateChangeResult.prevTabularItemState);
         }
-        // make new selection editable
-        this.editableRow.show(stateChangeResult.newTabularItemState, stateChangeResult.newIsCreated);
+        // displaying the row's new view
+        if (!stateChangeResult.newTabularItemState) {
+            // no row to display
+        } else if (stateChangeResult.newTabularItemState.selected) {
+            // change row's view to editable
+            this.editableRow.show(stateChangeResult.newTabularItemState, stateChangeResult.newIsCreated);
+        } else {
+            // change row's view to read-only
+            this.readOnlyRow.show(stateChangeResult.newTabularItemState, stateChangeResult.newIsCreated);
+        }
     }
 
     /**
