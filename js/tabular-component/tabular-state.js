@@ -1,44 +1,23 @@
 class TabularState {
     _selectedIndex = undefined;
 
-    get selectedItem() {
-        if (!this.selectionExists()) {
-            return undefined;
-        }
-        return this._items[this._selectedIndex];
-    }
-
-    get selectionState() {
-        if (!this.selectionExists()) {
-            return undefined;
-        }
-        return new TabularItemState(true, this._selectedIndex, this.selectedItem);
-    }
-
-    getStateAt(index) {
-        return new TabularItemState(this.isIndexSelected(index), index, this._items[index]);
-    }
-
-    get selectedIndex() {
-        return this._selectedIndex;
-    }
-
-    set selectedIndex(selectedIndex) {
-        throw `Unsupported operation! selectedIndex = ${selectedIndex}`;
+    constructor(items, selectedIndex) {
+        this.items = items;
+        this._selectedIndex = selectedIndex;
     }
 
     /**
      * @param selectedIndex
-     * @returns {StateChangeResult}
+     * @returns {StateChanges}
      */
     switchSelectionTo(selectedIndex) {
         if (!this.selectionExists()) {
             // no previous selection
             this._selectedIndex = selectedIndex;
-            return new StateChangeResult(undefined, this.selectionState);
+            return new StateChanges(undefined, this.selectionState);
         } else if (this.isIndexSelected(selectedIndex)) {
             // current selection is not changed (is just again selected)
-            return new StateChangeResult(this.selectionState, this.selectionState);
+            return new StateChanges(this.selectionState, this.selectionState);
         }
         // previous selection exists, new item is selected
         const prevTabularItemState = this.selectionState;
@@ -50,60 +29,45 @@ class TabularState {
         const removedRowPositionedBeforeNewSelectionExists =
             transientSelectionExists && prevSelItemPositionIsBeforeNewSelection ? 1 : 0;
         this._selectedIndex = selectedIndex - removedRowPositionedBeforeNewSelectionExists;
-        return new StateChangeResult(prevTabularItemState, this.selectionState, transientSelectionExists);
-    }
-
-    /**
-     * @returns {StateChangeResult}
-     */
-    cancelSelection() {
-        return this.switchSelectionTo();
+        return new StateChanges(prevTabularItemState, this.selectionState, transientSelectionExists);
     }
 
     /**
      * @param item
      * @param cancelSelection
-     * @returns {StateChangeResult}
+     * @returns {StateChanges}
      */
     replaceItemForSelection(item, cancelSelection) {
         const prevTabularItemState = this.selectionState;
         const prevSelectedIndex = this._selectedIndex;
-        this.items.splice(prevSelectedIndex, 1, item);
+        this.replaceItem(prevSelectedIndex, item);
         if (cancelSelection) {
             this._selectedIndex = undefined;
         }
-        return new StateChangeResult(prevTabularItemState, this.getStateAt(prevSelectedIndex));
+        return new StateChanges(prevTabularItemState, this.getStateAt(prevSelectedIndex));
     }
 
     /**
      * @param index
-     * @returns {StateChangeResult}
+     * @returns {StateChanges}
      */
     createEmptySelection(index) {
         if (this.transientSelectionExists()) {
             // current (transient) selection is not changed
-            return new StateChangeResult(this.selectionState, this.selectionState);
+            return new StateChanges(this.selectionState, this.selectionState);
         }
         // no transient selection exists
         const prevTabularItemState = this.selectionState;
         this.insertNewItem(index);
         this._selectedIndex = index;
-        return new StateChangeResult(prevTabularItemState, this.selectionState, false, true);
-    }
-
-    constructor(items) {
-        this.items = items;
-    }
-
-    insertNewItem(index) {
-        this.items.splice(index, 0, {});
+        return new StateChanges(prevTabularItemState, this.selectionState, false, true);
     }
 
     /**
-     * remove the item state and reset the selected index
+     * @returns {StateChanges}
      */
-    removeItem() {
-        this.items.splice(this._selectedIndex, 1);
+    cancelSelection() {
+        return this.switchSelectionTo();
     }
 
     /**
@@ -123,20 +87,57 @@ class TabularState {
         return this._selectedIndex >= 0;
     }
 
-    /**
-     * @returns {boolean|*}
-     */
-    selectionIsPersisted() {
-        return this.selectionExists() &&
-            $.isNumeric(this.items[this._selectedIndex].id);
-    }
-
     transientSelectionExists() {
-        return this.selectionExists() && !$.isNumeric(this.items[this._selectedIndex].id);
+        return this.selectionExists() && !$.isNumeric(this.selectedItem.id);
     }
 
-    get items() {
-        return this._items;
+    get selectedItem() {
+        if (!this.selectionExists()) {
+            return undefined;
+        }
+        return this._items[this._selectedIndex];
+    }
+
+    get selectionState() {
+        if (!this.selectionExists()) {
+            return undefined;
+        }
+        return new TabularItemState(true, this._selectedIndex, this.selectedItem);
+    }
+
+    getStateAt(index) {
+        if (!this._items || !this._items.length) {
+            return undefined;
+        }
+        return new TabularItemState(this.isIndexSelected(index), index, this._items[index]);
+    }
+
+    /**
+     * private method
+     */
+    replaceItem(index, item) {
+        this._items.splice(index, 1, item);
+    }
+
+    /**
+     * private method
+     */
+    insertNewItem(index) {
+        this._items.splice(index, 0, {});
+    }
+
+    /**
+     * private method
+     */
+    removeItem() {
+        this._items.splice(this._selectedIndex, 1);
+    }
+
+    /**
+     * private method
+     */
+    set selectedIndex(selectedIndex) {
+        throw `Unsupported operation! selectedIndex = ${selectedIndex}`;
     }
 
     set items(items) {
