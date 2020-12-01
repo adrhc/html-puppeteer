@@ -2,9 +2,10 @@
  * Role: adapter to HTMLTableElement
  */
 class HtmlTableAdapter {
-    constructor(tableId, bodyTmpl) {
+    constructor(tableId, bodyTmpl, elemTmpl) {
         this.tableId = tableId;
         this.bodyTmpl = bodyTmpl;
+        this.elemTmpl = elemTmpl;
     }
 
     deleteRow(index) {
@@ -20,9 +21,10 @@ class HtmlTableAdapter {
     }
 
     renderBody(data) {
-        const bodyTmplHtml = $(`#${this.bodyTmpl}`).html();
-        const renderedHtml = Mustache.render(bodyTmplHtml, data)
-        this.tbody().html(renderedHtml);
+        const bodyTmplHtml = HtmlUtils.prototype.templateTextOf(this.bodyTmpl);
+        const elemTmplHtml = $(`#${this.elemTmpl}`).html();
+        const html = Mustache.render(bodyTmplHtml, data, {readOnlyRow: elemTmplHtml})
+        this.tbody().html(html);
     }
 
     /**

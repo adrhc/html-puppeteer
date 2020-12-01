@@ -9,7 +9,7 @@ if (Modernizr.template) {
         }
     });
     $(() => {
-        const htmlTableAdapter = new HtmlTableAdapter("personsTable", "tableBodyTmpl");
+        const htmlTableAdapter = new HtmlTableAdapter("personsTable", "tableBodyTmpl", "readOnlyRowTmpl");
         const readOnlyRow = new ReadOnlyRow(htmlTableAdapter, "readOnlyRowTmpl");
         const editableRow = new EditableRow(htmlTableAdapter, "editableRowTmpl");
         const formUtils = new FormsHelper("editorForm");

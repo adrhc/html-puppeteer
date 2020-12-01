@@ -22,7 +22,7 @@ class EditableTable {
             return false;
         }
         const stateChangeResult = editableTable.state.createEmptySelection(0);
-        editableTable.refresh(stateChangeResult);
+        editableTable.update(stateChangeResult);
     }
 
     /**
@@ -36,7 +36,7 @@ class EditableTable {
             return false;
         }
         const stateChangeResult = editableTable.state.switchSelectionTo(selectedIndex);
-        editableTable.refresh(stateChangeResult);
+        editableTable.update(stateChangeResult);
     }
 
     /**
@@ -63,7 +63,7 @@ class EditableTable {
     onBtnCancel(ev) {
         const editableTable = ev.data;
         const stateChangeResult = editableTable.state.cancelSelection();
-        editableTable.refresh(stateChangeResult);
+        editableTable.update(stateChangeResult);
     }
 
     /**
@@ -82,7 +82,7 @@ class EditableTable {
      *
      * changes come in pairs: a row (previous) is hidden while another (new one) is shown (as editable)
      */
-    refresh(stateChangeResult) {
+    update(stateChangeResult) {
         if (stateChangeResult.prevRowState === stateChangeResult.newRowState) {
             // selection not changed, do nothing
             return;

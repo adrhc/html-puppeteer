@@ -25,13 +25,9 @@
 </form>
 
 <template id="tableBodyTmpl">
-    {{#persons}}
-    <tr id="{{id}}">
-        <td>{{id}}</td>
-        <td>{{firstName}}</td>
-        <td>{{lastName}}</td>
-    </tr>
-    {{/persons}}
+{{#persons}}
+    {{> readOnlyRow}}
+{{/persons}}
 </template>
 
 <template id="readOnlyRowTmpl">
@@ -71,6 +67,7 @@
     </tr>
 </template>
 
+<script src="js/util/html-utils.js"></script>
 <script src="js/util/rest-utils.js"></script>
 <script src="js/helper/forms-helper.js"></script>
 <script src="js/adapter/html-table-adapter.js"></script>
