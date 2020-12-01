@@ -8,12 +8,11 @@ class ReadOnlyRow {
     }
 
     hide(rowState) {
-        $(`#${rowState.id}`).remove()
+        this.htmlTableAdapter.deleteRowById(rowState.id)
     }
 
     show(rowState, asNew) {
-        const rowElem = $(`#${rowState.id}`)[0];
-        const rowIndex = asNew ? 0 : (rowElem.sectionRowIndex == null ? rowElem.rowIndex : rowElem.sectionRowIndex);
+        const rowIndex = asNew ? 0 : this.htmlTableAdapter.getRowIndexById(rowState.id);
         this.htmlTableAdapter.renderRow(rowIndex, this.cellsViewOf(rowState), this.rowTmpl, !asNew);
     }
 

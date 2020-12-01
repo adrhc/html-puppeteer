@@ -8,12 +8,17 @@ class HtmlTableAdapter {
         this.elemTmpl = elemTmpl;
     }
 
-    deleteRow(index) {
-        this.$tbody().find(`tr:eq(${index})`).remove();
+    deleteRowById(id) {
+        this.$getRowById(id).remove();
     }
 
-    deleteAllRows() {
-        this.$tbody().empty();
+    getRowIndexById(id) {
+        const rowElem = this.$getRowById(id)[0];
+        return rowElem.sectionRowIndex == null ? rowElem.rowIndex : rowElem.sectionRowIndex;
+    }
+
+    $getRowById(id) {
+        return this.$tbody().find(`#${id}`);
     }
 
     $tbody() {
