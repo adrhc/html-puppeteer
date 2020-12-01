@@ -1,13 +1,17 @@
 class EntityUtils {
+    get NEW_ID() {
+        return "newId";
+    }
+
     hasEmptyId(item) {
         return !$.isNumeric(item.id);
     }
 
     isTransientId(id) {
-        return id === "newItem";
+        return id === "newId";
     }
 
     isTransient(item) {
-        return item.id === "newItem";
+        return item.id === "newId";
     }
 }

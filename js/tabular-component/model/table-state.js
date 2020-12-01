@@ -96,7 +96,7 @@ class TableState {
     }
 
     getStateAt(id) {
-        if (!this._items || !this._items.length) {
+        if (!this._items || !this._items[id]) {
             return undefined;
         }
         return new RowState(this.isIdSelected(id), id, this._items[id]);
@@ -113,8 +113,9 @@ class TableState {
      * private method
      */
     insertNewItem() {
-        this._items["newItem"] = {id: "newItem"};
-        return this._items["newItem"];
+        const NEW_ID = EntityUtils.prototype.NEW_ID;
+        this._items[NEW_ID] = {id: NEW_ID};
+        return this._items[NEW_ID];
     }
 
     /**

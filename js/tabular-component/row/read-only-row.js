@@ -14,10 +14,15 @@ class ReadOnlyRow {
     show(rowState, asNew) {
         const rowElem = $(`#${rowState.id}`)[0];
         const rowIndex = asNew ? 0 : (rowElem.sectionRowIndex == null ? rowElem.rowIndex : rowElem.sectionRowIndex);
-        const cellValues = $.extend({htmlId: rowState.cellValues.id}, rowState.cellValues);
-        if (EntityUtils.prototype.hasEmptyId(rowState)) {
-            delete cellValues.id;
-        }
-        this.htmlTableAdapter.renderRow(rowIndex, cellValues, this.rowTmpl, !asNew);
+        this.htmlTableAdapter.renderRow(rowIndex, this.cellsViewOf(rowState), this.rowTmpl, !asNew);
+    }
+
+    /**
+     * appends htmlId to cloned cellValues then return it
+     * @param rowState
+     */
+    cellsViewOf(rowState) {
+        const htmlId = EntityUtils.prototype.hasEmptyId(rowState) ? "" : rowState.id;
+        return $.extend({htmlId: htmlId}, rowState.cellValues);
     }
 }
