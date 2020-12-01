@@ -31,18 +31,17 @@ class TableState {
      */
     replaceItemForSelection(item, cancelSelection) {
         const prevTabularItemState = this.selectionState;
-        const prevSelectedId = this._selectedId;
-        this.replaceItem(prevSelectedId, item);
+        this.replaceItem(prevTabularItemState.id, item);
         if (cancelSelection) {
             this._selectedId = undefined;
         }
-        return new StateChanges(prevTabularItemState, this.getStateAt(prevSelectedId));
+        return new StateChanges(prevTabularItemState, this.getStateAt(prevTabularItemState.id));
     }
 
     /**
      * @returns {StateChanges}
      */
-    createEmptySelection() {
+    createTransientSelection() {
         if (this.transientSelectionExists()) {
             // current (transient) selection is not changed
             return new StateChanges(this.selectionState, this.selectionState);
@@ -81,13 +80,9 @@ class TableState {
         return EntityUtils.prototype.isTransientId(this._selectedId);
     }
 
-    get selectedItem() {
-        if (!this.selectionExists()) {
-            return undefined;
-        }
-        return this._items[this._selectedId];
-    }
-
+    /**
+     * private method
+     */
     get selectionState() {
         if (!this.selectionExists()) {
             return undefined;
@@ -95,6 +90,19 @@ class TableState {
         return new RowState(true, this._selectedId, this.selectedItem);
     }
 
+    /**
+     * private method
+     */
+    get selectedItem() {
+        if (!this.selectionExists()) {
+            return undefined;
+        }
+        return this._items[this._selectedId];
+    }
+
+    /**
+     * private method
+     */
     getStateAt(id) {
         if (!this._items || !this._items[id]) {
             return undefined;

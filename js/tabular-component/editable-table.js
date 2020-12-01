@@ -21,7 +21,7 @@ class EditableTable {
             // new empty row is already available for edit
             return false;
         }
-        const stateChangeResult = editableTable.state.createEmptySelection();
+        const stateChangeResult = editableTable.state.createTransientSelection();
         editableTable.update(stateChangeResult);
     }
 
