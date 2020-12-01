@@ -12,7 +12,7 @@ class EditableRow extends ReadOnlyRow {
      * private method
      */
     focusFirstInput(index) {
-        const $row = this.htmlTableAdapter.tbody().find("tr").eq(index);
+        const $row = this.htmlTableAdapter.$tbody().find("tr").eq(index);
         const $inputToFocus = $row.find("input[name='firstName']:visible");
         if ($inputToFocus.length) {
             $inputToFocus.focus();

@@ -114,7 +114,7 @@ class EditableTable {
      */
     configureEvents() {
         $('#newItemBtn').on('dblclick', this, this.onTHeadDblclick);
-        this.htmlTableAdapter.tbody()
+        this.htmlTableAdapter.$tbody()
             .on('dblclick', 'tr', this, this.onRowDblclick)
             .on('click', '#cancel', this, this.onBtnCancel)
             .on('click', '#save', this, this.onBtnSave);
