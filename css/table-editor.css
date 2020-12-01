@@ -5,20 +5,24 @@
 * Browsers: last 50 version
 */
 
-.last-cell  {
+.buttons-cell  {
     display: block;
     /*border-style: solid;*/
 }
 
-.last-cell.lastName {
+.buttons-cell.lastName {
     padding-bottom: 5px;
 }
 
-.last-cell.lastName input {
+.buttons-cell.lastName input {
     width: 100%;
     width: -webkit-fill-available;
     width: -moz-available;
     width: fill-available;
+}
+
+.buttons-row {
+
 }
 
 button {
@@ -27,4 +31,9 @@ button {
 
 .float-right {
     float: right;
+}
+
+.editor td {
+    font-weight: bold;
+    color: black;
 }

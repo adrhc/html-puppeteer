@@ -4,7 +4,7 @@
 <head>
     <title>JavaScript DOM test</title>
     <link rel="stylesheet" href="css/table.css">
-    <link rel="stylesheet" href="css/table-buttons.css">
+    <link rel="stylesheet" href="css/table-editor.css">
     <script src="libraries/modernizr-custom.js"></script>
     <script src="https://unpkg.com/mustache@latest"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -26,7 +26,7 @@
 
 <template id="tableBodyTmpl">
     {{#persons}}
-    <tr>
+    <tr id="{{id}}">
         <td>{{id}}</td>
         <td>{{firstName}}</td>
         <td>{{lastName}}</td>
@@ -35,7 +35,7 @@
 </template>
 
 <template id="readOnlyRowTmpl">
-    <tr>
+    <tr id="{{id}}">
         <td>{{id}}</td>
         <td>{{firstName}}</td>
         <td>{{lastName}}</td>
@@ -43,21 +43,30 @@
 </template>
 
 <template id="editableRowTmpl">
-    <tr>
-        <td class="editor">{{id}}
+    <tr class="editor">
+        <td>{{id}}
             <input type="hidden" name="id" value="{{id}}">
         </td>
-        <td class="editor">
+        <td>
             <input type="text" name="firstName" value="{{firstName}}">
         </td>
-        <td class="editor">
-            <div class="last-cell lastName">
+        <td>
+            <div class="buttons-cell lastName">
                 <input type="text" name="lastName" value="{{lastName}}">
             </div>
-            <div class="last-cell buttons">
+            <div class="buttons-cell">
                 <button type="button" id="cancel">Cancel</button>
                 <button type="button" id="save" class="float-right">Save</button>
             </div>
+        </td>
+    </tr>
+</template>
+
+<template id="buttons">
+    <tr class="buttons-row">
+        <td colspan="3">
+            <button type="button" id="cancelBtn">Cancel</button>
+            <button type="button" id="saveBtn" class="float-right">Save</button>
         </td>
     </tr>
 </template>
