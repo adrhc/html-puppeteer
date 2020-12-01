@@ -2,10 +2,11 @@
  * Role: capture all table events
  */
 class EditableTable {
-    constructor(htmlTableAdapter, readOnlyRow, editableRow, entityHelper) {
+    constructor(htmlTableAdapter, readOnlyRow, editableRow, buttonsRow, entityHelper) {
         this.htmlTableAdapter = htmlTableAdapter;
         this.readOnlyRow = readOnlyRow;
         this.editableRow = editableRow;
+        this.buttonsRow = buttonsRow;
         this.entityHelper = entityHelper;
         this.state = new TableState();
         this.repo = new PersonsRepository();
@@ -49,7 +50,7 @@ class EditableTable {
             .then((savedPerson) => {
                 console.log(savedPerson);
                 const stateChangeResult = editableTable.state.replaceItemForSelection(savedPerson, true);
-                editableTable.readOnlyRow.show(stateChangeResult.newRowState);
+                editableTable.update(stateChangeResult);
             })
             .catch((jqXHR, textStatus, errorThrown) => {
                 console.log(textStatus, errorThrown);
@@ -92,9 +93,11 @@ class EditableTable {
         if (stateChangeResult.prevIsRemoved) {
             // previous selection is removed: remove the related row
             this.readOnlyRow.hide(stateChangeResult.prevRowState);
+            this.buttonsRow.hide();
         } else if (stateChangeResult.prevRowState) {
             // previous selection exists: change it to read-only
             this.readOnlyRow.show(stateChangeResult.prevRowState);
+            this.buttonsRow.hide();
         }
 
         // "activating" the new view
@@ -103,6 +106,7 @@ class EditableTable {
         } else if (stateChangeResult.newRowState.selected) {
             // change row's view to editable
             this.editableRow.show(stateChangeResult.newRowState, stateChangeResult.newIsCreated);
+            this.buttonsRow.show(stateChangeResult.newRowState)
         } else {
             // change row's view to read-only
             this.readOnlyRow.show(stateChangeResult.newRowState, stateChangeResult.newIsCreated);
@@ -116,7 +120,7 @@ class EditableTable {
         $('#newItemBtn').on('dblclick', this, this.onTHeadDblclick);
         this.htmlTableAdapter.$tbody()
             .on('dblclick', 'tr', this, this.onRowDblclick)
-            .on('click', '#cancel', this, this.onBtnCancel)
-            .on('click', '#save', this, this.onBtnSave);
+            .on('click', '#cancel, #cancelBtn', this, this.onBtnCancel)
+            .on('click', '#save, #saveBtn', this, this.onBtnSave);
     }
 }

@@ -13,7 +13,11 @@ class ReadOnlyRow {
 
     show(rowState, asNew) {
         const rowIndex = asNew ? 0 : this.htmlTableAdapter.getRowIndexById(rowState.id);
-        this.htmlTableAdapter.renderRow(rowIndex, this.cellsViewOf(rowState), this.rowTmpl, !asNew);
+        this.renderRow(rowIndex, this.cellsViewOf(rowState), !asNew);
+    }
+
+    renderRow(rowIndex, cellsView, replaceExisting) {
+        this.htmlTableAdapter.renderRow(rowIndex, cellsView, this.rowTmpl, replaceExisting);
     }
 
     /**

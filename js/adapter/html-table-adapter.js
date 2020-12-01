@@ -39,12 +39,12 @@ class HtmlTableAdapter {
      * @param replaceExisting: whether to replace or append a new row
      */
     renderRow(index, data, rowTmpl, replaceExisting) {
-        const renderedHtml = MustacheUtils.prototype.renderTmplId(data, rowTmpl)
+        const rowHtml = data ? MustacheUtils.prototype.renderTmplId(data, rowTmpl) : $(`#${rowTmpl}`).html();
         const $rowAtIndex = this.$tbody().find("tr").eq(index);
         if (replaceExisting) {
-            $rowAtIndex.replaceWith(renderedHtml);
+            $rowAtIndex.replaceWith(rowHtml);
         } else {
-            const row = $(renderedHtml);
+            const row = $(rowHtml);
             if ($rowAtIndex.length) {
                 $rowAtIndex.before(row);
             } else {

@@ -87,7 +87,7 @@ class TableState {
         if (!this.selectionExists()) {
             return undefined;
         }
-        return new RowState(true, this._selectedId, this.selectedItem);
+        return new RowState(this._selectedId, this.selectedItem, true);
     }
 
     /**
@@ -107,7 +107,7 @@ class TableState {
         if (!this._items || !this._items[id]) {
             return undefined;
         }
-        return new RowState(this.isIdSelected(id), id, this._items[id]);
+        return new RowState(id, this._items[id], this.isIdSelected(id));
     }
 
     /**

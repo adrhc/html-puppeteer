@@ -1,7 +1,7 @@
 class RowState {
-    constructor(selected, id, cellValues) {
-        this.selected = selected;
+    constructor(id, cellValues, selected) {
         this.id = id;
         this.cellValues = cellValues;
+        this.selected = selected;
     }
 }
