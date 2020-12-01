@@ -120,7 +120,7 @@ class EditableTable {
         $('#newItemBtn').on('dblclick', this, this.onTHeadDblclick);
         this.htmlTableAdapter.$tbody()
             .on('dblclick', 'tr', this, this.onRowDblclick)
-            .on('click', '#cancel, #cancelBtn', this, this.onBtnCancel)
-            .on('click', '#save, #saveBtn', this, this.onBtnSave);
+            .on('click', '#cancelBtn', this, this.onBtnCancel)
+            .on('click', '#saveBtn', this, this.onBtnSave);
     }
 }
