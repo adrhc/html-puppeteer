@@ -15,10 +15,10 @@ class PersonsRepository {
     }
 
     save(person) {
-        if ($.isNumeric(person.id)) {
-            return this.update(person);
-        } else {
+        if (EntityUtils.prototype.hasEmptyId(person)) {
             return this.insert(person);
+        } else {
+            return this.update(person);
         }
     }
 

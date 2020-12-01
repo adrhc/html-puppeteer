@@ -34,8 +34,7 @@ class HtmlTableAdapter {
      * @param replaceExisting: whether to replace or append a new row
      */
     renderRow(index, data, rowTmpl, replaceExisting) {
-        const rowTmplHtml = $(`#${rowTmpl}`).html();
-        const renderedHtml = Mustache.render(rowTmplHtml, data)
+        const renderedHtml = MustacheUtils.prototype.renderTmplId(data, rowTmpl)
         const $rowAtIndex = this.tbody().find("tr").eq(index);
         if (replaceExisting) {
             $rowAtIndex.replaceWith(renderedHtml);

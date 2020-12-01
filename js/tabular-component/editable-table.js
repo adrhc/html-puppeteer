@@ -2,11 +2,11 @@
  * Role: capture all table events
  */
 class EditableTable {
-    constructor(htmlTableAdapter, readOnlyRow, editableRow, formUtils) {
+    constructor(htmlTableAdapter, readOnlyRow, editableRow, entityHelper) {
         this.htmlTableAdapter = htmlTableAdapter;
         this.readOnlyRow = readOnlyRow;
         this.editableRow = editableRow;
-        this.formUtils = formUtils;
+        this.entityHelper = entityHelper;
         this.state = new TableState();
         this.repo = new PersonsRepository();
         this.configureEvents();
@@ -21,7 +21,7 @@ class EditableTable {
             // new empty row is already available for edit
             return false;
         }
-        const stateChangeResult = editableTable.state.createEmptySelection(0);
+        const stateChangeResult = editableTable.state.createEmptySelection();
         editableTable.update(stateChangeResult);
     }
 
@@ -30,12 +30,12 @@ class EditableTable {
      */
     onRowDblclick(ev) {
         const editableTable = ev.data;
-        const selectedIndex = this.rowIndex - 1;
-        if (editableTable.state.isIndexSelected(selectedIndex)) {
+        const selectedId = this.id;
+        if (editableTable.state.isIdSelected(selectedId)) {
             // index is already selected, nothing else to do here
             return false;
         }
-        const stateChangeResult = editableTable.state.switchSelectionTo(selectedIndex);
+        const stateChangeResult = editableTable.state.switchSelectionTo(selectedId);
         editableTable.update(stateChangeResult);
     }
 
@@ -44,7 +44,7 @@ class EditableTable {
      */
     onBtnSave(ev) {
         const editableTable = ev.data;
-        const person = editableTable.formUtils.objectifyForm();
+        const person = editableTable.entityHelper.extractEntity();
         editableTable.repo.save(person)
             .then((savedPerson) => {
                 console.log(savedPerson);

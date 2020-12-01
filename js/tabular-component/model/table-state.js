@@ -1,34 +1,26 @@
 class TableState {
-    _selectedIndex = undefined;
-
-    constructor(items, selectedIndex) {
-        this.items = items;
-        this._selectedIndex = selectedIndex;
-    }
+    _selectedId = undefined;
 
     /**
-     * @param selectedIndex
+     * @param selectedId
      * @returns {StateChanges}
      */
-    switchSelectionTo(selectedIndex) {
+    switchSelectionTo(selectedId) {
         if (!this.selectionExists()) {
             // no previous selection
-            this._selectedIndex = selectedIndex;
+            this._selectedId = selectedId;
             return new StateChanges(undefined, this.selectionState);
-        } else if (this.isIndexSelected(selectedIndex)) {
+        } else if (this.isIdSelected(selectedId)) {
             // current selection is not changed (is just again selected)
             return new StateChanges(this.selectionState, this.selectionState);
         }
         // previous selection exists, new item is selected
         const prevTabularItemState = this.selectionState;
-        const prevSelItemPositionIsBeforeNewSelection = this._selectedIndex < selectedIndex;
         const transientSelectionExists = this.transientSelectionExists();
         if (transientSelectionExists) {
-            this.removeItem();
+            this.removeSelectedItem();
         }
-        const removedRowPositionedBeforeNewSelectionExists =
-            transientSelectionExists && prevSelItemPositionIsBeforeNewSelection ? 1 : 0;
-        this._selectedIndex = selectedIndex - removedRowPositionedBeforeNewSelectionExists;
+        this._selectedId = selectedId;
         return new StateChanges(prevTabularItemState, this.selectionState, transientSelectionExists);
     }
 
@@ -39,27 +31,25 @@ class TableState {
      */
     replaceItemForSelection(item, cancelSelection) {
         const prevTabularItemState = this.selectionState;
-        const prevSelectedIndex = this._selectedIndex;
-        this.replaceItem(prevSelectedIndex, item);
+        const prevSelectedId = this._selectedId;
+        this.replaceItem(prevSelectedId, item);
         if (cancelSelection) {
-            this._selectedIndex = undefined;
+            this._selectedId = undefined;
         }
-        return new StateChanges(prevTabularItemState, this.getStateAt(prevSelectedIndex));
+        return new StateChanges(prevTabularItemState, this.getStateAt(prevSelectedId));
     }
 
     /**
-     * @param index
      * @returns {StateChanges}
      */
-    createEmptySelection(index) {
+    createEmptySelection() {
         if (this.transientSelectionExists()) {
             // current (transient) selection is not changed
             return new StateChanges(this.selectionState, this.selectionState);
         }
         // no transient selection exists
         const prevTabularItemState = this.selectionState;
-        this.insertNewItem(index);
-        this._selectedIndex = index;
+        this._selectedId = this.insertNewItem().id;
         return new StateChanges(prevTabularItemState, this.selectionState, false, true);
     }
 
@@ -73,74 +63,76 @@ class TableState {
     /**
      * "named processing" method type
      *
-     * @param index
+     * @param id
      * @returns {boolean}
      */
-    isIndexSelected(index) {
-        return this._selectedIndex === index;
+    isIdSelected(id) {
+        return this._selectedId === id;
     }
 
     /**
      * @returns {boolean}
      */
     selectionExists() {
-        return this._selectedIndex >= 0;
+        return this._selectedId != null;
     }
 
     transientSelectionExists() {
-        return this.selectionExists() && !$.isNumeric(this.selectedItem.id);
+        return EntityUtils.prototype.isTransientId(this._selectedId);
     }
 
     get selectedItem() {
         if (!this.selectionExists()) {
             return undefined;
         }
-        return this._items[this._selectedIndex];
+        return this._items[this._selectedId];
     }
 
     get selectionState() {
         if (!this.selectionExists()) {
             return undefined;
         }
-        return new RowState(true, this._selectedIndex, this.selectedItem);
+        return new RowState(true, this._selectedId, this.selectedItem);
     }
 
-    getStateAt(index) {
+    getStateAt(id) {
         if (!this._items || !this._items.length) {
             return undefined;
         }
-        return new RowState(this.isIndexSelected(index), index, this._items[index]);
+        return new RowState(this.isIdSelected(id), id, this._items[id]);
     }
 
     /**
      * private method
      */
-    replaceItem(index, item) {
-        this._items.splice(index, 1, item);
+    replaceItem(id, item) {
+        this._items[id] = item;
     }
 
     /**
      * private method
      */
-    insertNewItem(index) {
-        this._items.splice(index, 0, {});
+    insertNewItem() {
+        this._items["newItem"] = {id: "newItem"};
+        return this._items["newItem"];
     }
 
     /**
      * private method
      */
-    removeItem() {
-        this._items.splice(this._selectedIndex, 1);
+    removeSelectedItem() {
+        delete this._items[this._selectedId];
     }
 
     /**
      * private method
      */
-    set selectedIndex(selectedIndex) {
-        throw `Unsupported operation! selectedIndex = ${selectedIndex}`;
+    set selectedId(selectedId) {
+        throw `Unsupported operation! selectedId = ${selectedId}`;
     }
 
     set items(items) {
-        this._items = items == null ? [] : items;
+        this._items = {};
+        items.forEach(p => this._items[p.id] = p);
     }
 }

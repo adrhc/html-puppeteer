@@ -8,10 +8,16 @@ class ReadOnlyRow {
     }
 
     hide(rowState) {
-        this.htmlTableAdapter.deleteRow(rowState.index);
+        $(`#${rowState.id}`).remove()
     }
 
     show(rowState, asNew) {
-        this.htmlTableAdapter.renderRow(rowState.index, rowState.cellValues, this.rowTmpl, !asNew);
+        const rowElem = $(`#${rowState.id}`)[0];
+        const rowIndex = asNew ? 0 : (rowElem.sectionRowIndex == null ? rowElem.rowIndex : rowElem.sectionRowIndex);
+        const cellValues = $.extend({htmlId: rowState.cellValues.id}, rowState.cellValues);
+        if (EntityUtils.prototype.hasEmptyId(rowState)) {
+            delete cellValues.id;
+        }
+        this.htmlTableAdapter.renderRow(rowIndex, cellValues, this.rowTmpl, !asNew);
     }
 }

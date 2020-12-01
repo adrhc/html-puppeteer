@@ -39,7 +39,7 @@
 </template>
 
 <template id="editableRowTmpl">
-    <tr class="editor">
+    <tr id="{{htmlId}}" class="editor">
         <td>{{id}}
             <input type="hidden" name="id" value="{{id}}">
         </td>
@@ -67,9 +67,12 @@
     </tr>
 </template>
 
+<script src="js/util/entity-utils.js"></script>
 <script src="js/util/html-utils.js"></script>
+<script src="js/util/mustache-utils.js"></script>
 <script src="js/util/rest-utils.js"></script>
 <script src="js/helper/forms-helper.js"></script>
+<script src="js/helper/entity-helper.js"></script>
 <script src="js/adapter/html-table-adapter.js"></script>
 <script src="js/stores/persons-repository.js"></script>
 <script src="js/tabular-component/model/row-state.js"></script>
