@@ -66,13 +66,6 @@ class EditableTable {
             });
     }
 
-    catchRepoError(promise) {
-        return promise.catch((jqXHR, textStatus, errorThrown) => {
-            console.log(textStatus, errorThrown);
-            alert(textStatus);
-        });
-    }
-
     /**
      * private method
      *
@@ -117,5 +110,12 @@ class EditableTable {
             .on('dblclick', 'tr', this, this.onRowSelection)
             .on('click', '#cancelBtn', this, this.onCancel)
             .on('click', '#saveBtn', this, this.onSave);
+    }
+
+    catchRepoError(promise) {
+        return promise.catch((jqXHR, textStatus, errorThrown) => {
+            console.log(textStatus, errorThrown);
+            alert(textStatus);
+        });
     }
 }
