@@ -84,7 +84,7 @@ class EditableTable {
             return;
         }
 
-        // dropping previous view (aka removed state, aka DELETE_VIEW event type)
+        // dropping previous view (aka STATE_DELETED event type)
         if (stateChangeResult.prevIsRemoved) {
             // previous selection is removed: remove the related row
             this.readOnlyRow.hide(stateChangeResult.prevRowState);
@@ -95,7 +95,7 @@ class EditableTable {
             this.buttonsRow.hide();
         }
 
-        // "activating" the new view (aka created state, aka CREATE_VIEW event type)
+        // "activating" the new view (aka STATE_CREATED event type)
         if (!stateChangeResult.newRowState) {
             // no row to display (aka there's no new view)
         } else if (stateChangeResult.newRowState.selected) {
