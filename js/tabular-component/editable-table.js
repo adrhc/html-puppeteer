@@ -45,15 +45,12 @@ class EditableTable {
      */
     onSave(ev) {
         const editableTable = ev.data;
-        editableTable.repo.save(editableTable.entityHelper.extractEntity())
+        const person = editableTable.entityHelper.extractEntity();
+        this.catchRepoError(editableTable.repo.save(person))
             .then((savedPerson) => {
                 console.log(savedPerson);
                 const stateChangeResult = editableTable.state.replaceItemForSelection(savedPerson);
                 editableTable.updateView(stateChangeResult);
-            })
-            .catch((jqXHR, textStatus, errorThrown) => {
-                console.log(textStatus, errorThrown);
-                alert(textStatus);
             });
     }
 
@@ -61,16 +58,19 @@ class EditableTable {
      * initializer
      */
     init() {
-        this.repo.getAll()
+        this.catchRepoError(this.repo.getAll())
             .then((persons) => {
                 console.log("persons:\n", persons);
                 this.state.items = persons;
                 this.htmlTableAdapter.renderBody({persons: persons});
-            })
-            .catch((jqXHR, textStatus, errorThrown) => {
-                console.log(textStatus, errorThrown);
-                alert(textStatus);
             });
+    }
+
+    catchRepoError(promise) {
+        return promise.catch((jqXHR, textStatus, errorThrown) => {
+            console.log(textStatus, errorThrown);
+            alert(textStatus);
+        });
     }
 
     /**
