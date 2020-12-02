@@ -14,43 +14,42 @@ class EditableTable {
     }
 
     /**
-     * header selection event handler
+     * new item creation event handler
      */
-    onTHeadDblclick(ev) {
+    onNewRowRequest(ev) {
         const editableTable = ev.data;
-        if (editableTable.state.transientSelectionExists()) {
-            // new empty row is already available for edit
-            return false;
-        }
         const stateChangeResult = editableTable.state.createTransientSelection();
-        editableTable.update(stateChangeResult);
+        editableTable.updateView(stateChangeResult);
     }
 
     /**
-     * row selection event handler
+     * item selection event handler
      */
-    onRowDblclick(ev) {
+    onRowSelection(ev) {
         const editableTable = ev.data;
-        const selectedId = this.id;
-        if (editableTable.state.isIdSelected(selectedId)) {
-            // index is already selected, nothing else to do here
-            return false;
-        }
-        const stateChangeResult = editableTable.state.switchSelectionTo(selectedId);
-        editableTable.update(stateChangeResult);
+        const stateChangeResult = editableTable.state.switchSelectionTo(this.id);
+        editableTable.updateView(stateChangeResult);
+    }
+
+    /**
+     * cancel event handler
+     */
+    onCancel(ev) {
+        const editableTable = ev.data;
+        const stateChangeResult = editableTable.state.cancelSelection();
+        editableTable.updateView(stateChangeResult);
     }
 
     /**
      * save event handler
      */
-    onBtnSave(ev) {
+    onSave(ev) {
         const editableTable = ev.data;
-        const person = editableTable.entityHelper.extractEntity();
-        editableTable.repo.save(person)
+        editableTable.repo.save(editableTable.entityHelper.extractEntity())
             .then((savedPerson) => {
                 console.log(savedPerson);
-                const stateChangeResult = editableTable.state.replaceItemForSelection(savedPerson, true);
-                editableTable.update(stateChangeResult);
+                const stateChangeResult = editableTable.state.replaceItemForSelection(savedPerson);
+                editableTable.updateView(stateChangeResult);
             })
             .catch((jqXHR, textStatus, errorThrown) => {
                 console.log(textStatus, errorThrown);
@@ -59,23 +58,19 @@ class EditableTable {
     }
 
     /**
-     * cancel event handler
-     */
-    onBtnCancel(ev) {
-        const editableTable = ev.data;
-        const stateChangeResult = editableTable.state.cancelSelection();
-        editableTable.update(stateChangeResult);
-    }
-
-    /**
      * initializer
      */
-    show() {
-        this.repo.getAll().then((persons) => {
-            console.log("persons:\n", persons);
-            this.state.items = persons;
-            this.htmlTableAdapter.renderBody({persons: persons});
-        });
+    initializeView() {
+        this.repo.getAll()
+            .then((persons) => {
+                console.log("persons:\n", persons);
+                this.state.items = persons;
+                this.htmlTableAdapter.renderBody({persons: persons});
+            })
+            .catch((jqXHR, textStatus, errorThrown) => {
+                console.log(textStatus, errorThrown);
+                alert(textStatus);
+            });
     }
 
     /**
@@ -83,8 +78,8 @@ class EditableTable {
      *
      * changes come in pairs: a row (previous) is hidden while another (new one) is shown (as editable)
      */
-    update(stateChangeResult) {
-        if (stateChangeResult.prevRowState === stateChangeResult.newRowState) {
+    updateView(stateChangeResult) {
+        if (!stateChangeResult) {
             // selection not changed, do nothing
             return;
         }
@@ -117,10 +112,10 @@ class EditableTable {
      * private method
      */
     configureEvents() {
-        $('#newItemBtn').on('dblclick', this, this.onTHeadDblclick);
+        $('#newItemBtn').on('dblclick', this, this.onNewRowRequest);
         this.htmlTableAdapter.$tbody()
-            .on('dblclick', 'tr', this, this.onRowDblclick)
-            .on('click', '#cancelBtn', this, this.onBtnCancel)
-            .on('click', '#saveBtn', this, this.onBtnSave);
+            .on('dblclick', 'tr', this, this.onRowSelection)
+            .on('click', '#cancelBtn', this, this.onCancel)
+            .on('click', '#saveBtn', this, this.onSave);
     }
 }

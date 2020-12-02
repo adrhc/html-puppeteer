@@ -12,7 +12,7 @@ class TableState {
             return new StateChanges(undefined, this.selectionState);
         } else if (this.isIdSelected(selectedId)) {
             // current selection is not changed (is just again selected)
-            return new StateChanges(this.selectionState, this.selectionState);
+            return undefined;
         }
         // previous selection exists, new item is selected
         const prevTabularItemState = this.selectionState;
@@ -26,16 +26,16 @@ class TableState {
 
     /**
      * @param item
-     * @param cancelSelection
+     * @param dontCancelSelection
      * @returns {StateChanges}
      */
-    replaceItemForSelection(item, cancelSelection) {
+    replaceItemForSelection(item, dontCancelSelection) {
         const prevTabularItemState = this.selectionState;
         this.replaceItem(prevTabularItemState.id, item);
-        if (cancelSelection) {
+        if (!dontCancelSelection) {
             this._selectedId = undefined;
         }
-        return new StateChanges(prevTabularItemState, this.getStateAt(prevTabularItemState.id));
+        return new StateChanges(prevTabularItemState, this.getStateOf(prevTabularItemState.id));
     }
 
     /**
@@ -44,7 +44,7 @@ class TableState {
     createTransientSelection() {
         if (this.transientSelectionExists()) {
             // current (transient) selection is not changed
-            return new StateChanges(this.selectionState, this.selectionState);
+            return undefined;
         }
         // no transient selection exists
         const prevTabularItemState = this.selectionState;
@@ -103,7 +103,7 @@ class TableState {
     /**
      * private method
      */
-    getStateAt(id) {
+    getStateOf(id) {
         if (!this._items || !this._items[id]) {
             return undefined;
         }
