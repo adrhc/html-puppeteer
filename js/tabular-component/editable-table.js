@@ -60,7 +60,7 @@ class EditableTable {
     /**
      * initializer
      */
-    initializeView() {
+    init() {
         this.repo.getAll()
             .then((persons) => {
                 console.log("persons:\n", persons);
