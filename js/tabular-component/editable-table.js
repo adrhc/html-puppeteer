@@ -1,5 +1,5 @@
 /**
- * Role: capture all table events
+ * Role: capture all table events (aka UI adapter)
  */
 class EditableTable {
     constructor(htmlTableAdapter, readOnlyRow, editableRow, buttonsRow, entityHelper) {
