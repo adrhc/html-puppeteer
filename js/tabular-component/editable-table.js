@@ -2,14 +2,14 @@
  * Role: capture all table events (aka UI adapter)
  */
 class EditableTable {
-    constructor(htmlTableAdapter, readOnlyRow, editableRow, buttonsRow, entityHelper) {
+    constructor(htmlTableAdapter, readOnlyRow, editableRow, buttonsRow, entityHelper, repository) {
         this.htmlTableAdapter = htmlTableAdapter;
         this.readOnlyRow = readOnlyRow;
         this.editableRow = editableRow;
         this.buttonsRow = buttonsRow;
         this.entityHelper = entityHelper;
         this.state = new TableState();
-        this.repo = new PersonsRepository();
+        this.repo = repository;
         this.configureEvents();
     }
 
@@ -45,11 +45,11 @@ class EditableTable {
      */
     onSave(ev) {
         const editableTable = ev.data;
-        const person = editableTable.entityHelper.extractEntity();
-        this.catchRepoError(editableTable.repo.save(person))
-            .then((savedPerson) => {
-                console.log(savedPerson);
-                const stateChangeResult = editableTable.state.replaceItemForSelection(savedPerson);
+        const item = editableTable.entityHelper.extractEntity();
+        editableTable.catchRepoError(editableTable.repo.save(item))
+            .then((savedItem) => {
+                console.log(savedItem);
+                const stateChangeResult = editableTable.state.replaceItemForSelection(savedItem);
                 editableTable.updateView(stateChangeResult);
             });
     }
@@ -59,10 +59,10 @@ class EditableTable {
      */
     init() {
         this.catchRepoError(this.repo.getAll())
-            .then((persons) => {
-                console.log("persons:\n", persons);
-                this.state.items = persons;
-                this.htmlTableAdapter.renderBody({persons: persons});
+            .then((items) => {
+                console.log("items:\n", items);
+                this.state.items = items;
+                this.htmlTableAdapter.renderBody({items: items});
             });
     }
 
