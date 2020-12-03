@@ -22,6 +22,8 @@ class EditableTableState {
             this.removeSelectedItem();
         }
         this._selectedId = selectedId;
+        // can't select (aka make editable) a transient row because it doesn't exist
+        // consequence: newIsCreated will never be true (from this method)
         return new StateChanges(prevTabularItemState, this.selectionState, transientSelectionExists);
     }
 
@@ -29,15 +31,13 @@ class EditableTableState {
      * @param item
      * @returns {StateChanges}
      */
-    replaceItemForSelection(item) {
-        const prevTabularItemState = this.selectionState;
+    clearSelectionAndUpdateItem(item) {
+        const stateChanges = this.cancelSelection();
         this.replaceItem(item.id, item);
-        const transientSelectionExists = this.transientSelectionExists();
-        if (transientSelectionExists) {
-            this.removeSelectedItem();
-        }
-        this._selectedId = undefined;
-        return new StateChanges(prevTabularItemState, this.getStateOf(item.id), transientSelectionExists, transientSelectionExists);
+        stateChanges.newRowState = this.getStateOf(item.id);
+        // when previous is a transient than the updated item appears as a creation (aka newIsCreated = true)
+        stateChanges.newIsCreated = stateChanges.prevIsRemoved;
+        return stateChanges;
     }
 
     /**
