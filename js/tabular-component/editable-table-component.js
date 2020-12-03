@@ -47,7 +47,7 @@ class EditableTableComponent {
         editableTable._catchRepoError(editableTable.repo.save(item))
             .then((savedItem) => {
                 console.log(savedItem);
-                const stateChangeResult = editableTable.state.clearSelectionAndUpdateItem(savedItem);
+                const stateChangeResult = editableTable.state.cancelSelectionAndUpdateItem(savedItem);
                 editableTable.editableTableView.updateView(stateChangeResult);
             });
     }

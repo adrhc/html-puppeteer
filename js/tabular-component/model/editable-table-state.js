@@ -10,7 +10,8 @@ class EditableTableState {
         if (!this.selectionExists()) {
             // no previous selection
             this._selectedId = selectedId;
-            return new StateChanges(undefined, this.selectionState);
+            return new StateChanges(undefined, this.selectionState,
+                undefined, this.transientSelectionExists());
         } else if (this.isIdSelected(selectedId)) {
             // current selection is not changed (is just again selected)
             return undefined;
@@ -22,18 +23,19 @@ class EditableTableState {
             this.removeSelectedItem();
         }
         this._selectedId = selectedId;
-        // can't select (aka make editable) a transient row because it doesn't exist
-        // consequence: newIsCreated will never be true (from this method)
-        return new StateChanges(prevTabularItemState, this.selectionState, transientSelectionExists);
+        // because when de-selecting a transient that is advertised as a removal
+        // than when selecting a transient that is advertised as a creation
+        return new StateChanges(prevTabularItemState, this.selectionState,
+            transientSelectionExists, this.transientSelectionExists());
     }
 
     /**
      * @param item
      * @returns {StateChanges}
      */
-    clearSelectionAndUpdateItem(item) {
+    cancelSelectionAndUpdateItem(item) {
         const stateChanges = this.cancelSelection();
-        this.replaceItem(item.id, item);
+        this._replaceItem(item.id, item);
         stateChanges.newRowState = this.getStateOf(item.id);
         // when previous is a transient than the updated item appears as a creation (aka newIsCreated = true)
         stateChanges.newIsCreated = stateChanges.prevIsRemoved;
@@ -49,9 +51,8 @@ class EditableTableState {
             return undefined;
         }
         // no transient selection exists
-        const prevTabularItemState = this.selectionState;
-        this._selectedId = this.insertNewItem().id;
-        return new StateChanges(prevTabularItemState, this.selectionState, false, true);
+        const newItemId = this.insertNewItem().id;
+        return this.switchSelectionTo(newItemId);
     }
 
     /**
@@ -115,7 +116,7 @@ class EditableTableState {
     /**
      * private method
      */
-    replaceItem(id, item) {
+    _replaceItem(id, item) {
         this._items[id] = item;
     }
 
