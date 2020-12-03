@@ -11,38 +11,28 @@ class EditableTableView {
     }
 
     /**
-     * private method
-     *
-     * changes come in pairs: a row (previous) is hidden while another (new one) is shown (as editable)
+     * @param stateChanges {StateChange[]|undefined}
      */
-    updateView(stateChangeResult) {
-        if (!stateChangeResult) {
+    updateView(stateChanges) {
+        if (!stateChanges) {
             // selection not changed, do nothing
             return;
         }
-
-        // dropping previous view (aka STATE_DELETED event type)
-        if (stateChangeResult.prevIsRemoved) {
-            // previous selection is removed: remove the related row
-            this.buttonsRow.hide();
-            this.readOnlyRow.hide(stateChangeResult.prevRowState);
-        } else if (stateChangeResult.prevRowState) {
-            // previous selection exists: change it to read-only
-            this.buttonsRow.hide();
-            this.readOnlyRow.show(stateChangeResult.prevRowState);
-        }
-
-        // "activating" the new view (aka STATE_CREATED event type)
-        if (!stateChangeResult.newRowState) {
-            // no row to display (aka there's no new view)
-        } else if (stateChangeResult.newRowState.selected) {
-            // change row's view to editable
-            this.editableRow.show(stateChangeResult.newRowState, stateChangeResult.newIsCreated);
-            this.buttonsRow.show(stateChangeResult.newRowState)
-        } else {
-            // change row's view to read-only
-            this.readOnlyRow.show(stateChangeResult.newRowState, stateChangeResult.newIsCreated);
-        }
+        stateChanges.forEach(sc => {
+            if (sc.isSelected) {
+                // create/change to editable row view
+                this.editableRow.show(sc.item);
+                this.buttonsRow.show(sc.item)
+            } else {
+                this.buttonsRow.hide();
+                if (sc.isTransient) {
+                    // remove transient not selected row
+                    this.readOnlyRow.hide(sc.item);
+                } else {
+                    // read-only show saved but not selected row
+                    this.readOnlyRow.show(sc.item);
+                }
+            }
+        })
     }
-
 }

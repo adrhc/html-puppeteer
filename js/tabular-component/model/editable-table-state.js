@@ -3,30 +3,7 @@ class EditableTableState {
     _items = undefined;
 
     /**
-     * @param selectedId
-     * @returns {StateChanges}
-     */
-    switchSelectionTo(selectedId) {
-        const stateChanges = this.cancelSelection();
-        if (!stateChanges) {
-            // no previous selection
-            this._selectedId = selectedId;
-            return new StateChanges(undefined, this.selectionState,
-                undefined, this.transientSelectionExists());
-        } else if (this.isIdSelected(selectedId)) {
-            // current selection is not changed (is just again selected)
-            return undefined;
-        }
-        this._selectedId = selectedId;
-        stateChanges.newRowState = this.selectionState;
-        // because a transient de-selection is advertised as a removal
-        // than a transient selection is advertised as a creation
-        stateChanges.newIsCreated = this.transientSelectionExists();
-        return stateChanges;
-    }
-
-    /**
-     * @returns {StateChanges|undefined}
+     * @returns {StateChange|undefined}
      */
     cancelSelection() {
         if (!this.selectionExists()) {
@@ -34,38 +11,60 @@ class EditableTableState {
             return undefined;
         }
         // selection exists
-        const prevTabularItemState = this.selectionState;
-        const transientSelectionExists = this.transientSelectionExists();
+        const prevTabularItemState = this._selectedItem;
+        const transientSelectionExists = this._transientSelectionExists;
         if (transientSelectionExists) {
             this.removeSelectedItem();
         }
         this._selectedId = undefined;
-        return new StateChanges(prevTabularItemState, undefined, transientSelectionExists);
+        return new StateChange(prevTabularItemState, transientSelectionExists);
+    }
+
+    /**
+     * @param selectedId
+     * @returns {StateChange[]|undefined}
+     */
+    switchSelectionTo(selectedId) {
+        const stateChange = this.cancelSelection();
+        if (!stateChange) {
+            // no previous selection
+            this._selectedId = selectedId;
+            return [new StateChange(this._selectedItem, this._transientSelectionExists, true)];
+        } else if (this.isIdSelected(selectedId)) {
+            // current selection is not changed (is just again selected)
+            return undefined;
+        }
+        this._selectedId = selectedId;
+        // because a transient de-selection is advertised as a removal
+        // than a transient selection is advertised as a creation
+        return [stateChange, new StateChange(this._selectedItem, this._transientSelectionExists, true)];
     }
 
     /**
      * @param item
-     * @returns {StateChanges}
+     * @returns {StateChange[]|undefined}
      */
     cancelSelectionAndUpdateItem(item) {
-        const stateChanges = this.cancelSelection();
-        if (!stateChanges) {
+        if (this.isTransient(item.id)) {
+            console.error("A row is updated but remains still transient!", item);
+            return undefined;
+        }
+        const stateChange = this.cancelSelection();
+        if (!stateChange) {
             console.error("A row is updated without previously being selected!", item);
             return undefined;
         }
         this._replaceItem(item.id, item);
-        stateChanges.newRowState = this.getStateOf(item.id);
         // when "previous" is a transient than the updated is in fact
         // a "new" item to be stored which appears as a creation
-        stateChanges.newIsCreated = stateChanges.prevIsRemoved;
-        return stateChanges;
+        return [stateChange, new StateChange(this._getItemById(item.id))];
     }
 
     /**
-     * @returns {StateChanges}
+     * @returns {StateChange[]|undefined}
      */
     createTransientSelection() {
-        if (this.transientSelectionExists()) {
+        if (this._transientSelectionExists) {
             // current (transient) selection is not changed
             return undefined;
         }
@@ -91,24 +90,18 @@ class EditableTableState {
         return this._selectedId != null;
     }
 
-    transientSelectionExists() {
+    get _transientSelectionExists() {
         return EntityUtils.prototype.isTransientId(this._selectedId);
     }
 
-    /**
-     * private method
-     */
-    get selectionState() {
-        if (!this.selectionExists()) {
-            return undefined;
-        }
-        return new RowState(this._selectedId, this.selectedItem, true);
+    isTransient(id) {
+        return EntityUtils.prototype.isTransientId(id);
     }
 
     /**
-     * private method
+     * @returns {undefined|*}
      */
-    get selectedItem() {
+    get _selectedItem() {
         if (!this.selectionExists()) {
             return undefined;
         }
@@ -118,11 +111,11 @@ class EditableTableState {
     /**
      * private method
      */
-    getStateOf(id) {
+    _getItemById(id) {
         if (!this._items || !this._items[id]) {
             return undefined;
         }
-        return new RowState(id, this._items[id], this.isIdSelected(id));
+        return this._items[id];
     }
 
     /**

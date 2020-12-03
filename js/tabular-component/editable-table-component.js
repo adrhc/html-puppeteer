@@ -34,8 +34,8 @@ class EditableTableComponent {
      */
     onCancel(ev) {
         const editableTable = ev.data;
-        const stateChangeResult = editableTable.state.cancelSelection();
-        editableTable.editableTableView.updateView(stateChangeResult);
+        const stateChange = editableTable.state.cancelSelection();
+        editableTable.editableTableView.updateView([stateChange]);
     }
 
     /**
@@ -47,8 +47,8 @@ class EditableTableComponent {
         editableTable._catchRepoError(editableTable.repo.save(item))
             .then((savedItem) => {
                 console.log(savedItem);
-                const stateChangeResult = editableTable.state.cancelSelectionAndUpdateItem(savedItem);
-                editableTable.editableTableView.updateView(stateChangeResult);
+                const stateChanges = editableTable.state.cancelSelectionAndUpdateItem(savedItem);
+                editableTable.editableTableView.updateView(stateChanges);
             });
     }
 

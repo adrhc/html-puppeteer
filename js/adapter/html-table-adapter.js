@@ -13,6 +13,10 @@ class HtmlTableAdapter {
     }
 
     getRowIndexById(id) {
+        const $row = this.$getRowById(id);
+        if (!$row.length) {
+            return undefined;
+        }
         const rowElem = this.$getRowById(id)[0];
         return rowElem.sectionRowIndex == null ? rowElem.rowIndex : rowElem.sectionRowIndex;
     }

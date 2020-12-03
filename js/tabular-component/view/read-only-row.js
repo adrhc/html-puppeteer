@@ -7,13 +7,14 @@ class ReadOnlyRow {
         this.rowTmpl = rowTmpl;
     }
 
-    hide(rowState) {
-        this.htmlTableAdapter.deleteRowById(rowState.id)
+    hide(_item) {
+        this.htmlTableAdapter.deleteRowById(_item.id)
     }
 
-    show(rowState, asNew) {
-        const rowIndex = asNew ? 0 : this.htmlTableAdapter.getRowIndexById(rowState.id);
-        this.renderRow(rowIndex, this.cellsViewOf(rowState), !asNew);
+    show(_item) {
+        const rowIndex = this.htmlTableAdapter.getRowIndexById(_item.id);
+        const createNew = rowIndex == null;
+        this.renderRow(createNew ? 0 : rowIndex, this.cellsViewOf(_item), !createNew);
     }
 
     renderRow(rowIndex, cellsView, replaceExisting) {
@@ -22,10 +23,10 @@ class ReadOnlyRow {
 
     /**
      * appends htmlId to cloned cellValues then return it
-     * @param rowState
+     * @param _item
      */
-    cellsViewOf(rowState) {
-        const htmlId = EntityUtils.prototype.hasEmptyId(rowState) ? "" : rowState.id;
-        return $.extend({htmlId: htmlId}, rowState.cellValues);
+    cellsViewOf(_item) {
+        const htmlId = EntityUtils.prototype.hasEmptyId(_item) ? "" : _item.id;
+        return $.extend({htmlId: htmlId}, _item);
     }
 }
