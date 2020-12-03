@@ -7,7 +7,8 @@ class EditableTableState {
      * @returns {StateChanges}
      */
     switchSelectionTo(selectedId) {
-        if (!this.selectionExists()) {
+        const stateChanges = this.cancelSelection();
+        if (!stateChanges) {
             // no previous selection
             this._selectedId = selectedId;
             return new StateChanges(undefined, this.selectionState,
@@ -16,17 +17,30 @@ class EditableTableState {
             // current selection is not changed (is just again selected)
             return undefined;
         }
-        // previous selection exists, new item is selected
+        this._selectedId = selectedId;
+        stateChanges.newRowState = this.selectionState;
+        // because a transient de-selection is advertised as a removal
+        // than a transient selection is advertised as a creation
+        stateChanges.newIsCreated = this.transientSelectionExists();
+        return stateChanges;
+    }
+
+    /**
+     * @returns {StateChanges|undefined}
+     */
+    cancelSelection() {
+        if (!this.selectionExists()) {
+            // no selection
+            return undefined;
+        }
+        // selection exists
         const prevTabularItemState = this.selectionState;
         const transientSelectionExists = this.transientSelectionExists();
         if (transientSelectionExists) {
             this.removeSelectedItem();
         }
-        this._selectedId = selectedId;
-        // because when de-selecting a transient that is advertised as a removal
-        // than when selecting a transient that is advertised as a creation
-        return new StateChanges(prevTabularItemState, this.selectionState,
-            transientSelectionExists, this.transientSelectionExists());
+        this._selectedId = undefined;
+        return new StateChanges(prevTabularItemState, undefined, transientSelectionExists);
     }
 
     /**
@@ -35,9 +49,14 @@ class EditableTableState {
      */
     cancelSelectionAndUpdateItem(item) {
         const stateChanges = this.cancelSelection();
+        if (!stateChanges) {
+            console.error("A row is updated without previously being selected!", item);
+            return undefined;
+        }
         this._replaceItem(item.id, item);
         stateChanges.newRowState = this.getStateOf(item.id);
-        // when previous is a transient than the updated item appears as a creation (aka newIsCreated = true)
+        // when "previous" is a transient than the updated is in fact
+        // a "new" item to be stored which appears as a creation
         stateChanges.newIsCreated = stateChanges.prevIsRemoved;
         return stateChanges;
     }
@@ -53,13 +72,6 @@ class EditableTableState {
         // no transient selection exists
         const newItemId = this.insertNewItem().id;
         return this.switchSelectionTo(newItemId);
-    }
-
-    /**
-     * @returns {StateChanges}
-     */
-    cancelSelection() {
-        return this.switchSelectionTo();
     }
 
     /**
