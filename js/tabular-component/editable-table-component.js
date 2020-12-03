@@ -12,25 +12,25 @@ class EditableTableComponent {
     }
 
     /**
-     * new item creation event handler
+     * new-item-creation event handler
      */
-    onNewRowRequest(ev) {
+    onNewRowCreation(ev) {
         const editableTable = ev.data;
         const stateChangeResult = editableTable.state.createTransientSelection();
         editableTable.editableTableView.updateView(stateChangeResult);
     }
 
     /**
-     * item selection event handler
+     * (existing) item selection event handler
      */
-    onRowSelection(ev) {
+    onSelectionSwitch(ev) {
         const editableTable = ev.data;
         const stateChangeResult = editableTable.state.switchSelectionTo(this.id);
         editableTable.editableTableView.updateView(stateChangeResult);
     }
 
     /**
-     * cancel event handler
+     * "cancel" (selection) event handler
      */
     onCancel(ev) {
         const editableTable = ev.data;
@@ -39,7 +39,7 @@ class EditableTableComponent {
     }
 
     /**
-     * save event handler
+     * "save" (selection) event handler
      */
     onSave(ev) {
         const editableTable = ev.data;
@@ -53,7 +53,7 @@ class EditableTableComponent {
     }
 
     /**
-     * initializer
+     * component initializer
      */
     init() {
         this._catchRepoError(this.repo.getAll())
@@ -65,7 +65,7 @@ class EditableTableComponent {
     }
 
     /**
-     * handle repository errors
+     * (internal) errors handler
      */
     _catchRepoError(promise) {
         return promise.catch((jqXHR, textStatus, errorThrown) => {
@@ -74,10 +74,13 @@ class EditableTableComponent {
         });
     }
 
+    /**
+     * linking "outside" (and/or default) triggers to component's handlers (aka capabilities)
+     */
     _configureEvents() {
-        $('#newItemBtn').on('dblclick', this, this.onNewRowRequest);
+        $('#newItemBtn').on('dblclick', this, this.onNewRowCreation);
         this.htmlTableAdapter.$tbody()
-            .on('dblclick', 'tr', this, this.onRowSelection)
+            .on('dblclick', 'tr', this, this.onSelectionSwitch)
             .on('click', '#cancelBtn', this, this.onCancel)
             .on('click', '#saveBtn', this, this.onSave);
     }
