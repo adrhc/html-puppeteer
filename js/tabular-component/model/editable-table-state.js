@@ -1,5 +1,6 @@
-class TableState {
+class EditableTableState {
     _selectedId = undefined;
+    _items = undefined;
 
     /**
      * @param selectedId
@@ -26,16 +27,17 @@ class TableState {
 
     /**
      * @param item
-     * @param dontCancelSelection
      * @returns {StateChanges}
      */
-    replaceItemForSelection(item, dontCancelSelection) {
+    replaceItemForSelection(item) {
         const prevTabularItemState = this.selectionState;
-        this.replaceItem(prevTabularItemState.id, item);
-        if (!dontCancelSelection) {
-            this._selectedId = undefined;
+        this.replaceItem(item.id, item);
+        const transientSelectionExists = this.transientSelectionExists();
+        if (transientSelectionExists) {
+            this.removeSelectedItem();
         }
-        return new StateChanges(prevTabularItemState, this.getStateOf(prevTabularItemState.id));
+        this._selectedId = undefined;
+        return new StateChanges(prevTabularItemState, this.getStateOf(item.id), transientSelectionExists, transientSelectionExists);
     }
 
     /**
@@ -140,8 +142,12 @@ class TableState {
         throw `Unsupported operation! selectedId = ${selectedId}`;
     }
 
+    /**
+     * this plays also the role of an "initialization" method
+     */
     set items(items) {
         this._items = {};
+        this._selectedId = undefined;
         items.forEach(p => this._items[p.id] = p);
     }
 }

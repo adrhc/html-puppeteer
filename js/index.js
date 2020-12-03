@@ -13,9 +13,10 @@ if (Modernizr.template) {
         const readOnlyRow = new ReadOnlyRow(htmlTableAdapter, "readOnlyRowTmpl");
         const editableRow = new EditableRow(htmlTableAdapter, "editableRowTmpl");
         const buttonsRow = new ButtonsRow(htmlTableAdapter, "buttonsRowTmpl");
+        const editableTableView = new EditableTableView(readOnlyRow, editableRow, buttonsRow, htmlTableAdapter);
         const entityHelper = new EntityHelper(new FormsHelper("editorForm"));
         const personsRepository = new PersonsRepository();
-        new EditableTable(htmlTableAdapter, readOnlyRow, editableRow, buttonsRow, entityHelper, personsRepository).init();
+        new EditableTableComponent(editableTableView, htmlTableAdapter, entityHelper, personsRepository).init();
     })
 } else {
     // Find another way to add the rows to the table because
