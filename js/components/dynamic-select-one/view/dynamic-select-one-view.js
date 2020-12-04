@@ -22,8 +22,16 @@ class DynamicSelectOneView {
      * @param data {DynamicSelectOneState}
      */
     renderView(data) {
-        const html = Mustache.render(this.$tmplHtml, this.viewDataOf(data));
+        const viewData = this.viewDataOf(data);
+        const html = Mustache.render(this.$tmplHtml, viewData);
         this.$componentElem.html(html.trim());
+        if (viewData.renderOptions) {
+            this.$selectElem.removeClass("removed");
+            this.$descriptionElem.addClass("removed");
+        } else {
+            this.$selectElem.addClass("removed");
+            this.$descriptionElem.removeClass("removed");
+        }
     }
 
     clearOnBlurHandlers() {
@@ -46,9 +54,12 @@ class DynamicSelectOneView {
     viewDataOf(data) {
         const viewData = {
             title: data.title, placeholder: this.placeholder,
-            size: Math.min(data.options ? data.options.length : 0, this.size)
+            size: Math.min(data.options ? data.options.length : 0, this.size),
+            description: data.selectedItem ? data.selectedItem.description :
+                "Nu s-a găsit nimic deocamdată!" + (data.title ? ` s-a cautat <i>${data.title}</i>` : "")
         };
-        if (!data.options) {
+        viewData.renderOptions = viewData.size > 1 || (viewData.size > 0 && !data.selectedItem);
+        if (!viewData.renderOptions) {
             return viewData;
         }
         viewData.options = data.options.map(o => {
@@ -65,17 +76,26 @@ class DynamicSelectOneView {
         this.updateView(data, true);
     }
 
+    getRenderOptions(viewData) {
+
+    }
+
     get $tmplHtml() {
         return $(`#${this.tmplId}`).html();
+    }
+
+    get $descriptionElem() {
+        return $(`#${this.elemId} .dyna-sel-one-description`);
+    }
+
+    get $selectElem() {
+        return $(`#${this.elemId} [name='options']`);
     }
 
     get $searchInputElem() {
         return $(`#${this.elemId} [name='title']`);
     }
 
-    /**
-     * @returns {*|jQuery|HTMLElement}
-     */
     get $componentElem() {
         return $(`#${this.elemId}`);
     }

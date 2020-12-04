@@ -1,3 +1,10 @@
 div.dyna-sel-one-comp select {
     display: block;
 }
+
+.dyna-sel-one-description {
+}
+
+.removed {
+    display: none !important;
+}

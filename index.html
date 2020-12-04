@@ -3,6 +3,7 @@
 
 <head>
     <title>JavaScript DOM test</title>
+    <meta charset="UTF-8">
     <link rel="stylesheet" href="css/table.css">
     <link rel="stylesheet" href="css/table-editor.css">
     <link rel="stylesheet" href="css/dyna-sel-one.css">
@@ -26,19 +27,22 @@
     </table>
 </form>
 
-<template id="dynaSelOneCompTmpl">
-    <input type="text" name="title" value="{{title}}" placeholder="{{placeholder}}" autocomplete="off">
+<script id="dynaSelOneCompTmpl" type="x-tmpl-mustache">
+    <input type="text" name="title" value="{{title}}" placeholder="{{placeholder}}"
+           autocomplete="off" title="scrie cel putin 3 caractere pt a căuta">
     <select name="options" size="{{size}}">
         {{#options}}
         <option value="{{id}}" {{selected}}>{{description}}</option>
         {{/options}}
     </select>
-</template>
+    <span class="dyna-sel-one-description">{{{description}}}</span>
+</script>
 
 <script id="tableBodyTmpl" type="x-tmpl-mustache">
 {{#items}}
     {{> readOnlyRow}}
 {{/items}}
+
 </script>
 
 <script id="readOnlyRowTmpl" type="x-tmpl-mustache">
@@ -47,6 +51,7 @@
         <td>{{firstName}}</td>
         <td>{{lastName}}</td>
     </tr>
+
 </script>
 
 <script id="editableRowTmpl" type="x-tmpl-mustache">
@@ -63,6 +68,7 @@
             </div>
         </td>
     </tr>
+
 </script>
 
 <script id="buttonsRowTmpl" type="x-tmpl-mustache">
