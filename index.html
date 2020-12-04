@@ -5,6 +5,7 @@
     <title>JavaScript DOM test</title>
     <link rel="stylesheet" href="css/table.css">
     <link rel="stylesheet" href="css/table-editor.css">
+    <link rel="stylesheet" href="css/dyna-sel-one.css">
     <script src="libraries/modernizr-custom.js"></script>
     <script src="https://unpkg.com/mustache@latest"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -27,13 +28,11 @@
 
 <template id="dynaSelOneCompTmpl">
     <input type="text" name="title" value="{{title}}" placeholder="{{placeholder}}">
-    {{#options}}
     <select name="options">
         {{#options}}
         <option value="{{id}}">{{description}}</option>
         {{/options}}
     </select>
-    {{/options}}
 </template>
 
 <script id="tableBodyTmpl" type="x-tmpl-mustache">

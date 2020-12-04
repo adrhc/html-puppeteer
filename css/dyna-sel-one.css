@@ -1,2 +1,3 @@
-div.dyna-sel-one-comp {
+div.dyna-sel-one-comp select {
+    display: block;
 }

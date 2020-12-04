@@ -16,7 +16,7 @@ class PersonsRepository {
 
     findByTitle(title) {
         return $.ajax({
-            url: `${this.URL}/search/findByFirstName`,
+            url: `${this.URL}/search/findByFirstNameStartingWith`,
             data: {firstName: title},
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             processData: true

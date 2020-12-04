@@ -14,13 +14,14 @@ class DynamicSelectOneComponent {
             return false;
         }
         const _this = ev.data;
-        _this.state.setTitle($(this).val());
-        console.log(_this.state);
+        _this.state.setTitle($(this).val())
+            .then(state => _this.dynaSelOneView.updateView(state));
     }
 
     onItemSelect(ev) {
         const _this = ev.data;
-        _this.state.setSelectItemId($(this).value());
+        _this.state.setSelectItemId($(this).value())
+            .then(state => _this.dynaSelOneView.updateView(state));
     }
 
     init() {
@@ -33,7 +34,7 @@ class DynamicSelectOneComponent {
      */
     _configureEvents() {
         const comp = $(`#${this.dynaSelOneView.elemId}`);
-        comp.find("[name='title']").on('keyup', this, this.onEnterKey);
+        comp.on('keyup', "[name='title']", this, this.onEnterKey);
         comp.on('click', 'option', this, this.onItemSelect);
     }
 }
