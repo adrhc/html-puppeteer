@@ -46,6 +46,14 @@ class DynamicSelectOneState {
         });
     }
 
+    reset() {
+        this.title = undefined;
+        this.selectedItem = undefined;
+        this.cachePrefix = undefined;
+        this.options = undefined;
+        return Promise.resolve(this);
+    }
+
     _findOption() {
         return this.options.find(o => o.title === this.title);
     }
@@ -57,9 +65,5 @@ class DynamicSelectOneState {
             console.error("Selected missing option! id =", id);
         }
         return this.setTitle(this.selectedItem.title);
-    }
-
-    get hasOptions() {
-        return this.options && this.options.length;
     }
 }
