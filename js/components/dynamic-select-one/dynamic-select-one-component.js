@@ -15,11 +15,8 @@ class DynamicSelectOneComponent {
             return false;
         }
         const _this = ev.data;
-        if (ev.key === "Escape") {
-            _this._onEscape();
-        } else {
-            _this._onEnter($(this).val());
-        }
+        const command = ev.type !== "blur" ? ev.key : "Blur";
+        _this[`_on${command}`]($(this).val());
     }
 
     _onEscape() {
@@ -28,6 +25,10 @@ class DynamicSelectOneComponent {
 
     _onEnter(text) {
         this.state.setTitle(text).then(state => this.updateView(state, true));
+    }
+
+    _onBlur(text) {
+        this.state.deactivateEdit(text).then(state => this.updateView(state));
     }
 
     onItemSelect(ev) {

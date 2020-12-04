@@ -23,7 +23,7 @@ class DynamicSelectOneState {
      */
     setTitle(title) {
         console.log("title =", title);
-        if (!title || title.length < this.minCharsToSearch || this.title === title) {
+        if (!this.isEnoughTextForSearch(title) || this.title === title) {
             return Promise.reject();
         }
         this.title = title;
@@ -39,11 +39,27 @@ class DynamicSelectOneState {
         return optionsPromise.then(options => {
             this.options = options;
             this.selectedItem = this._findOption();
-            if (!!this.selectedItem) {
+            if (this.selectedItem) {
                 this.title = this.selectedItem.title;
             }
             return this;
         });
+    }
+
+    deactivateEdit(title) {
+        if (this.isEnoughTextForSearch(title)) {
+            // search new title
+            return this.setTitle(title);
+        } else if (this.selectedItem) {
+            // restore active selection
+            this.title = this.selectedItem.title;
+            return Promise.resolve(this);
+        } else {
+            this.options = undefined;
+            this.cachePrefix = undefined;
+            this.title = title;
+            return Promise.resolve(this);
+        }
     }
 
     reset() {
@@ -56,6 +72,13 @@ class DynamicSelectOneState {
 
     _findOption() {
         return this.options.find(o => o.title === this.title);
+    }
+
+    /**
+     * @param text {String}
+     */
+    isEnoughTextForSearch(text) {
+        return !!text && text.length >= this.minCharsToSearch;
     }
 
     setSelectItemId(id) {

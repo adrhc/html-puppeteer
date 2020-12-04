@@ -53,22 +53,29 @@ class DynamicSelectOneView {
     }
 
     /**
-     * @param data {DynamicSelectOneState}
+     * @param state {DynamicSelectOneState}
      */
-    _viewDataOf(data) {
+    _viewDataOf(state) {
         const viewData = {
-            title: data.title, placeholder: this.placeholder,
-            size: Math.min(data.options ? data.options.length : 0, this.size),
-            description: data.selectedItem ? data.selectedItem.description :
-                "Nu s-a găsit nimic deocamdată!" + (data.title ? ` s-a cautat <i>${data.title}</i>` : "")
+            title: state.title, placeholder: this.placeholder,
+            size: Math.min(state.options ? state.options.length : 0, this.size),
+            description: state.selectedItem ? state.selectedItem.description :
+                "Nu s-a găsit nimic deocamdată!" + (state.title ? ` s-a cautat <i>${state.title}</i>` : "")
         };
-        viewData.renderOptions = viewData.size > 1 || (viewData.size > 0 && !data.selectedItem);
+        if (state.selectedItem) {
+            viewData.description = state.selectedItem.description;
+        } else if (state.isEnoughTextForSearch(state.title)) {
+            viewData.description = `Nu s-a găsit nimic deocamdată! s-a cautat <i>${state.title}</i>`;
+        } else {
+            viewData.description = `Completați cel puțin ${state.minCharsToSearch} caractere pt a căuta (apasând ENTER).`;
+        }
+        viewData.renderOptions = viewData.size > 1 || (viewData.size > 0 && !state.selectedItem);
         if (!viewData.renderOptions) {
             return viewData;
         }
-        viewData.options = data.options.map(o => {
+        viewData.options = state.options.map(o => {
             const option = {id: o.id, description: o.description, selected: ""};
-            if (data.selectedItem && o.id === data.selectedItem.id) {
+            if (state.selectedItem && o.id === state.selectedItem.id) {
                 option.selected = "selected";
             }
             return option;
