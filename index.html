@@ -27,7 +27,7 @@
 </form>
 
 <template id="dynaSelOneCompTmpl">
-    <input type="text" name="title" value="{{title}}" placeholder="{{placeholder}}">
+    <input type="text" name="title" value="{{title}}" placeholder="{{placeholder}}" autocomplete="off">
     <select name="options" size="{{size}}">
         {{#options}}
         <option value="{{id}}" {{selected}}>{{description}}</option>
