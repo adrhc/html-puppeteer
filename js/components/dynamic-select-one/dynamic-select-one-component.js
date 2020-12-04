@@ -35,6 +35,7 @@ class DynamicSelectOneComponent {
     _configureEvents() {
         const comp = $(`#${this.dynaSelOneView.elemId}`);
         comp.on('keyup', "[name='title']", this, this.onEnterKey);
+        comp.on('blur', "[name='title']", this, this.onEnterKey);
         // comp.on('click', 'option', this, this.onItemSelect);
         comp.on('change', "[name='options']", this, this.onItemSelect);
     }

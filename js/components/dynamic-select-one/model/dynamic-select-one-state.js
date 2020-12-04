@@ -21,7 +21,7 @@ class DynamicSelectOneState {
     setTitle(title) {
         console.log("title =", title);
         if (this.title === title) {
-            return Promise.resolve(this);
+            return Promise.reject();
         }
         this.title = title;
         let optionsPromise;
