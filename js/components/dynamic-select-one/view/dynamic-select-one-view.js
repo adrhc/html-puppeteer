@@ -11,6 +11,10 @@ class DynamicSelectOneView {
      * @param keepFocus
      */
     updateView(data, keepFocus) {
+        const $searchInputElem = this.$searchInputElem;
+        if ($searchInputElem.length) {
+            $searchInputElem.off("blur");
+        }
         const tmplHtml = $(`#${this.tmplId}`).html();
         const html = Mustache.render(tmplHtml, this.viewDataOf(data));
         const comp = $(`#${this.elemId}`);
@@ -49,5 +53,9 @@ class DynamicSelectOneView {
 
     init(data) {
         this.updateView(data, true);
+    }
+
+    get $searchInputElem() {
+        return $(`#${this.elemId} [name='title']`);
     }
 }
