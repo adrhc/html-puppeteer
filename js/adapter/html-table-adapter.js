@@ -30,7 +30,7 @@ class HtmlTableAdapter {
     }
 
     renderBody(data) {
-        const bodyTmplHtml = HtmlUtils.prototype.templateTextOf(this.bodyTmpl);
+        const bodyTmplHtml = $(`#${this.bodyTmpl}`).html();
         const elemTmplHtml = $(`#${this.elemTmpl}`).html();
         const html = Mustache.render(bodyTmplHtml, data, {readOnlyRow: elemTmplHtml})
         this.$tbody().html(html);

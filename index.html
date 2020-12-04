@@ -24,21 +24,21 @@
     </table>
 </form>
 
-<template id="tableBodyTmpl">
+<script id="tableBodyTmpl" type="x-tmpl-mustache">
 {{#items}}
     {{> readOnlyRow}}
 {{/items}}
-</template>
+</script>
 
-<template id="readOnlyRowTmpl">
+<script id="readOnlyRowTmpl" type="x-tmpl-mustache">
     <tr id="{{id}}">
         <td>{{id}}</td>
         <td>{{firstName}}</td>
         <td>{{lastName}}</td>
     </tr>
-</template>
+</script>
 
-<template id="editableRowTmpl">
+<script id="editableRowTmpl" type="x-tmpl-mustache">
     <tr id="{{id}}" class="editor">
         <td>{{htmlId}}
             <input type="hidden" name="id" value="{{id}}">
@@ -52,16 +52,16 @@
             </div>
         </td>
     </tr>
-</template>
+</script>
 
-<template id="buttonsRowTmpl">
+<script id="buttonsRowTmpl" type="x-tmpl-mustache">
     <tr id="buttons" class="buttons-row">
         <td colspan="3">
             <button type="button" id="cancelBtn">Cancel</button>
             <button type="button" id="saveBtn">Save</button>
         </td>
     </tr>
-</template>
+</script>
 
 <script src="js/util/entity-utils.js"></script>
 <script src="js/util/html-utils.js"></script>
