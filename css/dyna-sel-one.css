@@ -1,5 +1,14 @@
+div.dyna-sel-one-comp input {
+    width: 100%;
+    width: -webkit-fill-available;
+    width: -moz-available;
+    width: fill-available;
+}
+
 div.dyna-sel-one-comp select {
     display: block;
+    margin-top: 2px;
+    width: 100%;
 }
 
 .dyna-sel-one-description {
