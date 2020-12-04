@@ -1,16 +1,19 @@
 class DynamicSelectOneState {
     /**
      * @param repository
-     * @param title
+     * @param minCharsToSearch {Number}
+     * @param title {String}
      * @param selectedItem {DynaSelOneItem|undefined}
-     * @param cachePrefix
+     * @param optionsPrefix {String}
      * @param options {DynaSelOneItem[]|undefined}
      */
-    constructor(repository, title, selectedItem, cachePrefix, options) {
+    constructor(repository, minCharsToSearch, title,
+                selectedItem, optionsPrefix, options) {
         this.repository = repository;
+        this.minCharsToSearch = minCharsToSearch;
         this.title = title;
         this.selectedItem = selectedItem;
-        this.cachePrefix = cachePrefix;
+        this.cachePrefix = optionsPrefix;
         this.options = options;
     }
 
@@ -20,7 +23,7 @@ class DynamicSelectOneState {
      */
     setTitle(title) {
         console.log("title =", title);
-        if (this.title === title) {
+        if (!title || title.length < this.minCharsToSearch || this.title === title) {
             return Promise.reject();
         }
         this.title = title;
