@@ -8,13 +8,16 @@ class DynamicSelectOneView {
 
     /**
      * @param data {DynamicSelectOneState}
+     * @param keepFocus
      */
-    updateView(data) {
+    updateView(data, keepFocus) {
         const tmplHtml = $(`#${this.tmplId}`).html();
         const html = Mustache.render(tmplHtml, this.viewDataOf(data));
         const comp = $(`#${this.elemId}`);
         comp.html(html.trim());
-        this.searchInputFocus(comp);
+        if (keepFocus) {
+            this.searchInputFocus(comp);
+        }
     }
 
     searchInputFocus(comp) {
@@ -45,6 +48,6 @@ class DynamicSelectOneView {
     }
 
     init(data) {
-        this.updateView(data);
+        this.updateView(data, true);
     }
 }
