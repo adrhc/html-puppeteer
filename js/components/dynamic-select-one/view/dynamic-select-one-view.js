@@ -8,24 +8,34 @@ class DynamicSelectOneView {
 
     /**
      * @param data {DynamicSelectOneState}
-     * @param keepFocus
+     * @param focusOnSearchInput
      */
-    updateView(data, keepFocus) {
-        const $searchInputElem = this.$searchInputElem;
-        if ($searchInputElem.length) {
-            $searchInputElem.off("blur");
-        }
-        const tmplHtml = $(`#${this.tmplId}`).html();
-        const html = Mustache.render(tmplHtml, this.viewDataOf(data));
-        const comp = $(`#${this.elemId}`);
-        comp.html(html.trim());
-        if (keepFocus) {
-            this.searchInputFocus(comp);
+    updateView(data, focusOnSearchInput) {
+        this.clearOnBlurHandlers();
+        this.renderView(data)
+        if (focusOnSearchInput) {
+            this.focusOnSearchInput();
         }
     }
 
-    searchInputFocus(comp) {
-        const searchInput = comp.find("[name='title']");
+    /**
+     * @param data {DynamicSelectOneState}
+     */
+    renderView(data) {
+        const html = Mustache.render(this.$tmplHtml, this.viewDataOf(data));
+        this.$componentElem.html(html.trim());
+    }
+
+    clearOnBlurHandlers() {
+        this.$componentElem.off("blur.dyna-sel-one");
+        const $searchInputElem = this.$searchInputElem;
+        if ($searchInputElem.length) {
+            $searchInputElem[0].onblur = null;
+        }
+    }
+
+    focusOnSearchInput() {
+        const searchInput = this.$searchInputElem;
         const value = searchInput.val();
         searchInput.focus().val("").val(value);
     }
@@ -55,7 +65,18 @@ class DynamicSelectOneView {
         this.updateView(data, true);
     }
 
+    get $tmplHtml() {
+        return $(`#${this.tmplId}`).html();
+    }
+
     get $searchInputElem() {
         return $(`#${this.elemId} [name='title']`);
+    }
+
+    /**
+     * @returns {*|jQuery|HTMLElement}
+     */
+    get $componentElem() {
+        return $(`#${this.elemId}`);
     }
 }
