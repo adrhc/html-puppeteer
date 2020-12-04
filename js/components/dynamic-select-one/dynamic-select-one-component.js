@@ -20,7 +20,7 @@ class DynamicSelectOneComponent {
 
     onItemSelect(ev) {
         const _this = ev.data;
-        _this.state.setSelectItemId($(this).value())
+        _this.state.setSelectItemId($(this).val())
             .then(state => _this.dynaSelOneView.updateView(state));
     }
 
@@ -35,6 +35,7 @@ class DynamicSelectOneComponent {
     _configureEvents() {
         const comp = $(`#${this.dynaSelOneView.elemId}`);
         comp.on('keyup', "[name='title']", this, this.onEnterKey);
-        comp.on('click', 'option', this, this.onItemSelect);
+        // comp.on('click', 'option', this, this.onItemSelect);
+        comp.on('change', "[name='options']", this, this.onItemSelect);
     }
 }

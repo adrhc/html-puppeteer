@@ -5,15 +5,13 @@ class DynamicSelectOneState {
      * @param selectedItem {DynaSelOneItem|undefined}
      * @param cachePrefix
      * @param options {DynaSelOneItem[]|undefined}
-     * @param found
      */
-    constructor(repository, title, selectedItem, cachePrefix, options, found) {
+    constructor(repository, title, selectedItem, cachePrefix, options) {
         this.repository = repository;
         this.title = title;
         this.selectedItem = selectedItem;
         this.cachePrefix = cachePrefix;
         this.options = options;
-        this.found = found;
     }
 
     /**
@@ -27,17 +25,18 @@ class DynamicSelectOneState {
         }
         this.title = title;
         let optionsPromise;
-        if (this.cachePrefix == null || !title.startsWith(this.cachePrefix)) {
-            this.cachePrefix = title;
-            optionsPromise = this.repository.findByTitle(title);
-        } else {
+        const newTitleContainsCurrentPrefix = this.cachePrefix != null && title.startsWith(this.cachePrefix);
+        this.cachePrefix = title;
+        if (newTitleContainsCurrentPrefix) {
+            this.options = this.options.filter(o => o.title.startsWith(title));
             optionsPromise = Promise.resolve(this.options);
+        } else {
+            optionsPromise = this.repository.findByTitle(title);
         }
         return optionsPromise.then(options => {
             this.options = options;
             this.selectedItem = this._findOption();
-            this.found = !!this.selectedItem;
-            if (this.found) {
+            if (!!this.selectedItem) {
                 this.title = this.selectedItem.title;
             }
             return this;
@@ -49,7 +48,8 @@ class DynamicSelectOneState {
     }
 
     setSelectItemId(id) {
-        this.selectedItem = this.options.find(o => o.id === id);
+        console.log("id =", id);
+        this.selectedItem = this.options.find(o => o.id == id);
         if (!this.selectedItem) {
             console.error("Selected missing option! id =", id);
         }
