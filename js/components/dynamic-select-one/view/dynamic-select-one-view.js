@@ -6,23 +6,27 @@ class DynamicSelectOneView {
         this.size = size;
     }
 
+    init(data) {
+        this.updateView(data, true);
+    }
+
     /**
      * @param data {DynamicSelectOneState}
      * @param focusOnSearchInput
      */
     updateView(data, focusOnSearchInput) {
-        this.clearOnBlurHandlers();
-        this.renderView(data)
+        this._clearOnBlurHandlers();
+        this._renderView(data)
         if (focusOnSearchInput) {
-            this.focusOnSearchInput();
+            this._focusOnSearchInput();
         }
     }
 
     /**
      * @param data {DynamicSelectOneState}
      */
-    renderView(data) {
-        const viewData = this.viewDataOf(data);
+    _renderView(data) {
+        const viewData = this._viewDataOf(data);
         const html = Mustache.render(this.$tmplHtml, viewData);
         this.$componentElem.html(html.trim());
         if (viewData.renderOptions) {
@@ -34,7 +38,7 @@ class DynamicSelectOneView {
         }
     }
 
-    clearOnBlurHandlers() {
+    _clearOnBlurHandlers() {
         this.$componentElem.off("blur.dyna-sel-one");
         const $searchInputElem = this.$searchInputElem;
         if ($searchInputElem.length) {
@@ -42,7 +46,7 @@ class DynamicSelectOneView {
         }
     }
 
-    focusOnSearchInput() {
+    _focusOnSearchInput() {
         const searchInput = this.$searchInputElem;
         const value = searchInput.val();
         searchInput.focus().val("").val(value);
@@ -51,7 +55,7 @@ class DynamicSelectOneView {
     /**
      * @param data {DynamicSelectOneState}
      */
-    viewDataOf(data) {
+    _viewDataOf(data) {
         const viewData = {
             title: data.title, placeholder: this.placeholder,
             size: Math.min(data.options ? data.options.length : 0, this.size),
@@ -70,14 +74,6 @@ class DynamicSelectOneView {
             return option;
         });
         return viewData;
-    }
-
-    init(data) {
-        this.updateView(data, true);
-    }
-
-    getRenderOptions(viewData) {
-
     }
 
     get $tmplHtml() {
