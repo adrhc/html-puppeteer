@@ -1,13 +1,13 @@
 /**
  * Role: capture all table events (aka UI adapter)
  */
-class EditableTableComponent {
+class TableEditorComponent {
     constructor(editableTableView, htmlTableAdapter, entityHelper, repository) {
         this.editableTableView = editableTableView;
         this.htmlTableAdapter = htmlTableAdapter;
         this.entityHelper = entityHelper;
         this.repo = repository;
-        this.state = new EditableTableState();
+        this.state = new TableEditorState();
         this._configureEvents();
     }
 

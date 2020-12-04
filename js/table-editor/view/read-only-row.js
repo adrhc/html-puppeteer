@@ -1,5 +1,5 @@
 /**
- * Represent the rendering capabilities of EditableTableComponent at row level.
+ * Represent the rendering capabilities of TableEditorComponent at row level.
  */
 class ReadOnlyRow {
     constructor(htmlTableAdapter, rowTmpl) {

@@ -6,5 +6,5 @@ htmlTableAdapter.deleteAllRows();
 ```
 ### add rows
 ```javascript 1.8
-new EditableTableComponent(DATA, "personsTable", "readOnlyRowTmpl", "editableRowTmpl").render();
+new TableEditorComponent(DATA, "personsTable", "readOnlyRowTmpl", "editableRowTmpl").render();
 ```

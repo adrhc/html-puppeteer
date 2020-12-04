@@ -1,4 +1,4 @@
-class EditableTableState {
+class TableEditorState {
     _selectedId = undefined;
     _items = undefined;
 
