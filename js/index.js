@@ -17,6 +17,10 @@ if (Modernizr.template) {
         const entityHelper = new EntityHelper(new FormsHelper("editorForm"));
         const personsRepository = new PersonsRepository();
         new TableEditorComponent(editableTableView, htmlTableAdapter, entityHelper, personsRepository).init();
+
+        const dynaSelOneView = new DynamicSelectOneView("dyna-sel-one", "dynaSelOneCompTmpl", "name");
+        const dynaSelOneComp = new DynamicSelectOneComponent(dynaSelOneView);
+        dynaSelOneComp.init();
     })
 } else {
     // Find another way to add the rows to the table because

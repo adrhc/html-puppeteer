@@ -11,6 +11,7 @@
 </head>
 
 <body>
+<div id="dyna-sel-one" class="dyna-sel-one-comp"></div>
 <form id="editorForm">
     <table id="personsTable" class="responstable">
         <thead>
@@ -23,6 +24,17 @@
         <tbody></tbody>
     </table>
 </form>
+
+<template id="dynaSelOneCompTmpl">
+    <input type="text" name="title" value="{{title}}" placeholder="{{placeholder}}">
+    {{#options}}
+    <select name="options">
+        {{#options}}
+        <option value="{{id}}">{{description}}</option>
+        {{/options}}
+    </select>
+    {{/options}}
+</template>
 
 <script id="tableBodyTmpl" type="x-tmpl-mustache">
 {{#items}}
@@ -71,13 +83,18 @@
 <script src="js/helper/entity-helper.js"></script>
 <script src="js/adapter/html-table-adapter.js"></script>
 <script src="js/stores/persons-repository.js"></script>
-<script src="js/table-editor/model/state-change.js"></script>
-<script src="js/table-editor/model/table-editor-state.js"></script>
-<script src="js/table-editor/view/read-only-row.js"></script>
-<script src="js/table-editor/view/buttons-row.js"></script>
-<script src="js/table-editor/view/editable-row.js"></script>
-<script src="js/table-editor/view/editable-table-view.js"></script>
-<script src="js/table-editor/table-editor-component.js"></script>
+<script src="js/components/table-editor/model/state-change.js"></script>
+<script src="js/components/table-editor/model/table-editor-state.js"></script>
+<script src="js/components/table-editor/view/read-only-row.js"></script>
+<script src="js/components/table-editor/view/buttons-row.js"></script>
+<script src="js/components/table-editor/view/editable-row.js"></script>
+<script src="js/components/table-editor/view/editable-table-view.js"></script>
+<script src="js/components/table-editor/table-editor-component.js"></script>
+<script src="js/components/dynamic-select-one/model/dyna-sel-one-item.js"></script>
+<script src="js/components/dynamic-select-one/model/dyna-sel-one-state-change.js"></script>
+<script src="js/components/dynamic-select-one/model/dynamic-select-one-state.js"></script>
+<script src="js/components/dynamic-select-one/view/dynamic-select-one-view.js"></script>
+<script src="js/components/dynamic-select-one/dynamic-select-one-component.js"></script>
 <script src="js/index.js"></script>
 </body>
 
