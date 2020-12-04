@@ -1,10 +1,11 @@
 class DynamicSelectOneComponent {
     /**
      * @param dynaSelOneView {DynamicSelectOneView}
+     * @param state {DynamicSelectOneState}
      */
-    constructor(dynaSelOneView) {
+    constructor(dynaSelOneView, state) {
         this.dynaSelOneView = dynaSelOneView;
-        this.state = new DynamicSelectOneState();
+        this.state = state;
     }
 
     onEnterKey(ev) {

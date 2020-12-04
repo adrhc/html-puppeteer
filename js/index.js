@@ -4,7 +4,7 @@ if (Modernizr.template) {
         processData: false
     });
     $.ajaxPrefilter(function (options) {
-        if (options.data) {
+        if (options.contentType === 'application/json' && options.data) {
             options.data = JSON.stringify(options.data);
         }
     });
@@ -19,7 +19,8 @@ if (Modernizr.template) {
         new TableEditorComponent(editableTableView, htmlTableAdapter, entityHelper, personsRepository).init();
 
         const dynaSelOneView = new DynamicSelectOneView("dyna-sel-one", "dynaSelOneCompTmpl", "name");
-        const dynaSelOneComp = new DynamicSelectOneComponent(dynaSelOneView);
+        const dynaSelOneState = new DynamicSelectOneState(personsRepository);
+        const dynaSelOneComp = new DynamicSelectOneComponent(dynaSelOneView, dynaSelOneState);
         dynaSelOneComp.init();
     })
 } else {

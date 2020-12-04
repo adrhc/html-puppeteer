@@ -1,13 +1,14 @@
 class DynamicSelectOneState {
     /**
-     * @param found
+     * @param repository
      * @param title
      * @param selectedItem {DynaSelOneItem|undefined}
      * @param cachePrefix
      * @param options {DynaSelOneItem[]|undefined}
+     * @param found
      */
-    constructor(title, selectedItem, cachePrefix, options, found) {
-        this.id = Math.random();
+    constructor(repository, title, selectedItem, cachePrefix, options, found) {
+        this.repository = repository;
         this.title = title;
         this.selectedItem = selectedItem;
         this.cachePrefix = cachePrefix;
@@ -17,6 +18,22 @@ class DynamicSelectOneState {
 
     setTitle(title) {
         this.title = title;
+        let optionsPromise;
+        if (this.cachePrefix == null || !title.startsWith(this.cachePrefix)) {
+            this.cachePrefix = title;
+            optionsPromise = this.repository.findByTitle(title);
+        } else {
+            optionsPromise = Promise.resolve(this.options);
+        }
+        optionsPromise.then(options => {
+            this.options = options;
+            this.selectedItem = this._findOption();
+            this.found = !!this.selectedItem;
+        });
+    }
+
+    _findOption() {
+        return this.options.find(o => o.title === this.title);
     }
 
     setSelectItemId(id) {

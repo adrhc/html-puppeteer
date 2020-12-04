@@ -14,6 +14,18 @@ class PersonsRepository {
             });
     }
 
+    findByTitle(title) {
+        return $.ajax({
+            url: `${this.URL}/search/findByFirstName`,
+            data: {firstName: title},
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            processData: true
+        }).then(data => {
+            const items = RestUtils.prototype.unwrapHAL(data);
+            return items.map(it => $.extend(true, new Person(), it));
+        });
+    }
+
     save(person) {
         if (EntityUtils.prototype.hasEmptyId(person)) {
             return this.insert(person);
