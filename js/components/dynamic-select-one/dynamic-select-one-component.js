@@ -34,9 +34,9 @@ class DynamicSelectOneComponent {
      */
     _configureEvents() {
         const comp = $(`#${this.dynaSelOneView.elemId}`);
-        comp.on('keyup', "[name='title']", this, this.onEnterKey);
-        comp.on('blur', "[name='title']", this, this.onEnterKey);
-        // comp.on('click', 'option', this, this.onItemSelect);
-        comp.on('change', "[name='options']", this, this.onItemSelect);
+        comp.on('keyup blur', "[name='title']", this, this.onEnterKey);
+        // option click works only when select size > 1
+        comp.on('click', 'option', this, this.onItemSelect);
+        // comp.on('change', "[name='options']", this, this.onItemSelect);
     }
 }
