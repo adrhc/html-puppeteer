@@ -1,6 +1,6 @@
 class ButtonsRow extends ReadOnlyRow {
-    constructor(htmlTableAdapter, rowTmpl) {
-        super(htmlTableAdapter, rowTmpl);
+    constructor(htmlTableAdapter, rowTmplId) {
+        super(htmlTableAdapter, rowTmplId);
     }
 
     hide() {

@@ -1,6 +1,6 @@
 class EditableRow extends ReadOnlyRow {
-    constructor(htmlTableAdapter, rowTmpl) {
-        super(htmlTableAdapter, rowTmpl);
+    constructor(htmlTableAdapter, rowTmplId) {
+        super(htmlTableAdapter, rowTmplId);
     }
 
     show(item) {

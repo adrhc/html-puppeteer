@@ -42,11 +42,11 @@ class HtmlTableAdapter {
     /**
      * @param index: row index
      * @param data: row cell values
-     * @param rowTmpl: row HTML template
+     * @param rowTmplId: row HTML template
      * @param replaceExisting: whether to replace or append a new row
      */
-    renderRow(index, data, rowTmpl, replaceExisting) {
-        const rowHtml = data ? MustacheUtils.prototype.renderTmplId(data, rowTmpl) : $(`#${rowTmpl}`).html();
+    renderRow(index, data, rowTmplId, replaceExisting) {
+        const rowHtml = data ? MustacheUtils.prototype.renderTmplId(data, rowTmplId) : $(`#${rowTmplId}`).html();
         const $rowAtIndex = this.$tbody.find("tr").eq(index);
         if (replaceExisting) {
             $rowAtIndex.replaceWith(rowHtml);

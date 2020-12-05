@@ -2,9 +2,9 @@
  * Represent the rendering capabilities of TableEditorComponent at row level.
  */
 class ReadOnlyRow {
-    constructor(htmlTableAdapter, rowTmpl) {
+    constructor(htmlTableAdapter, rowTmplId) {
         this.htmlTableAdapter = htmlTableAdapter;
-        this.rowTmpl = rowTmpl;
+        this.rowTmplId = rowTmplId;
     }
 
     hide(_item) {
@@ -18,7 +18,7 @@ class ReadOnlyRow {
     }
 
     renderRow(rowIndex, cellsView, replaceExisting) {
-        this.htmlTableAdapter.renderRow(rowIndex, cellsView, this.rowTmpl, replaceExisting);
+        this.htmlTableAdapter.renderRow(rowIndex, cellsView, this.rowTmplId, replaceExisting);
     }
 
     /**
