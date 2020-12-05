@@ -2,7 +2,7 @@ class PersonsRepository {
     URL = "http://127.0.0.1:8011/persons";
 
     /**
-     * @returns {*}
+     * @return {Promise<Person>}
      */
     getAll() {
         return $.getJSON(this.URL)
