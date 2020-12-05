@@ -8,7 +8,7 @@ class DynamicSelectOneState {
     constructor(repository, minCharsToSearch, title, options) {
         this.repository = repository;
         this.minCharsToSearch = minCharsToSearch;
-        this._updateOptions(title, options);
+        this._update(title, options);
     }
 
     /**
@@ -37,22 +37,24 @@ class DynamicSelectOneState {
     updateByTitle(title) {
         console.log("title =", title);
         if (this.title === title) {
+            // updating with same title
             return Promise.reject();
         }
         if (!this.isEnoughTextToSearch(title)) {
-            this._updateOptions(title);
+            // new title is too short
+            this._update(title);
             return Promise.resolve(this);
         }
         let optionsPromise;
         if (this.currentOptionsAreResultOfSearch && title.startsWith(this.title)) {
-            // new title contains the current title
+            // new title contains the current title: searching existing options
             optionsPromise = Promise.resolve(this._findOptionsByTitleStartingWith(title));
         } else {
-            // new title doesn't contain the current title
+            // new title doesn't contain the current title: searching the DB
             optionsPromise = this.repository.findByTitle(title);
         }
         return optionsPromise.then(options => {
-            this._updateOptions(title, options);
+            this._update(title, options);
             return this;
         });
     }
@@ -62,7 +64,7 @@ class DynamicSelectOneState {
      * @param options {DynaSelOneItem|undefined}
      * @private
      */
-    _updateOptions(title, options) {
+    _update(title, options) {
         this.options = options;
         this.selectedItem = this._findOptionByTitle(title);
         if (this.selectedItem) {
