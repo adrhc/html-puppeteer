@@ -89,4 +89,8 @@ class DynamicSelectOneState {
         }
         return this.setTitle(this.selectedItem.title);
     }
+
+    get optionsLength() {
+        return !this.options || !this.options.length ? 0 : this.options.length;
+    }
 }

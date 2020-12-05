@@ -1,9 +1,9 @@
 class DynamicSelectOneView {
-    constructor(elemId, tmplId, {placeholder, size = 10}) {
+    constructor(elemId, tmplId, {placeholder, optionsToShow = 10}) {
         this.elemId = elemId;
         this.tmplId = tmplId;
         this.placeholder = placeholder;
-        this.size = size;
+        this.optionsToShow = optionsToShow;
     }
 
     init(data) {
@@ -26,10 +26,10 @@ class DynamicSelectOneView {
      * @param data {DynamicSelectOneState}
      */
     _renderView(data) {
-        const viewData = this._viewDataOf(data);
-        const html = Mustache.render(this.$tmplHtml, viewData);
+        const viewModel = this._viewModelOf(data);
+        const html = Mustache.render(this.$tmplHtml, viewModel);
         this.$componentElem.html(html.trim());
-        if (viewData.renderOptions) {
+        if (viewModel.options) {
             this.$selectElem.removeClass("removed");
             this.$descriptionElem.addClass("removed");
         } else {
@@ -55,32 +55,33 @@ class DynamicSelectOneView {
     /**
      * @param state {DynamicSelectOneState}
      */
-    _viewDataOf(state) {
-        const viewData = {
-            title: state.title, placeholder: this.placeholder,
-            size: Math.min(state.options ? state.options.length : 0, this.size),
-            description: state.selectedItem ? state.selectedItem.description :
-                "Nu s-a găsit nimic deocamdată!" + (state.title ? ` s-a cautat <i>${state.title}</i>` : "")
+    _viewModelOf(state) {
+        const viewModel = {
+            title: state.title,
+            placeholder: this.placeholder,
+            optionsToShow: Math.min(state.optionsLength, this.optionsToShow)
         };
         if (state.selectedItem) {
-            viewData.description = state.selectedItem.description;
+            // showing selected item
+            viewModel.description = state.selectedItem.description;
         } else if (state.isEnoughTextForSearch(state.title)) {
-            viewData.description = `Nu s-a găsit nimic deocamdată! s-a cautat <i>${state.title}</i>`;
+            // no item selected, showing empty search result
+            viewModel.description = `Nu s-a găsit nimic deocamdată! s-a cautat <i>${state.title}</i>`;
         } else {
-            viewData.description = `Completați cel puțin ${state.minCharsToSearch} caractere pt a căuta (apasând ENTER).`;
+            // no item selected, showing char number required for searching
+            viewModel.description = `Completați cel puțin ${state.minCharsToSearch} caractere pt a căuta (apasând ENTER).`;
         }
-        viewData.renderOptions = viewData.size > 1 || (viewData.size > 0 && !state.selectedItem);
-        if (!viewData.renderOptions) {
-            return viewData;
+        if (state.optionsLength > 1 || viewModel.optionsToShow === 1 && !state.selectedItem) {
+            // rendering options
+            viewModel.options = state.options.map(o => {
+                const option = {id: o.id, description: o.description, selected: ""};
+                if (state.selectedItem && o.id === state.selectedItem.id) {
+                    option.selected = "selected";
+                }
+                return option;
+            });
         }
-        viewData.options = state.options.map(o => {
-            const option = {id: o.id, description: o.description, selected: ""};
-            if (state.selectedItem && o.id === state.selectedItem.id) {
-                option.selected = "selected";
-            }
-            return option;
-        });
-        return viewData;
+        return viewModel;
     }
 
     get $tmplHtml() {

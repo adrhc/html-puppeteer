@@ -8,11 +8,20 @@ class DynamicSelectOneComponent {
         this.state = state;
     }
 
+    onOptionClick(ev) {
+        if (ev.key !== "Enter" && ev.type !== "click") {
+            return true;
+        }
+        const _this = ev.data;
+        _this.state.setSelectItemId($(this).val())
+            .then(state => _this.updateView(state));
+    }
+
     onKeyup(ev) {
         // console.log(ev);
         if (ev.key !== "Escape" && ev.key !== "Enter" && ev.type !== "blur") {
             // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
-            return false;
+            return true;
         }
         const _this = ev.data;
         const command = ev.type !== "blur" ? ev.key : "Blur";
@@ -29,12 +38,6 @@ class DynamicSelectOneComponent {
 
     _onBlur(text) {
         this.state.deactivateEdit(text).then(state => this.updateView(state));
-    }
-
-    onItemSelect(ev) {
-        const _this = ev.data;
-        _this.state.setSelectItemId($(this).val())
-            .then(state => _this.updateView(state));
     }
 
     init() {
@@ -59,9 +62,8 @@ class DynamicSelectOneComponent {
         // comp.find("[name='title']").on("keyup blur mouseleave", this, this.onKeyup);
         this._configureOnBlur();
 
-        // option click works only when select size > 1
-        comp.on('click.dyna-sel-one', 'option', this, this.onItemSelect);
-        // comp.on('change', "[name='options']", this, this.onItemSelect);
+        comp.on('click.dyna-sel-one keyup.dyna-sel-one', 'option', this, this.onOptionClick);
+        // comp.on('change', "[name='options']", this, this.onOptionClick);
     }
 
     _configureOnBlur() {

@@ -30,7 +30,7 @@
 <script id="dynaSelOneCompTmpl" type="x-tmpl-mustache">
     <input type="text" name="title" value="{{title}}" placeholder="{{placeholder}}"
            autocomplete="off" title="scrie cel putin 3 caractere pt. a căuta apasând ENTER">
-    <select name="options" size="{{size}}">
+    <select name="options" size="{{optionsToShow}}">
         {{#options}}
         <option value="{{id}}" {{selected}}>{{description}}</option>
         {{/options}}
