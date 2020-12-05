@@ -2,9 +2,9 @@
  * Role: adapter to HTMLTableElement
  */
 class HtmlTableAdapter {
-    constructor(tableId, rowTmpl, bodyTmplHtml) {
+    constructor(tableId, bodyRowTmplId, bodyTmplHtml) {
         this.tableId = tableId;
-        this.rowTmpl = rowTmpl;
+        this.bodyRowTmplHtml = $(`#${bodyRowTmplId}`).html()
         this.bodyTmplHtml = bodyTmplHtml ? bodyTmplHtml : "{{#items}}{{> readOnlyRow}}{{/items}}";
     }
 
@@ -34,28 +34,25 @@ class HtmlTableAdapter {
     }
 
     renderBody(data) {
-        const elemTmplHtml = $(`#${this.rowTmpl}`).html();
-        const html = Mustache.render(this.bodyTmplHtml, data, {readOnlyRow: elemTmplHtml})
+        const html = Mustache.render(this.bodyTmplHtml, data, {readOnlyRow: this.bodyRowTmplHtml})
         this.$tbody.html(html);
     }
 
     /**
-     * @param index: row index
-     * @param data: row cell values
-     * @param rowTmplId: row HTML template
-     * @param replaceExisting: whether to replace or append a new row
+     * @param index {number}: row index
+     * @param rowHtml {string}: row HTML
+     * @param replaceExisting {boolean}: whether to replace or append a new row
      */
-    renderRow(index, data, rowTmplId, replaceExisting) {
-        const rowHtml = data ? MustacheUtils.prototype.renderTmplId(data, rowTmplId) : $(`#${rowTmplId}`).html();
+    renderRow(index, rowHtml, replaceExisting) {
         const $rowAtIndex = this.$tbody.find("tr").eq(index);
         if (replaceExisting) {
             $rowAtIndex.replaceWith(rowHtml);
         } else {
-            const row = $(rowHtml);
+            const $row = $(rowHtml);
             if ($rowAtIndex.length) {
-                $rowAtIndex.before(row);
+                $rowAtIndex.before($row);
             } else {
-                this.$tbody.append(row);
+                this.$tbody.append($row);
             }
         }
     }

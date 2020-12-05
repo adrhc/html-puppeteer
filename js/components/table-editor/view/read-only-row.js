@@ -4,7 +4,7 @@
 class ReadOnlyRow {
     constructor(htmlTableAdapter, rowTmplId) {
         this.htmlTableAdapter = htmlTableAdapter;
-        this.rowTmplId = rowTmplId;
+        this.rowTmplHtml = $(`#${rowTmplId}`).html();
     }
 
     hide(_item) {
@@ -18,7 +18,8 @@ class ReadOnlyRow {
     }
 
     renderRow(rowIndex, cellsView, replaceExisting) {
-        this.htmlTableAdapter.renderRow(rowIndex, cellsView, this.rowTmplId, replaceExisting);
+        const rowHtml = cellsView ? Mustache.render(this.rowTmplHtml, cellsView) : this.rowTmplHtml;
+        this.htmlTableAdapter.renderRow(rowIndex, rowHtml, replaceExisting);
     }
 
     /**
