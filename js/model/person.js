@@ -1,4 +1,4 @@
-class Person {
+class Person extends DynaSelOneItem {
     get title() {
         return this.firstName;
     }
