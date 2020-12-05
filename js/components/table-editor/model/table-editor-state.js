@@ -25,14 +25,15 @@ class TableEditorState {
      * @returns {StateChange[]|undefined}
      */
     switchSelectionTo(selectedId) {
+        if (this.isIdSelected(selectedId)) {
+            // current selection is not changed (is just again selected)
+            return undefined;
+        }
         const stateChange = this.cancelSelection();
         if (!stateChange) {
             // no previous selection
             this._selectedId = selectedId;
             return [new StateChange(this._selectedItem, this._transientSelectionExists, true)];
-        } else if (this.isIdSelected(selectedId)) {
-            // current selection is not changed (is just again selected)
-            return undefined;
         }
         this._selectedId = selectedId;
         // because a transient de-selection is advertised as a removal
