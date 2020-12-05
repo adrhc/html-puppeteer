@@ -14,6 +14,10 @@ class PersonsRepository {
             });
     }
 
+    /**
+     * @param title {String}
+     * @returns {PromiseLike<DynaSelOneItem[]> | Promise<DynaSelOneItem[]>}
+     */
     findByTitle(title) {
         return $.ajax({
             url: `${this.URL}/search/findByFirstNameStartingWith`,

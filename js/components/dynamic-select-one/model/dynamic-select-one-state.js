@@ -1,95 +1,127 @@
 class DynamicSelectOneState {
     /**
      * @param repository
-     * @param minCharsToSearch {Number}
-     * @param title {String}
-     * @param selectedItem {DynaSelOneItem|undefined}
-     * @param optionsPrefix {String}
+     * @param minCharsToSearch {number}
+     * @param title {string}
      * @param options {DynaSelOneItem[]|undefined}
      */
-    constructor(repository, minCharsToSearch, title,
-                selectedItem, optionsPrefix, options) {
+    constructor(repository, minCharsToSearch, title, options) {
         this.repository = repository;
         this.minCharsToSearch = minCharsToSearch;
-        this.title = title;
-        this.selectedItem = selectedItem;
-        this.cachePrefix = optionsPrefix;
-        this.options = options;
+        this._updateOptions(title, options);
     }
 
     /**
-     * @param title
+     * @param id {number}
      * @returns {Promise<DynamicSelectOneState>}
      */
-    setTitle(title) {
-        console.log("title =", title);
-        if (!this.isEnoughTextForSearch(title) || this.title === title) {
+    updateById(id) {
+        console.log("id =", id);
+        const foundOption = this._findOptionById(id);
+        if (!foundOption) {
+            console.error("Selected missing option! id =", id);
             return Promise.reject();
         }
-        this.title = title;
+        return this.updateByTitle(foundOption.title);
+    }
+
+    /**
+     * principle:
+     * - don't do 2 things in same step (e.g. update the model and cache some values)
+     * - do multiple things sequentially (if not possible in parallel)
+     * - gather all data but only then update the model
+     *
+     * @param title {string|undefined}
+     * @returns {Promise<DynamicSelectOneState>}
+     */
+    updateByTitle(title) {
+        console.log("title =", title);
+        if (this.title === title) {
+            return Promise.reject();
+        }
+        if (!this.isEnoughTextToSearch(title)) {
+            this._updateOptions(title);
+            return Promise.resolve(this);
+        }
         let optionsPromise;
-        const newTitleContainsCurrentPrefix = this.cachePrefix != null && title.startsWith(this.cachePrefix);
-        this.cachePrefix = title;
-        if (newTitleContainsCurrentPrefix) {
-            this.options = this.options.filter(o => o.title.startsWith(title));
-            optionsPromise = Promise.resolve(this.options);
+        if (this.currentOptionsAreResultOfSearch && title.startsWith(this.title)) {
+            // new title contains the current title
+            optionsPromise = Promise.resolve(this._findOptionsByTitleStartingWith(title));
         } else {
+            // new title doesn't contain the current title
             optionsPromise = this.repository.findByTitle(title);
         }
         return optionsPromise.then(options => {
-            this.options = options;
-            this.selectedItem = this._findOption();
-            if (this.selectedItem) {
-                this.title = this.selectedItem.title;
-            }
+            this._updateOptions(title, options);
             return this;
         });
     }
 
-    deactivateEdit(title) {
-        if (this.isEnoughTextForSearch(title)) {
-            // search new title
-            return this.setTitle(title);
-        } else if (this.selectedItem) {
-            // restore active selection
+    /**
+     * @param title {string|undefined}
+     * @param options {DynaSelOneItem|undefined}
+     * @private
+     */
+    _updateOptions(title, options) {
+        this.options = options;
+        this.selectedItem = this._findOptionByTitle(title);
+        if (this.selectedItem) {
             this.title = this.selectedItem.title;
-            return Promise.resolve(this);
         } else {
-            this.options = undefined;
-            this.cachePrefix = undefined;
             this.title = title;
-            return Promise.resolve(this);
         }
-    }
-
-    reset() {
-        this.title = undefined;
-        this.selectedItem = undefined;
-        this.cachePrefix = undefined;
-        this.options = undefined;
-        return Promise.resolve(this);
-    }
-
-    _findOption() {
-        return this.options.find(o => o.title === this.title);
     }
 
     /**
-     * @param text {String}
+     * @param text {string}
+     * @returns {DynaSelOneItem|undefined}
+     * @private
      */
-    isEnoughTextForSearch(text) {
+    _findOptionsByTitleStartingWith(text) {
+        if (!this.options) {
+            return undefined;
+        }
+        return this.options.filter(opt => opt.title.startsWith(text));
+    }
+
+    /**
+     * @param title {string}
+     * @returns {DynaSelOneItem|undefined}
+     * @private
+     */
+    _findOptionByTitle(title) {
+        if (!this.options) {
+            return undefined;
+        }
+        return this.options.find(opt => opt.title === title);
+    }
+
+    /**
+     * @param id {number|string}
+     * @returns {DynaSelOneItem|undefined}
+     * @private
+     */
+    _findOptionById(id) {
+        if (!this.options) {
+            return undefined;
+        }
+        return this.options.find(opt => opt.id == id);
+    }
+
+    get currentOptionsAreResultOfSearch() {
+        return this.isEnoughTextToSearch(this.title);
+    }
+
+    /**
+     * @param text {string|undefined}
+     */
+    isEnoughTextToSearch(text) {
         return !!text && text.length >= this.minCharsToSearch;
     }
 
-    setSelectItemId(id) {
-        console.log("id =", id);
-        this.selectedItem = this.options.find(o => o.id == id);
-        if (!this.selectedItem) {
-            console.error("Selected missing option! id =", id);
-        }
-        return this.setTitle(this.selectedItem.title);
-    }
-
+    /**
+     * @returns {number|*}
+     */
     get optionsLength() {
         return !this.options || !this.options.length ? 0 : this.options.length;
     }

@@ -13,7 +13,7 @@ class DynamicSelectOneComponent {
             return true;
         }
         const _this = ev.data;
-        _this.state.setSelectItemId($(this).val())
+        _this.state.updateById($(this).val())
             .then(state => _this.updateView(state));
     }
 
@@ -29,15 +29,15 @@ class DynamicSelectOneComponent {
     }
 
     _onEscape() {
-        this.state.reset().then(state => this.updateView(state, true));
+        this.state.updateByTitle().then(state => this.updateView(state, true));
     }
 
     _onEnter(text) {
-        this.state.setTitle(text).then(state => this.updateView(state, true));
+        this.state.updateByTitle(text).then(state => this.updateView(state, true));
     }
 
     _onBlur(text) {
-        this.state.deactivateEdit(text).then(state => this.updateView(state));
+        this.state.updateByTitle(text).then(state => this.updateView(state));
     }
 
     init() {

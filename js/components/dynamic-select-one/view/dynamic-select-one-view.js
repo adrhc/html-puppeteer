@@ -16,19 +16,26 @@ class DynamicSelectOneView {
      */
     updateView(data, focusOnSearchInput) {
         this._clearOnBlurHandlers();
-        this._renderView(data)
+        const viewModel = this._viewModelOf(data);
+        this._renderView(viewModel)
+        this._applyCss(viewModel);
         if (focusOnSearchInput) {
             this._focusOnSearchInput();
         }
     }
 
     /**
-     * @param data {DynamicSelectOneState}
+     * @param viewModel {Object}
      */
-    _renderView(data) {
-        const viewModel = this._viewModelOf(data);
+    _renderView(viewModel) {
         const html = Mustache.render(this.$tmplHtml, viewModel);
         this.$componentElem.html(html.trim());
+    }
+
+    /**
+     * @param viewModel {Object}
+     */
+    _applyCss(viewModel) {
         if (viewModel.options) {
             this.$selectElem.removeClass("removed");
             this.$descriptionElem.addClass("removed");
@@ -64,7 +71,7 @@ class DynamicSelectOneView {
         if (state.selectedItem) {
             // showing selected item
             viewModel.description = state.selectedItem.description;
-        } else if (state.isEnoughTextForSearch(state.title)) {
+        } else if (state.isEnoughTextToSearch(state.title)) {
             // no item selected, showing empty search result
             viewModel.description = `Nu s-a găsit nimic deocamdată! s-a cautat <i>${state.title}</i>`;
         } else {
