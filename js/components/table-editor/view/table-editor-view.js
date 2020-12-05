@@ -1,4 +1,4 @@
-class EditableTableView {
+class TableEditorView {
     constructor(readOnlyRow, editableRow, buttonsRow, htmlTableAdapter) {
         this.readOnlyRow = readOnlyRow;
         this.editableRow = editableRow;

@@ -3,7 +3,7 @@
  */
 class TableEditorComponent {
     /**
-     * @param editableTableView {EditableTableView}
+     * @param editableTableView {TableEditorView}
      * @param htmlTableAdapter {HtmlTableAdapter}
      * @param entityHelper {EntityHelper}
      * @param repository {TableEditorRepository}
@@ -50,7 +50,7 @@ class TableEditorComponent {
     onSave(ev) {
         const editableTable = ev.data;
         const item = editableTable.entityHelper.extractEntity();
-        editableTable._catchRepoError(editableTable.repo.save(item))
+        editableTable._catchRepoError(editableTable.repository.save(item))
             .then((savedItem) => {
                 console.log(savedItem);
                 const stateChanges = editableTable.state.cancelSelectionAndUpdateItem(savedItem);

@@ -13,7 +13,7 @@ if (Modernizr.template) {
         const readOnlyRow = new ReadOnlyRow(htmlTableAdapter, "readOnlyRowTmpl");
         const editableRow = new EditableRow(htmlTableAdapter, "editableRowTmpl");
         const buttonsRow = new ButtonsRow(htmlTableAdapter, "buttonsRowTmpl");
-        const editableTableView = new EditableTableView(readOnlyRow, editableRow, buttonsRow, htmlTableAdapter);
+        const editableTableView = new TableEditorView(readOnlyRow, editableRow, buttonsRow, htmlTableAdapter);
         const entityHelper = new EntityHelper(new FormsHelper("editorForm"));
         const personsRepository = new PersonsRepository();
 
