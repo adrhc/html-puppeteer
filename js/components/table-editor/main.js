@@ -89,7 +89,7 @@ class TableEditorComponent {
      */
     _configureEvents() {
         $('#newItemBtn').on('dblclick', this, this.onNewRowCreation);
-        this.htmlTableAdapter.$tbody()
+        this.htmlTableAdapter.$tbody
             .on('dblclick', 'tr', this, this.onSelectionSwitch)
             .on('click', '#cancelBtn', this, this.onCancel)
             .on('click', '#saveBtn', this, this.onSave);

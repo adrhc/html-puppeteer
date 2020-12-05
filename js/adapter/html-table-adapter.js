@@ -22,17 +22,21 @@ class HtmlTableAdapter {
     }
 
     $getRowById(id) {
-        return this.$tbody().find(`#${id}`);
+        return this.$tbody.find(`#${id}`);
     }
 
-    $tbody() {
-        return $(`#${this.tableId} > tbody`);
+    get $tbody() {
+        const $tbody = this._$tbody;
+        if (!$tbody.length) {
+            return this.$table.append("<tbody></tbody>").find("tbody");
+        }
+        return this._$tbody;
     }
 
     renderBody(data) {
         const elemTmplHtml = $(`#${this.rowTmpl}`).html();
         const html = Mustache.render(this.bodyTmplHtml, data, {readOnlyRow: elemTmplHtml})
-        this.$tbody().html(html);
+        this.$tbody.html(html);
     }
 
     /**
@@ -43,7 +47,7 @@ class HtmlTableAdapter {
      */
     renderRow(index, data, rowTmpl, replaceExisting) {
         const rowHtml = data ? MustacheUtils.prototype.renderTmplId(data, rowTmpl) : $(`#${rowTmpl}`).html();
-        const $rowAtIndex = this.$tbody().find("tr").eq(index);
+        const $rowAtIndex = this.$tbody.find("tr").eq(index);
         if (replaceExisting) {
             $rowAtIndex.replaceWith(rowHtml);
         } else {
@@ -51,8 +55,16 @@ class HtmlTableAdapter {
             if ($rowAtIndex.length) {
                 $rowAtIndex.before(row);
             } else {
-                this.$tbody().append(row);
+                this.$tbody.append(row);
             }
         }
+    }
+
+    get $table() {
+        return $(`#${this.tableId}`);
+    }
+
+    get _$tbody() {
+        return $(`#${this.tableId} > tbody`);
     }
 }
