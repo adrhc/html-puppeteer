@@ -1,14 +1,11 @@
 class DynamicSelectOneState {
     /**
-     * @param repository
+     * @param repository {DynaSelOneRepository}
      * @param minCharsToSearch {number}
-     * @param title {string}
-     * @param options {DynaSelOneItem[]|undefined}
      */
-    constructor(repository, minCharsToSearch, title, options) {
+    constructor(repository, minCharsToSearch) {
         this.repository = repository;
-        this.minCharsToSearch = minCharsToSearch;
-        this._update(title, options);
+        this.minCharsToSearch = minCharsToSearch ? minCharsToSearch : 3;
     }
 
     /**

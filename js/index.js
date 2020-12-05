@@ -18,8 +18,8 @@ if (Modernizr.template) {
         const personsRepository = new PersonsRepository();
         new TableEditorComponent(editableTableView, htmlTableAdapter, entityHelper, personsRepository).init();
 
-        const dynaSelOneView = new DynamicSelectOneView("dyna-sel-one", "dynaSelOneCompTmpl", "name");
-        const dynaSelOneState = new DynamicSelectOneState(personsRepository, 3);
+        const dynaSelOneView = new DynamicSelectOneView("dyna-sel-one", "the name to search for");
+        const dynaSelOneState = new DynamicSelectOneState(personsRepository);
         const dynaSelOneComp = new DynamicSelectOneComponent(dynaSelOneView, dynaSelOneState);
         dynaSelOneComp.init();
     })

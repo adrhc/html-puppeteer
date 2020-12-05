@@ -1,13 +1,16 @@
 class DynamicSelectOneView {
     /**
      * @param elemId {string}
-     * @param tmplId {string}
      * @param placeholder {string}
      * @param optionsToShow {number}
+     * @param tmplUrl {string}
      */
-    constructor(elemId, tmplId, {placeholder, optionsToShow = 10}) {
+    constructor(elemId, {
+        placeholder, optionsToShow = 10,
+        tmplUrl = "js/components/dynamic-select-one/templates/dyna-sel-one.html"
+    }) {
         this.elemId = elemId;
-        this.tmplId = tmplId;
+        this.tmpl = new CachedAjax(tmplUrl);
         this.placeholder = placeholder;
         this.optionsToShow = optionsToShow;
     }
@@ -16,7 +19,7 @@ class DynamicSelectOneView {
      * @param data {DynamicSelectOneState}
      */
     init(data) {
-        this.updateView(data, true);
+        return this.updateView(data, true);
     }
 
     /**
@@ -26,19 +29,24 @@ class DynamicSelectOneView {
     updateView(data, focusOnSearchInput) {
         this._clearOnBlurHandlers();
         const viewModel = this._viewModelOf(data);
-        this._renderView(viewModel)
-        this._applyCss(viewModel);
-        if (focusOnSearchInput) {
-            this._focusOnSearchInput();
-        }
+        return this._renderView(viewModel)
+            .then(() => {
+                this._applyCss(viewModel);
+                if (focusOnSearchInput) {
+                    this._focusOnSearchInput();
+                }
+                return viewModel;
+            });
     }
 
     /**
      * @param viewModel {Object}
+     * @return {Promise<jQuery>}
      */
     _renderView(viewModel) {
-        const html = Mustache.render(this.$tmplHtml, viewModel);
-        this.$componentElem.html(html.trim());
+        return this.tmpl.cache
+            .then(html => Mustache.render(html, viewModel))
+            .then(html => this.$componentElem.html(html.trim()));
     }
 
     /**
@@ -100,10 +108,6 @@ class DynamicSelectOneView {
             });
         }
         return viewModel;
-    }
-
-    get $tmplHtml() {
-        return $(`#${this.tmplId}`).html();
     }
 
     get $descriptionElem() {

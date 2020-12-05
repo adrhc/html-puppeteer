@@ -41,14 +41,14 @@ class DynamicSelectOneComponent {
     }
 
     init() {
-        this.dynaSelOneView.init(this.state);
-        this._configureEvents();
+        this.dynaSelOneView.init(this.state)
+            .then(() => this._configureEvents());
     }
 
     updateView(state, focusOnSearchInput) {
-        this.dynaSelOneView.updateView(state, focusOnSearchInput);
-        // $(`#${this.dynaSelOneView.elemId} [name='title']`).on("keyup blur mouseleave", this, this.onKeyup);
-        this._configureOnBlur();
+        return this.dynaSelOneView
+            .updateView(state, focusOnSearchInput)
+            .then(() => this._configureOnBlur());
     }
 
     /**
