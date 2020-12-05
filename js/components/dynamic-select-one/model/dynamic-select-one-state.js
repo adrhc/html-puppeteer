@@ -110,12 +110,16 @@ class DynamicSelectOneState {
         return this.options.find(opt => opt.id == id);
     }
 
+    /**
+     * @returns {boolean}
+     */
     get currentOptionsAreResultOfSearch() {
         return this.isEnoughTextToSearch(this.title);
     }
 
     /**
      * @param text {string|undefined}
+     * @returns {boolean}
      */
     isEnoughTextToSearch(text) {
         return !!text && text.length >= this.minCharsToSearch;
