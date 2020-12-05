@@ -1,4 +1,10 @@
 class DynamicSelectOneView {
+    /**
+     * @param elemId {string}
+     * @param tmplId {string}
+     * @param placeholder {string}
+     * @param optionsToShow {number}
+     */
     constructor(elemId, tmplId, {placeholder, optionsToShow = 10}) {
         this.elemId = elemId;
         this.tmplId = tmplId;
@@ -6,6 +12,9 @@ class DynamicSelectOneView {
         this.optionsToShow = optionsToShow;
     }
 
+    /**
+     * @param data {DynamicSelectOneState}
+     */
     init(data) {
         this.updateView(data, true);
     }
@@ -61,6 +70,8 @@ class DynamicSelectOneView {
 
     /**
      * @param state {DynamicSelectOneState}
+     * @return {{placeholder: string, optionsToShow: number, title: string}}
+     * @private
      */
     _viewModelOf(state) {
         const viewModel = {
