@@ -29,7 +29,7 @@ class DynamicSelectOneComponent {
     }
 
     _onEscape() {
-        this.state.updateByTitle().then(state => this.updateView(state, true));
+        this.state.updateByTitle().finally(() => this.updateView(this.state, true));
     }
 
     _onEnter(text) {

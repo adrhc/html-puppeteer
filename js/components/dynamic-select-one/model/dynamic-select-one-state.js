@@ -35,7 +35,7 @@ class DynamicSelectOneState {
         console.log("title =", title);
         if (this.title === title) {
             // updating with same title
-            return Promise.reject();
+            return Promise.reject(this);
         }
         if (!this.isEnoughTextToSearch(title)) {
             // new title is too short
