@@ -15,5 +15,4 @@ class RestUtils {
         }
         return object;
     }
-
 }
