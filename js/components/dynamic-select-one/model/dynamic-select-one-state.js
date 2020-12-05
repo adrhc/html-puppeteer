@@ -29,7 +29,7 @@ class DynamicSelectOneState {
      * principle:
      * - don't do 2 things in same step (e.g. update the model and cache some values)
      * - do multiple things sequentially (if not possible in parallel)
-     * - gather all data but only then update the model
+     * - gather all data then update the model then compute derivatives then cache
      *
      * @param title {string|undefined}
      * @returns {Promise<DynamicSelectOneState>}
@@ -60,6 +60,8 @@ class DynamicSelectOneState {
     }
 
     /**
+     * update the model then compute derivatives
+     *
      * @param title {string|undefined}
      * @param options {DynaSelOneItem|undefined}
      * @private
