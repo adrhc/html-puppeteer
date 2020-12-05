@@ -2,11 +2,17 @@
  * Role: capture all table events (aka UI adapter)
  */
 class TableEditorComponent {
+    /**
+     * @param editableTableView {EditableTableView}
+     * @param htmlTableAdapter {HtmlTableAdapter}
+     * @param entityHelper {EntityHelper}
+     * @param repository {TableEditorRepository}
+     */
     constructor(editableTableView, htmlTableAdapter, entityHelper, repository) {
         this.editableTableView = editableTableView;
         this.htmlTableAdapter = htmlTableAdapter;
         this.entityHelper = entityHelper;
-        this.repo = repository;
+        this.repository = repository;
         this.state = new TableEditorState();
         this._configureEvents();
     }
@@ -56,7 +62,7 @@ class TableEditorComponent {
      * component initializer
      */
     init() {
-        this._catchRepoError(this.repo.getAll())
+        this._catchRepoError(this.repository.getAll())
             .then((items) => {
                 console.log("items:\n", items);
                 this.state.items = items;
@@ -66,6 +72,10 @@ class TableEditorComponent {
 
     /**
      * (internal) errors handler
+     *
+     * @param promise
+     * @return {Promise<any>}
+     * @private
      */
     _catchRepoError(promise) {
         return promise.catch((jqXHR, textStatus, errorThrown) => {

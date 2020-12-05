@@ -16,6 +16,7 @@ if (Modernizr.template) {
         const editableTableView = new EditableTableView(readOnlyRow, editableRow, buttonsRow, htmlTableAdapter);
         const entityHelper = new EntityHelper(new FormsHelper("editorForm"));
         const personsRepository = new PersonsRepository();
+
         new TableEditorComponent(editableTableView, htmlTableAdapter, entityHelper, personsRepository).init();
 
         const dynaSelOneView = new DynamicSelectOneView("dyna-sel-one", "the name to search for");
