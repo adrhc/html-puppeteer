@@ -9,14 +9,14 @@ if (Modernizr.template) {
         }
     });
     $(() => {
+        const personsRepository = new PersonsRepository();
+
         const htmlTableAdapter = new HtmlTableAdapter("personsTable", "readOnlyRowTmpl");
         const readOnlyRow = new ReadOnlyRow(htmlTableAdapter, {rowTmplId: "readOnlyRowTmpl"});
         const editableRow = new EditableRow(htmlTableAdapter, {rowTmplId: "editableRowTmpl"});
         const buttonsRow = new ButtonsRow(htmlTableAdapter);
         const tableEditorView = new TableEditorView(readOnlyRow, editableRow, buttonsRow, htmlTableAdapter);
         const entityHelper = new EntityHelper(new FormsHelper("editorForm"));
-        const personsRepository = new PersonsRepository();
-
         new TableEditorComponent(tableEditorView, htmlTableAdapter, entityHelper, personsRepository).init();
 
         const dynaSelOneView = new DynamicSelectOneView("dyna-sel-one", "the name to search for");
