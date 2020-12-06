@@ -1,7 +1,7 @@
 class ButtonsRow extends ReadOnlyRow {
     /**
      * @param htmlTableAdapter {HtmlTableAdapter}
-     * @param config {{rowTmplId: string, rowTmplHtml: string}}
+     * @param config {{rowTmplId: string, rowTmplHtml: string, buttonsRowId: string}}
      */
     constructor(htmlTableAdapter, config) {
         super(htmlTableAdapter, $.extend({
@@ -13,10 +13,11 @@ class ButtonsRow extends ReadOnlyRow {
                     </td>
                 </tr>`
         }, config));
+        this.buttonsRowId = config && config.buttonsRowId ? config.buttonsRowId : "buttons";
     }
 
     hide() {
-        this.htmlTableAdapter.deleteRowById("buttons");
+        this.htmlTableAdapter.deleteRowById(this.buttonsRowId);
     }
 
     show(item) {

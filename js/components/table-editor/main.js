@@ -89,9 +89,14 @@ class TableEditorComponent {
      */
     _configureEvents() {
         $('#newItemBtn').on('dblclick', this, this.onNewRowCreation);
+        // see ButtonsRow.buttonsRowId
         this.htmlTableAdapter.$tbody
-            .on('dblclick', 'tr', this, this.onSelectionSwitch)
-            .on('click', '#cancelBtn', this, this.onCancel)
-            .on('click', '#saveBtn', this, this.onSave);
+            .on('dblclick', `tr[id!='${this._buttonsRowId}']`, this, this.onSelectionSwitch)
+            .on('click', "#cancelBtn", this, this.onCancel)
+            .on('click', "#saveBtn", this, this.onSave);
+    }
+
+    get _buttonsRowId() {
+        return this.editableTableView.buttonsRow.buttonsRowId;
     }
 }
