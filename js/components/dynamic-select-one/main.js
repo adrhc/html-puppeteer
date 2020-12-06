@@ -63,7 +63,7 @@ class DynamicSelectOneComponent {
         this._configureOnBlur();
 
         comp.on('click.dyna-sel-one keyup.dyna-sel-one', 'option', this, this.onOptionClick);
-        // comp.on('change', "[name='options']", this, this.onOptionClick);
+        // comp.on('change.dyna-sel-one keyup.dyna-sel-one', "[name='options']", this, this.onOptionClick);
     }
 
     _configureOnBlur() {

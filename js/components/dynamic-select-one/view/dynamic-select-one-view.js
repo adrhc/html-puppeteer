@@ -85,7 +85,8 @@ class DynamicSelectOneView {
         const viewModel = {
             title: state.title,
             placeholder: this.placeholder,
-            optionsToShow: Math.min(state.optionsLength, this.optionsToShow)
+            // 2: used to have the multiple select which know to handle click event on options
+            optionsToShow: Math.min(Math.max(state.optionsLength, 2), this.optionsToShow)
         };
         if (state.selectedItem) {
             // showing selected item
@@ -97,7 +98,7 @@ class DynamicSelectOneView {
             // no item selected, showing char number required for searching
             viewModel.description = `Completați cel puțin ${state.minCharsToSearch} caractere pt a căuta (apasând ENTER).`;
         }
-        if (state.optionsLength > 1 || viewModel.optionsToShow === 1 && !state.selectedItem) {
+        if (state.optionsLength > 1 || state.optionsLength === 1 && !state.selectedItem) {
             // rendering options
             viewModel.options = state.options.map(o => {
                 const option = {id: o.id, description: o.description, selected: ""};
