@@ -2,9 +2,18 @@
  * Represent the rendering capabilities of TableEditorComponent at row level.
  */
 class ReadOnlyRow {
-    constructor(htmlTableAdapter, rowTmplId) {
+    /**
+     * @param htmlTableAdapter {HtmlTableAdapter}
+     * @param rowTmplId {string}
+     * @param rowTmplHtml {string}
+     */
+    constructor(htmlTableAdapter, {rowTmplId, rowTmplHtml}) {
         this.htmlTableAdapter = htmlTableAdapter;
-        this.rowTmplHtml = $(`#${rowTmplId}`).html();
+        if (rowTmplId) {
+            this.rowTmplHtml = $(`#${rowTmplId}`).html();
+        } else if (rowTmplHtml) {
+            this.rowTmplHtml = rowTmplHtml;
+        }
     }
 
     hide(_item) {

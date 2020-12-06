@@ -1,6 +1,10 @@
 class EditableRow extends ReadOnlyRow {
-    constructor(htmlTableAdapter, rowTmplId) {
-        super(htmlTableAdapter, rowTmplId);
+    /**
+     * @param htmlTableAdapter {HtmlTableAdapter}
+     * @param config {{rowTmplId: string, rowTmplHtml: string}}
+     */
+    constructor(htmlTableAdapter, config) {
+        super(htmlTableAdapter, config);
     }
 
     show(item) {

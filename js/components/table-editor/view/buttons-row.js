@@ -1,6 +1,18 @@
 class ButtonsRow extends ReadOnlyRow {
-    constructor(htmlTableAdapter, rowTmplId) {
-        super(htmlTableAdapter, rowTmplId);
+    /**
+     * @param htmlTableAdapter {HtmlTableAdapter}
+     * @param config {{rowTmplId: string, rowTmplHtml: string}}
+     */
+    constructor(htmlTableAdapter, config) {
+        super(htmlTableAdapter, $.extend({
+            rowTmplHtml:
+                `<tr id="buttons" class="buttons-row">
+                    <td colspan="3">
+                        <button type="button" id="cancelBtn">Cancel</button>
+                        <button type="button" id="saveBtn">Save</button>
+                    </td>
+                </tr>`
+        }, config));
     }
 
     hide() {

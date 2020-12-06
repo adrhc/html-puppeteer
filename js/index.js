@@ -10,9 +10,9 @@ if (Modernizr.template) {
     });
     $(() => {
         const htmlTableAdapter = new HtmlTableAdapter("personsTable", "readOnlyRowTmpl");
-        const readOnlyRow = new ReadOnlyRow(htmlTableAdapter, "readOnlyRowTmpl");
-        const editableRow = new EditableRow(htmlTableAdapter, "editableRowTmpl");
-        const buttonsRow = new ButtonsRow(htmlTableAdapter, "buttonsRowTmpl");
+        const readOnlyRow = new ReadOnlyRow(htmlTableAdapter, {rowTmplId: "readOnlyRowTmpl"});
+        const editableRow = new EditableRow(htmlTableAdapter, {rowTmplId: "editableRowTmpl"});
+        const buttonsRow = new ButtonsRow(htmlTableAdapter);
         const tableEditorView = new TableEditorView(readOnlyRow, editableRow, buttonsRow, htmlTableAdapter);
         const entityHelper = new EntityHelper(new FormsHelper("editorForm"));
         const personsRepository = new PersonsRepository();
