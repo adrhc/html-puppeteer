@@ -9,6 +9,7 @@ class DynamicSelectOneComponent {
     }
 
     onOptionClick(ev) {
+        ev.stopPropagation();
         if (ev.key !== "Enter" && ev.type !== "click") {
             return true;
         }
@@ -18,6 +19,7 @@ class DynamicSelectOneComponent {
     }
 
     onKeyup(ev) {
+        ev.stopPropagation();
         // console.log(ev);
         if (ev.key !== "Escape" && ev.key !== "Enter" && ev.type !== "blur") {
             // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
@@ -67,6 +69,7 @@ class DynamicSelectOneComponent {
     }
 
     _configureOnBlur() {
+        // from jquery docs: blur does not propagate
         this.dynaSelOneView.$searchInputElem[0].onblur = (ev) => {
             ev.data = this;
             this.onKeyup.bind(ev.target)(ev, true);
