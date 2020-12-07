@@ -10,7 +10,7 @@ class ReadOnlyRow {
     constructor(mustacheTableElemAdapter, {rowTmplId, rowTmplHtml}) {
         this.mustacheTableElemAdapter = mustacheTableElemAdapter;
         if (rowTmplId) {
-            this.rowTmplHtml = $(`#${rowTmplId}`).html();
+            this.rowTmplHtml = HtmlUtils.prototype.templateTextOf(rowTmplId);
         } else if (rowTmplHtml) {
             this.rowTmplHtml = rowTmplHtml;
         }

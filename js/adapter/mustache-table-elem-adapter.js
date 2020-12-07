@@ -8,7 +8,7 @@ class MustacheTableElemAdapter extends TableElementAdapter {
      */
     constructor(tableId, bodyRowTmplId, bodyTmplHtml) {
         super(tableId);
-        this.bodyRowTmplHtml = $(`#${bodyRowTmplId}`).html()
+        this.bodyRowTmplHtml = HtmlUtils.prototype.templateTextOf(bodyRowTmplId);
         this.bodyTmplHtml = bodyTmplHtml ? bodyTmplHtml : "{{#items}}{{> bodyRowTmpl}}{{/items}}";
     }
 
