@@ -41,4 +41,12 @@ class TableEditorView {
             }
         })
     }
+
+    /**
+     * @param tr {HTMLTableRowElement}
+     * @return {string}
+     */
+    rowDataIdOf(tr) {
+        return $(tr).data("id");
+    }
 }

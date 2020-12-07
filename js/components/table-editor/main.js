@@ -31,7 +31,8 @@ class TableEditorComponent {
      */
     onSelectionSwitch(ev) {
         const editableTable = ev.data;
-        const stateChangeResult = editableTable.state.switchSelectionTo(this.id);
+        const rowDataId = editableTable.editableTableView.rowDataIdOf(this);
+        const stateChangeResult = editableTable.state.switchSelectionTo(rowDataId);
         editableTable.editableTableView.updateView(stateChangeResult);
     }
 
@@ -89,22 +90,26 @@ class TableEditorComponent {
      */
     _configureEvents() {
         this._configureNewItemBtnEvent();
-        // see ButtonsRow.buttonsRowId
         this.tableElementAdapter.$tbody
-            .on('dblclick', `tr[id!='${this._buttonsRowId}']`, this, this.onSelectionSwitch)
+            .on('dblclick', `tr[data-id!='${this._buttonsRowDataId}']`, this, this.onSelectionSwitch)
             .on('click', "[name='cancelBtn']", this, this.onCancel)
             .on('click', "[name='saveBtn']", this, this.onSave);
     }
 
     _configureNewItemBtnEvent() {
-        let $newItemBtn = this.tableElementAdapter.$table.find("[data-name='newItemBtn']");
-        if (!$newItemBtn.length) {
-            $newItemBtn = this.tableElementAdapter.$table.find("[name='newItemBtn']");
+        // dblclick on table header
+        let $newItemBtn = this.tableElementAdapter.$table.find("[data-id='newItemBtn']");
+        if ($newItemBtn.length) {
+            $newItemBtn.on('dblclick', this, this.onNewRowCreation);
         }
-        $newItemBtn.on('dblclick', this, this.onNewRowCreation);
+        // click on newItemBtn button
+        $newItemBtn = this.tableElementAdapter.$table.find("[name='newItemBtn']");
+        if ($newItemBtn.length) {
+            $newItemBtn.on('click', this, this.onNewRowCreation);
+        }
     }
 
-    get _buttonsRowId() {
-        return this.editableTableView.buttonsRow.buttonsRowId;
+    get _buttonsRowDataId() {
+        return this.editableTableView.buttonsRow.buttonsRowDataId;
     }
 }

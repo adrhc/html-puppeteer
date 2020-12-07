@@ -17,11 +17,11 @@ class ReadOnlyRow {
     }
 
     hide(_item) {
-        this.mustacheTableElemAdapter.deleteRowById(_item.id)
+        this.mustacheTableElemAdapter.deleteRowByDataId(_item.id)
     }
 
     show(_item) {
-        const rowIndex = this.mustacheTableElemAdapter.getRowIndexById(_item.id);
+        const rowIndex = this.mustacheTableElemAdapter.getRowIndexByDataId(_item.id);
         const createNew = rowIndex == null;
         this.renderRow(createNew ? 0 : rowIndex, this.cellsViewOf(_item), !createNew);
     }

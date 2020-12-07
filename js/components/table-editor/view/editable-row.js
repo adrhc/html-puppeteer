@@ -16,7 +16,7 @@ class EditableRow extends ReadOnlyRow {
      * private method
      */
     focusFirstInput(rowId) {
-        const $row = this.mustacheTableElemAdapter.$getRowById(rowId);
+        const $row = this.mustacheTableElemAdapter.$getRowByDataId(rowId);
         const $inputToFocus = $row.find("input[name='firstName']:visible");
         if ($inputToFocus.length) {
             $inputToFocus.focus();

@@ -17,7 +17,7 @@
 <form id="editorForm">
     <table id="personsTable" class="responstable">
         <thead>
-        <tr data-name="newItemBtn">
+        <tr data-id="newItemBtn">
             <th>Id</th>
             <th data-th="Details"><span>First name</span></th>
             <th>Last name</th>
@@ -27,7 +27,7 @@
 </form>
 
 <script id="readOnlyRowTmpl" type="x-tmpl-mustache">
-    <tr id="{{id}}">
+    <tr data-id="{{id}}">
         <td>{{id}}</td>
         <td>{{firstName}}</td>
         <td>{{lastName}}</td>
@@ -35,7 +35,7 @@
 </script>
 
 <script id="editableRowTmpl" type="x-tmpl-mustache">
-    <tr id="{{id}}" class="editor">
+    <tr data-id="{{id}}" class="editor">
         <td>{{htmlId}}
             <input type="hidden" name="id" value="{{id}}">
         </td>

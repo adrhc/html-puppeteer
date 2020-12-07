@@ -1,27 +1,27 @@
 class ButtonsRow extends ReadOnlyRow {
     /**
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
-     * @param config {{rowTmplId: string, rowTmplHtml: string, buttonsRowId: string}}
+     * @param config {{rowTmplId: string, rowTmplHtml: string, buttonsRowDataId: string}}
      */
     constructor(mustacheTableElemAdapter, config) {
         super(mustacheTableElemAdapter, $.extend({
             rowTmplHtml:
-                `<tr id="buttons" class="buttons-row">
+                `<tr data-id="buttons" class="buttons-row">
                     <td colspan="${mustacheTableElemAdapter.columnsCount}">
                         <button type="button" name="cancelBtn">Cancel</button>
                         <button type="button" name="saveBtn">Save</button>
                     </td>
                 </tr>`
         }, config));
-        this.buttonsRowId = config && config.buttonsRowId ? config.buttonsRowId : "buttons";
+        this.buttonsRowDataId = config && config.buttonsRowDataId ? config.buttonsRowDataId : "buttons";
     }
 
     hide() {
-        this.mustacheTableElemAdapter.deleteRowById(this.buttonsRowId);
+        this.mustacheTableElemAdapter.deleteRowByDataId(this.buttonsRowDataId);
     }
 
     show(item) {
-        const editorRowId = this.mustacheTableElemAdapter.getRowIndexById(item.id);
+        const editorRowId = this.mustacheTableElemAdapter.getRowIndexByDataId(item.id);
         super.renderRow(editorRowId + 1);
     }
 }

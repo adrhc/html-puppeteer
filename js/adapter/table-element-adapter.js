@@ -6,21 +6,21 @@ class TableElementAdapter {
         this.tableId = tableId;
     }
 
-    deleteRowById(id) {
-        this.$getRowById(id).remove();
+    deleteRowByDataId(rowDataId) {
+        this.$getRowByDataId(rowDataId).remove();
     }
 
-    getRowIndexById(id) {
-        const $row = this.$getRowById(id);
+    getRowIndexByDataId(rowDataId) {
+        const $row = this.$getRowByDataId(rowDataId);
         if (!$row.length) {
             return undefined;
         }
-        const rowElem = this.$getRowById(id)[0];
+        const rowElem = this.$getRowByDataId(rowDataId)[0];
         return rowElem.sectionRowIndex == null ? rowElem.rowIndex : rowElem.sectionRowIndex;
     }
 
-    $getRowById(rowId) {
-        return this.$tbody.find(`#${rowId}`);
+    $getRowByDataId(rowDataId) {
+        return this.$tbody.find(`[data-id=${rowDataId}]`);
     }
 
     /**
@@ -69,7 +69,7 @@ class TableElementAdapter {
     }
 
     get $table() {
-        return $(this.tableId);
+        return $(`#${this.tableId}`);
     }
 
     get _$tbody() {
