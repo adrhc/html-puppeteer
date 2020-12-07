@@ -1,7 +1,5 @@
 class MustacheTableElemAdapter extends TableElementAdapter {
     /**
-     * todo: use bodyRowTmplHtml instead of bodyRowTmplId
-     *
      * @param tableId {string}
      * @param bodyRowTmplId {string}
      * @param bodyTmplHtml {string}
