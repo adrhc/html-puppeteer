@@ -52,8 +52,7 @@ class TableEditorComponent {
     onSave(ev) {
         ev.stopPropagation();
         const editableTable = ev.data;
-        const item = editableTable.editableTableView.entityValuesFor(editableTable.state.selectedId);
-        editableTable._catchRepoError(editableTable.repository.save(item))
+        editableTable._catchRepoError(editableTable.saveEditedEntity())
             .then((savedItem) => {
                 console.log(savedItem);
                 const stateChanges = editableTable.state.cancelSelectionAndUpdateItem(savedItem);
@@ -113,5 +112,16 @@ class TableEditorComponent {
 
     get _buttonsRowDataId() {
         return this.editableTableView.buttonsRow.buttonsRowDataId;
+    }
+
+    get editedEntityValues() {
+        if (!this.state.selectionExists()) {
+            return undefined;
+        }
+        return this.editableTableView.entityValuesFor(this.state.selectedId);
+    }
+
+    saveEditedEntity() {
+        return this.repository.save(this.editedEntityValues);
     }
 }
