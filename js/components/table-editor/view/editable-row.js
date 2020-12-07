@@ -1,10 +1,10 @@
 class EditableRow extends ReadOnlyRow {
     /**
-     * @param htmlTableAdapter {TableElementAdapter}
+     * @param tableElementAdapter {TableElementAdapter}
      * @param config {{rowTmplId: string, rowTmplHtml: string}}
      */
-    constructor(htmlTableAdapter, config) {
-        super(htmlTableAdapter, config);
+    constructor(tableElementAdapter, config) {
+        super(tableElementAdapter, config);
     }
 
     show(item) {
@@ -16,7 +16,7 @@ class EditableRow extends ReadOnlyRow {
      * private method
      */
     focusFirstInput(id) {
-        const $row = this.htmlTableAdapter.$tbody.find(`#${id}`);
+        const $row = this.tableElementAdapter.$tbody.find(`#${id}`);
         const $inputToFocus = $row.find("input[name='firstName']:visible");
         if ($inputToFocus.length) {
             $inputToFocus.focus();

@@ -57,6 +57,24 @@ class TableElementAdapter {
         }
     }
 
+    get columnsCount() {
+        let columnsCount = 0;
+        const firstRow = $(`#${this.tableId} tr:nth-child(1)`);
+        let tds = firstRow.find("th");
+        if (!tds.length) {
+            tds = firstRow.find("td");
+        }
+        for (let td of tds) {
+            const colspan = $(td).attr('colspan');
+            if (colspan) {
+                columnsCount += +colspan;
+            } else {
+                columnsCount++;
+            }
+        }
+        return columnsCount;
+    }
+
     get $table() {
         return $(`#${this.tableId}`);
     }

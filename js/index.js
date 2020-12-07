@@ -11,13 +11,13 @@ if (Modernizr.template) {
     $(() => {
         const personsRepository = new PersonsRepository();
 
-        const htmlTableAdapter = new TableElementAdapter("personsTable", "readOnlyRowTmpl");
-        const readOnlyRow = new ReadOnlyRow(htmlTableAdapter, {rowTmplId: "readOnlyRowTmpl"});
-        const editableRow = new EditableRow(htmlTableAdapter, {rowTmplId: "editableRowTmpl"});
-        const buttonsRow = new ButtonsRow(htmlTableAdapter);
-        const tableEditorView = new TableEditorView(readOnlyRow, editableRow, buttonsRow, htmlTableAdapter);
+        const tableElementAdapter = new TableElementAdapter("personsTable", "readOnlyRowTmpl");
+        const readOnlyRow = new ReadOnlyRow(tableElementAdapter, {rowTmplId: "readOnlyRowTmpl"});
+        const editableRow = new EditableRow(tableElementAdapter, {rowTmplId: "editableRowTmpl"});
+        const buttonsRow = new ButtonsRow(tableElementAdapter);
+        const tableEditorView = new TableEditorView(readOnlyRow, editableRow, buttonsRow, tableElementAdapter);
         const entityHelper = new EntityHelper(new FormsHelper("editorForm"));
-        new TableEditorComponent(tableEditorView, htmlTableAdapter, entityHelper, personsRepository).init();
+        new TableEditorComponent(tableEditorView, tableElementAdapter, entityHelper, personsRepository).init();
 
         const dynaSelOneView = new DynamicSelectOneView("dyna-sel-one", "the name to search for");
         const dynaSelOneState = new DynamicSelectOneState(personsRepository);

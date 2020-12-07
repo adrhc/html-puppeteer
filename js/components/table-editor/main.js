@@ -4,13 +4,13 @@
 class TableEditorComponent {
     /**
      * @param editableTableView {TableEditorView}
-     * @param htmlTableAdapter {TableElementAdapter}
+     * @param tableElementAdapter {TableElementAdapter}
      * @param entityHelper {EntityHelper}
      * @param repository {TableEditorRepository}
      */
-    constructor(editableTableView, htmlTableAdapter, entityHelper, repository) {
+    constructor(editableTableView, tableElementAdapter, entityHelper, repository) {
         this.editableTableView = editableTableView;
-        this.htmlTableAdapter = htmlTableAdapter;
+        this.tableElementAdapter = tableElementAdapter;
         this.entityHelper = entityHelper;
         this.repository = repository;
         this.state = new TableEditorState();
@@ -90,7 +90,7 @@ class TableEditorComponent {
     _configureEvents() {
         $('#newItemBtn').on('dblclick', this, this.onNewRowCreation);
         // see ButtonsRow.buttonsRowId
-        this.htmlTableAdapter.$tbody
+        this.tableElementAdapter.$tbody
             .on('dblclick', `tr[id!='${this._buttonsRowId}']`, this, this.onSelectionSwitch)
             .on('click', "#cancelBtn", this, this.onCancel)
             .on('click', "#saveBtn", this, this.onSave);

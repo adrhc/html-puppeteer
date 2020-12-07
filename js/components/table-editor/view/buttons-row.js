@@ -1,13 +1,13 @@
 class ButtonsRow extends ReadOnlyRow {
     /**
-     * @param htmlTableAdapter {TableElementAdapter}
+     * @param tableElementAdapter {TableElementAdapter}
      * @param config {{rowTmplId: string, rowTmplHtml: string, buttonsRowId: string}}
      */
-    constructor(htmlTableAdapter, config) {
-        super(htmlTableAdapter, $.extend({
+    constructor(tableElementAdapter, config) {
+        super(tableElementAdapter, $.extend({
             rowTmplHtml:
                 `<tr id="buttons" class="buttons-row">
-                    <td colspan="3">
+                    <td colspan="${tableElementAdapter.columnsCount}">
                         <button type="button" id="cancelBtn">Cancel</button>
                         <button type="button" id="saveBtn">Save</button>
                     </td>
@@ -17,11 +17,11 @@ class ButtonsRow extends ReadOnlyRow {
     }
 
     hide() {
-        this.htmlTableAdapter.deleteRowById(this.buttonsRowId);
+        this.tableElementAdapter.deleteRowById(this.buttonsRowId);
     }
 
     show(item) {
-        const editorRowId = this.htmlTableAdapter.getRowIndexById(item.id);
+        const editorRowId = this.tableElementAdapter.getRowIndexById(item.id);
         super.renderRow(editorRowId + 1);
     }
 }
