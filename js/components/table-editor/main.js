@@ -92,8 +92,8 @@ class TableEditorComponent {
         // see ButtonsRow.buttonsRowId
         this.tableElementAdapter.$tbody
             .on('dblclick', `tr[id!='${this._buttonsRowId}']`, this, this.onSelectionSwitch)
-            .on('click', "#cancelBtn", this, this.onCancel)
-            .on('click', "#saveBtn", this, this.onSave);
+            .on('click', "[name='cancelBtn']", this, this.onCancel)
+            .on('click', "[name='saveBtn']", this, this.onSave);
     }
 
     get _buttonsRowId() {

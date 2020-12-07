@@ -8,8 +8,8 @@ class ButtonsRow extends ReadOnlyRow {
             rowTmplHtml:
                 `<tr id="buttons" class="buttons-row">
                     <td colspan="${mustacheTableElemAdapter.columnsCount}">
-                        <button type="button" id="cancelBtn">Cancel</button>
-                        <button type="button" id="saveBtn">Save</button>
+                        <button type="button" name="cancelBtn">Cancel</button>
+                        <button type="button" name="saveBtn">Save</button>
                     </td>
                 </tr>`
         }, config));
