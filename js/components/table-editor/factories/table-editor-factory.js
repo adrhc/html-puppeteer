@@ -7,7 +7,8 @@ class TableEditorFactory {
      * @return {TableEditorComponent}
      */
     create({
-               tableId, repository,
+               tableId,
+               repository = new InMemoryTableEditorRepository(),
                bodyRowTmplId = "readOnlyRowTmpl",
                editableRowTmplId = "editableRowTmpl"
            }) {

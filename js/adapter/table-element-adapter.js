@@ -20,7 +20,7 @@ class TableElementAdapter {
     }
 
     $getRowByDataId(rowDataId) {
-        return this.$tbody.find(`[data-id=${rowDataId}]`);
+        return this.$tbody.find(`[data-id='${rowDataId}']`);
     }
 
     /**

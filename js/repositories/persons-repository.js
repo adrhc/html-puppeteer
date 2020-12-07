@@ -1,21 +1,8 @@
 /**
  * also extends TableEditorRepository
  */
-class PersonsRepository extends DynaSelOneRepository {
+class PersonsRepository extends TableEditorRepository {
     URL = "http://127.0.0.1:8011/persons";
-
-    /**
-     * @return {Promise<Person>}
-     */
-    getAll() {
-        return $.getJSON(this.URL)
-            .then(data => RestUtils.prototype.unwrapHAL(data))
-            .catch((jqXHR, textStatus, errorThrown) => {
-                console.log(textStatus, errorThrown);
-                alert(`${textStatus}! loading fallback data`);
-                return $.getJSON("test/persons.json");
-            });
-    }
 
     /**
      * @param title {String}
@@ -33,12 +20,17 @@ class PersonsRepository extends DynaSelOneRepository {
         });
     }
 
-    save(person) {
-        if (EntityUtils.prototype.hasEmptyId(person)) {
-            return this.insert(person);
-        } else {
-            return this.update(person);
-        }
+    /**
+     * @return {Promise<Person[]>}
+     */
+    getAll() {
+        return $.getJSON(this.URL)
+            .then(data => RestUtils.prototype.unwrapHAL(data))
+            .catch((jqXHR, textStatus, errorThrown) => {
+                console.log(textStatus, errorThrown);
+                alert(`${textStatus}! loading fallback data`);
+                return $.getJSON("test/persons.json");
+            });
     }
 
     update(person) {

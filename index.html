@@ -14,37 +14,35 @@
 
 <body>
 <div id="dyna-sel-one" class="dyna-sel-one-comp"></div>
-<form id="editorForm">
-    <table id="personsTable" class="responstable">
-        <thead>
-        <tr data-id="newItemBtn">
-            <th>Id</th>
-            <th data-th="Details"><span>First name</span></th>
-            <th>Last name</th>
-        </tr>
-        </thead>
-    </table>
-</form>
+<table id="personsTable" class="responstable">
+    <thead>
+    <tr data-id="newItemBtn">
+        <th>Id</th>
+        <th data-th="Details"><span>First name</span></th>
+        <th>Last name</th>
+    </tr>
+    </thead>
+</table>
 
 <script id="readOnlyRowTmpl" type="x-tmpl-mustache">
-    <tr data-id="{{id}}">
-        <td>{{id}}</td>
-        <td>{{firstName}}</td>
-        <td>{{lastName}}</td>
+    <tr data-id="{{item.id}}">
+        <td>{{item.id}}</td>
+        <td>{{item.firstName}}</td>
+        <td>{{item.lastName}}</td>
     </tr>
 </script>
 
 <script id="editableRowTmpl" type="x-tmpl-mustache">
-    <tr data-id="{{id}}" class="editor">
+    <tr data-id="{{item.id}}" class="editor">
         <td>{{htmlId}}
-            <input type="hidden" name="id" value="{{id}}">
+            <input type="hidden" name="id" value="{{item.id}}">
         </td>
         <td>
-            <input type="text" name="firstName" value="{{firstName}}">
+            <input type="text" name="firstName" value="{{item.firstName}}">
         </td>
         <td>
             <div class="buttons-cell lastName">
-                <input type="text" name="lastName" value="{{lastName}}">
+                <input type="text" name="lastName" value="{{item.lastName}}">
             </div>
         </td>
     </tr>
@@ -66,6 +64,7 @@
 <script src="js/components/table-editor/model/state-change.js"></script>
 <script src="js/components/table-editor/model/table-editor-state.js"></script>
 <script src="js/components/table-editor/repository/table-editor-repository.js"></script>
+<script src="js/components/table-editor/repository/in-memory-table-editor-repository.js"></script>
 <script src="js/components/table-editor/view/read-only-row.js"></script>
 <script src="js/components/table-editor/view/buttons-row.js"></script>
 <script src="js/components/table-editor/view/editable-row.js"></script>
@@ -81,6 +80,7 @@
 <!-- person -->
 <script src="js/model/person.js"></script>
 <script src="js/repositories/persons-repository.js"></script>
+<script src="js/repositories/in-memory-persons-repository.js"></script>
 <!-- index -->
 <script src="js/index.js"></script>
 </body>

@@ -9,7 +9,7 @@ if (Modernizr.template) {
         }
     });
     $(() => {
-        const personsRepository = new PersonsRepository();
+        const personsRepository = new InMemoryPersonsRepository();
 
         TableEditorFactory.prototype.create({tableId: "personsTable", repository: personsRepository}).init();
 

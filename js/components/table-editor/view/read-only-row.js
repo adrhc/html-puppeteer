@@ -23,7 +23,7 @@ class ReadOnlyRow {
     show(_item) {
         const rowIndex = this.mustacheTableElemAdapter.getRowIndexByDataId(_item.id);
         const createNew = rowIndex == null;
-        this.renderRow(createNew ? 0 : rowIndex, this.cellsViewOf(_item), !createNew);
+        this.renderRow(createNew ? 0 : rowIndex, this.itemViewOf(_item), !createNew);
     }
 
     renderRow(rowIndex, cellsView, replaceExisting) {
@@ -32,10 +32,10 @@ class ReadOnlyRow {
 
     /**
      * appends htmlId to cloned cellValues then return it
-     * @param _item
+     * @param item {TableEditorItem}
      */
-    cellsViewOf(_item) {
-        const htmlId = EntityUtils.prototype.hasEmptyId(_item) ? "" : _item.id;
-        return $.extend({htmlId: htmlId}, _item);
+    itemViewOf(item) {
+        const htmlId = EntityUtils.prototype.hasEmptyId(item) ? "" : item.id;
+        return {htmlId: htmlId, item: item};
     }
 }
