@@ -19,8 +19,8 @@ class TableElementAdapter {
         return rowElem.sectionRowIndex == null ? rowElem.rowIndex : rowElem.sectionRowIndex;
     }
 
-    $getRowById(id) {
-        return this.$tbody.find(`#${id}`);
+    $getRowById(rowId) {
+        return this.$tbody.find(`#${rowId}`);
     }
 
     /**
@@ -69,7 +69,7 @@ class TableElementAdapter {
     }
 
     get $table() {
-        return $(`#${this.tableId}`);
+        return $(this.tableId);
     }
 
     get _$tbody() {
