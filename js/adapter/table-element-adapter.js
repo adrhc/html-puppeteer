@@ -2,10 +2,8 @@
  * Role: adapter to HTMLTableElement
  */
 class TableElementAdapter {
-    constructor(tableId, bodyRowTmplId, bodyTmplHtml) {
+    constructor(tableId) {
         this.tableId = tableId;
-        this.bodyRowTmplHtml = $(`#${bodyRowTmplId}`).html()
-        this.bodyTmplHtml = bodyTmplHtml ? bodyTmplHtml : "{{#items}}{{> readOnlyRow}}{{/items}}";
     }
 
     deleteRowById(id) {
@@ -23,19 +21,6 @@ class TableElementAdapter {
 
     $getRowById(id) {
         return this.$tbody.find(`#${id}`);
-    }
-
-    get $tbody() {
-        const $tbody = this._$tbody;
-        if (!$tbody.length) {
-            return this.$table.append("<tbody></tbody>").find("tbody");
-        }
-        return this._$tbody;
-    }
-
-    renderBody(data) {
-        const html = Mustache.render(this.bodyTmplHtml, data, {readOnlyRow: this.bodyRowTmplHtml})
-        this.$tbody.html(html);
     }
 
     /**
@@ -73,6 +58,14 @@ class TableElementAdapter {
             }
         }
         return columnsCount;
+    }
+
+    get $tbody() {
+        const $tbody = this._$tbody;
+        if (!$tbody.length) {
+            return this.$table.append("<tbody></tbody>").find("tbody");
+        }
+        return this._$tbody;
     }
 
     get $table() {

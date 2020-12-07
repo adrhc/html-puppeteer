@@ -3,12 +3,12 @@
  */
 class ReadOnlyRow {
     /**
-     * @param tableElementAdapter {TableElementAdapter}
+     * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param rowTmplId {string}
      * @param rowTmplHtml {string}
      */
-    constructor(tableElementAdapter, {rowTmplId, rowTmplHtml}) {
-        this.tableElementAdapter = tableElementAdapter;
+    constructor(mustacheTableElemAdapter, {rowTmplId, rowTmplHtml}) {
+        this.mustacheTableElemAdapter = mustacheTableElemAdapter;
         if (rowTmplId) {
             this.rowTmplHtml = $(`#${rowTmplId}`).html();
         } else if (rowTmplHtml) {
@@ -17,18 +17,17 @@ class ReadOnlyRow {
     }
 
     hide(_item) {
-        this.tableElementAdapter.deleteRowById(_item.id)
+        this.mustacheTableElemAdapter.deleteRowById(_item.id)
     }
 
     show(_item) {
-        const rowIndex = this.tableElementAdapter.getRowIndexById(_item.id);
+        const rowIndex = this.mustacheTableElemAdapter.getRowIndexById(_item.id);
         const createNew = rowIndex == null;
         this.renderRow(createNew ? 0 : rowIndex, this.cellsViewOf(_item), !createNew);
     }
 
     renderRow(rowIndex, cellsView, replaceExisting) {
-        const rowHtml = cellsView ? Mustache.render(this.rowTmplHtml, cellsView) : this.rowTmplHtml;
-        this.tableElementAdapter.renderRow(rowIndex, rowHtml, replaceExisting);
+        this.mustacheTableElemAdapter.renderRow(rowIndex, cellsView, this.rowTmplHtml, replaceExisting);
     }
 
     /**

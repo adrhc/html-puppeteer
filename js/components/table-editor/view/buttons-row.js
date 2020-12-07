@@ -1,13 +1,13 @@
 class ButtonsRow extends ReadOnlyRow {
     /**
-     * @param tableElementAdapter {TableElementAdapter}
+     * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param config {{rowTmplId: string, rowTmplHtml: string, buttonsRowId: string}}
      */
-    constructor(tableElementAdapter, config) {
-        super(tableElementAdapter, $.extend({
+    constructor(mustacheTableElemAdapter, config) {
+        super(mustacheTableElemAdapter, $.extend({
             rowTmplHtml:
                 `<tr id="buttons" class="buttons-row">
-                    <td colspan="${tableElementAdapter.columnsCount}">
+                    <td colspan="${mustacheTableElemAdapter.columnsCount}">
                         <button type="button" id="cancelBtn">Cancel</button>
                         <button type="button" id="saveBtn">Save</button>
                     </td>
@@ -17,11 +17,11 @@ class ButtonsRow extends ReadOnlyRow {
     }
 
     hide() {
-        this.tableElementAdapter.deleteRowById(this.buttonsRowId);
+        this.mustacheTableElemAdapter.deleteRowById(this.buttonsRowId);
     }
 
     show(item) {
-        const editorRowId = this.tableElementAdapter.getRowIndexById(item.id);
+        const editorRowId = this.mustacheTableElemAdapter.getRowIndexById(item.id);
         super.renderRow(editorRowId + 1);
     }
 }

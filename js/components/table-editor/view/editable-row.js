@@ -1,10 +1,10 @@
 class EditableRow extends ReadOnlyRow {
     /**
-     * @param tableElementAdapter {TableElementAdapter}
+     * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param config {{rowTmplId: string, rowTmplHtml: string}}
      */
-    constructor(tableElementAdapter, config) {
-        super(tableElementAdapter, config);
+    constructor(mustacheTableElemAdapter, config) {
+        super(mustacheTableElemAdapter, config);
     }
 
     show(item) {
@@ -16,7 +16,7 @@ class EditableRow extends ReadOnlyRow {
      * private method
      */
     focusFirstInput(id) {
-        const $row = this.tableElementAdapter.$tbody.find(`#${id}`);
+        const $row = this.mustacheTableElemAdapter.$tbody.find(`#${id}`);
         const $inputToFocus = $row.find("input[name='firstName']:visible");
         if ($inputToFocus.length) {
             $inputToFocus.focus();

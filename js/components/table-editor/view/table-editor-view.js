@@ -3,17 +3,17 @@ class TableEditorView {
      * @param readOnlyRow {ReadOnlyRow}
      * @param editableRow {EditableRow}
      * @param buttonsRow {ButtonsRow}
-     * @param tableElementAdapter {TableElementAdapter}
+     * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      */
-    constructor(readOnlyRow, editableRow, buttonsRow, tableElementAdapter) {
+    constructor(readOnlyRow, editableRow, buttonsRow, mustacheTableElemAdapter) {
         this.readOnlyRow = readOnlyRow;
         this.editableRow = editableRow;
         this.buttonsRow = buttonsRow;
-        this.tableElementAdapter = tableElementAdapter;
+        this.mustacheTableElemAdapter = mustacheTableElemAdapter;
     }
 
     init(data) {
-        this.tableElementAdapter.renderBody(data);
+        this.mustacheTableElemAdapter.renderBody(data);
     }
 
     /**

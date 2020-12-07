@@ -2,8 +2,8 @@
 
 ### delete all rows
 ```javascript 1.8
-var tableElementAdapter = new TableElementAdapter('personsTable');
-tableElementAdapter.deleteAllRows();
+var mustacheTableElemAdapter = new MustacheTableElemAdapter('personsTable');
+mustacheTableElemAdapter.deleteAllRows();
 ```
 
 ### add rows
