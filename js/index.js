@@ -11,7 +11,7 @@ if (Modernizr.template) {
     $(() => {
         const personsRepository = new PersonsRepository();
 
-        const htmlTableAdapter = new HtmlTableAdapter("personsTable", "readOnlyRowTmpl");
+        const htmlTableAdapter = new TableElementAdapter("personsTable", "readOnlyRowTmpl");
         const readOnlyRow = new ReadOnlyRow(htmlTableAdapter, {rowTmplId: "readOnlyRowTmpl"});
         const editableRow = new EditableRow(htmlTableAdapter, {rowTmplId: "editableRowTmpl"});
         const buttonsRow = new ButtonsRow(htmlTableAdapter);

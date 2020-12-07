@@ -3,7 +3,7 @@ class TableEditorView {
      * @param readOnlyRow {ReadOnlyRow}
      * @param editableRow {EditableRow}
      * @param buttonsRow {ButtonsRow}
-     * @param htmlTableAdapter {HtmlTableAdapter}
+     * @param htmlTableAdapter {TableElementAdapter}
      */
     constructor(readOnlyRow, editableRow, buttonsRow, htmlTableAdapter) {
         this.readOnlyRow = readOnlyRow;

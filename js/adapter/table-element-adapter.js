@@ -1,7 +1,7 @@
 /**
  * Role: adapter to HTMLTableElement
  */
-class HtmlTableAdapter {
+class TableElementAdapter {
     constructor(tableId, bodyRowTmplId, bodyTmplHtml) {
         this.tableId = tableId;
         this.bodyRowTmplHtml = $(`#${bodyRowTmplId}`).html()

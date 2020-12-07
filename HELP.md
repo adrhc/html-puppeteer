@@ -2,7 +2,7 @@
 
 ### delete all rows
 ```javascript 1.8
-var htmlTableAdapter = new HtmlTableAdapter('personsTable');
+var htmlTableAdapter = new TableElementAdapter('personsTable');
 htmlTableAdapter.deleteAllRows();
 ```
 

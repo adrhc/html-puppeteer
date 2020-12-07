@@ -4,7 +4,7 @@
 class TableEditorComponent {
     /**
      * @param editableTableView {TableEditorView}
-     * @param htmlTableAdapter {HtmlTableAdapter}
+     * @param htmlTableAdapter {TableElementAdapter}
      * @param entityHelper {EntityHelper}
      * @param repository {TableEditorRepository}
      */

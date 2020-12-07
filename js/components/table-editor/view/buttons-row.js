@@ -1,6 +1,6 @@
 class ButtonsRow extends ReadOnlyRow {
     /**
-     * @param htmlTableAdapter {HtmlTableAdapter}
+     * @param htmlTableAdapter {TableElementAdapter}
      * @param config {{rowTmplId: string, rowTmplHtml: string, buttonsRowId: string}}
      */
     constructor(htmlTableAdapter, config) {

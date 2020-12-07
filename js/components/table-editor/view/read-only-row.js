@@ -3,7 +3,7 @@
  */
 class ReadOnlyRow {
     /**
-     * @param htmlTableAdapter {HtmlTableAdapter}
+     * @param htmlTableAdapter {TableElementAdapter}
      * @param rowTmplId {string}
      * @param rowTmplHtml {string}
      */
