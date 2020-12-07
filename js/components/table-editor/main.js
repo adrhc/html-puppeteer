@@ -88,12 +88,20 @@ class TableEditorComponent {
      * linking "outside" (and/or default) triggers to component's handlers (aka capabilities)
      */
     _configureEvents() {
-        $('#newItemBtn').on('dblclick', this, this.onNewRowCreation);
+        this._configureNewItemBtnEvent();
         // see ButtonsRow.buttonsRowId
         this.tableElementAdapter.$tbody
             .on('dblclick', `tr[id!='${this._buttonsRowId}']`, this, this.onSelectionSwitch)
             .on('click', "[name='cancelBtn']", this, this.onCancel)
             .on('click', "[name='saveBtn']", this, this.onSave);
+    }
+
+    _configureNewItemBtnEvent() {
+        let $newItemBtn = this.tableElementAdapter.$table.find("[data-name='newItemBtn']");
+        if (!$newItemBtn.length) {
+            $newItemBtn = this.tableElementAdapter.$table.find("[name='newItemBtn']");
+        }
+        $newItemBtn.on('dblclick', this, this.onNewRowCreation);
     }
 
     get _buttonsRowId() {
