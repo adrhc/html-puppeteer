@@ -112,7 +112,7 @@ class DynamicSelectOneView {
     }
 
     get $descriptionElem() {
-        return $(`#${this.elemId} .dyna-sel-one-description`);
+        return $(`#${this.elemId} [data-name='description']`);
     }
 
     get $selectElem() {
