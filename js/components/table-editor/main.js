@@ -21,6 +21,7 @@ class TableEditorComponent {
      * new-item-creation event handler
      */
     onNewRowCreation(ev) {
+        ev.stopPropagation();
         const editableTable = ev.data;
         const stateChangeResult = editableTable.state.createTransientSelection();
         editableTable.editableTableView.updateView(stateChangeResult);
@@ -30,6 +31,7 @@ class TableEditorComponent {
      * (existing) item selection event handler
      */
     onSelectionSwitch(ev) {
+        ev.stopPropagation();
         const editableTable = ev.data;
         const rowDataId = editableTable.editableTableView.rowDataIdOf(this);
         const stateChangeResult = editableTable.state.switchSelectionTo(rowDataId);
@@ -40,6 +42,7 @@ class TableEditorComponent {
      * "cancel" (selection) event handler
      */
     onCancel(ev) {
+        ev.stopPropagation();
         const editableTable = ev.data;
         const stateChange = editableTable.state.cancelSelection();
         editableTable.editableTableView.updateView([stateChange]);
@@ -49,6 +52,7 @@ class TableEditorComponent {
      * "save" (selection) event handler
      */
     onSave(ev) {
+        ev.stopPropagation();
         const editableTable = ev.data;
         const item = editableTable.entityHelper.extractEntity();
         editableTable._catchRepoError(editableTable.repository.save(item))

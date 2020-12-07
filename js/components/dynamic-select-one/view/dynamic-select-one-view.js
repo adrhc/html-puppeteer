@@ -46,7 +46,7 @@ class DynamicSelectOneView {
     _renderView(viewModel) {
         return this.tmpl.cache
             .then(html => Mustache.render(html, viewModel))
-            .then(html => this.$componentElem.html(html.trim()));
+            .then(html => this.$component.html(html.trim()));
     }
 
     /**
@@ -63,7 +63,7 @@ class DynamicSelectOneView {
     }
 
     _clearOnBlurHandlers() {
-        this.$componentElem.off("blur.dyna-sel-one");
+        this.$component.off("blur.dyna-sel-one");
         const $searchInputElem = this.$searchInputElem;
         if ($searchInputElem.length) {
             $searchInputElem[0].onblur = null;
@@ -123,7 +123,7 @@ class DynamicSelectOneView {
         return $(`#${this.elemId} [name='title']`);
     }
 
-    get $componentElem() {
+    get $component() {
         return $(`#${this.elemId}`);
     }
 }
