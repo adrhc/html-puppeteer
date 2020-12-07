@@ -5,13 +5,11 @@ class TableEditorComponent {
     /**
      * @param editableTableView {TableEditorView}
      * @param tableElementAdapter {TableElementAdapter}
-     * @param entityHelper {EntityHelper}
      * @param repository {TableEditorRepository}
      */
-    constructor(editableTableView, tableElementAdapter, entityHelper, repository) {
+    constructor(editableTableView, tableElementAdapter, repository) {
         this.editableTableView = editableTableView;
         this.tableElementAdapter = tableElementAdapter;
-        this.entityHelper = entityHelper;
         this.repository = repository;
         this.state = new TableEditorState();
         this._configureEvents();
@@ -54,7 +52,7 @@ class TableEditorComponent {
     onSave(ev) {
         ev.stopPropagation();
         const editableTable = ev.data;
-        const item = editableTable.entityHelper.extractEntity();
+        const item = editableTable.editableTableView.entityValuesFor(editableTable.state.selectedId);
         editableTable._catchRepoError(editableTable.repository.save(item))
             .then((savedItem) => {
                 console.log(savedItem);

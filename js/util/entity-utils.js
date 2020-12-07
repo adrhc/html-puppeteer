@@ -3,6 +3,13 @@ class EntityUtils {
         return "newId";
     }
 
+    removeTransientId(object) {
+        if (EntityUtils.prototype.isTransient(object)) {
+            delete object.id;
+        }
+        return object;
+    }
+
     hasEmptyId(item) {
         return !$.isNumeric(item.id);
     }

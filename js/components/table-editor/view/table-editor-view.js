@@ -17,6 +17,16 @@ class TableEditorView {
     }
 
     /**
+     * @param editedId {string}
+     * @return {*}
+     */
+    entityValuesFor(editedId) {
+        const item = this.editableRow.valuesFor(editedId);
+        EntityUtils.prototype.removeTransientId(item);
+        return item;
+    }
+
+    /**
      * @param stateChanges {StateChange[]|undefined}
      */
     updateView(stateChanges) {

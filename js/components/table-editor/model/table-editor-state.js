@@ -70,7 +70,7 @@ class TableEditorState {
             return undefined;
         }
         // no transient selection exists
-        const newItemId = this.insertNewItem().id;
+        const newItemId = this._insertNewItem().id;
         return this.switchSelectionTo(newItemId);
     }
 
@@ -120,33 +120,37 @@ class TableEditorState {
     }
 
     /**
-     * private method
+     * @private
      */
     _replaceItem(id, item) {
         this._items[id] = item;
     }
 
     /**
-     * private method
+     * @private
      */
-    insertNewItem() {
+    _insertNewItem() {
         const NEW_ID = EntityUtils.prototype.NEW_ID;
         this._items[NEW_ID] = {id: NEW_ID};
         return this._items[NEW_ID];
     }
 
     /**
-     * private method
+     * @private
      */
     removeSelectedItem() {
         delete this._items[this._selectedId];
     }
 
     /**
-     * private method
+     * @private
      */
     set selectedId(selectedId) {
         throw `Unsupported operation! selectedId = ${selectedId}`;
+    }
+
+    get selectedId() {
+        return this._selectedId;
     }
 
     /**

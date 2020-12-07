@@ -11,13 +11,7 @@ if (Modernizr.template) {
     $(() => {
         const personsRepository = new PersonsRepository();
 
-        const mustacheTableElemAdapter = new MustacheTableElemAdapter("personsTable", "readOnlyRowTmpl");
-        const readOnlyRow = new ReadOnlyRow(mustacheTableElemAdapter, {rowTmplId: "readOnlyRowTmpl"});
-        const editableRow = new EditableRow(mustacheTableElemAdapter, {rowTmplId: "editableRowTmpl"});
-        const buttonsRow = new ButtonsRow(mustacheTableElemAdapter);
-        const tableEditorView = new TableEditorView(readOnlyRow, editableRow, buttonsRow, mustacheTableElemAdapter);
-        const entityHelper = new EntityHelper(new FormsHelper("editorForm"));
-        new TableEditorComponent(tableEditorView, mustacheTableElemAdapter, entityHelper, personsRepository).init();
+        TableEditorFactory.prototype.create({tableId: "personsTable", repository: personsRepository}).init();
 
         const dynaSelOneView = new DynamicSelectOneView("dyna-sel-one", "the name to search for");
         const dynaSelOneState = new DynamicSelectOneState(personsRepository);
