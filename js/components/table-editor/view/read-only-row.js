@@ -38,7 +38,7 @@ class ReadOnlyRow {
 
     /**
      * appends htmlId to cloned cellValues then return it
-     * @param item {TableEditorItem}
+     * @param item {IdentifiableEntity}
      */
     itemViewOf(item) {
         const htmlId = EntityUtils.prototype.hasEmptyId(item) ? "" : item.id;

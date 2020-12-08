@@ -1,9 +1,9 @@
 class RowEditorView {
-    show() {
+    show(stateChanges) {
 
     }
 
-    hide() {
+    hide(stateChanges) {
 
     }
 }

@@ -1,13 +1,16 @@
 class RowEditorState {
     /**
-     * @param item {TableEditorItem}
-     * @return {Promise<void>}
+     * @param item {IdentifiableEntity}
+     * @return {Promise<RowEditorState>}
      */
     init(item) {
-        return Promise.resolve();
+        return Promise.resolve(this);
     }
 
+    /**
+     * @return {Promise<RowEditorState>}
+     */
     close() {
-        return Promise.resolve();
+        return Promise.resolve(this);
     }
 }

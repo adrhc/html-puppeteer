@@ -1,4 +1,4 @@
-class TableEditorItem {
+class IdentifiableEntity {
     constructor(id) {
         this.id = id;
     }

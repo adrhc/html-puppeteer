@@ -16,8 +16,8 @@ class InMemoryTableEditorRepository extends TableEditorRepository {
     }
 
     /**
-     * @param itemOrItems {TableEditorItem|TableEditorItem[]}
-     * @return {Promise<TableEditorItem|TableEditorItem[]>}
+     * @param itemOrItems {IdentifiableEntity|IdentifiableEntity[]}
+     * @return {Promise<IdentifiableEntity|IdentifiableEntity[]>}
      * @private
      */
     _promiseOf(itemOrItems) {
@@ -30,7 +30,7 @@ class InMemoryTableEditorRepository extends TableEditorRepository {
 
     /**
      * @param data
-     * @return {TableEditorItem}
+     * @return {IdentifiableEntity}
      * @private
      */
     _itemOf(data) {
@@ -42,6 +42,6 @@ class InMemoryTableEditorRepository extends TableEditorRepository {
     }
 
     newItem() {
-        return new TableEditorItem();
+        return new IdentifiableEntity();
     }
 }

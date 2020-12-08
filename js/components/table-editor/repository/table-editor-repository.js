@@ -1,7 +1,7 @@
 class TableEditorRepository {
     /**
-     * @param item {TableEditorItem}
-     * @return {Promise<TableEditorItem>}
+     * @param item {IdentifiableEntity}
+     * @return {Promise<IdentifiableEntity>}
      */
     save(item) {
         if (EntityUtils.prototype.hasEmptyId(item)) {
@@ -12,23 +12,23 @@ class TableEditorRepository {
     }
 
     /**
-     * @param item {TableEditorItem}
-     * @return {Promise<TableEditorItem>}
+     * @param item {IdentifiableEntity}
+     * @return {Promise<IdentifiableEntity>}
      */
     insert(item) {
         throw "Not implemented!";
     }
 
     /**
-     * @param item {TableEditorItem}
-     * @return {Promise<TableEditorItem>}
+     * @param item {IdentifiableEntity}
+     * @return {Promise<IdentifiableEntity>}
      */
     update(item) {
         throw "Not implemented!";
     }
 
     /**
-     * @return {Promise<TableEditorItem[]>}
+     * @return {Promise<IdentifiableEntity[]>}
      */
     getAll() {
         throw "Not implemented!";
