@@ -4,9 +4,10 @@
 <head>
     <title>JavaScript DOM test</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/table.css">
+    <link rel="stylesheet" href="css/responstable-table.css">
+    <link rel="stylesheet" href="css/util.css">
     <link rel="stylesheet" href="css/table-editor.css">
-    <link rel="stylesheet" href="css/dyna-sel-one.css">
+    <link rel="stylesheet" href="css/adrhc/go/ro/jquery-widgets/dyna-sel-one.css">
     <script src="libraries/modernizr-custom.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://unpkg.com/mustache@latest"></script>
@@ -14,15 +15,19 @@
 
 <body>
 <div id="dyna-sel-one" class="dyna-sel-one-comp"></div>
-<table id="personsTable" class="responstable">
-    <thead>
-    <tr data-id="newItemBtn">
-        <th>Id</th>
-        <th data-th="Details"><span>First name</span></th>
-        <th>Last name</th>
-    </tr>
-    </thead>
-</table>
+
+<div class="personsTable">
+    <label for="personsTable">dublu click pe antetul tabelului pt a creea un nou rand</label>
+    <table id="personsTable" class="responstable">
+        <thead>
+        <tr data-id="newItemBtn">
+            <th>Id</th>
+            <th data-th="Details"><span>First name</span></th>
+            <th>Last name</th>
+        </tr>
+        </thead>
+    </table>
+</div>
 
 <script id="readOnlyRowTmpl" type="x-tmpl-mustache">
     <tr data-id="{{item.id}}">
@@ -41,48 +46,46 @@
             <input type="text" name="firstName" value="{{item.firstName}}" data-focus-me="true">
         </td>
         <td>
-            <div class="buttons-cell lastName">
-                <input type="text" name="lastName" value="{{item.lastName}}">
-            </div>
+            <input type="text" name="lastName" value="{{item.lastName}}">
         </td>
     </tr>
 </script>
 
 <!-- utils -->
-<script src="js/util/ajax-utils.js"></script>
-<script src="js/util/entity-utils.js"></script>
-<script src="js/util/form-utils.js"></script>
-<script src="js/util/html-utils.js"></script>
-<script src="js/util/rest-utils.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/util/ajax-utils.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/util/entity-utils.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/util/form-utils.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/util/html-utils.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/util/rest-utils.js"></script>
 <!-- helpers -->
-<script src="js/helper/cached-ajax.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/helper/cached-ajax.js"></script>
 <!-- adapters -->
-<script src="js/adapter/table-element-adapter.js"></script>
-<script src="js/adapter/mustache-table-elem-adapter.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/adapter/table-element-adapter.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/adapter/mustache-table-elem-adapter.js"></script>
 <!-- model -->
-<script src="js/model/IdentifiableEntity.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/model/IdentifiableEntity.js"></script>
 <!-- row-editor -->
-<script src="js/components/row-editor/model/row-editor-state.js"></script>
-<script src="js/components/row-editor/view/row-editor-view.js"></script>
-<script src="js/components/row-editor/row-editor.js"></script>
-<script src="js/components/row-editor/factories/row-editor-factory.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/row-editor/model/row-editor-state.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/row-editor/view/row-editor-view.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/row-editor/row-editor.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/row-editor/factories/row-editor-factory.js"></script>
 <!-- table-editor -->
-<script src="js/components/table-editor/model/state-change.js"></script>
-<script src="js/components/table-editor/model/table-editor-state.js"></script>
-<script src="js/components/table-editor/repository/table-editor-repository.js"></script>
-<script src="js/components/table-editor/repository/in-memory-table-editor-repository.js"></script>
-<script src="js/components/views/read-only-row.js"></script>
-<script src="js/components/row-editor/view/buttons-row.js"></script>
-<script src="js/components/row-editor/view/editable-row.js"></script>
-<script src="js/components/table-editor/view/table-editor-view.js"></script>
-<script src="js/components/table-editor/table-editor.js"></script>
-<script src="js/components/table-editor/factories/table-editor-factory.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/table-editor/model/state-change.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/table-editor/model/table-editor-state.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/table-editor/repository/table-editor-repository.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/table-editor/repository/in-memory-table-editor-repository.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/views/read-only-row.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/row-editor/view/buttons-row.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/row-editor/view/editable-row.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/table-editor/view/table-editor-view.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/table-editor/table-editor.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/table-editor/factories/table-editor-factory.js"></script>
 <!-- dynamic-select-one -->
-<script src="js/components/dynamic-select-one/repository/dyna-sel-one-repository.js"></script>
-<script src="js/components/dynamic-select-one/model/dyna-sel-one-item.js"></script>
-<script src="js/components/dynamic-select-one/model/dynamic-select-one-state.js"></script>
-<script src="js/components/dynamic-select-one/view/dynamic-select-one-view.js"></script>
-<script src="js/components/dynamic-select-one/dynamic-select-one.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/dynamic-select-one/repository/dyna-sel-one-repository.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/dynamic-select-one/model/dyna-sel-one-item.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/dynamic-select-one/model/dynamic-select-one-state.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/dynamic-select-one/view/dynamic-select-one-view.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/dynamic-select-one/dynamic-select-one.js"></script>
 <!-- person -->
 <script src="js/model/person.js"></script>
 <script src="js/repositories/persons-repository.js"></script>

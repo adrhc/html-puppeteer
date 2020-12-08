@@ -5,32 +5,20 @@
 * Browsers: last 50 version
 */
 
-.buttons-cell  {
-    display: block;
-    /*border-style: solid;*/
+.responstable {
+    margin: auto !important;
 }
 
-.buttons-cell.lastName {
-    padding-bottom: 5px;
+div.personsTable {
+    margin-top: 0.5em;
 }
 
-.buttons-cell.lastName input {
-    width: 100%;
-    width: -webkit-fill-available;
-    width: -moz-available;
-    width: fill-available;
-}
-
+/* exposed by ButtonsRow class */
 .buttons-row {
-
 }
 
 button {
     color: brown;
-}
-
-.float-right {
-    float: right;
 }
 
 .editor td {

@@ -7,7 +7,7 @@ class DynamicSelectOneView {
      */
     constructor(elemId, {
         placeholder, optionsToShow = 10,
-        tmplUrl = "js/components/dynamic-select-one/templates/dyna-sel-one.html"
+        tmplUrl = "js/adrhc/go/ro/jquery-widgets/components/dynamic-select-one/templates/dyna-sel-one.html"
     }) {
         this.elemId = elemId;
         this.tmpl = new CachedAjax(tmplUrl);
@@ -55,25 +55,24 @@ class DynamicSelectOneView {
     _applyCss(viewModel) {
         if (viewModel.options) {
             this.$selectElem.removeClass("removed");
-            this.$descriptionElem.addClass("removed");
         } else {
             this.$selectElem.addClass("removed");
-            this.$descriptionElem.removeClass("removed");
         }
-    }
-
-    _clearOnBlurHandlers() {
-        this.$component.off("blur.dyna-sel-one");
-        const $searchInputElem = this.$searchInputElem;
-        if ($searchInputElem.length) {
-            $searchInputElem[0].onblur = null;
+        if (viewModel.description) {
+            this.$selectionInfoElem.removeClass("removed");
+        } else {
+            this.$selectionInfoElem.addClass("removed");
         }
-    }
-
-    _focusOnSearchInput() {
-        const searchInput = this.$searchInputElem;
-        const value = searchInput.val();
-        searchInput.focus().val("").val(value);
+        if (viewModel.failSearch) {
+            this.$failSearchInfoElem.removeClass("removed");
+        } else {
+            this.$failSearchInfoElem.addClass("removed");
+        }
+        if (viewModel.minCharsToSearch) {
+            this.$minCharsInfoElem.removeClass("removed");
+        } else {
+            this.$minCharsInfoElem.addClass("removed");
+        }
     }
 
     /**
@@ -93,10 +92,10 @@ class DynamicSelectOneView {
             viewModel.description = state.selectedItem.description;
         } else if (state.isEnoughTextToSearch(state.title)) {
             // no item selected, showing empty search result
-            viewModel.description = `Nu s-a găsit nimic deocamdată! s-a cautat <i>${state.title}</i>`;
+            viewModel.failSearch = state.title;
         } else {
             // no item selected, showing char number required for searching
-            viewModel.description = `Completați cel puțin ${state.minCharsToSearch} caractere pt a căuta (apasând ENTER).`;
+            viewModel.minCharsToSearch = state.minCharsToSearch;
         }
         if (state.optionsLength > 1 || state.optionsLength === 1 && !state.selectedItem) {
             // rendering options
@@ -111,8 +110,30 @@ class DynamicSelectOneView {
         return viewModel;
     }
 
-    get $descriptionElem() {
-        return $(`#${this.elemId} [data-name='description']`);
+    _clearOnBlurHandlers() {
+        this.$component.off("blur.dyna-sel-one");
+        const $searchInputElem = this.$searchInputElem;
+        if ($searchInputElem.length) {
+            $searchInputElem[0].onblur = null;
+        }
+    }
+
+    _focusOnSearchInput() {
+        const searchInput = this.$searchInputElem;
+        const value = searchInput.val();
+        searchInput.focus().val("").val(value);
+    }
+
+    get $minCharsInfoElem() {
+        return $(`#${this.elemId} [data-name='min-chars-info']`);
+    }
+
+    get $failSearchInfoElem() {
+        return $(`#${this.elemId} [data-name='fail-search-info']`);
+    }
+
+    get $selectionInfoElem() {
+        return $(`#${this.elemId} [data-name='fail-search-info']`);
     }
 
     get $selectElem() {
