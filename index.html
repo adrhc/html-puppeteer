@@ -35,7 +35,7 @@
 <script id="editableRowTmpl" type="x-tmpl-mustache">
     <tr data-id="{{item.id}}" class="editor">
         <td>{{htmlId}}
-            <input type="hidden" name="id" value="{{item.id}}">
+            <input type="hidden" name="id" value="{{item.id}}" data-focus-me="true">
         </td>
         <td>
             <input type="text" name="firstName" value="{{item.firstName}}">
@@ -59,8 +59,14 @@
 <!-- adapters -->
 <script src="js/adapter/table-element-adapter.js"></script>
 <script src="js/adapter/mustache-table-elem-adapter.js"></script>
-<!-- table-editor -->
+<!-- model -->
 <script src="js/model/IdentifiableEntity.js"></script>
+<!-- row-editor -->
+<script src="js/components/row-editor/model/row-editor-state.js"></script>
+<script src="js/components/row-editor/view/row-editor-view.js"></script>
+<script src="js/components/row-editor/row-editor.js"></script>
+<script src="js/components/row-editor/factories/row-editor-factory.js"></script>
+<!-- table-editor -->
 <script src="js/components/table-editor/model/state-change.js"></script>
 <script src="js/components/table-editor/model/table-editor-state.js"></script>
 <script src="js/components/table-editor/repository/table-editor-repository.js"></script>

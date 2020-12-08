@@ -1,22 +1,23 @@
 class TableEditorFactory {
     /**
      * @param tableId {string}
-     * @param bodyRowTmplId {string}
-     * @param editableRowTmplId {string}
      * @param repository {TableEditorRepository}
+     * @param bodyRowTmplId {string}
+     * @param rowEditorComponent {RowEditorComponent}
      * @return {TableEditorComponent}
      */
     create({
                tableId,
                repository = new InMemoryTableEditorRepository(),
                bodyRowTmplId = "readOnlyRowTmpl",
-               editableRowTmplId = "editableRowTmpl"
+               rowEditorComponentFactory = RowEditorFactory.prototype.create
            }) {
         const mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, bodyRowTmplId);
+
+        const rowEditorComponent = rowEditorComponentFactory({mustacheTableElemAdapter});
+
         const readOnlyRow = new ReadOnlyRow(mustacheTableElemAdapter, {rowTmplId: bodyRowTmplId});
-        const editableRow = new EditableRow(mustacheTableElemAdapter, {rowTmplId: editableRowTmplId});
-        const buttonsRow = new ButtonsRow(mustacheTableElemAdapter);
-        const tableEditorView = new TableEditorView(readOnlyRow, editableRow, buttonsRow, mustacheTableElemAdapter);
-        return new TableEditorComponent(tableEditorView, mustacheTableElemAdapter, repository);
+        const tableEditorView = new TableEditorView(readOnlyRow, mustacheTableElemAdapter);
+        return new TableEditorComponent(tableEditorView, mustacheTableElemAdapter, repository, rowEditorComponent);
     }
 }

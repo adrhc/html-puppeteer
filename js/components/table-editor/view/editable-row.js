@@ -25,7 +25,7 @@ class EditableRow extends ReadOnlyRow {
      */
     focusFirstInput(rowId) {
         const $row = this._$rowOf(rowId);
-        const $inputToFocus = $row.find("input[name='firstName']:visible");
+        const $inputToFocus = $row.find("[data-focus-me='true']:visible");
         if ($inputToFocus.length) {
             $inputToFocus.focus();
         }

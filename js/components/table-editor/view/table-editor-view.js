@@ -1,29 +1,15 @@
 class TableEditorView {
     /**
      * @param readOnlyRow {ReadOnlyRow}
-     * @param editableRow {EditableRow}
-     * @param buttonsRow {ButtonsRow}
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      */
-    constructor(readOnlyRow, editableRow, buttonsRow, mustacheTableElemAdapter) {
+    constructor(readOnlyRow, mustacheTableElemAdapter) {
         this.readOnlyRow = readOnlyRow;
-        this.editableRow = editableRow;
-        this.buttonsRow = buttonsRow;
         this.mustacheTableElemAdapter = mustacheTableElemAdapter;
     }
 
     init(data) {
         this.mustacheTableElemAdapter.renderBody(data);
-    }
-
-    /**
-     * @param editedId {string}
-     * @return {*}
-     */
-    entityValuesFor(editedId) {
-        const item = this.editableRow.valuesFor(editedId);
-        EntityUtils.prototype.removeTransientId(item);
-        return item;
     }
 
     /**
@@ -38,12 +24,9 @@ class TableEditorView {
             if (sc.isSelected) {
                 // row was created & selected or just selected
                 // switch to "editable" row view
-                this.editableRow.show(sc.item);
-                this.buttonsRow.show(sc.item)
             } else {
                 // row was deselected
                 // remove the buttons row
-                this.buttonsRow.hide();
                 if (sc.isTransient) {
                     // remove transient row
                     this.readOnlyRow.hide(sc.item);

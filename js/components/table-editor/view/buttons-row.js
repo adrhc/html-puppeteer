@@ -13,7 +13,7 @@ class ButtonsRow extends ReadOnlyRow {
                     </td>
                 </tr>`
         }, config));
-        this.buttonsRowDataId = config && config.buttonsRowDataId ? config.buttonsRowDataId : "buttons";
+        this.buttonsRowDataId = config.buttonsRowDataId ? config.buttonsRowDataId : "buttons";
     }
 
     hide() {

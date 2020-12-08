@@ -6,12 +6,14 @@ class TableEditorComponent {
      * @param editableTableView {TableEditorView}
      * @param tableElementAdapter {TableElementAdapter}
      * @param repository {TableEditorRepository}
+     * @param rowEditorComponent {RowEditorComponent}
      */
-    constructor(editableTableView, tableElementAdapter, repository) {
+    constructor(editableTableView, tableElementAdapter, repository, rowEditorComponent) {
         this.editableTableView = editableTableView;
         this.tableElementAdapter = tableElementAdapter;
         this.repository = repository;
         this.state = new TableEditorState();
+        this.rowEditorComponent = rowEditorComponent;
         this._configureEvents();
     }
 
@@ -23,6 +25,8 @@ class TableEditorComponent {
         const editableTable = ev.data;
         const stateChangeResult = editableTable.state.createTransientSelection();
         editableTable.editableTableView.updateView(stateChangeResult);
+        editableTable.rowEditorComponent.destroy();
+        editableTable.rowEditorComponent.init(editableTable.state.selectedItem);
     }
 
     /**
@@ -32,8 +36,10 @@ class TableEditorComponent {
         ev.stopPropagation();
         const editableTable = ev.data;
         const rowDataId = editableTable.editableTableView.rowDataIdOf(this);
-        const stateChangeResult = editableTable.state.switchSelectionTo(rowDataId);
-        editableTable.editableTableView.updateView(stateChangeResult);
+        const stateChanges = editableTable.state.switchSelectionTo(rowDataId);
+        editableTable.editableTableView.updateView(stateChanges);
+        editableTable.rowEditorComponent.destroy();
+        editableTable.rowEditorComponent.init(editableTable.state.selectedItem);
     }
 
     /**
@@ -43,6 +49,7 @@ class TableEditorComponent {
         ev.stopPropagation();
         const editableTable = ev.data;
         const stateChange = editableTable.state.cancelSelection();
+        editableTable.rowEditorComponent.destroy();
         editableTable.editableTableView.updateView([stateChange]);
     }
 
@@ -54,8 +61,9 @@ class TableEditorComponent {
         const editableTable = ev.data;
         editableTable._catchRepoError(editableTable.saveEditedEntity())
             .then((savedItem) => {
-                console.log(savedItem);
+                console.log("TableEditorComponent.onSave\n", savedItem);
                 const stateChanges = editableTable.state.cancelSelectionAndUpdateItem(savedItem);
+                editableTable.rowEditorComponent.destroy();
                 editableTable.editableTableView.updateView(stateChanges);
             });
     }
@@ -66,7 +74,7 @@ class TableEditorComponent {
     init() {
         this._catchRepoError(this.repository.getAll())
             .then((items) => {
-                console.log("items:\n", items);
+                console.log("TableEditorComponent items:\n", items);
                 this.state.items = items;
                 this.editableTableView.init({items: items});
             });
@@ -92,7 +100,7 @@ class TableEditorComponent {
     _configureEvents() {
         this._configureNewItemBtnEvent();
         this.tableElementAdapter.$tbody
-            .on('dblclick', `tr[data-id!='${this._buttonsRowDataId}']`, this, this.onSelectionSwitch)
+            .on('dblclick', `tr[data-id!='${this.rowEditorComponent.buttonsRowDataId}']`, this, this.onSelectionSwitch)
             .on('click', "[name='cancelBtn']", this, this.onCancel)
             .on('click', "[name='saveBtn']", this, this.onSave);
     }
@@ -110,15 +118,11 @@ class TableEditorComponent {
         }
     }
 
-    get _buttonsRowDataId() {
-        return this.editableTableView.buttonsRow.buttonsRowDataId;
-    }
-
     get editedEntityValues() {
         if (!this.state.selectionExists()) {
             return undefined;
         }
-        return this.editableTableView.entityValuesFor(this.state.selectedId);
+        return this.rowEditorComponent.entityValuesFor(this.state.selectedId);
     }
 
     saveEditedEntity() {
