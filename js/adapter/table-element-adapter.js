@@ -49,6 +49,9 @@ class TableElementAdapter {
         if (!tds.length) {
             tds = firstRow.find("td");
         }
+        if (!tds.length) {
+            return +$table.data("columns-count");
+        }
         for (let td of tds) {
             const colspan = $(td).attr('colspan');
             if (colspan) {
