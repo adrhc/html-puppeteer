@@ -13,6 +13,10 @@ div.personsTable {
     margin-top: 0.5em;
 }
 
+div.personsTable > label {
+    font-size: small;
+}
+
 /* exposed by ButtonsRow class */
 .buttons-row {
 }

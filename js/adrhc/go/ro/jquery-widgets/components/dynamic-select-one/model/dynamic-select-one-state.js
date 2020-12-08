@@ -3,9 +3,9 @@ class DynamicSelectOneState {
      * @param repository {DynaSelOneRepository}
      * @param minCharsToSearch {number}
      */
-    constructor(repository, minCharsToSearch) {
+    constructor(repository, {minCharsToSearch = 3}) {
         this.repository = repository;
-        this.minCharsToSearch = minCharsToSearch ? minCharsToSearch : 3;
+        this.minCharsToSearch = minCharsToSearch;
     }
 
     /**

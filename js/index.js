@@ -13,10 +13,8 @@ if (Modernizr.template) {
 
         TableEditorFactory.prototype.create({tableId: "personsTable", repository: personsRepository}).init();
 
-        const dynaSelOneView = new DynamicSelectOneView("dyna-sel-one", "the name to search for");
-        const dynaSelOneState = new DynamicSelectOneState(personsRepository);
-        const dynaSelOneComp = new DynamicSelectOneComponent(dynaSelOneView, dynaSelOneState);
-        dynaSelOneComp.init();
+        DynamicSelectOneFactory.prototype.create({elemId: "dyna-sel-one",
+            placeholder: "the name to search for", repository: personsRepository}).init();
     })
 } else {
     // Find another way to add the rows to the table because
