@@ -37,6 +37,9 @@ class TableEditorComponent {
      * @param ev {Event}
      */
     onSelectionSwitch(ev) {
+        if ($(this).data("id") === "newItemBtn") {
+            return false;
+        }
         ev.stopPropagation();
         const editableTable = ev.data;
         const rowDataId = editableTable.editableTableView.rowDataIdOf(this);
@@ -107,27 +110,15 @@ class TableEditorComponent {
      * @private
      */
     _configureEvents() {
-        this._configureNewItemBtnEvent();
-        this.tableElementAdapter.$tbody
+        // use $tbody to not mix with onNewItem
+        this.tableElementAdapter.$table
             .on('dblclick.table-editor', `tr[data-id!='${this.rowEditorComponent.buttonsRowDataId}']`, this, this.onSelectionSwitch)
             .on('click.table-editor', "[name='cancelBtn']", this, this.onCancel)
-            .on('click.table-editor', "[name='saveBtn']", this, this.onSave);
-    }
-
-    /**
-     * @private
-     */
-    _configureNewItemBtnEvent() {
-        // dblclick on table header
-        let $newItemBtn = this.tableElementAdapter.$table.find("[data-id='newItemBtn']");
-        if ($newItemBtn.length) {
-            $newItemBtn.on('dblclick.table-editor', this, this.onNewItem);
-        }
-        // click on newItemBtn button
-        $newItemBtn = this.tableElementAdapter.$table.find("[name='newItemBtn']");
-        if ($newItemBtn.length) {
-            $newItemBtn.on('click.table-editor', this, this.onNewItem);
-        }
+            .on('click.table-editor', "[name='saveBtn']", this, this.onSave)
+            // dblclick on table header
+            .on('dblclick.table-editor', "[data-id='newItemBtn']", this, this.onNewItem)
+            // click on newItemBtn <button name='newItemBtn'>
+            .on('click.table-editor', "[name='newItemBtn']", this, this.onNewItem);
     }
 
     /**

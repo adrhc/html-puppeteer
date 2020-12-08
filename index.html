@@ -35,10 +35,10 @@
 <script id="editableRowTmpl" type="x-tmpl-mustache">
     <tr data-id="{{item.id}}" class="editor">
         <td>{{htmlId}}
-            <input type="hidden" name="id" value="{{item.id}}" data-focus-me="true">
+            <input type="hidden" name="id" value="{{item.id}}">
         </td>
         <td>
-            <input type="text" name="firstName" value="{{item.firstName}}">
+            <input type="text" name="firstName" value="{{item.firstName}}" data-focus-me="true">
         </td>
         <td>
             <div class="buttons-cell lastName">
