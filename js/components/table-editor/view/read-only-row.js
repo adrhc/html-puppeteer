@@ -16,16 +16,22 @@ class ReadOnlyRow {
         }
     }
 
-    hide(_item) {
-        this.mustacheTableElemAdapter.deleteRowByDataId(_item.id)
+    hide(item) {
+        this.mustacheTableElemAdapter.deleteRowByDataId(item.id)
     }
 
-    show(_item) {
-        const rowIndex = this.mustacheTableElemAdapter.getRowIndexByDataId(_item.id);
+    show(item) {
+        const rowIndex = this.mustacheTableElemAdapter.getRowIndexByDataId(item.id);
         const createNew = rowIndex == null;
-        this.renderRow(createNew ? 0 : rowIndex, this.itemViewOf(_item), !createNew);
+        this.renderRow(createNew ? 0 : rowIndex, this.itemViewOf(item), !createNew);
     }
 
+    /**
+     * @param rowIndex {number}
+     * @param cellsView
+     * @param replaceExisting {boolean}
+     * @protected
+     */
     renderRow(rowIndex, cellsView, replaceExisting) {
         this.mustacheTableElemAdapter.renderRow(rowIndex, cellsView, this.rowTmplHtml, replaceExisting);
     }
