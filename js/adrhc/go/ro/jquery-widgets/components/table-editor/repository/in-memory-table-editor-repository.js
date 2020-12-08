@@ -1,5 +1,8 @@
 class InMemoryTableEditorRepository extends TableEditorRepository {
-    items = {};
+    constructor(items) {
+        super();
+        this.items = items ? items : {};
+    }
 
     getAll() {
         return this._promiseOf(Object.values(this.items));

@@ -5,9 +5,11 @@ class HtmlUtils {
             return undefined;
         }
         if ($tmpl[0].content) {
-            return $tmpl[0].content.textContent;
-        } else {
+            // use <template> when content encoding as HTML is not an issue
             return $tmpl.html();
+        } else {
+            // use <script> when don't wont the HTML encoding to be automatically applied
+            return $tmpl.text();
         }
     }
 }

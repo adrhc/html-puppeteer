@@ -20,25 +20,28 @@
     <label for="personsTable">dublu click pe antetul tabelului pt a creea un nou rand</label>
     <table id="personsTable" class="responstable">
         <thead>
-        <tr data-id="newItemBtn">
+        <tr data-owner="personsTable" data-id="newItemBtn">
             <th>Id</th>
             <th data-th="Details"><span>First name</span></th>
             <th>Last name</th>
+            <th>Cats</th>
         </tr>
         </thead>
     </table>
 </div>
 
 <script id="readOnlyRowTmpl" type="x-tmpl-mustache">
-    <tr data-id="{{item.id}}">
+    <tr data-owner="personsTable" data-id="{{item.id}}">
         <td>{{item.id}}</td>
         <td>{{item.firstName}}</td>
         <td>{{item.lastName}}</td>
+        <td>{{#item.cats}}{{{.}}}{{/item.cats}}</td>
     </tr>
+
 </script>
 
-<script id="editableRowTmpl" type="x-tmpl-mustache">
-    <tr data-id="{{item.id}}" class="editor">
+<template id="editableRowTmpl">
+    <tr data-owner="personsTable" data-id="{{item.id}}" class="editor">
         <td>{{htmlId}}
             <input type="hidden" name="id" value="{{item.id}}">
         </td>
@@ -48,8 +51,31 @@
         <td>
             <input type="text" name="lastName" value="{{item.lastName}}">
         </td>
+        <td>
+            <table id="catsTable" class="responstable">
+                <thead>
+                <tr data-owner="catsTable">
+                    <th><button data-owner="catsTable" type="button" name="newItemBtn">new cat</button></th>
+                </tr>
+                </thead>
+            </table>
+        </td>
     </tr>
-</script>
+</template>
+
+<template id="readOnlyCatsRowTmpl">
+    <tr data-owner="catsTable" data-id="{{item.id}}">
+        <td>{{item.name}}</td>
+    </tr>
+</template>
+
+<template id="editableCatsRowTmpl">
+    <tr data-owner="catsTable" data-id="{{item.id}}" class="editor">
+        <td>
+            <input type="text" name="name" value="{{item.name}}" data-focus-me="true">
+        </td>
+    </tr>
+</template>
 
 <!-- utils -->
 <script src="js/adrhc/go/ro/jquery-widgets/util/ajax-utils.js"></script>
@@ -89,6 +115,9 @@
 <script src="js/adrhc/go/ro/jquery-widgets/components/dynamic-select-one/factories/dynamic-select-one-factory.js"></script>
 <!-- person -->
 <script src="js/model/person.js"></script>
+<script src="js/person-row-editor/person-row-editor.js"></script>
+<script src="js/person-row-editor/factories/person-row-editor-factory.js"></script>
+<script src="js/person-row-editor/factories/cats-table-editor-factory.js"></script>
 <script src="js/repositories/persons-repository.js"></script>
 <script src="js/repositories/in-memory-persons-repository.js"></script>
 <!-- index -->

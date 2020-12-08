@@ -11,10 +11,15 @@ if (Modernizr.template) {
     $(() => {
         const personsRepository = new InMemoryPersonsRepository();
 
-        TableEditorFactory.prototype.create({tableId: "personsTable", repository: personsRepository}).init();
+        TableEditorFactory.prototype.create({
+            tableId: "personsTable", repository: personsRepository,
+            rowEditorComponentFactory: PersonRowEditorFactory.prototype.create
+        }).init();
 
-        DynamicSelectOneFactory.prototype.create({elemId: "dyna-sel-one",
-            placeholder: "the name to search for", repository: personsRepository}).init();
+        DynamicSelectOneFactory.prototype.create({
+            elemId: "dyna-sel-one",
+            placeholder: "the name to search for", repository: personsRepository
+        }).init();
     })
 } else {
     // Find another way to add the rows to the table because

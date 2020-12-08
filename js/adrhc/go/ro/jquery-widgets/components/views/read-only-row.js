@@ -32,7 +32,7 @@ class ReadOnlyRow {
      */
     putDataId(itemId, index) {
         const $row = this.mustacheTableElemAdapter.$getRowAtIndex(index);
-        $row.data("data-id", itemId);
+        $row.data("id", itemId);
     }
 
     /**

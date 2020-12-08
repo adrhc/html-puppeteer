@@ -18,7 +18,7 @@ class TableEditorView {
     updateView(stateChanges) {
         if (!stateChanges) {
             // selection not changed, do nothing
-            return;
+            return Promise.reject();
         }
         stateChanges.forEach(sc => {
             if (sc.isSelected) {
@@ -36,6 +36,7 @@ class TableEditorView {
                 }
             }
         })
+        return Promise.resolve(stateChanges);
     }
 
     /**
@@ -43,6 +44,11 @@ class TableEditorView {
      * @return {string}
      */
     rowDataIdOf(tr) {
-        return $(tr).data("id");
+        const $elem = $(tr);
+        if ($elem.is("tr")) {
+            return $(tr).data("id");
+        } else {
+            return $($(tr).parents("tr")[0]).data("id");
+        }
     }
 }

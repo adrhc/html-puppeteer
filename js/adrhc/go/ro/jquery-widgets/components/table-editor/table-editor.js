@@ -18,7 +18,6 @@ class TableEditorComponent {
         this.repository = repository;
         this.state = new TableEditorState();
         this.rowEditorComponent = rowEditorComponent;
-        this._configureEvents();
     }
 
     /**
@@ -27,12 +26,13 @@ class TableEditorComponent {
      * @param ev {Event}
      */
     onNewItem(ev) {
-        ev.stopPropagation();
         const editableTable = ev.data;
-        const stateChangeResult = editableTable.state.createTransientSelection();
-        editableTable.editableTableView.updateView(stateChangeResult);
-        editableTable.rowEditorComponent.destroy();
-        editableTable.rowEditorComponent.init(editableTable.state.selectedItem);
+        const stateChanges = editableTable.state.createTransientSelection();
+        editableTable.editableTableView.updateView(stateChanges)
+            .then(() => {
+                editableTable.rowEditorComponent.destroy();
+                editableTable.rowEditorComponent.init(editableTable.state.selectedItem);
+            });
     }
 
     /**
@@ -44,13 +44,14 @@ class TableEditorComponent {
         if ($(this).data("id") === "newItemBtn") {
             return false;
         }
-        ev.stopPropagation();
         const editableTable = ev.data;
         const rowDataId = editableTable.editableTableView.rowDataIdOf(this);
         const stateChanges = editableTable.state.switchSelectionTo(rowDataId);
-        editableTable.editableTableView.updateView(stateChanges);
-        editableTable.rowEditorComponent.destroy();
-        editableTable.rowEditorComponent.init(editableTable.state.selectedItem);
+        editableTable.editableTableView.updateView(stateChanges)
+            .then(() => {
+                editableTable.rowEditorComponent.destroy();
+                editableTable.rowEditorComponent.init(editableTable.state.selectedItem);
+            });
     }
 
     /**
@@ -59,7 +60,6 @@ class TableEditorComponent {
      * @param ev {Event}
      */
     onCancel(ev) {
-        ev.stopPropagation();
         const editableTable = ev.data;
         const stateChange = editableTable.state.cancelSelection();
         editableTable.rowEditorComponent.destroy();
@@ -72,7 +72,6 @@ class TableEditorComponent {
      * @param ev {Event}
      */
     onSave(ev) {
-        ev.stopPropagation();
         const editableTable = ev.data;
         editableTable._handleRepoError(editableTable._saveEditedEntity())
             .then((savedItem) => {
@@ -93,6 +92,11 @@ class TableEditorComponent {
                 this.state.items = items;
                 this.editableTableView.init({items: items});
             });
+        this._configureEvents();
+    }
+
+    destroy() {
+        this.tableElementAdapter.$table.off();
     }
 
     /**
@@ -116,13 +120,28 @@ class TableEditorComponent {
     _configureEvents() {
         // use $tbody to not mix with onNewItem
         this.tableElementAdapter.$table
-            .on('dblclick.table-editor', `tr[data-id!='${this.rowEditorComponent.buttonsRowDataId}']`, this, this.onSelectionSwitch)
-            .on('click.table-editor', "[name='cancelBtn']", this, this.onCancel)
-            .on('click.table-editor', "[name='saveBtn']", this, this.onSave)
+            .on(this.eventsWithNamespace('dblclick'),
+                `tr[data-owner='${this._tableId}'][data-id!='newItemBtn']
+                [data-id!='${this.rowEditorComponent.buttonsRowDataId}']`, this, this.onSelectionSwitch)
+            .on(this.eventsWithNamespace('click'),
+                `[data-owner='${this._tableId}'][name='cancelBtn']`, this, this.onCancel)
+            .on(this.eventsWithNamespace('click'), `[data-owner='${this._tableId}'][name='saveBtn']`, this, this.onSave)
             // dblclick on table header
-            .on('dblclick.table-editor', "[data-id='newItemBtn']", this, this.onNewItem)
+            .on(this.eventsWithNamespace('dblclick'), `tr[data-owner='${this._tableId}'][data-id='newItemBtn']`, this, this.onNewItem)
             // click on newItemBtn <button name='newItemBtn'>
-            .on('click.table-editor', "[name='newItemBtn']", this, this.onNewItem);
+            .on(this.eventsWithNamespace('click'), `button[data-owner='${this._tableId}'][name='newItemBtn']`, this, this.onNewItem);
+    }
+
+    eventsWithNamespace(events) {
+        if ($.isArray(events)) {
+            return events.map(ev => `${ev}.table-editor-${this._tableId}`).join(" ");
+        } else {
+            return `${events}.table-editor-${this._tableId}`;
+        }
+    }
+
+    get _tableId() {
+        return this.tableElementAdapter.tableId;
     }
 
     /**

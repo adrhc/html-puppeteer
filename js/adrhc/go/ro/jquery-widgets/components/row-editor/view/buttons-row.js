@@ -6,10 +6,10 @@ class ButtonsRow extends ReadOnlyRow {
     constructor(mustacheTableElemAdapter, config) {
         super(mustacheTableElemAdapter, $.extend({
             rowTmplHtml:
-                `<tr data-id="buttons" class="buttons-row">
+                `<tr data-owner="${mustacheTableElemAdapter.tableId}" data-id="buttons" class="buttons-row">
                     <td colspan="${mustacheTableElemAdapter.columnsCount}">
-                        <button type="button" name="cancelBtn">Cancel</button>
-                        <button type="button" name="saveBtn">Save</button>
+                        <button data-owner="${mustacheTableElemAdapter.tableId}" type="button" name="cancelBtn">Cancel</button>
+                        <button data-owner="${mustacheTableElemAdapter.tableId}" type="button" name="saveBtn">Save</button>
                     </td>
                 </tr>`
         }, config));
