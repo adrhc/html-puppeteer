@@ -19,8 +19,10 @@ class TableEditorComponent {
 
     /**
      * new-item-creation event handler
+     *
+     * @param ev {Event}
      */
-    onNewRowCreation(ev) {
+    onNewItem(ev) {
         ev.stopPropagation();
         const editableTable = ev.data;
         const stateChangeResult = editableTable.state.createTransientSelection();
@@ -31,6 +33,8 @@ class TableEditorComponent {
 
     /**
      * (existing) item selection event handler
+     *
+     * @param ev {Event}
      */
     onSelectionSwitch(ev) {
         ev.stopPropagation();
@@ -44,6 +48,8 @@ class TableEditorComponent {
 
     /**
      * "cancel" (selection) event handler
+     *
+     * @param ev {Event}
      */
     onCancel(ev) {
         ev.stopPropagation();
@@ -55,11 +61,13 @@ class TableEditorComponent {
 
     /**
      * "save" (selection) event handler
+     *
+     * @param ev {Event}
      */
     onSave(ev) {
         ev.stopPropagation();
         const editableTable = ev.data;
-        editableTable._catchRepoError(editableTable.saveEditedEntity())
+        editableTable._catchRepoError(editableTable._saveEditedEntity())
             .then((savedItem) => {
                 console.log("TableEditorComponent.onSave\n", savedItem);
                 const stateChanges = editableTable.state.cancelSelectionAndUpdateItem(savedItem);
@@ -96,36 +104,48 @@ class TableEditorComponent {
 
     /**
      * linking "outside" (and/or default) triggers to component's handlers (aka capabilities)
+     * @private
      */
     _configureEvents() {
         this._configureNewItemBtnEvent();
         this.tableElementAdapter.$tbody
-            .on('dblclick', `tr[data-id!='${this.rowEditorComponent.buttonsRowDataId}']`, this, this.onSelectionSwitch)
-            .on('click', "[name='cancelBtn']", this, this.onCancel)
-            .on('click', "[name='saveBtn']", this, this.onSave);
+            .on('dblclick.table-editor', `tr[data-id!='${this.rowEditorComponent.buttonsRowDataId}']`, this, this.onSelectionSwitch)
+            .on('click.table-editor', "[name='cancelBtn']", this, this.onCancel)
+            .on('click.table-editor', "[name='saveBtn']", this, this.onSave);
     }
 
+    /**
+     * @private
+     */
     _configureNewItemBtnEvent() {
         // dblclick on table header
         let $newItemBtn = this.tableElementAdapter.$table.find("[data-id='newItemBtn']");
         if ($newItemBtn.length) {
-            $newItemBtn.on('dblclick', this, this.onNewRowCreation);
+            $newItemBtn.on('dblclick.table-editor', this, this.onNewItem);
         }
         // click on newItemBtn button
         $newItemBtn = this.tableElementAdapter.$table.find("[name='newItemBtn']");
         if ($newItemBtn.length) {
-            $newItemBtn.on('click', this, this.onNewRowCreation);
+            $newItemBtn.on('click.table-editor', this, this.onNewItem);
         }
     }
 
-    get editedEntityValues() {
+    /**
+     * @return {undefined|*}
+     * @private
+     */
+    get _editedEntityValues() {
         if (!this.state.selectionExists()) {
             return undefined;
         }
         return this.rowEditorComponent.entityValuesFor(this.state.selectedId);
     }
 
-    saveEditedEntity() {
-        return this.repository.save(this.editedEntityValues);
+    /**
+     * @return {Promise<IdentifiableEntity>}
+     * @private
+     */
+    _saveEditedEntity() {
+        return this.repository.save(this._editedEntityValues);
     }
 }
