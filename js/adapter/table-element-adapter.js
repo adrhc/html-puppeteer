@@ -19,17 +19,13 @@ class TableElementAdapter {
         return rowElem.sectionRowIndex == null ? rowElem.rowIndex : rowElem.sectionRowIndex;
     }
 
-    $getRowByDataId(rowDataId) {
-        return this.$tbody.find(`[data-id='${rowDataId}']`);
-    }
-
     /**
      * @param index {number}: row index
      * @param rowHtml {string}: row HTML
      * @param replaceExisting {boolean}: whether to replace or append a new row
      */
     renderRow(index, rowHtml, replaceExisting) {
-        const $rowAtIndex = this.$tbody.find("tr").eq(index);
+        const $rowAtIndex = this.$getRowAtIndex(index);
         if (replaceExisting) {
             $rowAtIndex.replaceWith(rowHtml);
         } else {
@@ -40,6 +36,22 @@ class TableElementAdapter {
                 this.$tbody.append($row);
             }
         }
+    }
+
+    /**
+     * @param rowDataId
+     * @return {jQuery<HTMLTableRowElement>}
+     */
+    $getRowByDataId(rowDataId) {
+        return this.$tbody.find(`[data-id='${rowDataId}']`);
+    }
+
+    /**
+     * @param index
+     * @return {jQuery<HTMLTableRowElement>}
+     */
+    $getRowAtIndex(index) {
+        return this.$tbody.find("tr").eq(index);
     }
 
     get columnsCount() {

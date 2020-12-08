@@ -27,6 +27,15 @@ class ReadOnlyRow {
     }
 
     /**
+     * @param itemId {number}
+     * @param index {number}
+     */
+    putDataId(itemId, index) {
+        const $row = this.mustacheTableElemAdapter.$getRowAtIndex(index);
+        $row.data("data-id", itemId);
+    }
+
+    /**
      * @param rowIndex {number}
      * @param cellsView
      * @param replaceExisting {boolean}

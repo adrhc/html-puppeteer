@@ -17,21 +17,26 @@ class EditableRow extends ReadOnlyRow {
      * @return {any}
      */
     valuesFor(rowId) {
-        return FormUtils.prototype.objectifyInputsOf(this._$rowOf(rowId))
+        return FormUtils.prototype.objectifyInputsOf(this._$rowByDataId(rowId))
     }
 
     /**
      * private method
      */
     focusFirstInput(rowId) {
-        const $row = this._$rowOf(rowId);
+        const $row = this._$rowByDataId(rowId);
         const $inputToFocus = $row.find("[data-focus-me='true']:visible");
         if ($inputToFocus.length) {
             $inputToFocus.focus();
         }
     }
 
-    _$rowOf(rowId) {
+    /**
+     * @param rowId
+     * @return {jQuery<HTMLTableRowElement>}
+     * @private
+     */
+    _$rowByDataId(rowId) {
         return this.mustacheTableElemAdapter.$getRowByDataId(rowId);
     }
 }

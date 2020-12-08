@@ -1,5 +1,9 @@
 /**
- * Role: capture all table events (aka UI adapter)
+ * Role: orchestrate state, view and sub-components
+ *
+ * API:
+ * - "data-id" on rows is mandatory and optionally on header rows
+ * - "data-id" = "newItemBtn" on a header row or a button with the name "newItemBtn" would trigger onNewItem
  */
 class TableEditorComponent {
     /**
@@ -70,7 +74,7 @@ class TableEditorComponent {
     onSave(ev) {
         ev.stopPropagation();
         const editableTable = ev.data;
-        editableTable._catchRepoError(editableTable._saveEditedEntity())
+        editableTable._handleRepoError(editableTable._saveEditedEntity())
             .then((savedItem) => {
                 console.log("TableEditorComponent.onSave\n", savedItem);
                 const stateChanges = editableTable.state.cancelSelectionAndUpdateItem(savedItem);
@@ -83,7 +87,7 @@ class TableEditorComponent {
      * component initializer
      */
     init() {
-        this._catchRepoError(this.repository.getAll())
+        this._handleRepoError(this.repository.getAll())
             .then((items) => {
                 console.log("TableEditorComponent items:\n", items);
                 this.state.items = items;
@@ -98,7 +102,7 @@ class TableEditorComponent {
      * @return {Promise<any>}
      * @private
      */
-    _catchRepoError(promise) {
+    _handleRepoError(promise) {
         return promise.catch((jqXHR, textStatus, errorThrown) => {
             console.log(textStatus, errorThrown);
             alert(textStatus);
