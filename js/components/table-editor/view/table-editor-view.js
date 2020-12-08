@@ -36,16 +36,19 @@ class TableEditorView {
         }
         stateChanges.forEach(sc => {
             if (sc.isSelected) {
-                // create/change-to "editable" row view
+                // row was created & selected or just selected
+                // switch to "editable" row view
                 this.editableRow.show(sc.item);
                 this.buttonsRow.show(sc.item)
             } else {
+                // row was deselected
+                // remove the buttons row
                 this.buttonsRow.hide();
                 if (sc.isTransient) {
-                    // remove transient, not selected row
+                    // remove transient row
                     this.readOnlyRow.hide(sc.item);
                 } else {
-                    // show saved (but not selected) row as read-only
+                    // show as "read-only" the nontransient row
                     this.readOnlyRow.show(sc.item);
                 }
             }
