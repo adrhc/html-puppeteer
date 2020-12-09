@@ -4,8 +4,8 @@ class InMemoryPersonsRepository extends InMemoryTableEditorRepository {
     }
 
     findByTitle(title) {
-        const items = Object.values(this.items).filter(it => it.firstName.startsWith(title));
-        return this._promiseOf(items);
+        return this.getAll()
+            .then(items => items.filter(it => it.firstName.startsWith(title)));
     }
 
     newItem() {
