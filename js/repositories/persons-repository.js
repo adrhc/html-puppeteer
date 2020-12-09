@@ -25,12 +25,7 @@ class PersonsRepository extends TableEditorRepository {
      */
     getAll() {
         return $.getJSON(this.URL)
-            .then(data => RestUtils.prototype.unwrapHAL(data))
-            .catch((jqXHR, textStatus, errorThrown) => {
-                console.log(textStatus, errorThrown);
-                alert(`${textStatus}! loading fallback data`);
-                return $.getJSON("test/persons.json");
-            });
+            .then(data => RestUtils.prototype.unwrapHAL(data));
     }
 
     update(person) {
