@@ -11,12 +11,14 @@ class TableEditorComponent {
      * @param tableElementAdapter {TableElementAdapter}
      * @param repository {TableEditorRepository}
      * @param rowEditorComponent {RowEditorComponent}
+     * @param state {TableEditorState}
      */
-    constructor(editableTableView, tableElementAdapter, repository, rowEditorComponent) {
+    constructor(editableTableView, tableElementAdapter, repository,
+                rowEditorComponent, state = new TableEditorState()) {
         this.editableTableView = editableTableView;
         this.tableElementAdapter = tableElementAdapter;
         this.repository = repository;
-        this.state = new TableEditorState();
+        this.state = state;
         this.rowEditorComponent = rowEditorComponent;
     }
 

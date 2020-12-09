@@ -69,6 +69,17 @@
     </tr>
 </template>
 
+<!--
+<template id="readOnlyCatsRowTmpl">
+    <tr data-owner="catsTable" data-id="{{id}}" class="editor">
+        <td>
+            <input type="hidden" name="id" value="{{id}}">
+            <input type="text" autocomplete="off" name="name" value="{{name}}" data-focus-me="true">
+        </td>
+    </tr>
+</template>
+-->
+
 <template id="editableCatsRowTmpl">
     <tr data-owner="catsTable" data-id="{{item.id}}" class="editor">
         <td>
@@ -108,6 +119,9 @@
 <script src="js/adrhc/go/ro/jquery-widgets/components/table-editor/view/table-editor-view.js"></script>
 <script src="js/adrhc/go/ro/jquery-widgets/components/table-editor/table-editor.js"></script>
 <script src="js/adrhc/go/ro/jquery-widgets/components/table-editor/factories/table-editor-factory.js"></script>
+<!-- list-editor -->
+<script src="js/adrhc/go/ro/jquery-widgets/components/list-editor/list-editor.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/list-editor/factories/list-editor-factory.js"></script>
 <!-- dynamic-select-one -->
 <script src="js/adrhc/go/ro/jquery-widgets/components/dynamic-select-one/repository/dyna-sel-one-repository.js"></script>
 <script src="js/adrhc/go/ro/jquery-widgets/components/dynamic-select-one/model/dyna-sel-one-item.js"></script>
