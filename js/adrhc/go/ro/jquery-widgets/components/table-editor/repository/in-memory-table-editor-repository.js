@@ -4,6 +4,9 @@ class InMemoryTableEditorRepository extends TableEditorRepository {
         this.items = items ? items : {};
     }
 
+    /**
+     * @return {Promise<IdentifiableEntity[]>}
+     */
     getAll() {
         return this._promiseOf(Object.values(this.items));
     }
