@@ -7,6 +7,7 @@
 
 .responstable {
     margin: auto !important;
+    border-radius: initial;
 }
 
 div.personsTable {
@@ -18,6 +19,7 @@ div.personsTable > label {
 }
 
 .catsTable {
+    width: 100%;
 }
 
 /* exposed by ButtonsRow class */
