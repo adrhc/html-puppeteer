@@ -27,12 +27,7 @@ class TableEditorComponent {
      */
     onNewItem(ev) {
         const editableTable = ev.data;
-        const stateChanges = editableTable.state.createTransientSelection();
-        editableTable.rowEditorComponent.close();
-        editableTable.editableTableView.updateView(stateChanges)
-            .then(() => {
-                editableTable.rowEditorComponent.init(editableTable.state.selectedItem);
-            });
+        editableTable._switchToEdit(editableTable.state.createTransientSelection());
     }
 
     /**
@@ -46,15 +41,7 @@ class TableEditorComponent {
         }
         const editableTable = ev.data;
         const rowDataId = editableTable.editableTableView.rowDataIdOf(this);
-        const stateChanges = editableTable.state.switchSelectionTo(rowDataId);
-        if (!stateChanges) {
-            editableTable.rowEditorComponent.close();
-            return true;
-        }
-        editableTable.editableTableView.updateView(stateChanges)
-            .then(() => {
-                editableTable.rowEditorComponent.init(editableTable.state.selectedItem);
-            });
+        editableTable._switchToEdit(editableTable.state.switchSelectionTo(rowDataId));
     }
 
     /**
@@ -65,8 +52,7 @@ class TableEditorComponent {
     onCancel(ev) {
         const editableTable = ev.data;
         const stateChange = editableTable.state.cancelSelection();
-        editableTable.rowEditorComponent.close();
-        editableTable.editableTableView.updateView([stateChange]);
+        editableTable._switchToReadOnly([stateChange]);
     }
 
     /**
@@ -80,8 +66,32 @@ class TableEditorComponent {
             .then((savedItem) => {
                 console.log("TableEditorComponent.onSave\n", savedItem);
                 const stateChanges = editableTable.state.cancelSelectionAndUpdateItem(savedItem);
-                editableTable.rowEditorComponent.close();
-                editableTable.editableTableView.updateView(stateChanges);
+                editableTable._switchToReadOnly(stateChanges);
+            });
+    }
+
+    /**
+     * @param stateChanges {Array<StateChange>}
+     * @private
+     */
+    _switchToReadOnly(stateChanges) {
+        this.rowEditorComponent.close();
+        this.editableTableView.updateView(stateChanges);
+    }
+
+    /**
+     * @param stateChanges {Promise<Array<StateChange>>}
+     * @private
+     */
+    _switchToEdit(stateChanges) {
+        stateChanges
+            .then(stateChanges => {
+                this.rowEditorComponent.close();
+                return stateChanges;
+            })
+            .then(stateChanges => this.editableTableView.updateView(stateChanges))
+            .then(() => {
+                this.rowEditorComponent.init(this.state.selectedItem);
             });
     }
 
