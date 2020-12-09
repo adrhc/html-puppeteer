@@ -24,9 +24,8 @@ class PersonRowEditorComponent extends RowEditorComponent {
      * @return {*} Person values
      */
     entityValuesFor(editedId) {
-        const item = this.rowEditorView.editableRow.valuesFor(editedId);
-        EntityUtils.prototype.removeTransientId(item);
-        item.cats = this.catsTableEditor.state.items;
+        const item = super.entityValuesFor(editedId);
+        item.cats = Object.values(this.catsTableEditor.state.items);
         return item;
     }
 

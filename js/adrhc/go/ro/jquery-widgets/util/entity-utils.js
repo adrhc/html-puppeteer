@@ -1,6 +1,17 @@
 class EntityUtils {
-    get NEW_ID() {
+    get transientId() {
         return "newId";
+    }
+
+    /**
+     * @return {number}
+     */
+    generateId() {
+        return -1 - Math.random();
+    }
+
+    isIdGenerated(id) {
+        return !this.isEmptyId(id) && id < 0;
     }
 
     removeTransientId(object) {
@@ -10,15 +21,19 @@ class EntityUtils {
         return object;
     }
 
+    isEmptyId(id) {
+        return !$.isNumeric(id);
+    }
+
     hasEmptyId(item) {
-        return !$.isNumeric(item.id);
+        return this.isEmptyId(item.id);
     }
 
     isTransientId(id) {
-        return id === "newId";
+        return id === this.transientId;
     }
 
     isTransient(item) {
-        return item.id === "newId";
+        return item.id === this.transientId;
     }
 }

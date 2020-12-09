@@ -1,6 +1,6 @@
 class CatsTableEditorFactory {
     create({
-               cats = {},
+               cats = [],
                tableId = "catsTable",
                bodyRowTmplId = "readOnlyCatsRowTmpl",
                rowEditorComponentFactory = RowEditorFactory.prototype.create

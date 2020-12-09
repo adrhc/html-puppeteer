@@ -130,9 +130,9 @@ class TableEditorState {
      * @private
      */
     _insertNewItem() {
-        const NEW_ID = EntityUtils.prototype.NEW_ID;
-        this._items[NEW_ID] = {id: NEW_ID};
-        return this._items[NEW_ID];
+        const transientId = EntityUtils.prototype.transientId;
+        this._items[transientId] = {id: transientId};
+        return this._items[transientId];
     }
 
     /**

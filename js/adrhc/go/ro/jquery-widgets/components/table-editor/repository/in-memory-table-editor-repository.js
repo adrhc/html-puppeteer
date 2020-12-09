@@ -1,7 +1,20 @@
 class InMemoryTableEditorRepository extends TableEditorRepository {
     constructor(items) {
         super();
-        this.items = items ? items : {};
+        if (items) {
+            this.items = this._mapOf(items);
+        } else {
+            this.items = {};
+        }
+    }
+
+    /**
+     * @param array {Array<IdentifiableEntity>}
+     * @return {*}
+     * @private
+     */
+    _mapOf(array) {
+        return array.reduce((accumulator, curr) => ({...accumulator, [curr.id]: curr}), {});
     }
 
     /**
@@ -12,7 +25,7 @@ class InMemoryTableEditorRepository extends TableEditorRepository {
     }
 
     insert(item) {
-        item.id = Math.random();
+        item.id = EntityUtils.prototype.generateId();
         return this.update(item);
     }
 
