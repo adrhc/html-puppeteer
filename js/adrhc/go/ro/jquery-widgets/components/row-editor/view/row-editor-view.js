@@ -13,13 +13,17 @@ class RowEditorView {
      */
     show(item) {
         this.editableRow.show(item);
-        this.buttonsRow.show(item)
+        if (this.buttonsRow) {
+            this.buttonsRow.show(item)
+        }
     }
 
     /**
      * @param item {IdentifiableEntity}
      */
     hide(item) {
-        this.buttonsRow.hide();
+        if (this.buttonsRow) {
+            this.buttonsRow.hide();
+        }
     }
 }

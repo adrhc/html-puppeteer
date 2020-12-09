@@ -3,7 +3,7 @@ class CatsTableEditorFactory {
                cats = [],
                tableId = "catsTable",
                bodyRowTmplId = "readOnlyCatsRowTmpl",
-               rowEditorComponentFactory = RowEditorFactory.prototype.create
+               rowEditorComponentFactory = RowEditorFactory.prototype.createWithNoButtons
            }) {
         const mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, bodyRowTmplId);
 

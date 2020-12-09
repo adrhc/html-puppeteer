@@ -1,8 +1,27 @@
 class RowEditorFactory {
-    create({mustacheTableElemAdapter, editableRowTmplId = "editableRowTmpl"}) {
+    /**
+     * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
+     * @param editableRowTmplId {string}
+     * @param buttonsRow {ButtonsRow}
+     * @return {RowEditorComponent}
+     */
+    create({mustacheTableElemAdapter, editableRowTmplId = "editableRowTmpl", buttonsRow}) {
         const editableRow = new EditableRow(mustacheTableElemAdapter, {rowTmplId: editableRowTmplId});
-        const buttonsRow = new ButtonsRow(mustacheTableElemAdapter, {});
+        buttonsRow = buttonsRow ? buttonsRow : new ButtonsRow(mustacheTableElemAdapter, {});
         const rowEditorView = new RowEditorView({editableRow: editableRow, buttonsRow: buttonsRow});
         return new RowEditorComponent({rowEditorView});
+    }
+
+    /**
+     * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
+     * @param editableRowTmplId {string}
+     * @return {RowEditorComponent}
+     */
+    createWithNoButtons({mustacheTableElemAdapter, editableRowTmplId}) {
+        return RowEditorFactory.prototype.create({
+            mustacheTableElemAdapter,
+            editableRowTmplId,
+            buttonsRow: new NoButtonsRow()
+        });
     }
 }

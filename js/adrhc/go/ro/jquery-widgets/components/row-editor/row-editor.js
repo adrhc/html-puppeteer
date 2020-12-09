@@ -38,6 +38,9 @@ class RowEditorComponent {
     }
 
     get buttonsRowDataId() {
+        if (!this.rowEditorView.buttonsRow) {
+            return undefined;
+        }
         return this.rowEditorView.buttonsRow.buttonsRowDataId;
     }
 }
