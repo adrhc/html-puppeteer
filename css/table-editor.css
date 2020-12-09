@@ -17,6 +17,9 @@ div.personsTable > label {
     font-size: small;
 }
 
+.catsTable {
+}
+
 /* exposed by ButtonsRow class */
 .buttons-row {
 }
