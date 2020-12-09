@@ -72,6 +72,7 @@
 <template id="editableCatsRowTmpl">
     <tr data-owner="catsTable" data-id="{{item.id}}" class="editor">
         <td>
+            <input type="hidden" name="id" value="{{item.id}}">
             <input type="text" name="name" value="{{item.name}}" data-focus-me="true">
         </td>
     </tr>

@@ -16,27 +16,66 @@ class TableElementAdapter {
             return undefined;
         }
         const rowElem = this.$getRowByDataId(rowDataId)[0];
+        // rowElem.sectionRowIndex doesn't play well with jquery tr:eq(${index})
         // return rowElem.sectionRowIndex == null ? rowElem.rowIndex : rowElem.sectionRowIndex;
         return rowElem.rowIndex;
     }
 
     /**
+     * @param rowDataId {string|number}
+     * @param rowHtml {string}
+     * @param replaceExistingIfExists {boolean}: whether to replace or append a new row
+     */
+    renderRowBeforeDataId(rowDataId, rowHtml, replaceExistingIfExists) {
+        const $existingRow = this.$getRowByDataId(rowDataId);
+        this._replaceOrCreateRow($existingRow, rowHtml, 'before', replaceExistingIfExists);
+    }
+
+    /**
+     * @param rowDataId {string|number}
+     * @param rowHtml {string}
+     * @param replaceExistingIfExists {boolean}: whether to replace or append a new row
+     */
+    renderRowAfterDataId(rowDataId, rowHtml, replaceExistingIfExists) {
+        const $existingRow = this.$getRowByDataId(rowDataId);
+        this._replaceOrCreateRow($existingRow, rowHtml, 'after', replaceExistingIfExists);
+    }
+
+    /**
      * @param index {number}: row index
      * @param rowHtml {string}: row HTML
-     * @param replaceExisting {boolean}: whether to replace or append a new row
+     * @param replaceExistingIfExists {boolean}: whether to replace or append a new row
      */
-    renderRow(index, rowHtml, replaceExisting) {
-        const $rowAtIndex = this.$getRowAtIndex(index);
-        if (replaceExisting) {
-            $rowAtIndex.replaceWith(rowHtml);
-        } else {
-            const $row = $(rowHtml);
-            if ($rowAtIndex.length) {
-                $rowAtIndex.before($row);
+    renderRowAtIndex(index, rowHtml, replaceExistingIfExists) {
+        const $existingRow = this.$getRowAtIndex(index);
+        this._replaceOrCreateRow($existingRow, rowHtml, 'before', replaceExistingIfExists);
+    }
+
+    /**
+     * @param $existingRow
+     * @param rowHtml
+     * @param replaceExistingIfExists
+     * @param where {'before', 'after'}
+     * @private
+     */
+    _replaceOrCreateRow($existingRow, rowHtml, where, replaceExistingIfExists) {
+        if ($existingRow.length) {
+            if (replaceExistingIfExists) {
+                $existingRow.replaceWith(rowHtml);
             } else {
-                this.$tbody.append($row);
+                $existingRow[where]($(rowHtml));
             }
+        } else {
+            this.$tbody.append($(rowHtml));
         }
+    }
+
+    /**
+     * @param rowDataId
+     * @return {jQuery}
+     */
+    prependEmptyRow(rowDataId) {
+        return this.$tbody.prepend(`<tr data-owner='${this.tableId}' data-id='${rowDataId}'></tr>`);
     }
 
     /**
@@ -44,7 +83,7 @@ class TableElementAdapter {
      * @return {jQuery<HTMLTableRowElement>}
      */
     $getRowByDataId(rowDataId) {
-        return this.$tbody.find(`[data-owner=${this.tableId}][data-id='${rowDataId}']`);
+        return this.$tbody.find(`[data-owner='${this.tableId}'][data-id='${rowDataId}']`);
     }
 
     /**

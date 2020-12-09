@@ -15,11 +15,11 @@ class PersonRowEditorComponent extends RowEditorComponent {
         });
     }
 
-    destroy() {
+    close() {
         if (!this.catsTableEditor) {
             return;
         }
-        this.catsTableEditor.destroy();
-        return super.destroy();
+        this.catsTableEditor.close();
+        return super.close();
     }
 }

@@ -15,8 +15,18 @@ class MustacheTableElemAdapter extends TableElementAdapter {
         super.$tbody.html(html);
     }
 
-    renderRow(rowIndex, cellsView, rowTmplHtml, replaceExisting) {
+    renderRowAtIndex(rowIndex, rowTmplHtml, cellsView, replaceExistingIfExists) {
         const rowHtml = cellsView ? Mustache.render(rowTmplHtml, cellsView) : rowTmplHtml;
-        super.renderRow(rowIndex, rowHtml, replaceExisting);
+        super.renderRowAtIndex(rowIndex, rowHtml, replaceExistingIfExists);
+    }
+
+    renderRowBeforeDataId(rowDataId, rowTmplHtml, cellsView, replaceExistingIfExists) {
+        const rowHtml = cellsView ? Mustache.render(rowTmplHtml, cellsView) : rowTmplHtml;
+        super.renderRowBeforeDataId(rowDataId, rowHtml, replaceExistingIfExists);
+    }
+
+    renderRowAfterDataId(rowDataId, rowTmplHtml, cellsView, replaceExistingIfExists) {
+        const rowHtml = cellsView ? Mustache.render(rowTmplHtml, cellsView) : rowTmplHtml;
+        super.renderRowAfterDataId(rowDataId, rowHtml, replaceExistingIfExists);
     }
 }

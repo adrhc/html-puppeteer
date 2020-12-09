@@ -28,9 +28,9 @@ class TableEditorComponent {
     onNewItem(ev) {
         const editableTable = ev.data;
         const stateChanges = editableTable.state.createTransientSelection();
+        editableTable.rowEditorComponent.close();
         editableTable.editableTableView.updateView(stateChanges)
             .then(() => {
-                editableTable.rowEditorComponent.destroy();
                 editableTable.rowEditorComponent.init(editableTable.state.selectedItem);
             });
     }
@@ -47,9 +47,9 @@ class TableEditorComponent {
         const editableTable = ev.data;
         const rowDataId = editableTable.editableTableView.rowDataIdOf(this);
         const stateChanges = editableTable.state.switchSelectionTo(rowDataId);
+        editableTable.rowEditorComponent.close();
         editableTable.editableTableView.updateView(stateChanges)
             .then(() => {
-                editableTable.rowEditorComponent.destroy();
                 editableTable.rowEditorComponent.init(editableTable.state.selectedItem);
             });
     }
@@ -62,7 +62,7 @@ class TableEditorComponent {
     onCancel(ev) {
         const editableTable = ev.data;
         const stateChange = editableTable.state.cancelSelection();
-        editableTable.rowEditorComponent.destroy();
+        editableTable.rowEditorComponent.close();
         editableTable.editableTableView.updateView([stateChange]);
     }
 
@@ -77,7 +77,7 @@ class TableEditorComponent {
             .then((savedItem) => {
                 console.log("TableEditorComponent.onSave\n", savedItem);
                 const stateChanges = editableTable.state.cancelSelectionAndUpdateItem(savedItem);
-                editableTable.rowEditorComponent.destroy();
+                editableTable.rowEditorComponent.close();
                 editableTable.editableTableView.updateView(stateChanges);
             });
     }
@@ -95,7 +95,7 @@ class TableEditorComponent {
         this._configureEvents();
     }
 
-    destroy() {
+    close() {
         this.tableElementAdapter.$table.off();
     }
 

@@ -21,28 +21,7 @@ class ReadOnlyRow {
     }
 
     show(item) {
-        const rowIndex = this.mustacheTableElemAdapter.getRowIndexByDataId(item.id);
-        const createNew = rowIndex == null;
-        this.renderRow(createNew ? 0 : rowIndex, this.itemViewOf(item), !createNew);
-    }
-
-    /**
-     * @param itemId {number}
-     * @param index {number}
-     */
-    putDataId(itemId, index) {
-        const $row = this.mustacheTableElemAdapter.$getRowAtIndex(index);
-        $row.data("id", itemId);
-    }
-
-    /**
-     * @param rowIndex {number}
-     * @param cellsView
-     * @param replaceExisting {boolean}
-     * @protected
-     */
-    renderRow(rowIndex, cellsView, replaceExisting) {
-        this.mustacheTableElemAdapter.renderRow(rowIndex, cellsView, this.rowTmplHtml, replaceExisting);
+        this.mustacheTableElemAdapter.renderRowBeforeDataId(item.id, this.rowTmplHtml, this.itemViewOf(item), true);
     }
 
     /**
@@ -50,6 +29,9 @@ class ReadOnlyRow {
      * @param item {IdentifiableEntity}
      */
     itemViewOf(item) {
+        if (!item) {
+            return undefined;
+        }
         const htmlId = EntityUtils.prototype.hasEmptyId(item) ? "" : item.id;
         return {htmlId: htmlId, item: item};
     }

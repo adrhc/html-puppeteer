@@ -13,17 +13,17 @@ class RowEditorComponent {
      */
     init(item) {
         console.log("RowEditorComponent.init\n", item)
-        return this.rowEditorState.init(item).then(stateChanges => {
-            this.rowEditorView.show(stateChanges);
-            return stateChanges;
+        return this.rowEditorState.init(item).then(item => {
+            this.rowEditorView.show(item);
+            return item;
         })
     }
 
-    destroy() {
-        console.log("RowEditorComponent.destroy\n", this)
-        return this.rowEditorState.close().then(stateChanges => {
-            this.rowEditorView.hide(stateChanges);
-            return stateChanges;
+    close() {
+        console.log("RowEditorComponent.close\n", this)
+        return this.rowEditorState.close().then(item => {
+            this.rowEditorView.hide(item);
+            return item;
         })
     }
 

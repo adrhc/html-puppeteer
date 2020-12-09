@@ -21,7 +21,6 @@ class ButtonsRow extends ReadOnlyRow {
     }
 
     show(item) {
-        const editorRowId = this.mustacheTableElemAdapter.getRowIndexByDataId(item.id);
-        super.renderRow(editorRowId + 1);
+        this.mustacheTableElemAdapter.renderRowAfterDataId(item.id, this.rowTmplHtml);
     }
 }

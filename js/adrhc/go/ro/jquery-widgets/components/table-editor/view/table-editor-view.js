@@ -21,19 +21,14 @@ class TableEditorView {
             return Promise.reject();
         }
         stateChanges.forEach(sc => {
-            if (sc.isSelected) {
-                // row was created & selected or just selected
-                // switch to "editable" row view
-            } else {
-                // row was deselected
-                // remove the buttons row
-                if (sc.isTransient) {
-                    // remove transient row
-                    this.readOnlyRow.hide(sc.item);
+            if (sc.isTransient) {
+                if (sc.isSelected) {
+                    this.mustacheTableElemAdapter.prependEmptyRow(sc.item.id);
                 } else {
-                    // show as "read-only" the nontransient row
-                    this.readOnlyRow.show(sc.item);
+                    this.mustacheTableElemAdapter.deleteRowByDataId(sc.item.id)
                 }
+            } else {
+                this.readOnlyRow.show(sc.item);
             }
         })
         return Promise.resolve(stateChanges);
