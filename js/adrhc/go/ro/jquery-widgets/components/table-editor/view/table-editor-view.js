@@ -40,10 +40,11 @@ class TableEditorView {
      */
     rowDataIdOf(tr) {
         const $elem = $(tr);
-        if ($elem.is("tr")) {
+        const ownerSelector = this.mustacheTableElemAdapter.ownerSelector;
+        if ($elem.is(ownerSelector)) {
             return $(tr).data("id");
         } else {
-            return $($(tr).parents("tr")[0]).data("id");
+            return $(tr).parents(`tr${ownerSelector}`).data("id");
         }
     }
 }

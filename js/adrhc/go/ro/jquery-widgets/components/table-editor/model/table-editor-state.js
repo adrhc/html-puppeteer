@@ -161,4 +161,8 @@ class TableEditorState {
         this._selectedId = undefined;
         items.forEach(p => this._items[p.id] = p);
     }
+
+    get items() {
+        return this._items;
+    }
 }

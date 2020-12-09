@@ -7,12 +7,27 @@ class PersonRowEditorComponent extends RowEditorComponent {
         super({rowEditorState, rowEditorView});
     }
 
+    /**
+     * @param item {Person}
+     * @return {Promise<IdentifiableEntity>}
+     */
     init(item) {
         return super.init(item).then((it) => {
             this.catsTableEditor = CatsTableEditorFactory.prototype.create({cats: item.cats});
             this.catsTableEditor.init();
             return it;
         });
+    }
+
+    /**
+     * @param editedId {string}
+     * @return {*} Person values
+     */
+    entityValuesFor(editedId) {
+        const item = this.rowEditorView.editableRow.valuesFor(editedId);
+        EntityUtils.prototype.removeTransientId(item);
+        item.cats = this.catsTableEditor.state.items;
+        return item;
     }
 
     close() {

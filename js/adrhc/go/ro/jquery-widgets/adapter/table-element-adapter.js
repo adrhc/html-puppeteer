@@ -83,7 +83,15 @@ class TableElementAdapter {
      * @return {jQuery<HTMLTableRowElement>}
      */
     $getRowByDataId(rowDataId) {
-        return this.$tbody.find(`[data-owner='${this.tableId}'][data-id='${rowDataId}']`);
+        return this.$tbody.find(this.getRowSelector(rowDataId));
+    }
+
+    getRowSelector(rowDataId) {
+        return `tr${this.ownerSelector}[data-id='${rowDataId}']`;
+    }
+
+    get ownerSelector() {
+        return `[data-owner='${this.tableId}']`;
     }
 
     /**

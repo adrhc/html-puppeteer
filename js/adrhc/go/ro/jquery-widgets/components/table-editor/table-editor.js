@@ -47,7 +47,10 @@ class TableEditorComponent {
         const editableTable = ev.data;
         const rowDataId = editableTable.editableTableView.rowDataIdOf(this);
         const stateChanges = editableTable.state.switchSelectionTo(rowDataId);
-        editableTable.rowEditorComponent.close();
+        if (!stateChanges) {
+            editableTable.rowEditorComponent.close();
+            return true;
+        }
         editableTable.editableTableView.updateView(stateChanges)
             .then(() => {
                 editableTable.rowEditorComponent.init(editableTable.state.selectedItem);
