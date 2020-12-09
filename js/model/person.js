@@ -1,4 +1,11 @@
 class Person extends DynaSelOneItem {
+    constructor(id, firstName, lastName, cats) {
+        super(id);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.cats = cats;
+    }
+
     get title() {
         return this.firstName;
     }

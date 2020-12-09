@@ -32,11 +32,11 @@
 </div>
 
 <script id="readOnlyRowTmpl" type="x-tmpl-mustache">
-    <tr data-owner="personsTable" data-id="{{item.id}}">
-        <td>{{item.id}}</td>
-        <td>{{item.firstName}}</td>
-        <td>{{item.lastName}}</td>
-        <td>{{#each item.cats}}<div>{{{this.name}}}<div>{{/each}}</td>
+    <tr data-owner="personsTable" data-id="{{id}}">
+        <td>{{id}}</td>
+        <td>{{firstName}}</td>
+        <td>{{lastName}}</td>
+        <td>{{#each cats}}<div>{{{this.name}}}<div>{{/each}}</td>
     </tr>
 </script>
 
@@ -64,8 +64,8 @@
 </template>
 
 <template id="readOnlyCatsRowTmpl">
-    <tr data-owner="catsTable" data-id="{{item.id}}">
-        <td>{{item.name}}</td>
+    <tr data-owner="catsTable" data-id="{{id}}">
+        <td>{{name}}</td>
     </tr>
 </template>
 

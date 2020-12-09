@@ -21,18 +21,6 @@ class ReadOnlyRow {
     }
 
     show(item) {
-        this.mustacheTableElemAdapter.renderRowBeforeDataId(item.id, this.rowTmplHtml, this.itemViewOf(item), true);
-    }
-
-    /**
-     * appends htmlId to cloned cellValues then return it
-     * @param item {IdentifiableEntity}
-     */
-    itemViewOf(item) {
-        if (!item) {
-            return undefined;
-        }
-        const htmlId = EntityUtils.prototype.hasEmptyId(item) ? "" : item.id;
-        return {htmlId: htmlId, item: item};
+        this.mustacheTableElemAdapter.renderRowBeforeDataId(item.id, this.rowTmplHtml, item, true);
     }
 }

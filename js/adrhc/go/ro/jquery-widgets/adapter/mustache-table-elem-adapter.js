@@ -16,25 +16,27 @@ class MustacheTableElemAdapter extends TableElementAdapter {
     }
 
     renderRowAtIndex(rowIndex, rowTmplHtml, cellsView, replaceExistingIfExists) {
-        const rowHtml = this._renderTemplate(rowTmplHtml, cellsView);
+        const rowHtml = this._renderTemplate(cellsView, rowTmplHtml);
         super.renderRowAtIndex(rowIndex, rowHtml, replaceExistingIfExists);
     }
 
     renderRowBeforeDataId(rowDataId, rowTmplHtml, cellsView, replaceExistingIfExists) {
-        const rowHtml = this._renderTemplate(rowTmplHtml, cellsView);
+        const rowHtml = this._renderTemplate(cellsView, rowTmplHtml);
         super.renderRowBeforeDataId(rowDataId, rowHtml, replaceExistingIfExists);
     }
 
     renderRowAfterDataId(rowDataId, rowTmplHtml, cellsView, replaceExistingIfExists) {
-        const rowHtml = this._renderTemplate(rowTmplHtml, cellsView);
+        const rowHtml = this._renderTemplate(cellsView, rowTmplHtml);
         super.renderRowAfterDataId(rowDataId, rowHtml, replaceExistingIfExists);
     }
 
     _renderBodyTemplate(data) {
-        return Mustache.render(this.bodyTmplHtml, data, {bodyRowTmpl: this.bodyRowTmplHtml})
+        // return Mustache.render(this.bodyTmplHtml, data, {bodyRowTmpl: this.bodyRowTmplHtml})
+        Handlebars.registerPartial("bodyRowTmpl", this.bodyRowTmplHtml)
+        return this._renderTemplate(data, this.bodyTmplHtml);
     }
 
-    _renderTemplate(rowTmplHtml, cellsView) {
+    _renderTemplate(cellsView, rowTmplHtml) {
         // return cellsView ? Mustache.render(rowTmplHtml, cellsView) : rowTmplHtml;
         if (cellsView) {
             const template = Handlebars.compile(rowTmplHtml);

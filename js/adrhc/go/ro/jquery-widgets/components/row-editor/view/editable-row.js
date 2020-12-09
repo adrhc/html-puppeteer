@@ -8,8 +8,20 @@ class EditableRow extends ReadOnlyRow {
     }
 
     show(item) {
-        super.show(item);
+        super.show(this.itemViewOf(item));
         this.focusFirstInput(item.id);
+    }
+
+    /**
+     * appends htmlId to cloned cellValues then return it
+     * @param item {IdentifiableEntity}
+     */
+    itemViewOf(item) {
+        if (!item) {
+            return undefined;
+        }
+        const htmlId = EntityUtils.prototype.hasEmptyId(item) ? "" : item.id;
+        return {id: item.id, htmlId: htmlId, item: item};
     }
 
     /**
