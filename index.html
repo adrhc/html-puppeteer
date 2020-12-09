@@ -46,10 +46,10 @@
             <input type="hidden" name="id" value="{{item.id}}">
         </td>
         <td>
-            <input type="text" name="firstName" value="{{item.firstName}}" data-focus-me="true">
+            <input type="text" autocomplete="off" name="firstName" value="{{item.firstName}}" data-focus-me="true">
         </td>
         <td>
-            <input type="text" name="lastName" value="{{item.lastName}}">
+            <input type="text" autocomplete="off" name="lastName" value="{{item.lastName}}">
         </td>
         <td>
             <table id="catsTable" class="catsTable">
@@ -73,7 +73,7 @@
     <tr data-owner="catsTable" data-id="{{item.id}}" class="editor">
         <td>
             <input type="hidden" name="id" value="{{item.id}}">
-            <input type="text" name="name" value="{{item.name}}" data-focus-me="true">
+            <input type="text" autocomplete="off" name="name" value="{{item.name}}" data-focus-me="true">
         </td>
     </tr>
 </template>
