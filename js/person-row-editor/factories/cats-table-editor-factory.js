@@ -12,7 +12,7 @@ class CatsTableEditorFactory {
         });
 
         const readOnlyRow = new ReadOnlyRow(mustacheTableElemAdapter, {rowTmplId: bodyRowTmplId});
-        const tableEditorView = new TableEditorView(readOnlyRow, mustacheTableElemAdapter);
+        const tableEditorView = new TableEditorView(mustacheTableElemAdapter, readOnlyRow);
         return new TableEditorComponent(tableEditorView, mustacheTableElemAdapter,
             new InMemoryTableEditorRepository(cats), rowEditorComponent);
     }

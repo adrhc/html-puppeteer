@@ -10,8 +10,7 @@ class ListEditorFactory {
 
         const rowEditorComponent = rowEditorComponentFactory({mustacheTableElemAdapter, editableRowTmplId});
 
-        const readOnlyRow = new ReadOnlyRow(mustacheTableElemAdapter, {rowTmplId: bodyRowTmplId});
-        const tableEditorView = new TableEditorView(readOnlyRow, mustacheTableElemAdapter);
+        const tableEditorView = new TableEditorView(mustacheTableElemAdapter);
         return new ListEditorComponent(tableEditorView, mustacheTableElemAdapter,
             new InMemoryTableEditorRepository(items), rowEditorComponent);
     }

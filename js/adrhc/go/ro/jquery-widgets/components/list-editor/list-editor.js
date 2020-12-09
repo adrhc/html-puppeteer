@@ -9,4 +9,20 @@ class ListEditorComponent extends TableEditorComponent {
     constructor(editableTableView, tableElementAdapter, repository, rowEditorComponent, state) {
         super(editableTableView, tableElementAdapter, repository, rowEditorComponent, state);
     }
+
+    /**
+     * new-item-creation event handler
+     *
+     * @param ev {Event}
+     */
+    onNewItem(ev) {
+        const editableTable = ev.data;
+        const newItem = editableTable.state.insertNewItem();
+        editableTable.repository.insert(newItem)
+            .then(savedItem => {
+                editableTable.state.removeTransientItem();
+                editableTable.state.replaceItem(savedItem);
+                editableTable._switchToEdit(editableTable.state.switchSelectionTo(savedItem.id));
+            })
+    }
 }

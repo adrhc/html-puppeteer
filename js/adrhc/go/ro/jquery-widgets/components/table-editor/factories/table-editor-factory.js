@@ -17,7 +17,7 @@ class TableEditorFactory {
         const rowEditorComponent = rowEditorComponentFactory({mustacheTableElemAdapter});
 
         const readOnlyRow = new ReadOnlyRow(mustacheTableElemAdapter, {rowTmplId: bodyRowTmplId});
-        const tableEditorView = new TableEditorView(readOnlyRow, mustacheTableElemAdapter);
+        const tableEditorView = new TableEditorView(mustacheTableElemAdapter, readOnlyRow);
         return new TableEditorComponent(tableEditorView, mustacheTableElemAdapter, repository, rowEditorComponent);
     }
 }

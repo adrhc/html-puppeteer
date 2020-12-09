@@ -14,7 +14,7 @@ class TableEditorState {
         const prevTabularItemState = this.selectedItem;
         const transientSelectionExists = this._transientSelectionExists;
         if (transientSelectionExists) {
-            this.removeSelectedItem();
+            this.removeTransientItem();
         }
         this._selectedId = undefined;
         return new StateChange(prevTabularItemState, transientSelectionExists);
@@ -55,7 +55,7 @@ class TableEditorState {
             console.error("A row is updated without previously being selected!", item);
             return undefined;
         }
-        this._replaceItem(item.id, item);
+        this.replaceItem(item);
         // when "previous" is a transient than the updated is in fact
         // a "new" item to be stored which appears as a creation
         return [stateChange, new StateChange(this._getItemById(item.id))];
@@ -70,7 +70,7 @@ class TableEditorState {
             return undefined;
         }
         // no transient selection exists
-        const newItemId = this._insertNewItem().id;
+        const newItemId = this.insertNewItem().id;
         return this.switchSelectionTo(newItemId);
     }
 
@@ -120,16 +120,13 @@ class TableEditorState {
     }
 
     /**
-     * @private
+     * @param item {IdentifiableEntity}
      */
-    _replaceItem(id, item) {
-        this._items[id] = item;
+    replaceItem(item) {
+        this._items[item.id] = item;
     }
 
-    /**
-     * @private
-     */
-    _insertNewItem() {
+    insertNewItem() {
         const transientId = EntityUtils.prototype.transientId;
         this._items[transientId] = {id: transientId};
         return this._items[transientId];
@@ -140,6 +137,10 @@ class TableEditorState {
      */
     removeSelectedItem() {
         delete this._items[this._selectedId];
+    }
+
+    removeTransientItem() {
+        delete this._items[EntityUtils.prototype.transientId];
     }
 
     /**

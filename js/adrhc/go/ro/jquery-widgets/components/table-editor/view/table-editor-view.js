@@ -3,7 +3,7 @@ class TableEditorView {
      * @param readOnlyRow {ReadOnlyRow}
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      */
-    constructor(readOnlyRow, mustacheTableElemAdapter) {
+    constructor(mustacheTableElemAdapter, readOnlyRow) {
         this.readOnlyRow = readOnlyRow;
         this.mustacheTableElemAdapter = mustacheTableElemAdapter;
     }
@@ -27,7 +27,7 @@ class TableEditorView {
                 } else {
                     this.mustacheTableElemAdapter.deleteRowByDataId(sc.item.id)
                 }
-            } else {
+            } else if (this.readOnlyRow) {
                 this.readOnlyRow.show(sc.item);
             }
         })
