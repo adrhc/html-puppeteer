@@ -2,10 +2,12 @@ class DynamicSelectOneState {
     /**
      * @param repository {DynaSelOneRepository}
      * @param minCharsToSearch {number}
+     * @param options {DynaSelOneItem[]|undefined}
      */
-    constructor(repository, {minCharsToSearch = 3}) {
+    constructor(repository, {minCharsToSearch = 3, options}) {
         this.repository = repository;
         this.minCharsToSearch = minCharsToSearch;
+        this.options = options;
     }
 
     /**
@@ -60,7 +62,7 @@ class DynamicSelectOneState {
      * update the model then compute derivatives
      *
      * @param title {string|undefined}
-     * @param options {DynaSelOneItem|undefined}
+     * @param options {DynaSelOneItem[]|undefined}
      * @private
      */
     _update(title, options) {
@@ -75,7 +77,7 @@ class DynamicSelectOneState {
 
     /**
      * @param text {string}
-     * @returns {DynaSelOneItem|undefined}
+     * @returns {DynaSelOneItem[]|undefined}
      * @private
      */
     _findOptionsByTitleStartingWith(text) {
