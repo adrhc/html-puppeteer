@@ -11,6 +11,7 @@
     <script src="libraries/modernizr-custom.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://unpkg.com/mustache@latest"></script>
+    <script src="libraries/handlebars-1.0.rc.1.min.js"></script>
 </head>
 
 <body>
@@ -35,9 +36,8 @@
         <td>{{item.id}}</td>
         <td>{{item.firstName}}</td>
         <td>{{item.lastName}}</td>
-        <td>{{#item.cats}}{{{.}}}{{/item.cats}}</td>
+        <td>{{#each item.cats}}<div>{{{this.name}}}<div>{{/each}}</td>
     </tr>
-
 </script>
 
 <template id="editableRowTmpl">
