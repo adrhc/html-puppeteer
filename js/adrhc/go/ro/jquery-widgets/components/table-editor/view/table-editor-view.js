@@ -8,8 +8,12 @@ class TableEditorView {
         this.mustacheTableElemAdapter = mustacheTableElemAdapter;
     }
 
-    init(data) {
-        this.mustacheTableElemAdapter.renderBody(data);
+    init(items) {
+        if ($.isArray(items)) {
+            this.mustacheTableElemAdapter.renderBody({items});
+        } else {
+            this.mustacheTableElemAdapter.renderBody(items);
+        }
     }
 
     /**

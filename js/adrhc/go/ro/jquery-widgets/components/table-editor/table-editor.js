@@ -118,7 +118,7 @@ class TableEditorComponent {
             .then((items) => {
                 console.log("TableEditorComponent items:\n", items);
                 this.state.items = items;
-                this.editableTableView.init({items: items});
+                this.editableTableView.init(items);
             });
         this._configureEvents();
     }

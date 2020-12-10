@@ -11,7 +11,9 @@ class MustacheTableElemAdapter extends TableElementAdapter {
     }
 
     renderBody(data) {
-        const html = this._renderBodyTemplate(data);
+        // return Mustache.render(this.bodyTmplHtml, data, {bodyRowTmpl: this.bodyRowTmplHtml})
+        Handlebars.registerPartial("bodyRowTmpl", this.bodyRowTmplHtml)
+        const html = this._renderTemplate(data, this.bodyTmplHtml);
         super.$tbody.html(html);
     }
 
@@ -28,12 +30,6 @@ class MustacheTableElemAdapter extends TableElementAdapter {
     renderRowAfterDataId(rowDataId, rowTmplHtml, cellsView, replaceExistingIfExists) {
         const rowHtml = this._renderTemplate(cellsView, rowTmplHtml);
         super.renderRowAfterDataId(rowDataId, rowHtml, replaceExistingIfExists);
-    }
-
-    _renderBodyTemplate(data) {
-        // return Mustache.render(this.bodyTmplHtml, data, {bodyRowTmpl: this.bodyRowTmplHtml})
-        Handlebars.registerPartial("bodyRowTmpl", this.bodyRowTmplHtml)
-        return this._renderTemplate(data, this.bodyTmplHtml);
     }
 
     _renderTemplate(cellsView, rowTmplHtml) {
