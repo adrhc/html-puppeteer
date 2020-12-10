@@ -66,7 +66,7 @@ class TableElementAdapter {
                 $existingRow[where]($(rowHtml));
             }
         } else {
-            this.$tbody.append($(rowHtml));
+            this.$tbody.prepend($(rowHtml));
         }
     }
 
