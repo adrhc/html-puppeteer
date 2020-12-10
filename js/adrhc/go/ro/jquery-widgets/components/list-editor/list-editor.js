@@ -17,12 +17,23 @@ class ListEditorComponent extends TableEditorComponent {
      */
     onNewItem(ev) {
         const editableTable = ev.data;
-        const newItem = editableTable.state.insertNewItem();
-        editableTable.repository.insert(newItem)
+        editableTable._createPersistentEmptyItem()
+            .then(savedItem => {
+                editableTable._switchToEdit(editableTable.state.switchSelectionTo(savedItem.id));
+            })
+    }
+
+    /**
+     * @return {Promise<IdentifiableEntity>}
+     * @private
+     */
+    _createPersistentEmptyItem() {
+        const newItem = this.state.insertNewItem();
+        return this.repository.insert(newItem)
             .then(savedItem => {
                 editableTable.state.removeTransientItem();
                 editableTable.state.replaceItem(savedItem);
-                editableTable._switchToEdit(editableTable.state.switchSelectionTo(savedItem.id));
-            })
+                return savedItem;
+            });
     }
 }

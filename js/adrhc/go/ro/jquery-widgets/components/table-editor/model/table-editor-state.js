@@ -3,7 +3,7 @@ class TableEditorState {
     _items = undefined;
 
     /**
-     * @returns {StateChange|undefined}
+     * @returns {StateChange|undefined} cancelled and no longer selected StateChange
      */
     cancelSelection() {
         if (!this.selectionExists()) {
@@ -22,7 +22,7 @@ class TableEditorState {
 
     /**
      * @param selectedId
-     * @returns {StateChange[]|undefined}
+     * @returns {StateChange[]|undefined} cancelled StateChange (no longer selected) and the updated StateChange (selected)
      */
     switchSelectionTo(selectedId) {
         if (this.isIdSelected(selectedId)) {
@@ -43,7 +43,7 @@ class TableEditorState {
 
     /**
      * @param item
-     * @returns {StateChange[]|undefined}
+     * @returns {StateChange[]|undefined} cancelled StateChange and the updated StateChange (both no longer selected)
      */
     cancelSelectionAndUpdateItem(item) {
         if (this.isTransient(item.id)) {

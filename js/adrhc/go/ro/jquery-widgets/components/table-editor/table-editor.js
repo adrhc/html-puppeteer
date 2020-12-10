@@ -67,6 +67,7 @@ class TableEditorComponent {
         editableTable._handleRepoError(editableTable._saveEditedEntity())
             .then((savedItem) => {
                 console.log("TableEditorComponent.onSave\n", savedItem);
+                editableTable.rowEditorComponent.rowEditorState.item = savedItem;
                 const stateChanges = editableTable.state.cancelSelectionAndUpdateItem(savedItem);
                 editableTable._switchToReadOnly(stateChanges);
             });
@@ -136,26 +137,26 @@ class TableEditorComponent {
         // use $tbody to not mix with onNewItem
         this.tableElementAdapter.$table
             .on(this.eventsWithNamespace('dblclick'),
-                `tr[data-owner='${this._tableId}'][data-id!='newItemBtn']
+                `tr[data-owner='${this.owner}'][data-id!='newItemBtn']
                 [data-id!='${this.rowEditorComponent.buttonsRowDataId}']`, this, this.onSelectionSwitch)
             .on(this.eventsWithNamespace('click'),
-                `[data-owner='${this._tableId}'][name='cancelBtn']`, this, this.onCancel)
-            .on(this.eventsWithNamespace('click'), `[data-owner='${this._tableId}'][name='saveBtn']`, this, this.onSave)
+                `[data-owner='${this.owner}'][name='cancelBtn']`, this, this.onCancel)
+            .on(this.eventsWithNamespace('click'), `[data-owner='${this.owner}'][name='saveBtn']`, this, this.onSave)
             // dblclick on table header
-            .on(this.eventsWithNamespace('dblclick'), `tr[data-owner='${this._tableId}'][data-id='newItemBtn']`, this, this.onNewItem)
+            .on(this.eventsWithNamespace('dblclick'), `tr[data-owner='${this.owner}'][data-id='newItemBtn']`, this, this.onNewItem)
             // click on newItemBtn <button name='newItemBtn'>
-            .on(this.eventsWithNamespace('click'), `button[data-owner='${this._tableId}'][name='newItemBtn']`, this, this.onNewItem);
+            .on(this.eventsWithNamespace('click'), `button[data-owner='${this.owner}'][name='newItemBtn']`, this, this.onNewItem);
     }
 
     eventsWithNamespace(events) {
         if ($.isArray(events)) {
-            return events.map(ev => `${ev}.table-editor-${this._tableId}`).join(" ");
+            return events.map(ev => `${ev}.table-editor-${this.owner}`).join(" ");
         } else {
-            return `${events}.table-editor-${this._tableId}`;
+            return `${events}.table-editor-${this.owner}`;
         }
     }
 
-    get _tableId() {
+    get owner() {
         return this.tableElementAdapter.tableId;
     }
 
@@ -163,11 +164,11 @@ class TableEditorComponent {
      * @return {undefined|*}
      * @private
      */
-    get _editedEntityValues() {
+    get _extractEntity() {
         if (!this.state.selectionExists()) {
             return undefined;
         }
-        return this.rowEditorComponent.entityValuesFor(this.state.selectedId);
+        return this.rowEditorComponent.extractEntity();
     }
 
     /**
@@ -175,6 +176,16 @@ class TableEditorComponent {
      * @private
      */
     _saveEditedEntity() {
-        return this.repository.save(this._editedEntityValues);
+        return this.repository.save(this._extractEntity);
+    }
+
+    /**
+     * by default this component won't use the owner to detect its fields
+     *
+     * @param useOwnerOnFields {boolean}
+     * @return {Array<IdentifiableEntity>}
+     */
+    extractEntities(useOwnerOnFields) {
+        return this.editableTableView.extractEntities(useOwnerOnFields);
     }
 }

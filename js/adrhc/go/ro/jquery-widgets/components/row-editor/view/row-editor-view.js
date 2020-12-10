@@ -26,4 +26,16 @@ class RowEditorView {
             this.buttonsRow.hide();
         }
     }
+
+    /**
+     * @param rowDataId
+     * @return {jQuery<HTMLTableRowElement>}
+     */
+    $getRowByDataId(rowDataId) {
+        return this.editableRow.mustacheTableElemAdapter.$getRowByDataId(rowDataId);
+    }
+
+    get owner() {
+        return this.editableRow.mustacheTableElemAdapter.tableId;
+    }
 }

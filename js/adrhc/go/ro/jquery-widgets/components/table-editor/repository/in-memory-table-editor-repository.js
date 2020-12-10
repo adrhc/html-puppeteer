@@ -2,19 +2,10 @@ class InMemoryTableEditorRepository extends TableEditorRepository {
     constructor(items) {
         super();
         if (items) {
-            this.items = this._mapOf(items);
+            this.items = Converters.prototype.mapOfArray(items);
         } else {
             this.items = {};
         }
-    }
-
-    /**
-     * @param array {Array<IdentifiableEntity>}
-     * @return {*}
-     * @private
-     */
-    _mapOf(array) {
-        return array.reduce((accumulator, curr) => ({...accumulator, [curr.id]: curr}), {});
     }
 
     /**

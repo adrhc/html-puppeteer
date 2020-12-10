@@ -79,11 +79,18 @@ class TableElementAdapter {
     }
 
     /**
+     * @return {jQuery<HTMLTableRowElement>[]}
+     */
+    $getAllRows() {
+        return this.$tbody.children(`tr${this.ownerSelector}`);
+    }
+
+    /**
      * @param rowDataId
      * @return {jQuery<HTMLTableRowElement>}
      */
     $getRowByDataId(rowDataId) {
-        return this.$tbody.find(this.getRowSelector(rowDataId));
+        return this.$tbody.children(this.getRowSelector(rowDataId));
     }
 
     getRowSelector(rowDataId) {
@@ -99,7 +106,7 @@ class TableElementAdapter {
      * @return {jQuery<HTMLTableRowElement>}
      */
     $getRowAtIndex(index) {
-        return this.$tbody.find(`tr:eq(${index})`);
+        return this.$tbody.children(`tr:eq(${index})`);
     }
 
     get columnsCount() {
@@ -109,9 +116,9 @@ class TableElementAdapter {
             const tableColumnsCount = this.$table.data("columns-count");
             return tableColumnsCount ? +tableColumnsCount : 1; // default to 1 column
         }
-        let tds = firstRow.find("th");
+        let tds = firstRow.children("th");
         if (!tds.length) {
-            tds = firstRow.find("td");
+            tds = firstRow.children("td");
         }
         for (let td of tds) {
             const colspan = $(td).attr('colspan');
@@ -127,7 +134,7 @@ class TableElementAdapter {
     get $tbody() {
         const $tbody = this._$tbody;
         if (!$tbody.length) {
-            return this.$table.append("<tbody></tbody>").find("tbody");
+            return this.$table.append("<tbody></tbody>").children("tbody");
         }
         return $tbody;
     }

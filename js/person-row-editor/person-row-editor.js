@@ -26,12 +26,12 @@ class PersonRowEditorComponent extends RowEditorComponent {
     }
 
     /**
-     * @param editedId {string}
      * @return {*} Person values
      */
-    entityValuesFor(editedId) {
-        const item = super.entityValuesFor(editedId);
-        item.cats = Object.values(this.catsTableEditor.state.items);
+    extractEntity() {
+        const item = super.extractEntity(true);
+        // item.cats = Object.values(this.catsTableEditor.state.items);
+        item.cats = this.catsTableEditor.extractEntities();
         return item;
     }
 

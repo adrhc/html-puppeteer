@@ -28,13 +28,14 @@ class RowEditorComponent {
     }
 
     /**
-     * @param editedId {string}
+     * by default this component won't use the owner to detect its fields
+     *
+     * @param useOwnerOnFields {boolean}
      * @return {*}
      */
-    entityValuesFor(editedId) {
-        const item = this.rowEditorView.editableRow.valuesFor(editedId);
-        EntityUtils.prototype.removeTransientId(item);
-        return item;
+    extractEntity(useOwnerOnFields) {
+        const $row = this.rowEditorView.$getRowByDataId(this.rowEditorState.item.id);
+        return EntityFormUtils.prototype.extractEntityFrom($row, useOwnerOnFields ? this.owner : undefined);
     }
 
     get buttonsRowDataId() {
@@ -42,5 +43,9 @@ class RowEditorComponent {
             return undefined;
         }
         return this.rowEditorView.buttonsRow.buttonsRowDataId;
+    }
+
+    get owner() {
+        return this.rowEditorView.owner;
     }
 }

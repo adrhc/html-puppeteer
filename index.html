@@ -43,13 +43,13 @@
 <template id="editableRowTmpl">
     <tr data-owner="personsTable" data-id="{{item.id}}" class="editor">
         <td>{{htmlId}}
-            <input type="hidden" name="id" value="{{item.id}}">
+            <input data-owner="personsTable" type="hidden" name="id" value="{{item.id}}">
         </td>
         <td>
-            <input type="text" autocomplete="off" name="firstName" value="{{item.firstName}}" data-focus-me="true">
+            <input data-owner="personsTable" type="text" autocomplete="off" name="firstName" value="{{item.firstName}}" data-focus-me="true">
         </td>
         <td>
-            <input type="text" autocomplete="off" name="lastName" value="{{item.lastName}}">
+            <input data-owner="personsTable" type="text" autocomplete="off" name="lastName" value="{{item.lastName}}">
         </td>
         <td>
             <table id="catsTable" class="catsTable">
@@ -90,9 +90,11 @@
 </template>
 
 <!-- utils -->
+<script src="js/adrhc/go/ro/jquery-widgets/util/converters.js"></script>
 <script src="js/adrhc/go/ro/jquery-widgets/util/ajax-utils.js"></script>
 <script src="js/adrhc/go/ro/jquery-widgets/util/entity-utils.js"></script>
 <script src="js/adrhc/go/ro/jquery-widgets/util/form-utils.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/util/entity-form-utils.js"></script>
 <script src="js/adrhc/go/ro/jquery-widgets/util/html-utils.js"></script>
 <script src="js/adrhc/go/ro/jquery-widgets/util/rest-utils.js"></script>
 <!-- helpers -->
