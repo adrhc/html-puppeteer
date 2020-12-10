@@ -15,11 +15,19 @@ class InMemoryTableEditorRepository extends TableEditorRepository {
         return this._promiseOf(Object.values(this.items));
     }
 
+    /**
+     * @param item {IdentifiableEntity}
+     * @return {Promise<IdentifiableEntity>}
+     */
     insert(item) {
         item.id = EntityUtils.prototype.generateId();
         return this.update(item);
     }
 
+    /**
+     * @param item {IdentifiableEntity}
+     * @return {Promise<IdentifiableEntity>}
+     */
     update(item) {
         this.items[item.id] = this._itemOf(item);
         return this._promiseOf(item);
@@ -51,6 +59,9 @@ class InMemoryTableEditorRepository extends TableEditorRepository {
         }
     }
 
+    /**
+     * @return {IdentifiableEntity}
+     */
     newItem() {
         return new IdentifiableEntity();
     }
