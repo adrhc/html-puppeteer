@@ -21,6 +21,11 @@ class EntityUtils {
         return !this.isEmptyId(id) && id < 0;
     }
 
+    removeTransientIds(array) {
+        array.forEach(it => EntityUtils.prototype.removeTransientId(it));
+        return array;
+    }
+
     removeTransientId(object) {
         if (EntityUtils.prototype.isTransient(object)) {
             delete object.id;
