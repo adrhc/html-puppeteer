@@ -31,7 +31,7 @@
     </table>
 </div>
 
-<script id="readOnlyRowTmpl" type="x-tmpl-mustache">
+<script id="personsRoRowTmpl" type="x-tmpl-mustache">
     <tr data-owner="personsTable" data-id="{{id}}">
         <td>{{id}}</td>
         <td>{{firstName}}</td>
@@ -40,7 +40,7 @@
     </tr>
 </script>
 
-<template id="editableRowTmpl">
+<template id="personsEditableRowTmpl">
     <tr data-owner="personsTable" data-id="{{item.id}}" class="editor">
         <td>{{htmlId}}
             <input data-owner="personsTable" type="hidden" name="id" value="{{item.id}}">
@@ -62,14 +62,6 @@
         </td>
     </tr>
 </template>
-
-<!--
-<template id="readOnlyCatsRowTmpl">
-    <tr data-owner="catsTable" data-id="{{id}}">
-        <td>{{name}}</td>
-    </tr>
-</template>
--->
 
 <template id="readOnlyCatsRowTmpl">
     <tr data-owner="catsTable" data-id="{{id}}" class="editor">
@@ -135,7 +127,6 @@
 <script src="js/model/person.js"></script>
 <script src="js/person-row-editor/person-row-editor.js"></script>
 <script src="js/person-row-editor/factories/person-row-editor-factory.js"></script>
-<script src="js/person-row-editor/factories/cats-table-editor-factory.js"></script>
 <script src="js/repositories/persons-repository.js"></script>
 <script src="js/repositories/in-memory-persons-repository.js"></script>
 <!-- index -->

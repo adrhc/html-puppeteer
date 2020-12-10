@@ -8,7 +8,7 @@ mustacheTableElemAdapter.deleteAllRows();
 
 ### add rows
 ```javascript 1.8
-new TableEditorComponent(DATA, "personsTable", "readOnlyRowTmpl", "editableRowTmpl").render();
+new TableEditorComponent(DATA, "personsTable", "personsRoRowTmpl", "personsEditableRowTmpl").render();
 ```
 
 ### utils 

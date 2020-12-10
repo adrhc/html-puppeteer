@@ -21,7 +21,7 @@ if (Modernizr.template) {
         // const personsRepository = new PersonsRepository();
 
         TableEditorFactory.prototype.create({
-            tableId: "personsTable", repository: personsRepository,
+            tableId: "personsTable", bodyRowTmplId: "personsRoRowTmpl", repository: personsRepository,
             rowEditorComponentFactory: PersonRowEditorFactory.prototype.create
         }).init();
 

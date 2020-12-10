@@ -1,6 +1,6 @@
 class PersonRowEditorFactory {
-    create(mustacheTableElemAdapter, editableRowTmplId = "editableRowTmpl") {
-        const editableRow = new EditableRow(mustacheTableElemAdapter, {rowTmplId: editableRowTmplId});
+    create(mustacheTableElemAdapter) {
+        const editableRow = new EditableRow(mustacheTableElemAdapter, {rowTmplId: "personsEditableRowTmpl"});
         const buttonsRow = new ButtonsRow(mustacheTableElemAdapter, {});
         const rowEditorView = new RowEditorView(editableRow, buttonsRow);
         return new PersonRowEditorComponent(rowEditorView);

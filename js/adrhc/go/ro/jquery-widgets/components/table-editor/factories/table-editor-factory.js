@@ -8,7 +8,7 @@ class TableEditorFactory {
      */
     create({
                tableId,
-               bodyRowTmplId = "readOnlyRowTmpl",
+               bodyRowTmplId = "bodyRowTmplId",
                repository = new InMemoryTableEditorRepository(),
                rowEditorComponentFactory = RowEditorFactory.prototype.create
            }) {

@@ -13,7 +13,6 @@ class PersonRowEditorComponent extends RowEditorComponent {
      */
     init(item) {
         return super.init(item).then((it) => {
-            // this.catsTableEditor = CatsTableEditorFactory.prototype.create({cats: item.cats});
             this.catsTableEditor = ListEditorFactory.prototype.create({
                 items: item.cats,
                 tableId: "catsTable",
