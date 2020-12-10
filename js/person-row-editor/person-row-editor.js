@@ -29,7 +29,7 @@ class PersonRowEditorComponent extends RowEditorComponent {
      */
     extractEntity() {
         const item = super.extractEntity(true);
-        item.cats = EntityUtils.prototype.removeTransientIds(this.catsTableEditor.extractEntities());
+        item.cats = EntityUtils.prototype.removeGeneratedIds(this.catsTableEditor.extractEntities());
         return item;
     }
 

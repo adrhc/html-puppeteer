@@ -18,12 +18,19 @@ class EntityUtils {
     }
 
     isIdGenerated(id) {
-        return !this.isEmptyId(id) && id < 0;
+        return !this.isEmptyId(id) && +id < 0;
     }
 
-    removeTransientIds(array) {
-        array.forEach(it => EntityUtils.prototype.removeTransientId(it));
+    removeGeneratedIds(array) {
+        array.forEach(it => EntityUtils.prototype.removeGeneratedId(it));
         return array;
+    }
+
+    removeGeneratedId(object) {
+        if (EntityUtils.prototype.isIdGenerated(object.id)) {
+            delete object.id;
+        }
+        return object;
     }
 
     removeTransientId(object) {
