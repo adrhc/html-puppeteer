@@ -28,6 +28,8 @@ class RowEditorFactory {
                             editableRow = new EditableRow(mustacheTableElemAdapter, {rowTmplId: editableRowTmplId}),
                             rowEditorView = new RowEditorView(editableRow)
                         }) {
-        return new RowEditorComponent(rowEditorView);
+        return RowEditorFactory.prototype.create({
+            mustacheTableElemAdapter, editableRowTmplId, buttonsRow: null
+        });
     }
 }

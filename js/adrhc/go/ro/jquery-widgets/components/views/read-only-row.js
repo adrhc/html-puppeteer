@@ -23,4 +23,8 @@ class ReadOnlyRow {
     show(item) {
         this.mustacheTableElemAdapter.renderRowBeforeDataId(item.id, this.rowTmplHtml, item, true);
     }
+
+    get owner() {
+        return this.mustacheTableElemAdapter.tableId;
+    }
 }

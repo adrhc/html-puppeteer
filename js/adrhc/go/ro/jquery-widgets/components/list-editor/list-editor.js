@@ -18,9 +18,7 @@ class ListEditorComponent extends TableEditorComponent {
     onNewItem(ev) {
         const editableTable = ev.data;
         editableTable._createPersistentEmptyItem()
-            .then(savedItem => {
-                editableTable._switchToEdit(editableTable.state.switchSelectionTo(savedItem.id));
-            })
+            .then(savedItem => editableTable._switchToEdit(editableTable.state.switchSelectionTo(savedItem.id)))
     }
 
     /**

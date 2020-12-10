@@ -38,10 +38,22 @@ class TableEditorComponent {
      * @param ev {Event}
      */
     onSelectionSwitch(ev) {
-        if ($(this).data("id") === "newItemBtn") {
-            return false;
-        }
+        ev.stopPropagation();
         const editableTable = ev.data;
+        if (!$(this).is("tr,td,th")) {
+            return;
+        }
+        const isTr = $(this).is("tr");
+        if (isTr && $(this).data("id") === "newItemBtn") {
+            return;
+        }
+        const parentDataId = $(this).parent().data("id");
+        if (!isTr && parentDataId === "newItemBtn") {
+            return;
+        }
+        if (!!editableTable && parentDataId === editableTable.rowEditorComponent.buttonsRowDataId) {
+            return;
+        }
         const rowDataId = editableTable.editableTableView.rowDataIdOf(this);
         editableTable._switchToEdit(editableTable.state.switchSelectionTo(rowDataId));
     }
@@ -88,9 +100,9 @@ class TableEditorComponent {
      */
     _switchToEdit(stateChanges) {
         stateChanges
-            .then(stateChanges => {
+            .then(it => {
                 this.rowEditorComponent.close();
-                return stateChanges;
+                return it;
             })
             .then(stateChanges => this.editableTableView.updateView(stateChanges))
             .then(() => {
