@@ -38,7 +38,6 @@ class TableEditorComponent {
      * @param ev {Event}
      */
     onSelectionSwitch(ev) {
-        ev.stopPropagation();
         const editableTable = ev.data;
         if (!$(this).is("tr,td,th")) {
             return;
@@ -54,6 +53,7 @@ class TableEditorComponent {
         if (!!editableTable && parentDataId === editableTable.rowEditorComponent.buttonsRowDataId) {
             return;
         }
+        ev.stopPropagation();
         const rowDataId = editableTable.editableTableView.rowDataIdOf(this);
         editableTable._switchToEdit(editableTable.state.switchSelectionTo(rowDataId));
     }
