@@ -14,6 +14,8 @@ if (Modernizr.template) {
                 [{id: 1, name: "cat1"}, {id: 2, name: "cat2"}, {id: 3, name: "cat3"}]),
             new Person(2, "gigi2", "kent2",
                 [{id: 21, name: "cat21"}, {id: 22, name: "cat22"}, {id: 23, name: "cat23"}]),
+            new Person(4, "gigi4", "kent4",
+                [{id: 41, name: "cat41"}, {id: 22, name: "cat42"}, {id: 43, name: "cat43"}]),
             new Person(3, "gigi3", "kent3",
                 [{id: 31, name: "cat31"}, {id: 32, name: "cat32"}, {id: 33, name: "cat33"}])
         ];
