@@ -3,8 +3,8 @@ class PersonRowEditorComponent extends RowEditorComponent {
      * @param rowEditorState {RowEditorState}
      * @param rowEditorView {RowEditorView}
      */
-    constructor({rowEditorState, rowEditorView}) {
-        super({rowEditorState, rowEditorView});
+    constructor(rowEditorView, rowEditorState) {
+        super(rowEditorView, rowEditorState);
     }
 
     /**

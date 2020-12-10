@@ -5,11 +5,13 @@ class RowEditorFactory {
      * @param buttonsRow {ButtonsRow}
      * @return {RowEditorComponent}
      */
-    create({mustacheTableElemAdapter, editableRowTmplId = "editableRowTmpl", buttonsRow}) {
+    create({
+               mustacheTableElemAdapter, editableRowTmplId = "editableRowTmpl",
+               buttonsRow = new ButtonsRow(mustacheTableElemAdapter, {})
+           }) {
         const editableRow = new EditableRow(mustacheTableElemAdapter, {rowTmplId: editableRowTmplId});
-        buttonsRow = buttonsRow ? buttonsRow : new ButtonsRow(mustacheTableElemAdapter, {});
-        const rowEditorView = new RowEditorView({editableRow: editableRow, buttonsRow: buttonsRow});
-        return new RowEditorComponent({rowEditorView});
+        const rowEditorView = new RowEditorView(editableRow, buttonsRow);
+        return new RowEditorComponent(rowEditorView);
     }
 
     /**
@@ -18,10 +20,8 @@ class RowEditorFactory {
      * @return {RowEditorComponent}
      */
     createWithNoButtons({mustacheTableElemAdapter, editableRowTmplId}) {
-        return RowEditorFactory.prototype.create({
-            mustacheTableElemAdapter,
-            editableRowTmplId,
-            buttonsRow: new NoButtonsRow()
-        });
+        const editableRow = new EditableRow(mustacheTableElemAdapter, {rowTmplId: editableRowTmplId});
+        const rowEditorView = new RowEditorView(editableRow);
+        return new RowEditorComponent(rowEditorView);
     }
 }

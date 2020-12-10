@@ -3,7 +3,7 @@ class RowEditorComponent {
      * @param rowEditorState {RowEditorState}
      * @param rowEditorView {RowEditorView}
      */
-    constructor({rowEditorState = new RowEditorState(), rowEditorView}) {
+    constructor(rowEditorView, rowEditorState = new RowEditorState()) {
         this.rowEditorState = rowEditorState;
         this.rowEditorView = rowEditorView;
     }

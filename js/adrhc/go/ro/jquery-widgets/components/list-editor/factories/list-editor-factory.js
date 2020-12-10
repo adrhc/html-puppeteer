@@ -4,7 +4,7 @@ class ListEditorFactory {
                tableId = "listEditor",
                bodyRowTmplId = "readOnlyListRowTmpl",
                editableRowTmplId = "editableListRowTmpl",
-               rowEditorComponentFactory = RowEditorFactory.prototype.create
+               rowEditorComponentFactory = RowEditorFactory.prototype.createWithNoButtons
            }) {
         const mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, bodyRowTmplId);
 

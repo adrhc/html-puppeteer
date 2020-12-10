@@ -3,7 +3,7 @@ class RowEditorView {
      * @param editableRow {EditableRow}
      * @param buttonsRow {ButtonsRow}
      */
-    constructor({editableRow, buttonsRow}) {
+    constructor(editableRow, buttonsRow) {
         this.editableRow = editableRow;
         this.buttonsRow = buttonsRow;
     }
