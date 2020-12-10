@@ -1,15 +1,15 @@
 class TableEditorFactory {
     /**
      * @param tableId {string}
-     * @param repository {TableEditorRepository}
      * @param bodyRowTmplId {string}
+     * @param repository {TableEditorRepository}
      * @param rowEditorComponent {RowEditorComponent}
      * @return {TableEditorComponent}
      */
     create({
                tableId,
-               repository = new InMemoryTableEditorRepository(),
                bodyRowTmplId = "readOnlyRowTmpl",
+               repository = new InMemoryTableEditorRepository(),
                rowEditorComponentFactory = RowEditorFactory.prototype.create
            }) {
         const mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, bodyRowTmplId);
