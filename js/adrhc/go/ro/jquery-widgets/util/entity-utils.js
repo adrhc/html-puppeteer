@@ -3,6 +3,13 @@ class EntityUtils {
         return "newId";
     }
 
+    haveSameId(item1, item2) {
+        if (!item1 || !item2 || !item1.id || !item2.id) {
+            return false;
+        }
+        return +item1.id === +item2.id;
+    }
+
     /**
      * @return {number}
      */
