@@ -21,6 +21,11 @@ class ListEditorComponent extends TableEditorComponent {
             .then(savedItem => editableTable._switchToEdit(editableTable.state.switchSelectionTo(savedItem.id)))
     }
 
+    onSelectionSwitch() {
+        // do nothing
+        return true;
+    }
+
     /**
      * @return {Promise<IdentifiableEntity>}
      * @private
