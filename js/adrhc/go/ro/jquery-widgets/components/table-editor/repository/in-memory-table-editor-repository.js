@@ -1,4 +1,7 @@
 class InMemoryTableEditorRepository extends TableEditorRepository {
+    /**
+     * @param items {Array<IdentifiableEntity>}
+     */
     constructor(items) {
         super();
         if (items) {
