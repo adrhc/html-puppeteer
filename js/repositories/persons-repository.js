@@ -24,7 +24,7 @@ class PersonsRepository extends TableEditorRepository {
      * @return {Promise<Person[]>}
      */
     getAll() {
-        return $.getJSON(this.URL)
+        return $.getJSON(`${this.URL}?projection=PersonWithCats`)
             .then(data => RestUtils.prototype.unwrapHAL(data));
     }
 
