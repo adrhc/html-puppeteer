@@ -137,7 +137,8 @@ class TableEditorComponent {
     _handleRepoError(promise) {
         return promise.catch((jqXHR, textStatus, errorThrown) => {
             console.log(textStatus, errorThrown);
-            alert(textStatus);
+            alert(`${textStatus}\n${jqXHR.responseText}`);
+            throw textStatus;
         });
     }
 

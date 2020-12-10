@@ -29,7 +29,6 @@ class PersonRowEditorComponent extends RowEditorComponent {
      */
     extractEntity() {
         const item = super.extractEntity(true);
-        // item.cats = Object.values(this.catsTableEditor.state.items);
         item.cats = this.catsTableEditor.extractEntities();
         return item;
     }
