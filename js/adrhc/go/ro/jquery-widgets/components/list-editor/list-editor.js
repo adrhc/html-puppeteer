@@ -31,8 +31,8 @@ class ListEditorComponent extends TableEditorComponent {
         const newItem = this.state.insertNewItem();
         return this.repository.insert(newItem)
             .then(savedItem => {
-                editableTable.state.removeTransientItem();
-                editableTable.state.replaceItem(savedItem);
+                this.state.removeTransientItem();
+                this.state.replaceItem(savedItem);
                 return savedItem;
             });
     }
