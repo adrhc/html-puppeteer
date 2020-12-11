@@ -1,7 +1,7 @@
 /**
  * also extends DynaSelOneRepository.findByTitle
  */
-class InMemoryPersonsRepository extends InMemoryTableEditorRepository {
+class InMemoryPersonsRepository extends InMemoryCrudRepository {
     constructor(items) {
         super(items);
     }

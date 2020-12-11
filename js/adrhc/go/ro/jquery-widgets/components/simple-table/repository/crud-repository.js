@@ -1,4 +1,4 @@
-class TableEditorRepository {
+class CrudRepository {
     /**
      * @param item {IdentifiableEntity}
      * @return {Promise<IdentifiableEntity>}

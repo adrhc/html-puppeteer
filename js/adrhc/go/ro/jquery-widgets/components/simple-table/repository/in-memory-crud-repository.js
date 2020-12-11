@@ -1,4 +1,4 @@
-class InMemoryTableEditorRepository extends TableEditorRepository {
+class InMemoryCrudRepository extends CrudRepository {
     /**
      * @param items {Array<IdentifiableEntity>}
      */

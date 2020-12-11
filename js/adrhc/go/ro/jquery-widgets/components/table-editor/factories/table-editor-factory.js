@@ -2,14 +2,14 @@ class TableEditorFactory {
     /**
      * @param tableId {string}
      * @param bodyRowTmplId {string}
-     * @param repository {TableEditorRepository}
+     * @param repository {CrudRepository}
      * @param rowEditorComponent {RowEditorComponent}
      * @return {TableEditorComponent}
      */
     create({
                tableId,
                bodyRowTmplId = "bodyRowTmplId",
-               repository = new InMemoryTableEditorRepository(),
+               repository = new InMemoryCrudRepository(),
                rowEditorComponentFactory = RowEditorFactory.prototype.create
            }) {
         const mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, bodyRowTmplId);

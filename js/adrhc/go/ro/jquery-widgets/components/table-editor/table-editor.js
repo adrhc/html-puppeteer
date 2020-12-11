@@ -9,7 +9,7 @@ class TableEditorComponent {
     /**
      * @param editableTableView {TableEditorView}
      * @param tableElementAdapter {TableElementAdapter}
-     * @param repository {TableEditorRepository}
+     * @param repository {CrudRepository}
      * @param rowEditorComponent {RowEditorComponent}
      * @param state {TableEditorState}
      */
