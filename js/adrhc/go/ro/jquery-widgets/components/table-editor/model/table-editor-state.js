@@ -68,7 +68,7 @@ class TableEditorState {
         let position = stateChange.position;
         if (stateChange.crudOperation === "DELETE") {
             // selected item was transient (and removed by cancelSelection)
-            this.insertItem(item, stateChange.position, this._items);
+            this.insertItem(item, stateChange.position);
             crudOperation = "CREATE";
         } else {
             // selected item was a persistent one
@@ -181,10 +181,9 @@ class TableEditorState {
         return item;
     }
 
-    insertItem(item, position, items) {
-        ArrayUtils.prototype.insert(item, position, items)
+    insertItem(item, position) {
+        ArrayUtils.prototype.insert(item, position, this._items)
     }
-
 
     /**
      * @return {number|number[]} removed positions (aka indexes)

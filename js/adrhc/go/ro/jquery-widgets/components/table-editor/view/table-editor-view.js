@@ -29,12 +29,12 @@ class TableEditorView {
                 case "DELETE":
                     this.mustacheTableElemAdapter.deleteRowByDataId(sc.item.id)
                     break;
-                case "CREATE":
-                case "UPDATE":
+                default:
                     const isNotFirstRow = sc.position > 0;
                     if (this.readOnlyRow) {
                         this.readOnlyRow.show(sc.item, !isNotFirstRow);
                     } else {
+                        // by default only create the row but won't fill it
                         this.mustacheTableElemAdapter.renderRowBeforeDataId(sc.item.id, undefined, undefined, true, !isNotFirstRow);
                     }
                     break;

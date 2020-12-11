@@ -12,6 +12,9 @@ class PersonRowEditorComponent extends RowEditorComponent {
      * @return {Promise<IdentifiableEntity>}
      */
     init(item) {
+        // cats array itself is edited so shouldn't be the received (original) one
+        // item has not this issue because it's recreated on request (extractEntity)
+        // item is cloned by super.init(item)
         return super.init(item).then((it) => {
             this.catsTableEditor = ListEditorFactory.prototype.create({
                 items: item.cats,

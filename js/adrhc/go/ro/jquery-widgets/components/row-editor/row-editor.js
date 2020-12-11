@@ -9,14 +9,18 @@ class RowEditorComponent {
     }
 
     /**
+     * item is cloned
+     *
      * @param item {IdentifiableEntity}
      */
     init(item) {
         console.log("RowEditorComponent.init\n", item)
-        return this.rowEditorState.init(item).then(item => {
-            this.rowEditorView.show(item);
-            return item;
-        })
+        return this.rowEditorState
+            .init(IdentifiableEntity.prototype.clone(item))
+            .then(item => {
+                this.rowEditorView.show(item);
+                return item;
+            })
     }
 
     close() {

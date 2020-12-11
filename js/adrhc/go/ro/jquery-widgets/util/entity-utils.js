@@ -121,7 +121,7 @@ class EntityUtils {
      */
     removeById(id, items) {
         return ArrayUtils.prototype.removeFirstByFilter(items,
-            (it) => EntityUtils.prototype.haveSameId(it, items))
+            (it) => EntityUtils.prototype.idsAreEqual(it.id, id))
     }
 
     newIdentifiableEntity() {

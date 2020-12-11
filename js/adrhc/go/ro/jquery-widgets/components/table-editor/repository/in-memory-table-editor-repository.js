@@ -11,7 +11,7 @@ class InMemoryTableEditorRepository extends TableEditorRepository {
      * @return {Promise<IdentifiableEntity[]>}
      */
     getAll() {
-        return Promise.resolve(this.items);
+        return Promise.resolve($.extend(true, [], this.items));
     }
 
     /**
