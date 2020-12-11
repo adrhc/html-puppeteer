@@ -12,14 +12,16 @@ class TableEditorComponent {
      * @param repository {TableEditorRepository}
      * @param rowEditorComponent {RowEditorComponent}
      * @param state {TableEditorState}
+     * @param appendNewRows {boolean}
      */
     constructor(editableTableView, tableElementAdapter, repository,
-                rowEditorComponent, state = new TableEditorState()) {
+                rowEditorComponent, state = new TableEditorState(), appendNewRows) {
         this.editableTableView = editableTableView;
         this.tableElementAdapter = tableElementAdapter;
         this.repository = repository;
-        this.state = state;
         this.rowEditorComponent = rowEditorComponent;
+        this.state = state;
+        this.appendNewRows = appendNewRows;
     }
 
     /**
@@ -29,7 +31,7 @@ class TableEditorComponent {
      */
     onNewItem(ev) {
         const editableTable = ev.data;
-        editableTable._switchToEdit(editableTable.state.createTransientSelection());
+        editableTable._switchToEdit(editableTable.state.createTransientSelection(this.appendNewRows));
     }
 
     /**

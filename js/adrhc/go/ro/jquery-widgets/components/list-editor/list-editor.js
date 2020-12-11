@@ -8,6 +8,7 @@ class ListEditorComponent extends TableEditorComponent {
      */
     constructor(editableTableView, tableElementAdapter, repository, rowEditorComponent, state) {
         super(editableTableView, tableElementAdapter, repository, rowEditorComponent, state);
+        this.editableTableView.appendNewRows = true;
     }
 
     /**

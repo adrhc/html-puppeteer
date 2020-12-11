@@ -29,8 +29,7 @@ class InMemoryTableEditorRepository extends TableEditorRepository {
      * @return {Promise<IdentifiableEntity>}
      */
     update(item) {
-        ArrayUtils.prototype.findAndReplaceByFilter(item,
-            this.items, (it) => EntityUtils.prototype.haveSameId(it, item));
+        EntityUtils.prototype.findAndReplaceById(item, this.items);
         return Promise.resolve(item);
     }
 }

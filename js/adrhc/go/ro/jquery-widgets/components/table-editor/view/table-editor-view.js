@@ -3,9 +3,10 @@ class TableEditorView {
      * @param readOnlyRow {ReadOnlyRow}
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      */
-    constructor(mustacheTableElemAdapter, readOnlyRow) {
+    constructor(mustacheTableElemAdapter, readOnlyRow, appendNewRows) {
         this.readOnlyRow = readOnlyRow;
         this.mustacheTableElemAdapter = mustacheTableElemAdapter;
+        this.appendNewRows = appendNewRows;
     }
 
     init(items) {
@@ -27,7 +28,7 @@ class TableEditorView {
         stateChanges.forEach(sc => {
             if (sc.isTransient) {
                 if (sc.isSelected) {
-                    this.mustacheTableElemAdapter.prependEmptyRow(sc.item.id);
+                    this.mustacheTableElemAdapter.showEmptyRow(sc.item.id, this.appendNewRows);
                 } else {
                     this.mustacheTableElemAdapter.deleteRowByDataId(sc.item.id)
                 }

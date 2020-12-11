@@ -71,11 +71,31 @@ class TableElementAdapter {
     }
 
     /**
-     * @param rowDataId
+     * @param rowDataId {string}
+     * @param append {boolean}
+     */
+    showEmptyRow(rowDataId, append) {
+        if (append) {
+            this.appendEmptyRow(rowDataId);
+        } else {
+            this.prependEmptyRow(rowDataId);
+        }
+    }
+
+    /**
+     * @param rowDataId {string}
      * @return {jQuery}
      */
     prependEmptyRow(rowDataId) {
         return this.$tbody.prepend(`<tr data-owner='${this.tableId}' data-id='${rowDataId}'></tr>`);
+    }
+
+    /**
+     * @param rowDataId
+     * @return {jQuery}
+     */
+    appendEmptyRow(rowDataId) {
+        return this.$tbody.append(`<tr data-owner='${this.tableId}' data-id='${rowDataId}'></tr>`);
     }
 
     /**

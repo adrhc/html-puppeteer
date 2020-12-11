@@ -62,9 +62,10 @@ class TableEditorState {
     }
 
     /**
+     * @param appendNewRows {boolean}
      * @returns {StateChange[]|undefined}
      */
-    createTransientSelection() {
+    createTransientSelection(appendNewRows) {
         if (this._transientSelectionExists) {
             // current (transient) selection is not changed
             return undefined;
@@ -106,41 +107,51 @@ class TableEditorState {
         if (!this.selectionExists()) {
             return undefined;
         }
-        return this._items[this._selectedId];
+        return this.findById(this._selectedId)
+    }
+
+    /**
+     * @param id {number}
+     * @return {IdentifiableEntity}
+     */
+    findById(id) {
+        return EntityUtils.prototype.findById(id, this._items)
     }
 
     /**
      * private method
      */
     _getItemById(id) {
-        if (!this._items || !this._items[id]) {
+        const item = this.findById(id);
+        if (!this._items) {
             return undefined;
         }
-        return this._items[id];
+        return item;
     }
 
     /**
      * @param item {IdentifiableEntity}
      */
     replaceItem(item) {
-        this._items[item.id] = item;
+        EntityUtils.prototype.findAndReplaceById(item, this._items);
     }
 
-    insertNewItem() {
-        const transientId = EntityUtils.prototype.transientId;
-        this._items[transientId] = {id: transientId};
-        return this._items[transientId];
+    insertNewItem(appendNewRows) {
+        const item = EntityUtils.prototype.newIdentifiableEntity();
+        if (appendNewRows) {
+            this._items.push(item);
+        } else {
+            this._items.unshift(item);
+        }
+        return item;
     }
 
-    /**
-     * @private
-     */
     removeSelectedItem() {
-        delete this._items[this._selectedId];
+        return EntityUtils.prototype.removeById(this._selectedId, this.items);
     }
 
     removeTransientItem() {
-        delete this._items[EntityUtils.prototype.transientId];
+        return EntityUtils.prototype.removeTransient(this.items);
     }
 
     /**
@@ -158,9 +169,8 @@ class TableEditorState {
      * this plays also the role of an "initialization" method
      */
     set items(items) {
-        this._items = {};
+        this._items = items;
         this._selectedId = undefined;
-        items.forEach(p => this._items[p.id] = p);
     }
 
     get items() {
