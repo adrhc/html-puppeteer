@@ -27,7 +27,7 @@ class ListEditorComponent extends TableEditorComponent {
     }
 
     /**
-     * @param stateChanges {Promise<Array<StateChange>>}
+     * @param stateChanges {Promise<Array<SelectableStateChange>>}
      * @private
      */
     _switchToEdit(stateChanges) {

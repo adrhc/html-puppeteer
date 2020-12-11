@@ -2,7 +2,7 @@ class InMemoryCrudRepository extends CrudRepository {
     /**
      * @param items {Array<IdentifiableEntity>}
      */
-    constructor(items) {
+    constructor(items = []) {
         super();
         this.items = items;
     }

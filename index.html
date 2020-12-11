@@ -17,6 +17,27 @@
 <body>
 <div id="dyna-sel-one" class="dyna-sel-one-comp"></div>
 
+<div class="dogsTable">
+    <table id="dogsTable" class="responstable">
+        <thead>
+        <tr data-owner="dogsTable">
+            <th>
+                <button data-owner="dogsTable" type="button" name="newItemBtn">new dog</button>
+            </th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<template id="readOnlyDogsRowTmpl">
+    <tr data-owner="dogsTable" data-id="{{id}}">
+        <td>
+            <input type="hidden" name="id" value="{{id}}">
+            <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
+        </td>
+    </tr>
+</template>
+
 <div class="personsTable">
     <label for="personsTable">dublu click pe antetul tabelului pt a creea un nou rand</label>
     <table id="personsTable" class="responstable">
@@ -38,6 +59,7 @@
         <td>{{lastName}}</td>
         <td>{{#each cats}}<div>{{{this.name}}}</div>{{/each}}</td>
     </tr>
+
 </script>
 
 <template id="personsEditableRowTmpl">
@@ -46,7 +68,8 @@
             <input data-owner="personsTable" type="hidden" name="id" value="{{item.id}}">
         </td>
         <td>
-            <input data-owner="personsTable" type="text" autocomplete="off" name="firstName" value="{{item.firstName}}" data-focus-me="true">
+            <input data-owner="personsTable" type="text" autocomplete="off" name="firstName" value="{{item.firstName}}"
+                   data-focus-me="true">
         </td>
         <td>
             <input data-owner="personsTable" type="text" autocomplete="off" name="lastName" value="{{item.lastName}}">
@@ -55,7 +78,9 @@
             <table id="catsTable" class="catsTable">
                 <thead>
                 <tr data-owner="catsTable">
-                    <th><button data-owner="catsTable" type="button" name="newItemBtn">new cat</button></th>
+                    <th>
+                        <button data-owner="catsTable" type="button" name="newItemBtn">new cat</button>
+                    </th>
                 </tr>
                 </thead>
             </table>
@@ -101,6 +126,7 @@
 <script src="js/adrhc/go/ro/jquery-widgets/components/views/read-only-row.js"></script>
 <!-- simple-table -->
 <script src="js/adrhc/go/ro/jquery-widgets/components/simple-table/model/simple-table-state.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/simple-table/model/crud-state-change.js"></script>
 <script src="js/adrhc/go/ro/jquery-widgets/components/simple-table/repository/crud-repository.js"></script>
 <script src="js/adrhc/go/ro/jquery-widgets/components/simple-table/repository/in-memory-crud-repository.js"></script>
 <script src="js/adrhc/go/ro/jquery-widgets/components/simple-table/view/simple-table-view.js"></script>
@@ -115,7 +141,7 @@
 <script src="js/adrhc/go/ro/jquery-widgets/components/row-editor/row-editor.js"></script>
 <script src="js/adrhc/go/ro/jquery-widgets/components/row-editor/factories/row-editor-factory.js"></script>
 <!-- table-editor -->
-<script src="js/adrhc/go/ro/jquery-widgets/components/table-editor/model/state-change.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/table-editor/model/selectable-state-change.js"></script>
 <script src="js/adrhc/go/ro/jquery-widgets/components/table-editor/model/table-editor-state.js"></script>
 <script src="js/adrhc/go/ro/jquery-widgets/components/table-editor/view/table-editor-view.js"></script>
 <script src="js/adrhc/go/ro/jquery-widgets/components/table-editor/table-editor.js"></script>

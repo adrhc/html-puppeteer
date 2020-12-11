@@ -3,7 +3,7 @@ class TableEditorState {
     _items = undefined;
 
     /**
-     * @returns {StateChange|undefined} cancelled and no longer selected StateChange
+     * @returns {SelectableStateChange|undefined} cancelled and no longer selected SelectableStateChange
      */
     cancelSelection() {
         if (!this.selectionExists()) {
@@ -18,7 +18,7 @@ class TableEditorState {
             this.removeTransientItem();
         }
         this._selectedId = undefined;
-        return new StateChange(prevTabularItemState, position, {
+        return new SelectableStateChange(prevTabularItemState, position, {
             crudOperation: transientSelectionExists ? "DELETE" : undefined
         });
     }
@@ -26,7 +26,7 @@ class TableEditorState {
     /**
      * @param selectedId {number}
      * @param crudOperation {"CREATE"|"UPDATE"|"DELETE"|undefined}
-     * @returns {Promise<StateChange[]>} cancelled StateChange (no longer selected) and the updated StateChange (selected)
+     * @returns {Promise<SelectableStateChange[]>} cancelled SelectableStateChange (no longer selected) and the updated SelectableStateChange (selected)
      */
     switchSelectionTo(selectedId, crudOperation) {
         if (this.isIdSelected(selectedId)) {
@@ -39,20 +39,20 @@ class TableEditorState {
             this._selectedId = selectedId;
             // because a transient de-selection is advertised as a removal
             // than a transient selection is advertised as a creation
-            return Promise.resolve([new StateChange(this.selectedItem, this.selectedItemPosition,
+            return Promise.resolve([new SelectableStateChange(this.selectedItem, this.selectedItemPosition,
                 {crudOperation, isSelected: true})]);
         }
         this._selectedId = selectedId;
         // because a transient de-selection is advertised as a removal
         // than a transient selection is advertised as a creation
-        const selectedStateChange = new StateChange(this.selectedItem, this.selectedItemPosition,
+        const selectedStateChange = new SelectableStateChange(this.selectedItem, this.selectedItemPosition,
             {crudOperation, isSelected: true});
         return Promise.resolve([cancelStateChange, selectedStateChange]);
     }
 
     /**
      * @param item
-     * @returns {StateChange[]|undefined} cancelled StateChange and the updated StateChange (both no longer selected)
+     * @returns {SelectableStateChange[]|undefined} cancelled SelectableStateChange and the updated SelectableStateChange (both no longer selected)
      */
     cancelSelectionAndUpdateItem(item) {
         if (this._isTransientId(item.id)) {
@@ -77,12 +77,12 @@ class TableEditorState {
         }
         // when "previous" is a transient than the updated is in fact
         // a "new" item to be stored which appears as a creation
-        return [stateChange, new StateChange(this._getItemById(item.id), position, {crudOperation})];
+        return [stateChange, new SelectableStateChange(this._getItemById(item.id), position, {crudOperation})];
     }
 
     /**
      * @param append {boolean}
-     * @returns {Promise<StateChange[]>}
+     * @returns {Promise<SelectableStateChange[]>}
      */
     createTransientSelection(append) {
         if (this._transientSelectionExists) {

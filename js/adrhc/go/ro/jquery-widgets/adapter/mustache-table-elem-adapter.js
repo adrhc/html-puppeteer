@@ -2,9 +2,9 @@ class MustacheTableElemAdapter extends TableElementAdapter {
     /**
      * @param tableId {string}
      * @param bodyRowTmplId {string}
-     * @param bodyTmplHtml {string}
+     * @param bodyTmplHtml {string|undefined}
      */
-    constructor(tableId, bodyRowTmplId, bodyTmplHtml) {
+    constructor(tableId, bodyRowTmplId, bodyTmplHtml = undefined) {
         super(tableId);
         this.bodyRowTmplHtml = HtmlUtils.prototype.templateTextOf(bodyRowTmplId);
         this.bodyTmplHtml = bodyTmplHtml ? bodyTmplHtml : "{{#items}}{{> bodyRowTmpl}}{{/items}}";

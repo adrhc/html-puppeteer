@@ -86,7 +86,7 @@ class TableEditorComponent {
     }
 
     /**
-     * @param stateChanges {Array<StateChange>}
+     * @param stateChanges {Array<SelectableStateChange>}
      * @private
      */
     _switchToReadOnly(stateChanges) {
@@ -95,7 +95,7 @@ class TableEditorComponent {
     }
 
     /**
-     * @param stateChanges {Promise<Array<StateChange>>}
+     * @param stateChanges {Promise<Array<SelectableStateChange>>}
      * @private
      */
     _switchToEdit(stateChanges) {

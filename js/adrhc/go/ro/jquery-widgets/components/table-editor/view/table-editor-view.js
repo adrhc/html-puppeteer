@@ -17,7 +17,7 @@ class TableEditorView {
     }
 
     /**
-     * @param stateChanges {StateChange[]|undefined}
+     * @param stateChanges {SelectableStateChange[]|undefined}
      */
     updateView(stateChanges) {
         if (!stateChanges) {

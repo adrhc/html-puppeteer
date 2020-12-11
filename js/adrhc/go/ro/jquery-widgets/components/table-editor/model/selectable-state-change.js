@@ -1,4 +1,4 @@
-class StateChange {
+class SelectableStateChange extends CrudStateChange {
     /**
      * @param item {IdentifiableEntity}
      * @param position {number}
@@ -6,9 +6,7 @@ class StateChange {
      * @param isSelected {boolean|undefined}
      */
     constructor(item, position, {crudOperation, isSelected}) {
-        this.item = item;
-        this.position = position;
-        this.crudOperation = crudOperation;
+        super(item, position, crudOperation);
         this.isSelected = isSelected;
     }
 }

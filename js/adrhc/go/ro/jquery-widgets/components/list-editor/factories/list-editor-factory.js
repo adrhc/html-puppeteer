@@ -3,10 +3,10 @@ class ListEditorFactory {
                items = [],
                tableId = "listEditor",
                bodyRowTmplId = "readOnlyListRowTmpl",
+               mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, bodyRowTmplId),
                editableRowTmplId = "editableListRowTmpl",
                rowEditorComponentFactory = RowEditorFactory.prototype.createWithNoButtons
            }) {
-        const mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, bodyRowTmplId);
 
         const rowEditorComponent = rowEditorComponentFactory({mustacheTableElemAdapter, editableRowTmplId});
 
