@@ -37,7 +37,7 @@ class ListEditorComponent extends TableEditorComponent {
                 return it;
             })
             .then(() => {
-                this.rowEditorComponent.init(this.state.selectedItem);
+                this.rowEditorComponent.init(this.state.selectedItem, true);
             });
     }
 

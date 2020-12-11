@@ -35,7 +35,7 @@ class TableEditorView {
                         this.readOnlyRow.show(sc.item, !isNotFirstRow);
                     } else {
                         // by default only create the row but won't fill it
-                        this.mustacheTableElemAdapter.renderRowBeforeDataId(sc.item.id, undefined, undefined, true, !isNotFirstRow);
+                        this.mustacheTableElemAdapter.renderRowBeforeDataId(sc.item.id, undefined, undefined, true, isNotFirstRow);
                     }
                     break;
             }

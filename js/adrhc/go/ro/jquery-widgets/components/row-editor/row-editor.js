@@ -12,13 +12,14 @@ class RowEditorComponent {
      * item is cloned
      *
      * @param item {IdentifiableEntity}
+     * @param putAtBottomIfNotExists {boolean|undefined}
      */
-    init(item) {
+    init(item, putAtBottomIfNotExists) {
         console.log("RowEditorComponent.init\n", item)
         return this.rowEditorState
             .init(IdentifiableEntity.prototype.clone(item))
             .then(item => {
-                this.rowEditorView.show(item);
+                this.rowEditorView.show(item, putAtBottomIfNotExists);
                 return item;
             })
     }

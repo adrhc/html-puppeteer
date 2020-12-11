@@ -7,8 +7,8 @@ class EditableRow extends ReadOnlyRow {
         super(mustacheTableElemAdapter, config);
     }
 
-    show(item) {
-        super.show(this.itemViewOf(item));
+    show(item, putAtBottomIfNotExists) {
+        super.show(this.itemViewOf(item), putAtBottomIfNotExists);
         this.focusFirstInput(item.id);
     }
 

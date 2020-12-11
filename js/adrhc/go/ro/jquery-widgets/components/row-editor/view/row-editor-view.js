@@ -10,9 +10,10 @@ class RowEditorView {
 
     /**
      * @param item {IdentifiableEntity}
+     * @param putAtBottomIfNotExists {boolean|undefined}
      */
-    show(item) {
-        this.editableRow.show(item);
+    show(item, putAtBottomIfNotExists) {
+        this.editableRow.show(item, putAtBottomIfNotExists);
         if (this.buttonsRow) {
             this.buttonsRow.show(item)
         }

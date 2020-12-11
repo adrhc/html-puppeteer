@@ -25,7 +25,7 @@ class ReadOnlyRow {
      * @param putAtBottomIfNotExists {boolean|undefined}
      */
     show(item, putAtBottomIfNotExists) {
-        this.mustacheTableElemAdapter.renderRowBeforeDataId(item.id, this.rowTmplHtml, item, true);
+        this.mustacheTableElemAdapter.renderRowBeforeDataId(item.id, this.rowTmplHtml, item, true, putAtBottomIfNotExists);
     }
 
     get owner() {
