@@ -24,49 +24,61 @@ class TableElementAdapter {
     /**
      * @param rowDataId {string|number}
      * @param rowHtml {string}
-     * @param replaceExistingIfExists {boolean}: whether to replace or append a new row
+     * @param replaceExisting {boolean}: whether to replace or append a new row
+     * @param putAtBottomIfNotExists {boolean}
      */
-    renderRowBeforeDataId(rowDataId, rowHtml, replaceExistingIfExists) {
+    renderRowBeforeDataId(rowDataId, rowHtml, replaceExisting, putAtBottomIfNotExists) {
         const $existingRow = this.$getRowByDataId(rowDataId);
-        this._replaceOrCreateRow($existingRow, rowHtml, 'before', replaceExistingIfExists);
+        this._replaceOrCreateRow($existingRow,
+            rowHtml ? rowHtml : this.emptyRowHtmlOf(rowDataId),
+            'before', replaceExisting, putAtBottomIfNotExists);
     }
 
     /**
      * @param rowDataId {string|number}
      * @param rowHtml {string}
-     * @param replaceExistingIfExists {boolean}: whether to replace or append a new row
+     * @param replaceExisting {boolean}: whether to replace or append a new row
+     * @param putAtBottomIfNotExists {boolean}
      */
-    renderRowAfterDataId(rowDataId, rowHtml, replaceExistingIfExists) {
+    renderRowAfterDataId(rowDataId, rowHtml, replaceExisting, putAtBottomIfNotExists) {
         const $existingRow = this.$getRowByDataId(rowDataId);
-        this._replaceOrCreateRow($existingRow, rowHtml, 'after', replaceExistingIfExists);
+        this._replaceOrCreateRow($existingRow,
+            rowHtml ? rowHtml : this.emptyRowHtmlOf(rowDataId),
+            'after', replaceExisting, putAtBottomIfNotExists);
     }
 
     /**
      * @param index {number}: row index
      * @param rowHtml {string}: row HTML
-     * @param replaceExistingIfExists {boolean}: whether to replace or append a new row
+     * @param replaceExisting {boolean}: whether to replace or append a new row
+     * @param putAtBottomIfNotExists {boolean}
      */
-    renderRowAtIndex(index, rowHtml, replaceExistingIfExists) {
+    renderRowAtIndex(index, rowHtml, replaceExisting, putAtBottomIfNotExists) {
         const $existingRow = this.$getRowAtIndex(index);
-        this._replaceOrCreateRow($existingRow, rowHtml, 'before', replaceExistingIfExists);
+        this._replaceOrCreateRow($existingRow, rowHtml, 'before', replaceExisting, putAtBottomIfNotExists);
     }
 
     /**
-     * @param $existingRow
-     * @param rowHtml
-     * @param replaceExistingIfExists
+     * @param $existingRow {jQuery<HTMLTableRowElement>}
+     * @param rowHtml {string}
+     * @param replaceExisting {boolean}
      * @param where {'before', 'after'}
+     * @param putAtBottomIfNotExists {boolean}
      * @private
      */
-    _replaceOrCreateRow($existingRow, rowHtml, where, replaceExistingIfExists) {
+    _replaceOrCreateRow($existingRow, rowHtml, where, replaceExisting, putAtBottomIfNotExists) {
         if ($existingRow.length) {
-            if (replaceExistingIfExists) {
+            if (replaceExisting) {
                 $existingRow.replaceWith(rowHtml);
             } else {
                 $existingRow[where]($(rowHtml));
             }
         } else {
-            this.$tbody.prepend($(rowHtml));
+            if (putAtBottomIfNotExists) {
+                this.$tbody.append($(rowHtml));
+            } else {
+                this.$tbody.prepend($(rowHtml));
+            }
         }
     }
 
@@ -76,26 +88,14 @@ class TableElementAdapter {
      */
     showEmptyRow(rowDataId, append) {
         if (append) {
-            this.appendEmptyRow(rowDataId);
+            return this.$tbody.append(this.emptyRowHtmlOf(rowDataId));
         } else {
-            this.prependEmptyRow(rowDataId);
+            return this.$tbody.prepend(this.emptyRowHtmlOf(rowDataId));
         }
     }
 
-    /**
-     * @param rowDataId {string}
-     * @return {jQuery}
-     */
-    prependEmptyRow(rowDataId) {
-        return this.$tbody.prepend(`<tr data-owner='${this.tableId}' data-id='${rowDataId}'></tr>`);
-    }
-
-    /**
-     * @param rowDataId
-     * @return {jQuery}
-     */
-    appendEmptyRow(rowDataId) {
-        return this.$tbody.append(`<tr data-owner='${this.tableId}' data-id='${rowDataId}'></tr>`);
+    emptyRowHtmlOf(rowDataId) {
+        return `<tr data-owner='${this.tableId}' data-id='${rowDataId}'></tr>`;
     }
 
     /**

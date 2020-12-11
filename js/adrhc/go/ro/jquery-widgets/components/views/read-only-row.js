@@ -20,7 +20,11 @@ class ReadOnlyRow {
         this.mustacheTableElemAdapter.deleteRowByDataId(item.id)
     }
 
-    show(item) {
+    /**
+     * @param item {IdentifiableEntity}
+     * @param putAtBottomIfNotExists {boolean|undefined}
+     */
+    show(item, putAtBottomIfNotExists) {
         this.mustacheTableElemAdapter.renderRowBeforeDataId(item.id, this.rowTmplHtml, item, true);
     }
 

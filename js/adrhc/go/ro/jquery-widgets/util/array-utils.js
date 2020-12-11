@@ -1,17 +1,16 @@
 class ArrayUtils {
     /**
-     * @param item {IdentifiableEntity}
+     * @param item
      * @param items {Array<IdentifiableEntity>}
      * @param filter
-     * @return {boolean}
+     * @return {number} item index
      */
     findAndReplaceByFilter(item, items, filter) {
         const index = items.findIndex(filter);
-        if (index < 0) {
-            return false;
+        if (index >= 0) {
+            items.splice(index, 1, item);
         }
-        items.splice(index, 1, item);
-        return true;
+        return index;
     }
 
     /**
@@ -21,16 +20,29 @@ class ArrayUtils {
      * @return {{}}
      */
     findFirstByKeyAndNumberValue(keyName, keyValue, items) {
-        return items.find(it => +it[keyName] === +keyValue);
+        return items.find(it => it[keyName] == keyValue);
     }
 
     /**
      * @param items {Array<{}>}
      * @param filter
-     * @return {boolean}
+     * @return {number} removed index
      */
     removeFirstByFilter(items, filter) {
         const index = items.findIndex(filter);
-        return items.splice(index, 1) > 0;
+        if (index < 0) {
+            return index;
+        }
+        items.splice(index, 1);
+        return index;
+    }
+
+    /**
+     * @param item
+     * @param index {number}
+     * @param items {Array}
+     */
+    insert(item, index, items) {
+        items.splice(index, 0, item);
     }
 }

@@ -3,10 +3,9 @@ class TableEditorView {
      * @param readOnlyRow {ReadOnlyRow}
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      */
-    constructor(mustacheTableElemAdapter, readOnlyRow, appendNewRows) {
+    constructor(mustacheTableElemAdapter, readOnlyRow) {
         this.readOnlyRow = readOnlyRow;
         this.mustacheTableElemAdapter = mustacheTableElemAdapter;
-        this.appendNewRows = appendNewRows;
     }
 
     init(items) {
@@ -26,14 +25,19 @@ class TableEditorView {
             return Promise.reject();
         }
         stateChanges.forEach(sc => {
-            if (sc.isTransient) {
-                if (sc.isSelected) {
-                    this.mustacheTableElemAdapter.showEmptyRow(sc.item.id, this.appendNewRows);
-                } else {
+            switch (sc.crudOperation) {
+                case "DELETE":
                     this.mustacheTableElemAdapter.deleteRowByDataId(sc.item.id)
-                }
-            } else if (this.readOnlyRow) {
-                this.readOnlyRow.show(sc.item);
+                    break;
+                case "CREATE":
+                case "UPDATE":
+                    const isNotFirstRow = sc.position > 0;
+                    if (this.readOnlyRow) {
+                        this.readOnlyRow.show(sc.item, !isNotFirstRow);
+                    } else {
+                        this.mustacheTableElemAdapter.renderRowBeforeDataId(sc.item.id, undefined, undefined, true, !isNotFirstRow);
+                    }
+                    break;
             }
         })
         return Promise.resolve(stateChanges);

@@ -20,6 +20,9 @@ class ButtonsRow extends ReadOnlyRow {
         this.mustacheTableElemAdapter.deleteRowByDataId(this.buttonsRowDataId);
     }
 
+    /**
+     * @param item {IdentifiableEntity}
+     */
     show(item) {
         this.mustacheTableElemAdapter.renderRowAfterDataId(item.id, this.rowTmplHtml);
     }

@@ -40,15 +40,23 @@ class EntityUtils {
         return object;
     }
 
+    /**
+     * @param items {Array<IdentifiableEntity>}
+     * @return {number|number[]} removed positions (aka indexes)
+     */
     removeTransient(items) {
         if (!items || !items.length) {
             return false;
         }
-        let count = 0;
-        while (EntityUtils.prototype.removeById(EntityUtils.prototype.transientId, items)) {
-            count++;
-        }
-        return count;
+        let removedIndexes = [];
+        let lastRemovedIndex;
+        do {
+            lastRemovedIndex = EntityUtils.prototype.removeById(EntityUtils.prototype.transientId, items);
+            if (lastRemovedIndex >= 0) {
+                removedIndexes.push(lastRemovedIndex);
+            }
+        } while (lastRemovedIndex >= 0)
+        return removedIndexes.length === 1 ? removedIndexes[0] : removedIndexes;
     }
 
     removeTransientId(object) {
@@ -77,11 +85,24 @@ class EntityUtils {
     /**
      * @param item {IdentifiableEntity}
      * @param items {Array<IdentifiableEntity>}
-     * @return {boolean}
+     * @return {number} item index
      */
     findAndReplaceById(item, items) {
         return ArrayUtils.prototype.findAndReplaceByFilter(item, items,
             (it) => EntityUtils.prototype.haveSameId(it, item));
+    }
+
+    /**
+     * @param item {IdentifiableEntity}
+     * @param items {Array<IdentifiableEntity>}
+     * @return {number}
+     */
+    findIndex(item, items) {
+        return items.findIndex((it) => EntityUtils.prototype.haveSameId(it, item));
+    }
+
+    findIndexById(id, items) {
+        return items.findIndex((it) => EntityUtils.prototype.idsAreEqual(it.id, id));
     }
 
     /**
@@ -96,7 +117,7 @@ class EntityUtils {
     /**
      * @param id {number|string}
      * @param items {Array<IdentifiableEntity>}
-     * @return {boolean}
+     * @return {number} removed index
      */
     removeById(id, items) {
         return ArrayUtils.prototype.removeFirstByFilter(items,

@@ -17,19 +17,20 @@ class MustacheTableElemAdapter extends TableElementAdapter {
         super.$tbody.html(html);
     }
 
-    renderRowAtIndex(rowIndex, rowTmplHtml, cellsView, replaceExistingIfExists) {
+    renderRowAtIndex(rowIndex, rowTmplHtml, cellsView, replaceExisting, putAtBottomIfNotExists) {
         const rowHtml = this._renderTemplate(cellsView, rowTmplHtml);
-        super.renderRowAtIndex(rowIndex, rowHtml, replaceExistingIfExists);
+        super.renderRowAtIndex(rowIndex, rowHtml, replaceExisting, putAtBottomIfNotExists);
     }
 
-    renderRowBeforeDataId(rowDataId, rowTmplHtml, cellsView, replaceExistingIfExists) {
+    renderRowBeforeDataId(rowDataId, rowTmplHtml, cellsView,
+                          replaceExisting, putAtBottomIfNotExists) {
         const rowHtml = this._renderTemplate(cellsView, rowTmplHtml);
-        super.renderRowBeforeDataId(rowDataId, rowHtml, replaceExistingIfExists);
+        super.renderRowBeforeDataId(rowDataId, rowHtml, replaceExisting, putAtBottomIfNotExists);
     }
 
-    renderRowAfterDataId(rowDataId, rowTmplHtml, cellsView, replaceExistingIfExists) {
+    renderRowAfterDataId(rowDataId, rowTmplHtml, cellsView, replaceExisting, putAtBottomIfNotExists) {
         const rowHtml = this._renderTemplate(cellsView, rowTmplHtml);
-        super.renderRowAfterDataId(rowDataId, rowHtml, replaceExistingIfExists);
+        super.renderRowAfterDataId(rowDataId, rowHtml, replaceExisting, putAtBottomIfNotExists);
     }
 
     _renderTemplate(cellsView, rowTmplHtml) {

@@ -12,33 +12,42 @@ class TableEditorState {
         }
         // selection exists
         const prevTabularItemState = this.selectedItem;
+        const position = this.selectedItemPosition;
         const transientSelectionExists = this._transientSelectionExists;
         if (transientSelectionExists) {
             this.removeTransientItem();
         }
         this._selectedId = undefined;
-        return new StateChange(prevTabularItemState, transientSelectionExists);
+        return new StateChange(prevTabularItemState, position, {
+            crudOperation: transientSelectionExists ? "DELETE" : undefined
+        });
     }
 
     /**
-     * @param selectedId
+     * @param selectedId {number}
+     * @param crudOperation {"CREATE"|"UPDATE"|"DELETE"|undefined}
      * @returns {Promise<StateChange[]>} cancelled StateChange (no longer selected) and the updated StateChange (selected)
      */
-    switchSelectionTo(selectedId) {
+    switchSelectionTo(selectedId, crudOperation) {
         if (this.isIdSelected(selectedId)) {
             // current selection is not changed (is just again selected)
             return Promise.reject();
         }
-        const stateChange = this.cancelSelection();
-        if (!stateChange) {
+        const cancelStateChange = this.cancelSelection();
+        if (!cancelStateChange) {
             // no previous selection
             this._selectedId = selectedId;
-            return Promise.resolve([new StateChange(this.selectedItem, this._transientSelectionExists, true)]);
+            // because a transient de-selection is advertised as a removal
+            // than a transient selection is advertised as a creation
+            return Promise.resolve([new StateChange(this.selectedItem, this.selectedItemPosition,
+                {crudOperation, isSelected: true})]);
         }
         this._selectedId = selectedId;
         // because a transient de-selection is advertised as a removal
         // than a transient selection is advertised as a creation
-        return Promise.resolve([stateChange, new StateChange(this.selectedItem, this._transientSelectionExists, true)]);
+        const selectedStateChange = new StateChange(this.selectedItem, this.selectedItemPosition,
+            {crudOperation, isSelected: true});
+        return Promise.resolve([cancelStateChange, selectedStateChange]);
     }
 
     /**
@@ -46,7 +55,7 @@ class TableEditorState {
      * @returns {StateChange[]|undefined} cancelled StateChange and the updated StateChange (both no longer selected)
      */
     cancelSelectionAndUpdateItem(item) {
-        if (this.isTransient(item.id)) {
+        if (this._isTransientId(item.id)) {
             console.error("A row is updated but remains still transient!", item);
             return undefined;
         }
@@ -55,24 +64,41 @@ class TableEditorState {
             console.error("A row is updated without previously being selected!", item);
             return undefined;
         }
-        this.replaceItem(item);
+        let crudOperation;
+        let position = stateChange.position;
+        if (stateChange.crudOperation === "DELETE") {
+            // selected item was transient (and removed by cancelSelection)
+            this.insertItem(item, stateChange.position, this._items);
+            crudOperation = "CREATE";
+        } else {
+            // selected item was a persistent one
+            position = this.replaceItem(item);
+            crudOperation = "UPDATE";
+        }
         // when "previous" is a transient than the updated is in fact
         // a "new" item to be stored which appears as a creation
-        return [stateChange, new StateChange(this._getItemById(item.id))];
+        return [stateChange, new StateChange(this._getItemById(item.id), position, {crudOperation})];
     }
 
     /**
      * @param append {boolean}
-     * @returns {StateChange[]|undefined}
+     * @returns {Promise<StateChange[]>}
      */
     createTransientSelection(append) {
         if (this._transientSelectionExists) {
             // current (transient) selection is not changed
-            return undefined;
+            return Promise.reject();
         }
         // no transient selection exists
-        const newItemId = this.insertNewItem(append).id;
-        return this.switchSelectionTo(newItemId);
+        const newItemId = this.createNewItem(append).id;
+        return this.switchSelectionTo(newItemId, "CREATE");
+    }
+
+    /**
+     * @return {number}
+     */
+    get selectedItemPosition() {
+        return EntityUtils.prototype.findIndexById(this._selectedId, this._items);
     }
 
     /**
@@ -92,11 +118,15 @@ class TableEditorState {
         return this._selectedId != null;
     }
 
+    /**
+     * @return {boolean}
+     * @private
+     */
     get _transientSelectionExists() {
-        return EntityUtils.prototype.isTransientId(this._selectedId);
+        return this._isTransientId(this._selectedId);
     }
 
-    isTransient(id) {
+    _isTransientId(id) {
         return EntityUtils.prototype.isTransientId(id);
     }
 
@@ -119,7 +149,7 @@ class TableEditorState {
     }
 
     /**
-     * private method
+     * @private
      */
     _getItemById(id) {
         const item = this.findById(id);
@@ -131,16 +161,17 @@ class TableEditorState {
 
     /**
      * @param item {IdentifiableEntity}
+     * @return item index
      */
     replaceItem(item) {
-        EntityUtils.prototype.findAndReplaceById(item, this._items);
+        return EntityUtils.prototype.findAndReplaceById(item, this._items);
     }
 
     /**
      * @param append {boolean}
      * @return {IdentifiableEntity}
      */
-    insertNewItem(append) {
+    createNewItem(append) {
         const item = EntityUtils.prototype.newIdentifiableEntity();
         if (append) {
             this._items.push(item);
@@ -150,10 +181,14 @@ class TableEditorState {
         return item;
     }
 
-    removeSelectedItem() {
-        return EntityUtils.prototype.removeById(this._selectedId, this.items);
+    insertItem(item, position, items) {
+        ArrayUtils.prototype.insert(item, position, items)
     }
 
+
+    /**
+     * @return {number|number[]} removed positions (aka indexes)
+     */
     removeTransientItem() {
         return EntityUtils.prototype.removeTransient(this.items);
     }

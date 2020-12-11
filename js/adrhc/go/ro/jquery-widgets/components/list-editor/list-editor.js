@@ -8,7 +8,6 @@ class ListEditorComponent extends TableEditorComponent {
      */
     constructor(editableTableView, tableElementAdapter, repository, rowEditorComponent, state) {
         super(editableTableView, tableElementAdapter, repository, rowEditorComponent, state);
-        this.editableTableView.appendNewRows = true;
     }
 
     /**
@@ -19,7 +18,7 @@ class ListEditorComponent extends TableEditorComponent {
     onNewItem(ev) {
         const editableTable = ev.data;
         editableTable._createPersistentEmptyItem()
-            .then(savedItem => editableTable._switchToEdit(editableTable.state.switchSelectionTo(savedItem.id)))
+            .then(savedItem => editableTable._switchToEdit(editableTable.state.switchSelectionTo(savedItem.id, "CREATE")))
     }
 
     onSelectionSwitch(ev) {
@@ -31,7 +30,7 @@ class ListEditorComponent extends TableEditorComponent {
      * @private
      */
     _createPersistentEmptyItem() {
-        const newItem = this.state.insertNewItem(true);
+        const newItem = this.state.createNewItem(true);
         return this.repository.insert(newItem)
             .then(savedItem => {
                 this.state.removeTransientItem();
