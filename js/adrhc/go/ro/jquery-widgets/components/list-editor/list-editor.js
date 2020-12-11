@@ -31,7 +31,7 @@ class ListEditorComponent extends TableEditorComponent {
      * @private
      */
     _createPersistentEmptyItem() {
-        const newItem = this.state.insertNewItem();
+        const newItem = this.state.insertNewItem(true);
         return this.repository.insert(newItem)
             .then(savedItem => {
                 this.state.removeTransientItem();

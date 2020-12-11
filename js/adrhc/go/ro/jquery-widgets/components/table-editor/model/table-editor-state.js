@@ -22,7 +22,7 @@ class TableEditorState {
 
     /**
      * @param selectedId
-     * @returns {StateChange[]|undefined} cancelled StateChange (no longer selected) and the updated StateChange (selected)
+     * @returns {Promise<StateChange[]>} cancelled StateChange (no longer selected) and the updated StateChange (selected)
      */
     switchSelectionTo(selectedId) {
         if (this.isIdSelected(selectedId)) {
@@ -62,16 +62,16 @@ class TableEditorState {
     }
 
     /**
-     * @param appendNewRows {boolean}
+     * @param append {boolean}
      * @returns {StateChange[]|undefined}
      */
-    createTransientSelection(appendNewRows) {
+    createTransientSelection(append) {
         if (this._transientSelectionExists) {
             // current (transient) selection is not changed
             return undefined;
         }
         // no transient selection exists
-        const newItemId = this.insertNewItem().id;
+        const newItemId = this.insertNewItem(append).id;
         return this.switchSelectionTo(newItemId);
     }
 
@@ -136,9 +136,13 @@ class TableEditorState {
         EntityUtils.prototype.findAndReplaceById(item, this._items);
     }
 
-    insertNewItem(appendNewRows) {
+    /**
+     * @param append {boolean}
+     * @return {IdentifiableEntity}
+     */
+    insertNewItem(append) {
         const item = EntityUtils.prototype.newIdentifiableEntity();
-        if (appendNewRows) {
+        if (append) {
             this._items.push(item);
         } else {
             this._items.unshift(item);
