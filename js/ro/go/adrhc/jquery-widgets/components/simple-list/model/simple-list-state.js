@@ -2,7 +2,7 @@ class SimpleListState extends BasicComponentState {
     items = undefined;
 
     /**
-     * @param items {IdentifiableEntity}
+     * @param items {IdentifiableEntity[]}
      */
     update(items) {
         this.items = items;

@@ -1,3 +1,6 @@
+/**
+ * https://github.com/swarup260/Learning_Algorithms/blob/master/data_structure/Dequeue.js
+ */
 class Dequeue {
     constructor() {
         this.items = {};
