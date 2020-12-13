@@ -4,7 +4,7 @@ class AbstractTableComponent {
     /**
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param state
-     * @param view {AbstractTableView}
+     * @param view {AbstractTableBasedView}
      */
     constructor(mustacheTableElemAdapter, state, view) {
         this.mustacheTableElemAdapter = mustacheTableElemAdapter;

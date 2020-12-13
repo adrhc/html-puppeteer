@@ -1,4 +1,4 @@
-class AbstractTableView {
+class AbstractTableBasedView {
     /**
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      */
@@ -29,13 +29,5 @@ class AbstractTableView {
             .map((index, elem) =>
                 EntityFormUtils.prototype.extractEntityFrom($(elem), useOwnerOnFields ? this.owner : undefined))
             .get();
-    }
-
-    /**
-     * @param stateChange {StateChange}
-     * @return {boolean}
-     */
-    supports(stateChange) {
-        return false;
     }
 }

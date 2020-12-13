@@ -1,19 +1,18 @@
-class SelectableRow extends AbstractTableComponent {
+class SimpleRow extends AbstractTableComponent {
     /**
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
-     * @param state {SelectableState}
-     * @param view {SelectableRowView}
+     * @param state {SimpleRowState}
+     * @param view {SimpleRowView}
      */
     constructor(mustacheTableElemAdapter, state, view) {
         super(mustacheTableElemAdapter, state, view);
     }
 
     /**
-     * @param select {boolean}
      * @param item
      */
-    select(select, item) {
-        this.state.update(select, item);
+    update(item,) {
+        this.state.update(item);
         this.view.update(this.state.consumeStateChange());
     }
 }

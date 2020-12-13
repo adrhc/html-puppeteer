@@ -26,7 +26,7 @@
     </table>
 </div>
 
-<!-- dogs row template -->
+<!-- dogs row template (used by SimpleListFactory.bodyRowTmplId) -->
 <template id="dogsTableRowTmpl">
     <tr data-owner="dogsTable" data-id="{{id}}">
         <td>
@@ -43,13 +43,6 @@
             <input type="hidden" name="id" value="{{id}}">
             <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
         </td>
-    </tr>
-</template>
-
-<!-- dogs deselected row template -->
-<template id="dogsTableDeselectedRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}">
-        <td>{{name}}</td>
     </tr>
 </template>
 
@@ -80,7 +73,7 @@
 <script src="js/ro/go/adrhc/jquery-widgets/components/model/state/state-changes.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/model/basic-component-state.js"></script>
 <!-- components/views -->
-<script src="js/ro/go/adrhc/jquery-widgets/components/views/abstract-table-view.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/views/abstract-table-based-view.js"></script>
 <script src="js/adrhc/go/ro/jquery-widgets/components/views/read-only-row.js"></script>
 <!-- components/abstract* -->
 <script src="js/ro/go/adrhc/jquery-widgets/components/abstract-table-component.js"></script>
@@ -89,14 +82,15 @@
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-list/simple-list-view.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-list/simple-list.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-list/simple-list-factory.js"></script>
-<!-- components/selectable -->
-<script src="js/ro/go/adrhc/jquery-widgets/components/selectable/model/selectable-state.js"></script>
-<script src="js/ro/go/adrhc/jquery-widgets/components/selectable/view/selectable-row-view.js"></script>
-<script src="js/ro/go/adrhc/jquery-widgets/components/selectable/selectable-row.js"></script>
-<script src="js/ro/go/adrhc/jquery-widgets/components/selectable/factories/selectable-factory.js"></script>
+<!-- components/simple-row -->
+<script src="js/ro/go/adrhc/jquery-widgets/components/simple-row/model/simple-row-state-change.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/simple-row/model/simple-row-state.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/simple-row/view/simple-row-view.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/simple-row/simple-row.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/simple-row/factories/simple-row-factory.js"></script>
 
 <!-- index -->
-<script src="js/selectable-row.js"></script>
+<script src="js/simple-row.js"></script>
 </body>
 
 </html>

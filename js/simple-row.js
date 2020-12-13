@@ -16,10 +16,9 @@ if (Modernizr.template) {
         })
             .init()
             .then(items => {
-                SelectableFactory.prototype.createSelectableRow("dogsTable", {
-                    deselectedRowTmpl: "dogsTableDeselectedRowTmpl",
-                    selectedRowTmpl: "dogsTableSelectedRowTmpl",
-                }).select(true, items[0]);
+                SimpleRowFactory.prototype.create("dogsTable", {
+                    rowTmpl: "dogsTableSelectedRowTmpl"
+                }).update(items[0]);
             })
 
     })
