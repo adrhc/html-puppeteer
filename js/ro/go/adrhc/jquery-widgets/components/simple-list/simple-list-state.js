@@ -6,6 +6,6 @@ class SimpleListState extends BasicComponentState {
      */
     update(items) {
         this.items = items;
-        this.stateChanges.collect(new StateUpdate(items));
+        this.collectStateChange(new StateUpdate(items));
     }
 }

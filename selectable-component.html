@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>JavaScript components</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/responstable-table.css">
+    <link rel="stylesheet" href="css/util.css">
+    <link rel="stylesheet" href="css/table-editor.css">
+    <link rel="stylesheet" href="css/adrhc/go/ro/jquery-widgets/dyna-sel-one.css">
+    <script src="libraries/modernizr-custom.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/mustache@latest"></script>
+    <script src="libraries/handlebars-1.0.rc.1.min.js"></script>
+</head>
+
+<body>
+<!-- dogs table -->
+<div class="dogsTable">
+    <table id="dogsTable" class="responstable">
+        <thead>
+        <tr data-owner="dogsTable">
+            <th>Dogs</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<!-- dogs row template -->
+<template id="dogsTableRowTmpl">
+    <tr data-owner="dogsTable" data-id="{{id}}">
+        <td>
+            <input type="hidden" name="id" value="{{id}}">
+            {{name}}
+        </td>
+    </tr>
+</template>
+
+<!-- dogs selectable row template -->
+<template id="dogsTableSelectableRowTmpl">
+    <tr data-owner="dogsTable" data-id="{{id}}">
+        <td>
+            <input type="hidden" name="id" value="{{id}}">
+            <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
+        </td>
+    </tr>
+</template>
+
+<!-- utils -->
+<script src="js/ro/go/adrhc/jquery-widgets/utils/ajax-utils.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/utils/array-utils.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/utils/converters.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/utils/deque.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/utils/entity-form-utils.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/utils/entity-utils.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/utils/form-utils.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/utils/html-utils.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/utils/rest-utils.js"></script>
+<!-- helpers -->
+<script src="js/ro/go/adrhc/jquery-widgets/helper/cached-ajax.js"></script>
+<!-- adapters -->
+<script src="js/ro/go/adrhc/jquery-widgets/adapter/table-element-adapter.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/adapter/mustache-table-elem-adapter.js"></script>
+<!-- model -->
+<script src="js/ro/go/adrhc/jquery-widgets/model/IdentifiableEntity.js"></script>
+<!-- repositories -->
+<script src="js/ro/go/adrhc/jquery-widgets/repositories/crud-repository.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/repositories/in-memory-crud-repository.js"></script>
+<!-- components -->
+<!-- components/model -->
+<script src="js/ro/go/adrhc/jquery-widgets/components/model/state/state-change.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/model/state/state-update.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/model/state/state-changes.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/model/basic-component-state.js"></script>
+<!-- components/views -->
+<script src="js/ro/go/adrhc/jquery-widgets/components/views/abstract-table-view.js"></script>
+<script src="js/adrhc/go/ro/jquery-widgets/components/views/read-only-row.js"></script>
+<!-- components/abstract* -->
+<script src="js/ro/go/adrhc/jquery-widgets/components/abstract-table-component.js"></script>
+<!-- components/simple-list.js -->
+<script src="js/ro/go/adrhc/jquery-widgets/components/simple-list/simple-list-state.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/simple-list/simple-list-view.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/simple-list/simple-list.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/simple-list/simple-list-factory.js"></script>
+
+<!-- index -->
+<script src="js/selectable-component.js"></script>
+</body>
+
+</html>

@@ -6,22 +6,22 @@ class SimpleListComponent extends AbstractTableComponent {
      * @param view {SimpleListView}
      */
     constructor(mustacheTableElemAdapter,
-                repository = new InMemoryCrudRepository(),
-                state = new SimpleListState(),
-                view = new SimpleListView(mustacheTableElemAdapter)) {
+                repository, state, view) {
         super(mustacheTableElemAdapter, state, view);
         this.repository = repository;
     }
 
     /**
      * component initializer
+     * @return {Promise<IdentifiableEntity[]>}
      */
     init() {
-        this.handleRepoErrors(this.repository.getAll())
+        return this.handleRepoErrors(this.repository.getAll())
             .then((items) => {
                 console.log("TableEditorComponent items:\n", items);
                 this.state.update(items);
                 this.view.update(this.state.consumeStateChange());
+                return items;
             });
     }
 }

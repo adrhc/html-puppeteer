@@ -1,3 +1,6 @@
+/**
+ * mix the EditableRow and ButtonsRow into 1 view
+ */
 class RowEditorView {
     /**
      * @param editableRow {EditableRow}

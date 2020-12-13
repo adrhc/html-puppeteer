@@ -59,12 +59,12 @@ class TableElementAdapter {
     }
 
     /**
-     * @param $existingRow {jQuery<HTMLTableRowElement>}
-     * @param rowHtml {string}
-     * @param replaceExisting {boolean}
-     * @param where {'before', 'after'}
-     * @param putAtBottomIfNotExists {boolean}
-     * @private
+     * @param $existingRow {jQuery<HTMLTableRowElement>} is the row relative to which the generated one will be placed
+     * @param rowHtml {string} is the "generated row"
+     * @param replaceExisting {boolean} specify that the generated row will replace the existing one
+     * @param where {'before', 'after'} specify where to put the generated row relative to the existing one
+     * @param putAtBottomIfNotExists {boolean} specify the that generated row should be put at bottom of the table if $existingRow is missing
+     * @protected
      */
     _replaceOrCreateRow($existingRow, rowHtml, where, replaceExisting, putAtBottomIfNotExists) {
         if ($existingRow.length) {

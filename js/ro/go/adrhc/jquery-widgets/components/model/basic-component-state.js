@@ -1,11 +1,15 @@
 class BasicComponentState {
-    stateChanges = new StateChanges();
+    /**
+     * @type {StateChanges}
+     * @private
+     */
+    _stateChanges = new StateChanges();
 
     /**
      * @param stateChange {StateChange}
      */
     collectStateChange(stateChange) {
-        this.stateChanges.collect(stateChange);
+        this._stateChanges.collect(stateChange);
     }
 
     /**
@@ -13,7 +17,7 @@ class BasicComponentState {
      * @return {StateChange}
      */
     consumeStateChange(fromLatest = false) {
-        return this.stateChanges.consume(fromLatest);
+        return this._stateChanges.consume(fromLatest);
     }
 
     /**
@@ -21,6 +25,6 @@ class BasicComponentState {
      * @return {StateChange[]}
      */
     consumeAllStateChanges(fromLatest= false) {
-        return this.stateChanges.consumeAll(fromLatest);
+        return this._stateChanges.consumeAll(fromLatest);
     }
 }
