@@ -10,10 +10,9 @@ if (Modernizr.template) {
     });
     $(() => {
         const dogs = [{id: 1, name: "dog1"}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
-        SimpleTableFactory.prototype.create({
+        SimpleListFactory.prototype.create({
             items: dogs,
-            tableId: "dogsTable",
-            bodyRowTmplId: "readOnlyDogsRowTmpl"
+            tableId: "dogsTable"
         }).init();
 
         /*
