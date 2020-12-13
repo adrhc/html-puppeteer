@@ -1,4 +1,4 @@
-class SimpleListComponent extends AbstractTableComponent {
+class SimpleListComponent extends AbstractTableBasedComponent {
     /**
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param repository {CrudRepository}

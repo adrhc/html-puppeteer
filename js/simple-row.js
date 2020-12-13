@@ -17,12 +17,17 @@ if (Modernizr.template) {
             .create({items: dogs, tableId: dogsTableWithEdit})
             .init()
             .then(items => {
-                SimpleRowFactory.prototype
-                    .create(dogsTableWithEdit, {
+                const identifiableRow = SimpleRowFactory.prototype
+                    .createIdentifiableRow(dogsTableWithEdit, {
                         rowTmpl: "dogsTableWithEditSelectedRowTmpl",
                         putAtBottomIfNotExists: true
-                    })
-                    .update(items[0]);
+                    });
+                identifiableRow
+                    .update(items[0])
+                    .then(() => {
+                        const extractedEntity = identifiableRow.extractEntity();
+                        console.log("extractedEntity:\n", extractedEntity);
+                    });
             });
 
         // dogs table with deleted row
@@ -31,12 +36,12 @@ if (Modernizr.template) {
             .create({items: dogs, tableId: dogsTableWithDelete})
             .init()
             .then(items => {
-                const simpleRow = SimpleRowFactory.prototype.create(
+                const simpleRow = SimpleRowFactory.prototype.createSimpleRow(
                     dogsTableWithDelete, {removeOnEmptyState: true});
                 simpleRow
                     .update(items[0])
-                    .then(() => simpleRow.update());
-            })
+                    .then(() => simpleRow.update(undefined));
+            });
     })
 } else {
     // Find another way to add the rows to the table because

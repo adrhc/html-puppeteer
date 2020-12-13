@@ -1,4 +1,4 @@
-class AbstractTableComponent {
+class AbstractTableBasedComponent {
     mustacheTableElemAdapter;
 
     /**

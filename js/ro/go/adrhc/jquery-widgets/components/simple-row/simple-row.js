@@ -1,4 +1,4 @@
-class SimpleRow extends AbstractTableComponent {
+class SimpleRow extends AbstractTableBasedComponent {
     /**
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param state {SimpleRowState}
