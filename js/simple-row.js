@@ -23,11 +23,20 @@ if (Modernizr.template) {
                         putAtBottomIfNotExists: true
                     });
                 identifiableRow
+                    // switch to existing row (aka enter "edit" mode)
                     .update(items[0])
+                    // extracting row data for e.g. save
                     .then(() => {
                         const extractedEntity = identifiableRow.extractEntity();
-                        console.log("extractedEntity:\n", extractedEntity);
-                    });
+                        console.log("extractedEntity:\n", JSON.stringify(extractedEntity));
+                    })
+                    // switch to new row (aka ADD then enter "edit" mode)
+                    .then(() => identifiableRow
+                        .update({id: EntityUtils.prototype.transientId, name: "new dog"}))
+                    .then(() => {
+                        const extractedEntity = identifiableRow.extractEntity();
+                        console.log("extractedEntity:\n", JSON.stringify(extractedEntity));
+                    })
             });
 
         // dogs table with deleted row
@@ -38,8 +47,9 @@ if (Modernizr.template) {
             .then(items => {
                 const simpleRow = SimpleRowFactory.prototype.createSimpleRow(
                     dogsTableWithDelete, {removeOnEmptyState: true});
-                simpleRow
-                    .update(items[0])
+                // switch to existing row (aka enter "edit" mode)
+                simpleRow.update(items[0])
+                    // switch to a missing row (aka enter "delete" mode which by default means "delete the row")
                     .then(() => simpleRow.update(undefined));
             });
     })

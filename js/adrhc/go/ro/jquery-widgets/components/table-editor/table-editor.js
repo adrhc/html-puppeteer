@@ -116,7 +116,7 @@ class TableEditorComponent {
     init() {
         this._handleRepoError(this.repository.getAll())
             .then((items) => {
-                console.log("TableEditorComponent items:\n", items);
+                console.log("TableEditorComponent items:\n", JSON.stringify(items));
                 this.state.items = items;
                 this.editableTableView.init(items);
             });

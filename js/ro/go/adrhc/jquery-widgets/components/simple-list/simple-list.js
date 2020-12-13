@@ -18,7 +18,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     init() {
         return this.handleRepoErrors(this.repository.getAll())
             .then((items) => {
-                console.log("TableEditorComponent items:\n", items);
+                console.log("TableEditorComponent items:\n", JSON.stringify(items));
                 this.state.update(items);
                 this.view.update(this.state.consumeStateChange());
                 return items;

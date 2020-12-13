@@ -13,7 +13,7 @@ class SimpleRowView extends AbstractTableBasedView {
         putAtBottomIfNotExists
     }) {
         super(mustacheTableElemAdapter);
-        this.putAtBottomIfNotExists = false;
+        this.putAtBottomIfNotExists = putAtBottomIfNotExists;
         this.rowTmplHtml = HtmlUtils.prototype.templateOf(rowTmpl, rowTmplHtml);
         this.removeOnEmptyState = removeOnEmptyState;
     }
