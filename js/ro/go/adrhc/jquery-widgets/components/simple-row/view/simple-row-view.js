@@ -8,7 +8,7 @@ class SimpleRowView extends AbstractTableBasedView {
      */
     constructor(mustacheTableElemAdapter, {
         rowTmpl,
-        rowTmplHtml,
+        rowTmplHtml = mustacheTableElemAdapter.bodyRowTmplHtml,
         removeOnEmptyState,
         putAtBottomIfNotExists
     }) {

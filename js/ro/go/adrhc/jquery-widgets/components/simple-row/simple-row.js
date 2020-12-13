@@ -11,8 +11,8 @@ class SimpleRow extends AbstractTableComponent {
     /**
      * @param item
      */
-    update(item,) {
+    update(item) {
         this.state.update(item);
-        this.view.update(this.state.consumeStateChange());
+        return this.view.update(this.state.consumeStateChange());
     }
 }

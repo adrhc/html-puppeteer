@@ -15,20 +15,20 @@
 </head>
 
 <body>
-<!-- dogs table -->
+<!-- dogs table with editable row -->
 <div class="dogsTable">
-    <table id="dogsTable" class="responstable">
+    <table id="dogsTableWithEdit" class="responstable">
         <thead>
-        <tr data-owner="dogsTable">
-            <th>Dogs</th>
+        <tr data-owner="dogsTableWithEdit">
+            <th>Dogs with editable row</th>
         </tr>
         </thead>
     </table>
 </div>
 
-<!-- dogs row template (used by SimpleListFactory.bodyRowTmplId) -->
-<template id="dogsTableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}">
+<!-- dogs table with editable row (default) row template (used by SimpleListFactory.bodyRowTmplId) -->
+<template id="dogsTableWithEditRowTmpl">
+    <tr data-owner="dogsTableWithEdit" data-id="{{id}}">
         <td>
             <input type="hidden" name="id" value="{{id}}">
             {{name}}
@@ -36,12 +36,35 @@
     </tr>
 </template>
 
-<!-- dogs selected row template -->
-<template id="dogsTableSelectedRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}">
+<!-- dogs table with editable row "selected" row template -->
+<template id="dogsTableWithEditSelectedRowTmpl">
+    <tr data-owner="dogsTableWithEdit" data-id="{{id}}">
         <td>
             <input type="hidden" name="id" value="{{id}}">
             <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
+        </td>
+    </tr>
+</template>
+
+<BR>
+
+<!-- dogs table with deleted row -->
+<div class="dogsTable">
+    <table id="dogsTableWithDelete" class="responstable">
+        <thead>
+        <tr data-owner="dogsTableWithDelete">
+            <th>Dogs with deleted row</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<!-- dogs table with deleted row (default) row template (used by SimpleListFactory.bodyRowTmplId) -->
+<template id="dogsTableWithDeleteRowTmpl">
+    <tr data-owner="dogsTableWithDelete" data-id="{{id}}">
+        <td>
+            <input type="hidden" name="id" value="{{id}}">
+            {{name}}
         </td>
     </tr>
 </template>

@@ -2,7 +2,7 @@ class SimpleListFactory {
     create({
                items = [],
                tableId = "simpleList",
-               bodyRowTmplId = `${tableId}RowTmpl`,
+               bodyRowTmplId,
                mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, bodyRowTmplId),
                repository = new InMemoryCrudRepository(items),
                state = new SimpleListState(),
