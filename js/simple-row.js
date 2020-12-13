@@ -13,17 +13,22 @@ if (Modernizr.template) {
 
         // dogs table with editable row
         const dogsTableWithEdit = "dogsTableWithEdit";
-        SimpleListFactory.prototype.create({items: dogs, tableId: dogsTableWithEdit})
+        SimpleListFactory.prototype
+            .create({items: dogs, tableId: dogsTableWithEdit})
             .init()
             .then(items => {
                 SimpleRowFactory.prototype
-                    .create(dogsTableWithEdit, {rowTmpl: "dogsTableWithEditSelectedRowTmpl"})
+                    .create(dogsTableWithEdit, {
+                        rowTmpl: "dogsTableWithEditSelectedRowTmpl",
+                        putAtBottomIfNotExists: true
+                    })
                     .update(items[0]);
-            })
+            });
 
         // dogs table with deleted row
         const dogsTableWithDelete = "dogsTableWithDelete";
-        SimpleListFactory.prototype.create({items: dogs, tableId: dogsTableWithDelete})
+        SimpleListFactory.prototype
+            .create({items: dogs, tableId: dogsTableWithDelete})
             .init()
             .then(items => {
                 const simpleRow = SimpleRowFactory.prototype.create(

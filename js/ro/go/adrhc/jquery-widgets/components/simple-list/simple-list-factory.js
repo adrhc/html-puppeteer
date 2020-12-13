@@ -1,4 +1,14 @@
 class SimpleListFactory {
+    /**
+     * @param items {IdentifiableEntity[]}
+     * @param tableId {string}
+     * @param bodyRowTmplId {string}
+     * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
+     * @param repository {CrudRepository}
+     * @param state {SimpleListState}
+     * @param view {SimpleListView}
+     * @return {SimpleListComponent}
+     */
     create({
                items = [],
                tableId = "simpleList",
