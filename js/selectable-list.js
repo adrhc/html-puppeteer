@@ -13,11 +13,11 @@ if (Modernizr.template) {
 
         // dogs table with editable row
         const tableId = "dogsTable";
-        const notSelectedRow = SimpleRowFactory.prototype.createSimpleRow(
+        const notSelectedRow = SimpleRowFactory.prototype.createIdentifiableRow(
             tableId, {
-                rowTmpl: "dogsTableRowTmpl", removeOnEmptyState: true
+                removeOnEmptyState: true
             });
-        const selectedRow = SimpleRowFactory.prototype.createSimpleRow(
+        const selectedRow = SimpleRowFactory.prototype.createIdentifiableRow(
             tableId, {
                 rowTmpl: "dogsTableEditableRowTmpl", removeOnEmptyState: true
             });
