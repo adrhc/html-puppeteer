@@ -1,4 +1,4 @@
-class SimpleListState extends BasicComponentState {
+class SimpleListState extends BasicState {
     items = undefined;
 
     /**

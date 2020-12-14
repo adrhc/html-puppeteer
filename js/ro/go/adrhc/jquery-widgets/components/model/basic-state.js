@@ -1,4 +1,4 @@
-class BasicComponentState {
+class BasicState {
     /**
      * @type {StateChanges}
      * @private
@@ -24,7 +24,11 @@ class BasicComponentState {
      * @param fromLatest {boolean}
      * @return {StateChange[]}
      */
-    consumeAllStateChanges(fromLatest= false) {
+    consumeAllStateChanges(fromLatest = false) {
         return this._stateChanges.consumeAll(fromLatest);
+    }
+
+    reset() {
+        this._stateChanges = new StateChanges();
     }
 }

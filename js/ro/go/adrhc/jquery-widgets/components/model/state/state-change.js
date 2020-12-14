@@ -1,5 +1,11 @@
 class StateChange {
+    /**
+     * the request type that determine the change of state
+     */
     requestType;
+    /**
+     * the state resulted-after/involved-while executing the requestType
+     */
     state;
 
     /**

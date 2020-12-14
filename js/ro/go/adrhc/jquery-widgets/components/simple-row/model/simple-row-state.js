@@ -1,4 +1,4 @@
-class SimpleRowState extends BasicComponentState {
+class SimpleRowState extends BasicState {
     /**
      * @param rowState {*}
      */
