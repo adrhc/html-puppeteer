@@ -11,8 +11,10 @@ class SelectableListComponent extends SimpleListComponent {
                 repository, state, view,
                 notSelectedRow, selectedRow) {
         super(mustacheTableElemAdapter, repository, state, view);
-        this.notSelectedRow = notSelectedRow;
-        this.selectedRow = selectedRow;
+        this._rowSelector = {
+            false: selectedRow,
+            true: notSelectedRow
+        };
     }
 
     init() {
@@ -38,12 +40,8 @@ class SelectableListComponent extends SimpleListComponent {
             .forEach(onOff => {
                 console.log("SelectableListComponent.onSelectionSwitch\n", onOff);
                 console.log(JSON.stringify(onOff));
-                if (onOff.isOff) {
-                    selectableList.notSelectedRow.update(onOff.state);
-                } else {
-                    selectableList.selectedRow.update(onOff.state);
-                }
-            })
+                selectableList._rowSelector[onOff.isOff].update(onOff.state);
+            });
     }
 
     /**
