@@ -8,4 +8,12 @@ class SimpleListState extends BasicState {
         this.items = items;
         this.collectStateChange(new StateUpdate(items));
     }
+
+    /**
+     * @param id {number}
+     * @return {IdentifiableEntity}
+     */
+    findById(id) {
+        return EntityUtils.prototype.findById(id, this.items)
+    }
 }

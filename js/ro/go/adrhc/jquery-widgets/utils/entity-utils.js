@@ -106,7 +106,7 @@ class EntityUtils {
     }
 
     /**
-     * @param id {number}
+     * @param id {number|string}
      * @param items {Array<IdentifiableEntity>}
      * @return {IdentifiableEntity}
      */

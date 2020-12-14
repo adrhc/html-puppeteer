@@ -44,11 +44,11 @@ class TableEditorView {
     }
 
     /**
-     * @param tr {HTMLTableRowElement}
+     * @param elem {HTMLElement}
      * @return {string}
      */
-    rowDataIdOf(tr) {
-        const $elem = $(tr);
+    rowDataIdOf(elem) {
+        const $elem = $(elem);
         const ownerSelector = this.mustacheTableElemAdapter.ownerSelector;
         if ($elem.is(ownerSelector)) {
             return $(tr).data("id");

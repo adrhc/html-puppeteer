@@ -15,7 +15,7 @@ class ArrayUtils {
 
     /**
      * @param keyName {string}
-     * @param keyValue {number}
+     * @param keyValue {number|string}
      * @param items {Array<{}>}
      * @return {{}}
      */

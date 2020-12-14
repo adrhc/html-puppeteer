@@ -12,6 +12,22 @@ class AbstractTableBasedComponent {
         this.view = view;
     }
 
+    /**
+     * @param events {string,string[]}
+     * @return {string|*}
+     */
+    withNamespaceFor(events) {
+        if ($.isArray(events)) {
+            return events.map(ev => this.withNamespaceFor(ev)).join(" ");
+        } else {
+            return `${events}.${this.eventsNamespace}`;
+        }
+    }
+
+    get eventsNamespace() {
+        return `.${this.constructor.name}.${this.owner}`;
+    }
+
     get owner() {
         return this.mustacheTableElemAdapter.tableId;
     }
@@ -39,5 +55,9 @@ class AbstractTableBasedComponent {
             alert(`${textStatus}\n${jqXHR.responseText}`);
             throw textStatus;
         });
+    }
+
+    close() {
+        this.tableElementAdapter.$table.off(this.eventsNamespace);
     }
 }

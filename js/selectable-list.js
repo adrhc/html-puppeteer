@@ -13,30 +13,9 @@ if (Modernizr.template) {
 
         // dogs table with editable row
         const dogsTable = "dogsTable";
-        SimpleListFactory.prototype
+        SelectableListFactory.prototype
             .create({items: dogs, tableId: dogsTable})
-            .init()
-            .then(items => {
-                const identifiableRow = SimpleRowFactory.prototype
-                    .createIdentifiableRow(dogsTable, {
-                        putAtBottomIfNotExists: true
-                    });
-                identifiableRow
-                    // switch to existing row (aka enter "edit" mode)
-                    .update(items[0])
-                    // extracting row data for e.g. save
-                    .then(() => {
-                        const extractedEntity = identifiableRow.extractEntity();
-                        console.log("extractedEntity:\n", JSON.stringify(extractedEntity));
-                    })
-                    // switch to new row (aka ADD then enter "edit" mode)
-                    .then(() => identifiableRow
-                        .update({id: EntityUtils.prototype.transientId, name: "new dog"}))
-                    .then(() => {
-                        const extractedEntity = identifiableRow.extractEntity();
-                        console.log("extractedEntity:\n", JSON.stringify(extractedEntity));
-                    })
-            });
+            .init();
     })
 } else {
     // Find another way to add the rows to the table because
