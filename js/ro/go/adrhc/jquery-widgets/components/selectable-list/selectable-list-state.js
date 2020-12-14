@@ -1,20 +1,20 @@
 class SelectableListState extends BasicState {
-    simpleListState = new SimpleListState();
+    crudListState = new CrudListState();
     onOffState = new OnOffState("SELECT");
 
     /**
      * @param items {IdentifiableEntity[]}
      */
     update(items) {
-        this.simpleListState.update(items);
-        this.collectAnotherStateChanges(this.simpleListState.stateChanges)
+        this.crudListState.update(items);
+        this.collectAnotherStateChanges(this.crudListState.stateChanges)
     }
 
     /**
      * @param id {numeric|string}
      */
     switchTo(id) {
-        const item = this.simpleListState.findById(id);
+        const item = this.crudListState.findById(id);
         this.onOffState.switchTo(item);
         this.collectAnotherStateChanges(this.onOffState.stateChanges)
     }

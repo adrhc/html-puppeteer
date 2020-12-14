@@ -31,16 +31,6 @@
     <tr data-owner="dogsTable" data-id="{{id}}">
         <td>
             <input type="hidden" name="id" value="{{id}}">
-            {{name}}
-        </td>
-    </tr>
-</template>
-
-<!-- dogs simple-row row template -->
-<template id="dogsTableSelectableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}">
-        <td>
-            <input type="hidden" name="id" value="{{id}}">
             <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
         </td>
     </tr>
@@ -84,7 +74,7 @@
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-list/factories/simple-list-factory.js"></script>
 
 <!-- index -->
-<script src="js/selectable-component.js"></script>
+<script src="js/simple-list-editable.js"></script>
 </body>
 
 </html>

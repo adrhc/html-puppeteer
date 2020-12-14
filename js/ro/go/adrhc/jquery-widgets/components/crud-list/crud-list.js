@@ -1,0 +1,3 @@
+class CrudListComponent extends SimpleListComponent {
+
+}
