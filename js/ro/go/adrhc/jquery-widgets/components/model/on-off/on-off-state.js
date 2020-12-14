@@ -25,6 +25,9 @@ class OnOffState extends BasicState {
      * @param state
      */
     switchTo(state) {
+        if (this.onOff && state === this.onOff.state) {
+            return;
+        }
         // switching "off" the previous state
         this.switchOff();
         // switching "on" the new state
@@ -35,7 +38,7 @@ class OnOffState extends BasicState {
     switchOff(dontIgnoreMissing) {
         if (dontIgnoreMissing && !this.onOff) {
             throw "switchOff: missing onOff"
-        } else if (!this.onOff || !this.onOff.isOff) {
+        } else if (!this.onOff || this.onOff.isOff) {
             // previous doesn't exist or is already "off"
             return;
         }
@@ -46,7 +49,7 @@ class OnOffState extends BasicState {
     switchOn(dontIgnoreMissing) {
         if (dontIgnoreMissing && !this.onOff) {
             throw "switchOn: missing onOff"
-        } else if (!this.onOff || this.onOff.isOff) {
+        } else if (!this.onOff || !this.onOff.isOff) {
             // previous doesn't exist or is already "on"
             return;
         }

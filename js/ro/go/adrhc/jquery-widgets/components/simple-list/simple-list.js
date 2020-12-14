@@ -20,7 +20,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
             .then((items) => {
                 console.log("TableEditorComponent items:\n", JSON.stringify(items));
                 this.state.update(items);
-                this.view.update(this.state.consumeStateChange());
+                this.view.update(this.state.consumeOne());
                 return items;
             });
     }

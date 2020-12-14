@@ -9,12 +9,21 @@ if (Modernizr.template) {
         }
     });
     $(() => {
-        const dogs = [{id: 1, name: "dog1"}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
+        const items = [{id: 1, name: "dog1"}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
 
         // dogs table with editable row
-        const dogsTable = "dogsTable";
+        const tableId = "dogsTable";
+        const notSelectedRow = SimpleRowFactory.prototype.createSimpleRow(
+            tableId, {
+                rowTmpl: "dogsTableRowTmpl", removeOnEmptyState: true
+            });
+        const selectedRow = SimpleRowFactory.prototype.createSimpleRow(
+            tableId, {
+                rowTmpl: "dogsTableEditableRowTmpl", removeOnEmptyState: true
+            });
+
         SelectableListFactory.prototype
-            .create({items: dogs, tableId: dogsTable})
+            .create({items, tableId, notSelectedRow, selectedRow})
             .init();
     })
 } else {

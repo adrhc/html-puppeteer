@@ -6,6 +6,20 @@ class AbstractTableBasedView {
         this.mustacheTableElemAdapter = mustacheTableElemAdapter;
     }
 
+    /**
+     * @param elem {HTMLElement}
+     * @return {string}
+     */
+    rowDataIdOf(elem) {
+        const $elem = $(elem);
+        const ownerSelector = this.mustacheTableElemAdapter.ownerSelector;
+        if ($elem.is(ownerSelector)) {
+            return $elem.data("id");
+        } else {
+            return $elem.parents(`tr${ownerSelector}`).data("id");
+        }
+    }
+
     get owner() {
         return this.mustacheTableElemAdapter.tableId;
     }

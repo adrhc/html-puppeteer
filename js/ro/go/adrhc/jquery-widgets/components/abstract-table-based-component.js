@@ -20,12 +20,16 @@ class AbstractTableBasedComponent {
         if ($.isArray(events)) {
             return events.map(ev => this.withNamespaceFor(ev)).join(" ");
         } else {
-            return `${events}.${this.eventsNamespace}`;
+            return `${events}${this.eventsNamespace}`;
         }
     }
 
     get eventsNamespace() {
         return `.${this.constructor.name}.${this.owner}`;
+    }
+
+    get ownerSelector() {
+        return this.mustacheTableElemAdapter.ownerSelector;
     }
 
     get owner() {

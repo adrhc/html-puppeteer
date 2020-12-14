@@ -12,18 +12,18 @@ class StateChanges {
      * @param fromLatest {boolean} is the consumption starting point
      * @return {StateChange}
      */
-    consume(fromLatest = false) {
+    consumeOne(fromLatest = false) {
         return fromLatest ? this.changes.removeBack() : this.changes.removeFront();
     }
 
     /**
-     * @param fromLatest {boolean} is the consumption starting point
+     * @param fromLatest {boolean|undefined} is the consumption starting point
      * @return {StateChange[]}
      */
     consumeAll(fromLatest = false) {
         const changes = [];
         while (!this.changes.isEmpty()) {
-            changes.push(this.consume(fromLatest));
+            changes.push(this.consumeOne(fromLatest));
         }
         return changes;
     }

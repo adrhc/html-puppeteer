@@ -5,8 +5,10 @@ class SelectableListFactory {
      * @param bodyRowTmplId {string}
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param repository {CrudRepository}
-     * @param state {SimpleListState}
+     * @param state {SelectableListState}
      * @param view {SimpleListView}
+     * @param notSelectedRow {IdentifiableRow}
+     * @param selectedRow {IdentifiableRow}
      * @return {SimpleListComponent}
      */
     create({
@@ -15,9 +17,10 @@ class SelectableListFactory {
                bodyRowTmplId,
                mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, bodyRowTmplId),
                repository = new InMemoryCrudRepository(items),
-               state = new SimpleListState(),
-               view = new SimpleListView(mustacheTableElemAdapter)
+               state = new SelectableListState(),
+               view = new SimpleListView(mustacheTableElemAdapter),
+               notSelectedRow, selectedRow
            }) {
-        return new SelectableListComponent(mustacheTableElemAdapter, repository, state, view);
+        return new SelectableListComponent(mustacheTableElemAdapter, repository, state, view, notSelectedRow, selectedRow);
     }
 }

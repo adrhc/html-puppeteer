@@ -20,23 +20,19 @@ class BasicState {
         stateChanges.consumeAll(fromLatest).forEach(stateChange => this.collectStateChange(stateChange));
     }
 
-    collectStateChangesArray(stateChanges) {
-        stateChanges.forEach(stateChange => this.collectStateChange(stateChange));
-    }
-
     /**
      * @param fromLatest {boolean|undefined}
      * @return {StateChange}
      */
-    consumeStateChange(fromLatest = false) {
-        return this._stateChanges.consume(fromLatest);
+    consumeOne(fromLatest = false) {
+        return this._stateChanges.consumeOne(fromLatest);
     }
 
     /**
      * @param fromLatest {boolean|undefined}
      * @return {StateChange[]}
      */
-    consumeAllStateChanges(fromLatest = false) {
+    consumeAll(fromLatest = false) {
         return this._stateChanges.consumeAll(fromLatest);
     }
 

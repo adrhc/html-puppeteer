@@ -4,10 +4,15 @@ class SelectableListComponent extends SimpleListComponent {
      * @param repository {CrudRepository}
      * @param state {SelectableListState}
      * @param view {SimpleListView}
+     * @param notSelectedRow {IdentifiableRow}
+     * @param selectedRow {IdentifiableRow}
      */
     constructor(mustacheTableElemAdapter,
-                repository, state, view) {
+                repository, state, view,
+                notSelectedRow, selectedRow) {
         super(mustacheTableElemAdapter, repository, state, view);
+        this.notSelectedRow = notSelectedRow;
+        this.selectedRow = selectedRow;
     }
 
     init() {
@@ -24,8 +29,21 @@ class SelectableListComponent extends SimpleListComponent {
         if (!$(this).is("tr,td,th")) {
             return;
         }
-        const rowDataId = selectableList.mustacheTableElemAdapter.rowDataIdOf(this);
+        ev.stopPropagation();
+        const rowDataId = selectableList.view.rowDataIdOf(this);
         selectableList.state.switchTo(rowDataId);
+        selectableList.state.consumeAll()
+            .filter(onOffState => onOffState.requestType === "SELECT")
+            .map(it => it.state)
+            .forEach(onOff => {
+                console.log("SelectableListComponent.onSelectionSwitch\n", onOff);
+                console.log(JSON.stringify(onOff));
+                if (onOff.isOff) {
+                    selectableList.notSelectedRow.update(onOff.state);
+                } else {
+                    selectableList.selectedRow.update(onOff.state);
+                }
+            })
     }
 
     /**
