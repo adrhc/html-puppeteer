@@ -8,7 +8,7 @@ class ElasticSimpleListFactory {
      * @param state {CrudListState}
      * @param view {SimpleListView}
      * @param putAtBottomIfNotExists {boolean|undefined}
-     * @param simpleRow {function}
+     * @param simpleRow {SimpleRow}
      * @return {ElasticSimpleListComponent}
      */
     create({
@@ -20,13 +20,11 @@ class ElasticSimpleListFactory {
                state = new CrudListState(),
                view = new SimpleListView(mustacheTableElemAdapter),
                putAtBottomIfNotExists,
-               simpleRowFactoryFn = () => {
-                   return SimpleRowFactory.prototype.createIdentifiableRow(tableId, {
-                       bodyRowTmplId,
-                       putAtBottomIfNotExists
-                   });
-               }
+               simpleRow = SimpleRowFactory.prototype.createSimpleRow(tableId, {
+                   bodyRowTmplId,
+                   putAtBottomIfNotExists
+               })
            }) {
-        return new ElasticSimpleListComponent(mustacheTableElemAdapter, repository, state, view, simpleRowFactoryFn);
+        return new ElasticSimpleListComponent(mustacheTableElemAdapter, repository, state, view, simpleRow);
     }
 }

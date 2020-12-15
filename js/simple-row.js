@@ -49,8 +49,8 @@ if (Modernizr.template) {
                     dogsTableWithDelete, {});
                 // switch to existing row (aka enter "edit" mode)
                 simpleRow.update(items[0])
-                    // switch to a missing row (aka enter "delete" mode which by default means "delete the row")
-                    .then(() => simpleRow.update(undefined));
+                    // switch to same row with delete
+                    .then(() => simpleRow.update(items[0], true));
             });
     })
 } else {

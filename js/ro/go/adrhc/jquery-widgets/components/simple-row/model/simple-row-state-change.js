@@ -1,10 +1,9 @@
 class SimpleRowStateChange extends StateChange {
     /**
-     * @param previousRowState
-     * @param updatedRowState
-     * @param updatedRowStateIsDueToRemove
+     * @param rowState
+     * @param rowStateIsRemoved
      */
-    constructor(previousRowState, updatedRowState, updatedRowStateIsDueToRemove) {
-        super(undefined, {previousRowState, updatedRowState, updatedRowStateIsDueToRemove});
+    constructor(rowState, rowStateIsRemoved) {
+        super(undefined, {rowState, rowStateIsRemoved});
     }
 }

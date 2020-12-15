@@ -1,6 +1,6 @@
 /**
- * A SimpleListComponent able to accept item-level state changes and updating the view at row level.
- * Uses a SimpleRow to render the updated items.
+ * A SimpleListComponent able to accept item-level state changes then updating the view at row level.
+ * Uses a SimpleRow to render the updated items (aka rows).
  */
 class ElasticSimpleListComponent extends SimpleListComponent {
     /**
@@ -8,11 +8,11 @@ class ElasticSimpleListComponent extends SimpleListComponent {
      * @param repository {CrudRepository}
      * @param state {CrudListState}
      * @param view {SimpleListView}
-     * @param simpleRowFactoryFn {function}
+     * @param simpleRow {SimpleRow}
      */
-    constructor(mustacheTableElemAdapter, repository, state, view, simpleRowFactoryFn) {
+    constructor(mustacheTableElemAdapter, repository, state, view, simpleRow) {
         super(mustacheTableElemAdapter, repository, state, view);
-        this.simpleRowFactoryFn = simpleRowFactoryFn;
+        this.simpleRow = simpleRow;
     }
 
     /**
@@ -44,11 +44,11 @@ class ElasticSimpleListComponent extends SimpleListComponent {
                         promises.push(super.updateOnStateChange(stateChange));
                         break;
                     case "DELETE":
-                        promises.push(this.simpleRowFactoryFn().update(stateChange.state, true));
+                        promises.push(this.simpleRow.update(stateChange.state, true));
                         break;
                     case "INSERT":
                     case "UPDATE":
-                        promises.push(this.simpleRowFactoryFn().update(stateChange.state));
+                        promises.push(this.simpleRow.update(stateChange.state));
                         break;
                     default:
                         console.warn(`won't updateView for ${stateChange.requestType}`)

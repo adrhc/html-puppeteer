@@ -1,8 +1,4 @@
-/**
- * When removeOnEmptyState = true the click on header will determine the deletion of the previous clicked row (if any).
- * This can happen because there'll be a switch from an item != undefined (the previous clicked row) to an item = undefined (the header).
- */
-class SelectableListComponent extends SimpleListComponent {
+class SelectableListComponent extends ElasticSimpleListComponent {
     /**
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param repository {CrudRepository}
@@ -14,7 +10,7 @@ class SelectableListComponent extends SimpleListComponent {
     constructor(mustacheTableElemAdapter,
                 repository, state, view,
                 notSelectedRow, selectedRow) {
-        super(mustacheTableElemAdapter, repository, state, view);
+        super(mustacheTableElemAdapter, repository, state, view, notSelectedRow);
         this._rowSelector = {
             false: selectedRow,
             true: notSelectedRow
@@ -39,8 +35,9 @@ class SelectableListComponent extends SimpleListComponent {
         const rowDataId = selectableList.view.rowDataIdOf(this);
         selectableList.state.switchTo(rowDataId);
         selectableList.state.consumeAll()
-            .filter(onOffState => onOffState.requestType === "SELECT")
+            .filter(onOffStateChange => onOffStateChange.requestType === "SELECT")
             .map(it => it.state)
+            .filter(onOff => onOff.state)
             .forEach(onOff => {
                 console.log("SelectableListComponent.onSelectionSwitch\n", onOff);
                 console.log(JSON.stringify(onOff));

@@ -5,7 +5,6 @@ class SimpleRowFactory {
             state = new SimpleRowState(),
             rowTmpl,
             rowTmplHtml,
-            removeOnEmptyState,
             putAtBottomIfNotExists
         }
     ) {
@@ -13,7 +12,6 @@ class SimpleRowFactory {
         const view = new SimpleRowView(mustacheTableElemAdapter, {
             rowTmpl,
             rowTmplHtml,
-            removeOnEmptyState,
             putAtBottomIfNotExists
         });
         return new SimpleRow(mustacheTableElemAdapter, state, view);
@@ -25,7 +23,6 @@ class SimpleRowFactory {
             state = new SimpleRowState(),
             rowTmpl,
             rowTmplHtml,
-            removeOnEmptyState,
             putAtBottomIfNotExists
         }
     ) {
@@ -33,7 +30,6 @@ class SimpleRowFactory {
         const view = new SimpleRowView(mustacheTableElemAdapter, {
             rowTmpl,
             rowTmplHtml,
-            removeOnEmptyState,
             putAtBottomIfNotExists
         });
         return new IdentifiableRow(mustacheTableElemAdapter, state, view);

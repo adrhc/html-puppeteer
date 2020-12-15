@@ -1,5 +1,6 @@
 /**
  * A component rendering a table by using a list of items.
+ * Updatable by a state change containing all items.
  */
 class SimpleListComponent extends AbstractTableBasedComponent {
     /**
