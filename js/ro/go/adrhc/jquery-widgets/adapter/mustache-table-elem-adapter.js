@@ -12,30 +12,11 @@ class MustacheTableElemAdapter extends TableElementAdapter {
         this.bodyTmplHtml = bodyTmplHtml ? bodyTmplHtml : "{{#items}}{{> bodyRowTmpl}}{{/items}}";
     }
 
-    renderBody(data) {
+    renderBodyWithTemplate(data) {
         // return Mustache.render(this.bodyTmplHtml, data, {bodyRowTmpl: this.bodyRowTmplHtml})
         Handlebars.registerPartial("bodyRowTmpl", this.bodyRowTmplHtml)
         const html = this._renderTemplate(data, this.bodyTmplHtml);
         super.$tbody.html(html);
-    }
-
-    /**
-     * @param rowDataId {number|string}
-     * @param rowTmplHtml {string}
-     * @param data
-     * @param replaceExisting {boolean|undefined}
-     * @param putAtBottomIfNotExists {boolean|undefined}
-     */
-    renderRowBeforeDataId(rowDataId, rowTmplHtml, data,
-                          replaceExisting, putAtBottomIfNotExists) {
-        this.renderRowWithTemplate({
-            rowDataId,
-            data,
-            rowTmplHtml,
-            replaceExisting,
-            tableRelativePosition: putAtBottomIfNotExists ? "append" : "prepend",
-            createIfNotExists: true
-        });
     }
 
     /**

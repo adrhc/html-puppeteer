@@ -5,14 +5,14 @@ class SimpleRowFactory {
             state = new SimpleRowState(),
             rowTmpl,
             rowTmplHtml,
-            putAtBottomIfNotExists
+            tableRelativePositionOnCreate
         }
     ) {
         const mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, rowTmpl);
         const view = new SimpleRowView(mustacheTableElemAdapter, {
             rowTmpl,
             rowTmplHtml,
-            putAtBottomIfNotExists
+            tableRelativePositionOnCreate
         });
         return new SimpleRow(mustacheTableElemAdapter, state, view);
     }
@@ -23,14 +23,14 @@ class SimpleRowFactory {
             state = new SimpleRowState(),
             rowTmpl,
             rowTmplHtml,
-            putAtBottomIfNotExists
+            tableRelativePositionOnCreate
         }
     ) {
         const mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, rowTmpl);
         const view = new SimpleRowView(mustacheTableElemAdapter, {
             rowTmpl,
             rowTmplHtml,
-            putAtBottomIfNotExists
+            tableRelativePositionOnCreate
         });
         return new IdentifiableRow(mustacheTableElemAdapter, state, view);
     }

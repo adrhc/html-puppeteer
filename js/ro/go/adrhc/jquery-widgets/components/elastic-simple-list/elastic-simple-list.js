@@ -44,11 +44,13 @@ class ElasticSimpleListComponent extends SimpleListComponent {
                         promises.push(super.updateOnStateChange(stateChange));
                         break;
                     case "DELETE":
-                        promises.push(this.simpleRow.update(stateChange.state, true));
+                        promises.push(this.simpleRow.update(stateChange.state, {rowStateIsRemoved: true}));
                         break;
                     case "INSERT":
+                        promises.push(this.simpleRow.update(stateChange.state, {rowStateIsCreated: true}));
+                        break;
                     case "UPDATE":
-                        promises.push(this.simpleRow.update(stateChange.state));
+                        promises.push(this.simpleRow.update(stateChange.state, {}));
                         break;
                     default:
                         console.warn(`won't updateView for ${stateChange.requestType}`)

@@ -10,9 +10,9 @@ class TableEditorView {
 
     init(items) {
         if ($.isArray(items)) {
-            this.mustacheTableElemAdapter.renderBody({items});
+            this.mustacheTableElemAdapter.renderBodyWithTemplate({items});
         } else {
-            this.mustacheTableElemAdapter.renderBody(items);
+            this.mustacheTableElemAdapter.renderBodyWithTemplate(items);
         }
     }
 
@@ -35,7 +35,11 @@ class TableEditorView {
                         this.readOnlyRow.show(sc.item, !isNotFirstRow);
                     } else {
                         // by default only create the row but won't fill it
-                        this.mustacheTableElemAdapter.renderRowBeforeDataId(sc.item.id, undefined, undefined, true, !isNotFirstRow);
+                        this.mustacheTableElemAdapter.renderRowWithTemplate({
+                            rowDataId: sc.item.id,
+                            tableRelativePosition: isNotFirstRow ? "prepend" : "append",
+                            createIfNotExists: true
+                        });
                     }
                     break;
             }

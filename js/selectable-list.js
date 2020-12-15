@@ -14,31 +14,34 @@ if (Modernizr.template) {
 
         // dogs table with both read-only and editable row
         const tableId = "dogsTable";
-        const putAtBottomIfNotExists = true;
+        const tableRelativePositionOnCreate = "append";
 
         const notSelectedRow = SimpleRowFactory.prototype.createIdentifiableRow(
-            tableId, {});
+            tableId, {tableRelativePositionOnCreate});
         const selectedRow = SimpleRowFactory.prototype.createIdentifiableRow(
             tableId, {
-                rowTmpl: "dogsTableEditableRowTmpl"
+                rowTmpl: "dogsTableEditableRowTmpl",
+                tableRelativePositionOnCreate
             });
 
         const component = SelectableListFactory.prototype
-            .create({items, tableId, putAtBottomIfNotExists, notSelectedRow, selectedRow});
+            .create({items, tableId, notSelectedRow, selectedRow});
 
         component
             .init()
             .then(() => {
                 component.doWithState((crudListState) => {
-                    crudListState.createNewItem().name = "new dog";
+                    crudListState.createNewItem().name = `new dog (with table ${tableRelativePositionOnCreate})`;
                     crudListState.updateItem({id: 3, name: "updated dog3"});
                     crudListState.removeById(2);
-                    crudListState.createNewItem().name = `restored dog2 (at ${putAtBottomIfNotExists ? "bottom" : "top"})`;
+                    crudListState.insertItem({
+                            id: 2,
+                            name: `restored dog2 (with table ${tableRelativePositionOnCreate})`
+                        },
+                        tableRelativePositionOnCreate === "append");
                 });
             });
-
     })
-
 } else {
     // Find another way to add the rows to the table because
     // the HTML template element is not supported.

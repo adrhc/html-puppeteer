@@ -18,14 +18,14 @@ class TableElementAdapter {
     renderRow({
                   rowDataId,
                   rowHtml,
-                  replaceExisting,
+                  replaceExisting = true,
                   neighbourRowDataId,
                   neighbourRelativePosition = "before",
                   tableRelativePosition = "prepend",
                   createIfNotExists
               }) {
-        const $existingRow = this.$getRowByDataId(rowDataId);
         rowHtml = rowHtml ? rowHtml : this.emptyRowHtmlOf(rowDataId);
+        const $existingRow = rowDataId ? this.$getRowByDataId(rowDataId) : {};
         if ($existingRow.length) {
             if (replaceExisting) {
                 // replace existing

@@ -10,7 +10,7 @@ class SimpleListView extends AbstractTableBasedView {
      * @param stateChange {StateChange}
      */
     update(stateChange) {
-        this.mustacheTableElemAdapter.renderBody({items: stateChange.state});
+        this.mustacheTableElemAdapter.renderBodyWithTemplate({items: stateChange.state});
         return Promise.resolve(stateChange);
     }
 }
