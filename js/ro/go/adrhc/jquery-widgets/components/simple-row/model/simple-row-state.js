@@ -2,18 +2,17 @@ class SimpleRowState extends BasicState {
     /**
      * @param rowState {*}
      */
-    constructor(rowState = undefined) {
+    constructor(rowState) {
         super();
         this.rowState = rowState;
     }
 
     /**
      * @param updatedRowState {*}
-     * @param rowStateIsRemoved {boolean|undefined}
-     * @param rowStateIsCreated {boolean|undefined}
+     * @param action {"CREATE"|"DELETE"|"UPDATE"|undefined}
      */
-    update(updatedRowState, {rowStateIsRemoved, rowStateIsCreated}) {
+    update(updatedRowState, action) {
         this.rowState = updatedRowState;
-        this.collectStateChange(new SimpleRowStateChange(updatedRowState, {rowStateIsRemoved, rowStateIsCreated}));
+        this.collectStateChange(new SimpleRowStateChange(updatedRowState, action));
     }
 }

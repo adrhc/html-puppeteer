@@ -17,25 +17,24 @@ if (Modernizr.template) {
             .create({items: dogs, tableId: dogsTableWithEdit})
             .init()
             .then(items => {
-                const identifiableRow = SimpleRowFactory.prototype
+                const editableRow = SimpleRowFactory.prototype
                     .createIdentifiableRow(dogsTableWithEdit, {
                         rowTmpl: "dogsTableWithEditSelectedRowTmpl",
                         putAtBottomIfNotExists: true
                     });
-                identifiableRow
+                editableRow
                     // switch to existing row (aka enter "edit" mode)
                     .update(items[0], {})
                     // extracting row data for e.g. save
                     .then(() => {
-                        const extractedEntity = identifiableRow.extractEntity();
+                        const extractedEntity = editableRow.extractEntity();
                         console.log("extractedEntity:\n", JSON.stringify(extractedEntity));
                     })
                     // switch to new row (aka ADD then enter "edit" mode)
-                    .then(() => identifiableRow
-                        .update({id: EntityUtils.prototype.transientId, name: "new dog"},
-                            {rowStateIsCreated: true}))
+                    .then(() => editableRow
+                        .update({id: EntityUtils.prototype.transientId, name: "new dog"}, "CREATE"))
                     .then(() => {
-                        const extractedEntity = identifiableRow.extractEntity();
+                        const extractedEntity = editableRow.extractEntity();
                         console.log("extractedEntity:\n", JSON.stringify(extractedEntity));
                     })
             });
@@ -51,7 +50,7 @@ if (Modernizr.template) {
                 // switch to existing row (aka enter "edit" mode)
                 simpleRow.update(items[0], {})
                     // switch to same row with delete
-                    .then(() => simpleRow.update(items[0], {rowStateIsRemoved: true}));
+                    .then(() => simpleRow.update(items[0], "DELETE"));
             });
     })
 } else {

@@ -1,10 +1,9 @@
 class SimpleRowStateChange extends StateChange {
     /**
      * @param rowState
-     * @param rowStateIsRemoved {boolean|undefined}
-     * @param rowStateIsCreated {boolean|undefined}
+     * @param action {"CREATE"|"DELETE"|"UPDATE"}
      */
-    constructor(rowState, {rowStateIsRemoved, rowStateIsCreated}) {
-        super(undefined, {rowState, rowStateIsRemoved, rowStateIsCreated});
+    constructor(rowState, action = "UPDATE") {
+        super(undefined, {rowState, action});
     }
 }
