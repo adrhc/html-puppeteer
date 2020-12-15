@@ -1,3 +1,6 @@
+/**
+ * SelectableListState extends CrudListState (which extends SimpleListState) and OnOffState
+ */
 class SelectableListState extends BasicState {
     crudListState = new CrudListState();
     onOffState = new OnOffState("SELECT");
@@ -5,7 +8,7 @@ class SelectableListState extends BasicState {
     /**
      * @param items {IdentifiableEntity[]}
      */
-    update(items) {
+    updateAll(items) {
         this.crudListState.updateAll(items);
         this.collectAnotherStateChanges(this.crudListState.stateChanges)
     }

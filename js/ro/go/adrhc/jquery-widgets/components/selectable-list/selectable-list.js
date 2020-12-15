@@ -1,3 +1,7 @@
+/**
+ * The click on header will determine the deletion of the previous clicked row (if any)
+ * which is because there'll be a switch from an item != undefined to an item = undefined.
+ */
 class SelectableListComponent extends SimpleListComponent {
     /**
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
