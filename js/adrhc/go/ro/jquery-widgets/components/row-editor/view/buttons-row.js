@@ -24,7 +24,7 @@ class ButtonsRow extends ReadOnlyRow {
      * @param item {IdentifiableEntity}
      */
     show(item) {
-        this.mustacheTableElemAdapter.renderWithTemplate({
+        this.mustacheTableElemAdapter.renderRowWithTemplate({
             rowTmplHtml: this.rowTmplHtml,
             neighbourRowDataId: item.id,
             neighbourRelativePosition: "after",

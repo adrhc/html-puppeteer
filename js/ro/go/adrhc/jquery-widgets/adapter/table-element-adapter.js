@@ -6,26 +6,6 @@ class TableElementAdapter {
         this.tableId = tableId;
     }
 
-    deleteRowByDataId(rowDataId) {
-        this.$getRowByDataId(rowDataId).remove();
-    }
-
-    /**
-     * @param rowDataId {string|number}
-     * @param rowHtml {string}
-     * @param replaceExisting {boolean}: whether to replace or append a new row
-     * @param putAtBottomIfNotExists {boolean}
-     */
-    renderRowBeforeDataId(rowDataId, rowHtml, replaceExisting, putAtBottomIfNotExists) {
-        this.renderRow({
-            rowDataId,
-            rowHtml: rowHtml ? rowHtml : this.emptyRowHtmlOf(rowDataId),
-            replaceExisting,
-            tableRelativePosition: putAtBottomIfNotExists ? "append" : "prepend",
-            createIfNotExists: true
-        });
-    }
-
     /**
      * @param rowDataId {number|string}
      * @param rowHtml {string}
@@ -45,6 +25,7 @@ class TableElementAdapter {
                   createIfNotExists
               }) {
         const $existingRow = this.$getRowByDataId(rowDataId);
+        rowHtml = rowHtml ? rowHtml : this.emptyRowHtmlOf(rowDataId);
         if ($existingRow.length) {
             if (replaceExisting) {
                 // replace existing
@@ -62,6 +43,10 @@ class TableElementAdapter {
 
     emptyRowHtmlOf(rowDataId) {
         return `<tr data-owner='${this.tableId}' data-id='${rowDataId}'></tr>`;
+    }
+
+    deleteRowByDataId(rowDataId) {
+        this.$getRowByDataId(rowDataId).remove();
     }
 
     /**

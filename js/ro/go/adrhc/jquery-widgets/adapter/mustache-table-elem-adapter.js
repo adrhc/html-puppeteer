@@ -19,10 +19,23 @@ class MustacheTableElemAdapter extends TableElementAdapter {
         super.$tbody.html(html);
     }
 
+    /**
+     * @param rowDataId {number|string}
+     * @param rowTmplHtml {string}
+     * @param data
+     * @param replaceExisting {boolean|undefined}
+     * @param putAtBottomIfNotExists {boolean|undefined}
+     */
     renderRowBeforeDataId(rowDataId, rowTmplHtml, data,
                           replaceExisting, putAtBottomIfNotExists) {
-        const rowHtml = this._renderTemplate(data, rowTmplHtml);
-        super.renderRowBeforeDataId(rowDataId, rowHtml, replaceExisting, putAtBottomIfNotExists);
+        this.renderRowWithTemplate({
+            rowDataId,
+            data,
+            rowTmplHtml,
+            replaceExisting,
+            tableRelativePosition: putAtBottomIfNotExists ? "append" : "prepend",
+            createIfNotExists: true
+        });
     }
 
     /**
@@ -35,7 +48,7 @@ class MustacheTableElemAdapter extends TableElementAdapter {
      * @param tableRelativePosition {"prepend"|"append"|undefined}
      * @param createIfNotExists {boolean|undefined}
      */
-    renderWithTemplate({
+    renderRowWithTemplate({
                            rowDataId,
                            data,
                            rowTmplHtml,
@@ -57,6 +70,12 @@ class MustacheTableElemAdapter extends TableElementAdapter {
         });
     }
 
+    /**
+     * @param data
+     * @param rowTmplHtml {string}
+     * @return {string}
+     * @private
+     */
     _renderTemplate(data, rowTmplHtml) {
         // return data ? Mustache.render(rowTmplHtml, data) : rowTmplHtml;
         if (data) {
