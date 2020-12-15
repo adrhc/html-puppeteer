@@ -13,13 +13,20 @@ if (Modernizr.template) {
 
         // dogs table with read-only row
         const tableId = "dogsTable";
-        const elasticSimpleListComponent = ElasticSimpleListFactory.prototype.create({items, tableId});
+        const putAtBottomIfNotExists = true;
+        const elasticSimpleListComponent = ElasticSimpleListFactory.prototype.create({
+            items,
+            tableId,
+            putAtBottomIfNotExists
+        });
         elasticSimpleListComponent
             .init()
             .then(() => {
                 elasticSimpleListComponent.doWithState((crudListState) => {
-                    crudListState.createNewItem().name = `new dog<BR><BR>${new Date()}`;
-                    crudListState.updateItem({id: 3, name: `updated dog3<BR><BR>${new Date()}`});
+                    crudListState.createNewItem().name = "new dog";
+                    crudListState.updateItem({id: 3, name: "updated dog3"});
+                    crudListState.removeById(2);
+                    crudListState.createNewItem().name = `restored dog2 (at ${putAtBottomIfNotExists ? "bottom" : "top"})`;
                 });
             });
     });

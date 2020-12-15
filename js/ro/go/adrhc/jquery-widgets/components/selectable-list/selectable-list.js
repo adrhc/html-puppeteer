@@ -1,6 +1,6 @@
 /**
- * The click on header will determine the deletion of the previous clicked row (if any)
- * which is because there'll be a switch from an item != undefined to an item = undefined.
+ * When removeOnEmptyState = true the click on header will determine the deletion of the previous clicked row (if any).
+ * This can happen because there'll be a switch from an item != undefined (the previous clicked row) to an item = undefined (the header).
  */
 class SelectableListComponent extends SimpleListComponent {
     /**

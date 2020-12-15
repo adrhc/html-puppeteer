@@ -35,8 +35,8 @@ class CrudListState extends SimpleListState {
      * @return {IdentifiableEntity}
      */
     removeById(id) {
-        const removedItem = EntityUtils.prototype.removeById(id);
-        this.collectStateChange(new StateChange("REMOVE", removedItem));
+        const removedItem = EntityUtils.prototype.removeById(id, this.items);
+        this.collectStateChange(new StateChange("DELETE", removedItem));
         return removedItem;
     }
 
@@ -45,7 +45,7 @@ class CrudListState extends SimpleListState {
      */
     removeTransient() {
         const removedItems = EntityUtils.prototype.removeTransient(this.items);
-        this.collectStateChange(new StateChange("REMOVE", removedItems));
+        this.collectStateChange(new StateChange("DELETE", removedItems));
         return removedItems;
     }
 

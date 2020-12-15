@@ -11,10 +11,11 @@ class SimpleRow extends AbstractTableBasedComponent {
 
     /**
      * @param item
+     * @param itemIsDueToRemove {boolean|undefined}
      * @return {Promise<SimpleRowStateChange>}
      */
-    update(item) {
-        this.state.update(item);
+    update(item, itemIsDueToRemove) {
+        this.state.update(item, itemIsDueToRemove);
         return this.view.update(this.state.consumeOne());
     }
 }

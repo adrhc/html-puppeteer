@@ -3,9 +3,7 @@
  */
 class Dequeue {
     constructor() {
-        this.items = {};
-        this.count = 0;
-        this.lowestCount = 0;
+        this.clear();
     }
 
     addFront(element) {
@@ -64,6 +62,17 @@ class Dequeue {
         return this.items[this.count - 1];
     }
 
+    peekAll(fromBack) {
+        const items = [];
+        for (let i = this.lowestCount; i < this.count - 1; i++) {
+            if (fromBack) {
+                items.unshift(this.items[i]);
+            } else {
+                items.push(this.items[i]);
+            }
+        }
+        return items;
+    }
 
     isEmpty() {
         return this.count - this.lowestCount === 0;

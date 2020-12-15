@@ -9,10 +9,11 @@ class SimpleRowState extends BasicState {
 
     /**
      * @param updatedRowState {*}
+     * @param updatedRowStateIsDueToRemove {boolean|undefined}
      */
-    update(updatedRowState) {
+    update(updatedRowState, updatedRowStateIsDueToRemove) {
         const previousRowState = this.rowState;
         this.rowState = updatedRowState;
-        this.collectStateChange(new SimpleRowStateChange(previousRowState, updatedRowState));
+        this.collectStateChange(new SimpleRowStateChange(previousRowState, updatedRowState, updatedRowStateIsDueToRemove));
     }
 }

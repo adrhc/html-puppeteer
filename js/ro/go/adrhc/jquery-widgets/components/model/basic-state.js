@@ -32,8 +32,16 @@ class BasicState {
      * @param fromLatest {boolean|undefined}
      * @return {StateChange[]}
      */
-    consumeAll(fromLatest = false) {
+    consumeAll(fromLatest) {
         return this._stateChanges.consumeAll(fromLatest);
+    }
+
+    /**
+     * @param fromLatest {boolean|undefined}
+     * @return {StateChange[]}
+     */
+    peekAll(fromLatest) {
+        return this._stateChanges.changes.peekAll(fromLatest);
     }
 
     get stateChanges() {
