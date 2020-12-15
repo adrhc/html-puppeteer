@@ -10,17 +10,6 @@ class TableElementAdapter {
         this.$getRowByDataId(rowDataId).remove();
     }
 
-    getRowIndexByDataId(rowDataId) {
-        const $row = this.$getRowByDataId(rowDataId);
-        if (!$row.length) {
-            return undefined;
-        }
-        const rowElem = this.$getRowByDataId(rowDataId)[0];
-        // rowElem.sectionRowIndex doesn't play well with jquery tr:eq(${index})
-        // return rowElem.sectionRowIndex == null ? rowElem.rowIndex : rowElem.sectionRowIndex;
-        return rowElem.rowIndex;
-    }
-
     /**
      * @param rowDataId {string|number}
      * @param rowHtml {string}
@@ -28,69 +17,46 @@ class TableElementAdapter {
      * @param putAtBottomIfNotExists {boolean}
      */
     renderRowBeforeDataId(rowDataId, rowHtml, replaceExisting, putAtBottomIfNotExists) {
-        const $existingRow = this.$getRowByDataId(rowDataId);
-        this._replaceOrCreateRow($existingRow,
-            rowHtml ? rowHtml : this.emptyRowHtmlOf(rowDataId),
-            'before', replaceExisting, putAtBottomIfNotExists);
+        this.renderRow({
+            rowDataId,
+            rowHtml: rowHtml ? rowHtml : this.emptyRowHtmlOf(rowDataId),
+            replaceExisting,
+            tableRelativePosition: putAtBottomIfNotExists ? "append" : "prepend",
+            createIfNotExists: true
+        });
     }
 
     /**
-     * @param rowDataId {string|number}
+     * @param rowDataId {number|string}
      * @param rowHtml {string}
-     * @param replaceExisting {boolean}: whether to replace or append a new row
-     * @param putAtBottomIfNotExists {boolean}
+     * @param replaceExisting {boolean|undefined}
+     * @param neighbourRowDataId {number|string}
+     * @param neighbourRelativePosition {"before"|"after"|undefined}
+     * @param tableRelativePosition {"prepend"|"append"|undefined}
+     * @param createIfNotExists {boolean|undefined}
      */
-    renderRowAfterDataId(rowDataId, rowHtml, replaceExisting, putAtBottomIfNotExists) {
+    renderRow({
+                  rowDataId,
+                  rowHtml,
+                  replaceExisting,
+                  neighbourRowDataId,
+                  neighbourRelativePosition = "before",
+                  tableRelativePosition = "prepend",
+                  createIfNotExists
+              }) {
         const $existingRow = this.$getRowByDataId(rowDataId);
-        this._replaceOrCreateRow($existingRow,
-            rowHtml ? rowHtml : this.emptyRowHtmlOf(rowDataId),
-            'after', replaceExisting, putAtBottomIfNotExists);
-    }
-
-    /**
-     * @param index {number}: row index
-     * @param rowHtml {string}: row HTML
-     * @param replaceExisting {boolean}: whether to replace or append a new row
-     * @param putAtBottomIfNotExists {boolean}
-     */
-    renderRowAtIndex(index, rowHtml, replaceExisting, putAtBottomIfNotExists) {
-        const $existingRow = this.$getRowAtIndex(index);
-        this._replaceOrCreateRow($existingRow, rowHtml, 'before', replaceExisting, putAtBottomIfNotExists);
-    }
-
-    /**
-     * @param $existingRow {jQuery<HTMLTableRowElement>} is the row relative to which the generated one will be placed
-     * @param rowHtml {string} is the "generated row"
-     * @param replaceExisting {boolean} specify that the generated row will replace the existing one
-     * @param where {'before', 'after'} specify where to put the generated row relative to the existing one
-     * @param putAtBottomIfNotExists {boolean} specify the that generated row should be put at bottom of the table if $existingRow is missing
-     * @protected
-     */
-    _replaceOrCreateRow($existingRow, rowHtml, where, replaceExisting, putAtBottomIfNotExists) {
         if ($existingRow.length) {
             if (replaceExisting) {
+                // replace existing
                 $existingRow.replaceWith(rowHtml);
-            } else {
-                $existingRow[where]($(rowHtml));
             }
-        } else {
-            if (putAtBottomIfNotExists) {
-                this.$tbody.append($(rowHtml));
-            } else {
-                this.$tbody.prepend($(rowHtml));
+        } else if (createIfNotExists) {
+            if (neighbourRowDataId) {
+                const $neighbour = this.$getRowByDataId(neighbourRowDataId);
+                $neighbour[neighbourRelativePosition]($(rowHtml));
+            } else if (tableRelativePosition) {
+                this.$tbody[tableRelativePosition]($(rowHtml));
             }
-        }
-    }
-
-    /**
-     * @param rowDataId {string}
-     * @param append {boolean}
-     */
-    showEmptyRow(rowDataId, append) {
-        if (append) {
-            return this.$tbody.append(this.emptyRowHtmlOf(rowDataId));
-        } else {
-            return this.$tbody.prepend(this.emptyRowHtmlOf(rowDataId));
         }
     }
 
@@ -119,14 +85,6 @@ class TableElementAdapter {
 
     get ownerSelector() {
         return `[data-owner='${this.tableId}']`;
-    }
-
-    /**
-     * @param index
-     * @return {jQuery<HTMLTableRowElement>}
-     */
-    $getRowAtIndex(index) {
-        return this.$tbody.children(`tr:eq(${index})`);
     }
 
     get columnsCount() {

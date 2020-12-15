@@ -19,27 +19,49 @@ class MustacheTableElemAdapter extends TableElementAdapter {
         super.$tbody.html(html);
     }
 
-    renderRowAtIndex(rowIndex, rowTmplHtml, cellsView, replaceExisting, putAtBottomIfNotExists) {
-        const rowHtml = this._renderTemplate(cellsView, rowTmplHtml);
-        super.renderRowAtIndex(rowIndex, rowHtml, replaceExisting, putAtBottomIfNotExists);
-    }
-
-    renderRowBeforeDataId(rowDataId, rowTmplHtml, cellsView,
+    renderRowBeforeDataId(rowDataId, rowTmplHtml, data,
                           replaceExisting, putAtBottomIfNotExists) {
-        const rowHtml = this._renderTemplate(cellsView, rowTmplHtml);
+        const rowHtml = this._renderTemplate(data, rowTmplHtml);
         super.renderRowBeforeDataId(rowDataId, rowHtml, replaceExisting, putAtBottomIfNotExists);
     }
 
-    renderRowAfterDataId(rowDataId, rowTmplHtml, cellsView, replaceExisting, putAtBottomIfNotExists) {
-        const rowHtml = this._renderTemplate(cellsView, rowTmplHtml);
-        super.renderRowAfterDataId(rowDataId, rowHtml, replaceExisting, putAtBottomIfNotExists);
+    /**
+     * @param rowDataId {number|string}
+     * @param data
+     * @param rowTmplHtml {string}
+     * @param replaceExisting {boolean|undefined}
+     * @param neighbourRowDataId {number|string}
+     * @param neighbourRelativePosition {"before"|"after"|undefined}
+     * @param tableRelativePosition {"prepend"|"append"|undefined}
+     * @param createIfNotExists {boolean|undefined}
+     */
+    renderWithTemplate({
+                           rowDataId,
+                           data,
+                           rowTmplHtml,
+                           replaceExisting,
+                           neighbourRowDataId,
+                           neighbourRelativePosition,
+                           tableRelativePosition,
+                           createIfNotExists
+                       }) {
+        const rowHtml = this._renderTemplate(data, rowTmplHtml);
+        super.renderRow({
+            rowDataId,
+            rowHtml,
+            replaceExisting,
+            neighbourRowDataId,
+            neighbourRelativePosition,
+            tableRelativePosition,
+            createIfNotExists
+        });
     }
 
-    _renderTemplate(cellsView, rowTmplHtml) {
-        // return cellsView ? Mustache.render(rowTmplHtml, cellsView) : rowTmplHtml;
-        if (cellsView) {
+    _renderTemplate(data, rowTmplHtml) {
+        // return data ? Mustache.render(rowTmplHtml, data) : rowTmplHtml;
+        if (data) {
             const template = Handlebars.compile(rowTmplHtml);
-            return template(cellsView);
+            return template(data);
         } else {
             return rowTmplHtml;
         }

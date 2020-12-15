@@ -24,6 +24,12 @@ class ButtonsRow extends ReadOnlyRow {
      * @param item {IdentifiableEntity}
      */
     show(item) {
-        this.mustacheTableElemAdapter.renderRowAfterDataId(item.id, this.rowTmplHtml);
+        this.mustacheTableElemAdapter.renderWithTemplate({
+            rowTmplHtml: this.rowTmplHtml,
+            neighbourRowDataId: item.id,
+            neighbourRelativePosition: "after",
+            tableRelativePosition: "append",
+            createIfNotExists: true
+        });
     }
 }
