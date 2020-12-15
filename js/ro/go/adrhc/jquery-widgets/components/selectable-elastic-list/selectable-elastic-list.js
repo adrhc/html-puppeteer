@@ -41,7 +41,7 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
             .forEach(onOff => {
                 console.log("SelectableElasticListComponent.onSelectionSwitch\n", onOff);
                 console.log(JSON.stringify(onOff));
-                selectableList._rowSelector[onOff.isOff].update(onOff.state, {});
+                selectableList._rowSelector[onOff.isOff].update(onOff.state);
             });
     }
 

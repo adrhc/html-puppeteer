@@ -9,10 +9,10 @@ class SimpleRowState extends BasicState {
 
     /**
      * @param updatedRowState {*}
-     * @param action {"CREATE"|"DELETE"|"UPDATE"|undefined}
+     * @param requestType {"CREATE"|"DELETE"|"UPDATE"|undefined}
      */
-    update(updatedRowState, action) {
+    update(updatedRowState, requestType) {
         this.rowState = updatedRowState;
-        this.collectStateChange(new SimpleRowStateChange(updatedRowState, action));
+        this.collectStateChange(new StateChange(requestType, updatedRowState));
     }
 }

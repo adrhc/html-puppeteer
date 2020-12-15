@@ -18,7 +18,7 @@ class CrudListState extends SimpleListState {
         } else {
             this.items.unshift(item);
         }
-        this.collectStateChange(new StateChange("INSERT", item));
+        this.collectStateChange(new StateChange("CREATE", item));
         return item;
     }
 

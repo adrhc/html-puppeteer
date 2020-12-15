@@ -16,19 +16,19 @@ class SimpleRowView extends AbstractTableBasedView {
     }
 
     /**
-     * @param stateChange {SimpleRowStateChange}
-     * @return {Promise<SimpleRowStateChange>}
+     * @param stateChange {StateChange}
+     * @return {Promise<StateChange>}
      */
     update(stateChange) {
-        const updatedRowState = stateChange.state.rowState;
-        if (stateChange.state.action === "DELETE") {
+        const updatedRowState = stateChange.state;
+        if (stateChange.requestType === "DELETE") {
             this.mustacheTableElemAdapter.deleteRowByDataId(updatedRowState.id);
         } else {
             this.mustacheTableElemAdapter.renderRowWithTemplate({
                 rowDataId: updatedRowState.id,
                 data: updatedRowState,
                 rowTmplHtml: this.rowTmplHtml,
-                createIfNotExists: stateChange.state.action === "CREATE",
+                createIfNotExists: stateChange.requestType === "CREATE",
                 tableRelativePosition: this.tableRelativePositionOnCreate
             })
         }

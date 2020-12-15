@@ -46,7 +46,7 @@ class ElasticSimpleListComponent extends SimpleListComponent {
                     case "DELETE":
                         promises.push(this.simpleRow.update(stateChange.state, "DELETE"));
                         break;
-                    case "INSERT":
+                    case "CREATE":
                         promises.push(this.simpleRow.update(stateChange.state, "CREATE"));
                         break;
                     case "UPDATE":

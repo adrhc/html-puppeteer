@@ -24,7 +24,7 @@ if (Modernizr.template) {
                     });
                 editableRow
                     // switch to existing row (aka enter "edit" mode)
-                    .update(items[0], {})
+                    .update(items[0])
                     // extracting row data for e.g. save
                     .then(() => {
                         const extractedEntity = editableRow.extractEntity();
@@ -48,7 +48,7 @@ if (Modernizr.template) {
                 const simpleRow = SimpleRowFactory.prototype.createSimpleRow(
                     dogsTableWithDelete, {});
                 // switch to existing row (aka enter "edit" mode)
-                simpleRow.update(items[0], {})
+                simpleRow.update(items[0])
                     // switch to same row with delete
                     .then(() => simpleRow.update(items[0], "DELETE"));
             });
