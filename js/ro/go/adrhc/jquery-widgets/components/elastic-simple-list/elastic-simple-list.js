@@ -30,7 +30,7 @@ class ElasticSimpleListComponent extends SimpleListComponent {
     }
 
     /**
-     * @param stateChanges {StateChange[]|undefined} used to update the view otherwise use state.consumeAll()
+     * @param stateChanges {StateChange[]|undefined} (delayed state changes) used to update the view otherwise use state.consumeAll()
      * @return {Promise<StateChange[]>}
      */
     updateOnStateChanges(stateChanges) {
