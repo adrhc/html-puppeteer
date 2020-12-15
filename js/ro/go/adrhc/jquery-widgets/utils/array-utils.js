@@ -26,15 +26,16 @@ class ArrayUtils {
     /**
      * @param items {Array<{}>}
      * @param filter
-     * @return {number} removed index
+     * @return removed item
      */
     removeFirstByFilter(items, filter) {
         const index = items.findIndex(filter);
         if (index < 0) {
-            return index;
+            return undefined;
         }
+        const itemToRemove = items[index];
         items.splice(index, 1);
-        return index;
+        return itemToRemove;
     }
 
     /**

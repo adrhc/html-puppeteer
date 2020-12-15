@@ -42,21 +42,21 @@ class EntityUtils {
 
     /**
      * @param items {Array<IdentifiableEntity>}
-     * @return {number|number[]} removed positions (aka indexes)
+     * @return {IdentifiableEntity|IdentifiableEntity[]} removed entities
      */
     removeTransient(items) {
+        let removedEntities = [];
         if (!items || !items.length) {
-            return false;
+            return removedEntities;
         }
-        let removedIndexes = [];
-        let lastRemovedIndex;
+        let lastRemovedEntity;
         do {
-            lastRemovedIndex = EntityUtils.prototype.removeById(EntityUtils.prototype.transientId, items);
-            if (lastRemovedIndex >= 0) {
-                removedIndexes.push(lastRemovedIndex);
+            lastRemovedEntity = EntityUtils.prototype.removeById(EntityUtils.prototype.transientId, items);
+            if (lastRemovedEntity) {
+                removedEntities.push(lastRemovedEntity);
             }
-        } while (lastRemovedIndex >= 0)
-        return removedIndexes.length === 1 ? removedIndexes[0] : removedIndexes;
+        } while (lastRemovedEntity)
+        return removedEntities.length === 1 ? removedEntities[0] : removedEntities;
     }
 
     removeTransientId(object) {
@@ -117,7 +117,7 @@ class EntityUtils {
     /**
      * @param id {number|string}
      * @param items {Array<IdentifiableEntity>}
-     * @return {number} removed index
+     * @return {IdentifiableEntity} removed entity
      */
     removeById(id, items) {
         return ArrayUtils.prototype.removeFirstByFilter(items,

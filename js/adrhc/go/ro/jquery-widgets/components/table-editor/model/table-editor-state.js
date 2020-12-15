@@ -186,7 +186,7 @@ class TableEditorState {
     }
 
     /**
-     * @return {number|number[]} removed positions (aka indexes)
+     * @return {IdentifiableEntity|IdentifiableEntity[]} removed entities
      */
     removeTransientItem() {
         return EntityUtils.prototype.removeTransient(this.items);

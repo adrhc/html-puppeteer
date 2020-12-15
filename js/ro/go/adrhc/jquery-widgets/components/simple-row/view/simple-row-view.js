@@ -20,6 +20,7 @@ class SimpleRowView extends AbstractTableBasedView {
 
     /**
      * @param stateChange {SimpleRowStateChange}
+     * @return {Promise<SimpleRowStateChange>}
      */
     update(stateChange) {
         const previousRowState = stateChange.state.previousRowState;

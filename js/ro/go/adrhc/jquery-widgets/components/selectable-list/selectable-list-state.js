@@ -6,7 +6,7 @@ class SelectableListState extends BasicState {
      * @param items {IdentifiableEntity[]}
      */
     update(items) {
-        this.crudListState.update(items);
+        this.crudListState.updateAll(items);
         this.collectAnotherStateChanges(this.crudListState.stateChanges)
     }
 

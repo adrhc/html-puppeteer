@@ -5,11 +5,13 @@ class SimpleRow extends AbstractTableBasedComponent {
      * @param view {SimpleRowView}
      */
     constructor(mustacheTableElemAdapter, state, view) {
-        super(mustacheTableElemAdapter, state, view);
+        super(mustacheTableElemAdapter, view);
+        this.state = state;
     }
 
     /**
      * @param item
+     * @return {Promise<SimpleRowStateChange>}
      */
     update(item) {
         this.state.update(item);

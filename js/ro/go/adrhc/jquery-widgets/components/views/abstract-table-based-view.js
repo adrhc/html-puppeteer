@@ -26,6 +26,7 @@ class AbstractTableBasedView {
 
     /**
      * @param stageChanges {StateChange|StateChange[]}
+     * @return {Promise<StateChange|StateChange[]>}
      * @abstract
      */
     update(stageChanges) {
