@@ -1,3 +1,9 @@
+/**
+ * todo: should I reset the onOffState when receiving an UPDATE_ALL state change?
+ * When receiving UPDATE_ALL, and notSelectedRow is not automatically creating the related row,
+ * than the next onSelectionSwitch will determine onOffState to render as "deselected" the previous
+ * item but only if already exists (its row) otherwise nothing will be rendered for it.
+ */
 class SelectableElasticListComponent extends ElasticSimpleListComponent {
     /**
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
