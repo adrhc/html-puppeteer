@@ -19,7 +19,8 @@ class SelectableListFactory {
                repository = new InMemoryCrudRepository(items),
                state = new SelectableListState(),
                view = new SimpleListView(mustacheTableElemAdapter),
-               notSelectedRow, selectedRow
+               notSelectedRow,
+               selectedRow
            }) {
         return new SelectableListComponent(mustacheTableElemAdapter, repository, state, view, notSelectedRow, selectedRow);
     }

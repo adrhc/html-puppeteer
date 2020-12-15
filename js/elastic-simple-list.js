@@ -29,6 +29,7 @@ if (Modernizr.template) {
                     crudListState.createNewItem().name = `restored dog2 (at ${putAtBottomIfNotExists ? "bottom" : "top"})`;
                 });
             });
+
     });
 } else {
     // Find another way to add the rows to the table because
