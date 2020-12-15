@@ -24,7 +24,7 @@ if (Modernizr.template) {
                 tableRelativePositionOnCreate
             });
 
-        const component = SelectableListFactory.prototype
+        const component = SelectableElasticListFactory.prototype
             .create({items, tableId, notSelectedRow, selectedRow});
 
         component

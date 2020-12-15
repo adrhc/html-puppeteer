@@ -1,7 +1,7 @@
 /**
- * SelectableListState extends CrudListState (which extends SimpleListState) and OnOffState
+ * SelectableElasticListState extends CrudListState (which extends SimpleListState) and OnOffState
  */
-class SelectableListState extends CrudListState {
+class SelectableElasticListState extends CrudListState {
     onOffState = new OnOffState("SELECT");
 
     /**

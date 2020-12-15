@@ -1,8 +1,8 @@
-class SelectableListComponent extends ElasticSimpleListComponent {
+class SelectableElasticListComponent extends ElasticSimpleListComponent {
     /**
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param repository {CrudRepository}
-     * @param state {SelectableListState}
+     * @param state {SelectableElasticListState}
      * @param view {SimpleListView}
      * @param notSelectedRow {IdentifiableRow}
      * @param selectedRow {IdentifiableRow}
@@ -39,7 +39,7 @@ class SelectableListComponent extends ElasticSimpleListComponent {
             .map(it => it.state)
             .filter(onOff => onOff.state)
             .forEach(onOff => {
-                console.log("SelectableListComponent.onSelectionSwitch\n", onOff);
+                console.log("SelectableElasticListComponent.onSelectionSwitch\n", onOff);
                 console.log(JSON.stringify(onOff));
                 selectableList._rowSelector[onOff.isOff].update(onOff.state, {});
             });
