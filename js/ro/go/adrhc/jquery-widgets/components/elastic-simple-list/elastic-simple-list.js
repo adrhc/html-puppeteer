@@ -1,6 +1,6 @@
 /**
- * A SimpleListComponent capable of updating the view based on item-level state changes.
- * Uses a SimpleRow to update the changed item.
+ * A SimpleListComponent able to accept item-level state changes and updating the view at row level.
+ * Uses a SimpleRow to render the updated items.
  */
 class ElasticSimpleListComponent extends SimpleListComponent {
     /**
