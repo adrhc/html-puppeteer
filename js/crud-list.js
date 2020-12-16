@@ -14,7 +14,7 @@ if (Modernizr.template) {
 
         // dogs table with both read-only and editable row
         const tableId = "dogsTable";
-        const tableRelativePositionOnCreate = "append";
+        const tableRelativePositionOnCreate = "prepend";
 
         const readOnlyRow = SimpleRowFactory.prototype.createIdentifiableRow(
             tableId, {tableRelativePositionOnCreate});
@@ -37,7 +37,6 @@ if (Modernizr.template) {
             .init()
             .then(() => {
                 component.doWithState((crudListState) => {
-                    crudListState.createNewItem().name = `new dog (with table ${tableRelativePositionOnCreate})`;
                     crudListState.updateItem({id: 3, name: "updated dog3"});
                     crudListState.removeById(2);
                     crudListState.insertItem({
