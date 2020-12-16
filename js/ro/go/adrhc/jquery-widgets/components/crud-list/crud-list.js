@@ -33,6 +33,6 @@ class CrudListComponent extends SelectableElasticListComponent {
         super._configureEvents();
         this.tableAdapter.$table
             .on(this.withNamespaceFor('click'),
-                `${this.ownerSelector}[data-btn='delete']`, this, this.switchToDelete);
+                `${this.ownerSelector}[data-btn='showDelete']`, this, this.switchToDelete);
     }
 }

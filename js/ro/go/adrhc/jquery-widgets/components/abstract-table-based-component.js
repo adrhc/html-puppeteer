@@ -1,4 +1,7 @@
 class AbstractTableBasedComponent {
+    /**
+     * @type {TableElementAdapter}
+     */
     tableAdapter;
 
     /**

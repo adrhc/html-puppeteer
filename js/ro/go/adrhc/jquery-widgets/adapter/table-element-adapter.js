@@ -48,8 +48,7 @@ class TableElementAdapter {
      */
     rowDataIdOf(elem, searchParentsForDataIdIfMissingOnElem) {
         const $elem = elem instanceof jQuery ? elem : $(elem);
-        const ownerSelector = this.ownerSelector;
-        if ($elem.is(ownerSelector)) {
+        if ($elem.is(this.ownerSelector)) {
             const dataId = $elem.data("id");
             if (dataId) {
                 return $elem.data("id");
@@ -67,7 +66,7 @@ class TableElementAdapter {
      */
     rowDataIdOfParent(elem) {
         const $elem = elem instanceof jQuery ? elem : $(elem);
-        return $elem.parents(`tr${ownerSelector}`).data("id");
+        return $elem.parents(`tr${this.ownerSelector}`).data("id");
     }
 
     emptyRowHtmlOf(rowDataId) {

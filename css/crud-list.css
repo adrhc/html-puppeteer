@@ -13,3 +13,7 @@ td.button img {
     margin-right: auto;
     cursor: pointer;
 }
+
+table th {
+    text-align: center !important;
+}
