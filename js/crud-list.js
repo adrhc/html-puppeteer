@@ -23,9 +23,15 @@ if (Modernizr.template) {
                 rowTmpl: "dogsTableEditableRowTmpl",
                 tableRelativePositionOnCreate
             });
+        // doesn't make sense to use tableRelativePositionOnCreate
+        // because the row to delete always have to already exist
+        const deletableRow = SimpleRowFactory.prototype.createIdentifiableRow(
+            tableId, {
+                rowTmpl: "dogsTableDeletableRowTmpl"
+            });
 
         const component = CrudListFactory.prototype
-            .create({items, tableId, readOnlyRow, editableRow});
+            .create({items, tableId, readOnlyRow, editableRow, deletableRow});
 
         component
             .init()

@@ -31,23 +31,18 @@
     <tr data-owner="dogsTable" data-id="{{id}}">
         <td>
             <input type="hidden" name="id" value="{{id}}">
-            {{name}}
+            {{{name}}}
         </td>
     </tr>
 </template>
 
 <!-- dogs deletable row template -->
 <template id="dogsTableDeletableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}">
-        <td>
-            <input type="hidden" name="id" value="{{id}}">
-            {{name}}
-        </td>
+    <tr data-owner="dogsTable" data-id="{{id}}" class="deletable-row">
+        <td>{{{name}}}</td>
     </tr>
     <tr>
-        <td colspan="1">
-            row to delete
-        </td>
+        <td colspan="1">row to delete</td>
     </tr>
 </template>
 

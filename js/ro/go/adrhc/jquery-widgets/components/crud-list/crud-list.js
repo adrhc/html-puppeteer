@@ -6,11 +6,13 @@ class CrudListComponent extends SelectableElasticListComponent {
      * @param view {SimpleListView}
      * @param readOnlyRow {IdentifiableRow}
      * @param editableRow {IdentifiableRow}
+     * @param deletableRow {IdentifiableRow}
      */
     constructor(mustacheTableElemAdapter,
                 repository, state, view,
-                readOnlyRow, editableRow) {
+                readOnlyRow, editableRow, deletableRow) {
         super(mustacheTableElemAdapter, repository, state, view, readOnlyRow, editableRow);
+        this.deletableRow = deletableRow;
     }
 
     /**

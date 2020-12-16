@@ -9,6 +9,7 @@ class CrudListFactory {
      * @param view {SimpleListView}
      * @param readOnlyRow {IdentifiableRow}
      * @param editableRow {IdentifiableRow}
+     * @param deletableRow {IdentifiableRow}
      * @return {CrudListFactory}
      */
     create({
@@ -20,8 +21,9 @@ class CrudListFactory {
                state = new SelectableElasticListState(),
                view = new SimpleListView(mustacheTableElemAdapter),
                readOnlyRow,
-               editableRow
+               editableRow,
+               deletableRow
            }) {
-        return new CrudListComponent(mustacheTableElemAdapter, repository, state, view, readOnlyRow, editableRow);
+        return new CrudListComponent(mustacheTableElemAdapter, repository, state, view, readOnlyRow, editableRow, deletableRow);
     }
 }
