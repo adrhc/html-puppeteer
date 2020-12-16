@@ -1,6 +1,5 @@
 class CrudListComponent extends SelectableElasticListComponent {
     /**
-     * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param repository {CrudRepository}
      * @param state {SelectableElasticListState}
      * @param view {SimpleListView}
@@ -8,11 +7,10 @@ class CrudListComponent extends SelectableElasticListComponent {
      * @param editableRow {IdentifiableRow}
      * @param deletableRow {IdentifiableRow}
      */
-    constructor(mustacheTableElemAdapter,
-                repository, state, view,
+    constructor(repository, state, view,
                 readOnlyRow, editableRow, deletableRow) {
-        super(mustacheTableElemAdapter, repository, state, view, readOnlyRow, editableRow);
-        this._onOffContextAwareRowSelector = {
+        super(repository, state, view, readOnlyRow, editableRow);
+        this._swappingContextAwareRowSelector = {
             "SHOW_DELETE": deletableRow
         }
     }
@@ -24,7 +22,7 @@ class CrudListComponent extends SelectableElasticListComponent {
      */
     switchToDelete(ev) {
         const selectableList = ev.data;
-        const rowDataId = selectableList.view.rowDataIdOf(this, true);
+        const rowDataId = selectableList.rowDataIdOf(this, true);
         if (!rowDataId) {
             return;
         }
@@ -40,8 +38,8 @@ class CrudListComponent extends SelectableElasticListComponent {
     _updateOnSelect(stateChange) {
         const onOff = stateChange.state;
         const selectableOnOffData = onOff.data;
-        if (!onOff.isOff && selectableOnOffData.context) {
-            return this._onOffContextAwareRowSelector[selectableOnOffData.context].update(selectableOnOffData.item);
+        if (!onOff.isPrevious && selectableOnOffData.context) {
+            return this._swappingContextAwareRowSelector[selectableOnOffData.context].update(selectableOnOffData.item);
         } else {
             return super._updateOnSelect(stateChange);
         }
@@ -53,7 +51,7 @@ class CrudListComponent extends SelectableElasticListComponent {
      */
     _configureEvents() {
         super._configureEvents();
-        this.mustacheTableElemAdapter.$table
+        this.tableAdapter.$table
             .on(this.withNamespaceFor('click'),
                 `${this.ownerSelector}[data-btn='delete']`, this, this.switchToDelete);
     }

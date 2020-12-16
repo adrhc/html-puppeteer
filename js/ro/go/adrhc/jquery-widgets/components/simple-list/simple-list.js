@@ -4,14 +4,12 @@
  */
 class SimpleListComponent extends AbstractTableBasedComponent {
     /**
-     * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param repository {CrudRepository}
      * @param state {CrudListState}
      * @param view {SimpleListView}
      */
-    constructor(mustacheTableElemAdapter,
-                repository, state, view) {
-        super(mustacheTableElemAdapter, view);
+    constructor(repository, state, view) {
+        super(view);
         this.repository = repository;
         this.state = state;
     }

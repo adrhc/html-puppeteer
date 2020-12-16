@@ -18,6 +18,6 @@ class SimpleListFactory {
                state = new SimpleListState(),
                view = new SimpleListView(mustacheTableElemAdapter)
            }) {
-        return new SimpleListComponent(mustacheTableElemAdapter, repository, state, view);
+        return new SimpleListComponent(repository, state, view);
     }
 }

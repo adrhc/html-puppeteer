@@ -4,14 +4,13 @@
  */
 class ElasticSimpleListComponent extends SimpleListComponent {
     /**
-     * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param repository {CrudRepository}
      * @param state {CrudListState}
      * @param view {SimpleListView}
      * @param simpleRow {SimpleRow}
      */
-    constructor(mustacheTableElemAdapter, repository, state, view, simpleRow) {
-        super(mustacheTableElemAdapter, repository, state, view);
+    constructor(repository, state, view, simpleRow) {
+        super(repository, state, view);
         this.simpleRow = simpleRow;
     }
 

@@ -1,8 +1,8 @@
 /**
- * SelectableElasticListState extends CrudListState (which extends SimpleListState) and OnOffState
+ * SelectableElasticListState extends CrudListState (which extends SimpleListState) and SwappingState
  */
 class SelectableElasticListState extends CrudListState {
-    onOffState = new OnOffState("SELECT");
+    swappingState = new SwappingState();
 
     /**
      * @param id {numeric|string}
@@ -10,7 +10,7 @@ class SelectableElasticListState extends CrudListState {
      */
     switchTo(id, context) {
         const item = this.findById(id);
-        this.onOffState.switchTo(new SelectableOnOffData(item, context));
-        this.collectAnotherStateChanges(this.onOffState.stateChanges)
+        this.swappingState.switchTo(new SelectableSwappingData(item, context));
+        this.collectAnotherStateChanges(this.swappingState.stateChanges)
     }
 }

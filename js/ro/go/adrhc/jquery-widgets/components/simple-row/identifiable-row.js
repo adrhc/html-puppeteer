@@ -1,11 +1,10 @@
 class IdentifiableRow extends SimpleRow {
     /**
-     * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param state {SimpleRowState}
      * @param view {SimpleRowView}
      */
-    constructor(mustacheTableElemAdapter, state, view) {
-        super(mustacheTableElemAdapter, state, view);
+    constructor(state, view) {
+        super(state, view);
     }
 
     /**
@@ -16,7 +15,7 @@ class IdentifiableRow extends SimpleRow {
      */
     extractEntity(useOwnerOnFields = false) {
         const identifiableEntity = this.state.rowState;
-        const $row = this.mustacheTableElemAdapter.$getRowByDataId(identifiableEntity.id);
+        const $row = this.tableAdapter.$getRowByDataId(identifiableEntity.id);
         return EntityFormUtils.prototype.extractEntityFrom($row, useOwnerOnFields ? this.owner : undefined);
     }
 }

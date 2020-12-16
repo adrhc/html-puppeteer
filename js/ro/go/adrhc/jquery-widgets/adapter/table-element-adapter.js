@@ -41,6 +41,35 @@ class TableElementAdapter {
         }
     }
 
+    /**
+     * @param elem {HTMLElement|jQuery}
+     * @param searchParentsForDataIdIfMissingOnElem {boolean|undefined}
+     * @return {string|number}
+     */
+    rowDataIdOf(elem, searchParentsForDataIdIfMissingOnElem) {
+        const $elem = elem instanceof jQuery ? elem : $(elem);
+        const ownerSelector = this.ownerSelector;
+        if ($elem.is(ownerSelector)) {
+            const dataId = $elem.data("id");
+            if (dataId) {
+                return $elem.data("id");
+            } else if (searchParentsForDataIdIfMissingOnElem) {
+                return this.rowDataIdOfParent($elem);
+            }
+        } else {
+            return this.rowDataIdOfParent($elem);
+        }
+    }
+
+    /**
+     * @param elem {HTMLElement|jQuery}
+     * @return {string|number}
+     */
+    rowDataIdOfParent(elem) {
+        const $elem = elem instanceof jQuery ? elem : $(elem);
+        return $elem.parents(`tr${ownerSelector}`).data("id");
+    }
+
     emptyRowHtmlOf(rowDataId) {
         return `<tr data-owner='${this.tableId}' data-id='${rowDataId}'></tr>`;
     }

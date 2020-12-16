@@ -1,13 +1,21 @@
 class AbstractTableBasedComponent {
-    mustacheTableElemAdapter;
+    tableAdapter;
 
     /**
-     * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param view {AbstractTableBasedView}
      */
-    constructor(mustacheTableElemAdapter, view) {
-        this.mustacheTableElemAdapter = mustacheTableElemAdapter;
+    constructor(view) {
+        this.tableAdapter = view.tableAdapter;
         this.view = view;
+    }
+
+    /**
+     * @param elem {HTMLElement|jQuery}
+     * @param searchParentsForDataIdIfMissingOnElem {boolean|undefined}
+     * @return {string|number}
+     */
+    rowDataIdOf(elem, searchParentsForDataIdIfMissingOnElem) {
+        return this.tableAdapter.rowDataIdOf(elem, searchParentsForDataIdIfMissingOnElem);
     }
 
     /**
@@ -27,11 +35,11 @@ class AbstractTableBasedComponent {
     }
 
     get ownerSelector() {
-        return this.mustacheTableElemAdapter.ownerSelector;
+        return this.tableAdapter.ownerSelector;
     }
 
     get owner() {
-        return this.mustacheTableElemAdapter.tableId;
+        return this.tableAdapter.tableId;
     }
 
     /**

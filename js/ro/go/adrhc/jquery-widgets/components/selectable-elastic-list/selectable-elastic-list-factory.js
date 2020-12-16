@@ -22,6 +22,6 @@ class SelectableElasticListFactory {
                notSelectedRow,
                selectedRow
            }) {
-        return new SelectableElasticListComponent(mustacheTableElemAdapter, repository, state, view, notSelectedRow, selectedRow);
+        return new SelectableElasticListComponent(repository, state, view, notSelectedRow, selectedRow);
     }
 }

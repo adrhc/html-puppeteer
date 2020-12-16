@@ -14,7 +14,7 @@ class SimpleRowFactory {
             rowTmplHtml,
             tableRelativePositionOnCreate
         });
-        return new SimpleRow(mustacheTableElemAdapter, state, view);
+        return new SimpleRow(state, view);
     }
 
     createIdentifiableRow(
@@ -32,6 +32,6 @@ class SimpleRowFactory {
             rowTmplHtml,
             tableRelativePositionOnCreate
         });
-        return new IdentifiableRow(mustacheTableElemAdapter, state, view);
+        return new IdentifiableRow(state, view);
     }
 }

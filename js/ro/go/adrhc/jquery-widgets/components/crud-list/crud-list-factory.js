@@ -24,6 +24,6 @@ class CrudListFactory {
                editableRow,
                deletableRow
            }) {
-        return new CrudListComponent(mustacheTableElemAdapter, repository, state, view, readOnlyRow, editableRow, deletableRow);
+        return new CrudListComponent(repository, state, view, readOnlyRow, editableRow, deletableRow);
     }
 }

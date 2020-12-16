@@ -21,6 +21,6 @@ class ElasticSimpleListFactory {
                simpleRow = SimpleRowFactory.prototype
                    .createSimpleRow(tableId, {bodyRowTmplId})
            }) {
-        return new ElasticSimpleListComponent(mustacheTableElemAdapter, repository, state, view, simpleRow);
+        return new ElasticSimpleListComponent(repository, state, view, simpleRow);
     }
 }

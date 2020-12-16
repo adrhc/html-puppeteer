@@ -1,11 +1,10 @@
 class SimpleRow extends AbstractTableBasedComponent {
     /**
-     * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param state {SimpleRowState}
      * @param view {SimpleRowView}
      */
-    constructor(mustacheTableElemAdapter, state, view) {
-        super(mustacheTableElemAdapter, view);
+    constructor(state, view) {
+        super(view);
         this.state = state;
     }
 

@@ -1,22 +1,20 @@
 /**
- * todo: should I reset the onOffState when receiving an UPDATE_ALL state change?
+ * todo: should I reset the swappingState when receiving an UPDATE_ALL state change?
  * When receiving UPDATE_ALL, and notSelectedRow is not automatically creating the related row,
- * than the next onSelectionSwitch will determine onOffState to render as "deselected" the previous
+ * than the next onSelectionSwitch will determine swappingState to render as "deselected" the previous
  * item but only if already exists (its row) otherwise nothing will be rendered for it.
  */
 class SelectableElasticListComponent extends ElasticSimpleListComponent {
     /**
-     * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param repository {CrudRepository}
      * @param state {SelectableElasticListState}
      * @param view {SimpleListView}
      * @param notSelectedRow {IdentifiableRow}
      * @param selectedRow {IdentifiableRow}
      */
-    constructor(mustacheTableElemAdapter,
-                repository, state, view,
+    constructor(repository, state, view,
                 notSelectedRow, selectedRow) {
-        super(mustacheTableElemAdapter, repository, state, view, notSelectedRow);
+        super(repository, state, view, notSelectedRow);
         this._onOffRowSelector = {
             false: selectedRow,
             true: notSelectedRow
@@ -38,7 +36,7 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
             return;
         }
         ev.stopPropagation();
-        const rowDataId = selectableList.view.rowDataIdOf(this);
+        const rowDataId = selectableList.rowDataIdOf(this);
         selectableList._switchToId(rowDataId, this.selectedRequestType);
     }
 
@@ -73,7 +71,7 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
         const onOff = stateChange.state;
         const selectableOnOffData = onOff.data;
         if (selectableOnOffData.item) {
-            return this._onOffRowSelector[onOff.isOff].update(selectableOnOffData.item);
+            return this._onOffRowSelector[onOff.isPrevious].update(selectableOnOffData.item);
         } else {
             return Promise.resolve(stateChange);
         }
@@ -84,7 +82,7 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
      * @protected
      */
     _configureEvents() {
-        this.mustacheTableElemAdapter.$table
+        this.tableAdapter.$table
             .on(this.withNamespaceFor('dblclick'),
                 `tr${this.ownerSelector}`, this, this.onSelectionSwitch);
     }
@@ -93,6 +91,6 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
      * @return {string}
      */
     get selectedRequestType() {
-        return this.state.onOffState.requestType;
+        return this.state.swappingState.requestType;
     }
 }
