@@ -6,10 +6,9 @@ class EditableListState extends SelectableElasticListState {
     switchTo(id, context) {
         const currentSelectableSwappingData = this.currentSelectableSwappingData;
         super.switchTo(id, context);
-        const nextSelectableSwappingData = this.currentSelectableSwappingData;
         if (!currentSelectableSwappingData || !currentSelectableSwappingData.item) {
             // previous switch doesn't exist
-        } else if (currentSelectableSwappingData.equals(nextSelectableSwappingData)) {
+        } else if (currentSelectableSwappingData.equals(this.currentSelectableSwappingData)) {
             // previous switch equals the next one
         } else if (EntityUtils.prototype.isTransientId(currentSelectableSwappingData.item.id)) {
             // previous switch is transient entity
