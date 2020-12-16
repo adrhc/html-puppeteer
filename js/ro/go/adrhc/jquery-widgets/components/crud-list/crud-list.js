@@ -7,7 +7,9 @@ class CrudListComponent extends SelectableElasticListComponent {
      */
     constructor(repository, state, view, deletableRow) {
         super(repository, state, view);
-        this.view.swappingRowSelector["SHOW_DELETE"] = deletableRow;
+        this.view.swappingRowSelector["showAdd"] = this.view.swappingRowSelector[true];
+        this.view.swappingRowSelector["showDelete"] = deletableRow;
+        this.view.swappingRowSelector["showEdit"] = this.view.swappingRowSelector[false];
     }
 
     /**
@@ -15,14 +17,16 @@ class CrudListComponent extends SelectableElasticListComponent {
      *
      * @param ev {Event}
      */
-    switchToDelete(ev) {
+    onButton(ev) {
         const selectableList = ev.data;
         const rowDataId = selectableList.rowDataIdOf(this, true);
-        if (!rowDataId) {
+        const context = $(this).data("btn");
+        if (!rowDataId || !context) {
             return;
         }
         ev.stopPropagation();
-        selectableList._doSwap(rowDataId, "SHOW_DELETE");
+        // showEdit context should match the context used for row double-click in SelectableElasticListComponent
+        selectableList._doSwap(rowDataId, context === "showEdit" ? undefined : context);
     }
 
     /**
@@ -33,6 +37,8 @@ class CrudListComponent extends SelectableElasticListComponent {
         super._configureEvents();
         this.tableAdapter.$table
             .on(this.withNamespaceFor('click'),
-                `${this.ownerSelector}[data-btn='showDelete']`, this, this.switchToDelete);
+                `${this.ownerSelector}[data-btn='showAdd'],
+                ${this.ownerSelector}[data-btn='showDelete'],
+                ${this.ownerSelector}[data-btn='showEdit']`, this, this.onButton);
     }
 }
