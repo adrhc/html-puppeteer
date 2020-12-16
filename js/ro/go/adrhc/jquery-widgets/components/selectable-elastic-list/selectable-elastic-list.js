@@ -39,21 +39,29 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
         }
         ev.stopPropagation();
         const rowDataId = selectableList.view.rowDataIdOf(this);
-        selectableList.state.switchTo(rowDataId);
-        selectableList.state.consumeAll()
+        selectableList._switchToId(rowDataId);
+    }
+
+    /**
+     * @param rowDataId {string|number}
+     * @protected
+     */
+    _switchToId(rowDataId) {
+        this.state.switchTo(rowDataId);
+        this.state.consumeAll()
             .filter(onOffStateChange => onOffStateChange.requestType === "SELECT")
             .map(it => it.state)
             .filter(onOff => onOff.state)
             .forEach(onOff => {
                 console.log("SelectableElasticListComponent.onSelectionSwitch\n", onOff);
                 console.log(JSON.stringify(onOff));
-                selectableList._rowSelector[onOff.isOff].update(onOff.state);
+                this._rowSelector[onOff.isOff].update(onOff.state);
             });
     }
 
     /**
      * linking "outside" (and/or default) triggers to component's handlers (aka capabilities)
-     * @private
+     * @protected
      */
     _configureEvents() {
         this.mustacheTableElemAdapter.$table

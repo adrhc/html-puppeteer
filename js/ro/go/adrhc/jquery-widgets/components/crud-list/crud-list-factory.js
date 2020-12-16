@@ -1,4 +1,4 @@
-class SelectableElasticListFactory {
+class CrudListFactory {
     /**
      * @param items {IdentifiableEntity[]}
      * @param tableId {string}
@@ -7,21 +7,21 @@ class SelectableElasticListFactory {
      * @param repository {CrudRepository}
      * @param state {SelectableElasticListState}
      * @param view {SimpleListView}
-     * @param notSelectedRow {IdentifiableRow}
-     * @param selectedRow {IdentifiableRow}
-     * @return {SelectableElasticListComponent}
+     * @param readOnlyRow {IdentifiableRow}
+     * @param editableRow {IdentifiableRow}
+     * @return {CrudListFactory}
      */
     create({
                items = [],
-               tableId = "simpleList",
+               tableId = "crudList",
                bodyRowTmplId,
                mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, bodyRowTmplId),
                repository = new InMemoryCrudRepository(items),
                state = new SelectableElasticListState(),
                view = new SimpleListView(mustacheTableElemAdapter),
-               notSelectedRow,
-               selectedRow
+               readOnlyRow,
+               editableRow
            }) {
-        return new SelectableElasticListComponent(mustacheTableElemAdapter, repository, state, view, notSelectedRow, selectedRow);
+        return new CrudListComponent(mustacheTableElemAdapter, repository, state, view, readOnlyRow, editableRow);
     }
 }

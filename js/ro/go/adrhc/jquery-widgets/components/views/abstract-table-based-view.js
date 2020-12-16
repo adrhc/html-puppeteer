@@ -8,16 +8,31 @@ class AbstractTableBasedView {
 
     /**
      * @param elem {HTMLElement}
+     * @param searchParentsForDataIdIfMissingOnElem {boolean|undefined}
      * @return {string}
      */
-    rowDataIdOf(elem) {
+    rowDataIdOf(elem, searchParentsForDataIdIfMissingOnElem) {
         const $elem = $(elem);
         const ownerSelector = this.mustacheTableElemAdapter.ownerSelector;
         if ($elem.is(ownerSelector)) {
-            return $elem.data("id");
+            const dataId = $elem.data("id");
+            if (dataId) {
+                return $elem.data("id");
+            } else if (searchParentsForDataIdIfMissingOnElem) {
+                return this.rowDataIdOfParent($elem);
+            }
         } else {
-            return $elem.parents(`tr${ownerSelector}`).data("id");
+            return this.rowDataIdOfParent($elem);
         }
+    }
+
+    /**
+     * @param elem {HTMLElement}
+     * @return {string}
+     */
+    rowDataIdOfParent(elem) {
+        const $elem = elem instanceof jQuery ? elem : $(elem);
+        return $elem.parents(`tr${ownerSelector}`).data("id");
     }
 
     get owner() {
