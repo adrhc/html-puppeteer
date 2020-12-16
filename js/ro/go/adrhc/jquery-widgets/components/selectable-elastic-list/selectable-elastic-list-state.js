@@ -11,12 +11,21 @@ class SelectableElasticListState extends CrudListState {
     switchTo(id, context) {
         const item = this.findById(id);
         const newSelectableSwappingData = new SelectableSwappingData(item, context);
-        if (this.swappingState.swappingDetails
-            && this.swappingState.swappingDetails.data
-            && this.swappingState.swappingDetails.data.equals(newSelectableSwappingData)) {
+        if (this._isEqualToCurrent(newSelectableSwappingData)) {
             return;
         }
         this.swappingState.switchTo(newSelectableSwappingData);
         this.collectAnotherStateChanges(this.swappingState.stateChanges)
+    }
+
+    /**
+     * @param newSelectableSwappingData {SelectableSwappingData}
+     * @return {boolean}
+     * @protected
+     */
+    _isEqualToCurrent(newSelectableSwappingData) {
+        return this.swappingState.swappingDetails
+            && this.swappingState.swappingDetails.data
+            && this.swappingState.swappingDetails.data.equals(newSelectableSwappingData);
     }
 }
