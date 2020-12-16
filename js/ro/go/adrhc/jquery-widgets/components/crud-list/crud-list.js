@@ -12,7 +12,9 @@ class CrudListComponent extends SelectableElasticListComponent {
                 repository, state, view,
                 readOnlyRow, editableRow, deletableRow) {
         super(mustacheTableElemAdapter, repository, state, view, readOnlyRow, editableRow);
-        this.deletableRow = deletableRow;
+        this._onOffContextAwareRowSelector = {
+            "SHOW_DELETE": deletableRow
+        }
     }
 
     /**
@@ -27,7 +29,22 @@ class CrudListComponent extends SelectableElasticListComponent {
             return;
         }
         ev.stopPropagation();
-        selectableList._switchToId(rowDataId);
+        selectableList._switchToId(rowDataId, "SHOW_DELETE");
+    }
+
+    /**
+     * @param stateChange
+     * @return {Promise<StateChange>}
+     * @protected
+     */
+    _updateOnSelect(stateChange) {
+        const onOff = stateChange.state;
+        const selectableOnOffData = onOff.data;
+        if (!onOff.isOff && selectableOnOffData.context) {
+            return this._onOffContextAwareRowSelector[selectableOnOffData.context].update(selectableOnOffData.item);
+        } else {
+            return super._updateOnSelect(stateChange);
+        }
     }
 
     /**

@@ -10,7 +10,7 @@ class SelectableElasticListState extends CrudListState {
      */
     switchTo(id, context) {
         const item = this.findById(id);
-        this.onOffState.switchTo({item, context});
+        this.onOffState.switchTo(new SelectableOnOffData(item, context));
         this.collectAnotherStateChanges(this.onOffState.stateChanges)
     }
 }

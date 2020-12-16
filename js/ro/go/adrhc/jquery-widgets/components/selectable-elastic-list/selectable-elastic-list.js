@@ -17,7 +17,7 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
                 repository, state, view,
                 notSelectedRow, selectedRow) {
         super(mustacheTableElemAdapter, repository, state, view, notSelectedRow);
-        this._rowSelector = {
+        this._onOffRowSelector = {
             false: selectedRow,
             true: notSelectedRow
         };
@@ -39,7 +39,7 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
         }
         ev.stopPropagation();
         const rowDataId = selectableList.view.rowDataIdOf(this);
-        selectableList._switchToId(rowDataId);
+        selectableList._switchToId(rowDataId, this.selectedRequestType);
     }
 
     /**
@@ -56,7 +56,7 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
         stateChange = stateChange ? stateChange : this.state.consumeOne();
         console.log("SelectableElasticListComponent.updateOnStateChange\n", JSON.stringify(stateChange));
         switch (stateChange.requestType) {
-            case "SELECT":
+            case this.selectedRequestType:
                 return this._updateOnSelect(stateChange);
             default:
                 console.warn(`SelectableElasticListComponent delegating view update to super for ${stateChange.requestType}`)
@@ -71,8 +71,9 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
      */
     _updateOnSelect(stateChange) {
         const onOff = stateChange.state;
-        if (onOff.data.item) {
-            return this._rowSelector[onOff.isOff].update(onOff.data.item);
+        const selectableOnOffData = onOff.data;
+        if (selectableOnOffData.item) {
+            return this._onOffRowSelector[onOff.isOff].update(selectableOnOffData.item);
         } else {
             return Promise.resolve(stateChange);
         }
@@ -86,5 +87,12 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
         this.mustacheTableElemAdapter.$table
             .on(this.withNamespaceFor('dblclick'),
                 `tr${this.ownerSelector}`, this, this.onSelectionSwitch);
+    }
+
+    /**
+     * @return {string}
+     */
+    get selectedRequestType() {
+        return this.state.onOffState.requestType;
     }
 }
