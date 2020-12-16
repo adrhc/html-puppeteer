@@ -35,6 +35,15 @@ class CrudListComponent extends SelectableElasticListComponent {
         selectableList._doSwap(undefined);
     }
 
+    onAdd(ev) {
+        ev.stopPropagation();
+        const selectableList = ev.data;
+        selectableList.doWithState((crudListState) => {
+            const newId = crudListState.createNewItem().id;
+            selectableList._doSwap(newId);
+        });
+    }
+
     /**
      * linking "outside" (and/or default) triggers to component's handlers (aka capabilities)
      * @private
@@ -43,10 +52,11 @@ class CrudListComponent extends SelectableElasticListComponent {
         super._configureEvents();
         this.tableAdapter.$table
             .on(this.withNamespaceFor('click'),
-                `${this.ownerSelector}[data-btn='showAdd'],
-                ${this.ownerSelector}[data-btn='showDelete'],
+                `${this.ownerSelector}[data-btn='showDelete'],
                 ${this.ownerSelector}[data-btn='showEdit']`, this, this.onShowCDU)
             .on(this.withNamespaceFor('click'),
-                `${this.ownerSelector}[data-btn='cancel']`, this, this.onCancel);
+                `${this.ownerSelector}[data-btn='cancel']`, this, this.onCancel)
+            .on(this.withNamespaceFor('click'),
+                `${this.ownerSelector}[data-btn='showAdd']`, this, this.onAdd);
     }
 }
