@@ -10,9 +10,7 @@ class CrudListComponent extends SelectableElasticListComponent {
     constructor(repository, state, view,
                 readOnlyRow, editableRow, deletableRow) {
         super(repository, state, view, readOnlyRow, editableRow);
-        this._swappingContextAwareRowSelector = {
-            "SHOW_DELETE": deletableRow
-        }
+        this._swappingRowSelector["SHOW_DELETE"] = deletableRow;
     }
 
     /**
@@ -27,22 +25,7 @@ class CrudListComponent extends SelectableElasticListComponent {
             return;
         }
         ev.stopPropagation();
-        selectableList._switchToId(rowDataId, "SHOW_DELETE");
-    }
-
-    /**
-     * @param stateChange
-     * @return {Promise<StateChange>}
-     * @protected
-     */
-    _updateOnSelect(stateChange) {
-        const onOff = stateChange.data;
-        const selectableOnOffData = onOff.data;
-        if (!onOff.isPrevious && selectableOnOffData.context) {
-            return this._swappingContextAwareRowSelector[selectableOnOffData.context].update(selectableOnOffData.item);
-        } else {
-            return super._updateOnSelect(stateChange);
-        }
+        selectableList._doSwap(rowDataId, "SHOW_DELETE");
     }
 
     /**

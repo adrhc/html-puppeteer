@@ -25,26 +25,26 @@ class ElasticSimpleListComponent extends SimpleListComponent {
         if (delayViewUpdate) {
             return Promise.resolve(this.state.stateChanges.peekAll());
         }
-        return this.updateOnStateChanges();
+        return this.updateViewOnStateChanges();
     }
 
     /**
      * @param stateChanges {StateChange[]|undefined} (delayed state changes) used to update the view otherwise use state.consumeAll()
      * @return {Promise<StateChange[]>}
      */
-    updateOnStateChanges(stateChanges) {
+    updateViewOnStateChanges(stateChanges) {
         stateChanges = stateChanges ? stateChanges : this.state.consumeAll();
         const promises = [];
         stateChanges
             .forEach(stateChange => {
-                promises.push(this.updateOnStateChange(stateChange));
+                promises.push(this.updateViewOnStateChange(stateChange));
             });
         return Promise.allSettled(promises).then(() => stateChanges);
     }
 
-    updateOnStateChange(stateChange) {
+    updateViewOnStateChange(stateChange) {
         stateChange = stateChange ? stateChange : this.state.consumeOne();
-        console.log("ElasticSimpleListComponent.updateOnStateChange\n", JSON.stringify(stateChange));
+        console.log("ElasticSimpleListComponent.updateViewOnStateChange\n", JSON.stringify(stateChange));
         switch (stateChange.requestType) {
             case "DELETE":
                 return this.simpleRow.update(stateChange.data, "DELETE");
@@ -54,7 +54,7 @@ class ElasticSimpleListComponent extends SimpleListComponent {
                 return this.simpleRow.update(stateChange.data);
             default:
                 console.warn(`ElasticSimpleListComponent delegating view update to super for ${stateChange.requestType}`)
-                return super.updateOnStateChange(stateChange);
+                return super.updateViewOnStateChange(stateChange);
         }
     }
 }

@@ -23,7 +23,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
             .then((items) => {
                 console.log("TableEditorComponent items:\n", JSON.stringify(items));
                 this.state.updateAll(items);
-                return this.updateOnStateChange();
+                return this.updateViewOnStateChange();
             });
     }
 
@@ -31,7 +31,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @param stateChange {StateChange|undefined} used to update the view otherwise use state.consumeOne()
      * @return {Promise<StateChange>}
      */
-    updateOnStateChange(stateChange) {
+    updateViewOnStateChange(stateChange) {
         stateChange = stateChange ? stateChange : this.state.consumeOne();
         return this.view.update(stateChange);
     }

@@ -1,7 +1,7 @@
 /**
  * todo: should I reset the swappingState when receiving an UPDATE_ALL state change?
  * When receiving UPDATE_ALL, and notSelectedRow is not automatically creating the related row,
- * than the next onSelectionSwitch will determine swappingState to render as "deselected" the previous
+ * than the next onSwapping will determine swappingState to render as "deselected" the previous
  * item but only if already exists (its row) otherwise nothing will be rendered for it.
  */
 class SelectableElasticListComponent extends ElasticSimpleListComponent {
@@ -15,7 +15,7 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
     constructor(repository, state, view,
                 notSelectedRow, selectedRow) {
         super(repository, state, view, notSelectedRow);
-        this._onOffRowSelector = {
+        this._swappingRowSelector = {
             false: selectedRow,
             true: notSelectedRow
         };
@@ -30,14 +30,14 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
      *
      * @param ev {Event}
      */
-    onSelectionSwitch(ev) {
+    onSwapping(ev) {
         const selectableList = ev.data;
         if (!$(this).is("tr,td,th")) {
             return;
         }
         ev.stopPropagation();
         const rowDataId = selectableList.rowDataIdOf(this);
-        selectableList._switchToId(rowDataId, this.selectedRequestType);
+        selectableList._doSwap(rowDataId, this.swappingRequestType);
     }
 
     /**
@@ -45,35 +45,52 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
      * @param context relates to SelectableElasticListState.switchTo(id, context)
      * @protected
      */
-    _switchToId(rowDataId, context) {
+    _doSwap(rowDataId, context) {
         this.state.switchTo(rowDataId, context);
-        this.updateOnStateChanges();
+        this.updateViewOnStateChanges();
     }
 
-    updateOnStateChange(stateChange) {
+    updateViewOnStateChange(stateChange) {
         stateChange = stateChange ? stateChange : this.state.consumeOne();
-        console.log("SelectableElasticListComponent.updateOnStateChange\n", JSON.stringify(stateChange));
+        console.log("SelectableElasticListComponent.updateViewOnStateChange\n", JSON.stringify(stateChange));
         switch (stateChange.requestType) {
-            case this.selectedRequestType:
-                return this._updateOnSelect(stateChange);
+            case this.swappingRequestType:
+                return this._updateViewOnSwapping(stateChange);
             default:
                 console.warn(`SelectableElasticListComponent delegating view update to super for ${stateChange.requestType}`)
-                return super.updateOnStateChange(stateChange);
+                return super.updateViewOnStateChange(stateChange);
         }
     }
 
     /**
-     * @param stateChange
+     * @param swappingStateChange
      * @return {Promise<StateChange>}
      * @protected
      */
-    _updateOnSelect(stateChange) {
-        const onOff = stateChange.data;
-        const selectableOnOffData = onOff.data;
-        if (selectableOnOffData.item) {
-            return this._onOffRowSelector[onOff.isPrevious].update(selectableOnOffData.item);
+    _updateViewOnSwapping(swappingStateChange) {
+        const swappingDetails = swappingStateChange.data;
+        const swappingData = swappingDetails.data;
+        if (swappingData.item) {
+            return this._rowComponentOf(swappingStateChange).update(swappingData.item);
         } else {
-            return Promise.resolve(stateChange);
+            return Promise.resolve(swappingStateChange);
+        }
+    }
+
+    /**
+     * Selects from _swappingRowSelector based on swappingDetails.isPrevious and swappingDetails.swappingData.context.
+     *
+     * @param swappingStateChange {StateChange}
+     * @return {IdentifiableRowComponent}
+     * @protected
+     */
+    _rowComponentOf(swappingStateChange) {
+        const swappingDetails = swappingStateChange.data;
+        const swappingData = swappingDetails.data;
+        if (!swappingDetails.isPrevious && swappingData.context) {
+            return this._swappingRowSelector[swappingData.context];
+        } else {
+            return this._swappingRowSelector[swappingDetails.isPrevious];
         }
     }
 
@@ -84,13 +101,13 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
     _configureEvents() {
         this.tableAdapter.$table
             .on(this.withNamespaceFor('dblclick'),
-                `tr${this.ownerSelector}`, this, this.onSelectionSwitch);
+                `tr${this.ownerSelector}`, this, this.onSwapping);
     }
 
     /**
      * @return {string}
      */
-    get selectedRequestType() {
+    get swappingRequestType() {
         return this.state.swappingState.requestType;
     }
 }
