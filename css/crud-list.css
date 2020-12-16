@@ -3,17 +3,32 @@
     border-radius: initial;
 }
 
-.deletable-row {
-    text-decoration: line-through;
-}
-
-td.button img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    cursor: pointer;
-}
-
 table th {
     text-align: center !important;
 }
+
+.deletable-row td:not(:last-child) {
+    text-decoration: line-through;
+}
+
+td.buttons div {
+    width: fit-content;
+    height: 32px;
+    margin: auto;
+}
+
+td.buttons div img {
+    cursor: pointer;
+}
+
+/*
+td.buttons [data-btn='cancel'] {
+    margin-bottom: 0.5em;
+}
+
+td.buttons button {
+    width: 70px;
+    display: block;
+    margin: auto;
+}
+*/

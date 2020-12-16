@@ -34,8 +34,11 @@
             <input type="hidden" name="id" value="{{id}}">
             {{{name}}}
         </td>
-        <td class="button">
-            <img data-owner="dogsTable" data-btn="showDelete" alt="delete" src="images/delete-button-32.png"/>
+        <td class="buttons">
+            <div>
+                <img data-owner="dogsTable" data-btn="showDelete" alt="delete" src="images/delete-button-32.png"/>
+                <img data-owner="dogsTable" data-btn="showUpdate" alt="update" src="images/save-button-32.png"/>
+            </div>
         </td>
     </tr>
 </template>
@@ -43,12 +46,12 @@
 <!-- dogs deletable row template -->
 <template id="dogsTableDeletableRowTmpl">
     <tr data-owner="dogsTable" data-id="{{id}}" class="deletable-row">
-        <td colspan="2">{{{name}}}</td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <button data-owner="dogsTable" data-btn="cancel" type="button">Cancel</button>
-            <button data-owner="dogsTable" data-btn="delete" type="button">Delete</button>
+        <td>{{{name}}}</td>
+        <td class="buttons">
+            <div>
+                <img data-owner="dogsTable" data-btn="cancel" alt="cancel" src="images/cancel-button-32.png"/>
+                <img data-owner="dogsTable" data-btn="delete" alt="delete" src="images/delete-button-32.png"/>
+            </div>
         </td>
     </tr>
 </template>
@@ -56,9 +59,15 @@
 <!-- dogs editable row template -->
 <template id="dogsTableEditableRowTmpl">
     <tr data-owner="dogsTable" data-id="{{id}}">
-        <td colspan="2">
+        <td>
             <input type="hidden" name="id" value="{{id}}">
             <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
+        </td>
+        <td class="buttons">
+            <div>
+                <img data-owner="dogsTable" data-btn="cancel" alt="cancel" src="images/cancel-button-32.png"/>
+                <img data-owner="dogsTable" data-btn="update" alt="update" src="images/save-button-32.png"/>
+            </div>
         </td>
     </tr>
 </template>
