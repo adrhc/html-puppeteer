@@ -32,7 +32,16 @@ class CrudListComponent extends SelectableElasticListComponent {
     onCancel(ev) {
         ev.stopPropagation();
         const selectableList = ev.data;
-        selectableList._doSwap(undefined);
+        const rowDataId = selectableList.rowDataIdOf(this, true);
+        selectableList._doSwap(undefined)
+            .then((it) => {
+                if (EntityUtils.prototype.isTransientId(rowDataId)) {
+                    selectableList.doWithState((state) => {
+                        state.removeById(rowDataId);
+                    })
+                }
+                return it;
+            });
     }
 
     onAdd(ev) {

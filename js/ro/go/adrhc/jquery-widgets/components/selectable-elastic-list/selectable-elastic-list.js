@@ -40,7 +40,7 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
      */
     _doSwap(rowDataId, context) {
         this.state.switchTo(rowDataId, context);
-        this.updateViewOnStateChanges();
+        return this.updateViewOnStateChanges();
     }
 
     updateViewOnStateChange(stateChange) {
