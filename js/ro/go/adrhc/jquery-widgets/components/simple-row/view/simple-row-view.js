@@ -20,7 +20,7 @@ class SimpleRowView extends AbstractTableBasedView {
      * @return {Promise<StateChange>}
      */
     update(stateChange) {
-        const updatedRowState = stateChange.state;
+        const updatedRowState = stateChange.data;
         if (stateChange.requestType === "DELETE") {
             this.tableAdapter.deleteRowByDataId(updatedRowState.id);
         } else {

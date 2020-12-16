@@ -1,13 +1,13 @@
 /**
  * A SimpleListComponent able to accept item-level state changes then updating the view at row level.
- * Uses a SimpleRow to render the updated items (aka rows).
+ * Uses a SimpleRowComponent to render the updated items (aka rows).
  */
 class ElasticSimpleListComponent extends SimpleListComponent {
     /**
      * @param repository {CrudRepository}
      * @param state {CrudListState}
      * @param view {SimpleListView}
-     * @param simpleRow {SimpleRow}
+     * @param simpleRow {SimpleRowComponent}
      */
     constructor(repository, state, view, simpleRow) {
         super(repository, state, view);
@@ -47,11 +47,11 @@ class ElasticSimpleListComponent extends SimpleListComponent {
         console.log("ElasticSimpleListComponent.updateOnStateChange\n", JSON.stringify(stateChange));
         switch (stateChange.requestType) {
             case "DELETE":
-                return this.simpleRow.update(stateChange.state, "DELETE");
+                return this.simpleRow.update(stateChange.data, "DELETE");
             case "CREATE":
-                return this.simpleRow.update(stateChange.state, "CREATE");
+                return this.simpleRow.update(stateChange.data, "CREATE");
             case "UPDATE":
-                return this.simpleRow.update(stateChange.state);
+                return this.simpleRow.update(stateChange.data);
             default:
                 console.warn(`ElasticSimpleListComponent delegating view update to super for ${stateChange.requestType}`)
                 return super.updateOnStateChange(stateChange);

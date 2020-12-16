@@ -1,4 +1,4 @@
-class SimpleRow extends AbstractTableBasedComponent {
+class SimpleRowComponent extends AbstractTableBasedComponent {
     /**
      * @param state {SimpleRowState}
      * @param view {SimpleRowView}

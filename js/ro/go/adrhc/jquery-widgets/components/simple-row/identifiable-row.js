@@ -1,4 +1,4 @@
-class IdentifiableRow extends SimpleRow {
+class IdentifiableRowComponent extends SimpleRowComponent {
     /**
      * @param state {SimpleRowState}
      * @param view {SimpleRowView}

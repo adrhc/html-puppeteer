@@ -7,7 +7,7 @@ class ElasticSimpleListFactory {
      * @param repository {CrudRepository}
      * @param state {CrudListState}
      * @param view {SimpleListView}
-     * @param simpleRow {SimpleRow}
+     * @param simpleRow {SimpleRowComponent}
      * @return {ElasticSimpleListComponent}
      */
     create({

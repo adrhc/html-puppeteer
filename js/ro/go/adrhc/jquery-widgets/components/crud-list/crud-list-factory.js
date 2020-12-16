@@ -7,9 +7,9 @@ class CrudListFactory {
      * @param repository {CrudRepository}
      * @param state {SelectableElasticListState}
      * @param view {SimpleListView}
-     * @param readOnlyRow {IdentifiableRow}
-     * @param editableRow {IdentifiableRow}
-     * @param deletableRow {IdentifiableRow}
+     * @param readOnlyRow {IdentifiableRowComponent}
+     * @param editableRow {IdentifiableRowComponent}
+     * @param deletableRow {IdentifiableRowComponent}
      * @return {CrudListFactory}
      */
     create({

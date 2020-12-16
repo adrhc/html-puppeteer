@@ -7,8 +7,8 @@ class SelectableElasticListFactory {
      * @param repository {CrudRepository}
      * @param state {SelectableElasticListState}
      * @param view {SimpleListView}
-     * @param notSelectedRow {IdentifiableRow}
-     * @param selectedRow {IdentifiableRow}
+     * @param notSelectedRow {IdentifiableRowComponent}
+     * @param selectedRow {IdentifiableRowComponent}
      * @return {SelectableElasticListComponent}
      */
     create({

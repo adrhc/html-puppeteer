@@ -17,7 +17,7 @@ if (Modernizr.template) {
             .create({items: dogs, tableId: dogsTableWithEdit})
             .init()
             .then(updateAllStateChange => {
-                const items = updateAllStateChange.state;
+                const items = updateAllStateChange.data;
                 const editableRow = SimpleRowFactory.prototype
                     .createIdentifiableRow(dogsTableWithEdit, {
                         rowTmpl: "dogsTableWithEditSelectedRowTmpl",
@@ -46,7 +46,7 @@ if (Modernizr.template) {
             .create({items: dogs, tableId: dogsTableWithDelete})
             .init()
             .then(updateAllStateChange => {
-                const items = updateAllStateChange.state;
+                const items = updateAllStateChange.data;
                 const simpleRow = SimpleRowFactory.prototype.createSimpleRow(
                     dogsTableWithDelete, {});
                 // switch to existing row (aka enter "edit" mode)

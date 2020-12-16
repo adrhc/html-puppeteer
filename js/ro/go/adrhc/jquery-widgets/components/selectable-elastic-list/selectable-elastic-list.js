@@ -9,8 +9,8 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
      * @param repository {CrudRepository}
      * @param state {SelectableElasticListState}
      * @param view {SimpleListView}
-     * @param notSelectedRow {IdentifiableRow}
-     * @param selectedRow {IdentifiableRow}
+     * @param notSelectedRow {IdentifiableRowComponent}
+     * @param selectedRow {IdentifiableRowComponent}
      */
     constructor(repository, state, view,
                 notSelectedRow, selectedRow) {
@@ -68,7 +68,7 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
      * @protected
      */
     _updateOnSelect(stateChange) {
-        const onOff = stateChange.state;
+        const onOff = stateChange.data;
         const selectableOnOffData = onOff.data;
         if (selectableOnOffData.item) {
             return this._onOffRowSelector[onOff.isPrevious].update(selectableOnOffData.item);

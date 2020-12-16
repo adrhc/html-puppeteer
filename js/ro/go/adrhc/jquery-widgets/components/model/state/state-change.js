@@ -4,16 +4,16 @@ class StateChange {
      */
     requestType;
     /**
-     * the state resulted-after/involved-while executing the requestType
+     * the data resulted-after/involved-while executing the requestType
      */
-    state;
+    data;
 
     /**
      * @param requestType {string|undefined} is the request type performed on state (e.g. CREATE, SELECT, NO_OP, etc)
-     * @param state {*} is the change-affected state; could be the entire state or part of it
+     * @param data {*} is the change-affected state; could be the entire state or part of it
      */
-    constructor(requestType, state) {
+    constructor(requestType, data) {
         this.requestType = requestType;
-        this.state = state;
+        this.data = data;
     }
 }

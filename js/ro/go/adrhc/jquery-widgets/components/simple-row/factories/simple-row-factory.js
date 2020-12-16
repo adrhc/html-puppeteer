@@ -14,7 +14,7 @@ class SimpleRowFactory {
             rowTmplHtml,
             tableRelativePositionOnCreate
         });
-        return new SimpleRow(state, view);
+        return new SimpleRowComponent(state, view);
     }
 
     createIdentifiableRow(
@@ -32,6 +32,6 @@ class SimpleRowFactory {
             rowTmplHtml,
             tableRelativePositionOnCreate
         });
-        return new IdentifiableRow(state, view);
+        return new IdentifiableRowComponent(state, view);
     }
 }
