@@ -38,24 +38,24 @@ class ElasticSimpleListComponent extends SimpleListComponent {
         const promises = [];
         stateChanges
             .forEach(stateChange => {
-                console.log("ElasticSimpleListComponent.updateView\n", JSON.stringify(stateChange));
-                switch (stateChange.requestType) {
-                    case "UPDATE_ALL":
-                        promises.push(super.updateOnStateChange(stateChange));
-                        break;
-                    case "DELETE":
-                        promises.push(this.simpleRow.update(stateChange.state, "DELETE"));
-                        break;
-                    case "CREATE":
-                        promises.push(this.simpleRow.update(stateChange.state, "CREATE"));
-                        break;
-                    case "UPDATE":
-                        promises.push(this.simpleRow.update(stateChange.state));
-                        break;
-                    default:
-                        console.warn(`won't updateView for ${stateChange.requestType}`)
-                }
+                promises.push(this.updateOnStateChange(stateChange));
             });
         return Promise.allSettled(promises).then(() => stateChanges);
+    }
+
+    updateOnStateChange(stateChange) {
+        stateChange = stateChange ? stateChange : this.state.consumeOne();
+        console.log("ElasticSimpleListComponent.updateOnStateChange\n", JSON.stringify(stateChange));
+        switch (stateChange.requestType) {
+            case "DELETE":
+                return this.simpleRow.update(stateChange.state, "DELETE");
+            case "CREATE":
+                return this.simpleRow.update(stateChange.state, "CREATE");
+            case "UPDATE":
+                return this.simpleRow.update(stateChange.state);
+            default:
+                console.warn(`ElasticSimpleListComponent delegating view update to super for ${stateChange.requestType}`)
+                return super.updateOnStateChange(stateChange);
+        }
     }
 }

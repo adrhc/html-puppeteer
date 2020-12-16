@@ -49,15 +49,33 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
      */
     _switchToId(rowDataId, context) {
         this.state.switchTo(rowDataId, context);
-        this.state.consumeAll()
-            .filter(onOffStateChange => onOffStateChange.requestType === "SELECT")
-            .map(it => it.state)
-            .filter(onOff => onOff.data)
-            .forEach(onOff => {
-                console.log("SelectableElasticListComponent.onSelectionSwitch\n", onOff);
-                console.log(JSON.stringify(onOff));
-                this._rowSelector[onOff.isOff].update(onOff.data.item);
-            });
+        this.updateOnStateChanges();
+    }
+
+    updateOnStateChange(stateChange) {
+        stateChange = stateChange ? stateChange : this.state.consumeOne();
+        console.log("SelectableElasticListComponent.updateOnStateChange\n", JSON.stringify(stateChange));
+        switch (stateChange.requestType) {
+            case "SELECT":
+                return this._updateOnSelect(stateChange);
+            default:
+                console.warn(`SelectableElasticListComponent delegating view update to super for ${stateChange.requestType}`)
+                return super.updateOnStateChange(stateChange);
+        }
+    }
+
+    /**
+     * @param stateChange
+     * @return {Promise<StateChange>}
+     * @protected
+     */
+    _updateOnSelect(stateChange) {
+        const onOff = stateChange.state;
+        if (onOff.data.item) {
+            return this._rowSelector[onOff.isOff].update(onOff.data.item);
+        } else {
+            return Promise.resolve(stateChange);
+        }
     }
 
     /**
