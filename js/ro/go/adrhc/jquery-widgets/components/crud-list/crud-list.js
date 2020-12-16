@@ -17,7 +17,7 @@ class CrudListComponent extends SelectableElasticListComponent {
      *
      * @param ev {Event}
      */
-    onButton(ev) {
+    onShowCDU(ev) {
         const selectableList = ev.data;
         const rowDataId = selectableList.rowDataIdOf(this, true);
         const context = $(this).data("btn");
@@ -27,6 +27,12 @@ class CrudListComponent extends SelectableElasticListComponent {
         ev.stopPropagation();
         // showEdit context should match the context used for row double-click in SelectableElasticListComponent
         selectableList._doSwap(rowDataId, context === "showEdit" ? undefined : context);
+    }
+
+    onCancel(ev) {
+        ev.stopPropagation();
+        const selectableList = ev.data;
+        selectableList._doSwap(undefined);
     }
 
     /**
@@ -39,6 +45,8 @@ class CrudListComponent extends SelectableElasticListComponent {
             .on(this.withNamespaceFor('click'),
                 `${this.ownerSelector}[data-btn='showAdd'],
                 ${this.ownerSelector}[data-btn='showDelete'],
-                ${this.ownerSelector}[data-btn='showEdit']`, this, this.onButton);
+                ${this.ownerSelector}[data-btn='showEdit']`, this, this.onShowCDU)
+            .on(this.withNamespaceFor('click'),
+                `${this.ownerSelector}[data-btn='cancel']`, this, this.onCancel);
     }
 }
