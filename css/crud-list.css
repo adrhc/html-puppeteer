@@ -1,3 +1,15 @@
+.responstable {
+    margin: auto !important;
+    border-radius: initial;
+}
+
 .deletable-row {
     text-decoration: line-through;
+}
+
+td.button img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    cursor: pointer;
 }

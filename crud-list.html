@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/responstable-table.css">
     <link rel="stylesheet" href="css/util.css">
-    <link rel="stylesheet" href="css/table-editor.css">
+    <link rel="stylesheet" href="css/crud-list.css">
     <link rel="stylesheet" href="css/adrhc/go/ro/jquery-widgets/dyna-sel-one.css">
     <script src="libraries/modernizr-custom.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -21,6 +21,7 @@
         <thead>
         <tr data-owner="dogsTable">
             <th>Dogs</th>
+            <th>Actions</th>
         </tr>
         </thead>
     </table>
@@ -33,16 +34,19 @@
             <input type="hidden" name="id" value="{{id}}">
             {{{name}}}
         </td>
+        <td data-owner="dogsTable" class="button">
+            <img alt="delete" src="images/delete-button-32.png"/>
+        </td>
     </tr>
 </template>
 
 <!-- dogs deletable row template -->
 <template id="dogsTableDeletableRowTmpl">
     <tr data-owner="dogsTable" data-id="{{id}}" class="deletable-row">
-        <td>{{{name}}}</td>
+        <td colspan="2">{{{name}}}</td>
     </tr>
     <tr>
-        <td colspan="1">row to delete</td>
+        <td colspan="2">row to delete</td>
     </tr>
 </template>
 
