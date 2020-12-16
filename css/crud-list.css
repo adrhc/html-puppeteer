@@ -11,6 +11,12 @@ table th {
     text-decoration: line-through;
 }
 
+th img {
+    cursor: pointer;
+    display: block;
+    margin: auto;
+}
+
 td.buttons div {
     width: fit-content;
     height: 32px;
