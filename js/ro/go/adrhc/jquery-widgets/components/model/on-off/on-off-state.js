@@ -22,16 +22,16 @@ class OnOffState extends BasicState {
     }
 
     /**
-     * @param state
+     * @param data
      */
-    switchTo(state) {
-        if (this.onOff && state === this.onOff.state) {
+    switchTo(data) {
+        if (this.onOff && data === this.onOff.data) {
             return;
         }
-        // switching "off" the previous state
+        // switching "off" the previous data
         this.switchOff();
-        // switching "on" the new state
-        this.onOff = new OnOff(state);
+        // switching "on" the new data
+        this.onOff = new OnOff(data);
         this._collectStateChange(this.onOff);
     }
 

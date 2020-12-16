@@ -6,10 +6,11 @@ class SelectableElasticListState extends CrudListState {
 
     /**
      * @param id {numeric|string}
+     * @param context is some context data
      */
-    switchTo(id) {
+    switchTo(id, context) {
         const item = this.findById(id);
-        this.onOffState.switchTo(item);
+        this.onOffState.switchTo({item, context});
         this.collectAnotherStateChanges(this.onOffState.stateChanges)
     }
 }

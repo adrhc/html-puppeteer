@@ -1,10 +1,10 @@
 class OnOff {
     /**
-     * @param state
+     * @param data
      * @param isOff {boolean}
      */
-    constructor(state, isOff = false) {
-        this.state = state;
+    constructor(data, isOff = false) {
+        this.data = data;
         this.isOff = isOff;
     }
 }

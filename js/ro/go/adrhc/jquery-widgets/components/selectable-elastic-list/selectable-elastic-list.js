@@ -44,18 +44,19 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
 
     /**
      * @param rowDataId {string|number}
+     * @param context relates to SelectableElasticListState.switchTo(id, context)
      * @protected
      */
-    _switchToId(rowDataId) {
-        this.state.switchTo(rowDataId);
+    _switchToId(rowDataId, context) {
+        this.state.switchTo(rowDataId, context);
         this.state.consumeAll()
             .filter(onOffStateChange => onOffStateChange.requestType === "SELECT")
             .map(it => it.state)
-            .filter(onOff => onOff.state)
+            .filter(onOff => onOff.data)
             .forEach(onOff => {
                 console.log("SelectableElasticListComponent.onSelectionSwitch\n", onOff);
                 console.log(JSON.stringify(onOff));
-                this._rowSelector[onOff.isOff].update(onOff.state);
+                this._rowSelector[onOff.isOff].update(onOff.data.item);
             });
     }
 
