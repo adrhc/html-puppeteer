@@ -18,7 +18,7 @@ class CrudListFactory {
                bodyRowTmplId,
                mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, bodyRowTmplId),
                repository = new InMemoryCrudRepository(items),
-               state = new SelectableElasticListState(),
+               state = new EditableListState(),
                readOnlyRow,
                editableRow,
                view = new SelectableListView(mustacheTableElemAdapter, readOnlyRow, editableRow),

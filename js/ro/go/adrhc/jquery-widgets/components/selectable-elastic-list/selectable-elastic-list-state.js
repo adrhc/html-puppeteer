@@ -24,8 +24,15 @@ class SelectableElasticListState extends CrudListState {
      * @protected
      */
     _isEqualToCurrent(newSelectableSwappingData) {
-        return this.swappingState.swappingDetails
-            && this.swappingState.swappingDetails.data
-            && this.swappingState.swappingDetails.data.equals(newSelectableSwappingData);
+        return this.currentSelectableSwappingData
+            && this.currentSelectableSwappingData.equals(newSelectableSwappingData);
+    }
+
+    /**
+     * @return {SelectableSwappingData|undefined}
+     */
+    get currentSelectableSwappingData() {
+        return this.swappingState.swappingDetails && this.swappingState.swappingDetails.data
+            ? this.swappingState.swappingDetails.data : undefined;
     }
 }

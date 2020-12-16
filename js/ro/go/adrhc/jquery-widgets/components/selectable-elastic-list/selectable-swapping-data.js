@@ -10,7 +10,8 @@ class SelectableSwappingData {
      * @return {boolean}
      */
     equals(selectableSwappingData) {
-        return this.context == selectableSwappingData.context
+        return selectableSwappingData
+            && this.context == selectableSwappingData.context
             && (this.item == selectableSwappingData.item
                 || (this.item && selectableSwappingData.item
                     && EntityUtils.prototype.idsAreEqual(this.item.id, selectableSwappingData.item.id)));
