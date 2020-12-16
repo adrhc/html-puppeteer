@@ -8,17 +8,10 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
     /**
      * @param repository {CrudRepository}
      * @param state {SelectableElasticListState}
-     * @param view {SimpleListView}
-     * @param notSelectedRow {IdentifiableRowComponent}
-     * @param selectedRow {IdentifiableRowComponent}
+     * @param view {SelectableListView}
      */
-    constructor(repository, state, view,
-                notSelectedRow, selectedRow) {
-        super(repository, state, view, notSelectedRow);
-        this._swappingRowSelector = {
-            false: selectedRow,
-            true: notSelectedRow
-        };
+    constructor(repository, state, view) {
+        super(repository, state, view, view.notSelectedRow);
     }
 
     init() {
@@ -55,42 +48,10 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
         console.log("SelectableElasticListComponent.updateViewOnStateChange\n", JSON.stringify(stateChange));
         switch (stateChange.requestType) {
             case this.swappingRequestType:
-                return this._updateViewOnSwapping(stateChange);
+                return this.view.updateViewOnSwapping(stateChange);
             default:
                 console.warn(`SelectableElasticListComponent delegating view update to super for ${stateChange.requestType}`)
                 return super.updateViewOnStateChange(stateChange);
-        }
-    }
-
-    /**
-     * @param swappingStateChange
-     * @return {Promise<StateChange>}
-     * @protected
-     */
-    _updateViewOnSwapping(swappingStateChange) {
-        const swappingDetails = swappingStateChange.data;
-        const swappingData = swappingDetails.data;
-        if (swappingData.item) {
-            return this._rowComponentOf(swappingStateChange).update(swappingData.item);
-        } else {
-            return Promise.resolve(swappingStateChange);
-        }
-    }
-
-    /**
-     * Selects from _swappingRowSelector based on swappingDetails.isPrevious and swappingDetails.swappingData.context.
-     *
-     * @param swappingStateChange {StateChange}
-     * @return {IdentifiableRowComponent}
-     * @protected
-     */
-    _rowComponentOf(swappingStateChange) {
-        const swappingDetails = swappingStateChange.data;
-        const swappingData = swappingDetails.data;
-        if (!swappingDetails.isPrevious && swappingData.context) {
-            return this._swappingRowSelector[swappingData.context];
-        } else {
-            return this._swappingRowSelector[swappingDetails.isPrevious];
         }
     }
 

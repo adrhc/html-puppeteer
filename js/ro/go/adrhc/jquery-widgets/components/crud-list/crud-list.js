@@ -2,15 +2,12 @@ class CrudListComponent extends SelectableElasticListComponent {
     /**
      * @param repository {CrudRepository}
      * @param state {SelectableElasticListState}
-     * @param view {SimpleListView}
-     * @param readOnlyRow {IdentifiableRowComponent}
-     * @param editableRow {IdentifiableRowComponent}
+     * @param view {SelectableListView}
      * @param deletableRow {IdentifiableRowComponent}
      */
-    constructor(repository, state, view,
-                readOnlyRow, editableRow, deletableRow) {
-        super(repository, state, view, readOnlyRow, editableRow);
-        this._swappingRowSelector["SHOW_DELETE"] = deletableRow;
+    constructor(repository, state, view, deletableRow) {
+        super(repository, state, view);
+        this.view.swappingRowSelector["SHOW_DELETE"] = deletableRow;
     }
 
     /**
