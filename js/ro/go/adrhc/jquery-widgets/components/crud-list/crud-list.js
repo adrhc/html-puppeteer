@@ -44,6 +44,18 @@ class CrudListComponent extends SelectableListComponent {
     }
 
     /**
+     * RELOAD
+     *
+     * @param ev {Event}
+     */
+    onReload(ev) {
+        ev.stopPropagation();
+        const selectableList = ev.data;
+        selectableList.state.resetSwappingState();
+        selectableList.reload();
+    }
+
+    /**
      * CANCEL
      *
      * @param ev {Event}
@@ -81,7 +93,7 @@ class CrudListComponent extends SelectableListComponent {
         const entity = selectableList.view.extractInputValuesByDataId(rowDataId);
         selectableList.doWithState((crudListState) => {
             crudListState.updateItem(entity);
-            // resetSwappingState leaves the edited row in place otherwise would be deleted if swapping
+            // resetSwappingState leaves the edited row in place otherwise would be deleted by swapping
             crudListState.resetSwappingState();
         });
     }
@@ -99,6 +111,8 @@ class CrudListComponent extends SelectableListComponent {
                 ${this.ownerSelector}[data-btn='showEdit']`, this, this.onShowDU)
             .on(this.withNamespaceFor('click'),
                 `${this.ownerSelector}[data-btn='showAdd']`, this, this.onShowAdd)
+            .on(this.withNamespaceFor('click'),
+                `${this.ownerSelector}[data-btn='reload']`, this, this.onReload)
             .on(this.withNamespaceFor('click'),
                 `${this.ownerSelector}[data-btn='cancel']`, this, this.onCancel)
             .on(this.withNamespaceFor('click'),

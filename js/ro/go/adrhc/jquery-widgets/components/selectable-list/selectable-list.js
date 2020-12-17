@@ -18,6 +18,10 @@ class SelectableListComponent extends ElasticListComponent {
         return super.init().then(() => this._configureEvents());
     }
 
+    reload() {
+        return super.init();
+    }
+
     /**
      * (existing) item selection event handler
      *

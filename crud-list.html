@@ -21,7 +21,12 @@
         <thead>
         <tr data-owner="dogsTable">
             <th>Dogs</th>
-            <th><img data-owner="dogsTable" data-btn="showAdd" alt="show add" src="images/add-button-32.png"/></th>
+            <th>
+                <div class="buttons">
+                    <img data-owner="dogsTable" data-btn="reload" alt="reload" src="images/reload-button-32.png"/>
+                    <img data-owner="dogsTable" data-btn="showAdd" alt="show add" src="images/add-button-32.png"/>
+                </div>
+            </th>
         </tr>
         </thead>
     </table>
@@ -33,8 +38,8 @@
         <td>
             <input type="hidden" name="id" value="{{id}}">{{{name}}}
         </td>
-        <td class="buttons">
-            <div>
+        <td>
+            <div class="buttons">
                 <img data-owner="dogsTable" data-btn="showDelete" alt="show delete" src="images/delete-button-32.png"/>
                 <img data-owner="dogsTable" data-btn="showEdit" alt="show edit" src="images/edit-button-32.png"/>
             </div>
@@ -46,8 +51,8 @@
 <template id="dogsTableDeletableRowTmpl">
     <tr data-owner="dogsTable" data-id="{{id}}" class="deletable-row">
         <td>{{{name}}}</td>
-        <td class="buttons">
-            <div>
+        <td>
+            <div class="buttons">
                 <img data-owner="dogsTable" data-btn="cancel" alt="cancel" src="images/cancel-button-32.png"/>
                 <img data-owner="dogsTable" data-btn="delete" alt="delete" src="images/delete-button-32.png"/>
             </div>
@@ -62,8 +67,8 @@
             <input type="hidden" name="id" value="{{id}}">
             <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
         </td>
-        <td class="buttons">
-            <div>
+        <td>
+            <div class="buttons">
                 <img data-owner="dogsTable" data-btn="cancel" alt="cancel" src="images/cancel-button-32.png"/>
                 <img data-owner="dogsTable" data-btn="update" alt="update" src="images/save-button-32.png"/>
             </div>
@@ -117,12 +122,12 @@
 <!-- components/elastic-list -->
 <script src="js/ro/go/adrhc/jquery-widgets/components/elastic-list/elastic-list.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/elastic-list/elastic-list-factory.js"></script>
-<!-- components/selectable-elastic-list -->
-<script src="js/ro/go/adrhc/jquery-widgets/components/selectable-elastic-list/selectable-swapping-data.js"></script>
-<script src="js/ro/go/adrhc/jquery-widgets/components/selectable-elastic-list/selectable-list-state.js"></script>
-<script src="js/ro/go/adrhc/jquery-widgets/components/selectable-elastic-list/selectable-list-view.js"></script>
-<script src="js/ro/go/adrhc/jquery-widgets/components/selectable-elastic-list/selectable-list.js"></script>
-<script src="js/ro/go/adrhc/jquery-widgets/components/selectable-elastic-list/selectable-list-factory.js"></script>
+<!-- components/selectable-list -->
+<script src="js/ro/go/adrhc/jquery-widgets/components/selectable-list/selectable-swapping-data.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/selectable-list/selectable-list-state.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/selectable-list/selectable-list-view.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/selectable-list/selectable-list.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/selectable-list/selectable-list-factory.js"></script>
 <!-- components/crud-list -->
 <script src="js/ro/go/adrhc/jquery-widgets/components/crud-list/editable-list-state.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/crud-list/crud-list.js"></script>

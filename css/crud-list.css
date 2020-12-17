@@ -11,19 +11,21 @@ table th {
     text-decoration: line-through;
 }
 
+/*
 th img {
     cursor: pointer;
     display: block;
     margin: auto;
 }
+*/
 
-td.buttons div {
+div.buttons {
     width: fit-content;
     height: 32px;
     margin: auto;
 }
 
-td.buttons div img {
+div.buttons img {
     cursor: pointer;
 }
 
