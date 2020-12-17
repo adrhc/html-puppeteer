@@ -50,4 +50,8 @@ class SelectableListView extends SimpleListView {
             return this.swappingRowSelector[swappingDetails.isPrevious];
         }
     }
+
+    extractInputValuesByDataId(rowDataId, context) {
+        return this.swappingRowSelector[context].view.extractInputValuesByDataId(rowDataId);
+    }
 }

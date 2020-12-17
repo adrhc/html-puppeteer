@@ -14,6 +14,15 @@ class InMemoryCrudRepository extends CrudRepository {
         return Promise.resolve($.extend(true, [], this.items));
     }
 
+    delete(id) {
+        const removedItem = EntityUtils.prototype.removeById(id, this.items);
+        if (removedItem) {
+            return Promise.resolve(removedItem);
+        } else {
+            return Promise.reject(id);
+        }
+    }
+
     /**
      * @param item {IdentifiableEntity}
      * @return {Promise<IdentifiableEntity>}
@@ -21,7 +30,7 @@ class InMemoryCrudRepository extends CrudRepository {
     insert(item) {
         item.id = EntityUtils.prototype.generateId();
         this.items.unshift(item);
-        return Promise.resolve(item);
+        return Promise.resolve($.extend(true, new IdentifiableEntity(), item));
     }
 
     /**
@@ -29,7 +38,11 @@ class InMemoryCrudRepository extends CrudRepository {
      * @return {Promise<IdentifiableEntity>}
      */
     update(item) {
-        EntityUtils.prototype.findAndReplaceById(item, this.items);
-        return Promise.resolve(item);
+        const removedIndex = EntityUtils.prototype.findAndReplaceById(item, this.items);
+        if (removedIndex < 0) {
+            return Promise.reject(item);
+        } else {
+            return Promise.resolve($.extend(true, new IdentifiableEntity(), item));
+        }
     }
 }

@@ -43,4 +43,11 @@ class PersonsRepository extends CrudRepository {
             data: person,
         }).then(it => RestUtils.prototype.unwrapHAL(it));
     }
+
+    delete(id) {
+        return $.ajax({
+            url: `${this.URL}/${id}`,
+            method: "DELETE"
+        }).then(it => RestUtils.prototype.unwrapHAL(it));
+    }
 }

@@ -9,11 +9,11 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @param item {IdentifiableEntity}
-     * @param itemIdToRemove {number|string}
-     * @return {IdentifiableEntity}
+     * @param item {IdentifiableEntity} is to insert if itemIdToRemove exists otherwise update
+     * @param itemIdToRemove {number|string} is to remove if exists
+     * @return {IdentifiableEntity} the insert or update result
      */
-    removeThenCreate(item, itemIdToRemove) {
+    save(item, itemIdToRemove) {
         if (itemIdToRemove && !EntityUtils.prototype.idsAreEqual(item.id, itemIdToRemove)) {
             this.removeById(itemIdToRemove);
             return this.insertItem(item);

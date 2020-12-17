@@ -20,6 +20,14 @@ class CrudRepository {
     }
 
     /**
+     * @param id {number|string}
+     * @return {Promise<IdentifiableEntity>}
+     */
+    delete(id) {
+        throw "Not implemented!";
+    }
+
+    /**
      * @param item {IdentifiableEntity}
      * @return {Promise<IdentifiableEntity>}
      */
