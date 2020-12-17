@@ -13,11 +13,11 @@ class CrudListComponent extends SelectableElasticListComponent {
     }
 
     /**
-     * (existing) item selection event handler
+     * SHOW DELETE OR EDIT (aka UPDATE)
      *
      * @param ev {Event}
      */
-    onShowCDU(ev) {
+    onShowDU(ev) {
         const selectableList = ev.data;
         const rowDataId = selectableList.rowDataIdOf(this, true);
         const context = $(this).data("btn");
@@ -26,26 +26,37 @@ class CrudListComponent extends SelectableElasticListComponent {
         }
         ev.stopPropagation();
         // showEdit context should match the context used for row double-click in SelectableElasticListComponent
-        selectableList._doSwap(rowDataId, context === "showEdit" ? undefined : context);
+        selectableList._doSwapWith(rowDataId, context === "showEdit" ? undefined : context);
     }
 
-    onCancel(ev) {
-        ev.stopPropagation();
-        const selectableList = ev.data;
-        selectableList._doSwap(undefined);
-    }
-
-    onAdd(ev) {
+    /**
+     * SHOW ADD
+     *
+     * @param ev
+     */
+    onShowAdd(ev) {
         ev.stopPropagation();
         const selectableList = ev.data;
         selectableList.doWithState((crudListState) => {
             const newId = crudListState.createNewItem().id;
-            selectableList._doSwap(newId);
+            selectableList._doSwapWith(newId);
         });
     }
 
     /**
-     * linking "outside" (and/or default) triggers to component's handlers (aka capabilities)
+     * CANCEL
+     *
+     * @param ev {Event}
+     */
+    onCancel(ev) {
+        ev.stopPropagation();
+        const selectableList = ev.data;
+        selectableList._doSwapWith(undefined);
+    }
+
+    /**
+     * linking triggers to component's handlers (aka capabilities)
+     *
      * @private
      */
     _configureEvents() {
@@ -53,10 +64,10 @@ class CrudListComponent extends SelectableElasticListComponent {
         this.tableAdapter.$table
             .on(this.withNamespaceFor('click'),
                 `${this.ownerSelector}[data-btn='showDelete'],
-                ${this.ownerSelector}[data-btn='showEdit']`, this, this.onShowCDU)
+                ${this.ownerSelector}[data-btn='showEdit']`, this, this.onShowDU)
             .on(this.withNamespaceFor('click'),
                 `${this.ownerSelector}[data-btn='cancel']`, this, this.onCancel)
             .on(this.withNamespaceFor('click'),
-                `${this.ownerSelector}[data-btn='showAdd']`, this, this.onAdd);
+                `${this.ownerSelector}[data-btn='showAdd']`, this, this.onShowAdd);
     }
 }

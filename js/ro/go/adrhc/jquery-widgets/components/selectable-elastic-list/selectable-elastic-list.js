@@ -30,7 +30,7 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
         }
         ev.stopPropagation();
         const rowDataId = selectableList.rowDataIdOf(this);
-        selectableList._doSwap(rowDataId);
+        selectableList._doSwapWith(rowDataId);
     }
 
     /**
@@ -38,7 +38,7 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
      * @param context relates to SelectableElasticListState.switchTo(id, context)
      * @protected
      */
-    _doSwap(rowDataId, context) {
+    _doSwapWith(rowDataId, context) {
         this.state.switchTo(rowDataId, context);
         return this.updateViewOnStateChanges();
     }
