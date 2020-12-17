@@ -7,4 +7,4 @@ core-js (shim/polyfill library)
 https://unpkg.com/core-js-bundle@3.6.5/minified.js
 
 # class hierarchy
-AbstractTableBasedComponent -> SimpleListComponent -> ElasticSimpleListComponent -> SelectableElasticListComponent
+AbstractTableBasedComponent -> SimpleListComponent -> ElasticListComponent -> SelectableListComponent

@@ -1,4 +1,4 @@
-class EditableListState extends SelectableElasticListState {
+class EditableListState extends SelectableListState {
     /**
      * @param id {numeric|string}
      * @param context is some context data
@@ -14,5 +14,18 @@ class EditableListState extends SelectableElasticListState {
             // previous switch is transient entity - automatically remove it on switch to another item
             this.removeTransient();
         }
+    }
+
+    /**
+     * @param append {boolean|undefined}
+     * @return {IdentifiableEntity}
+     */
+    createNewItem(append = false) {
+        let item = this.findById(EntityUtils.prototype.transientId);
+        if (item) {
+            return item;
+        }
+        item = EntityUtils.prototype.newIdentifiableEntity();
+        return this.insertItem(item, append);
     }
 }

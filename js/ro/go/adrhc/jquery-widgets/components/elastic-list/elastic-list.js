@@ -2,7 +2,7 @@
  * A SimpleListComponent able to accept item-level state changes then updating the view at row level.
  * Uses a SimpleRowComponent to render the updated items (aka rows).
  */
-class ElasticSimpleListComponent extends SimpleListComponent {
+class ElasticListComponent extends SimpleListComponent {
     /**
      * @param repository {CrudRepository}
      * @param state {CrudListState}
@@ -20,7 +20,7 @@ class ElasticSimpleListComponent extends SimpleListComponent {
      * @return {Promise<StateChange[]>}
      */
     doWithState(stateUpdaterFn, delayViewUpdate) {
-        console.log("ElasticSimpleListComponent.doWithState: delayViewUpdate=", delayViewUpdate);
+        console.log("ElasticListComponent.doWithState: delayViewUpdate=", delayViewUpdate);
         stateUpdaterFn(this.state);
         if (delayViewUpdate) {
             return Promise.resolve(this.state.stateChanges.peekAll());
@@ -44,7 +44,7 @@ class ElasticSimpleListComponent extends SimpleListComponent {
 
     updateViewOnStateChange(stateChange) {
         stateChange = stateChange ? stateChange : this.state.consumeOne();
-        console.log("ElasticSimpleListComponent.updateViewOnStateChange\n", JSON.stringify(stateChange));
+        console.log("ElasticListComponent.updateViewOnStateChange\n", JSON.stringify(stateChange));
         switch (stateChange.requestType) {
             case "DELETE":
                 return this.simpleRow.update(stateChange.data, "DELETE");

@@ -4,10 +4,10 @@
  * than the next onSwapping will determine swappingState to render as "deselected" the previous
  * item but only if already exists (its row) otherwise nothing will be rendered for it.
  */
-class SelectableElasticListComponent extends ElasticSimpleListComponent {
+class SelectableListComponent extends ElasticListComponent {
     /**
      * @param repository {CrudRepository}
-     * @param state {SelectableElasticListState}
+     * @param state {SelectableListState}
      * @param view {SelectableListView}
      */
     constructor(repository, state, view) {
@@ -35,7 +35,7 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
 
     /**
      * @param rowDataId {string|number}
-     * @param context relates to SelectableElasticListState.switchTo(id, context)
+     * @param context relates to SelectableListState.switchTo(id, context)
      * @protected
      */
     _doSwapWith(rowDataId, context) {
@@ -45,7 +45,7 @@ class SelectableElasticListComponent extends ElasticSimpleListComponent {
 
     updateViewOnStateChange(stateChange) {
         stateChange = stateChange ? stateChange : this.state.consumeOne();
-        console.log("SelectableElasticListComponent.updateViewOnStateChange\n", JSON.stringify(stateChange));
+        console.log("SelectableListComponent.updateViewOnStateChange\n", JSON.stringify(stateChange));
         switch (stateChange.requestType) {
             case this.swappingRequestType:
                 return this.view.updateViewOnSwapping(stateChange);

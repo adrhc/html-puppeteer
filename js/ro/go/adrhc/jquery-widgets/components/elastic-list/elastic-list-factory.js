@@ -1,4 +1,4 @@
-class ElasticSimpleListFactory {
+class ElasticListFactory {
     /**
      * @param items {IdentifiableEntity[]}
      * @param tableId {string}
@@ -8,7 +8,7 @@ class ElasticSimpleListFactory {
      * @param state {CrudListState}
      * @param view {SimpleListView}
      * @param simpleRow {SimpleRowComponent}
-     * @return {ElasticSimpleListComponent}
+     * @return {ElasticListComponent}
      */
     create({
                items = [],
@@ -21,6 +21,6 @@ class ElasticSimpleListFactory {
                simpleRow = SimpleRowFactory.prototype
                    .createSimpleRow(tableId, {bodyRowTmplId})
            }) {
-        return new ElasticSimpleListComponent(repository, state, view, simpleRow);
+        return new ElasticListComponent(repository, state, view, simpleRow);
     }
 }

@@ -1,7 +1,7 @@
 /**
- * SelectableElasticListState extends CrudListState (which extends SimpleListState) and SwappingState
+ * SelectableListState extends CrudListState (which extends SimpleListState) and SwappingState
  */
-class SelectableElasticListState extends CrudListState {
+class SelectableListState extends CrudListState {
     swappingState = new SwappingState();
 
     /**

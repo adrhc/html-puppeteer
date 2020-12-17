@@ -5,7 +5,7 @@ class CrudListFactory {
      * @param bodyRowTmplId {string}
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param repository {CrudRepository}
-     * @param state {SelectableElasticListState}
+     * @param state {SelectableListState}
      * @param view {SimpleListView}
      * @param readOnlyRow {IdentifiableRowComponent}
      * @param editableRow {IdentifiableRowComponent}

@@ -1,15 +1,15 @@
-class SelectableElasticListFactory {
+class SelectableListFactory {
     /**
      * @param items {IdentifiableEntity[]}
      * @param tableId {string}
      * @param bodyRowTmplId {string}
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param repository {CrudRepository}
-     * @param state {SelectableElasticListState}
+     * @param state {SelectableListState}
      * @param notSelectedRow {IdentifiableRowComponent}
      * @param selectedRow {IdentifiableRowComponent}
      * @param view {SimpleListView}
-     * @return {SelectableElasticListComponent}
+     * @return {SelectableListComponent}
      */
     create({
                items = [],
@@ -17,11 +17,11 @@ class SelectableElasticListFactory {
                bodyRowTmplId,
                mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, bodyRowTmplId),
                repository = new InMemoryCrudRepository(items),
-               state = new SelectableElasticListState(),
+               state = new SelectableListState(),
                notSelectedRow,
                selectedRow,
                view = new SelectableListView(mustacheTableElemAdapter, notSelectedRow, selectedRow)
            }) {
-        return new SelectableElasticListComponent(repository, state, view);
+        return new SelectableListComponent(repository, state, view);
     }
 }

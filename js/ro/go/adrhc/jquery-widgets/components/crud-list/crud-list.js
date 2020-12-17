@@ -1,4 +1,4 @@
-class CrudListComponent extends SelectableElasticListComponent {
+class CrudListComponent extends SelectableListComponent {
     /**
      * @param repository {CrudRepository}
      * @param state {EditableListState}
@@ -25,7 +25,7 @@ class CrudListComponent extends SelectableElasticListComponent {
             return;
         }
         ev.stopPropagation();
-        // showEdit context should match the context used for row double-click in SelectableElasticListComponent
+        // showEdit context should match the context used for row double-click in SelectableListComponent
         selectableList._doSwapWith(rowDataId, context === "showEdit" ? undefined : context);
     }
 

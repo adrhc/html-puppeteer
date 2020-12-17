@@ -13,7 +13,7 @@ if (Modernizr.template) {
         const items = [{id: 1, name: "dog1"}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
 
         // dogs table with read-only row (default: on creation prepend to table)
-        const component = ElasticSimpleListFactory.prototype.create({items, tableId: "dogsTable"});
+        const component = ElasticListFactory.prototype.create({items, tableId: "dogsTable"});
 
         component
             .init()
