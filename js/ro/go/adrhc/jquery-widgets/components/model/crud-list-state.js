@@ -10,7 +10,22 @@ class CrudListState extends SimpleListState {
 
     /**
      * @param item {IdentifiableEntity}
+     * @param itemIdToRemove {number|string}
+     * @return {IdentifiableEntity}
+     */
+    removeThenCreate(item, itemIdToRemove) {
+        if (itemIdToRemove && !EntityUtils.prototype.idsAreEqual(item.id, itemIdToRemove)) {
+            this.removeById(itemIdToRemove);
+            return this.insertItem(item);
+        } else {
+            return this.updateItem(item);
+        }
+    }
+
+    /**
+     * @param item {IdentifiableEntity}
      * @param append {boolean|undefined}
+     * @return {IdentifiableEntity}
      */
     insertItem(item, append = false) {
         if (append) {
@@ -24,14 +39,16 @@ class CrudListState extends SimpleListState {
 
     /**
      * @param item {IdentifiableEntity}
+     * @return {IdentifiableEntity}
      */
     updateItem(item) {
         EntityUtils.prototype.findAndReplaceById(item, this.items);
         this.collectStateChange(new StateChange("UPDATE", item));
+        return item;
     }
 
     /**
-     * @param {number|string} id
+     * @param id {number|string}
      * @return {IdentifiableEntity}
      */
     removeById(id) {
@@ -50,7 +67,7 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @param id {number}
+     * @param id {number|string}
      * @return {IdentifiableEntity}
      */
     findById(id) {

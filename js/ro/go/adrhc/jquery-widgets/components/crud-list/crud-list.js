@@ -91,11 +91,14 @@ class CrudListComponent extends SelectableListComponent {
         const selectableList = ev.data;
         const rowDataId = selectableList.rowDataIdOf(this, true);
         const entity = selectableList.view.extractInputValuesByDataId(rowDataId);
-        selectableList.doWithState((crudListState) => {
-            crudListState.updateItem(entity);
-            // resetSwappingState leaves the edited row in place otherwise would be deleted by swapping
-            crudListState.resetSwappingState();
-        });
+        selectableList.repository.save(entity)
+            .then(savedEntity => {
+                selectableList.doWithState((crudListState) => {
+                    crudListState.removeThenCreate(savedEntity, rowDataId);
+                    // resetSwappingState leaves the edited row in place otherwise would be deleted by swapping
+                    crudListState.resetSwappingState();
+                });
+            });
     }
 
     /**
