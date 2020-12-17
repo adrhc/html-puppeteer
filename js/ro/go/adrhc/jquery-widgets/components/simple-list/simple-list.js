@@ -16,6 +16,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
 
     /**
      * component initializer
+     *
      * @return {Promise<IdentifiableEntity[]>}
      */
     init() {
@@ -28,7 +29,9 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     }
 
     /**
-     * @param stateChange {StateChange|undefined} used to update the view otherwise use state.consumeOne()
+     * Updates the view on 1x state change.
+     *
+     * @param stateChange {StateChange|undefined}
      * @return {Promise<StateChange>}
      */
     updateViewOnStateChange(stateChange) {

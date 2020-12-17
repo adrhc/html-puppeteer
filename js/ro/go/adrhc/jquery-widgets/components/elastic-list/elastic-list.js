@@ -15,8 +15,10 @@ class ElasticListComponent extends SimpleListComponent {
     }
 
     /**
+     * Offer the state for manipulation then update the view.
+     *
      * @param stateUpdaterFn {function} receives a state {CrudListState} to update
-     * @param delayViewUpdate {boolean} whether to (immediately) update the view based on state changes or not
+     * @param delayViewUpdate {boolean} whether to (immediately) update the view based or not
      * @return {Promise<StateChange[]>}
      */
     doWithState(stateUpdaterFn, delayViewUpdate) {
@@ -29,7 +31,9 @@ class ElasticListComponent extends SimpleListComponent {
     }
 
     /**
-     * @param stateChanges {StateChange[]|undefined} (delayed state changes) used to update the view otherwise use state.consumeAll()
+     * Process multiple state changes to update the view.
+     *
+     * @param stateChanges {StateChange[]|undefined}
      * @return {Promise<StateChange[]>}
      */
     updateViewOnStateChanges(stateChanges) {
@@ -42,6 +46,12 @@ class ElasticListComponent extends SimpleListComponent {
         return Promise.allSettled(promises).then(() => stateChanges);
     }
 
+    /**
+     * Selects the view to update (aka re-render) or delegate to super.
+     *
+     * @param stateChange {StateChange|undefined}
+     * @return {Promise<StateChange>}
+     */
     updateViewOnStateChange(stateChange) {
         stateChange = stateChange ? stateChange : this.state.consumeOne();
         console.log("ElasticListComponent.updateViewOnStateChange\n", JSON.stringify(stateChange));

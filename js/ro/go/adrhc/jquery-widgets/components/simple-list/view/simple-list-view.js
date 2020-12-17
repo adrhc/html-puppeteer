@@ -1,3 +1,6 @@
+/**
+ * Able to re-render on "all" items update.
+ */
 class SimpleListView extends AbstractTableBasedView {
     /**
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
