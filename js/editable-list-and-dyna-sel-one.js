@@ -30,20 +30,20 @@ if (Modernizr.template) {
 
         // EDITABLE-LIST
         // dogs table with both read-only and editable row
-        const tableId = "dogsTable";
+        const tableId = "personsTable";
         const tableRelativePositionOnCreate = "prepend";
 
         const readOnlyRow = SimpleRowFactory.prototype.createIdentifiableRow(
             tableId, {tableRelativePositionOnCreate});
         const editableRow = SimpleRowFactory.prototype.createIdentifiableRow(
             tableId, {
-                rowTmpl: "dogsTableEditableRowTmpl", tableRelativePositionOnCreate
+                rowTmpl: "personsTableEditableRowTmpl", tableRelativePositionOnCreate
             });
         // doesn't make sense to use tableRelativePositionOnCreate
         // because the row to delete always have to already exist
         const deletableRow = SimpleRowFactory.prototype.createIdentifiableRow(
             tableId, {
-                rowTmpl: "dogsTableDeletableRowTmpl"
+                rowTmpl: "personsTableDeletableRowTmpl"
             });
 
         const component = EditableListFactory.prototype

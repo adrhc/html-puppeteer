@@ -18,18 +18,18 @@
 <body>
 <div id="dyna-sel-one" class="dyna-sel-one-comp"></div>
 
-<!-- dogs table -->
-<div class="dogsTable">
-    <table id="dogsTable" class="responstable">
+<!-- persons table -->
+<div class="personsTable">
+    <table id="personsTable" class="responstable">
         <thead>
-        <tr data-owner="dogsTable">
+        <tr data-owner="personsTable">
             <th>Id</th>
             <th>First name</th>
             <th>Last name</th>
             <th>
                 <div class="buttons">
-                    <img data-owner="dogsTable" data-btn="reload" alt="reload" src="images/reload-button-32.png" title="reîncarcă datele"/>
-                    <img data-owner="dogsTable" data-btn="showAdd" alt="show add" src="images/add-button-32.png" title="către adăugare"/>
+                    <img data-owner="personsTable" data-btn="reload" alt="reload" src="images/reload-button-32.png" title="reîncarcă datele"/>
+                    <img data-owner="personsTable" data-btn="showAdd" alt="show add" src="images/add-button-32.png" title="către adăugare"/>
                 </div>
             </th>
         </tr>
@@ -38,46 +38,52 @@
 </div>
 
 <!-- READ-ONLY row template -->
-<template id="dogsTableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}">
+<template id="personsTableRowTmpl">
+    <tr data-owner="personsTable" data-id="{{id}}">
         <td>{{id}}</td>
         <td>{{firstName}}</td>
         <td>{{lastName}}</td>
         <td>
             <div class="buttons">
-                <img data-owner="dogsTable" data-btn="showDelete" alt="show delete" src="images/delete-button-32.png" title="către ștergere"/>
-                <img data-owner="dogsTable" data-btn="showEdit" alt="show edit" src="images/edit-button-32.png" title="către editare"/>
+                <img data-owner="personsTable" data-btn="showDelete" alt="show delete" src="images/delete-button-32.png" title="către ștergere"/>
+                <img data-owner="personsTable" data-btn="showEdit" alt="show edit" src="images/edit-button-32.png" title="către editare"/>
             </div>
         </td>
     </tr>
 </template>
 
 <!-- DELETE row template -->
-<template id="dogsTableDeletableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}" class="deletable-row">
+<template id="personsTableDeletableRowTmpl">
+    <tr data-owner="personsTable" data-id="{{id}}" class="deletable-row">
         <td>{{id}}</td>
         <td>{{firstName}}</td>
         <td>{{lastName}}</td>
         <td>
             <div class="buttons">
-                <img data-owner="dogsTable" data-btn="cancel" alt="cancel" src="images/cancel-button-32.png" title="anulează ștergerea"/>
-                <img data-owner="dogsTable" data-btn="delete" alt="delete" src="images/delete-button-32.png" title="confirmă ștergerea"/>
+                <img data-owner="personsTable" data-btn="cancel" alt="cancel" src="images/cancel-button-32.png" title="anulează ștergerea"/>
+                <img data-owner="personsTable" data-btn="delete" alt="delete" src="images/delete-button-32.png" title="confirmă ștergerea"/>
             </div>
         </td>
     </tr>
 </template>
 
 <!-- EDIT row template -->
-<template id="dogsTableEditableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}">
+<template id="personsTableEditableRowTmpl">
+    <tr data-owner="personsTable" data-id="{{id}}">
         <td>
-            <input type="hidden" name="id" value="{{id}}">
-            <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
+            <input data-owner="personsTable" type="hidden" name="id" value="{{id}}">
+        </td>
+        <td>
+            <input data-owner="personsTable" type="text" autocomplete="off"
+                   name="firstName" value="{{firstName}}" data-focus-me="true">
+        </td>
+        <td>
+            <input data-owner="personsTable" type="text" autocomplete="off" name="lastName" value="{{lastName}}">
         </td>
         <td>
             <div class="buttons">
-                <img data-owner="dogsTable" data-btn="cancel" alt="cancel" src="images/cancel-button-32.png" title="anulează modificarea"/>
-                <img data-owner="dogsTable" data-btn="update" alt="update" src="images/save-button-32.png" title="confirmă salvarea"/>
+                <img data-owner="personsTable" data-btn="cancel" alt="cancel" src="images/cancel-button-32.png" title="anulează modificarea"/>
+                <img data-owner="personsTable" data-btn="update" alt="update" src="images/save-button-32.png" title="confirmă salvarea"/>
             </div>
         </td>
     </tr>
