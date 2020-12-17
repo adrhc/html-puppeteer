@@ -55,6 +55,32 @@ class CrudListComponent extends SelectableElasticListComponent {
     }
 
     /**
+     * UPDATE
+     *
+     * @param ev {Event}
+     */
+    onDelete(ev) {
+        ev.stopPropagation();
+        const selectableList = ev.data;
+        const rowDataId = selectableList.rowDataIdOf(this, true);
+        selectableList.doWithState((crudListState) => {
+            crudListState.removeById(rowDataId);
+        });
+    }
+
+    /**
+     * UPDATE
+     *
+     * @param ev {Event}
+     */
+    onUpdate(ev) {
+        ev.stopPropagation();
+        const selectableList = ev.data;
+        const rowDataId = selectableList.rowDataIdOf(this, true);
+        selectableList._doSwapWith(undefined);
+    }
+
+    /**
      * linking triggers to component's handlers (aka capabilities)
      *
      * @private
@@ -66,8 +92,12 @@ class CrudListComponent extends SelectableElasticListComponent {
                 `${this.ownerSelector}[data-btn='showDelete'],
                 ${this.ownerSelector}[data-btn='showEdit']`, this, this.onShowDU)
             .on(this.withNamespaceFor('click'),
+                `${this.ownerSelector}[data-btn='showAdd']`, this, this.onShowAdd)
+            .on(this.withNamespaceFor('click'),
                 `${this.ownerSelector}[data-btn='cancel']`, this, this.onCancel)
             .on(this.withNamespaceFor('click'),
-                `${this.ownerSelector}[data-btn='showAdd']`, this, this.onShowAdd);
+                `${this.ownerSelector}[data-btn='delete']`, this, this.onDelete)
+            .on(this.withNamespaceFor('click'),
+                `${this.ownerSelector}[data-btn='update']`, this, this.onUpdate);
     }
 }
