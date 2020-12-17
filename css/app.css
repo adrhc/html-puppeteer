@@ -1,3 +1,15 @@
 .personsTable {
     margin-top: 0.5em;
 }
+
+.personsTable table tr td:first-child {
+    max-width: 100px;
+}
+
+
+.personsTable table td input {
+    width: 100%;
+    width: -webkit-fill-available;
+    width: -moz-available;
+    width: fill-available;
+}
