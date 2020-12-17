@@ -6,8 +6,9 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/responstable-table.css">
     <link rel="stylesheet" href="css/util.css">
-    <link rel="stylesheet" href="css/table-editor.css">
+    <link rel="stylesheet" href="css/editable-list.css">
     <link rel="stylesheet" href="css/dyna-sel-one.css">
+    <link rel="stylesheet" href="css/app.css">
     <script src="libraries/modernizr-custom.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://unpkg.com/mustache@latest"></script>
@@ -15,33 +16,65 @@
 </head>
 
 <body>
+<div id="dyna-sel-one" class="dyna-sel-one-comp"></div>
+
 <!-- dogs table -->
 <div class="dogsTable">
     <table id="dogsTable" class="responstable">
         <thead>
         <tr data-owner="dogsTable">
             <th>Dogs</th>
+            <th>
+                <div class="buttons">
+                    <img data-owner="dogsTable" data-btn="reload" alt="reload" src="images/reload-button-32.png"/>
+                    <img data-owner="dogsTable" data-btn="showAdd" alt="show add" src="images/add-button-32.png"/>
+                </div>
+            </th>
         </tr>
         </thead>
     </table>
 </div>
 
-<!-- dogs row template -->
+<!-- READ-ONLY row template -->
 <template id="dogsTableRowTmpl">
     <tr data-owner="dogsTable" data-id="{{id}}">
         <td>
-            <input type="hidden" name="id" value="{{id}}">
-            {{name}}
+            <input type="hidden" name="id" value="{{id}}">{{{name}}}
+        </td>
+        <td>
+            <div class="buttons">
+                <img data-owner="dogsTable" data-btn="showDelete" alt="show delete" src="images/delete-button-32.png"/>
+                <img data-owner="dogsTable" data-btn="showEdit" alt="show edit" src="images/edit-button-32.png"/>
+            </div>
         </td>
     </tr>
 </template>
 
-<!-- dogs editable row template -->
+<!-- DELETE row template -->
+<template id="dogsTableDeletableRowTmpl">
+    <tr data-owner="dogsTable" data-id="{{id}}" class="deletable-row">
+        <td>{{{name}}}</td>
+        <td>
+            <div class="buttons">
+                <img data-owner="dogsTable" data-btn="cancel" alt="cancel" src="images/cancel-button-32.png"/>
+                <img data-owner="dogsTable" data-btn="delete" alt="delete" src="images/delete-button-32.png"/>
+            </div>
+        </td>
+    </tr>
+</template>
+
+<!-- EDIT row template -->
 <template id="dogsTableEditableRowTmpl">
     <tr data-owner="dogsTable" data-id="{{id}}">
         <td>
             <input type="hidden" name="id" value="{{id}}">
             <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
+        </td>
+        <td>
+            <div class="buttons">
+                <img data-owner="dogsTable" data-btn="cancel" alt="cancel" src="images/cancel-button-32.png"/>
+                <img data-owner="dogsTable" data-btn="update" alt="update" src="images/save-button-32.png"/>
+            </div>
         </td>
     </tr>
 </template>
@@ -79,6 +112,13 @@
 <script src="js/ro/go/adrhc/jquery-widgets/components/views/abstract-table-based-view.js"></script>
 <!-- components/abstract* -->
 <script src="js/ro/go/adrhc/jquery-widgets/components/abstract-table-based-component.js"></script>
+<!-- dynamic-select-one -->
+<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/repository/dyna-sel-one-repository.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/model/dyna-sel-one-item.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/model/dynamic-select-one-state.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/view/dynamic-select-one-view.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/dynamic-select-one.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/factories/dynamic-select-one-factory.js"></script>
 <!-- components/simple-list -->
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-list/view/simple-list-view.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-list/simple-list.js"></script>
@@ -98,9 +138,16 @@
 <script src="js/ro/go/adrhc/jquery-widgets/components/selectable-list/selectable-list-view.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/selectable-list/selectable-list.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/selectable-list/selectable-list-factory.js"></script>
-
+<!-- components/editable-list -->
+<script src="js/ro/go/adrhc/jquery-widgets/components/editable-list/editable-list-state.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/editable-list/editable-list.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/editable-list/editable-list-factory.js"></script>
+<!-- app -->
+<script src="js/model/person.js"></script>
+<script src="js/repositories/in-memory-persons-repository.js"></script>
+<script src="js/repositories/persons-repository.js"></script>
 <!-- index -->
-<script src="js/selectable-list.js"></script>
+<script src="js/editable-list-and-dyna-sel-one.js"></script>
 </body>
 
 </html>

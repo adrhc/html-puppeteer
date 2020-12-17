@@ -7,7 +7,7 @@ class DynamicSelectOneView {
      */
     constructor(elemId, {
         placeholder, optionsToShow = 10,
-        tmplUrl = "js/adrhc/go/ro/jquery-widgets/components/dynamic-select-one/templates/dyna-sel-one.html"
+        tmplUrl = "js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/templates/dyna-sel-one.html"
     }) {
         this.elemId = elemId;
         this.tmpl = new CachedAjax(tmplUrl);
