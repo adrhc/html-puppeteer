@@ -20,7 +20,7 @@ th img {
 */
 
 div.buttons {
-    width: fit-content;
+    text-align: center !important;
     height: 32px;
     margin: auto;
 }
