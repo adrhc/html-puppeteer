@@ -31,17 +31,7 @@
     <tr data-owner="dogsTable" data-id="{{id}}">
         <td>
             <input type="hidden" name="id" value="{{id}}">
-            {{name}}
-        </td>
-    </tr>
-</template>
-
-<!-- dogs editable row template -->
-<template id="dogsTableEditableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}">
-        <td>
-            <input type="hidden" name="id" value="{{id}}">
-            <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
+            {{{name}}}
         </td>
     </tr>
 </template>
@@ -101,7 +91,7 @@
 <script src="js/ro/go/adrhc/jquery-widgets/components/selectable-elastic-list/selectable-list-factory.js"></script>
 
 <!-- index -->
-<script src="js/selectable-elastic-list.js"></script>
+<script src="js/elastic-list.js"></script>
 </body>
 
 </html>
