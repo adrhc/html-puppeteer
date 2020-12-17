@@ -22,15 +22,13 @@ if (Modernizr.template) {
         ];
         const personsRepository = new InMemoryPersonsRepository(persons);
 
-        // dynamic-select-one
+        // DYNAMIC-SELECT-ONE
         DynamicSelectOneFactory.prototype.create({
             elemId: "dyna-sel-one",
             placeholder: "the name to search for", repository: personsRepository
         }).init();
 
-        // editable-list
-        const items = [{id: 1, name: "dog1"}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
-
+        // EDITABLE-LIST
         // dogs table with both read-only and editable row
         const tableId = "dogsTable";
         const tableRelativePositionOnCreate = "prepend";
@@ -39,8 +37,7 @@ if (Modernizr.template) {
             tableId, {tableRelativePositionOnCreate});
         const editableRow = SimpleRowFactory.prototype.createIdentifiableRow(
             tableId, {
-                rowTmpl: "dogsTableEditableRowTmpl",
-                tableRelativePositionOnCreate
+                rowTmpl: "dogsTableEditableRowTmpl", tableRelativePositionOnCreate
             });
         // doesn't make sense to use tableRelativePositionOnCreate
         // because the row to delete always have to already exist
@@ -50,21 +47,9 @@ if (Modernizr.template) {
             });
 
         const component = EditableListFactory.prototype
-            .create({items, tableId, readOnlyRow, editableRow, deletableRow});
+            .create({repository: personsRepository, tableId, readOnlyRow, editableRow, deletableRow});
 
-        component
-            .init()
-            .then(() => {
-                component.doWithState((crudListState) => {
-                    crudListState.updateItem({id: 3, name: "updated dog3"});
-                    crudListState.removeById(2);
-                    crudListState.insertItem({
-                            id: 2,
-                            name: `restored dog2 (with table ${tableRelativePositionOnCreate})`
-                        },
-                        tableRelativePositionOnCreate === "append");
-                });
-            });
+        component.init();
     })
 } else {
     // Find another way to add the rows to the table because

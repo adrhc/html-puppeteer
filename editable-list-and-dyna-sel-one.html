@@ -23,7 +23,9 @@
     <table id="dogsTable" class="responstable">
         <thead>
         <tr data-owner="dogsTable">
-            <th>Dogs</th>
+            <th>Id</th>
+            <th>First name</th>
+            <th>Last name</th>
             <th>
                 <div class="buttons">
                     <img data-owner="dogsTable" data-btn="reload" alt="reload" src="images/reload-button-32.png" title="reîncarcă datele"/>
@@ -38,9 +40,9 @@
 <!-- READ-ONLY row template -->
 <template id="dogsTableRowTmpl">
     <tr data-owner="dogsTable" data-id="{{id}}">
-        <td>
-            <input type="hidden" name="id" value="{{id}}">{{{name}}}
-        </td>
+        <td>{{id}}</td>
+        <td>{{firstName}}</td>
+        <td>{{lastName}}</td>
         <td>
             <div class="buttons">
                 <img data-owner="dogsTable" data-btn="showDelete" alt="show delete" src="images/delete-button-32.png" title="către ștergere"/>
