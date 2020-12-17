@@ -55,7 +55,9 @@
 <!-- DELETE row template -->
 <template id="dogsTableDeletableRowTmpl">
     <tr data-owner="dogsTable" data-id="{{id}}" class="deletable-row">
-        <td>{{{name}}}</td>
+        <td>{{id}}</td>
+        <td>{{firstName}}</td>
+        <td>{{lastName}}</td>
         <td>
             <div class="buttons">
                 <img data-owner="dogsTable" data-btn="cancel" alt="cancel" src="images/cancel-button-32.png" title="anulează ștergerea"/>
