@@ -1,4 +1,4 @@
-class CrudListFactory {
+class EditableListFactory {
     /**
      * @param items {IdentifiableEntity[]}
      * @param tableId {string}
@@ -10,7 +10,7 @@ class CrudListFactory {
      * @param readOnlyRow {IdentifiableRowComponent}
      * @param editableRow {IdentifiableRowComponent}
      * @param deletableRow {IdentifiableRowComponent}
-     * @return {CrudListComponent}
+     * @return {EditableListComponent}
      */
     create({
                items = [],
@@ -24,6 +24,6 @@ class CrudListFactory {
                view = new SelectableListView(mustacheTableElemAdapter, readOnlyRow, editableRow),
                deletableRow
            }) {
-        return new CrudListComponent(repository, state, view, deletableRow);
+        return new EditableListComponent(repository, state, view, deletableRow);
     }
 }

@@ -1,4 +1,4 @@
-class CrudListComponent extends SelectableListComponent {
+class EditableListComponent extends SelectableListComponent {
     /**
      * @param repository {CrudRepository}
      * @param state {EditableListState}

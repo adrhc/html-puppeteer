@@ -30,7 +30,7 @@ if (Modernizr.template) {
                 rowTmpl: "dogsTableDeletableRowTmpl"
             });
 
-        const component = CrudListFactory.prototype
+        const component = EditableListFactory.prototype
             .create({items, tableId, readOnlyRow, editableRow, deletableRow});
 
         component
