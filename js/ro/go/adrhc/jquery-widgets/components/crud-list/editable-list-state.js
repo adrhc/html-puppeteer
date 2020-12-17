@@ -11,7 +11,7 @@ class EditableListState extends SelectableElasticListState {
         } else if (currentSelectableSwappingData.equals(this.currentSelectableSwappingData)) {
             // previous switch equals the next one
         } else if (EntityUtils.prototype.isTransientId(currentSelectableSwappingData.item.id)) {
-            // previous switch is transient entity
+            // previous switch is transient entity - automatically remove it on switch to another item
             this.removeTransient();
         }
     }
