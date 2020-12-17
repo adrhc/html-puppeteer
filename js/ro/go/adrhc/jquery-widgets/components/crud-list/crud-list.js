@@ -81,6 +81,7 @@ class CrudListComponent extends SelectableListComponent {
         const entity = selectableList.view.extractInputValuesByDataId(rowDataId);
         selectableList.doWithState((crudListState) => {
             crudListState.updateItem(entity);
+            // resetSwappingState leaves the edited row in place otherwise would be deleted if swapping
             crudListState.resetSwappingState();
         });
     }
