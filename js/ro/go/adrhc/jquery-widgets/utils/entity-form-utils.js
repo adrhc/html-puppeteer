@@ -6,7 +6,6 @@ class EntityFormUtils {
      */
     extractEntityFrom($elem, owner) {
         const item = FormUtils.prototype.objectifyInputsOf($elem, owner);
-        EntityUtils.prototype.removeTransientId(item);
-        return item;
+        return EntityUtils.prototype.removeTransientId(item);
     }
 }

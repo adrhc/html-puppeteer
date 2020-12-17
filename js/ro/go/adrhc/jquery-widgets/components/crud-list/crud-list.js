@@ -39,7 +39,7 @@ class CrudListComponent extends SelectableListComponent {
         const selectableList = ev.data;
         selectableList.doWithState((crudListState) => {
             const newId = crudListState.createNewItem().id;
-            selectableList._doSwapWith(newId);
+            return selectableList._doSwapWith(newId);
         });
     }
 
@@ -65,6 +65,7 @@ class CrudListComponent extends SelectableListComponent {
         const rowDataId = selectableList.rowDataIdOf(this, true);
         selectableList.doWithState((crudListState) => {
             crudListState.removeById(rowDataId);
+            crudListState.resetSwappingState();
         });
     }
 
@@ -77,7 +78,11 @@ class CrudListComponent extends SelectableListComponent {
         ev.stopPropagation();
         const selectableList = ev.data;
         const rowDataId = selectableList.rowDataIdOf(this, true);
-        selectableList._doSwapWith(undefined);
+        const entity = selectableList.view.extractInputValuesByDataId(rowDataId);
+        selectableList.doWithState((crudListState) => {
+            crudListState.updateItem(entity);
+            crudListState.resetSwappingState();
+        });
     }
 
     /**

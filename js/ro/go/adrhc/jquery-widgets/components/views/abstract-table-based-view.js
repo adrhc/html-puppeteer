@@ -22,13 +22,36 @@ class AbstractTableBasedView {
     /**
      * by default this component won't use the owner to detect its fields
      *
-     * @param useOwnerOnFields {boolean}
-     * @return {Array<IdentifiableEntity>}
+     * @param useOwnerOnFields {boolean|undefined}
+     * @return {Array<{}>}
      */
-    extractEntities(useOwnerOnFields) {
+    extractAllRowsInputValues(useOwnerOnFields) {
         return this.tableAdapter.$getAllRows()
             .map((index, elem) =>
-                EntityFormUtils.prototype.extractEntityFrom($(elem), useOwnerOnFields ? this.owner : undefined))
+                this._extractInputValues($(elem), useOwnerOnFields))
             .get();
+    }
+
+    /**
+     * by default this component won't use the owner to detect its fields
+     *
+     * @param rowDataId {number|string}
+     * @param useOwnerOnFields {boolean|undefined}
+     * @return {{}}
+     */
+    extractInputValuesByDataId(rowDataId, useOwnerOnFields) {
+        const $elem = this.tableAdapter.$getRowByDataId(rowDataId)
+        return this._extractInputValues($elem, useOwnerOnFields);
+    }
+
+    /**
+     * @param $elem {jQuery<HTMLTableRowElement>}
+     * @param useOwnerOnFields {boolean|undefined}
+     * @return {{}}
+     * @protected
+     */
+    _extractInputValues($elem, useOwnerOnFields) {
+        const owner = useOwnerOnFields ? this.owner : undefined;
+        return FormUtils.prototype.objectifyInputsOf($elem, owner);
     }
 }

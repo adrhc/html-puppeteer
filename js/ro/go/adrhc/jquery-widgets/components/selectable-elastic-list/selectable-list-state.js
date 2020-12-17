@@ -28,6 +28,22 @@ class SelectableListState extends CrudListState {
             && this.currentSelectableSwappingData.equals(newSelectableSwappingData);
     }
 
+    resetSwappingState() {
+        this.swappingState.reset();
+    }
+
+    /**
+     * @param swappingStateChange {StateChange|undefined}
+     * @param mustBePrevious {boolean|undefined}
+     */
+    reloadItemOnSwapping(swappingStateChange, mustBePrevious = true) {
+        const swappingDetails = swappingStateChange.data;
+        const selectableSwappingData = swappingDetails.data;
+        if (swappingDetails.isPrevious && selectableSwappingData.item) {
+            selectableSwappingData.item = this.findById(selectableSwappingData.item.id);
+        }
+    }
+
     /**
      * @return {SelectableSwappingData|undefined}
      */

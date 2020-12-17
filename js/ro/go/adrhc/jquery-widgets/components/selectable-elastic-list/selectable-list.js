@@ -58,12 +58,16 @@ class SelectableListComponent extends ElasticListComponent {
     /**
      * Updates the view on 1x "swapping" state change.
      *
-     * @param stateChange {StateChange|undefined}
+     * @param swappingStateChange {StateChange|undefined}
      * @return {Promise<StateChange>}
      */
-    updateViewOnSwapping(stateChange) {
-        stateChange = stateChange ? stateChange : this.state.consumeOne();
-        return this.view.updateViewOnSwapping(stateChange);
+    updateViewOnSwapping(swappingStateChange) {
+        swappingStateChange = swappingStateChange ? swappingStateChange : this.swappingState.consumeOne();
+        if (!swappingStateChange) {
+            return Promise.resolve(swappingStateChange);
+        }
+        this.state.reloadItemOnSwapping(swappingStateChange);
+        return this.view.updateViewOnSwapping(swappingStateChange);
     }
 
     /**

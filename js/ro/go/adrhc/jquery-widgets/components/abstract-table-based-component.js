@@ -48,11 +48,24 @@ class AbstractTableBasedComponent {
     /**
      * by default this component won't use the owner to detect its fields
      *
-     * @param useOwnerOnFields {boolean}
+     * @param useOwnerOnFields {boolean|undefined}
      * @return {Array<IdentifiableEntity>}
      */
-    extractEntities(useOwnerOnFields) {
-        return this.view.extractEntities(useOwnerOnFields);
+    extractAllEntities(useOwnerOnFields) {
+        return this.view.extractAllRowsInputValues(useOwnerOnFields)
+            .map(it => EntityUtils.prototype.removeTransientId(it));
+    }
+
+    /**
+     * by default this component won't use the owner to detect its fields
+     *
+     * @param rowDataId {number|string}
+     * @param useOwnerOnFields {boolean|undefined}
+     * @return {IdentifiableEntity}
+     */
+    extractEntityByDataId(rowDataId, useOwnerOnFields) {
+        const values = this.view.extractInputValuesByDataId(rowDataId, useOwnerOnFields);
+        return EntityUtils.prototype.removeTransientId(values);
     }
 
     /**

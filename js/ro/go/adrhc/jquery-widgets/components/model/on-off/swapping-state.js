@@ -61,11 +61,11 @@ class SwappingState extends BasicState {
     }
 
     /**
-     * @param onOff {SwappingDetails}
+     * @param swappingDetails {SwappingDetails}
      * @return {StateChange}
      * @private
      */
-    _collectStateChange(onOff) {
-        super.collectStateChange(new StateChange(this.requestType, onOff));
+    _collectStateChange(swappingDetails) {
+        super.collectStateChange(new StateChange(this.requestType, swappingDetails));
     }
 }
