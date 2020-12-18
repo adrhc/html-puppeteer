@@ -28,7 +28,8 @@ class SelectableListView extends SimpleListView {
         const swappingDetails = swappingStateChange.data;
         const swappingData = swappingDetails.data;
         if (swappingData.item) {
-            return this._rowComponentOf(swappingStateChange).update(swappingData.item);
+            return this._rowComponentOf(swappingStateChange)
+                .update(swappingData.item).then(() => swappingStateChange);
         } else {
             return Promise.resolve(swappingStateChange);
         }

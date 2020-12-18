@@ -109,6 +109,27 @@ class EditableListComponent extends SelectableListComponent {
     }
 
     /**
+     * Updates the view on 1x "swapping" state change.
+     *
+     * At this moment the EditableListState.switchTo already delete the transient entity such
+     * that super.updateViewOnSwapping find no entity when calling reloadItemOnSwapping.
+     *
+     * @param swappingStateChange {StateChange|undefined}
+     * @return {Promise<StateChange>}
+     */
+    updateViewOnSwapping(swappingStateChange) {
+        return super.updateViewOnSwapping(swappingStateChange)
+            .then(swappingStateChange => {
+                const swappingDetails = swappingStateChange.data;
+                const selectableSwappingData = swappingDetails.data;
+                if (swappingDetails.isPrevious && selectableSwappingData.item) {
+                    // todo: delete "remove-on-swapping" rows
+                    console.debug(`removing on swapping: ${selectableSwappingData.item.id}`);
+                }
+            });
+    }
+
+    /**
      * linking triggers to component's handlers (aka capabilities)
      *
      * @private
