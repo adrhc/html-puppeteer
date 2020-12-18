@@ -1,3 +1,7 @@
+/**
+ * StateChange.requestType = this.requestType
+ * StateChange.data = SwappingDetails
+ */
 class SwappingState extends BasicState {
     /**
      * @type {string} is the requestType to use when reporting state changes
