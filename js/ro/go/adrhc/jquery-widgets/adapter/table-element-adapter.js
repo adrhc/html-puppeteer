@@ -92,6 +92,15 @@ class TableElementAdapter {
         return this.$tbody.children(this.getRowSelector(rowDataId));
     }
 
+    /**
+     * @param dataKey {string}
+     * @param dataValue {string|number}
+     * @return {jQuery<HTMLTableRowElement>}
+     */
+    $getOwnRowByData(dataKey, dataValue) {
+        return this.$tbody.children(`tr${this.ownerSelector}[data-${dataKey}='${dataValue}']`);
+    }
+
     getRowSelector(rowDataId) {
         return `tr${this.ownerSelector}[data-id='${rowDataId}']`;
     }
