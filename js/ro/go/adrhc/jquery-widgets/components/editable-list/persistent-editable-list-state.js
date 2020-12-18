@@ -13,7 +13,7 @@ class PersistentEditableListState extends EditableListState {
     }
 
     /**
-     * removes isPrevious = false state changes
+     * ignores isPrevious = false state changes
      *
      * @param stateChanges {StateChanges}
      * @param fromLatest {boolean|undefined}
@@ -25,9 +25,5 @@ class PersistentEditableListState extends EditableListState {
                 return !swappingDetails.isPrevious;
             })
             .forEach(stateChange => this.collectStateChange(stateChange));
-    }
-
-    _reloadItemOnAllSwappings(mustBePrevious = true) {
-        console.log(`mustBePrevious = ${mustBePrevious}`);
     }
 }
