@@ -67,7 +67,7 @@ class SelectableListComponent extends ElasticListComponent {
         console.log("SelectableListComponent.updateViewOnStateChange\n", JSON.stringify(stateChange));
         switch (stateChange.requestType) {
             case this.swappingRequestType:
-                return this.updateComponentsOnSwapping(stateChange);
+                return this.updateSwappingComponent(stateChange);
             default:
                 console.warn(`SelectableElasticListComponent delegating view update to super for ${stateChange.requestType}`)
                 return super.updateViewOnStateChange(stateChange);
@@ -80,12 +80,12 @@ class SelectableListComponent extends ElasticListComponent {
      * @param swappingStateChange {StateChange|undefined}
      * @return {Promise<StateChange>}
      */
-    updateComponentsOnSwapping(swappingStateChange) {
+    updateSwappingComponent(swappingStateChange) {
         swappingStateChange = swappingStateChange ? swappingStateChange : this.swappingState.consumeOne();
         if (!swappingStateChange) {
             return Promise.resolve(swappingStateChange);
         }
-        return this._updateSelectedView(swappingStateChange);
+        return this._updateSwappingComponent(swappingStateChange);
     }
 
     /**
@@ -95,11 +95,11 @@ class SelectableListComponent extends ElasticListComponent {
      * @return {Promise<StateChange>}
      * @protected
      */
-    _updateSelectedView(swappingStateChange) {
+    _updateSwappingComponent(swappingStateChange) {
         const swappingDetails = swappingStateChange.data;
         const swappingData = swappingDetails.data;
         if (swappingData.item) {
-            const rowComponent = this._rowComponentOf(swappingStateChange);
+            const rowComponent = this._componentOf(swappingStateChange);
             return rowComponent
                 .init()
                 .then(() => rowComponent.update(swappingData.item))
@@ -116,7 +116,7 @@ class SelectableListComponent extends ElasticListComponent {
      * @return {IdentifiableRowComponent}
      * @protected
      */
-    _rowComponentOf(swappingStateChange) {
+    _componentOf(swappingStateChange) {
         const swappingDetails = swappingStateChange.data;
         const swappingData = swappingDetails.data;
         if (!swappingDetails.isPrevious && swappingData.context) {
