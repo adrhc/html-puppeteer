@@ -30,6 +30,7 @@ class PersonRowEditor extends IdentifiableRowComponent {
 
         this.catsTableComp = EditableListFactory.prototype.create({
             items: stateChange.data.cats,
+            state: new PersistentEditableListState(new EntityHelper()),
             tableId,
             bodyRowTmplId: "editableCatsRowTmpl",
             readOnlyRow: roAndRwRow,

@@ -13,8 +13,8 @@ class BasicState {
     }
 
     /**
-     * @param fromLatest {boolean|undefined}
      * @param stateChanges {StateChanges}
+     * @param fromLatest {boolean|undefined}
      */
     collectByConsumingStateChanges(stateChanges, fromLatest = false) {
         stateChanges.consumeAll(fromLatest).forEach(stateChange => this.collectStateChange(stateChange));

@@ -124,7 +124,11 @@ class EntityUtils {
             (it) => EntityUtils.prototype.idsAreEqual(it.id, id))
     }
 
-    newIdentifiableEntity() {
-        return new IdentifiableEntity(EntityUtils.prototype.transientId);
+    /**
+     * @param id {number|string|undefined}
+     * @return {IdentifiableEntity}
+     */
+    newIdentifiableEntity(id) {
+        return new IdentifiableEntity(!!id ? id : EntityUtils.prototype.transientId);
     }
 }
