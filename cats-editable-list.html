@@ -26,6 +26,7 @@
             <th>Id</th>
             <th>First name</th>
             <th>Last name</th>
+            <th>Cats</th>
             <th>
                 <div class="buttons">
                     <img data-owner="personsTable" data-btn="reload" alt="reload" src="images/reload-button-32.png" title="reîncarcă datele"/>
@@ -43,6 +44,7 @@
         <td>{{id}}</td>
         <td>{{firstName}}</td>
         <td>{{lastName}}</td>
+        <td>{{#each cats}}<div>{{{this.name}}}</div>{{/each}}</td>
         <td>
             <div class="buttons">
                 <img data-owner="personsTable" data-btn="showDelete" alt="show delete" src="images/delete-button-32.png" title="către ștergere"/>
@@ -58,6 +60,7 @@
         <td>{{id}}</td>
         <td>{{firstName}}</td>
         <td>{{lastName}}</td>
+        <td>{{#each cats}}<div>{{{this.name}}}</div>{{/each}}</td>
         <td>
             <div class="buttons">
                 <img data-owner="personsTable" data-btn="cancel" alt="cancel" src="images/cancel-button-32.png" title="anulează ștergerea"/>
@@ -65,9 +68,9 @@
             </div>
         </td>
     </tr>
-    <tr data-owner="personsTable" data-remove-on-swapping-off="{{id}}">
-        <td colspan="4">remove-on-swapping-off</td>
-    </tr>
+<!--    <tr data-owner="personsTable" data-remove-on-swapping-off="{{id}}">-->
+<!--        <td colspan="4">remove-on-swapping-off</td>-->
+<!--    </tr>-->
 </template>
 
 <!-- EDIT row template -->
@@ -90,9 +93,9 @@
             </div>
         </td>
     </tr>
-    <tr data-owner="personsTable" data-remove-on-swapping-off="{{id}}">
-        <td colspan="4">remove-on-swapping-off</td>
-    </tr>
+<!--    <tr data-owner="personsTable" data-remove-on-swapping-off="{{id}}">-->
+<!--        <td colspan="4">remove-on-swapping-off</td>-->
+<!--    </tr>-->
 </template>
 
 <!-- utils -->
