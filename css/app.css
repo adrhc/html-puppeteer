@@ -13,3 +13,7 @@
     width: -moz-available;
     width: fill-available;
 }
+
+.catsTable {
+    width: 100%;
+}

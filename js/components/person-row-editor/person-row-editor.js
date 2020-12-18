@@ -10,6 +10,7 @@ class PersonRowEditor extends IdentifiableRowComponent {
 
     /**
      * @param stateChange {StateChange}
+     * @return {Promise<StateChange>}
      * @protected
      */
     _initCatsTable(stateChange) {
@@ -20,21 +21,23 @@ class PersonRowEditor extends IdentifiableRowComponent {
 
         const roAndRwRow = SimpleRowFactory.prototype.createIdentifiableRow(
             tableId, {
-                rowTmpl: "catsTableEditableRowTmpl", tableRelativePositionOnCreate: "append"
+                rowTmpl: "editableCatsRowTmpl", tableRelativePositionOnCreate: "append"
             });
         const deletableRow = SimpleRowFactory.prototype.createIdentifiableRow(
             tableId, {
-                rowTmpl: "catsTableDeletableRowTmpl"
+                rowTmpl: "readOnlyCatsRowTmpl"
             });
 
-        this.catsTableComp = EditableListFactory.prototype
-            .create({
-                items: stateChange.data.cats,
-                tableId,
-                readOnlyRow: roAndRwRow,
-                editableRow: roAndRwRow,
-                deletableRow
-            });
+        this.catsTableComp = EditableListFactory.prototype.create({
+            items: stateChange.data.cats,
+            tableId,
+            bodyRowTmplId: "editableCatsRowTmpl",
+            readOnlyRow: roAndRwRow,
+            editableRow: roAndRwRow,
+            deletableRow
+        });
+
+        return this.catsTableComp.init();
     }
 
     /**
@@ -44,10 +47,7 @@ class PersonRowEditor extends IdentifiableRowComponent {
      */
     update(item, requestType) {
         return super.update(item, requestType)
-            .then(stateChange => {
-                this._initCatsTable(stateChange);
-                return stateChange;
-            });
+            .then(stateChange => this._initCatsTable(stateChange).then(() => stateChange));
     }
 
     close() {

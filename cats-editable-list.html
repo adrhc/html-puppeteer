@@ -87,6 +87,21 @@
             <input data-owner="personsTable" type="text" autocomplete="off" name="lastName" value="{{lastName}}">
         </td>
         <td>
+            <table id="catsTable" class="catsTable">
+                <thead>
+                <tr data-owner="catsTable">
+                    <th>Name</th>
+                    <th>
+                        <div class="buttons">
+                            <img data-owner="catsTable" data-btn="reload" alt="reload" src="images/reload-button-32.png" title="reîncarcă datele"/>
+                            <img data-owner="catsTable" data-btn="showAdd" alt="show add" src="images/add-button-32.png" title="către adăugare"/>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+            </table>
+        </td>
+        <td>
             <div class="buttons">
                 <img data-owner="personsTable" data-btn="cancel" alt="cancel" src="images/cancel-button-32.png" title="anulează modificarea"/>
                 <img data-owner="personsTable" data-btn="update" alt="update" src="images/save-button-32.png" title="confirmă salvarea"/>
@@ -96,6 +111,21 @@
 <!--    <tr data-owner="personsTable" data-remove-on-swapping-off="{{id}}">-->
 <!--        <td colspan="4">remove-on-swapping-off</td>-->
 <!--    </tr>-->
+</template>
+
+<template id="readOnlyCatsRowTmpl">
+    <tr data-owner="catsTable" data-id="{{id}}">
+        <td>{{{name}}}</td>
+    </tr>
+</template>
+
+<template id="editableCatsRowTmpl">
+    <tr data-owner="catsTable" data-id="{{id}}">
+        <td>
+            <input type="hidden" name="id" value="{{id}}">
+            <input type="text" autocomplete="off" name="name" value="{{name}}" data-focus-me="true">
+        </td>
+    </tr>
 </template>
 
 <!-- utils -->
