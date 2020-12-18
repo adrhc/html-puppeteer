@@ -9,35 +9,44 @@ class PersonRowEditor extends IdentifiableRowComponent {
     }
 
     /**
-     * @return {Promise<StateChange>}
+     * @param stateChange {StateChange}
+     * @protected
      */
-    init() {
+    _initCatsTable(stateChange) {
         // cats array itself is edited so shouldn't be the received (original) one
         // item has not this issue because it's recreated on request (extractEntity)
         // item is cloned by super.init(item)
-        return super.init()
-            .then(() => {
-                const tableId = "catsTable";
+        const tableId = "catsTable";
 
-                const roAndRwRow = SimpleRowFactory.prototype.createIdentifiableRow(
-                    tableId, {
-                        rowTmpl: "catsTableEditableRowTmpl", tableRelativePositionOnCreate: "append"
-                    });
-                const deletableRow = SimpleRowFactory.prototype.createIdentifiableRow(
-                    tableId, {
-                        rowTmpl: "catsTableDeletableRowTmpl"
-                    });
+        const roAndRwRow = SimpleRowFactory.prototype.createIdentifiableRow(
+            tableId, {
+                rowTmpl: "catsTableEditableRowTmpl", tableRelativePositionOnCreate: "append"
+            });
+        const deletableRow = SimpleRowFactory.prototype.createIdentifiableRow(
+            tableId, {
+                rowTmpl: "catsTableDeletableRowTmpl"
+            });
 
-                this.catsTableComp = EditableListFactory.prototype
-                    .create({
-                        items: [],
-                        tableId,
-                        readOnlyRow: roAndRwRow,
-                        editableRow: roAndRwRow,
-                        deletableRow
-                    });
+        this.catsTableComp = EditableListFactory.prototype
+            .create({
+                items: stateChange.data.cats,
+                tableId,
+                readOnlyRow: roAndRwRow,
+                editableRow: roAndRwRow,
+                deletableRow
+            });
+    }
 
-                return this.catsTableComp.init();
+    /**
+     * @param item {Person}
+     * @param requestType {string|undefined}
+     * @return {Promise<StateChange>}
+     */
+    update(item, requestType) {
+        return super.update(item, requestType)
+            .then(stateChange => {
+                this._initCatsTable(stateChange);
+                return stateChange;
             });
     }
 
