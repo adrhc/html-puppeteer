@@ -14,9 +14,6 @@ class PersonRowEditor extends IdentifiableRowComponent {
      * @protected
      */
     _initCatsTable(stateChange) {
-        // cats array itself is edited so shouldn't be the received (original) one
-        // item has not this issue because it's recreated on request (extractEntity)
-        // item is cloned by super.init(item)
         const tableId = "catsTable";
 
         const roAndRwRow = SimpleRowFactory.prototype.createIdentifiableRow(
@@ -28,9 +25,12 @@ class PersonRowEditor extends IdentifiableRowComponent {
                 rowTmpl: "readOnlyCatsRowTmpl"
             });
 
+        const repository = new InMemoryCrudRepository(new EntityHelper(),
+            $.extend(true, [], stateChange.data.cats));
+
         this.catsTableComp = EditableListFactory.prototype.create({
-            items: stateChange.data.cats,
-            state: new PersistentEditableListState(new EntityHelper()),
+            repository,
+            state: new CatsListState(repository),
             tableId,
             bodyRowTmplId: "editableCatsRowTmpl",
             readOnlyRow: roAndRwRow,
@@ -49,6 +49,12 @@ class PersonRowEditor extends IdentifiableRowComponent {
     update(item, requestType) {
         return super.update(item, requestType)
             .then(stateChange => this._initCatsTable(stateChange).then(() => stateChange));
+    }
+
+    extractInputValues(useOwnerOnFields = false) {
+        const item = super.extractInputValues(true);
+        item.cats = this.catsTableComp.extractAllEntities(true);
+        return item;
     }
 
     close() {

@@ -1,14 +1,14 @@
-class PersistentEditableListState extends EditableListState {
+class CatsListState extends EditableListState {
     /**
-     * @param entityHelper {EntityHelper}
+     * @param repository {InMemoryCrudRepository}
      */
-    constructor(entityHelper) {
+    constructor(repository) {
         super();
-        this.entityHelper = entityHelper;
+        this.repository = repository;
     }
 
     createNewItem(append = false) {
-        const item = EntityUtils.prototype.newIdentifiableEntity(this.entityHelper.generateId());
+        const item = this.repository.insert(new IdentifiableEntity(), true);
         return this.insertItem(item, true);
     }
 

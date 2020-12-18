@@ -27,12 +27,18 @@ class InMemoryCrudRepository extends CrudRepository {
 
     /**
      * @param item {IdentifiableEntity}
-     * @return {Promise<IdentifiableEntity>}
+     * @param useNoPromise {boolean|undefined}
+     * @return {Promise<IdentifiableEntity>|IdentifiableEntity}
      */
-    insert(item) {
+    insert(item, useNoPromise = false) {
         item.id = this.entityHelper.generateId();
         this.items.unshift(item);
-        return Promise.resolve($.extend(true, new IdentifiableEntity(), item));
+        const resultItem = $.extend(true, new IdentifiableEntity(), item);
+        if (useNoPromise) {
+            return resultItem;
+        } else {
+            return Promise.resolve(resultItem);
+        }
     }
 
     /**

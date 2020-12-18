@@ -93,7 +93,6 @@
                     <th>Name</th>
                     <th>
                         <div class="buttons">
-                            <img data-owner="catsTable" data-btn="reload" alt="reload" src="images/reload-button-32.png" title="reîncarcă datele"/>
                             <img data-owner="catsTable" data-btn="showAdd" alt="show add" src="images/add-button-32.png" title="către adăugare"/>
                         </div>
                     </th>
@@ -122,8 +121,8 @@
 <template id="editableCatsRowTmpl">
     <tr data-owner="catsTable" data-id="{{id}}">
         <td>
-            <input type="hidden" name="id" value="{{id}}">
-            <input type="text" autocomplete="off" name="name" value="{{name}}" data-focus-me="true">
+            <input data-owner="catsTable" type="hidden" name="id" value="{{id}}">
+            <input data-owner="catsTable" type="text" autocomplete="off" name="name" value="{{name}}" data-focus-me="true">
         </td>
         <td>
             <div class="buttons">
@@ -195,7 +194,7 @@
 <script src="js/ro/go/adrhc/jquery-widgets/components/selectable-list/selectable-list-factory.js"></script>
 <!-- components/editable-list -->
 <script src="js/ro/go/adrhc/jquery-widgets/components/editable-list/editable-list-state.js"></script>
-<script src="js/ro/go/adrhc/jquery-widgets/components/editable-list/persistent-editable-list-state.js"></script>
+<script src="js/components/person-row-editor/cats-list-state.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/editable-list/editable-list.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/editable-list/editable-list-factory.js"></script>
 <!-- app -->
