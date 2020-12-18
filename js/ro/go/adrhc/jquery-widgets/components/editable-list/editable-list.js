@@ -80,7 +80,7 @@ class EditableListComponent extends SelectableListComponent {
         ev.stopPropagation();
         const selectableList = ev.data;
         const rowDataId = selectableList.rowDataIdOf(this, true);
-        selectableList.repository.delete(rowDataId)
+        selectableList.handleRepoErrors(selectableList.repository.delete(rowDataId))
             .then(() => {
                 selectableList.doWithState((crudListState) => {
                     crudListState.removeById(rowDataId);
@@ -99,7 +99,7 @@ class EditableListComponent extends SelectableListComponent {
         const selectableList = ev.data;
         const rowDataId = selectableList.rowDataIdOf(this, true);
         const entity = selectableList.extractSelectionInputValues();
-        selectableList.repository.save(entity)
+        selectableList.handleRepoErrors(selectableList.repository.save(entity))
             .then(savedEntity => {
                 selectableList.doWithState((crudListState) => {
                     // todo: sync "append" save param with notSelectedRow.tableRelativePositionOnCreate
