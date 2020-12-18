@@ -38,6 +38,7 @@ class EditableListComponent extends SelectableListComponent {
         ev.stopPropagation();
         const selectableList = ev.data;
         selectableList.doWithState((crudListState) => {
+            // todo: sync "append" createNewItem param with showAdd.tableRelativePositionOnCreate
             const newId = crudListState.createNewItem().id;
             return selectableList._doSwapWith(newId);
         });
@@ -97,6 +98,7 @@ class EditableListComponent extends SelectableListComponent {
         selectableList.repository.save(entity)
             .then(savedEntity => {
                 selectableList.doWithState((crudListState) => {
+                    // todo: sync "append" save param with view.notSelectedRow.tableRelativePositionOnCreate
                     crudListState.save(savedEntity, rowDataId);
                     // When not using repository resetSwappingState leaves the edited
                     // row in place otherwise would be deleted by swapping processing.
