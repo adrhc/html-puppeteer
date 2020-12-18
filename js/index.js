@@ -31,7 +31,7 @@ if (Modernizr.template) {
 
                 TableEditorFactory.prototype.create({
                     tableId: "personsTable", bodyRowTmplId: "personsRoRowTmpl", repository: personsRepository,
-                    rowEditorComponentFactory: PersonRowEditorFactory.prototype.create
+                    rowEditorComponentFactory: PersonRowEditorOldFactory.prototype.create
                 }).init();
 
                 DynamicSelectOneFactory.prototype.create({

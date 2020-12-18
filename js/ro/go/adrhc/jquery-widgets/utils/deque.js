@@ -48,6 +48,11 @@ class Dequeue {
         return result;
     }
 
+    /**
+     * aka peek left
+     *
+     * @return {undefined|*}
+     */
     peekFront() {
         if (this.isEmpty()) {
             return undefined;
@@ -55,11 +60,28 @@ class Dequeue {
         return this.items[this.lowestCount];
     }
 
+    /**
+     * aka peek right
+     *
+     * @return {undefined|*}
+     */
     peekBack() {
         if (this.isEmpty()) {
             return undefined;
         }
         return this.items[this.count - 1];
+    }
+
+    /**
+     * @param fromBack {boolean|undefined}
+     * @return {undefined|*}
+     */
+    peekOne(fromBack) {
+        if (fromBack) {
+            return this.peekBack();
+        } else {
+            return this.peekFront();
+        }
     }
 
     peekAll(fromBack) {

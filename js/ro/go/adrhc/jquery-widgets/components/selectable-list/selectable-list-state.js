@@ -21,7 +21,29 @@ class SelectableListState extends CrudListState {
             return;
         }
         this.swappingState.switchTo(newSelectableSwappingData);
-        this.collectAnotherStateChanges(this.swappingState.stateChanges)
+        this.reloadItemOnAllSwappings(true);
+        this.collectByConsumingStateChanges(this.swappingState.stateChanges)
+    }
+
+    /**
+     * @param mustBePrevious means swappingDetails.isPrevious must bu true
+     */
+    reloadItemOnAllSwappings(mustBePrevious = true) {
+        this.swappingState.peekAll(true)
+            .forEach(stateChange => this.reloadItemOnSwapping(stateChange, mustBePrevious));
+    }
+
+    /**
+     * @param swappingStateChange {StateChange|undefined}
+     * @param mustBePrevious {boolean|undefined}
+     */
+    reloadItemOnSwapping(swappingStateChange, mustBePrevious = true) {
+        const swappingDetails = swappingStateChange.data;
+        const selectableSwappingData = swappingDetails.data;
+        if (swappingDetails.isPrevious && selectableSwappingData.item) {
+            selectableSwappingData.reloadedId = selectableSwappingData.item.id;
+            selectableSwappingData.item = this.findById(selectableSwappingData.item.id);
+        }
     }
 
     /**
@@ -36,19 +58,6 @@ class SelectableListState extends CrudListState {
 
     resetSwappingState() {
         this.swappingState.reset();
-    }
-
-    /**
-     * @param swappingStateChange {StateChange|undefined}
-     * @param mustBePrevious {boolean|undefined}
-     */
-    reloadItemOnSwapping(swappingStateChange, mustBePrevious = true) {
-        const swappingDetails = swappingStateChange.data;
-        const selectableSwappingData = swappingDetails.data;
-        if (swappingDetails.isPrevious && selectableSwappingData.item) {
-            selectableSwappingData.reloadedId = selectableSwappingData.item.id;
-            selectableSwappingData.item = this.findById(selectableSwappingData.item.id);
-        }
     }
 
     /**

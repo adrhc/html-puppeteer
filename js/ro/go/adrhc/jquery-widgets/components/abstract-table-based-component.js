@@ -83,6 +83,13 @@ class AbstractTableBasedComponent {
         });
     }
 
+    /**
+     * @return {Promise<StateChange|undefined>}
+     */
+    init() {
+        return Promise.resolve(undefined);
+    }
+
     close() {
         this.tableElementAdapter.$table.off(this.eventsNamespace);
     }

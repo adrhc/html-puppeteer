@@ -1,4 +1,4 @@
-class PersonRowEditorComponent extends RowEditorComponent {
+class PersonRowEditorOldComponent extends RowEditorComponent {
     /**
      * @param rowEditorState {RowEditorState}
      * @param rowEditorView {RowEditorView}

@@ -14,12 +14,19 @@ class SelectableListComponent extends ElasticListComponent {
         super(repository, state, view, view.notSelectedRow);
     }
 
+    /**
+     * @return {Promise<StateChange>}
+     */
     init() {
-        return super.init().then(() => this._configureEvents());
+        return super.init()
+            .then((stateChange) => {
+                this._configureEvents();
+                return stateChange;
+            });
     }
 
     reload() {
-        return super.init();
+        return super.reload();
     }
 
     /**
@@ -70,7 +77,6 @@ class SelectableListComponent extends ElasticListComponent {
         if (!swappingStateChange) {
             return Promise.resolve(swappingStateChange);
         }
-        this.state.reloadItemOnSwapping(swappingStateChange);
         return this.view.updateViewOnSwapping(swappingStateChange);
     }
 

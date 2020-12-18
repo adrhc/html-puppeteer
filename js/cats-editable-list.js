@@ -35,7 +35,7 @@ if (Modernizr.template) {
 
         const readOnlyRow = SimpleRowFactory.prototype.createIdentifiableRow(
             tableId, {tableRelativePositionOnCreate});
-        const editableRow = SimpleRowFactory.prototype.createIdentifiableRow(
+        const editableRow = PersonRowEditorFactory.prototype.create(
             tableId, {
                 rowTmpl: "personsTableEditableRowTmpl", tableRelativePositionOnCreate
             });
