@@ -1,10 +1,10 @@
 /**
  * SelectableListState extends CrudListState (which extends SimpleListState) and SwappingState
  *
- * from SwappingState:
- *      StateChange.requestType = this.requestType
+ * SwappingState collects state changes as follows:
+ *      StateChange.requestType = SwappingState.requestType (defaults to "SWAP")
  *      StateChange.data = SwappingDetails
- * from here:
+ * SelectableListState.swappingState collects state changes as follows:
  *      StateChange.swappingDetails.data = SelectableSwappingData
  */
 class SelectableListState extends CrudListState {

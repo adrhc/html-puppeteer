@@ -1,6 +1,7 @@
 /**
- * StateChange.requestType = this.requestType
- * StateChange.data = SwappingDetails
+ * SwappingState collects state changes as follows:
+ *      StateChange.requestType defaults to "SWAP"
+ *      StateChange.data = SwappingDetails
  */
 class SwappingState extends BasicState {
     /**
