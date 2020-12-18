@@ -67,7 +67,7 @@ class SelectableListComponent extends ElasticListComponent {
         console.log("SelectableListComponent.updateViewOnStateChange\n", JSON.stringify(stateChange));
         switch (stateChange.requestType) {
             case this.swappingRequestType:
-                return this.updateViewOnSwapping(stateChange);
+                return this.updateComponentsOnSwapping(stateChange);
             default:
                 console.warn(`SelectableElasticListComponent delegating view update to super for ${stateChange.requestType}`)
                 return super.updateViewOnStateChange(stateChange);
@@ -80,7 +80,7 @@ class SelectableListComponent extends ElasticListComponent {
      * @param swappingStateChange {StateChange|undefined}
      * @return {Promise<StateChange>}
      */
-    updateViewOnSwapping(swappingStateChange) {
+    updateComponentsOnSwapping(swappingStateChange) {
         swappingStateChange = swappingStateChange ? swappingStateChange : this.swappingState.consumeOne();
         if (!swappingStateChange) {
             return Promise.resolve(swappingStateChange);
