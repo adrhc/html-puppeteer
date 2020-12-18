@@ -1,4 +1,9 @@
 class SelectableSwappingData {
+    /**
+     * @type {number|string} is the id used to reload the item (see SelectableListState.reloadItemOnSwapping)
+     */
+    reloadedId;
+
     constructor(item, context) {
         this.item = item;
         this.context = context;

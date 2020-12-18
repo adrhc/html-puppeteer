@@ -46,6 +46,7 @@ class SelectableListState extends CrudListState {
         const swappingDetails = swappingStateChange.data;
         const selectableSwappingData = swappingDetails.data;
         if (swappingDetails.isPrevious && selectableSwappingData.item) {
+            selectableSwappingData.reloadedId = selectableSwappingData.item.id;
             selectableSwappingData.item = this.findById(selectableSwappingData.item.id);
         }
     }
