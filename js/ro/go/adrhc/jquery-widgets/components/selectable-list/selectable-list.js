@@ -8,10 +8,17 @@ class SelectableListComponent extends ElasticListComponent {
     /**
      * @param repository {CrudRepository}
      * @param state {SelectableListState}
-     * @param view {SelectableListView}
+     * @param view {SimpleListView}
+     * @param notSelectedRow {IdentifiableRowComponent}
+     * @param selectedRow {IdentifiableRowComponent}
      */
-    constructor(repository, state, view) {
-        super(repository, state, view, view.notSelectedRow);
+    constructor(repository, state, view,
+                notSelectedRow, selectedRow) {
+        super(repository, state, view, notSelectedRow);
+        this.swappingRowSelector = {
+            false: selectedRow,
+            true: notSelectedRow
+        };
     }
 
     /**
@@ -77,7 +84,52 @@ class SelectableListComponent extends ElasticListComponent {
         if (!swappingStateChange) {
             return Promise.resolve(swappingStateChange);
         }
-        return this.view.updateViewOnSwapping(swappingStateChange);
+        return this._updateSelectedView(swappingStateChange);
+    }
+
+    /**
+     * @param swappingStateChange
+     * @return {Promise<StateChange>}
+     * @protected
+     */
+    _updateSelectedView(swappingStateChange) {
+        const swappingDetails = swappingStateChange.data;
+        const swappingData = swappingDetails.data;
+        if (swappingData.item) {
+            const rowComponent = this._rowComponentOf(swappingStateChange);
+            return rowComponent.init()
+                .then(() => rowComponent.update(swappingData.item))
+                .then(() => swappingStateChange);
+        } else {
+            return Promise.resolve(swappingStateChange);
+        }
+    }
+
+    /**
+     * Selects the row to display based on swappingDetails.isPrevious and swappingDetails.swappingData.context.
+     *
+     * @param swappingStateChange {StateChange}
+     * @return {IdentifiableRowComponent}
+     * @protected
+     */
+    _rowComponentOf(swappingStateChange) {
+        const swappingDetails = swappingStateChange.data;
+        const swappingData = swappingDetails.data;
+        if (!swappingDetails.isPrevious && swappingData.context) {
+            return this.swappingRowSelector[swappingData.context];
+        } else {
+            return this.swappingRowSelector[swappingDetails.isPrevious];
+        }
+    }
+
+    /**
+     * @param rowDataId {number|string}
+     * @param useOwnerOnFields {boolean|undefined}
+     * @param context {string}
+     * @return {{}}
+     */
+    extractSelectionInputValuesByDataId(rowDataId, context, useOwnerOnFields) {
+        return this.swappingRowSelector[context].view.extractInputValuesByDataId(rowDataId, useOwnerOnFields);
     }
 
     /**

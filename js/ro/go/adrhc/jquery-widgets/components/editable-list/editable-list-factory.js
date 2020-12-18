@@ -5,7 +5,7 @@ class EditableListFactory {
      * @param bodyRowTmplId {string}
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param repository {CrudRepository}
-     * @param state {SelectableListState}
+     * @param state {EditableListState}
      * @param view {SimpleListView}
      * @param readOnlyRow {IdentifiableRowComponent}
      * @param editableRow {IdentifiableRowComponent}
@@ -21,9 +21,9 @@ class EditableListFactory {
                state = new EditableListState(),
                readOnlyRow,
                editableRow,
-               view = new SelectableListView(mustacheTableElemAdapter, readOnlyRow, editableRow),
+               view = new SimpleListView(mustacheTableElemAdapter),
                deletableRow
            }) {
-        return new EditableListComponent(repository, state, view, deletableRow);
+        return new EditableListComponent(repository, state, view, readOnlyRow, editableRow, deletableRow);
     }
 }

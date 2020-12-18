@@ -2,14 +2,18 @@ class EditableListComponent extends SelectableListComponent {
     /**
      * @param repository {CrudRepository}
      * @param state {EditableListState}
-     * @param view {SelectableListView}
+     * @param view {SimpleListView}
+     * @param notSelectedRow {IdentifiableRowComponent}
+     * @param selectedRow {IdentifiableRowComponent}
      * @param deletableRow {IdentifiableRowComponent}
      */
-    constructor(repository, state, view, deletableRow) {
-        super(repository, state, view);
-        this.view.swappingRowSelector["showAdd"] = this.view.swappingRowSelector[true];
-        this.view.swappingRowSelector["showDelete"] = deletableRow;
-        this.view.swappingRowSelector["showEdit"] = this.view.swappingRowSelector[false];
+    constructor(repository, state, view,
+                notSelectedRow, selectedRow,
+                deletableRow) {
+        super(repository, state, view, notSelectedRow, selectedRow);
+        this.swappingRowSelector["showAdd"] = selectedRow;
+        this.swappingRowSelector["showEdit"] = selectedRow;
+        this.swappingRowSelector["showDelete"] = deletableRow;
     }
 
     /**
@@ -94,11 +98,11 @@ class EditableListComponent extends SelectableListComponent {
         ev.stopPropagation();
         const selectableList = ev.data;
         const rowDataId = selectableList.rowDataIdOf(this, true);
-        const entity = selectableList.view.extractInputValuesByDataId(rowDataId, "showEdit");
+        const entity = selectableList.extractSelectionInputValuesByDataId(rowDataId, "showEdit");
         selectableList.repository.save(entity)
             .then(savedEntity => {
                 selectableList.doWithState((crudListState) => {
-                    // todo: sync "append" save param with view.notSelectedRow.tableRelativePositionOnCreate
+                    // todo: sync "append" save param with notSelectedRow.tableRelativePositionOnCreate
                     crudListState.save(savedEntity, rowDataId);
                     // When not using repository resetSwappingState leaves the edited
                     // row in place otherwise would be deleted by swapping processing.
@@ -119,15 +123,21 @@ class EditableListComponent extends SelectableListComponent {
      */
     updateViewOnSwapping(swappingStateChange) {
         return super.updateViewOnSwapping(swappingStateChange)
-            .then(swappingStateChange => {
-                const swappingDetails = swappingStateChange.data;
-                const selectableSwappingData = swappingDetails.data;
-                if (swappingDetails.isPrevious) {
-                    const id = selectableSwappingData.reloadedId ? selectableSwappingData.reloadedId : selectableSwappingData.item.id;
-                    console.log(`removing row on swapping off: id = ${id}`);
-                    this.tableAdapter.$getOwnRowByData("remove-on-swapping-off", id).remove();
-                }
-            });
+            .then(swappingStateChange => this._removeSwappingOffRow(swappingStateChange));
+    }
+
+    /**
+     * @param swappingStateChange {StateChange|undefined}
+     * @private
+     */
+    _removeSwappingOffRow(swappingStateChange) {
+        const swappingDetails = swappingStateChange.data;
+        const selectableSwappingData = swappingDetails.data;
+        if (swappingDetails.isPrevious) {
+            const id = selectableSwappingData.reloadedId ? selectableSwappingData.reloadedId : selectableSwappingData.item.id;
+            console.log(`removing row on swapping off: id = ${id}`);
+            this.tableAdapter.$getOwnRowByData("remove-on-swapping-off", id).remove();
+        }
     }
 
     /**

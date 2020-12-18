@@ -20,8 +20,8 @@ class SelectableListFactory {
                state = new SelectableListState(),
                notSelectedRow,
                selectedRow,
-               view = new SelectableListView(mustacheTableElemAdapter, notSelectedRow, selectedRow)
+               view = new SimpleListView(mustacheTableElemAdapter)
            }) {
-        return new SelectableListComponent(repository, state, view);
+        return new SelectableListComponent(repository, state, view, notSelectedRow, selectedRow);
     }
 }
