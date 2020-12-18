@@ -12,6 +12,6 @@ class ListEditorFactory {
 
         const tableEditorView = new TableEditorView(mustacheTableElemAdapter);
         return new ListEditorComponent(tableEditorView, mustacheTableElemAdapter,
-            new InMemoryCrudRepository(items), rowEditorComponent);
+            new InMemoryCrudRepository(new EntityHelper(), items), rowEditorComponent);
     }
 }

@@ -17,7 +17,7 @@ class EditableListFactory {
                tableId = "crudList",
                bodyRowTmplId,
                mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, bodyRowTmplId),
-               repository = new InMemoryCrudRepository(items),
+               repository = new InMemoryCrudRepository(new EntityHelper(), items),
                state = new EditableListState(),
                readOnlyRow,
                editableRow,

@@ -79,7 +79,7 @@ class EditableListComponent extends SelectableListComponent {
             .then(() => {
                 selectableList.doWithState((crudListState) => {
                     crudListState.removeById(rowDataId);
-                    crudListState.resetSwappingState();
+                    selectableList._doSwapWith(undefined);
                 });
             });
     }
@@ -98,8 +98,10 @@ class EditableListComponent extends SelectableListComponent {
             .then(savedEntity => {
                 selectableList.doWithState((crudListState) => {
                     crudListState.save(savedEntity, rowDataId);
-                    // resetSwappingState leaves the edited row in place otherwise would be deleted by swapping
-                    crudListState.resetSwappingState();
+                    // When not using repository resetSwappingState leaves the edited
+                    // row in place otherwise would be deleted by swapping processing.
+                    // crudListState.resetSwappingState();
+                    selectableList._doSwapWith(undefined);
                 });
             });
     }

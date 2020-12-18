@@ -14,7 +14,7 @@ class SimpleListFactory {
                tableId = "simpleList",
                bodyRowTmplId,
                mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, bodyRowTmplId),
-               repository = new InMemoryCrudRepository(items),
+               repository = new InMemoryCrudRepository(new EntityHelper(), items),
                state = new SimpleListState(),
                view = new SimpleListView(mustacheTableElemAdapter)
            }) {

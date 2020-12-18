@@ -9,7 +9,7 @@ class TableEditorFactory {
     create({
                tableId,
                bodyRowTmplId = "bodyRowTmplId",
-               repository = new InMemoryCrudRepository(),
+               repository = new InMemoryCrudRepository(new EntityHelper()),
                rowEditorComponentFactory = RowEditorFactory.prototype.create
            }) {
         const mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, bodyRowTmplId);

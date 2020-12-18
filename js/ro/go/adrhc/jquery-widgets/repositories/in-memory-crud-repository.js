@@ -1,9 +1,11 @@
 class InMemoryCrudRepository extends CrudRepository {
     /**
      * @param items {Array<IdentifiableEntity>}
+     * @param entityHelper {EntityHelper}
      */
-    constructor(items = []) {
+    constructor(entityHelper, items = []) {
         super();
+        this.entityHelper = entityHelper;
         this.items = items;
     }
 
@@ -28,7 +30,7 @@ class InMemoryCrudRepository extends CrudRepository {
      * @return {Promise<IdentifiableEntity>}
      */
     insert(item) {
-        item.id = EntityUtils.prototype.generateId();
+        item.id = this.entityHelper.generateId();
         this.items.unshift(item);
         return Promise.resolve($.extend(true, new IdentifiableEntity(), item));
     }
