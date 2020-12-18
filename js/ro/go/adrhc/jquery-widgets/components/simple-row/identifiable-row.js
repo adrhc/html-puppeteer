@@ -14,8 +14,12 @@ class IdentifiableRowComponent extends SimpleRowComponent {
      * @return {*}
      */
     extractEntity(useOwnerOnFields = false) {
+        const inputValues = this.extractInputValues(useOwnerOnFields);
+        return EntityUtils.prototype.removeTransientId(inputValues);
+    }
+
+    extractInputValues(useOwnerOnFields = false) {
         const identifiableEntity = this.state.rowState;
-        const $row = this.tableAdapter.$getRowByDataId(identifiableEntity.id);
-        return EntityFormUtils.prototype.extractEntityFrom($row, useOwnerOnFields ? this.owner : undefined);
+        return this.view.extractInputValuesByDataId(identifiableEntity.id, useOwnerOnFields);
     }
 }

@@ -15,6 +15,7 @@ class SelectableListComponent extends ElasticListComponent {
     constructor(repository, state, view,
                 notSelectedRow, selectedRow) {
         super(repository, state, view, notSelectedRow);
+        // true/false relates to swappingDetails.isPrevious
         this.swappingRowSelector = {
             false: selectedRow,
             true: notSelectedRow
@@ -97,7 +98,8 @@ class SelectableListComponent extends ElasticListComponent {
         const swappingData = swappingDetails.data;
         if (swappingData.item) {
             const rowComponent = this._rowComponentOf(swappingStateChange);
-            return rowComponent.init()
+            return rowComponent
+                .init()
                 .then(() => rowComponent.update(swappingData.item))
                 .then(() => swappingStateChange);
         } else {
@@ -123,13 +125,14 @@ class SelectableListComponent extends ElasticListComponent {
     }
 
     /**
-     * @param rowDataId {number|string}
      * @param useOwnerOnFields {boolean|undefined}
-     * @param context {string}
      * @return {{}}
      */
-    extractSelectionInputValuesByDataId(rowDataId, context, useOwnerOnFields) {
-        return this.swappingRowSelector[context].view.extractInputValuesByDataId(rowDataId, useOwnerOnFields);
+    extractSelectionInputValues(useOwnerOnFields) {
+        const selectableSwappingData = this.state.currentSelectableSwappingData;
+        // swappingRowSelector is true/false based where false means "active" and relates to "isPrevious"
+        const context = selectableSwappingData.context ? selectableSwappingData.context : false;
+        return this.swappingRowSelector[context].extractInputValues(useOwnerOnFields);
     }
 
     /**
