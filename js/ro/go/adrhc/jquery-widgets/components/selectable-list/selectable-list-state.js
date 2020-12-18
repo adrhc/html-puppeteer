@@ -26,7 +26,7 @@ class SelectableListState extends CrudListState {
     }
 
     /**
-     * @param mustBePrevious means swappingDetails.isPrevious must bu true
+     * @param mustBePrevious means swappingDetails.isPrevious must be true
      */
     reloadItemOnAllSwappings(mustBePrevious = true) {
         this.swappingState.peekAll(true)
@@ -34,6 +34,8 @@ class SelectableListState extends CrudListState {
     }
 
     /**
+     * restore item state on cancelled swapping (aka "previous" or switched to "off" swapping)
+     *
      * @param swappingStateChange {StateChange|undefined}
      * @param mustBePrevious {boolean|undefined}
      */
