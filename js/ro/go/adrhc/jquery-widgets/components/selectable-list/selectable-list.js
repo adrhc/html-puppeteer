@@ -75,7 +75,7 @@ class SelectableListComponent extends ElasticListComponent {
     }
 
     /**
-     * Updates the view on 1x "swapping" state change.
+     * Updates the selected component on 1x "swapping" state change.
      *
      * @param swappingStateChange {StateChange|undefined}
      * @return {Promise<StateChange>}
@@ -89,6 +89,8 @@ class SelectableListComponent extends ElasticListComponent {
     }
 
     /**
+     * Calls "update" on the selected component.
+     *
      * @param swappingStateChange
      * @return {Promise<StateChange>}
      * @protected

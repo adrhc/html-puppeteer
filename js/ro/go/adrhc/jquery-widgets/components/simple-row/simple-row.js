@@ -9,6 +9,8 @@ class SimpleRowComponent extends AbstractTableBasedComponent {
     }
 
     /**
+     * Updates the state then the view based on state changes.
+     *
      * @param item
      * @param requestType {"CREATE"|"DELETE"|"UPDATE"|undefined}
      * @return {Promise<StateChange>}
