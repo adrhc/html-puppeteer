@@ -128,13 +128,22 @@ class SelectableListComponent extends ElasticListComponent {
 
     /**
      * @param useOwnerOnFields {boolean|undefined}
+     * @param extractEntity {boolean}
      * @return {{}}
      */
-    extractSelectionInputValues(useOwnerOnFields) {
+    extractSelectionInputValues(useOwnerOnFields, extractEntity = false) {
         const selectableSwappingData = this.state.currentSelectableSwappingData;
         // swappingRowSelector is true/false based where false means "active" and relates to "isPrevious"
         const context = selectableSwappingData.context ? selectableSwappingData.context : false;
-        return this.swappingRowSelector[context].extractInputValues(useOwnerOnFields);
+        if (extractEntity) {
+            return this.swappingRowSelector[context].extractEntity(useOwnerOnFields);
+        } else {
+            return this.swappingRowSelector[context].extractInputValues(useOwnerOnFields);
+        }
+    }
+
+    extractSelectionEntity(useOwnerOnFields) {
+        return this.extractSelectionInputValues(useOwnerOnFields, true);
     }
 
     /**

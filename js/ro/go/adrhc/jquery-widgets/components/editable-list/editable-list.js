@@ -98,7 +98,7 @@ class EditableListComponent extends SelectableListComponent {
         ev.stopPropagation();
         const selectableList = ev.data;
         const rowDataId = selectableList.rowDataIdOf(this, true);
-        const entity = selectableList.extractSelectionInputValues();
+        const entity = selectableList.extractSelectionEntity();
         selectableList.handleRepoErrors(selectableList.repository.save(entity))
             .then(savedEntity => {
                 selectableList.doWithState((crudListState) => {
