@@ -1,5 +1,8 @@
 class FormUtils {
     /**
+     * JSON.stringify(FormUtils.prototype.objectifyInputsOf($("#dyna-sel-one")))
+     * JSON.stringify(FormUtils.prototype.objectifyInputsOf($("#dyna-sel-one"), 'personSearch'))
+     *
      * @param $element {jQuery<HTMLElement>}
      * @param owner {string}
      * @return {{}}

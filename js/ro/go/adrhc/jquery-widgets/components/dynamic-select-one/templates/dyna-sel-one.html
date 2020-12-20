@@ -1,10 +1,10 @@
-<input type="text" name="{{titleInputName}}" value="{{title}}" placeholder="{{placeholder}}"
+<input type="text" data-owner="{{owner}}" name="{{titleInputName}}" value="{{title}}" placeholder="{{placeholder}}"
        autocomplete="off" title="scrie cel putin 3 caractere pt. a căuta apasând ENTER">
-<input type="hidden" name="{{valueInputName}}" value="{{id}}">
-<input type="hidden" name="{{descriptionInputName}}" value="{{description}}">
-<select name="options" size="{{optionsToShow}}">
+<input type="hidden" data-owner="{{owner}}" name="{{valueInputName}}" value="{{id}}">
+<input type="hidden" data-owner="{{owner}}" name="{{descriptionInputName}}" value="{{description}}">
+<select name="options" data-owner="{{owner}}" size="{{optionsToShow}}">
     {{#options}}
-    <option value="{{id}}" {{selected}}>{{description}}</option>
+    <option data-owner="{{owner}}" value="{{id}}" {{selected}}>{{description}}</option>
     {{/options}}
 </select>
 <span data-name="selection-info" class="dyna-sel-one-info">

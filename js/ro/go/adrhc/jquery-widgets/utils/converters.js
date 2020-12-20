@@ -1,5 +1,8 @@
 class Converters {
     /**
+     * JSON.stringify(Converters.prototype.mapOfArray($("#dyna-sel-one").find(":input[name]").serializeArray(), "value", "name"))
+     * JSON.stringify(Converters.prototype.mapOfArray($("#dyna-sel-one").find(":input[name][data-owner='personSearch']").serializeArray(), "value", "name"))
+     *
      * @param array {Array<IdentifiableEntity>}
      * @param valueField {string}
      * @param keyField {string}

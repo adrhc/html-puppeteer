@@ -87,6 +87,7 @@ class DynamicSelectOneView {
      */
     _viewModelOf(state) {
         const viewModel = {
+            owner: this.owner,
             titleInputName: this.titleInputName,
             valueInputName: this.valueInputName,
             descriptionInputName: this.descriptionInputName,
