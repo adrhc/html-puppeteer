@@ -54,24 +54,29 @@ class DynamicSelectOneView {
      */
     _applyCss(viewModel) {
         if (viewModel.options) {
-            this.$selectElem.removeClass("removed");
+            this.$optionsElem.removeClass("removed");
         } else {
-            this.$selectElem.addClass("removed");
+            this.$optionsElem.addClass("removed");
         }
         if (viewModel.description) {
             this.$selectionInfoElem.removeClass("removed");
         } else {
             this.$selectionInfoElem.addClass("removed");
         }
-        if (viewModel.failSearch) {
-            this.$failSearchInfoElem.removeClass("removed");
+        if (viewModel.nothingFound) {
+            this.$nothingFound.removeClass("removed");
         } else {
-            this.$failSearchInfoElem.addClass("removed");
+            this.$nothingFound.addClass("removed");
+        }
+        if (viewModel.tooMany) {
+            this.$tooMany.removeClass("removed");
+        } else {
+            this.$tooMany.addClass("removed");
         }
         if (viewModel.minCharsToSearch) {
-            this.$minCharsInfoElem.removeClass("removed");
+            this.$tooLessChars.removeClass("removed");
         } else {
-            this.$minCharsInfoElem.addClass("removed");
+            this.$tooLessChars.addClass("removed");
         }
     }
 
@@ -88,13 +93,19 @@ class DynamicSelectOneView {
             optionsToShow: Math.min(Math.max(state.optionsLength, 2), this.optionsToShow)
         };
         if (state.selectedItem) {
-            // showing selected item
+            // search success: selected/found exactly 1 item
             viewModel.description = state.selectedItem.description;
         } else if (state.isEnoughTextToSearch(state.title)) {
-            // no item selected, showing empty search result
-            viewModel.failSearch = state.title;
+            viewModel.searchedTitle = state.title;
+            if (state.optionsLength > 1) {
+                // too many results
+                viewModel.tooMany = state.title;
+            } else {
+                // no search result
+                viewModel.nothingFound = state.title;
+            }
         } else {
-            // no item selected, showing char number required for searching
+            // search with too less characters
             viewModel.minCharsToSearch = state.minCharsToSearch;
         }
         if (state.optionsLength > 1 || state.optionsLength === 1 && !state.selectedItem) {
@@ -112,35 +123,44 @@ class DynamicSelectOneView {
 
     _clearOnBlurHandlers() {
         this.$component.off("blur.dyna-sel-one");
-        const $searchInputElem = this.$searchInputElem;
+        const $searchInputElem = this.$titleElem;
         if ($searchInputElem.length) {
             $searchInputElem[0].onblur = null;
         }
     }
 
     _focusOnSearchInput() {
-        const searchInput = this.$searchInputElem;
+        const searchInput = this.$titleElem;
         const value = searchInput.val();
         searchInput.focus().val("").val(value);
     }
 
-    get $minCharsInfoElem() {
-        return $(`#${this.elemId} [data-name='min-chars-info']`);
+    get $tooLessChars() {
+        return $(`#${this.elemId} [data-name='too-less-chars']`);
     }
 
-    get $failSearchInfoElem() {
-        return $(`#${this.elemId} [data-name='fail-search-info']`);
+    get $nothingFound() {
+        return $(`#${this.elemId} [data-name='nothing-found']`);
+    }
+
+    get $tooMany() {
+        return $(`#${this.elemId} [data-name='too-many']`);
     }
 
     get $selectionInfoElem() {
-        return $(`#${this.elemId} [data-name='fail-search-info']`);
+        return $(`#${this.elemId} [data-name='selection-info']`);
     }
 
-    get $selectElem() {
+    get $optionsElem() {
         return $(`#${this.elemId} [name='options']`);
     }
 
-    get $searchInputElem() {
+    /**
+     * this is the search box
+     *
+     * @return {*|jQuery|HTMLElement}
+     */
+    get $titleElem() {
         return $(`#${this.elemId} [name='title']`);
     }
 

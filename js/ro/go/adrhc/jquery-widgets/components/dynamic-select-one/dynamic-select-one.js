@@ -70,7 +70,7 @@ class DynamicSelectOneComponent {
 
     _configureOnBlur() {
         // from jquery docs: blur does not propagate
-        this.dynaSelOneView.$searchInputElem[0].onblur = (ev) => {
+        this.dynaSelOneView.$titleElem[0].onblur = (ev) => {
             ev.data = this;
             this.onKeyup.bind(ev.target)(ev, true);
         };

@@ -84,7 +84,7 @@ class DynamicSelectOneState {
         if (!this.options) {
             return undefined;
         }
-        return this.options.filter(opt => opt.title.startsWith(text));
+        return this.options.filter(opt => opt.title.toLowerCase().startsWith(text.toLowerCase()));
     }
 
     /**
@@ -96,7 +96,7 @@ class DynamicSelectOneState {
         if (!this.options) {
             return undefined;
         }
-        return this.options.find(opt => opt.title === title);
+        return this.options.find(opt => opt.title.toLowerCase() === title.toLowerCase());
     }
 
     /**
@@ -108,7 +108,7 @@ class DynamicSelectOneState {
         if (!this.options) {
             return undefined;
         }
-        return this.options.find(opt => opt.id == id);
+        return this.options.find(opt => EntityUtils.prototype.idsAreEqual(opt.id, id));
     }
 
     /**
