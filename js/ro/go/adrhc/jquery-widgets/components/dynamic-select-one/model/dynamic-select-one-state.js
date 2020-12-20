@@ -15,7 +15,7 @@ class DynamicSelectOneState {
      * @returns {Promise<DynamicSelectOneState>}
      */
     updateById(id) {
-        console.log("id =", id);
+        console.log("DynamicSelectOneState.updateById: id =", id);
         const foundOption = this._findOptionById(id);
         if (!foundOption) {
             console.error("Selected missing option! id =", id);

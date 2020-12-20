@@ -1,4 +1,24 @@
 class AbstractComponent {
+
+    /**
+     * by default this component won't use the owner to detect its fields
+     *
+     * @param useOwnerOnFields {boolean}
+     * @return {*}
+     */
+    extractEntity(useOwnerOnFields = false) {
+        const inputValues = this.extractInputValues(useOwnerOnFields);
+        return EntityUtils.prototype.removeTransientId(inputValues);
+    }
+
+    /**
+     * @param useOwnerOnFields {boolean}
+     * @return {*}
+     */
+    extractInputValues(useOwnerOnFields = false) {
+        throw "Not implemented!";
+    }
+
     /**
      * (internal) errors handler
      *

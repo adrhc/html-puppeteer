@@ -87,4 +87,12 @@ class DynamicSelectOneComponent extends AbstractComponent {
     get owner() {
         return this.dynaSelOneView.owner;
     }
+
+    /**
+     * @param useOwnerOnFields {boolean}
+     * @return {*}
+     */
+    extractInputValues(useOwnerOnFields = false) {
+        return this.dynaSelOneView.extractInputValues(useOwnerOnFields);
+    }
 }

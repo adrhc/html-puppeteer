@@ -1,4 +1,4 @@
-class DynamicSelectOneView {
+class DynamicSelectOneView extends AbstractView {
     /**
      * @param elemId {string}
      * @param placeholder {string}
@@ -9,6 +9,7 @@ class DynamicSelectOneView {
         placeholder, optionsToShow = 10,
         tmplUrl = "js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/templates/dyna-sel-one.html"
     }) {
+        super();
         this.elemId = elemId;
         this.tmpl = new CachedAjax(tmplUrl);
         this.placeholder = placeholder;
@@ -138,6 +139,14 @@ class DynamicSelectOneView {
         const searchInput = this.$titleElem;
         const value = searchInput.val();
         searchInput.focus().val("").val(value);
+    }
+
+    /**
+     * @param useOwnerOnFields {boolean|undefined}
+     * @return {{}}
+     */
+    extractInputValues(useOwnerOnFields) {
+        return this._extractInputValues(this.$component, useOwnerOnFields);
     }
 
     get $tooLessChars() {

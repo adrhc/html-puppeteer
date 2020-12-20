@@ -1,22 +1,13 @@
-class AbstractTableBasedView {
+/**
+ * @abstract
+ */
+class AbstractTableBasedView extends AbstractView {
     /**
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      */
     constructor(mustacheTableElemAdapter) {
+        super();
         this.tableAdapter = mustacheTableElemAdapter;
-    }
-
-    get owner() {
-        return this.tableAdapter.tableId;
-    }
-
-    /**
-     * @param stageChanges {StateChange|StateChange[]}
-     * @return {Promise<StateChange|StateChange[]>}
-     * @abstract
-     */
-    update(stageChanges) {
-        throw "Not implemented!";
     }
 
     /**
@@ -44,14 +35,11 @@ class AbstractTableBasedView {
         return this._extractInputValues($elem, useOwnerOnFields);
     }
 
-    /**
-     * @param $elem {jQuery<HTMLTableRowElement>}
-     * @param useOwnerOnFields {boolean|undefined}
-     * @return {{}}
-     * @protected
-     */
-    _extractInputValues($elem, useOwnerOnFields) {
-        const owner = useOwnerOnFields ? this.owner : undefined;
-        return FormUtils.prototype.objectifyInputsOf($elem, owner);
+    extractInputValues(useOwnerOnFields) {
+        throw "Not implemented!";
+    }
+
+    get owner() {
+        return this.tableAdapter.tableId;
     }
 }
