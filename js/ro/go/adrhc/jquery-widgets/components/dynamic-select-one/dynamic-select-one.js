@@ -57,9 +57,10 @@ class DynamicSelectOneComponent {
      * linking "outside" (and/or default) triggers to component's handlers (aka capabilities)
      */
     _configureEvents() {
-        const $comp = this.dynaSelOneView.$component;
+        const view = this.dynaSelOneView;
+        const $comp = view.$component;
 
-        $comp.on('keyup.dyna-sel-one', "[name='title']", this, this.onKeyup);
+        $comp.on('keyup.dyna-sel-one', `[name='${view.titleInputName}']`, this, this.onKeyup);
         // comp.on('keyup blur mouseleave', "[name='title']", this, this.onKeyup);
         // comp.find("[name='title']").on("keyup blur mouseleave", this, this.onKeyup);
         this._configureOnBlur();

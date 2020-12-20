@@ -87,6 +87,9 @@ class DynamicSelectOneView {
      */
     _viewModelOf(state) {
         const viewModel = {
+            titleInputName: this.titleInputName,
+            valueInputName: this.valueInputName,
+            descriptionInputName: this.descriptionInputName,
             title: state.title,
             placeholder: this.placeholder,
             // 2: used to have the multiple select which know to handle click event on options
@@ -161,10 +164,24 @@ class DynamicSelectOneView {
      * @return {*|jQuery|HTMLElement}
      */
     get $titleElem() {
-        return $(`#${this.elemId} [name='title']`);
+        return $(`#${this.elemId} [name='${this.titleInputName}']`);
     }
 
     get $component() {
         return $(`#${this.elemId}`);
+    }
+
+    get titleInputName() {
+        return this.$component.data("name");
+    }
+
+    get valueInputName() {
+        const inputName = this.$component.data("value");
+        return inputName? inputName : `${this.titleInputName}-value`;
+    }
+
+    get descriptionInputName() {
+        const inputName = this.$component.data("description");
+        return inputName? inputName : `${this.titleInputName}-description`;
     }
 }
