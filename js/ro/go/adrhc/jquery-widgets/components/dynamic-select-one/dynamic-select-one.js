@@ -4,7 +4,7 @@ class DynamicSelectOneComponent extends AbstractComponent {
      * @param state {DynamicSelectOneState}
      */
     constructor(dynaSelOneView, state) {
-        super();
+        super(dynaSelOneView);
         this.dynaSelOneView = dynaSelOneView;
         this.state = state;
     }
@@ -50,7 +50,7 @@ class DynamicSelectOneComponent extends AbstractComponent {
 
     updateView(state, focusOnSearchInput) {
         return this.dynaSelOneView
-            .updateView(state, focusOnSearchInput)
+            .update(state, focusOnSearchInput)
             .then(() => this._configureOnBlur());
     }
 
@@ -78,6 +78,8 @@ class DynamicSelectOneComponent extends AbstractComponent {
             ev.data = this;
             this.onKeyup.bind(ev.target)(ev, true);
         };
+        console.log(`DynamicSelectOneComponent._configureOnBlur:\n${JSON.stringify(this.extractEntity())}`);
+        console.log("DynamicSelectOneComponent selectedItem:\n", this.state.selectedItem);
     }
 
     close() {
@@ -86,13 +88,5 @@ class DynamicSelectOneComponent extends AbstractComponent {
 
     get owner() {
         return this.dynaSelOneView.owner;
-    }
-
-    /**
-     * @param useOwnerOnFields {boolean}
-     * @return {*}
-     */
-    extractInputValues(useOwnerOnFields = false) {
-        return this.dynaSelOneView.extractInputValues(useOwnerOnFields);
     }
 }

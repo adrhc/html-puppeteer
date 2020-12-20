@@ -20,14 +20,14 @@ class DynamicSelectOneView extends AbstractView {
      * @param data {DynamicSelectOneState}
      */
     init(data) {
-        return this.updateView(data, true);
+        return this.update(data, true);
     }
 
     /**
      * @param data {DynamicSelectOneState}
      * @param focusOnSearchInput
      */
-    updateView(data, focusOnSearchInput) {
+    update(data, focusOnSearchInput) {
         this._clearOnBlurHandlers();
         const viewModel = this._viewModelOf(data);
         return this._renderView(viewModel)

@@ -8,7 +8,7 @@ class AbstractTableBasedComponent extends AbstractComponent {
      * @param view {AbstractTableBasedView}
      */
     constructor(view) {
-        super();
+        super(view);
         this.tableAdapter = view.tableAdapter;
         this.view = view;
     }

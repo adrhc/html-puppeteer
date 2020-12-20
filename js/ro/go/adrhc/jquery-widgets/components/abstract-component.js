@@ -1,4 +1,10 @@
 class AbstractComponent {
+    /**
+     * @param view {AbstractView}
+     */
+    constructor(view) {
+        this.view = view;
+    }
 
     /**
      * by default this component won't use the owner to detect its fields
@@ -16,7 +22,7 @@ class AbstractComponent {
      * @return {*}
      */
     extractInputValues(useOwnerOnFields = false) {
-        throw "Not implemented!";
+        return this.view.extractInputValues(useOwnerOnFields);
     }
 
     /**
