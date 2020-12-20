@@ -99,6 +99,7 @@ class DynamicSelectOneView {
         if (state.selectedItem) {
             // search success: selected/found exactly 1 item
             viewModel.description = state.selectedItem.description;
+            viewModel.id = state.selectedItem.id;
         } else if (state.isEnoughTextToSearch(state.title)) {
             viewModel.searchedTitle = state.title;
             if (state.optionsLength > 1) {
