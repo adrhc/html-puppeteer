@@ -12,18 +12,7 @@ class CatsListState extends EditableListState {
         return this.insertItem(item, true);
     }
 
-    /**
-     * ignores isPrevious = false state changes
-     *
-     * @param stateChanges {StateChanges}
-     * @param fromLatest {boolean|undefined}
-     */
-    collectByConsumingStateChanges(stateChanges, fromLatest = false) {
-        stateChanges.consumeAll(fromLatest)
-            .filter(stateChange => {
-                const swappingDetails = stateChange.data;
-                return !swappingDetails.isPrevious;
-            })
-            .forEach(stateChange => this.collectStateChange(stateChange));
+    switchTo(id, context) {
+        // cancelling swapping
     }
 }
