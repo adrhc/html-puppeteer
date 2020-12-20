@@ -78,8 +78,8 @@ class DynamicSelectOneComponent extends AbstractComponent {
             ev.data = this;
             this.onKeyup.bind(ev.target)(ev, true);
         };
-        console.log(`DynamicSelectOneComponent._configureOnBlur:\n${JSON.stringify(this.extractEntity())}`);
-        console.log("DynamicSelectOneComponent selectedItem:\n", this.state.selectedItem);
+        // console.log(`DynamicSelectOneComponent._configureOnBlur:\n${JSON.stringify(this.extractEntity())}`);
+        // console.log("DynamicSelectOneComponent selectedItem:\n", this.state.selectedItem);
     }
 
     close() {
