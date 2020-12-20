@@ -34,7 +34,7 @@ class DynamicSelectOneState {
      * @returns {Promise<DynamicSelectOneState>}
      */
     updateByTitle(title) {
-        console.log("title =", title);
+        console.log("DynamicSelectOneState.updateByTitle title =", title);
         if (this.title === title) {
             // updating with same title
             return Promise.reject(this);
