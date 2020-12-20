@@ -15,7 +15,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     }
 
     /**
-     * component initializer
+     * component initializer: (re)load data, configure events
      *
      * @return {Promise<StateChange>}
      */
@@ -24,6 +24,8 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     }
 
     /**
+     * reload data
+     *
      * @return {Promise<StateChange>}
      */
     reload() {

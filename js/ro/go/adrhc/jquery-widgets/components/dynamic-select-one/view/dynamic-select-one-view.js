@@ -175,13 +175,18 @@ class DynamicSelectOneView {
         return this.$component.data("name");
     }
 
+    get owner() {
+        const owner = this.$component.data("owner");
+        return owner ? owner : "";
+    }
+
     get valueInputName() {
         const inputName = this.$component.data("value");
-        return inputName? inputName : `${this.titleInputName}-value`;
+        return inputName ? inputName : `${this.titleInputName}-value`;
     }
 
     get descriptionInputName() {
         const inputName = this.$component.data("description");
-        return inputName? inputName : `${this.titleInputName}-description`;
+        return inputName ? inputName : `${this.titleInputName}-description`;
     }
 }

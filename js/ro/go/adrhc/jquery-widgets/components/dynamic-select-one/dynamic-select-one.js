@@ -1,9 +1,10 @@
-class DynamicSelectOneComponent {
+class DynamicSelectOneComponent extends AbstractComponent {
     /**
      * @param dynaSelOneView {DynamicSelectOneView}
      * @param state {DynamicSelectOneState}
      */
     constructor(dynaSelOneView, state) {
+        super();
         this.dynaSelOneView = dynaSelOneView;
         this.state = state;
     }
@@ -60,12 +61,14 @@ class DynamicSelectOneComponent {
         const view = this.dynaSelOneView;
         const $comp = view.$component;
 
-        $comp.on('keyup.dyna-sel-one', `[name='${view.titleInputName}']`, this, this.onKeyup);
+        $comp.on(this.withNamespaceFor('keyup'),
+            `[name='${view.titleInputName}']`, this, this.onKeyup);
         // comp.on('keyup blur mouseleave', "[name='title']", this, this.onKeyup);
         // comp.find("[name='title']").on("keyup blur mouseleave", this, this.onKeyup);
         this._configureOnBlur();
 
-        $comp.on('click.dyna-sel-one keyup.dyna-sel-one', 'option', this, this.onOptionClick);
+        $comp.on(this.withNamespaceFor(['click', 'keyup']),
+            'option', this, this.onOptionClick);
         // comp.on('change.dyna-sel-one keyup.dyna-sel-one', "[name='options']", this, this.onOptionClick);
     }
 
@@ -75,5 +78,13 @@ class DynamicSelectOneComponent {
             ev.data = this;
             this.onKeyup.bind(ev.target)(ev, true);
         };
+    }
+
+    close() {
+        this.dynaSelOneView.$component.off();
+    }
+
+    get owner() {
+        return this.dynaSelOneView.owner;
     }
 }

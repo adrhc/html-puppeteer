@@ -1,4 +1,4 @@
-class AbstractTableBasedComponent {
+class AbstractTableBasedComponent extends AbstractComponent {
     /**
      * @type {TableElementAdapter}
      */
@@ -8,6 +8,7 @@ class AbstractTableBasedComponent {
      * @param view {AbstractTableBasedView}
      */
     constructor(view) {
+        super();
         this.tableAdapter = view.tableAdapter;
         this.view = view;
     }
@@ -21,28 +22,8 @@ class AbstractTableBasedComponent {
         return this.tableAdapter.rowDataIdOf(elem, searchParentsForDataIdIfMissingOnElem);
     }
 
-    /**
-     * @param events {string,string[]}
-     * @return {string|*}
-     */
-    withNamespaceFor(events) {
-        if ($.isArray(events)) {
-            return events.map(ev => this.withNamespaceFor(ev)).join(" ");
-        } else {
-            return `${events}${this.eventsNamespace}`;
-        }
-    }
-
-    get eventsNamespace() {
-        return `.${this.constructor.name}.${this.owner}`;
-    }
-
     get ownerSelector() {
         return this.tableAdapter.ownerSelector;
-    }
-
-    get owner() {
-        return this.tableAdapter.tableId;
     }
 
     /**
@@ -68,29 +49,11 @@ class AbstractTableBasedComponent {
         return EntityUtils.prototype.removeTransientId(values);
     }
 
-    /**
-     * (internal) errors handler
-     *
-     * @param promise
-     * @return {Promise<any>}
-     * @protected
-     */
-    handleRepoErrors(promise) {
-        return promise.catch((jqXHR, textStatus, errorThrown) => {
-            console.log(textStatus, errorThrown);
-            alert(`${textStatus}\n${jqXHR.responseText}`);
-            throw textStatus;
-        });
-    }
-
-    /**
-     * @return {Promise<StateChange|undefined>}
-     */
-    init() {
-        return Promise.resolve(undefined);
+    get owner() {
+        return this.tableAdapter.tableId;
     }
 
     close() {
-        this.tableElementAdapter.$table.off(this.eventsNamespace);
+        this.tableAdapter.$table.off(this.eventsNamespace);
     }
 }
