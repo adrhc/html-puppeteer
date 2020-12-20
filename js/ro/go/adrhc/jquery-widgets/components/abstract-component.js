@@ -40,4 +40,8 @@ class AbstractComponent {
     get owner() {
         throw "Not implemented!";
     }
+
+    close() {
+        // do nothing by default
+    }
 }
