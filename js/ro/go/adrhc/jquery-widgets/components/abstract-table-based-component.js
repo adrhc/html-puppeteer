@@ -50,7 +50,7 @@ class AbstractTableBasedComponent extends AbstractComponent {
     }
 
     get owner() {
-        return this.tableAdapter.tableId;
+        return this.tableAdapter.owner;
     }
 
     close() {

@@ -40,6 +40,6 @@ class AbstractTableBasedView extends AbstractView {
     }
 
     get owner() {
-        return this.tableAdapter.tableId;
+        return this.tableAdapter.owner;
     }
 }

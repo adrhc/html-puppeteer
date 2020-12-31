@@ -4,6 +4,7 @@
 class TableElementAdapter {
     constructor(tableId) {
         this.tableId = tableId;
+        this._owner = tableId;
     }
 
     /**
@@ -70,7 +71,7 @@ class TableElementAdapter {
     }
 
     emptyRowHtmlOf(rowDataId) {
-        return `<tr data-owner='${this.tableId}' data-id='${rowDataId}'></tr>`;
+        return `<tr data-owner='${this.owner}' data-id='${rowDataId}'></tr>`;
     }
 
     deleteRowByDataId(rowDataId) {
@@ -106,12 +107,12 @@ class TableElementAdapter {
     }
 
     get ownerSelector() {
-        return `[data-owner='${this.tableId}']`;
+        return `[data-owner='${this.owner}']`;
     }
 
     get columnsCount() {
         let columnsCount = 0;
-        const firstRow = $(`#${this.tableId} tr:nth-child(1)`);
+        const firstRow = this.$firstRow;
         if (!firstRow.length) {
             const tableColumnsCount = this.$table.data("columns-count");
             return tableColumnsCount ? +tableColumnsCount : 1; // default to 1 column
@@ -144,6 +145,14 @@ class TableElementAdapter {
     }
 
     get _$tbody() {
-        return $(`#${this.tableId} > tbody`);
+        return this.$table.children("tbody");
+    }
+
+    get $firstRow() {
+        return this.$tbody.children("tr:nth-child(1)");
+    }
+
+    get owner() {
+        return this._owner;
     }
 }
