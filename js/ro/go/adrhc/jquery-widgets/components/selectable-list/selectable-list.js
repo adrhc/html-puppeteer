@@ -33,10 +33,6 @@ class SelectableListComponent extends ElasticListComponent {
             });
     }
 
-    reload() {
-        return super.reload();
-    }
-
     /**
      * (existing) item selection event handler
      *
