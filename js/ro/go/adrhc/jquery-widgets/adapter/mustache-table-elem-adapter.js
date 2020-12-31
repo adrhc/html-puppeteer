@@ -1,6 +1,6 @@
 class MustacheTableElemAdapter extends TableElementAdapter {
     /**
-     * @param tableId {string}
+     * @param tableId {string|jQuery<HTMLTableRowElement>}
      * @param bodyRowTmplId {string}
      * @param bodyTmplHtml {string|undefined}
      */
@@ -9,7 +9,11 @@ class MustacheTableElemAdapter extends TableElementAdapter {
                 bodyTmplHtml = undefined) {
         super(tableId);
         this.bodyRowTmplHtml = HtmlUtils.prototype.templateTextOf(bodyRowTmplId);
-        this.bodyTmplHtml = bodyTmplHtml ? bodyTmplHtml : "{{#items}}{{> bodyRowTmpl}}{{/items}}";
+        if (this.bodyRowTmplHtml) {
+            this.bodyTmplHtml = bodyTmplHtml ? bodyTmplHtml : "{{#items}}{{> bodyRowTmpl}}{{/items}}";
+        } else {
+            this.bodyTmplHtml = bodyTmplHtml;
+        }
     }
 
     renderBodyWithTemplate(data) {
