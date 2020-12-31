@@ -146,7 +146,7 @@ class TableElementAdapter {
 
     get $tbody() {
         if (!this._$tbody.length) {
-            return this.$table.append("<tbody></tbody>");
+            this.$table.append("<tbody></tbody>");
         }
         return this._$tbody;
     }

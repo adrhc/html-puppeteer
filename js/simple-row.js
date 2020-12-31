@@ -21,7 +21,7 @@ if (Modernizr.template) {
                 const editableRow = SimpleRowFactory.prototype
                     .createIdentifiableRow(dogsTableWithEdit, {
                         rowTmpl: "dogsTableWithEditSelectedRowTmpl",
-                        putAtBottomIfNotExists: true
+                        tableRelativePositionOnCreate: "append"
                     });
                 editableRow
                     // switch to existing row (aka enter "edit" mode)
@@ -49,10 +49,10 @@ if (Modernizr.template) {
                 const items = updateAllStateChange.data;
                 const simpleRow = SimpleRowFactory.prototype.createSimpleRow(
                     dogsTableWithDelete, {rowTmpl: "dogsTableWithDeleteDeletedRowTmpl"});
-                // switch to existing row (aka enter "edit" mode)
+                // switching to "simpleRow" display type (i.e. line-through text style)
                 simpleRow.update(items[0])
-                    // switch to same row with delete
-                    .then(() => simpleRow.update(items[0], "DELETE"));
+                    // removing the row
+                    .then(() => simpleRow.update(items[1], "DELETE"));
             });
     })
 } else {
