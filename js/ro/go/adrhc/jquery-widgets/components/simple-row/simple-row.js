@@ -4,7 +4,7 @@ class SimpleRowComponent extends AbstractTableBasedComponent {
      * @param view {SimpleRowView}
      */
     constructor(state, view) {
-        super(view);
+        super(state, view);
         this.state = state;
     }
 

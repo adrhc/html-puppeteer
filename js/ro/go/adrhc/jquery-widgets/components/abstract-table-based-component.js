@@ -5,10 +5,11 @@ class AbstractTableBasedComponent extends AbstractComponent {
     tableAdapter;
 
     /**
+     * @param state {BasicState}
      * @param view {AbstractTableBasedView}
      */
-    constructor(view) {
-        super(view);
+    constructor(state, view) {
+        super(state, view);
         this.tableAdapter = view.tableAdapter;
         this.view = view;
     }

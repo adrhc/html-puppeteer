@@ -136,7 +136,7 @@ class EditableListComponent extends SelectableListComponent {
         if (swappingDetails.isPrevious) {
             const id = selectableSwappingData.reloadedId ? selectableSwappingData.reloadedId : selectableSwappingData.item.id;
             console.log(`removing row on swapping off: id = ${id}`);
-            this.tableAdapter.$getOwnRowByData("remove-on-swapping-off", id).remove();
+            this.tableAdapter.$getOwnedRowByData("remove-on-swapping-off", id).remove();
         }
     }
 

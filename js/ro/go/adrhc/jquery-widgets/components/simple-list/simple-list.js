@@ -9,7 +9,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @param view {SimpleListView}
      */
     constructor(repository, state, view) {
-        super(view);
+        super(state, view);
         this.repository = repository;
         this.state = state;
     }
@@ -38,13 +38,12 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     }
 
     /**
-     * Updates the view on 1x state change.
+     * called by AbstractComponent.updateViewOnStateChange
      *
      * @param stateChange {StateChange|undefined}
      * @return {Promise<StateChange>}
      */
-    updateViewOnStateChange(stateChange) {
-        stateChange = stateChange ? stateChange : this.state.consumeOne();
+    updateViewOnUPDATE_ALL(stateChange) {
         return this.view.update(stateChange);
     }
 }

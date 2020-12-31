@@ -35,10 +35,6 @@ class AbstractTableBasedView extends AbstractView {
         return this._extractInputValues($elem, useOwnerOnFields);
     }
 
-    extractInputValues(useOwnerOnFields) {
-        throw "Not implemented!";
-    }
-
     get owner() {
         return this.tableAdapter.owner;
     }

@@ -6,6 +6,11 @@
  */
 class SelectableListComponent extends ElasticListComponent {
     /**
+     * @type {SelectableListState}
+     */
+    selectableListState;
+
+    /**
      * @param repository {CrudRepository}
      * @param state {SelectableListState}
      * @param view {SimpleListView}
@@ -15,6 +20,7 @@ class SelectableListComponent extends ElasticListComponent {
     constructor(repository, state, view,
                 notSelectedRow, selectedRow) {
         super(repository, state, view, notSelectedRow);
+        this.selectableListState = state;
         // true/false relates to swappingDetails.isPrevious
         this.swappingRowSelector = {
             false: selectedRow,
@@ -54,51 +60,33 @@ class SelectableListComponent extends ElasticListComponent {
      * @protected
      */
     _doSwapWith(rowDataId, context) {
-        this.state.switchTo(rowDataId, context);
+        this.selectableListState.switchTo(rowDataId, context);
+        // changes are: deactivation (previous item) and activation (the selection)
         return this.updateViewOnStateChanges();
     }
 
-    updateViewOnStateChange(stateChange) {
-        stateChange = stateChange ? stateChange : this.state.consumeOne();
-        console.log("SelectableListComponent.updateViewOnStateChange\n", JSON.stringify(stateChange));
-        switch (stateChange.requestType) {
-            case this.swappingRequestType:
-                return this.updateSwappingComponent(stateChange);
-            default:
-                console.warn(`SelectableElasticListComponent delegating view update to super for ${stateChange.requestType}`)
-                return super.updateViewOnStateChange(stateChange);
-        }
-    }
-
     /**
-     * Updates the selected component on 1x "swapping" state change.
+     * called by AbstractComponent.updateViewOnStateChange
+     * calls "update" on the "selected" component
+     * see also this.state.swappingState.requestType (defaults to "SWAP")
      *
      * @param swappingStateChange {StateChange|undefined}
      * @return {Promise<StateChange>}
      */
-    updateSwappingComponent(swappingStateChange) {
-        swappingStateChange = swappingStateChange ? swappingStateChange : this.swappingState.consumeOne();
-        if (!swappingStateChange) {
-            return Promise.resolve(swappingStateChange);
-        }
-        return this._updateSwappingComponent(swappingStateChange);
-    }
-
-    /**
-     * Calls "update" on the selected component.
-     *
-     * @param swappingStateChange
-     * @return {Promise<StateChange>}
-     * @protected
-     */
-    _updateSwappingComponent(swappingStateChange) {
+    updateViewOnSWAP(swappingStateChange) {
+        /**
+         * @type {SwappingDetails}
+         */
         const swappingDetails = swappingStateChange.data;
+        /**
+         * @type {SelectableSwappingData}
+         */
         const swappingData = swappingDetails.data;
         if (swappingData.item) {
-            const rowComponent = this._componentOf(swappingStateChange);
+            const rowComponent = this._rowComponentFor(swappingStateChange);
             return rowComponent
                 .init()
-                .then(() => rowComponent.update(swappingData.item))
+                .then(() => rowComponent.update(swappingData.item, "UPDATE"))
                 .then(() => swappingStateChange);
         } else {
             return Promise.resolve(swappingStateChange);
@@ -112,34 +100,46 @@ class SelectableListComponent extends ElasticListComponent {
      * @return {IdentifiableRowComponent}
      * @protected
      */
-    _componentOf(swappingStateChange) {
+    _rowComponentFor(swappingStateChange) {
+        /**
+         * @type {SwappingDetails}
+         */
         const swappingDetails = swappingStateChange.data;
+        /**
+         * @type {SelectableSwappingData}
+         */
         const swappingData = swappingDetails.data;
         if (!swappingDetails.isPrevious && swappingData.context) {
+            // this is the current/active selection; depending on "context" a row component or another would be used
             return this.swappingRowSelector[swappingData.context];
         } else {
+            // this is the inactive/deactivated/previous selection
+            // todo: consider using the context here too
             return this.swappingRowSelector[swappingDetails.isPrevious];
         }
     }
 
-    /**
-     * @param useOwnerOnFields {boolean|undefined}
-     * @param extractEntity {boolean}
-     * @return {{}}
-     */
-    extractSelectionInputValues(useOwnerOnFields, extractEntity = false) {
-        const selectableSwappingData = this.state.currentSelectableSwappingData;
-        // swappingRowSelector is true/false based where false means "active" and relates to "isPrevious"
+    get _selectedRowComponent() {
+        const selectableSwappingData = this.selectableListState.currentSelectableSwappingData;
+        // swappingRowSelector is true/false based where false means "active" (also means that isPrevious is false)
         const context = selectableSwappingData.context ? selectableSwappingData.context : false;
-        if (extractEntity) {
-            return this.swappingRowSelector[context].extractEntity(useOwnerOnFields);
-        } else {
-            return this.swappingRowSelector[context].extractInputValues(useOwnerOnFields);
-        }
+        return this.swappingRowSelector[context];
     }
 
+    /**
+     * @param useOwnerOnFields {boolean|undefined}
+     * @return {{}}
+     */
+    extractSelectionInputValues(useOwnerOnFields) {
+        return this._selectedRowComponent.extractInputValues(useOwnerOnFields);
+    }
+
+    /**
+     * @param useOwnerOnFields {boolean|undefined}
+     * @return {{}}
+     */
     extractSelectionEntity(useOwnerOnFields) {
-        return this.extractSelectionInputValues(useOwnerOnFields, true);
+        return this._selectedRowComponent.extractEntity(useOwnerOnFields);
     }
 
     /**
@@ -150,12 +150,5 @@ class SelectableListComponent extends ElasticListComponent {
         this.tableAdapter.$table
             .on(this.withNamespaceFor('dblclick'),
                 `tr${this.ownerSelector}`, this, this.onSwapping);
-    }
-
-    /**
-     * @return {string}
-     */
-    get swappingRequestType() {
-        return this.state.swappingState.requestType;
     }
 }

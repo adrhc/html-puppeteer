@@ -106,14 +106,20 @@ class TableElementAdapter {
      * @param dataValue {string|number}
      * @return {jQuery<HTMLTableRowElement>}
      */
-    $getOwnRowByData(dataKey, dataValue) {
+    $getOwnedRowByData(dataKey, dataValue) {
         return this.$tbody.children(`tr${this.ownerSelector}[data-${dataKey}='${dataValue}']`);
     }
 
+    /**
+     * @returns {string}
+     */
     getRowSelector(rowDataId) {
         return `tr${this.ownerSelector}[data-id='${rowDataId}']`;
     }
 
+    /**
+     * @returns {string}
+     */
     get ownerSelector() {
         return `[data-owner='${this.owner}']`;
     }
@@ -140,10 +146,16 @@ class TableElementAdapter {
         return columnsCount;
     }
 
+    /**
+     * @returns {jQuery<HTMLTableRowElement>|*}
+     */
     get $table() {
         return this._$table;
     }
 
+    /**
+     * @returns {jQuery<HTMLBodyElement>}
+     */
     get $tbody() {
         if (!this._$tbody.length) {
             this.$table.append("<tbody></tbody>");
@@ -151,14 +163,23 @@ class TableElementAdapter {
         return this._$tbody;
     }
 
+    /**
+     * @returns {jQuery<HTMLBodyElement>}
+     */
     get _$tbody() {
         return this.$table.children("tbody");
     }
 
+    /**
+     * @returns {jQuery<HTMLTableRowElement>}
+     */
     get $firstRow() {
         return this.$tbody.children("tr:nth-child(1)");
     }
 
+    /**
+     * @returns {string}
+     */
     get owner() {
         return this._owner;
     }
