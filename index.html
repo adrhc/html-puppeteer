@@ -16,8 +16,8 @@
 </head>
 
 <body>
-<div id="dyna-sel-one" class="dyna-sel-one-comp"
-     data-name="person" data-value="value" data-description="description"></div>
+<div id="dyna-sel-one" class="dyna-sel-one-comp" data-owner="personSearch"
+     data-name="firstName" data-value="personId" data-description="person-description"></div>
 
 <!-- persons table -->
 <div class="personsTable">
@@ -30,8 +30,10 @@
             <th>Cats</th>
             <th>
                 <div class="buttons">
-                    <img data-owner="personsTable" data-btn="reload" alt="reload" src="images/ro/go/adrhc/reload-button-32.png" title="reîncarcă datele"/>
-                    <img data-owner="personsTable" data-btn="showAdd" alt="show add" src="images/ro/go/adrhc/add-button-32.png" title="către adăugare"/>
+                    <img data-owner="personsTable" data-btn="reload" alt="reload"
+                         src="images/ro/go/adrhc/reload-button-32.png" title="reîncarcă datele"/>
+                    <img data-owner="personsTable" data-btn="showAdd" alt="show add"
+                         src="images/ro/go/adrhc/add-button-32.png" title="către adăugare"/>
                 </div>
             </th>
         </tr>
@@ -45,11 +47,16 @@
         <td>{{id}}</td>
         <td>{{firstName}}</td>
         <td>{{lastName}}</td>
-        <td>{{#each cats}}<div>{{{this.name}}}</div>{{/each}}</td>
+        <td>{{#each cats}}
+            <div>{{{this.name}}}</div>
+            {{/each}}
+        </td>
         <td>
             <div class="buttons">
-                <img data-owner="personsTable" data-btn="showDelete" alt="show delete" src="images/ro/go/adrhc/delete-button-32.png" title="către ștergere"/>
-                <img data-owner="personsTable" data-btn="showEdit" alt="show edit" src="images/ro/go/adrhc/edit-button-32.png" title="către editare"/>
+                <img data-owner="personsTable" data-btn="showDelete" alt="show delete"
+                     src="images/ro/go/adrhc/delete-button-32.png" title="către ștergere"/>
+                <img data-owner="personsTable" data-btn="showEdit" alt="show edit"
+                     src="images/ro/go/adrhc/edit-button-32.png" title="către editare"/>
             </div>
         </td>
     </tr>
@@ -61,11 +68,16 @@
         <td>{{id}}</td>
         <td>{{firstName}}</td>
         <td>{{lastName}}</td>
-        <td>{{#each cats}}<div>{{{this.name}}}</div>{{/each}}</td>
+        <td>{{#each cats}}
+            <div>{{{this.name}}}</div>
+            {{/each}}
+        </td>
         <td>
             <div class="buttons">
-                <img data-owner="personsTable" data-btn="cancel" alt="cancel" src="images/ro/go/adrhc/cancel-button-32.png" title="anulează ștergerea"/>
-                <img data-owner="personsTable" data-btn="delete" alt="delete" src="images/ro/go/adrhc/delete-button-32.png" title="confirmă ștergerea"/>
+                <img data-owner="personsTable" data-btn="cancel" alt="cancel"
+                     src="images/ro/go/adrhc/cancel-button-32.png" title="anulează ștergerea"/>
+                <img data-owner="personsTable" data-btn="delete" alt="delete"
+                     src="images/ro/go/adrhc/delete-button-32.png" title="confirmă ștergerea"/>
             </div>
         </td>
     </tr>
@@ -94,7 +106,8 @@
                     <th>Name</th>
                     <th>
                         <div class="buttons">
-                            <img data-owner="catsTable" data-btn="showAdd" alt="show add" src="images/ro/go/adrhc/add-button-32.png" title="către adăugare"/>
+                            <img data-owner="catsTable" data-btn="showAdd" alt="show add"
+                                 src="images/ro/go/adrhc/add-button-32.png" title="către adăugare"/>
                         </div>
                     </th>
                 </tr>
@@ -103,8 +116,10 @@
         </td>
         <td>
             <div class="buttons">
-                <img data-owner="personsTable" data-btn="cancel" alt="cancel" src="images/ro/go/adrhc/cancel-button-32.png" title="anulează modificarea"/>
-                <img data-owner="personsTable" data-btn="update" alt="update" src="images/ro/go/adrhc/save-button-32.png" title="confirmă salvarea"/>
+                <img data-owner="personsTable" data-btn="cancel" alt="cancel"
+                     src="images/ro/go/adrhc/cancel-button-32.png" title="anulează modificarea"/>
+                <img data-owner="personsTable" data-btn="update" alt="update"
+                     src="images/ro/go/adrhc/save-button-32.png" title="confirmă salvarea"/>
             </div>
         </td>
     </tr>
@@ -123,11 +138,13 @@
     <tr data-owner="catsTable" data-id="{{id}}">
         <td>
             <input data-owner="catsTable" type="hidden" name="id" value="{{id}}">
-            <input data-owner="catsTable" type="text" autocomplete="off" name="name" value="{{name}}" data-focus-me="true">
+            <input data-owner="catsTable" type="text" autocomplete="off" name="name" value="{{name}}"
+                   data-focus-me="true">
         </td>
         <td>
             <div class="buttons">
-                <img data-owner="catsTable" data-btn="delete" alt="delete" src="images/ro/go/adrhc/delete-button-32.png" title="confirmă ștergerea"/>
+                <img data-owner="catsTable" data-btn="delete" alt="delete" src="images/ro/go/adrhc/delete-button-32.png"
+                     title="confirmă ștergerea"/>
             </div>
         </td>
     </tr>
