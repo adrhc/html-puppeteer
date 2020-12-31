@@ -132,16 +132,16 @@ class TableElementAdapter {
         return columnsCount;
     }
 
+    get $table() {
+        return $(`#${this.tableId}`);
+    }
+
     get $tbody() {
         const $tbody = this._$tbody;
         if (!$tbody.length) {
             return this.$table.append("<tbody></tbody>").children("tbody");
         }
         return $tbody;
-    }
-
-    get $table() {
-        return $(`#${this.tableId}`);
     }
 
     get _$tbody() {

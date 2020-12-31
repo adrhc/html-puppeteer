@@ -25,7 +25,7 @@ class EntityUtils {
     }
 
     isIdGenerated(id) {
-        return !this.isEmptyId(id) && +id < 0;
+        return !EntityUtils.prototype.isEmptyId(id) && +id < 0;
     }
 
     removeGeneratedIds(array) {
@@ -71,15 +71,15 @@ class EntityUtils {
     }
 
     hasEmptyId(item) {
-        return this.isEmptyId(item.id);
+        return EntityUtils.prototype.isEmptyId(item.id);
     }
 
     isTransientId(id) {
-        return id === this.transientId;
+        return id === EntityUtils.prototype.transientId;
     }
 
     isTransient(item) {
-        return item.id === this.transientId;
+        return item.id === EntityUtils.prototype.transientId;
     }
 
     /**
