@@ -17,12 +17,11 @@ class SelectableListState extends CrudListState {
     switchTo(id, context) {
         const item = this.findById(id);
         const newSelectableSwappingData = new SelectableSwappingData(item, context);
-        if (this._isEqualToCurrent(newSelectableSwappingData)) {
-            return;
+        if (!this._isEqualToCurrent(newSelectableSwappingData)) {
+            this.swappingState.switchTo(newSelectableSwappingData);
+            this._reloadItemOnAllSwappings(true);
+            this.collectByConsumingStateChanges(this.swappingState.stateChanges)
         }
-        this.swappingState.switchTo(newSelectableSwappingData);
-        this._reloadItemOnAllSwappings(true);
-        this.collectByConsumingStateChanges(this.swappingState.stateChanges)
     }
 
     /**

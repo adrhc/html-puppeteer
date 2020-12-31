@@ -18,10 +18,10 @@ class ElasticListComponent extends SimpleListComponent {
      * Offer the state for manipulation then update the view.
      *
      * @param stateUpdaterFn {function} receives a state {CrudListState} to update
-     * @param delayViewUpdate {boolean} whether to (immediately) update the view based or not
+     * @param delayViewUpdate {boolean|undefined} whether to (immediately) update the view based or not
      * @return {Promise<StateChange[]>}
      */
-    doWithState(stateUpdaterFn, delayViewUpdate) {
+    doWithState(stateUpdaterFn, delayViewUpdate = false) {
         console.log("ElasticListComponent.doWithState: delayViewUpdate=", delayViewUpdate);
         stateUpdaterFn(this.state);
         if (delayViewUpdate) {

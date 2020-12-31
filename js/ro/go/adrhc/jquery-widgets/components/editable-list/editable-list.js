@@ -12,25 +12,29 @@ class EditableListComponent extends SelectableListComponent {
                 deletableRow) {
         super(repository, state, view, notSelectedRow, selectedRow);
         this.swappingRowSelector["showAdd"] = selectedRow;
-        this.swappingRowSelector["showEdit"] = selectedRow;
+        this.swappingRowSelector["showEdit"] = selectedRow; // is equal to super.swappingRowSelector[false]
         this.swappingRowSelector["showDelete"] = deletableRow;
     }
 
     /**
-     * SHOW DELETE OR EDIT (aka UPDATE)
+     * SHOW DELETE OR UPDATE (aka EDIT)
      *
      * @param ev {Event}
      */
     onShowDU(ev) {
-        const selectableList = ev.data;
-        const rowDataId = selectableList.rowDataIdOf(this, true);
+        /**
+         * @type {EditableListComponent}
+         */
+        const editableList = ev.data;
+        const rowDataId = editableList.rowDataIdOf(this, true);
         const context = $(this).data("btn");
         if (!rowDataId || !context) {
             return;
         }
         ev.stopPropagation();
-        // showEdit context should match the context used for row double-click in SelectableListComponent
-        selectableList._doSwapWith(rowDataId, context === "showEdit" ? undefined : context);
+        // "showEdit" row component should be the same used for row double-click in SelectableListComponent (i.e. undefined)
+        // context could be "showEdit" or "showDelete"
+        editableList._doSwapWith(rowDataId, context);
     }
 
     /**
@@ -40,11 +44,14 @@ class EditableListComponent extends SelectableListComponent {
      */
     onShowAdd(ev) {
         ev.stopPropagation();
-        const selectableList = ev.data;
-        selectableList.doWithState((crudListState) => {
-            // todo: sync "append" createNewItem param with showAdd.tableRelativePositionOnCreate
-            const newId = crudListState.createNewItem().id;
-            return selectableList._doSwapWith(newId);
+        /**
+         * @type {EditableListComponent}
+         */
+        const editableList = ev.data;
+        editableList.doWithState((editableListState) => {
+            // todo: correlate "append" createNewItem param with showAdd.tableRelativePositionOnCreate
+            const newId = editableListState.createNewItem().id;
+            editableListState.switchTo(newId, "showAdd");
         });
     }
 
@@ -55,9 +62,12 @@ class EditableListComponent extends SelectableListComponent {
      */
     onReload(ev) {
         ev.stopPropagation();
-        const selectableList = ev.data;
-        selectableList.state.resetSwappingState();
-        selectableList.reload();
+        /**
+         * @type {EditableListComponent}
+         */
+        const editableList = ev.data;
+        editableList.state.resetSwappingState();
+        editableList.reload();
     }
 
     /**
@@ -67,8 +77,11 @@ class EditableListComponent extends SelectableListComponent {
      */
     onCancel(ev) {
         ev.stopPropagation();
-        const selectableList = ev.data;
-        selectableList._doSwapWith(undefined);
+        /**
+         * @type {EditableListComponent}
+         */
+        const editableList = ev.data;
+        editableList._doSwapWith(undefined);
     }
 
     /**
@@ -78,15 +91,17 @@ class EditableListComponent extends SelectableListComponent {
      */
     onDelete(ev) {
         ev.stopPropagation();
-        const selectableList = ev.data;
-        const rowDataId = selectableList.rowDataIdOf(this, true);
-        selectableList.handleRepoErrors(selectableList.repository.delete(rowDataId))
-            .then(() => {
-                selectableList.doWithState((crudListState) => {
-                    crudListState.removeById(rowDataId);
-                    selectableList._doSwapWith(undefined);
-                });
-            });
+        /**
+         * @type {EditableListComponent}
+         */
+        const editableList = ev.data;
+        const rowDataId = editableList.rowDataIdOf(this, true);
+        editableList.handleRepoErrors(editableList.repository.delete(rowDataId))
+            .then(() =>
+                editableList.doWithState((editableListState) => {
+                    editableListState.removeById(rowDataId);
+                    editableListState.switchTo(undefined);
+                }));
     }
 
     /**
@@ -96,41 +111,47 @@ class EditableListComponent extends SelectableListComponent {
      */
     onUpdate(ev) {
         ev.stopPropagation();
-        const selectableList = ev.data;
-        const rowDataId = selectableList.rowDataIdOf(this, true);
-        const entity = selectableList.extractSelectionEntity();
-        selectableList.handleRepoErrors(selectableList.repository.save(entity))
-            .then(savedEntity => {
-                selectableList.doWithState((crudListState) => {
+        /**
+         * @type {EditableListComponent}
+         */
+        const editableList = ev.data;
+        const rowDataId = editableList.rowDataIdOf(this, true);
+        const entity = editableList.extractSelectionEntity();
+        editableList.handleRepoErrors(editableList.repository.save(entity))
+            .then(savedEntity =>
+                editableList.doWithState((editableListState) => {
                     // todo: sync "append" save param with notSelectedRow.tableRelativePositionOnCreate
-                    crudListState.save(savedEntity, rowDataId);
+                    editableListState.save(savedEntity, rowDataId);
                     // When not using repository resetSwappingState leaves the edited
                     // row in place otherwise would be deleted by swapping processing.
                     // crudListState.resetSwappingState();
-                    selectableList._doSwapWith(undefined);
-                });
-            });
+                    editableListState.switchTo(undefined);
+                }));
     }
 
     /**
-     * Updates the view on 1x "swapping" state change.
-     *
      * At this moment the EditableListState.switchTo already delete the transient entity such
-     * that super.updateSwappingComponent find no entity when calling reloadItemOnSwapping.
+     * that super.updateViewOnSWAP find no entity when calling reloadItemOnSwapping.
      *
      * @param swappingStateChange {StateChange|undefined}
      * @return {Promise<StateChange>}
      */
-    updateSwappingComponent(swappingStateChange) {
-        return super.updateSwappingComponent(swappingStateChange)
-            .then(swappingStateChange => this._removeSwappingOffRow(swappingStateChange));
+    updateViewOnSWAP(swappingStateChange) {
+        return super.updateViewOnSWAP(swappingStateChange)
+            .then(swappingStateChange => {
+                this._removeSwappingOffRows(swappingStateChange);
+                return swappingStateChange;
+            });
     }
 
     /**
      * @param swappingStateChange {StateChange|undefined}
      * @private
      */
-    _removeSwappingOffRow(swappingStateChange) {
+    _removeSwappingOffRows(swappingStateChange) {
+        /**
+         * @type {SwappingDetails}
+         */
         const swappingDetails = swappingStateChange.data;
         const selectableSwappingData = swappingDetails.data;
         if (swappingDetails.isPrevious) {

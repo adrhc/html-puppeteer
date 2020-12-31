@@ -89,6 +89,7 @@ class SelectableListComponent extends ElasticListComponent {
                 .then(() => rowComponent.update(swappingData.item, "UPDATE"))
                 .then(() => swappingStateChange);
         } else {
+            // swapping to nothing: used to swap-off the previous selection
             return Promise.resolve(swappingStateChange);
         }
     }
