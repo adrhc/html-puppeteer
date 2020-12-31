@@ -17,3 +17,7 @@
 .catsTable {
     width: 100%;
 }
+
+.simple-deletable-row {
+    text-decoration: line-through;
+}

@@ -2,9 +2,17 @@
  * Role: adapter to HTMLTableElement
  */
 class TableElementAdapter {
+    /**
+     * @param tableId {string|jQuery<HTMLTableRowElement>}
+     */
     constructor(tableId) {
-        this.tableId = tableId;
-        this._owner = tableId;
+        if (tableId instanceof jQuery) {
+            this._$table = tableId;
+            this._owner = !!this._$table.id ? this._$table.id : this.$table.data("id");
+        } else {
+            this._$table = $(`#${tableId}`);
+            this._owner = tableId;
+        }
     }
 
     /**
@@ -133,15 +141,14 @@ class TableElementAdapter {
     }
 
     get $table() {
-        return $(`#${this.tableId}`);
+        return this._$table;
     }
 
     get $tbody() {
-        const $tbody = this._$tbody;
-        if (!$tbody.length) {
-            return this.$table.append("<tbody></tbody>").children("tbody");
+        if (!this._$tbody.length) {
+            return this.$table.append("<tbody></tbody>");
         }
-        return $tbody;
+        return this._$tbody;
     }
 
     get _$tbody() {

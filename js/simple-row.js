@@ -29,26 +29,26 @@ if (Modernizr.template) {
                     // extracting row data for e.g. save
                     .then(() => {
                         const extractedEntity = editableRow.extractEntity();
-                        console.log("extractedEntity:\n", JSON.stringify(extractedEntity));
+                        console.log("1. extractedEntity:\n", JSON.stringify(extractedEntity));
                     })
                     // switch to new row (aka ADD then enter "edit" mode)
                     .then(() => editableRow
                         .update({id: EntityUtils.prototype.transientId, name: "new dog"}, "CREATE"))
                     .then(() => {
                         const extractedEntity = editableRow.extractEntity();
-                        console.log("extractedEntity:\n", JSON.stringify(extractedEntity));
+                        console.log("2. extractedEntity:\n", JSON.stringify(extractedEntity));
                     })
             });
 
         // dogs table with deleted row
         const dogsTableWithDelete = "dogsTableWithDelete";
         SimpleListFactory.prototype
-            .create({items: dogs, tableId: dogsTableWithDelete})
+            .create({items: dogs, tableId: dogsTableWithDelete, bodyRowTmplId: "dogsTableWithDeleteReadOnlyRowTmpl"})
             .init()
             .then(updateAllStateChange => {
                 const items = updateAllStateChange.data;
                 const simpleRow = SimpleRowFactory.prototype.createSimpleRow(
-                    dogsTableWithDelete, {});
+                    dogsTableWithDelete, {rowTmpl: "dogsTableWithDeleteDeletedRowTmpl"});
                 // switch to existing row (aka enter "edit" mode)
                 simpleRow.update(items[0])
                     // switch to same row with delete
