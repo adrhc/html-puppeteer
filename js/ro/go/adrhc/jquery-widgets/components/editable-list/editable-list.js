@@ -154,8 +154,10 @@ class EditableListComponent extends SelectableListComponent {
          */
         const swappingDetails = swappingStateChange.data;
         const selectableSwappingData = swappingDetails.data;
-        if (swappingDetails.isPrevious) {
-            const id = selectableSwappingData.reloadedId ? selectableSwappingData.reloadedId : selectableSwappingData.item.id;
+        // id could be undefined when previously switched to undefined (to switch off the previous)
+        const id = selectableSwappingData.reloadedId ? selectableSwappingData.reloadedId :
+            selectableSwappingData.item ? selectableSwappingData.item.id : undefined;
+        if (swappingDetails.isPrevious && !!id) {
             console.log(`removing row on swapping off: id = ${id}`);
             this.tableAdapter.$getOwnedRowByData("remove-on-swapping-off", id).remove();
         }
