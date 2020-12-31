@@ -4,12 +4,12 @@ class RestUtils {
             object = object._embedded;
             for (let p in object) {
                 if (object.hasOwnProperty(p)) {
-                    return this.unwrapHAL(object[p]);
+                    return RestUtils.prototype.unwrapHAL(object[p]);
                 }
             }
-            return this.unwrapHAL(object);
+            return RestUtils.prototype.unwrapHAL(object);
         } else if ($.isArray(object)) {
-            object.forEach(it => this.unwrapHAL(it));
+            object.forEach(it => RestUtils.prototype.unwrapHAL(it));
         } else {
             delete object._links;
         }
