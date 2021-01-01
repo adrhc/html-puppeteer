@@ -3,6 +3,17 @@
  */
 class TableElementAdapter {
     /**
+     * @type {jQuery<HTMLTableRowElement>}
+     * @private
+     */
+    _$table;
+    /**
+     * @type {string}
+     * @private
+     */
+    _owner;
+
+    /**
      * @param tableId {string|jQuery<HTMLTableRowElement>}
      */
     constructor(tableId) {
@@ -147,7 +158,7 @@ class TableElementAdapter {
     }
 
     /**
-     * @returns {jQuery<HTMLTableRowElement>|*}
+     * @returns {jQuery<HTMLTableRowElement>}
      */
     get $table() {
         return this._$table;

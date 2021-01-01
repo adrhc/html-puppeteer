@@ -2,10 +2,23 @@ class AbstractComponent {
     /**
      * @param state {BasicState}
      * @param view {AbstractView}
+     * @param knownRequestTypes {string[]}
      */
-    constructor(state, view) {
+    constructor(state, view, knownRequestTypes = []) {
         this.state = state;
         this.view = view;
+        this.knownRequestTypes = knownRequestTypes;
+    }
+
+    /**
+     * @return {Promise<StateChange|undefined>}
+     */
+    init() {
+        return Promise.resolve(undefined);
+    }
+
+    close() {
+        // do nothing by default
     }
 
     /**
@@ -25,28 +38,6 @@ class AbstractComponent {
      */
     extractInputValues(useOwnerOnFields = false) {
         return this.view.extractInputValues(useOwnerOnFields);
-    }
-
-    /**
-     * (internal) errors handler
-     *
-     * @param promise
-     * @return {Promise<any>}
-     * @protected
-     */
-    handleRepoErrors(promise) {
-        return promise.catch((jqXHR, textStatus, errorThrown) => {
-            console.log(textStatus, errorThrown);
-            alert(`${textStatus}\n${jqXHR.responseText}`);
-            throw textStatus;
-        });
-    }
-
-    /**
-     * @return {Promise<StateChange|undefined>}
-     */
-    init() {
-        return Promise.resolve(undefined);
     }
 
     /**
@@ -83,8 +74,8 @@ class AbstractComponent {
         const fnName = `updateViewOn${stateChange.requestType}`;
         if (typeof this[fnName] === "function") {
             return this[fnName](stateChange);
-        } else if (this.getKnownRequestTypes().includes(stateChange.requestType)) {
-            return this["updateViewOnKnownStateChange"](stateChange);
+        } else if (this.knownRequestTypes.includes(stateChange.requestType)) {
+            return this._updateViewOnKnownStateChange(stateChange);
         } else if (typeof this["updateViewOnAny"] === "function") {
             return this["updateViewOnAny"](stateChange);
         } else {
@@ -96,40 +87,50 @@ class AbstractComponent {
     /**
      * @param stateChange {StateChange|undefined}
      * @return {Promise<StateChange>}
+     * @protected
      */
-    updateViewOnKnownStateChange(stateChange) {
-        console.warn(`"do nothing" handler for:\n${JSON.stringify(stateChange)}`);
-        return Promise.resolve(stateChange);
-    }
-
-    /**
-     * @returns {string[]} representing known request types (handleable with updateViewOnKnownStateChange)
-     */
-    getKnownRequestTypes() {
-        return [];
+    _updateViewOnKnownStateChange(stateChange) {
+        console.warn(`rejected:\n${JSON.stringify(stateChange)}`);
+        return Promise.reject(stateChange);
     }
 
     /**
      * @param events {string,string[]}
      * @return {string|*}
+     * @protected
      */
-    withNamespaceFor(events) {
+    _withNamespaceFor(events) {
         if ($.isArray(events)) {
-            return events.map(ev => this.withNamespaceFor(ev)).join(" ");
+            return events.map(ev => this._withNamespaceFor(ev)).join(" ");
         } else {
-            return `${events}${this.eventsNamespace}`;
+            return `${events}${this._eventsNamespace}`;
         }
     }
 
-    get eventsNamespace() {
+    /**
+     * (internal) errors handler
+     *
+     * @param promise
+     * @return {Promise<any>}
+     * @protected
+     */
+    _handleRepoErrors(promise) {
+        return promise.catch((jqXHR, textStatus, errorThrown) => {
+            console.log(textStatus, errorThrown);
+            alert(`${textStatus}\n${jqXHR.responseText}`);
+            throw textStatus;
+        });
+    }
+
+    /**
+     * @returns {string}
+     * @protected
+     */
+    get _eventsNamespace() {
         return `.${this.constructor.name}.${this.owner}`;
     }
 
     get owner() {
         throw "Not implemented!";
-    }
-
-    close() {
-        // do nothing by default
     }
 }

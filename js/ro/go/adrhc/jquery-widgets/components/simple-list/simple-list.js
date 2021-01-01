@@ -29,7 +29,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @return {Promise<StateChange>}
      */
     reload() {
-        return this.handleRepoErrors(this.repository.getAll())
+        return this._handleRepoErrors(this.repository.getAll())
             .then((items) => {
                 console.log("TableEditorComponent items:\n", JSON.stringify(items));
                 this.state.updateAll(items);

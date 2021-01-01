@@ -55,6 +55,6 @@ class AbstractTableBasedComponent extends AbstractComponent {
     }
 
     close() {
-        this.tableAdapter.$table.off(this.eventsNamespace);
+        this.tableAdapter.$table.off(this._eventsNamespace);
     }
 }

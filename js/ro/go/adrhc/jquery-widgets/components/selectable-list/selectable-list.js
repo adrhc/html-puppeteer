@@ -149,7 +149,7 @@ class SelectableListComponent extends ElasticListComponent {
      */
     _configureEvents() {
         this.tableAdapter.$table
-            .on(this.withNamespaceFor('dblclick'),
+            .on(this._withNamespaceFor('dblclick'),
                 `tr${this.ownerSelector}`, this, this.onSwapping);
     }
 }

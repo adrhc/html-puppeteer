@@ -149,22 +149,37 @@ class DynamicSelectOneView extends AbstractView {
         return this._extractInputValues(this.$component, useOwnerOnFields);
     }
 
+    /**
+     * @returns {jQuery<HTMLElement>}
+     */
     get $tooLessChars() {
         return $(`#${this.elemId} [data-name='too-less-chars']`);
     }
 
+    /**
+     * @returns {jQuery<HTMLElement>}
+     */
     get $nothingFound() {
         return $(`#${this.elemId} [data-name='nothing-found']`);
     }
 
+    /**
+     * @returns {jQuery<HTMLElement>}
+     */
     get $tooMany() {
         return $(`#${this.elemId} [data-name='too-many']`);
     }
 
+    /**
+     * @returns {jQuery<HTMLElement>}
+     */
     get $selectionInfoElem() {
         return $(`#${this.elemId} [data-name='selection-info']`);
     }
 
+    /**
+     * @returns {jQuery<HTMLSelectElement>}
+     */
     get $optionsElem() {
         return $(`#${this.elemId} [name='options']`);
     }
@@ -172,12 +187,15 @@ class DynamicSelectOneView extends AbstractView {
     /**
      * this is the search box
      *
-     * @return {*|jQuery|HTMLElement}
+     * @return {jQuery<HTMLInputElement>}
      */
     get $titleElem() {
         return $(`#${this.elemId} [name='${this.titleInputName}']`);
     }
 
+    /**
+     * @returns {jQuery<HTMLElement>}
+     */
     get $component() {
         return $(`#${this.elemId}`);
     }
