@@ -29,12 +29,14 @@ class CrudListState extends SimpleListState {
      * @return {IdentifiableEntity}
      */
     insertItem(item, append = false) {
+        let afterItemId;
         if (append) {
+            afterItemId = this.items.length ? this.items[0].id : undefined;
             this.items.push(item);
         } else {
             this.items.unshift(item);
         }
-        this.collectStateChange(new StateChange("CREATE", item));
+        this.collectStateChange(new CreateStateChange(item, afterItemId));
         return item;
     }
 
