@@ -75,13 +75,10 @@ class SelectableListComponent extends ElasticListComponent {
      */
     updateViewOnSWAP(swappingStateChange) {
         /**
-         * @type {SwappingDetails}
-         */
-        const swappingDetails = swappingStateChange.data;
-        /**
+         * swappingStateChange.data is SwappingDetails
          * @type {SelectableSwappingData}
          */
-        const swappingData = swappingDetails.data;
+        const swappingData = swappingStateChange.data.data;
         if (swappingData.item) {
             const rowComponent = this._rowComponentFor(swappingStateChange);
             return rowComponent
