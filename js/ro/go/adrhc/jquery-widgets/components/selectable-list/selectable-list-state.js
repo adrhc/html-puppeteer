@@ -19,28 +19,26 @@ class SelectableListState extends CrudListState {
         const newSelectableSwappingData = new SelectableSwappingData(item, context);
         if (!this._isEqualToCurrent(newSelectableSwappingData)) {
             this.swappingState.switchTo(newSelectableSwappingData);
-            this._reloadItemOnAllSwappings(true);
+            this._reloadAllSwappedOffItems(true);
             this.collectByConsumingStateChanges(this.swappingState.stateChanges)
         }
     }
 
     /**
-     * @param mustBePrevious means swappingDetails.isPrevious must be true
      * @protected
      */
-    _reloadItemOnAllSwappings(mustBePrevious = true) {
+    _reloadAllSwappedOffItems() {
         this.swappingState.peekAll(true)
-            .forEach(stateChange => this._reloadItemOnSwapping(stateChange, mustBePrevious));
+            .forEach(stateChange => this._reloadSwappedOffItem(stateChange));
     }
 
     /**
      * restore item state on cancelled swapping (aka "previous" or switched to "off" swapping)
      *
      * @param swappingStateChange {StateChange}
-     * @param mustBePrevious {boolean|undefined}
      * @protected
      */
-    _reloadItemOnSwapping(swappingStateChange, mustBePrevious = true) {
+    _reloadSwappedOffItem(swappingStateChange) {
         /**
          * @type {SwappingDetails}
          */
