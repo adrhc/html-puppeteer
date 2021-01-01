@@ -86,7 +86,7 @@ class Dequeue {
 
     peekAll(fromBack) {
         const items = [];
-        for (let i = this.lowestCount; i < this.count - 1; i++) {
+        for (let i = this.lowestCount; i < this.count; i++) {
             if (fromBack) {
                 items.unshift(this.items[i]);
             } else {
