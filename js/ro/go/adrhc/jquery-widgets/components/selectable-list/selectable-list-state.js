@@ -29,6 +29,7 @@ class SelectableListState extends CrudListState {
      */
     _reloadAllSwappedOffItems() {
         this.swappingState.peekAll(true)
+            .filter(swappingStateChange => swappingStateChange.data.isPrevious)
             .forEach(stateChange => this._reloadSwappedOffItem(stateChange));
     }
 
@@ -40,16 +41,14 @@ class SelectableListState extends CrudListState {
      */
     _reloadSwappedOffItem(swappingStateChange) {
         /**
-         * @type {SwappingDetails}
-         */
-        const swappingDetails = swappingStateChange.data;
-        /**
+         * swappingStateChange.data is SwappingDetails
          * @type {SelectableSwappingData}
          */
-        const selectableSwappingData = swappingDetails.data;
-        // id could be undefined when previously switched to undefined (to switch off the previous)
+        const selectableSwappingData = swappingStateChange.data.data;
+        // itemId could be undefined when "previous" item is undefined
+        // makes sense to switch to undefined (aka undefined item): it is used to switch off the current selection
         const itemId = selectableSwappingData.itemId;
-        if (swappingDetails.isPrevious && !!itemId) {
+        if (!!itemId) {
             selectableSwappingData.reloadedId = itemId;
             selectableSwappingData.item = this.findById(itemId);
         }
