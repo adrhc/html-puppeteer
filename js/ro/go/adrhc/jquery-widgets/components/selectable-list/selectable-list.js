@@ -51,7 +51,7 @@ class SelectableListComponent extends ElasticListComponent {
         }
         ev.stopPropagation();
         const rowDataId = selectableList.rowDataIdOf(this);
-        selectableList._doSwapWith(rowDataId);
+        selectableList._switchTo(rowDataId);
     }
 
     /**
@@ -59,7 +59,7 @@ class SelectableListComponent extends ElasticListComponent {
      * @param context relates to SelectableListState.switchTo(id, context)
      * @protected
      */
-    _doSwapWith(rowDataId, context) {
+    _switchTo(rowDataId, context) {
         this.selectableListState.switchTo(rowDataId, context);
         // changes are: deactivation (previous item) and activation (the selection)
         return this.updateViewOnStateChanges();

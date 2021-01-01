@@ -58,6 +58,7 @@ class SwappingState extends BasicState {
         }
         this.swappingDetails.isPrevious = true;
         this._collectStateChange(this.swappingDetails);
+        this.swappingDetails = undefined;
         return true;
     }
 
