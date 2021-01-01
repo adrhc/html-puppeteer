@@ -72,8 +72,11 @@ class EditableListComponent extends SelectableListComponent {
          * @type {EditableListComponent}
          */
         const editableList = ev.data;
-        editableList.editableListState.resetSwappingState();
-        editableList.reload();
+        editableList.reloadState().then(() => editableList.updateViewOnStateChanges());
+    }
+
+    reloadState() {
+        return super.reloadState().then(() => this.editableListState.resetSwappingState())
     }
 
     /**

@@ -11,7 +11,7 @@ class AbstractComponent {
     }
 
     /**
-     * @return {Promise<StateChange|undefined>}
+     * @return {Promise<StateChange[]|undefined>}
      */
     init() {
         return Promise.resolve(undefined);

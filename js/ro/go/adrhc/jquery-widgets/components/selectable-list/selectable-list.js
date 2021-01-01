@@ -29,13 +29,13 @@ class SelectableListComponent extends ElasticListComponent {
     }
 
     /**
-     * @return {Promise<StateChange>}
+     * @return {Promise<StateChange[]|undefined>}
      */
     init() {
         return super.init()
-            .then((stateChange) => {
+            .then((stateChanges) => {
                 this._configureEvents();
-                return stateChange;
+                return stateChanges;
             });
     }
 

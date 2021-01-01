@@ -17,23 +17,23 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     /**
      * component initializer: (re)load data, configure events
      *
-     * @return {Promise<StateChange>}
+     * @return {Promise<StateChange[]|undefined>}
      */
     init() {
-        return this.reload();
+        return this.reloadState().then(() => this.updateViewOnStateChanges());
     }
 
     /**
      * reload data
      *
-     * @return {Promise<StateChange>}
+     * @return {Promise}
      */
-    reload() {
+    reloadState() {
         return this._handleRepoErrors(this.repository.getAll())
             .then((items) => {
                 console.log("TableEditorComponent items:\n", JSON.stringify(items));
                 this.state.updateAll(items);
-                return this.updateViewOnStateChange();
+                return items;
             });
     }
 
