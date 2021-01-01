@@ -1,5 +1,10 @@
 class EditableListComponent extends SelectableListComponent {
     /**
+     * @type {EditableListState}
+     */
+    editableListState;
+
+    /**
      * @param repository {CrudRepository}
      * @param state {EditableListState}
      * @param view {SimpleListView}
@@ -11,6 +16,7 @@ class EditableListComponent extends SelectableListComponent {
                 notSelectedRow, selectedRow,
                 deletableRow) {
         super(repository, state, view, notSelectedRow, selectedRow);
+        this.editableListState = state;
         this.swappingRowSelector["showAdd"] = selectedRow;
         this.swappingRowSelector["showEdit"] = selectedRow; // is equal to super.swappingRowSelector[false]
         this.swappingRowSelector["showDelete"] = deletableRow;
@@ -66,7 +72,7 @@ class EditableListComponent extends SelectableListComponent {
          * @type {EditableListComponent}
          */
         const editableList = ev.data;
-        editableList.state.resetSwappingState();
+        editableList.editableListState.resetSwappingState();
         editableList.reload();
     }
 
