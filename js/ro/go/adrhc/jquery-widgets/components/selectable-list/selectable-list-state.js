@@ -63,8 +63,8 @@ class SelectableListState extends CrudListState {
         // itemId could be undefined when "previous" item is undefined
         // makes sense to switch to undefined (aka undefined item): it is used to switch off the current selection
         const itemId = selectableSwappingData.itemId;
+        selectableSwappingData.reloadedId = itemId;
         if (!!itemId) {
-            selectableSwappingData.reloadedId = itemId;
             selectableSwappingData.item = this.findById(itemId);
         }
     }
