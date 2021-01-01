@@ -19,7 +19,7 @@ class AbstractTableBasedView extends AbstractView {
     extractAllRowsInputValues(useOwnerOnFields) {
         return this.tableAdapter.$getAllRows()
             .map((index, elem) =>
-                this._extractInputValues($(elem), useOwnerOnFields))
+                FormUtils.prototype.objectifyInputsOf($(elem), useOwnerOnFields ? this.owner : undefined))
             .get();
     }
 
@@ -32,7 +32,7 @@ class AbstractTableBasedView extends AbstractView {
      */
     extractInputValuesByDataId(rowDataId, useOwnerOnFields) {
         const $elem = this.tableAdapter.$getRowByDataId(rowDataId)
-        return this._extractInputValues($elem, useOwnerOnFields);
+        return FormUtils.prototype.objectifyInputsOf($elem, useOwnerOnFields ? this.owner : undefined);
     }
 
     get owner() {

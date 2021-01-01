@@ -109,7 +109,7 @@ class EditableListComponent extends SelectableListComponent {
             .then(() =>
                 editableList.doWithState((editableListState) => {
                     editableListState.removeById(rowDataId);
-                    editableListState.switchTo(undefined);
+                    editableListState.switchToOff();
                 }));
     }
 
@@ -134,7 +134,7 @@ class EditableListComponent extends SelectableListComponent {
                     // When not using repository resetSwappingState leaves the edited
                     // row in place otherwise would be deleted by swapping processing.
                     // crudListState.resetSwappingState();
-                    editableListState.switchTo(undefined);
+                    editableListState.switchToOff();
                 }));
     }
 

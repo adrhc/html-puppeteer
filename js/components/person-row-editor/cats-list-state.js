@@ -14,5 +14,6 @@ class CatsListState extends EditableListState {
 
     switchTo(id, context) {
         // cancelling swapping
+        return false;
     }
 }

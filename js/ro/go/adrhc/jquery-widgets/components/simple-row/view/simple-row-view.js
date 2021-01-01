@@ -20,18 +20,17 @@ class SimpleRowView extends AbstractTableBasedView {
      * @return {Promise<StateChange>}
      */
     update(stateChange) {
+        /**
+         * @type {IdentifiableEntity}
+         */
         const updatedRowState = stateChange.data;
-        if (stateChange.requestType === "DELETE") {
-            this.tableAdapter.deleteRowByDataId(updatedRowState.id);
-        } else {
-            this.tableAdapter.renderRowWithTemplate({
-                rowDataId: updatedRowState.id,
-                data: updatedRowState,
-                rowTmplHtml: this.rowTmplHtml,
-                createIfNotExists: stateChange.requestType === "CREATE",
-                tableRelativePosition: this.tableRelativePositionOnCreate
-            })
-        }
+        this.tableAdapter.renderRowWithTemplate({
+            rowDataId: updatedRowState.id,
+            data: updatedRowState,
+            rowTmplHtml: this.rowTmplHtml,
+            createIfNotExists: stateChange.requestType === "CREATE",
+            tableRelativePosition: this.tableRelativePositionOnCreate
+        })
         return Promise.resolve(stateChange);
     }
 }

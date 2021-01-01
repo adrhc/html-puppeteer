@@ -31,27 +31,34 @@ class SwappingState extends BasicState {
 
     /**
      * @param data
+     * @return {boolean} whether the switch actually happened or not
      */
     switchTo(data) {
         if (this.swappingDetails && data === this.swappingDetails.data) {
-            return;
+            return false;
         }
         // switching "off" the previous data
         this.switchOff();
         // switching "on" the new data
         this.swappingDetails = new SwappingDetails(data);
         this._collectStateChange(this.swappingDetails);
+        return true;
     }
 
+    /**
+     * @param dontIgnoreMissingSwappingDetails
+     * @return {boolean} whether the switch actually happened or not
+     */
     switchOff(dontIgnoreMissingSwappingDetails) {
         if (dontIgnoreMissingSwappingDetails && !this.swappingDetails) {
             throw "switchOff: missing swappingDetails"
         } else if (!this.swappingDetails || this.swappingDetails.isPrevious) {
             // previous doesn't exist or is already "off"
-            return;
+            return false;
         }
         this.swappingDetails.isPrevious = true;
         this._collectStateChange(this.swappingDetails);
+        return true;
     }
 
     switchOn(dontIgnoreMissingSwappingDetails) {

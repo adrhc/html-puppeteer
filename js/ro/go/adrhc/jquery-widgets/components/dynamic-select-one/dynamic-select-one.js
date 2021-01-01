@@ -45,7 +45,8 @@ class DynamicSelectOneComponent extends AbstractComponent {
     }
 
     init() {
-        return this.dynaSelOneView.init(this.state)
+        return this.dynaSelOneView
+            .update(this.state, true)
             .then(() => this._configureEvents());
     }
 

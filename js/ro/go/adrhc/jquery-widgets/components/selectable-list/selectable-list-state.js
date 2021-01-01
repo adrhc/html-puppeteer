@@ -13,15 +13,30 @@ class SelectableListState extends CrudListState {
     /**
      * @param id {numeric|string}
      * @param context is some context data
+     * @return {boolean} whether the switch actually happened or not
      */
     switchTo(id, context) {
+        const previousSelectableSwappingData = this.currentSelectableSwappingData;
         const item = this.findById(id);
         const newSelectableSwappingData = new SelectableSwappingData(item, context);
-        if (!this._isEqualToCurrent(newSelectableSwappingData)) {
-            this.swappingState.switchTo(newSelectableSwappingData);
-            this._reloadAllSwappedOffItems(true);
-            this.collectByConsumingStateChanges(this.swappingState.stateChanges)
+        if (newSelectableSwappingData.similarTo(previousSelectableSwappingData)) {
+            return false;
         }
+        const switched = this.swappingState.switchTo(newSelectableSwappingData);
+        if (switched) {
+            this._doAfterSwitch(previousSelectableSwappingData, newSelectableSwappingData)
+        }
+        return switched;
+    }
+
+    /**
+     * @param previousSelectableSwappingData {SelectableSwappingData|undefined}
+     * @param newSelectableSwappingData {SelectableSwappingData|undefined}
+     * @protected
+     */
+    _doAfterSwitch(previousSelectableSwappingData, newSelectableSwappingData) {
+        this._reloadAllSwappedOffItems(true);
+        this.collectByConsumingStateChanges(this.swappingState.stateChanges)
     }
 
     /**
@@ -52,16 +67,6 @@ class SelectableListState extends CrudListState {
             selectableSwappingData.reloadedId = itemId;
             selectableSwappingData.item = this.findById(itemId);
         }
-    }
-
-    /**
-     * @param newSelectableSwappingData {SelectableSwappingData}
-     * @return {boolean}
-     * @protected
-     */
-    _isEqualToCurrent(newSelectableSwappingData) {
-        return this.currentSelectableSwappingData
-            && this.currentSelectableSwappingData.equals(newSelectableSwappingData);
     }
 
     resetSwappingState() {

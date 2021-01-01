@@ -50,13 +50,18 @@ class AbstractComponent {
     updateViewOnStateChanges(stateChanges, applyChangesStartingFromLatest) {
         stateChanges = stateChanges ? stateChanges : this.state.consumeAll(applyChangesStartingFromLatest);
         if (!stateChanges || !stateChanges.length) {
+            // can happen when switching to undefined multiple times (e.g. dblclick on header)
+            // or clicking in an input box on an editable row
             console.warn("no state changes!");
             return Promise.resolve(stateChanges);
         }
-        const promiseHolder = {promise: this.updateViewOnStateChange(stateChanges[0])};
-        stateChanges.shift();
+        const promiseHolder = {};
         stateChanges.forEach(stateChange => {
-            promiseHolder.promise = promiseHolder.promise.then(() => this.updateViewOnStateChange(stateChange));
+            if (promiseHolder.promise) {
+                promiseHolder.promise = promiseHolder.promise.then(() => this.updateViewOnStateChange(stateChange));
+            } else {
+                promiseHolder.promise = this.updateViewOnStateChange(stateChange);
+            }
         });
         return promiseHolder.promise.then(() => stateChanges);
     }
@@ -76,11 +81,8 @@ class AbstractComponent {
             return this[fnName](stateChange);
         } else if (this.knownRequestTypes.includes(stateChange.requestType)) {
             return this._updateViewOnKnownStateChange(stateChange);
-        } else if (typeof this["updateViewOnAny"] === "function") {
-            return this["updateViewOnAny"](stateChange);
         } else {
-            console.warn(`no handler for:\n${JSON.stringify(stateChange)}`);
-            return Promise.reject(stateChange);
+            return this.updateViewOnAny(stateChange);
         }
     }
 
@@ -90,8 +92,13 @@ class AbstractComponent {
      * @protected
      */
     _updateViewOnKnownStateChange(stateChange) {
-        console.warn(`rejected:\n${JSON.stringify(stateChange)}`);
-        return Promise.reject(stateChange);
+        console.debug(`_updateViewOnKnownStateChange:\n${JSON.stringify(stateChange)}`);
+        return this.view.update(stateChange);
+    }
+
+    updateViewOnAny(stateChange) {
+        console.debug(`updateViewOnAny:\n${JSON.stringify(stateChange)}`);
+        return this.view.update(stateChange);
     }
 
     /**

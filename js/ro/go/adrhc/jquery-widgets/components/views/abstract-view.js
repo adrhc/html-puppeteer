@@ -3,17 +3,6 @@
  */
 class AbstractView {
     /**
-     * @param $elem {jQuery<HTMLElement>}
-     * @param useOwnerOnFields {boolean|undefined}
-     * @return {{}}
-     * @protected
-     */
-    _extractInputValues($elem, useOwnerOnFields) {
-        const owner = useOwnerOnFields ? this.owner : undefined;
-        return FormUtils.prototype.objectifyInputsOf($elem, owner);
-    }
-
-    /**
      * @param stageChanges {StateChange|StateChange[]}
      * @return {Promise<StateChange|StateChange[]>}
      * @abstract
@@ -23,18 +12,18 @@ class AbstractView {
     }
 
     /**
-     * @abstract
+     * @param useOwnerOnFields {boolean|undefined}
+     * @return {{}}
      */
-    get owner() {
-        throw "Not implemented!";
+    extractInputValues(useOwnerOnFields) {
+        return undefined;
     }
 
     /**
-     * @param useOwnerOnFields {boolean|undefined}
-     * @return {{}}
+     * @return {string}
      * @abstract
      */
-    extractInputValues(useOwnerOnFields) {
+    get owner() {
         throw "Not implemented!";
     }
 }

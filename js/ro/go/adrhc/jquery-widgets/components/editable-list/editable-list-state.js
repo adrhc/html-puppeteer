@@ -1,19 +1,21 @@
 class EditableListState extends SelectableListState {
-    /**
-     * @param id {numeric|string}
-     * @param context is some context data
-     */
-    switchTo(id, context) {
-        const previousSelectableSwappingData = this.currentSelectableSwappingData;
-        super.switchTo(id, context);
-        if (!previousSelectableSwappingData || !previousSelectableSwappingData.item) {
-            // previous switch doesn't exist
-        } else if (previousSelectableSwappingData.equals(this.currentSelectableSwappingData)) {
-            // previous switch equals the next one
-        } else if (EntityUtils.prototype.isTransientId(previousSelectableSwappingData.itemId)) {
-            // previous switch is transient entity - automatically remove it on switch to another item
+    _doAfterSwitch(previousSelectableSwappingData, newSelectableSwappingData) {
+        super._doAfterSwitch(previousSelectableSwappingData, newSelectableSwappingData);
+        if (previousSelectableSwappingData &&
+            EntityUtils.prototype.isTransientId(previousSelectableSwappingData.itemId) &&
+            !previousSelectableSwappingData.similarTo(this.currentSelectableSwappingData)) {
+            // previous switch exist and is transient and isn't similar to the next one
             this.removeTransient();
         }
+    }
+
+    switchToOff() {
+        const previousSelectableSwappingData = this.currentSelectableSwappingData;
+        const switched = this.swappingState.switchOff();
+        if (switched) {
+            this._doAfterSwitch(previousSelectableSwappingData)
+        }
+        return switched;
     }
 
     /**

@@ -18,13 +18,6 @@ class DynamicSelectOneView extends AbstractView {
 
     /**
      * @param data {DynamicSelectOneState}
-     */
-    init(data) {
-        return this.update(data, true);
-    }
-
-    /**
-     * @param data {DynamicSelectOneState}
      * @param focusOnSearchInput
      */
     update(data, focusOnSearchInput) {
@@ -146,7 +139,7 @@ class DynamicSelectOneView extends AbstractView {
      * @return {{}}
      */
     extractInputValues(useOwnerOnFields) {
-        return this._extractInputValues(this.$component, useOwnerOnFields);
+        return FormUtils.prototype.objectifyInputsOf(this.$component, useOwnerOnFields ? this.owner : undefined);
     }
 
     /**

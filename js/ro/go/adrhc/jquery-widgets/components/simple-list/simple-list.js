@@ -33,7 +33,6 @@ class SimpleListComponent extends AbstractTableBasedComponent {
             .then((items) => {
                 console.log("TableEditorComponent items:\n", JSON.stringify(items));
                 this.state.updateAll(items);
-                return items;
             });
     }
 

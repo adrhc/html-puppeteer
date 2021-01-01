@@ -18,7 +18,7 @@ class SelectableSwappingData {
      *
      * @return {boolean}
      */
-    equals(selectableSwappingData) {
+    similarTo(selectableSwappingData) {
         return selectableSwappingData
             && this.context == selectableSwappingData.context
             && (this.item == selectableSwappingData.item

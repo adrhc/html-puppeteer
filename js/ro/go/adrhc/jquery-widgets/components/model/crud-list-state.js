@@ -15,7 +15,7 @@ class CrudListState extends SimpleListState {
      * @return {IdentifiableEntity} the insert or update result
      */
     save(item, itemIdToRemove, append = false) {
-        if (itemIdToRemove && !EntityUtils.prototype.idsAreEqual(item.id, itemIdToRemove)) {
+        if (!!itemIdToRemove && !EntityUtils.prototype.idsAreEqual(item.id, itemIdToRemove)) {
             this.removeById(itemIdToRemove);
             return this.insertItem(item, append);
         } else {

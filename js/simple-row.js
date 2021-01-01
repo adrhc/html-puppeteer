@@ -16,8 +16,8 @@ if (Modernizr.template) {
         SimpleListFactory.prototype
             .create({items: dogs, tableId: dogsTableWithEdit})
             .init()
-            .then(updateAllStateChange => {
-                const items = updateAllStateChange.data;
+            .then(updateAllStateChanges => {
+                const items = updateAllStateChanges[0].data;
                 const editableRow = SimpleRowFactory.prototype
                     .createIdentifiableRow(dogsTableWithEdit, {
                         rowTmpl: "dogsTableWithEditSelectedRowTmpl",
@@ -45,8 +45,8 @@ if (Modernizr.template) {
         SimpleListFactory.prototype
             .create({items: dogs, tableId: dogsTableWithDelete, bodyRowTmplId: "dogsTableWithDeleteReadOnlyRowTmpl"})
             .init()
-            .then(updateAllStateChange => {
-                const items = updateAllStateChange.data;
+            .then(updateAllStateChanges => {
+                const items = updateAllStateChanges[0].data;
                 const simpleRow = SimpleRowFactory.prototype.createSimpleRow(
                     dogsTableWithDelete, {rowTmpl: "dogsTableWithDeleteDeletedRowTmpl"});
                 // switching to "simpleRow" display type (i.e. line-through text style)
