@@ -4,6 +4,10 @@ class SelectableSwappingData {
      */
     reloadedId;
 
+    /**
+     * @param item {IdentifiableEntity}
+     * @param context
+     */
     constructor(item, context) {
         this.item = item;
         this.context = context;
@@ -18,7 +22,13 @@ class SelectableSwappingData {
         return selectableSwappingData
             && this.context == selectableSwappingData.context
             && (this.item == selectableSwappingData.item
-                || (this.item && selectableSwappingData.item
-                    && EntityUtils.prototype.idsAreEqual(this.item.id, selectableSwappingData.item.id)));
+                || EntityUtils.prototype.idsAreEqual(this.itemId, selectableSwappingData.itemId));
+    }
+
+    /**
+     * @returns {number|string|undefined} could be undefined when "previously" switched to undefined (to switch off the "previous")
+     */
+    get itemId() {
+        return this.item ? this.item.id : undefined;
     }
 }

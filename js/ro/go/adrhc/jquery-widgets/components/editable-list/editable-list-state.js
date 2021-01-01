@@ -10,7 +10,7 @@ class EditableListState extends SelectableListState {
             // previous switch doesn't exist
         } else if (previousSelectableSwappingData.equals(this.currentSelectableSwappingData)) {
             // previous switch equals the next one
-        } else if (EntityUtils.prototype.isTransientId(previousSelectableSwappingData.item.id)) {
+        } else if (EntityUtils.prototype.isTransientId(previousSelectableSwappingData.itemId)) {
             // previous switch is transient entity - automatically remove it on switch to another item
             this.removeTransient();
         }

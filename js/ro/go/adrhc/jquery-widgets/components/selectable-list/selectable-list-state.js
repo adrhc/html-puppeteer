@@ -36,16 +36,24 @@ class SelectableListState extends CrudListState {
     /**
      * restore item state on cancelled swapping (aka "previous" or switched to "off" swapping)
      *
-     * @param swappingStateChange {StateChange|undefined}
+     * @param swappingStateChange {StateChange}
      * @param mustBePrevious {boolean|undefined}
      * @protected
      */
     _reloadItemOnSwapping(swappingStateChange, mustBePrevious = true) {
+        /**
+         * @type {SwappingDetails}
+         */
         const swappingDetails = swappingStateChange.data;
+        /**
+         * @type {SelectableSwappingData}
+         */
         const selectableSwappingData = swappingDetails.data;
-        if (swappingDetails.isPrevious && selectableSwappingData.item) {
-            selectableSwappingData.reloadedId = selectableSwappingData.item.id;
-            selectableSwappingData.item = this.findById(selectableSwappingData.item.id);
+        // id could be undefined when previously switched to undefined (to switch off the previous)
+        const itemId = selectableSwappingData.itemId;
+        if (swappingDetails.isPrevious && !!itemId) {
+            selectableSwappingData.reloadedId = itemId;
+            selectableSwappingData.item = this.findById(itemId);
         }
     }
 
