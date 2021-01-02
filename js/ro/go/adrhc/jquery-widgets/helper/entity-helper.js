@@ -1,13 +1,13 @@
 class EntityHelper {
     /**
-     * @type {number}
-     */
-    lastGeneratedId = -1;
-
-    /**
      * @return {number}
      */
     generateId() {
-        return this.lastGeneratedId--;
+        return EntityHelper.prototype.lastGeneratedId--;
     }
 }
+
+/**
+ * @type {number}
+ */
+EntityHelper.prototype.lastGeneratedId = -1;

@@ -20,10 +20,6 @@ class PersonRowEditor extends IdentifiableRowComponent {
             tableId, {
                 rowTmpl: "editableCatsRowTmpl", tableRelativePositionOnCreate: "append"
             });
-        const deletableRow = SimpleRowFactory.prototype.createIdentifiableRow(
-            tableId, {
-                rowTmpl: "readOnlyCatsRowTmpl"
-            });
 
         const repository = new InMemoryCrudRepository(new EntityHelper(),
             $.extend(true, [], stateChange.data.cats));
@@ -35,7 +31,7 @@ class PersonRowEditor extends IdentifiableRowComponent {
             bodyRowTmplId: "editableCatsRowTmpl",
             readOnlyRow: roAndRwRow,
             editableRow: roAndRwRow,
-            deletableRow
+            deletableRow: roAndRwRow
         });
 
         return this.catsTableComp.init();
