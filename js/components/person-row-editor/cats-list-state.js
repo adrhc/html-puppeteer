@@ -13,7 +13,7 @@ class CatsListState extends EditableListState {
     }
 
     switchTo(id, context) {
-        // cancelling swapping
+        // cancel swapping
         return false;
     }
 }

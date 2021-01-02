@@ -1,9 +1,16 @@
 class CrudListState extends SimpleListState {
     /**
+     * whether to append or prepend new items
+     *
+     * @type {boolean|undefined}
+     */
+    append;
+
+    /**
      * @param append {boolean|undefined}
      * @return {IdentifiableEntity}
      */
-    createNewItem(append = false) {
+    createNewItem(append = this.append) {
         const item = EntityUtils.prototype.newIdentifiableEntity();
         return this.insertItem(item, append);
     }
@@ -14,7 +21,7 @@ class CrudListState extends SimpleListState {
      * @param append {boolean|undefined}
      * @return {IdentifiableEntity} the insert or update result
      */
-    save(item, itemIdToRemove, append = false) {
+    save(item, itemIdToRemove, append = this.append) {
         if (!!itemIdToRemove && !EntityUtils.prototype.idsAreEqual(item.id, itemIdToRemove)) {
             this.removeById(itemIdToRemove);
             return this.insertItem(item, append);
@@ -28,10 +35,10 @@ class CrudListState extends SimpleListState {
      * @param append {boolean|undefined}
      * @return {IdentifiableEntity}
      */
-    insertItem(item, append = false) {
+    insertItem(item, append = this.append) {
         let afterItemId;
         if (append) {
-            afterItemId = this.items.length ? this.items[0].id : undefined;
+            afterItemId = this.items.length ? this.items[this.items.length - 1].id : undefined;
             this.items.push(item);
         } else {
             this.items.unshift(item);

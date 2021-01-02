@@ -41,9 +41,16 @@ if (Modernizr.template) {
                     crudListState.removeById(2);
                     crudListState.insertItem({
                             id: 2,
-                            name: `restored dog2 (with table ${tableRelativePositionOnCreate})`
-                        },
-                        tableRelativePositionOnCreate === "append");
+                            name: `restored dog2 (using append)`
+                        }, true);
+                    crudListState.insertItem({
+                        id: 4,
+                        name: `added dog4 (using prepend)`
+                    }, false);
+                    crudListState.insertItem({
+                        id: 5,
+                        name: `added dog5 (using append)`
+                    }, true);
                 });
             });
     })
