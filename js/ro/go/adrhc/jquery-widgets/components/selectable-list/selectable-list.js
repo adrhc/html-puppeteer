@@ -51,18 +51,21 @@ class SelectableListComponent extends ElasticListComponent {
         }
         ev.stopPropagation();
         const rowDataId = selectableList.rowDataIdOf(this);
-        selectableList._switchTo(rowDataId);
+        selectableList.switchTo(rowDataId);
     }
 
     /**
-     * @param rowDataId {string|number}
-     * @param context relates to SelectableListState.switchTo(id, context)
-     * @protected
+     * @param context {string|boolean|undefined}
+     * @param rowDataId {number|string}
      */
-    _switchTo(rowDataId, context) {
-        this.selectableListState.switchTo(rowDataId, context);
-        // changes are: deactivation (previous item) and activation (the selection)
-        return this.updateViewOnStateChanges();
+    switchTo(rowDataId, context) {
+        this.doWithState((selectableListState) => {
+            if (rowDataId) {
+                selectableListState.switchTo(rowDataId, context);
+            } else {
+                selectableListState.switchToOff();
+            }
+        });
     }
 
     /**
@@ -75,21 +78,19 @@ class SelectableListComponent extends ElasticListComponent {
      */
     updateViewOnSWAP(swappingStateChange) {
         /**
-         * swappingStateChange.data is SwappingDetails
-         * @type {SelectableSwappingData}
+         * swappingStateChange.data is {SwappingDetails}
+         * swappingStateChange.data.data is {SelectableSwappingData}
          */
-        const swappingData = swappingStateChange.data.data;
-        if (swappingData.item) {
-            const rowComponent = this._rowComponentFor(swappingStateChange);
-            return rowComponent
-                .init()
-                .then(() => rowComponent.update(swappingData.item, "UPDATE"))
-                .then(() => swappingStateChange);
-        } else {
-            // the just saved transient will land here because selectableListState._reloadSwappedOffItem
-            // will set its item to undefined after no longer finding it because was changed to "persistent"
+        const item = swappingStateChange.data.data.item;
+        if (!item) {
+            // see also SelectableListState._reloadLastSwappedOffItem
             return Promise.resolve(swappingStateChange);
         }
+        const rowComponent = this._rowComponentFor(swappingStateChange);
+        return rowComponent
+            .init()
+            .then(() => rowComponent.update(item, "UPDATE"))
+            .then(() => swappingStateChange);
     }
 
     /**
@@ -112,8 +113,8 @@ class SelectableListComponent extends ElasticListComponent {
             // this is the current/active selection; depending on "context" a row component or another would be used
             return this.swappingRowSelector[swappingData.context];
         } else {
-            // this is the inactive/deactivated/previous selection
-            // todo: consider using the context here too
+            // this is the inactive/deactivated/previous selection or the current/active one with a null context
+            // todo: consider using the context for inactive/deactivated/previous too
             return this.swappingRowSelector[swappingDetails.isPrevious];
         }
     }

@@ -62,17 +62,6 @@ class SwappingState extends BasicState {
         return true;
     }
 
-    switchOn(dontIgnoreMissingSwappingDetails) {
-        if (dontIgnoreMissingSwappingDetails && !this.swappingDetails) {
-            throw "switchOn: missing swappingDetails"
-        } else if (!this.swappingDetails || !this.swappingDetails.isPrevious) {
-            // previous doesn't exist or is already "on"
-            return;
-        }
-        this.swappingDetails.isPrevious = false;
-        this._collectStateChange(this.swappingDetails);
-    }
-
     /**
      * @param swappingDetails {SwappingDetails}
      * @return {StateChange}

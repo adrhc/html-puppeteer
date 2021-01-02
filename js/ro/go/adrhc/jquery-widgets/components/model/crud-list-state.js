@@ -61,7 +61,7 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @return {number|number[]} removed positions (aka indexes)
+     * @return {IdentifiableEntity|IdentifiableEntity[]} removed positions (aka indexes)
      */
     removeTransient() {
         const removedItems = EntityUtils.prototype.removeTransient(this.items);

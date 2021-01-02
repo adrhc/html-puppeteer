@@ -37,19 +37,15 @@ class BasicState {
     }
 
     /**
-     * @param fromLatest {boolean|undefined}
+     * @param fromNewestToEarliest {boolean|undefined}
      * @return {StateChange[]}
      */
-    peekAll(fromLatest) {
-        return this._stateChanges.changes.peekAll(fromLatest);
+    peekAll(fromNewestToEarliest) {
+        return this._stateChanges.changes.peekAll(fromNewestToEarliest);
     }
 
-    /**
-     * @param fromLatest {boolean|undefined}
-     * @return {StateChange}
-     */
-    peekOne(fromLatest) {
-        return this._stateChanges.changes.peekOne(fromLatest);
+    findFirstFromNewest(predicate) {
+        return this._stateChanges.changes.findFirstFromBack(predicate);
     }
 
     get stateChanges() {

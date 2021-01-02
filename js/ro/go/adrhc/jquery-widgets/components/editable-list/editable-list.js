@@ -40,7 +40,7 @@ class EditableListComponent extends SelectableListComponent {
         ev.stopPropagation();
         // "showEdit" row component should be the same used for row double-click in SelectableListComponent (i.e. undefined)
         // context could be "showEdit" or "showDelete"
-        editableList._switchTo(rowDataId, context);
+        editableList.switchTo(rowDataId, context);
     }
 
     /**
@@ -94,7 +94,7 @@ class EditableListComponent extends SelectableListComponent {
     }
 
     /**
-     * UPDATE
+     * DELETE
      *
      * @param ev {Event}
      */

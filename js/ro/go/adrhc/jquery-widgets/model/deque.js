@@ -51,43 +51,54 @@ class Dequeue {
     /**
      * aka peek left
      *
+     * @param count {number} how muck further from left to pick; 0 means 1th from left
      * @return {undefined|*}
      */
-    peekFront() {
+    peekFront(count = this.lowestCount) {
         if (this.isEmpty()) {
             return undefined;
         }
-        return this.items[this.lowestCount];
+        return this.items[count];
     }
 
     /**
      * aka peek right
      *
+     * @param count {number} how muck back from right to pick; 0 means 1th from right
      * @return {undefined|*}
      */
-    peekBack() {
+    peekBack(count = 0) {
         if (this.isEmpty()) {
             return undefined;
         }
-        return this.items[this.count - 1];
+        return this.items[this.count - count - 1];
     }
 
     /**
-     * @param fromBack {boolean|undefined}
+     * @param predicate {function}
      * @return {undefined|*}
      */
-    peekOne(fromBack) {
-        if (fromBack) {
-            return this.peekBack();
-        } else {
-            return this.peekFront();
+    findFirstFromBack(predicate) {
+        let stateChange;
+        let i = 0;
+        stateChange = this.items[this.count - i++ - 1];
+        while (!!stateChange) {
+            if (predicate(stateChange)) {
+                return stateChange;
+            }
+            stateChange = this.items[this.count - i++ - 1];
         }
+        return undefined;
     }
 
-    peekAll(fromBack) {
+    /**
+     * @param fromNewestToEarliest {boolean|undefined}
+     * @return {[]}
+     */
+    peekAll(fromNewestToEarliest) {
         const items = [];
         for (let i = this.lowestCount; i < this.count; i++) {
-            if (fromBack) {
+            if (fromNewestToEarliest) {
                 items.unshift(this.items[i]);
             } else {
                 items.push(this.items[i]);

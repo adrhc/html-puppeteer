@@ -20,11 +20,21 @@ class SelectableListState extends CrudListState {
         const item = this.findById(id);
         const newSelectableSwappingData = new SelectableSwappingData(item, context);
         if (newSelectableSwappingData.similarTo(previousSelectableSwappingData)) {
+            console.log(`switch cancelled:\n${JSON.stringify(previousSelectableSwappingData)}\nis similar to\n${JSON.stringify(newSelectableSwappingData)}`)
             return false;
         }
         const switched = this.swappingState.switchTo(newSelectableSwappingData);
         if (switched) {
             this._doAfterSwitch(previousSelectableSwappingData, newSelectableSwappingData)
+        }
+        return switched;
+    }
+
+    switchToOff() {
+        const previousSelectableSwappingData = this.currentSelectableSwappingData;
+        const switched = this.swappingState.switchOff();
+        if (switched) {
+            this._doAfterSwitch(previousSelectableSwappingData, undefined)
         }
         return switched;
     }
@@ -35,38 +45,43 @@ class SelectableListState extends CrudListState {
      * @protected
      */
     _doAfterSwitch(previousSelectableSwappingData, newSelectableSwappingData) {
-        this._reloadAllSwappedOffItems(true);
+        if (!!previousSelectableSwappingData) {
+            this._reloadLastSwappedOffItem();
+        }
         this.collectByConsumingStateChanges(this.swappingState.stateChanges)
     }
 
     /**
-     * @protected
-     */
-    _reloadAllSwappedOffItems() {
-        this.swappingState.peekAll(true)
-            .filter(swappingStateChange => swappingStateChange.data.isPrevious)
-            .forEach(stateChange => this._reloadSwappedOffItem(stateChange));
-    }
-
-    /**
-     * restore item state on cancelled swapping (aka "previous" or switched to "off" swapping)
+     * When switching after a save operation the current swappingStateChange might contain a stale item.
+     * The switch events consumer might need the updated item's value so we need to reload it.
+     * When the item is a transient one it make no sense to reload it.
      *
-     * @param swappingStateChange {StateChange}
      * @protected
      */
-    _reloadSwappedOffItem(swappingStateChange) {
+    _reloadLastSwappedOffItem() {
+        const swappingStateChange = this.swappingState.findFirstFromNewest((swappingStateChange) => swappingStateChange.data.isPrevious);
+        if (!swappingStateChange) {
+            // error: no isPrevious (true) state change
+            throw "found no isPrevious = true state change!";
+        }
         /**
-         * swappingStateChange.data is SwappingDetails
+         * swappingStateChange.data is {SwappingDetails}
          * @type {SelectableSwappingData}
          */
         const selectableSwappingData = swappingStateChange.data.data;
-        // itemId could be undefined when "previous" item is undefined
-        // makes sense to switch to undefined (aka undefined item): it is used to switch off the current selection
-        const itemId = selectableSwappingData.itemId;
-        selectableSwappingData.reloadedId = itemId;
-        if (!!itemId) {
-            selectableSwappingData.item = this.findById(itemId);
+        if (selectableSwappingData.reloadedId != null) {
+            // error: reloadedId != null
+            throw `reloadedId (${selectableSwappingData.reloadedId}) != null:\n${JSON.stringify(swappingStateChange)}`;
         }
+        if (selectableSwappingData.itemId == null) {
+            // skip null itemId
+            return;
+        }
+        // remember the reloaded id
+        selectableSwappingData.reloadedId = selectableSwappingData.itemId;
+        // when reloading the "transient" id the result might be undefined when
+        // the transient record was removed (after being persisted or discarded)
+        selectableSwappingData.item = this.findById(selectableSwappingData.reloadedId);
     }
 
     resetSwappingState() {

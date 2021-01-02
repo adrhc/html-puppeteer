@@ -26,7 +26,7 @@ class ElasticListComponent extends SimpleListComponent {
         console.log("ElasticListComponent.doWithState: delayViewUpdate=", delayViewUpdate);
         stateUpdaterFn(this.state);
         if (delayViewUpdate) {
-            return Promise.resolve(this.state.stateChanges.peekAll());
+            return Promise.resolve(this.state.peekAll());
         }
         return this.updateViewOnStateChanges();
     }

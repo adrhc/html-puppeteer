@@ -20,8 +20,9 @@ class SelectableSwappingData {
      */
     similarTo(selectableSwappingData) {
         return selectableSwappingData
-            && this.context == selectableSwappingData.context
-            && (this.item == selectableSwappingData.item
+            && (this.context == null && selectableSwappingData.context == null
+                || this.context == selectableSwappingData.context)
+            && (this.itemId == null && selectableSwappingData.itemId == null
                 || EntityUtils.prototype.idsAreEqual(this.itemId, selectableSwappingData.itemId));
     }
 
