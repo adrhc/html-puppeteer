@@ -17,7 +17,7 @@ class DynamicSelectOneView extends AbstractView {
     }
 
     /**
-     * @param data {DynamicSelectOneState}
+     * @param data {DynaSelOneState}
      * @param focusOnSearchInput
      */
     update(data, focusOnSearchInput) {
@@ -75,7 +75,7 @@ class DynamicSelectOneView extends AbstractView {
     }
 
     /**
-     * @param state {DynamicSelectOneState}
+     * @param state {DynaSelOneState}
      * @return {{placeholder: string, optionsToShow: number, title: string}}
      * @private
      */

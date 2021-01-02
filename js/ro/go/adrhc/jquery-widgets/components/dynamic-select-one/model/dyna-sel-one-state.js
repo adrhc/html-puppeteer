@@ -1,21 +1,27 @@
-class DynamicSelectOneState {
+class DynaSelOneState {
     /**
      * @param repository {DynaSelOneRepository}
      * @param minCharsToSearch {number}
      * @param options {DynaSelOneItem[]|undefined}
+     * @param searchLastSearchResult {boolean|undefined}
      */
-    constructor(repository, {minCharsToSearch = 3, options}) {
+    constructor(repository, {
+        minCharsToSearch = 3,
+        options,
+        searchLastSearchResult
+    }) {
         this.repository = repository;
         this.minCharsToSearch = minCharsToSearch;
         this.options = options;
+        this.searchLastSearchResult = searchLastSearchResult;
     }
 
     /**
      * @param id {number}
-     * @returns {Promise<DynamicSelectOneState>}
+     * @returns {Promise<DynaSelOneState>}
      */
     updateById(id) {
-        console.log("DynamicSelectOneState.updateById: id =", id);
+        console.log("DynaSelOneState.updateById: id =", id);
         const foundOption = this._findOptionById(id);
         if (!foundOption) {
             console.error("Selected missing option! id =", id);
@@ -31,12 +37,13 @@ class DynamicSelectOneState {
      * - gather all data then update the model then compute derivatives then cache
      *
      * @param title {string|undefined}
-     * @returns {Promise<DynamicSelectOneState>}
+     * @returns {Promise<DynaSelOneState>}
      */
     updateByTitle(title) {
-        console.log("DynamicSelectOneState.updateByTitle title =", title);
-        if (this.title === title) {
+        console.log("DynaSelOneState.updateByTitle title =", title);
+        if (this.searchLastSearchResult && this.title === title) {
             // updating with same title
+            console.log(`rejecting update with same title: ${!!title ? title : "nothing"}`);
             return Promise.reject(this);
         }
         if (!this.isEnoughTextToSearch(title)) {
@@ -45,7 +52,7 @@ class DynamicSelectOneState {
             return Promise.resolve(this);
         }
         let optionsPromise;
-        if (this.currentOptionsAreResultOfSearch && title.startsWith(this.title)) {
+        if (this.searchLastSearchResult && this.currentOptionsAreResultOfSearch && title.startsWith(this.title)) {
             // new title contains the current title: searching existing options
             optionsPromise = Promise.resolve(this._findOptionsByTitleStartingWith(title));
         } else {

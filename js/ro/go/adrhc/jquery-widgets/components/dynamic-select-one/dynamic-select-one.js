@@ -1,7 +1,7 @@
 class DynamicSelectOneComponent extends AbstractComponent {
     /**
      * @param dynaSelOneView {DynamicSelectOneView}
-     * @param state {DynamicSelectOneState}
+     * @param state {DynaSelOneState}
      */
     constructor(dynaSelOneView, state) {
         // todo: adapt DynamicSelectOneView to BasicState

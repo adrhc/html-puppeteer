@@ -1,3 +1,6 @@
+/**
+ * @interface
+ */
 class DynaSelOneRepository {
     /**
      * @param title {string}
