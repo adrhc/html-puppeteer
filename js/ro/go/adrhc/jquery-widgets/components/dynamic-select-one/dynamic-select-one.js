@@ -5,7 +5,7 @@ class DynamicSelectOneComponent extends AbstractComponent {
      */
     constructor(dynaSelOneView, state) {
         // todo: adapt DynamicSelectOneView to BasicState
-        super(undefined, dynaSelOneView);
+        super(state, dynaSelOneView);
         this.dynaSelOneView = dynaSelOneView;
         this.state = state;
     }

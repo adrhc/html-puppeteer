@@ -3,7 +3,7 @@
  */
 class TableElementAdapter {
     /**
-     * @type {jQuery<HTMLTableRowElement>}
+     * @type {jQuery<HTMLTableElement>}
      * @private
      */
     _$table;
@@ -19,7 +19,7 @@ class TableElementAdapter {
     constructor(tableId) {
         if (tableId instanceof jQuery) {
             this._$table = tableId;
-            this._owner = !!this._$table.id ? this._$table.id : this.$table.data("id");
+            this._owner = !!this._$table.id ? this._$table.id : this._$table.data("id");
         } else {
             this._$table = $(`#${tableId}`);
             this._owner = tableId;
@@ -158,7 +158,7 @@ class TableElementAdapter {
     }
 
     /**
-     * @returns {jQuery<HTMLTableRowElement>}
+     * @returns {jQuery<HTMLTableElement>}
      */
     get $table() {
         return this._$table;

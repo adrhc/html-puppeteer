@@ -1,5 +1,16 @@
 class DynamicSelectOneView extends AbstractView {
     /**
+     * @type {jQuery<HTMLElement>}
+     * @private
+     */
+    _$component;
+    /**
+     * @type {string}
+     * @private
+     */
+    _owner;
+
+    /**
      * @param elemId {string}
      * @param placeholder {string}
      * @param optionsToShow {number}
@@ -10,7 +21,13 @@ class DynamicSelectOneView extends AbstractView {
         tmplUrl = "js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/templates/dyna-sel-one.html"
     }) {
         super();
-        this.elemId = elemId;
+        if (elemId instanceof jQuery) {
+            this._$component = elemId;
+            this._owner = !!this._$component.id ? this._$component.id : this._$component.data("id");
+        } else {
+            this._$component = $(`#${elemId}`);
+            this._owner = elemId;
+        }
         this.tmpl = new CachedAjax(tmplUrl);
         this.placeholder = placeholder;
         this.optionsToShow = optionsToShow;
@@ -146,35 +163,35 @@ class DynamicSelectOneView extends AbstractView {
      * @returns {jQuery<HTMLElement>}
      */
     get $tooLessChars() {
-        return $(`#${this.elemId} [data-name='too-less-chars']`);
+        return this.$component.find(`[data-name='too-less-chars']`);
     }
 
     /**
      * @returns {jQuery<HTMLElement>}
      */
     get $nothingFound() {
-        return $(`#${this.elemId} [data-name='nothing-found']`);
+        return this.$component.find(`[data-name='nothing-found']`);
     }
 
     /**
      * @returns {jQuery<HTMLElement>}
      */
     get $tooMany() {
-        return $(`#${this.elemId} [data-name='too-many']`);
+        return this.$component.find(`[data-name='too-many']`);
     }
 
     /**
      * @returns {jQuery<HTMLElement>}
      */
     get $selectionInfoElem() {
-        return $(`#${this.elemId} [data-name='selection-info']`);
+        return this.$component.find(`[data-name='selection-info']`);
     }
 
     /**
      * @returns {jQuery<HTMLSelectElement>}
      */
     get $optionsElem() {
-        return $(`#${this.elemId} [name='options']`);
+        return this.$component.find(`[name='options']`);
     }
 
     /**
@@ -183,14 +200,14 @@ class DynamicSelectOneView extends AbstractView {
      * @return {jQuery<HTMLInputElement>}
      */
     get $titleElem() {
-        return $(`#${this.elemId} [name='${this.titleInputName}']`);
+        return this.$component.find(`[name='${this.titleInputName}']`);
     }
 
     /**
      * @returns {jQuery<HTMLElement>}
      */
     get $component() {
-        return $(`#${this.elemId}`);
+        return this._$component;
     }
 
     get titleInputName() {
@@ -208,7 +225,6 @@ class DynamicSelectOneView extends AbstractView {
     }
 
     get owner() {
-        const owner = this.$component.data("owner");
-        return owner ? owner : "";
+        return this._owner;
     }
 }
