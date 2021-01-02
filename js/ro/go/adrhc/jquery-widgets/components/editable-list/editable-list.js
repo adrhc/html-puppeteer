@@ -167,8 +167,11 @@ class EditableListComponent extends SelectableListComponent {
          * @type {SwappingDetails}
          */
         const swappingDetails = swappingStateChange.data;
+        /**
+         * @type {SelectableSwappingData}
+         */
         const selectableSwappingData = swappingDetails.data;
-        // itemId could be undefined when previously switched to undefined (to switch off the previous)
+        // itemId could be undefined when "previously" is a saved transient item
         const itemId = selectableSwappingData.reloadedId ? selectableSwappingData.reloadedId : selectableSwappingData.itemId;
         if (swappingDetails.isPrevious && !!itemId) {
             console.log(`removing row on swapping off: id = ${itemId}`);
