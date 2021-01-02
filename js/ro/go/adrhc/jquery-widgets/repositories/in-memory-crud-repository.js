@@ -31,9 +31,9 @@ class InMemoryCrudRepository extends CrudRepository {
      * @return {Promise<IdentifiableEntity>|IdentifiableEntity}
      */
     insert(item, useNoPromise = false) {
-        item.id = this.entityHelper.generateId();
         this.items.unshift(item);
         const resultItem = $.extend(true, new IdentifiableEntity(), item);
+        resultItem.id = this.entityHelper.generateId();
         if (useNoPromise) {
             return resultItem;
         } else {

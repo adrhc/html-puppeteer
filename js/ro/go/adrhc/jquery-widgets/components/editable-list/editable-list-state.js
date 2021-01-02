@@ -7,17 +7,4 @@ class EditableListState extends SelectableListState {
             this.removeTransient();
         }
     }
-
-    /**
-     * @param append {boolean|undefined}
-     * @return {IdentifiableEntity}
-     */
-    createNewItem(append = false) {
-        let item = this.findById(EntityUtils.prototype.transientId);
-        if (item) {
-            return item;
-        }
-        item = EntityUtils.prototype.newIdentifiableEntity();
-        return this.insertItem(item, append);
-    }
 }

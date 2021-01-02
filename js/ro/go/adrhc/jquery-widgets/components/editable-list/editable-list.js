@@ -54,10 +54,15 @@ class EditableListComponent extends SelectableListComponent {
          * @type {EditableListComponent}
          */
         const editableList = ev.data;
+        const context = $(this).data("btn");
         editableList.doWithState((editableListState) => {
+            if (editableListState.findById(EntityUtils.prototype.transientId)) {
+                // new item already exists, do nothing
+                return;
+            }
             // todo: correlate "append" createNewItem param with showAdd.tableRelativePositionOnCreate
             const newId = editableListState.createNewItem().id;
-            editableListState.switchTo(newId, "showAdd");
+            editableListState.switchTo(newId, context);
         });
     }
 

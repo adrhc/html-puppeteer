@@ -1,6 +1,12 @@
 class IdentifiableEntity {
+    /**
+     * @param id {number|string|undefined}
+     */
     constructor(id) {
-        this.id = id;
+        /**
+         * @type {number|undefined}
+         */
+        this.id = !!id ? +id : undefined;
     }
 
     /**
