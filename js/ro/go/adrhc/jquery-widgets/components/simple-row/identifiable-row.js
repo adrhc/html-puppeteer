@@ -28,4 +28,17 @@ class IdentifiableRowComponent extends SimpleRowComponent {
         const identifiableEntity = this.state.rowState;
         return this.view.extractInputValuesByDataId(identifiableEntity.id, useOwnerOnFields);
     }
+
+    close() {
+        this._removeSwappingOffRows();
+    }
+
+    /**
+     * @protected
+     */
+    _removeSwappingOffRows() {
+        const itemId = this.state.rowState.id;
+        console.log(`removing rows where [remove-on-row-close=${itemId}]`);
+        this.tableAdapter.$getOwnedRowByData("remove-on-row-close", itemId).remove();
+    }
 }

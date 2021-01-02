@@ -144,42 +144,6 @@ class EditableListComponent extends SelectableListComponent {
     }
 
     /**
-     * At this moment the EditableListState.switchTo already delete the transient entity such
-     * that super.updateViewOnSWAP find no entity when calling reloadItemOnSwapping.
-     *
-     * @param swappingStateChange {StateChange|undefined}
-     * @return {Promise<StateChange>}
-     */
-    updateViewOnSWAP(swappingStateChange) {
-        return super.updateViewOnSWAP(swappingStateChange)
-            .then(swappingStateChange => {
-                this._removeSwappingOffRows(swappingStateChange);
-                return swappingStateChange;
-            });
-    }
-
-    /**
-     * @param swappingStateChange {StateChange|undefined}
-     * @private
-     */
-    _removeSwappingOffRows(swappingStateChange) {
-        /**
-         * @type {SwappingDetails}
-         */
-        const swappingDetails = swappingStateChange.data;
-        /**
-         * @type {SelectableSwappingData}
-         */
-        const selectableSwappingData = swappingDetails.data;
-        // itemId could be undefined when "previously" is a saved transient item
-        const itemId = selectableSwappingData.reloadedId ? selectableSwappingData.reloadedId : selectableSwappingData.itemId;
-        if (swappingDetails.isPrevious && !!itemId) {
-            console.log(`removing row on swapping off: id = ${itemId}`);
-            this.tableAdapter.$getOwnedRowByData("remove-on-swapping-off", itemId).remove();
-        }
-    }
-
-    /**
      * linking triggers to component's handlers (aka capabilities)
      *
      * @private

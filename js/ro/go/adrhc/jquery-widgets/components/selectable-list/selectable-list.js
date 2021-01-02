@@ -70,7 +70,6 @@ class SelectableListComponent extends ElasticListComponent {
 
     /**
      * called by AbstractComponent.updateViewOnStateChange
-     * calls "update" on the "selected" component
      * see also this.state.swappingState.requestType (defaults to "SWAP")
      *
      * @param swappingStateChange {StateChange|undefined}
@@ -78,40 +77,55 @@ class SelectableListComponent extends ElasticListComponent {
      */
     updateViewOnSWAP(swappingStateChange) {
         /**
-         * swappingStateChange.data is {SwappingDetails}
-         * swappingStateChange.data.data is {SelectableSwappingData}
-         */
-        const item = swappingStateChange.data.data.item;
-        if (!item) {
-            // see also SelectableListState._reloadLastSwappedOffItem
-            return Promise.resolve(swappingStateChange);
-        }
-        const rowComponent = this._rowComponentFor(swappingStateChange);
-        return rowComponent
-            .init()
-            .then(() => rowComponent.update(item, "UPDATE"))
-            .then(() => swappingStateChange);
-    }
-
-    /**
-     * Selects the row to display based on swappingDetails.isPrevious and swappingDetails.swappingData.context.
-     *
-     * @param swappingStateChange {StateChange}
-     * @return {IdentifiableRowComponent}
-     * @protected
-     */
-    _rowComponentFor(swappingStateChange) {
-        /**
          * @type {SwappingDetails}
          */
         const swappingDetails = swappingStateChange.data;
-        /**
-         * @type {SelectableSwappingData}
-         */
-        const swappingData = swappingDetails.data;
-        if (!swappingDetails.isPrevious && swappingData.context) {
+        this._closePreviousSelectedRow(swappingDetails);
+        return this._redrawRow(swappingDetails).then(() => swappingStateChange);
+    }
+
+    /**
+     * @param swappingDetails {SwappingDetails}
+     * @return {Promise<StateChange>}
+     * @protected
+     */
+    _redrawRow(swappingDetails) {
+        // item could be undefined when "previously" is a saved transient item which after
+        // SelectableListState._reloadLastSwappedOffItem) is set to undefined; same happens
+        // when removing an item
+        const item = swappingDetails.data.item;
+        if (!item) {
+            return Promise.resolve(undefined);
+        }
+        const rowComponent = this._rowComponentFor(swappingDetails);
+        return rowComponent.init()
+            .then(() => rowComponent.update(item, "UPDATE"));
+    }
+
+    /**
+     * @param swappingDetails {SwappingDetails}
+     * @protected
+     */
+    _closePreviousSelectedRow(swappingDetails) {
+        // closing previous view (selectedRow)
+        if (swappingDetails.isPrevious) {
+            // swappingDetails.data is {SelectableSwappingData}
+            const context = !!swappingDetails.data.context ? swappingDetails.data.context : false;
+            this.swappingRowSelector[context].close();
+        }
+    }
+
+    /**
+     * @param swappingDetails {SwappingDetails}
+     * @return {IdentifiableRowComponent} to be use with swappingDetails
+     * @protected
+     */
+    _rowComponentFor(swappingDetails) {
+        // swappingDetails.data is {SelectableSwappingData}
+        const context = swappingDetails.data.context;
+        if (!swappingDetails.isPrevious && !!context) {
             // this is the current/active selection; depending on "context" a row component or another would be used
-            return this.swappingRowSelector[swappingData.context];
+            return this.swappingRowSelector[context];
         } else {
             // this is the inactive/deactivated/previous selection or the current/active one with a null context
             // todo: consider using the context for inactive/deactivated/previous too
@@ -119,10 +133,18 @@ class SelectableListComponent extends ElasticListComponent {
         }
     }
 
+    /**
+     * Returns the IdentifiableRowComponent dealing with an "active" selection.
+     * The specific row though depend on the SelectableSwappingData.context if
+     * present otherwise is the this.swappingRowSelector[false].
+     *
+     * @return {IdentifiableRowComponent} responsible for the currently "selected" row
+     * @protected
+     */
     get _selectedRowComponent() {
         const selectableSwappingData = this.selectableListState.currentSelectableSwappingData;
         // swappingRowSelector is true/false based where false means "active" (also means that isPrevious is false)
-        const context = selectableSwappingData.context ? selectableSwappingData.context : false;
+        const context = !!selectableSwappingData.context ? selectableSwappingData.context : false;
         return this.swappingRowSelector[context];
     }
 
