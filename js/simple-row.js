@@ -21,7 +21,7 @@ if (Modernizr.template) {
                 const editableRow = SimpleRowFactory.prototype
                     .createIdentifiableRow(dogsTableWithEdit, {
                         rowTmpl: "dogsTableWithEditSelectedRowTmpl",
-                        tableRelativePositionOnCreate: "append"
+                        tableRelativePositionOnCreate: "prepend"
                     });
                 editableRow
                     // switch to existing row (aka enter "edit" mode)
@@ -33,7 +33,12 @@ if (Modernizr.template) {
                     })
                     // switch to new row (aka ADD then enter "edit" mode)
                     .then(() => editableRow
-                        .update({id: EntityUtils.prototype.transientId, name: "new dog"}, "CREATE"))
+                        .update({id: EntityUtils.prototype.transientId, name: "new dog (after id 3)"},
+                            "CREATE", 3))
+                    .then(() => editableRow
+                        .update({id: 999,
+                                name: `new dog (using view's default positioning: ${editableRow.simpleRowView.tableRelativePositionOnCreate})`},
+                            "CREATE"))
                     .then(() => {
                         const extractedEntity = editableRow.extractEntity();
                         console.log("2. extractedEntity:\n", JSON.stringify(extractedEntity));

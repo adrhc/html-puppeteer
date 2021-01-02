@@ -16,30 +16,33 @@ class SimpleRowView extends AbstractTableBasedView {
     }
 
     /**
-     * @param stateChange {StateChange}
-     * @return {Promise<StateChange>}
+     * @param stateChange {PositionStateChange}
+     * @return {Promise<PositionStateChange>}
      */
     update(stateChange) {
         /**
          * @type {IdentifiableEntity}
          */
         const updatedRowState = stateChange.data;
-        const createIfNotExists = stateChange.requestType === "CREATE";
-        let tableRelativePosition = this.tableRelativePositionOnCreate;
-        if (stateChange instanceof CreateStateChange) {
-            tableRelativePosition = this.tableRelativePositionOf(stateChange);
-        }
         this.tableAdapter.renderRowWithTemplate({
             rowDataId: updatedRowState.id,
             data: updatedRowState,
             rowTmplHtml: this.rowTmplHtml,
-            createIfNotExists,
-            tableRelativePosition
+            createIfNotExists: stateChange.requestType === "CREATE",
+            tableRelativePosition: this._tableRelativePositionOf(stateChange)
         })
         return Promise.resolve(stateChange);
     }
 
-    tableRelativePositionOf(createStateChange) {
-        return !!createStateChange.afterItemId ? "append" : "prepend"
+    /**
+     * @param stateChange {PositionStateChange}
+     * @return {"prepend"|"append"|undefined|string}
+     * @protected
+     */
+    _tableRelativePositionOf(stateChange) {
+        if (stateChange.afterItemId == null) {
+            return this.tableRelativePositionOnCreate;
+        }
+        return !!stateChange.afterItemId ? "append" : "prepend"
     }
 }

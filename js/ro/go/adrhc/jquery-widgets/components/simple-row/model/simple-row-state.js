@@ -10,9 +10,10 @@ class SimpleRowState extends BasicState {
     /**
      * @param updatedRowState {*}
      * @param requestType {"CREATE"|"DELETE"|"UPDATE"|undefined}
+     * @param afterItemId {number|string}
      */
-    update(updatedRowState, requestType) {
+    update(updatedRowState, requestType, afterItemId) {
         this.rowState = updatedRowState;
-        this.collectStateChange(new StateChange(requestType, updatedRowState));
+        this.collectStateChange(new PositionStateChange(requestType, updatedRowState, afterItemId));
     }
 }

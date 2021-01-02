@@ -44,10 +44,11 @@ class PersonRowEditor extends IdentifiableRowComponent {
     /**
      * @param item {Person}
      * @param requestType {string|undefined}
+     * @param afterItemId {number|string}
      * @return {Promise<StateChange>}
      */
-    update(item, requestType) {
-        return super.update(item, requestType)
+    update(item, requestType, afterItemId) {
+        return super.update(item, requestType, afterItemId)
             .then(stateChange => this._initCatsTable(stateChange).then(() => stateChange));
     }
 

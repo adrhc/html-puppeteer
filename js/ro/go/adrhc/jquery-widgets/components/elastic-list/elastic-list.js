@@ -31,8 +31,13 @@ class ElasticListComponent extends SimpleListComponent {
         return this.updateViewOnStateChanges();
     }
 
+    /**
+     * @param stateChange {PositionStateChange}
+     * @return {Promise<PositionStateChange>}
+     * @private
+     */
     _updateViewOnKnownStateChange(stateChange) {
         console.log("ElasticListComponent.updateViewOnStateChange\n", JSON.stringify(stateChange));
-        return this.simpleRow.update(stateChange.data, stateChange.requestType);
+        return this.simpleRow.update(stateChange.data, stateChange.requestType, stateChange.afterItemId);
     }
 }
