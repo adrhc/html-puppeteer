@@ -123,9 +123,14 @@ class AbstractComponent {
      */
     _handleRepoErrors(promise) {
         return promise.catch((jqXHR, textStatus, errorThrown) => {
-            console.log(textStatus, errorThrown);
-            alert(`${textStatus}\n${jqXHR.responseText}`);
-            throw textStatus;
+            if (!!textStatus || !!errorThrown) {
+                console.log(`errorThrown: ${errorThrown}`);
+                alert(`${textStatus}\n${jqXHR.responseText}`);
+                throw textStatus;
+            } else {
+                alert(JSON.stringify(jqXHR));
+                throw jqXHR;
+            }
         });
     }
 
