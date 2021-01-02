@@ -21,6 +21,7 @@ class InMemoryCrudRepository extends CrudRepository {
         if (removedItem) {
             return Promise.resolve(removedItem);
         } else {
+            console.error(`repository couldn't find to delete id: ${id}`);
             return Promise.reject(id);
         }
     }
