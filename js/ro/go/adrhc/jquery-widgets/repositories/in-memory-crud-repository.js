@@ -26,14 +26,16 @@ class InMemoryCrudRepository extends CrudRepository {
     }
 
     /**
+     * usually, after saving, the item is no longer used by the caller so I can store it directly into this.items
+     *
      * @param item {IdentifiableEntity}
      * @param useNoPromise {boolean|undefined}
      * @return {Promise<IdentifiableEntity>|IdentifiableEntity}
      */
     insert(item, useNoPromise = false) {
+        item.id = this.entityHelper.generateId();
         this.items.unshift(item);
         const resultItem = $.extend(true, new IdentifiableEntity(), item);
-        resultItem.id = this.entityHelper.generateId();
         if (useNoPromise) {
             return resultItem;
         } else {
@@ -42,6 +44,8 @@ class InMemoryCrudRepository extends CrudRepository {
     }
 
     /**
+     * usually, after saving, the item is no longer used by the caller so I can store it directly into this.items
+     *
      * @param item {IdentifiableEntity}
      * @return {Promise<IdentifiableEntity>}
      */
