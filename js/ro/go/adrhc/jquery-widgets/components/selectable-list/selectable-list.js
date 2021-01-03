@@ -122,10 +122,10 @@ class SelectableListComponent extends ElasticListComponent {
      */
     _rowComponentFor(swappingDetails) {
         // swappingDetails.data is {SelectableSwappingData}
-        const context = swappingDetails.data.context;
-        if (!swappingDetails.isPrevious && !!context) {
+        const swappingContext = swappingDetails.data.context;
+        if (!swappingDetails.isPrevious && !!swappingContext) {
             // this is the current/active selection; depending on "context" a row component or another would be used
-            return this.swappingRowSelector[context];
+            return this.swappingRowSelector[swappingContext];
         } else {
             // this is the inactive/deactivated/previous selection or the current/active one with a null context
             // todo: consider using the context for inactive/deactivated/previous too
