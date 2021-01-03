@@ -61,7 +61,9 @@ class EditableListComponent extends SelectableListComponent {
                 return;
             }
             // todo: correlate "append" createNewItem param with showAdd.tableRelativePositionOnCreate
+            // events: CREATE
             const newId = editableListState.createNewItem().id;
+            // events: SWAP (isPrevious=true, if any previous exists) + SWAP (isPrevious=false)
             editableListState.switchTo(newId, context);
         });
     }
@@ -134,7 +136,7 @@ class EditableListComponent extends SelectableListComponent {
         editableList._handleRepoErrors(editableList.repository.save(entity))
             .then(savedEntity =>
                 editableList.doWithState((editableListState) => {
-                    // events: SWAP + DELETE (transient, if any)
+                    // events: SWAP (isPrevious=true, if any previous exists) + DELETE (transient, if any)
                     editableListState.switchToOff();
                     // todo: sync "append" save param with notSelectedRow.tableRelativePositionOnCreate
                     // events: DELETE (transient, if any) + CREATE or just UPDATE
