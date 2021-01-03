@@ -66,14 +66,11 @@
             </div>
         </td>
     </tr>
-    <tr data-owner="personsTable" data-identifiable-row-part="{{id}}">
-        <td colspan="4">identifiable-row-part</td>
-    </tr>
 </template>
 
 <!-- EDIT row template -->
 <template id="personsTableEditableRowTmpl">
-    <tr data-owner="personsTable" data-id="{{id}}">
+    <tr data-owner="personsTable" data-id="{{id}}" class="row-editor">
         <td>
             <input data-owner="personsTable" type="hidden" name="id" value="{{id}}">
         </td>
@@ -91,8 +88,8 @@
             </div>
         </td>
     </tr>
-    <tr data-owner="personsTable" data-identifiable-row-part="{{id}}">
-        <td colspan="4">identifiable-row-part</td>
+    <tr data-owner="personsTable" data-secondary-row-part="{{id}}" class="row-part">
+        <td colspan="4">secondary-row-part</td>
     </tr>
 </template>
 

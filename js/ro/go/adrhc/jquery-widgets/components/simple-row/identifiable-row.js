@@ -30,18 +30,13 @@ class IdentifiableRowComponent extends SimpleRowComponent {
     }
 
     updateViewOnDELETE(stateChange) {
-        // _removeSwappingOffRows needs existing state which is reset by updateViewOnDELETE
-        // so we need to call _removeSwappingOffRows before updateViewOnDELETE
-        this._removeSwappingOffRows();
+        this.removeSecondaryRowParts();
         return super.updateViewOnDELETE(stateChange);
     }
 
-    /**
-     * @protected
-     */
-    _removeSwappingOffRows() {
+    removeSecondaryRowParts() {
         const itemId = this.state.rowState.id;
-        console.log(`removing rows where [identifiable-row-part=${itemId}]`);
-        this.tableAdapter.$getOwnedRowByData("identifiable-row-part", itemId).remove();
+        console.log(`removing rows where [secondary-row-part=${itemId}]`);
+        this.tableAdapter.$getOwnedRowByData("secondary-row-part", itemId).remove();
     }
 }

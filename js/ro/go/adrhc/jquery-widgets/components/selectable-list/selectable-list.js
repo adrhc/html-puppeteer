@@ -114,7 +114,14 @@ class SelectableListComponent extends ElasticListComponent {
         if (swappingDetails.isPrevious) {
             // swappingDetails.data is {SelectableSwappingData}
             const context = !!swappingDetails.data.context ? swappingDetails.data.context : false;
-            this.swappingRowSelector[context].close();
+            /**
+             * @type {IdentifiableRowComponent}
+             */
+            const identifiableRow = this.swappingRowSelector[context];
+            // removeSecondaryRowParts needs existing state which is reset by close()
+            // so we need to call removeSecondaryRowParts before identifiableRow.close()
+            identifiableRow.removeSecondaryRowParts();
+            identifiableRow.close();
         }
     }
 
