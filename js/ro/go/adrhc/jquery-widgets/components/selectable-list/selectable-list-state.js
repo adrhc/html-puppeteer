@@ -30,6 +30,9 @@ class SelectableListState extends CrudListState {
         return switched;
     }
 
+    /**
+     * @return {boolean} whether the switch off actually happened or not
+     */
     switchToOff() {
         const previousSelectableSwappingData = this.currentSelectableSwappingData;
         const switched = this.swappingState.switchOff();
@@ -40,6 +43,8 @@ class SelectableListState extends CrudListState {
     }
 
     /**
+     * reload last swapped off item
+     *
      * @param previousSelectableSwappingData {SelectableSwappingData|undefined}
      * @param newSelectableSwappingData {SelectableSwappingData|undefined}
      * @protected

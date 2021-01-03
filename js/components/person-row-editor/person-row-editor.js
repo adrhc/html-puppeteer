@@ -16,7 +16,7 @@ class PersonRowEditor extends IdentifiableRowComponent {
     _initCatsTable(stateChange) {
         const tableId = "catsTable";
 
-        const roAndRwRow = SimpleRowFactory.prototype.createIdentifiableRow(
+        const catRow = SimpleRowFactory.prototype.createIdentifiableRow(
             tableId, {
                 rowTmpl: "editableCatsRowTmpl", tableRelativePositionOnCreate: "append"
             });
@@ -29,9 +29,9 @@ class PersonRowEditor extends IdentifiableRowComponent {
             state: new CatsListState(repository),
             tableId,
             bodyRowTmplId: "editableCatsRowTmpl",
-            readOnlyRow: roAndRwRow,
-            editableRow: roAndRwRow,
-            deletableRow: roAndRwRow
+            readOnlyRow: catRow,
+            editableRow: catRow,
+            deletableRow: catRow
         });
 
         return this.catsTableComp.init();

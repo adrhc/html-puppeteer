@@ -21,8 +21,8 @@ class EditableListFactory {
                state = new EditableListState(),
                readOnlyRow,
                editableRow,
-               view = new SimpleListView(mustacheTableElemAdapter),
-               deletableRow
+               deletableRow,
+               view = new SimpleListView(mustacheTableElemAdapter)
            }) {
         return new EditableListComponent(repository, state, view, readOnlyRow, editableRow, deletableRow);
     }

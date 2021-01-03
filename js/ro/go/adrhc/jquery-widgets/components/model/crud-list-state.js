@@ -63,7 +63,11 @@ class CrudListState extends SimpleListState {
      */
     removeById(id) {
         const removedItem = EntityUtils.prototype.removeById(id, this.items);
-        this.collectStateChange(new StateChange("DELETE", removedItem));
+        if (!!removedItem) {
+            this.collectStateChange(new StateChange("DELETE", removedItem));
+        } else {
+            console.log(`item id ${id} is missing (already deleted by someone else)`)
+        }
         return removedItem;
     }
 

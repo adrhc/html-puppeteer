@@ -36,15 +36,11 @@ if (Modernizr.template) {
         const readOnlyRow = SimpleRowFactory.prototype.createIdentifiableRow(
             tableId, {tableRelativePositionOnCreate});
         const editableRow = PersonRowEditorFactory.prototype.create(
-            tableId, {
-                rowTmpl: "personsTableEditableRowTmpl", tableRelativePositionOnCreate
-            });
+            tableId, {rowTmpl: "personsTableEditableRowTmpl"});
         // doesn't make sense to use tableRelativePositionOnCreate
         // because the row to delete always have to already exist
         const deletableRow = SimpleRowFactory.prototype.createIdentifiableRow(
-            tableId, {
-                rowTmpl: "personsTableDeletableRowTmpl"
-            });
+            tableId, {rowTmpl: "personsTableDeletableRowTmpl"});
 
         const component = EditableListFactory.prototype
             .create({repository: personsRepository, tableId, readOnlyRow, editableRow, deletableRow});
