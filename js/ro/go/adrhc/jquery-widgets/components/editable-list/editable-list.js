@@ -134,12 +134,9 @@ class EditableListComponent extends SelectableListComponent {
         editableList._handleRepoErrors(editableList.repository.save(entity))
             .then(savedEntity =>
                 editableList.doWithState((editableListState) => {
+                    editableListState.switchToOff();
                     // todo: sync "append" save param with notSelectedRow.tableRelativePositionOnCreate
                     editableListState.save(savedEntity, rowDataId);
-                    // When not using repository resetSwappingState leaves the edited
-                    // row in place otherwise would be deleted by swapping processing.
-                    // crudListState.resetSwappingState();
-                    editableListState.switchToOff();
                 }));
     }
 
