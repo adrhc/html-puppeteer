@@ -113,8 +113,8 @@ class EditableListComponent extends SelectableListComponent {
         editableList._handleRepoErrors(editableList.repository.delete(rowDataId))
             .then(() =>
                 editableList.doWithState((editableListState) => {
-                    editableListState.removeById(rowDataId);
                     editableListState.switchToOff();
+                    editableListState.removeById(rowDataId);
                 }));
     }
 
