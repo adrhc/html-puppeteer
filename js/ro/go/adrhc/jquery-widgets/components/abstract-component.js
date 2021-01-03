@@ -92,12 +92,12 @@ class AbstractComponent {
      * @protected
      */
     _updateViewOnKnownStateChange(stateChange) {
-        console.debug(`_updateViewOnKnownStateChange:\n${JSON.stringify(stateChange)}`);
+        console.debug(`${this.constructor.name}._updateViewOnKnownStateChange:\n${JSON.stringify(stateChange)}`);
         return this.view.update(stateChange);
     }
 
     updateViewOnAny(stateChange) {
-        console.debug(`updateViewOnAny:\n${JSON.stringify(stateChange)}`);
+        console.debug(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
         return this.view.update(stateChange);
     }
 
