@@ -35,10 +35,9 @@ if (Modernizr.template) {
                     crudListState.updateItem({id: 3, name: "updated dog3"});
                     crudListState.removeById(2);
                     crudListState.insertItem({
-                            id: 2,
-                            name: `restored dog2 (with table ${tableRelativePositionOnCreate})`
-                        },
-                        tableRelativePositionOnCreate === "append");
+                        id: 2,
+                        name: `restored dog2 (with table ${tableRelativePositionOnCreate})`
+                    }, tableRelativePositionOnCreate === "append");
                 });
             });
     })

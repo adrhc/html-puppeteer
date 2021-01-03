@@ -29,8 +29,11 @@ class IdentifiableRowComponent extends SimpleRowComponent {
         return this.view.extractInputValuesByDataId(identifiableEntity.id, useOwnerOnFields);
     }
 
-    close() {
+    updateViewOnDELETE(stateChange) {
+        // _removeSwappingOffRows needs existing state which is reset by updateViewOnDELETE
+        // so we need to call _removeSwappingOffRows before updateViewOnDELETE
         this._removeSwappingOffRows();
+        return super.updateViewOnDELETE(stateChange);
     }
 
     /**
@@ -38,7 +41,7 @@ class IdentifiableRowComponent extends SimpleRowComponent {
      */
     _removeSwappingOffRows() {
         const itemId = this.state.rowState.id;
-        console.log(`removing rows where [remove-on-row-close=${itemId}]`);
-        this.tableAdapter.$getOwnedRowByData("remove-on-row-close", itemId).remove();
+        console.log(`removing rows where [identifiable-row-part=${itemId}]`);
+        this.tableAdapter.$getOwnedRowByData("identifiable-row-part", itemId).remove();
     }
 }

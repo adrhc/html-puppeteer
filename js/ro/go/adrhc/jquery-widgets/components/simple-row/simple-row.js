@@ -21,9 +21,17 @@ class SimpleRowComponent extends AbstractTableBasedComponent {
         return this.updateViewOnStateChange();
     }
 
+    /**
+     * @param stateChange {StateChange}
+     * @return {Promise<StateChange>}
+     */
     updateViewOnDELETE(stateChange) {
         const updatedRowState = stateChange.data;
         this.tableAdapter.deleteRowByDataId(updatedRowState.id);
         return Promise.resolve(stateChange);
+    }
+
+    close() {
+        this.state.reset();
     }
 }

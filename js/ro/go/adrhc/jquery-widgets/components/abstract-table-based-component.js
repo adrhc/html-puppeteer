@@ -50,6 +50,9 @@ class AbstractTableBasedComponent extends AbstractComponent {
         return EntityUtils.prototype.removeTransientId(values);
     }
 
+    /**
+     * @return {string}
+     */
     get owner() {
         return this.tableAdapter.owner;
     }
