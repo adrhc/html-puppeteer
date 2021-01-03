@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/ro/go/adrhc/responstable-table.css">
     <link rel="stylesheet" href="css/ro/go/adrhc/util.css">
     <link rel="stylesheet" href="css/ro/go/adrhc/dyna-sel-one.css">
+    <link rel="stylesheet" href="css/app.css">
     <script src="libraries/modernizr-custom.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://unpkg.com/mustache@latest"></script>
@@ -37,11 +38,14 @@
 
 <!-- dogs editable row template -->
 <template id="dogsTableEditableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}">
+    <tr data-owner="dogsTable" data-id="{{id}}" class="row-editor">
         <td>
             <input type="hidden" name="id" value="{{id}}">
             <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
         </td>
+    </tr>
+    <tr data-owner="dogsTable" data-identifiable-row-part="{{id}}" class="row-part">
+        <td colspan="2">identifiable-row-part {{id}}</td>
     </tr>
 </template>
 

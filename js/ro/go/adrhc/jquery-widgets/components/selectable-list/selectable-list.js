@@ -80,8 +80,8 @@ class SelectableListComponent extends ElasticListComponent {
          * @type {SwappingDetails}
          */
         const swappingDetails = swappingStateChange.data;
-        this._closePreviousSelectedRow(swappingDetails);
-        return this._redrawRow(swappingDetails).then(() => swappingStateChange);
+        this._closePreviousRow(swappingDetails);
+        return this._rowPickAndRedraw(swappingDetails).then(() => swappingStateChange);
     }
 
     /**
@@ -89,7 +89,7 @@ class SelectableListComponent extends ElasticListComponent {
      * @return {Promise<StateChange>}
      * @protected
      */
-    _redrawRow(swappingDetails) {
+    _rowPickAndRedraw(swappingDetails) {
         // item could be undefined when "previously" is a saved transient item which after
         // SelectableListState._reloadLastSwappedOffItem) is set to undefined; same happens
         // when removing an item
@@ -103,10 +103,13 @@ class SelectableListComponent extends ElasticListComponent {
     }
 
     /**
+     * The closing must be performed by the specific selected row: could be based on swapping context
+     * or could be the default (i.e. swappingRowSelector[false] = selectedRow).
+     *
      * @param swappingDetails {SwappingDetails}
      * @protected
      */
-    _closePreviousSelectedRow(swappingDetails) {
+    _closePreviousRow(swappingDetails) {
         // closing previous view (selectedRow)
         if (swappingDetails.isPrevious) {
             // swappingDetails.data is {SelectableSwappingData}

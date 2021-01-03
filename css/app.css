@@ -6,7 +6,6 @@
     max-width: 100px;
 }
 
-
 table td input {
     width: 100%;
     width: -webkit-fill-available;
@@ -20,4 +19,8 @@ table td input {
 
 .simple-deletable-row {
     text-decoration: line-through;
+}
+
+tr.row-editor, tr.row-part {
+    background-color: floralwhite !important;
 }
