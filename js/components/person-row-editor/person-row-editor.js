@@ -26,12 +26,11 @@ class PersonRowEditor extends IdentifiableRowComponent {
 
         this.catsTableComp = EditableListFactory.prototype.create({
             repository,
+            // CatsListState cancels swapping events so there's no need for editableRow and deletableRow
             state: new CatsListState(repository),
             tableId,
             bodyRowTmplId: "editableCatsRowTmpl",
-            readOnlyRow: catRow,
-            editableRow: catRow,
-            deletableRow: catRow
+            readOnlyRow: catRow
         });
 
         return this.catsTableComp.init();
