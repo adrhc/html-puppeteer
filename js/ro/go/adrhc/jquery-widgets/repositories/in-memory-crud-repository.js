@@ -52,7 +52,7 @@ class InMemoryCrudRepository extends CrudRepository {
     update(item) {
         const removedIndex = EntityUtils.prototype.findAndReplaceById(item, this.items);
         if (removedIndex < 0) {
-            return Promise.reject(`repository couldn't find to update:\n${JSON.stringify(item)}`);
+            return Promise.reject("repository couldn't find item to update:\n" + JSON.stringify(item));
         } else {
             return Promise.resolve($.extend(true, new IdentifiableEntity(), item));
         }
