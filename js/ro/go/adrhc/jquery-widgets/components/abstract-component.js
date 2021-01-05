@@ -127,13 +127,13 @@ class AbstractComponent {
      */
     _handleRepoErrors(promise) {
         return promise.catch((jqXHR, textStatus, errorThrown) => {
-            if (!!textStatus || !!errorThrown) {
+            if (typeof jqXHR === "string" || typeof jqXHR === "number") {
+                alert(jqXHR);
+                throw jqXHR;
+            } else {
                 console.log(`errorThrown: ${errorThrown}`);
                 alert(`${textStatus}\n${jqXHR.responseText}`);
                 throw textStatus;
-            } else {
-                alert(JSON.stringify(jqXHR));
-                throw jqXHR;
             }
         });
     }

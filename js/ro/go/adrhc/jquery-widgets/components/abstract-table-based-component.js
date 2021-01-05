@@ -3,6 +3,10 @@ class AbstractTableBasedComponent extends AbstractComponent {
      * @type {TableElementAdapter}
      */
     tableAdapter;
+    /**
+     * @type {AbstractTableBasedView}
+     */
+    abstractTableBasedView;
 
     /**
      * @param state {BasicState}
@@ -10,6 +14,7 @@ class AbstractTableBasedComponent extends AbstractComponent {
      */
     constructor(state, view) {
         super(state, view);
+        this.abstractTableBasedView = view;
         this.tableAdapter = view.tableAdapter;
     }
 
@@ -33,7 +38,7 @@ class AbstractTableBasedComponent extends AbstractComponent {
      * @return {Array<IdentifiableEntity>}
      */
     extractAllEntities(useOwnerOnFields) {
-        return this.view.extractAllRowsInputValues(useOwnerOnFields)
+        return this.abstractTableBasedView.extractAllRowsInputValues(useOwnerOnFields)
             .map(it => EntityUtils.prototype.removeTransientId(it));
     }
 
@@ -45,7 +50,7 @@ class AbstractTableBasedComponent extends AbstractComponent {
      * @return {IdentifiableEntity}
      */
     extractEntityByDataId(rowDataId, useOwnerOnFields) {
-        const values = this.view.extractInputValuesByDataId(rowDataId, useOwnerOnFields);
+        const values = this.abstractTableBasedView.extractInputValuesByDataId(rowDataId, useOwnerOnFields);
         return EntityUtils.prototype.removeTransientId(values);
     }
 
