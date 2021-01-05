@@ -12,7 +12,7 @@ class ElasticListComponent extends SimpleListComponent {
     constructor(repository, state, view, simpleRow) {
         super(repository, state, view);
         this.simpleRow = simpleRow;
-        this.knownRequestTypes = ["CREATE", "UPDATE", "DELETE"];
+        this.stateChangesDispatcher.knownRequestTypes.splice(0, 0, "CREATE", "UPDATE", "DELETE");
     }
 
     /**
@@ -36,7 +36,7 @@ class ElasticListComponent extends SimpleListComponent {
      * @return {Promise<PositionStateChange>}
      * @private
      */
-    _updateViewOnKnownStateChange(stateChange) {
+    updateViewOnKnownStateChange(stateChange) {
         console.log("ElasticListComponent.updateViewOnStateChange\n", JSON.stringify(stateChange));
         return this.simpleRow.update(stateChange.data, stateChange.requestType, stateChange.afterItemId);
     }

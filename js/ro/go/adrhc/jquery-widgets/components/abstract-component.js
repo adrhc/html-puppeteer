@@ -8,19 +8,26 @@ class AbstractComponent {
      */
     view;
     /**
-     * @type {string[]}
+     * @type {StateChangesDispatcher}
      */
-    knownRequestTypes;
+    stateChangesDispatcher;
 
     /**
      * @param state {BasicState}
      * @param view {AbstractView}
-     * @param knownRequestTypes {string[]}
      */
-    constructor(state, view, knownRequestTypes = []) {
+    constructor(state, view) {
         this.state = state;
         this.view = view;
-        this.knownRequestTypes = knownRequestTypes;
+        this.stateChangesDispatcher = new StateChangesDispatcher(this);
+    }
+
+    updateViewOnStateChanges(stateChanges, applyChangesStartingFromLatest) {
+        return this.stateChangesDispatcher.updateViewOnStateChanges(stateChanges, applyChangesStartingFromLatest);
+    }
+
+    updateViewOnStateChange(stateChange) {
+        return this.stateChangesDispatcher.updateViewOnStateChange(stateChange);
     }
 
     /**
@@ -58,57 +65,10 @@ class AbstractComponent {
     }
 
     /**
-     * Process (orderly) multiple state changes to update the view.
-     *
-     * @param stateChanges {StateChange[]|undefined}
-     * @param applyChangesStartingFromLatest {boolean|undefined}
-     * @return {Promise<StateChange[]>}
-     */
-    updateViewOnStateChanges(stateChanges, applyChangesStartingFromLatest) {
-        stateChanges = stateChanges ? stateChanges : this.state.consumeAll(applyChangesStartingFromLatest);
-        if (!stateChanges || !stateChanges.length) {
-            // can happen when switching to undefined multiple times (e.g. dblclick on header)
-            // or clicking in an input box on an editable row
-            console.warn("no state changes!");
-            return Promise.resolve(stateChanges);
-        }
-        const promiseHolder = {};
-        stateChanges.forEach(stateChange => {
-            if (promiseHolder.promise) {
-                promiseHolder.promise = promiseHolder.promise.then(() => this.updateViewOnStateChange(stateChange));
-            } else {
-                promiseHolder.promise = this.updateViewOnStateChange(stateChange);
-            }
-        });
-        return promiseHolder.promise.then(() => stateChanges);
-    }
-
-    /**
      * @param stateChange {StateChange|undefined}
      * @return {Promise<StateChange>}
      */
-    updateViewOnStateChange(stateChange) {
-        stateChange = stateChange ? stateChange : this.state.consumeOne();
-        if (!stateChange) {
-            console.warn("no state change!");
-            return Promise.resolve(stateChange);
-        }
-        const fnName = `updateViewOn${stateChange.requestType}`;
-        if (typeof this[fnName] === "function") {
-            return this[fnName](stateChange);
-        } else if (this.knownRequestTypes.includes(stateChange.requestType)) {
-            return this._updateViewOnKnownStateChange(stateChange);
-        } else {
-            return this.updateViewOnAny(stateChange);
-        }
-    }
-
-    /**
-     * @param stateChange {StateChange|undefined}
-     * @return {Promise<StateChange>}
-     * @protected
-     */
-    _updateViewOnKnownStateChange(stateChange) {
+    updateViewOnKnownStateChange(stateChange) {
         console.debug(`${this.constructor.name}._updateViewOnKnownStateChange:\n${JSON.stringify(stateChange)}`);
         return this.view.update(stateChange);
     }
