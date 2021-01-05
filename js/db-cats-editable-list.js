@@ -40,10 +40,13 @@ if (Modernizr.template) {
 
         const readOnlyRow = SimpleRowFactory.prototype.createIdentifiableRow(
             tableId, {tableRelativePositionOnCreate});
-        const editableRow = PersonRowEditorFactory.prototype.create(
+
+        const editableRow = SimpleRowFactory.prototype.createIdentifiableRow(
             tableId, {
-                rowTmpl: "personsTableEditableRowTmpl", tableRelativePositionOnCreate
+                rowTmpl: "personsTableEditableRowTmpl",
+                componentSpecifications: new CatsComponentSpec()
             });
+
         // doesn't make sense to use tableRelativePositionOnCreate
         // because the row to delete always have to already exist
         const deletableRow = SimpleRowFactory.prototype.createIdentifiableRow(

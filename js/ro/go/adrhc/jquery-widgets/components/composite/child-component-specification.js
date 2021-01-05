@@ -15,7 +15,7 @@ class ChildComponentSpecification {
     /**
      * @param elemSelector {string}
      * @param compFactory {AbstractComponentFactory|function}
-     * @param parentStateUpdater {ParentStateUpdater}
+     * @param parentStateUpdater {ParentStateUpdater|function}
      */
     constructor(elemSelector, compFactory, parentStateUpdater) {
         this.elemSelector = elemSelector;

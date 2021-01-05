@@ -28,7 +28,7 @@ class AbstractComponent {
     }
 
     /**
-     * @param compSpec {ChildComponentSpecification}
+     * @param compSpec {ChildComponentSpecification|ChildComponentSpecification[]}
      */
     addComponentSpec(compSpec) {
         return this.compositeComponent.addComponentSpec(compSpec);
@@ -99,8 +99,10 @@ class AbstractComponent {
      * @param useOwnerOnFields {boolean}
      * @return {*}
      */
-    extractInputValues(useOwnerOnFields = false) {
-        return this.view.extractInputValues(useOwnerOnFields);
+    extractInputValues(useOwnerOnFields = this.compositeComponent.hasComponentSpecifications()) {
+        const item = this.view.extractInputValues(useOwnerOnFields);
+        this.updateWithKidsState(item);
+        return item;
     }
 
     /**

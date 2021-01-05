@@ -5,7 +5,8 @@ class SimpleRowFactory {
             state = new SimpleRowState(),
             rowTmpl,
             rowTmplHtml,
-            tableRelativePositionOnCreate
+            tableRelativePositionOnCreate,
+            componentSpecifications
         }
     ) {
         const mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, rowTmpl);
@@ -14,7 +15,11 @@ class SimpleRowFactory {
             rowTmplHtml,
             tableRelativePositionOnCreate
         });
-        return new SimpleRowComponent(state, view);
+        const simpleRowComponent = new SimpleRowComponent(state, view);
+        if (componentSpecifications) {
+            simpleRowComponent.addComponentSpec(componentSpecifications);
+        }
+        return simpleRowComponent;
     }
 
     createIdentifiableRow(
@@ -23,7 +28,8 @@ class SimpleRowFactory {
             state = new SimpleRowState(),
             rowTmpl,
             rowTmplHtml,
-            tableRelativePositionOnCreate
+            tableRelativePositionOnCreate,
+            componentSpecifications
         }
     ) {
         const mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, rowTmpl);
@@ -32,6 +38,10 @@ class SimpleRowFactory {
             rowTmplHtml,
             tableRelativePositionOnCreate
         });
-        return new IdentifiableRowComponent(state, view);
+        const identifiableRowComponent = new IdentifiableRowComponent(state, view);
+        if (componentSpecifications) {
+            identifiableRowComponent.addComponentSpec(componentSpecifications);
+        }
+        return identifiableRowComponent;
     }
 }

@@ -1,10 +1,21 @@
-class CatsTableFactory extends AbstractComponentFactory {
+class CatsComponentSpec extends ChildComponentSpecification {
+    constructor() {
+        super("[data-id='catsTable']",
+            CatsComponentSpec.createCatsTable,
+            CatsComponentSpec.updateParentStateWithCats);
+    }
+
+    static updateParentStateWithCats(parentState, childComp) {
+        parentState.cats = childComp.extractAllEntities(true);
+        return true;
+    }
+
     /**
      * @param $tableElem {jQuery<HTMLElement>}
      * @param parentState {SimpleRowState}
      * @return {EditableListComponent}
      */
-    create($tableElem, parentState) {
+    static createCatsTable($tableElem, parentState) {
         const catRow = SimpleRowFactory.prototype.createIdentifiableRow(
             $tableElem, {
                 rowTmpl: "editableCatsRowTmpl", tableRelativePositionOnCreate: "append"

@@ -28,7 +28,8 @@ class SimpleRowComponent extends AbstractComponent {
      */
     update(item, requestType = "UPDATE", afterItemId) {
         this.simpleRowState.update(item, requestType, afterItemId);
-        return this.updateViewOnStateChange();
+        return this.updateViewOnStateChange()
+            .then(stateChange => this.initKids().then(() => stateChange));
     }
 
     /**

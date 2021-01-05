@@ -23,10 +23,14 @@ class CompositeComponent {
     }
 
     /**
-     * @param compSpec {ChildComponentSpecification}
+     * @param compSpec {ChildComponentSpecification|ChildComponentSpecification[]}
      */
     addComponentSpec(compSpec) {
-        this.componentSpecs.push(compSpec);
+        if ($.isArray(compSpec)) {
+            compSpec.forEach(it => this.componentSpecs.push(it));
+        } else {
+            return this.componentSpecs.push(compSpec);
+        }
     }
 
     /**
@@ -49,6 +53,13 @@ class CompositeComponent {
             }
         });
         return result.existsChange;
+    }
+
+    /**
+     * @return {boolean} whether has component specifications or not
+     */
+    hasComponentSpecifications() {
+        return this.componentSpecs.length > 0;
     }
 
     /**
