@@ -15,8 +15,6 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     }
 
     /**
-     * component initializer: (re)load data, configure events
-     *
      * @return {Promise<StateChange[]|undefined>}
      */
     init() {

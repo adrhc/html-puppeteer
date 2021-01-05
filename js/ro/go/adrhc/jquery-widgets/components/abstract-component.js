@@ -31,6 +31,8 @@ class AbstractComponent {
     }
 
     /**
+     * component initializer: (re)load state, update the view, configure events
+     *
      * @return {Promise<StateChange[]|undefined>}
      */
     init() {
