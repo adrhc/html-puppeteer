@@ -1,3 +1,7 @@
+/**
+ * This is a view able to compute at each update its $elem and owner but unable to reset its tableAdapter;
+ * it's almost like a stateless view, the $elem and owner are useful only when updating the view.
+ */
 class SimpleRowView extends AbstractTableBasedView {
     /**
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
@@ -11,6 +15,7 @@ class SimpleRowView extends AbstractTableBasedView {
         tableRelativePositionOnCreate
     }) {
         super(mustacheTableElemAdapter);
+        this.$elem = undefined;
         this.rowTmplHtml = HtmlUtils.prototype.templateOf(rowTmpl, rowTmplHtml);
         this.tableRelativePositionOnCreate = tableRelativePositionOnCreate;
     }
@@ -31,6 +36,7 @@ class SimpleRowView extends AbstractTableBasedView {
             createIfNotExists: stateChange.requestType === "CREATE",
             tableRelativePosition: this._tableRelativePositionOf(stateChange)
         })
+        this.$elem = this.tableAdapter.$getRowByDataId(updatedRowState.id);
         return Promise.resolve(stateChange);
     }
 
@@ -44,5 +50,12 @@ class SimpleRowView extends AbstractTableBasedView {
             return this.tableRelativePositionOnCreate;
         }
         return !!stateChange.afterItemId ? "append" : "prepend"
+    }
+
+    /**
+     * keep tableAdapter, owner (which makes sens only with associated tableAdapter) and the associated event bindings
+     */
+    reset() {
+        this.$elem = undefined;
     }
 }

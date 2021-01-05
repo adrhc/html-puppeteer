@@ -3,12 +3,48 @@
  */
 class AbstractView {
     /**
+     * @type {jQuery<HTMLElement>}
+     * @protected
+     */
+    _$elem;
+
+    /**
+     * @type {string}
+     * @protected
+     */
+    _owner;
+
+    /**
+     * @param elemId {string|jQuery<HTMLTableRowElement>}
+     * @protected
+     */
+    _setupElem(elemId) {
+        if (elemId instanceof jQuery) {
+            this._$elem = elemId;
+        } else {
+            this._$elem = $(`#${elemId}`);
+        }
+    }
+
+    /**
+     * @protected
+     */
+    _setupOwner() {
+        const dataOwner = this.$elem.data("owner");
+        if (dataOwner) {
+            this._owner = dataOwner;
+        } else {
+            const dataId = this.$elem.data("id");
+            this._owner = dataId ? dataId : this.$elem.attr("id");
+        }
+    }
+
+    /**
      * @param stageChanges {StateChange|StateChange[]}
      * @return {Promise<StateChange|StateChange[]>}
-     * @abstract
      */
     update(stageChanges) {
-        throw "Not implemented!";
+        // do nothing
     }
 
     /**
@@ -16,14 +52,43 @@ class AbstractView {
      * @return {{}}
      */
     extractInputValues(useOwnerOnFields) {
-        return undefined;
+        if (!this.$elem || !this.$elem.length) {
+            console.warn(`${this.constructor.name} $elem is null or empty!`);
+            return undefined;
+        }
+        return FormUtils.prototype.objectifyInputsOf(this.$elem, useOwnerOnFields ? this.owner : undefined);
     }
 
     /**
      * @return {string}
-     * @abstract
      */
     get owner() {
-        throw "Not implemented!";
+        return this._owner;
+    }
+
+    /**
+     * @param owner {string}
+     */
+    set owner(owner) {
+        this._owner = owner;
+    }
+
+    /**
+     * @return {jQuery<HTMLElement>}
+     */
+    get $elem() {
+        return this._$elem;
+    }
+
+    /**
+     * @param $elem {jQuery<HTMLElement>}
+     */
+    set $elem($elem) {
+        this._$elem = $elem;
+    }
+
+    reset() {
+        this._$elem = undefined;
+        this._owner = undefined;
     }
 }

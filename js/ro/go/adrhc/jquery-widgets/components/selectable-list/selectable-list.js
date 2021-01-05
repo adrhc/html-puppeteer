@@ -81,7 +81,7 @@ class SelectableListComponent extends ElasticListComponent {
          */
         const swappingDetails = swappingStateChange.data;
         this._closePreviousRow(swappingDetails);
-        return this._rowPickAndRedraw(swappingDetails).then(() => swappingStateChange);
+        return this._rowPickAndUpdate(swappingDetails).then(() => swappingStateChange);
     }
 
     /**
@@ -89,7 +89,7 @@ class SelectableListComponent extends ElasticListComponent {
      * @return {Promise<StateChange>}
      * @protected
      */
-    _rowPickAndRedraw(swappingDetails) {
+    _rowPickAndUpdate(swappingDetails) {
         // item could be undefined when "previously" is a saved transient item which after
         // SelectableListState._reloadLastSwappedOffItem) is set to undefined; same happens
         // when removing an item
@@ -153,6 +153,9 @@ class SelectableListComponent extends ElasticListComponent {
      */
     get _selectedRowComponent() {
         const selectableSwappingData = this.selectableListState.currentSelectableSwappingData;
+        if (!selectableSwappingData) {
+            return undefined;
+        }
         // swappingRowSelector is true/false based where false means "active" (also means that isPrevious is false)
         const context = !!selectableSwappingData.context ? selectableSwappingData.context : false;
         return this.swappingRowSelector[context];
@@ -162,16 +165,9 @@ class SelectableListComponent extends ElasticListComponent {
      * @param useOwnerOnFields {boolean|undefined}
      * @return {{}}
      */
-    extractSelectionInputValues(useOwnerOnFields) {
-        return this._selectedRowComponent.extractInputValues(useOwnerOnFields);
-    }
-
-    /**
-     * @param useOwnerOnFields {boolean|undefined}
-     * @return {{}}
-     */
-    extractSelectionEntity(useOwnerOnFields) {
-        return this._selectedRowComponent.extractEntity(useOwnerOnFields);
+    extractEntity(useOwnerOnFields) {
+        const selectedRow = this._selectedRowComponent;
+        return selectedRow ? selectedRow.extractEntity(useOwnerOnFields) : undefined;
     }
 
     /**
@@ -180,7 +176,7 @@ class SelectableListComponent extends ElasticListComponent {
      */
     _configureEvents() {
         this.tableAdapter.$table
-            .on(this._withNamespaceFor('dblclick'),
+            .on(this._appendNamespaceTo('dblclick'),
                 `tr${this.ownerSelector}`, this, this.onSwapping);
     }
 }

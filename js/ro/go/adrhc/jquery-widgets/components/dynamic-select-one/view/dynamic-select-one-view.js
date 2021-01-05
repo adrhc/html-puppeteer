@@ -1,16 +1,5 @@
 class DynamicSelectOneView extends AbstractView {
     /**
-     * @type {jQuery<HTMLElement>}
-     * @private
-     */
-    _$component;
-    /**
-     * @type {string}
-     * @private
-     */
-    _owner;
-
-    /**
      * @param elemId {string}
      * @param placeholder {string}
      * @param optionsToShow {number}
@@ -21,13 +10,8 @@ class DynamicSelectOneView extends AbstractView {
         tmplUrl = "js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/templates/dyna-sel-one.html"
     }) {
         super();
-        if (elemId instanceof jQuery) {
-            this._$component = elemId;
-            this._owner = !!this._$component.id ? this._$component.id : this._$component.data("id");
-        } else {
-            this._$component = $(`#${elemId}`);
-            this._owner = elemId;
-        }
+        this._setupElem(elemId);
+        this._setupOwner();
         this.tmpl = new CachedAjax(tmplUrl);
         this.placeholder = placeholder;
         this.optionsToShow = optionsToShow;
@@ -38,7 +22,6 @@ class DynamicSelectOneView extends AbstractView {
      * @param focusOnSearchInput
      */
     update(data, focusOnSearchInput) {
-        this._clearOnBlurHandlers();
         const viewModel = this._viewModelOf(data);
         return this._renderView(viewModel)
             .then(() => {
@@ -57,7 +40,7 @@ class DynamicSelectOneView extends AbstractView {
     _renderView(viewModel) {
         return this.tmpl.cache
             .then(html => Mustache.render(html, viewModel))
-            .then(html => this.$component.html(html.trim()));
+            .then(html => this.$elem.html(html.trim()));
     }
 
     /**
@@ -137,14 +120,6 @@ class DynamicSelectOneView extends AbstractView {
         return viewModel;
     }
 
-    _clearOnBlurHandlers() {
-        this.$component.off("blur.dyna-sel-one");
-        const $searchInputElem = this.$titleElem;
-        if ($searchInputElem.length) {
-            $searchInputElem[0].onblur = null;
-        }
-    }
-
     _focusOnSearchInput() {
         const searchInput = this.$titleElem;
         const value = searchInput.val();
@@ -152,46 +127,38 @@ class DynamicSelectOneView extends AbstractView {
     }
 
     /**
-     * @param useOwnerOnFields {boolean|undefined}
-     * @return {{}}
-     */
-    extractInputValues(useOwnerOnFields) {
-        return FormUtils.prototype.objectifyInputsOf(this.$component, useOwnerOnFields ? this.owner : undefined);
-    }
-
-    /**
      * @returns {jQuery<HTMLElement>}
      */
     get $tooLessChars() {
-        return this.$component.find(`[data-name='too-less-chars']`);
+        return this.$elem.find(`[data-name='too-less-chars']`);
     }
 
     /**
      * @returns {jQuery<HTMLElement>}
      */
     get $nothingFound() {
-        return this.$component.find(`[data-name='nothing-found']`);
+        return this.$elem.find(`[data-name='nothing-found']`);
     }
 
     /**
      * @returns {jQuery<HTMLElement>}
      */
     get $tooMany() {
-        return this.$component.find(`[data-name='too-many']`);
+        return this.$elem.find(`[data-name='too-many']`);
     }
 
     /**
      * @returns {jQuery<HTMLElement>}
      */
     get $selectionInfoElem() {
-        return this.$component.find(`[data-name='selection-info']`);
+        return this.$elem.find(`[data-name='selection-info']`);
     }
 
     /**
      * @returns {jQuery<HTMLSelectElement>}
      */
     get $optionsElem() {
-        return this.$component.find(`[name='options']`);
+        return this.$elem.find(`[name='options']`);
     }
 
     /**
@@ -200,31 +167,20 @@ class DynamicSelectOneView extends AbstractView {
      * @return {jQuery<HTMLInputElement>}
      */
     get $titleElem() {
-        return this.$component.find(`[name='${this.titleInputName}']`);
-    }
-
-    /**
-     * @returns {jQuery<HTMLElement>}
-     */
-    get $component() {
-        return this._$component;
+        return this.$elem.find(`[name='${this.titleInputName}']`);
     }
 
     get titleInputName() {
-        return this.$component.data("name");
+        return this.$elem.data("name");
     }
 
     get valueInputName() {
-        const inputName = this.$component.data("value");
+        const inputName = this.$elem.data("value");
         return inputName ? inputName : `${this.titleInputName}-value`;
     }
 
     get descriptionInputName() {
-        const inputName = this.$component.data("description");
+        const inputName = this.$elem.data("description");
         return inputName ? inputName : `${this.titleInputName}-description`;
-    }
-
-    get owner() {
-        return this._owner;
     }
 }

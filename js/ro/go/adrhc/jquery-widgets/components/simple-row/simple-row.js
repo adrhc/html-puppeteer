@@ -5,7 +5,6 @@ class SimpleRowComponent extends AbstractTableBasedComponent {
      */
     constructor(state, view) {
         super(state, view);
-        this.state = state;
     }
 
     /**
@@ -26,12 +25,12 @@ class SimpleRowComponent extends AbstractTableBasedComponent {
      * @return {Promise<StateChange>}
      */
     updateViewOnDELETE(stateChange) {
-        const updatedRowState = stateChange.data;
-        this.tableAdapter.deleteRowByDataId(updatedRowState.id);
+        this.close();
+        this.tableAdapter.deleteRowByDataId(stateChange.data.id);
         return Promise.resolve(stateChange);
     }
 
     close() {
-        this.state.reset();
+        AbstractComponent.prototype.close.bind(this)();
     }
 }

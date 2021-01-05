@@ -79,11 +79,14 @@ class EditableListComponent extends SelectableListComponent {
          * @type {EditableListComponent}
          */
         const editableList = ev.data;
-        editableList.reloadState().then(() => editableList.updateViewOnStateChanges());
+        editableList._reloadState().then(() => editableList.updateViewOnStateChanges());
     }
 
-    reloadState() {
-        return super.reloadState().then(() => this.editableListState.resetSwappingState())
+    _reloadState() {
+        return super._reloadState().then((stateValue) => {
+            this.editableListState.resetSwappingState();
+            return stateValue;
+        })
     }
 
     /**
@@ -132,7 +135,7 @@ class EditableListComponent extends SelectableListComponent {
          */
         const editableList = ev.data;
         const rowDataId = editableList.rowDataIdOf(this, true);
-        const entity = editableList.extractSelectionEntity();
+        const entity = editableList.extractEntity();
         editableList._handleRepoErrors(editableList.repository.save(entity))
             .then(savedEntity =>
                 editableList.doWithState((editableListState) => {
@@ -152,18 +155,18 @@ class EditableListComponent extends SelectableListComponent {
     _configureEvents() {
         super._configureEvents();
         this.tableAdapter.$table
-            .on(this._withNamespaceFor('click'),
+            .on(this._appendNamespaceTo('click'),
                 `${this.ownerSelector}[data-btn='showDelete'],
                 ${this.ownerSelector}[data-btn='showEdit']`, this, this.onShowDU)
-            .on(this._withNamespaceFor('click'),
+            .on(this._appendNamespaceTo('click'),
                 `${this.ownerSelector}[data-btn='showAdd']`, this, this.onShowAdd)
-            .on(this._withNamespaceFor('click'),
+            .on(this._appendNamespaceTo('click'),
                 `${this.ownerSelector}[data-btn='reload']`, this, this.onReload)
-            .on(this._withNamespaceFor('click'),
+            .on(this._appendNamespaceTo('click'),
                 `${this.ownerSelector}[data-btn='cancel']`, this, this.onCancel)
-            .on(this._withNamespaceFor('click'),
+            .on(this._appendNamespaceTo('click'),
                 `${this.ownerSelector}[data-btn='delete']`, this, this.onDelete)
-            .on(this._withNamespaceFor('click'),
+            .on(this._appendNamespaceTo('click'),
                 `${this.ownerSelector}[data-btn='update']`, this, this.onUpdate);
     }
 }

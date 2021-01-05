@@ -8,6 +8,8 @@ class AbstractTableBasedView extends AbstractView {
     constructor(mustacheTableElemAdapter) {
         super();
         this.tableAdapter = mustacheTableElemAdapter;
+        this.$elem = this.tableAdapter.$table;
+        this.owner = this.tableAdapter.owner;
     }
 
     /**
@@ -31,11 +33,15 @@ class AbstractTableBasedView extends AbstractView {
      * @return {{}}
      */
     extractInputValuesByDataId(rowDataId, useOwnerOnFields) {
-        const $elem = this.tableAdapter.$getRowByDataId(rowDataId)
-        return FormUtils.prototype.objectifyInputsOf($elem, useOwnerOnFields ? this.owner : undefined);
+        const $row = this.tableAdapter.$getRowByDataId(rowDataId)
+        return FormUtils.prototype.objectifyInputsOf($row, useOwnerOnFields ? this.owner : undefined);
     }
 
-    get owner() {
-        return this.tableAdapter.owner;
+    /**
+     * keep owner and tableAdapter
+     */
+    reset() {
+        super.reset();
+        this.tableAdapter = undefined;
     }
 }

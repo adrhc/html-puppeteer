@@ -97,7 +97,7 @@ class SelectableListState extends CrudListState {
      * @return {SelectableSwappingData|undefined}
      */
     get currentSelectableSwappingData() {
-        return this.swappingState.swappingDetails && this.swappingState.swappingDetails.data
-            ? this.swappingState.swappingDetails.data : undefined;
+        const swappingDetails = this.swappingState.swappingDetails;
+        return swappingDetails && swappingDetails.data ? swappingDetails.data : undefined;
     }
 }

@@ -18,7 +18,11 @@ class AbstractComponent {
     }
 
     close() {
-        // do nothing by default
+        if (this.view.$elem) {
+            this.view.$elem.off(this._eventsNamespace);
+        }
+        this.state.reset();
+        this.view.reset();
     }
 
     /**
@@ -27,7 +31,7 @@ class AbstractComponent {
      * @param useOwnerOnFields {boolean}
      * @return {*}
      */
-    extractEntity(useOwnerOnFields = false) {
+    extractEntity(useOwnerOnFields) {
         const inputValues = this.extractInputValues(useOwnerOnFields);
         return EntityUtils.prototype.removeTransientId(inputValues);
     }
@@ -106,9 +110,9 @@ class AbstractComponent {
      * @return {string|*}
      * @protected
      */
-    _withNamespaceFor(events) {
+    _appendNamespaceTo(events) {
         if ($.isArray(events)) {
-            return events.map(ev => this._withNamespaceFor(ev)).join(" ");
+            return events.map(ev => this._appendNamespaceTo(ev)).join(" ");
         } else {
             return `${events}${this._eventsNamespace}`;
         }
@@ -143,6 +147,6 @@ class AbstractComponent {
     }
 
     get owner() {
-        throw "Not implemented!";
+        return this.view.owner;
     }
 }

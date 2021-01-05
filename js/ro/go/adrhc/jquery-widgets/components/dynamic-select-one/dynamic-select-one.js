@@ -45,12 +45,14 @@ class DynamicSelectOneComponent extends AbstractComponent {
     }
 
     init() {
+        this._clearOnBlurHandlers();
         return this.dynaSelOneView
             .update(this.state, true)
             .then(() => this._configureEvents());
     }
 
     updateView(state, focusOnSearchInput) {
+        this._clearOnBlurHandlers();
         return this.dynaSelOneView
             .update(state, focusOnSearchInput)
             .then(() => this._configureOnBlur());
@@ -61,15 +63,15 @@ class DynamicSelectOneComponent extends AbstractComponent {
      */
     _configureEvents() {
         const view = this.dynaSelOneView;
-        const $comp = view.$component;
+        const $comp = view.$elem;
 
-        $comp.on(this._withNamespaceFor('keyup'),
+        $comp.on(this._appendNamespaceTo('keyup'),
             `[name='${view.titleInputName}']`, this, this.onKeyup);
         // comp.on('keyup blur mouseleave', "[name='title']", this, this.onKeyup);
         // comp.find("[name='title']").on("keyup blur mouseleave", this, this.onKeyup);
         this._configureOnBlur();
 
-        $comp.on(this._withNamespaceFor(['click', 'keyup']),
+        $comp.on(this._appendNamespaceTo(['click', 'keyup']),
             'option', this, this.onOptionClick);
         // comp.on('change.dyna-sel-one keyup.dyna-sel-one', "[name='options']", this, this.onOptionClick);
     }
@@ -84,11 +86,16 @@ class DynamicSelectOneComponent extends AbstractComponent {
         // console.log("DynamicSelectOneComponent selectedItem:\n", this.state.selectedItem);
     }
 
-    close() {
-        this.dynaSelOneView.$component.off();
+    _clearOnBlurHandlers() {
+        this.view.$elem.off(this._appendNamespaceTo("blur"));
+        const $searchInputElem = this.dynaSelOneView.$titleElem;
+        if ($searchInputElem.length) {
+            $searchInputElem[0].onblur = null;
+        }
     }
 
-    get owner() {
-        return this.dynaSelOneView.owner;
+    close() {
+        this._clearOnBlurHandlers();
+        super.close();
     }
 }

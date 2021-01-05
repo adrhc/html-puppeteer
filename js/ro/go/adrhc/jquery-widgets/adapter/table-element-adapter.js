@@ -17,12 +17,32 @@ class TableElementAdapter {
      * @param tableId {string|jQuery<HTMLTableRowElement>}
      */
     constructor(tableId) {
+        this._setupElem(tableId);
+        this._setupOwner();
+    }
+
+    /**
+     * @param tableId {string|jQuery<HTMLTableRowElement>}
+     * @protected
+     */
+    _setupElem(tableId) {
         if (tableId instanceof jQuery) {
             this._$table = tableId;
-            this._owner = !!this._$table.id ? this._$table.id : this._$table.data("id");
         } else {
             this._$table = $(`#${tableId}`);
-            this._owner = tableId;
+        }
+    }
+
+    /**
+     * @protected
+     */
+    _setupOwner() {
+        const dataOwner = this.$table.data("owner");
+        if (dataOwner) {
+            this._owner = dataOwner;
+        } else {
+            const dataId = this.$table.data("id");
+            this._owner = dataId ? dataId : this.$table.attr("id");
         }
     }
 
