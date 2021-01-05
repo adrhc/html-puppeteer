@@ -4,7 +4,7 @@ class ComponentSpecification {
      */
     elemSelector;
     /**
-     * @type {AbstractComponentFactory}
+     * @type {AbstractComponentFactory|function}
      */
     compFactory;
 

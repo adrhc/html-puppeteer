@@ -52,6 +52,10 @@ class CompositeComponent {
      */
     _createComp(componentSpec) {
         const $elem = this._$elemOf(componentSpec);
-        return componentSpec.compFactory.create($elem);
+        if (typeof componentSpec.compFactory === "function") {
+            return componentSpec.compFactory($elem);
+        } else {
+            return componentSpec.compFactory.create($elem);
+        }
     }
 }

@@ -4,6 +4,7 @@
 class AbstractComponentFactory {
     /**
      * @param $elem {jQuery<HTMLElement>}
+     * @return {AbstractComponent}
      * @abstract
      */
     create($elem) {
