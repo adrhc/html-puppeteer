@@ -3,6 +3,11 @@
  */
 class AbstractTableBasedView extends AbstractView {
     /**
+     * @type {MustacheTableElemAdapter}
+     */
+    tableAdapter;
+
+    /**
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      */
     constructor(mustacheTableElemAdapter) {
@@ -26,15 +31,12 @@ class AbstractTableBasedView extends AbstractView {
     }
 
     /**
-     * by default this component won't use the owner to detect its fields
-     *
-     * @param rowDataId {number|string}
-     * @param useOwnerOnFields {boolean|undefined}
-     * @return {{}}
+     * @param elem {HTMLElement|jQuery}
+     * @param searchParentsForDataIdIfMissingOnElem {boolean|undefined}
+     * @return {string|number}
      */
-    extractInputValuesByDataId(rowDataId, useOwnerOnFields) {
-        const $row = this.tableAdapter.$getRowByDataId(rowDataId)
-        return FormUtils.prototype.objectifyInputsOf($row, useOwnerOnFields ? this.owner : undefined);
+    rowDataIdOf(elem, searchParentsForDataIdIfMissingOnElem) {
+        return this.tableAdapter.rowDataIdOf(elem, searchParentsForDataIdIfMissingOnElem);
     }
 
     /**

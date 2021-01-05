@@ -1,12 +1,8 @@
 class AbstractTableBasedComponent extends AbstractComponent {
     /**
-     * @type {TableElementAdapter}
-     */
-    tableAdapter;
-    /**
      * @type {AbstractTableBasedView}
      */
-    abstractTableBasedView;
+    tableBasedView;
 
     /**
      * @param state {BasicState}
@@ -14,21 +10,7 @@ class AbstractTableBasedComponent extends AbstractComponent {
      */
     constructor(state, view) {
         super(state, view);
-        this.abstractTableBasedView = view;
-        this.tableAdapter = view.tableAdapter;
-    }
-
-    /**
-     * @param elem {HTMLElement|jQuery}
-     * @param searchParentsForDataIdIfMissingOnElem {boolean|undefined}
-     * @return {string|number}
-     */
-    rowDataIdOf(elem, searchParentsForDataIdIfMissingOnElem) {
-        return this.tableAdapter.rowDataIdOf(elem, searchParentsForDataIdIfMissingOnElem);
-    }
-
-    get ownerSelector() {
-        return this.tableAdapter.ownerSelector;
+        this.tableBasedView = view;
     }
 
     /**
@@ -38,24 +20,7 @@ class AbstractTableBasedComponent extends AbstractComponent {
      * @return {Array<IdentifiableEntity>}
      */
     extractAllEntities(useOwnerOnFields) {
-        return this.abstractTableBasedView.extractAllRowsInputValues(useOwnerOnFields)
+        return this.tableBasedView.extractAllRowsInputValues(useOwnerOnFields)
             .map(it => EntityUtils.prototype.removeTransientId(it));
-    }
-
-    /**
-     * by default this component won't use the owner to detect its fields
-     *
-     * @param rowDataId {number|string}
-     * @param useOwnerOnFields {boolean|undefined}
-     * @return {IdentifiableEntity}
-     */
-    extractEntityByDataId(rowDataId, useOwnerOnFields) {
-        const values = this.abstractTableBasedView.extractInputValuesByDataId(rowDataId, useOwnerOnFields);
-        return EntityUtils.prototype.removeTransientId(values);
-    }
-
-    close() {
-        this.tableAdapter.$table.off(this._eventsNamespace);
-        super.close();
     }
 }

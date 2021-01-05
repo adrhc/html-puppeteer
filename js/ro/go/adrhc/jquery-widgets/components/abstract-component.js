@@ -1,5 +1,18 @@
 class AbstractComponent {
     /**
+     * @type {BasicState}
+     */
+    state;
+    /**
+     * @type {AbstractView}
+     */
+    view;
+    /**
+     * @type {string[]}
+     */
+    knownRequestTypes;
+
+    /**
      * @param state {BasicState}
      * @param view {AbstractView}
      * @param knownRequestTypes {string[]}
@@ -106,19 +119,6 @@ class AbstractComponent {
     }
 
     /**
-     * @param events {string,string[]}
-     * @return {string|*}
-     * @protected
-     */
-    _appendNamespaceTo(events) {
-        if ($.isArray(events)) {
-            return events.map(ev => this._appendNamespaceTo(ev)).join(" ");
-        } else {
-            return `${events}${this._eventsNamespace}`;
-        }
-    }
-
-    /**
      * (internal) errors handler
      *
      * @param promise
@@ -139,14 +139,31 @@ class AbstractComponent {
     }
 
     /**
+     * @param events {string,string[]}
+     * @return {string|*}
+     * @protected
+     */
+    _appendNamespaceTo(events) {
+        if ($.isArray(events)) {
+            return events.map(ev => this._appendNamespaceTo(ev)).join(" ");
+        } else {
+            return `${events}${this._eventsNamespace}`;
+        }
+    }
+
+    /**
      * @returns {string}
      * @protected
      */
     get _eventsNamespace() {
-        return `.${this.constructor.name}.${this.owner}`;
+        return `.${this.constructor.name}.${this.view.owner}`;
     }
 
-    get owner() {
-        return this.view.owner;
+    /**
+     * @returns {string}
+     * @protected
+     */
+    get _ownerSelector() {
+        return `[data-owner='${this.view.owner}']`;
     }
 }

@@ -1,10 +1,21 @@
-class SimpleRowComponent extends AbstractTableBasedComponent {
+class SimpleRowComponent extends AbstractComponent {
+    /**
+     * @type {SimpleRowState}
+     */
+    simpleRowState;
+    /**
+     * @type {SimpleRowView}
+     */
+    simpleRowView;
+
     /**
      * @param state {SimpleRowState}
      * @param view {SimpleRowView}
      */
     constructor(state, view) {
         super(state, view);
+        this.simpleRowState = state;
+        this.simpleRowView = view;
     }
 
     /**
@@ -16,7 +27,7 @@ class SimpleRowComponent extends AbstractTableBasedComponent {
      * @return {Promise<StateChange>}
      */
     update(item, requestType = "UPDATE", afterItemId) {
-        this.state.update(item, requestType, afterItemId);
+        this.simpleRowState.update(item, requestType, afterItemId);
         return this.updateViewOnStateChange();
     }
 
@@ -26,11 +37,7 @@ class SimpleRowComponent extends AbstractTableBasedComponent {
      */
     updateViewOnDELETE(stateChange) {
         this.close();
-        this.tableAdapter.deleteRowByDataId(stateChange.data.id);
+        this.simpleRowView.deleteRowByDataId(stateChange.data.id);
         return Promise.resolve(stateChange);
-    }
-
-    close() {
-        AbstractComponent.prototype.close.bind(this)();
     }
 }

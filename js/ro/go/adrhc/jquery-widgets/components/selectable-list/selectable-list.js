@@ -21,6 +21,7 @@ class SelectableListComponent extends ElasticListComponent {
                 notSelectedRow, selectedRow) {
         super(repository, state, view, notSelectedRow);
         this.selectableListState = state;
+        this.simpleListView = view;
         // true/false relates to swappingDetails.isPrevious
         this.swappingRowSelector = {
             false: selectedRow,
@@ -50,7 +51,7 @@ class SelectableListComponent extends ElasticListComponent {
             return;
         }
         ev.stopPropagation();
-        const rowDataId = selectableList.rowDataIdOf(this);
+        const rowDataId = selectableList.simpleListView.rowDataIdOf(this);
         selectableList.switchTo(rowDataId);
     }
 
@@ -175,8 +176,8 @@ class SelectableListComponent extends ElasticListComponent {
      * @protected
      */
     _configureEvents() {
-        this.tableAdapter.$table
+        this.simpleListView.$elem
             .on(this._appendNamespaceTo('dblclick'),
-                `tr${this.ownerSelector}`, this, this.onSwapping);
+                `tr${this._ownerSelector}`, this, this.onSwapping);
     }
 }

@@ -129,7 +129,7 @@ class TableElementAdapter {
      * @return {jQuery<HTMLTableRowElement>}
      */
     $getRowByDataId(rowDataId) {
-        return this.$tbody.children(this.getRowSelector(rowDataId));
+        return this.$getOwnedRowByData("id", rowDataId);
     }
 
     /**
@@ -138,14 +138,14 @@ class TableElementAdapter {
      * @return {jQuery<HTMLTableRowElement>}
      */
     $getOwnedRowByData(dataKey, dataValue) {
-        return this.$tbody.children(`tr${this.ownerSelector}[data-${dataKey}='${dataValue}']`);
+        return this.$tbody.children(this.getRowSelector(dataKey, dataValue));
     }
 
     /**
      * @returns {string}
      */
-    getRowSelector(rowDataId) {
-        return `tr${this.ownerSelector}[data-id='${rowDataId}']`;
+    getRowSelector(dataKey, dataValue) {
+        return `tr${this.ownerSelector}[data-${dataKey}='${dataValue}']`;
     }
 
     /**

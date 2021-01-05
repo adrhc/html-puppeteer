@@ -32,7 +32,7 @@ class EditableListComponent extends SelectableListComponent {
          * @type {EditableListComponent}
          */
         const editableList = ev.data;
-        const rowDataId = editableList.rowDataIdOf(this, true);
+        const rowDataId = editableList.simpleListView.rowDataIdOf(this, true);
         const context = $(this).data("btn");
         if (!rowDataId || !context) {
             return;
@@ -114,7 +114,7 @@ class EditableListComponent extends SelectableListComponent {
          * @type {EditableListComponent}
          */
         const editableList = ev.data;
-        const rowDataId = editableList.rowDataIdOf(this, true);
+        const rowDataId = editableList.simpleListView.rowDataIdOf(this, true);
         editableList._handleRepoErrors(editableList.repository.delete(rowDataId))
             .then(() =>
                 editableList.doWithState((editableListState) => {
@@ -134,7 +134,7 @@ class EditableListComponent extends SelectableListComponent {
          * @type {EditableListComponent}
          */
         const editableList = ev.data;
-        const rowDataId = editableList.rowDataIdOf(this, true);
+        const rowDataId = editableList.simpleListView.rowDataIdOf(this, true);
         const entity = editableList.extractEntity();
         editableList._handleRepoErrors(editableList.repository.save(entity))
             .then(savedEntity =>
@@ -154,19 +154,19 @@ class EditableListComponent extends SelectableListComponent {
      */
     _configureEvents() {
         super._configureEvents();
-        this.tableAdapter.$table
+        this.simpleListView.$elem
             .on(this._appendNamespaceTo('click'),
-                `${this.ownerSelector}[data-btn='showDelete'],
-                ${this.ownerSelector}[data-btn='showEdit']`, this, this.onShowDU)
+                `${this._ownerSelector}[data-btn='showDelete'],
+                ${this._ownerSelector}[data-btn='showEdit']`, this, this.onShowDU)
             .on(this._appendNamespaceTo('click'),
-                `${this.ownerSelector}[data-btn='showAdd']`, this, this.onShowAdd)
+                `${this._ownerSelector}[data-btn='showAdd']`, this, this.onShowAdd)
             .on(this._appendNamespaceTo('click'),
-                `${this.ownerSelector}[data-btn='reload']`, this, this.onReload)
+                `${this._ownerSelector}[data-btn='reload']`, this, this.onReload)
             .on(this._appendNamespaceTo('click'),
-                `${this.ownerSelector}[data-btn='cancel']`, this, this.onCancel)
+                `${this._ownerSelector}[data-btn='cancel']`, this, this.onCancel)
             .on(this._appendNamespaceTo('click'),
-                `${this.ownerSelector}[data-btn='delete']`, this, this.onDelete)
+                `${this._ownerSelector}[data-btn='delete']`, this, this.onDelete)
             .on(this._appendNamespaceTo('click'),
-                `${this.ownerSelector}[data-btn='update']`, this, this.onUpdate);
+                `${this._ownerSelector}[data-btn='update']`, this, this.onUpdate);
     }
 }

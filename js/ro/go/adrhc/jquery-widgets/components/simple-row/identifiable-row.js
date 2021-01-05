@@ -1,16 +1,10 @@
 class IdentifiableRowComponent extends SimpleRowComponent {
     /**
-     * @type {SimpleRowView}
-     */
-    simpleRowView;
-
-    /**
      * @param state {SimpleRowState}
      * @param view {SimpleRowView}
      */
     constructor(state, view) {
         super(state, view);
-        this.simpleRowView = view;
     }
 
     updateViewOnDELETE(stateChange) {
@@ -19,8 +13,8 @@ class IdentifiableRowComponent extends SimpleRowComponent {
     }
 
     removeSecondaryRowParts() {
-        const itemId = this.state.rowState.id;
-        console.log(`removing rows with owner = ${this.owner} and secondary-row-part = ${itemId}`);
-        this.tableAdapter.$getOwnedRowByData("secondary-row-part", itemId).remove();
+        const itemId = this.simpleRowState.rowState.id;
+        console.log(`removing rows with owner = ${this.simpleRowView.owner} and secondary-row-part = ${itemId}`);
+        this.simpleRowView.$getOwnedRowByData("secondary-row-part", itemId).remove();
     }
 }
