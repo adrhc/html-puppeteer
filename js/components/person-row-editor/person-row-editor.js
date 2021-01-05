@@ -1,39 +1,11 @@
 class PersonRowEditor extends IdentifiableRowComponent {
-    /**
-     * @type {EditableListComponent}
-     */
-    catsTableComp;
-
     constructor(state, view) {
         super(state, view);
-    }
-
-    /**
-     * @param stateChange {StateChange}
-     * @return {Promise<StateChange>}
-     * @protected
-     */
-    _initCatsTable(stateChange) {
-        const tableId = "catsTable";
-
-        const catRow = SimpleRowFactory.prototype.createIdentifiableRow(
-            tableId, {
-                rowTmpl: "editableCatsRowTmpl", tableRelativePositionOnCreate: "append"
-            });
-
-        const repository = new InMemoryCrudRepository(new EntityHelper(),
-            $.extend(true, [], stateChange.data.cats));
-
-        this.catsTableComp = EditableListFactory.prototype.create({
-            repository,
-            // CatsListState cancels swapping events so there's no need for editableRow and deletableRow
-            state: new CatsListState(repository),
-            tableId,
-            bodyRowTmplId: "editableCatsRowTmpl",
-            readOnlyRow: catRow
-        });
-
-        return this.catsTableComp.init();
+        this.addComponentSpec(new ChildComponentSpecification("[data-id='catsTable']",
+            new CatsTableFactory(), (parentState, childComp) => {
+                parentState.cats = childComp.extractAllEntities(true);
+                return true;
+            }));
     }
 
     /**
@@ -44,19 +16,12 @@ class PersonRowEditor extends IdentifiableRowComponent {
      */
     update(item, requestType, afterItemId) {
         return super.update(item, requestType, afterItemId)
-            .then(stateChange => this._initCatsTable(stateChange).then(() => stateChange));
+            .then(stateChange => this.initKids().then(() => stateChange));
     }
 
     extractInputValues(useOwnerOnFields = false) {
         const item = super.extractInputValues(true);
-        item.cats = this.catsTableComp.extractAllEntities(true);
+        this.updateWithKidsState(item);
         return item;
-    }
-
-    close() {
-        super.close();
-        if (this.catsTableComp) {
-            this.catsTableComp.close();
-        }
     }
 }

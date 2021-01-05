@@ -11,6 +11,10 @@ class AbstractComponent {
      * @type {StateChangesDispatcher}
      */
     stateChangesDispatcher;
+    /**
+     * @type {CompositeComponent}
+     */
+    compositeComponent;
 
     /**
      * @param state {BasicState}
@@ -20,12 +24,44 @@ class AbstractComponent {
         this.state = state;
         this.view = view;
         this.stateChangesDispatcher = new StateChangesDispatcher(this);
+        this.compositeComponent = new CompositeComponent(this);
     }
 
+    /**
+     * @param compSpec {ChildComponentSpecification}
+     */
+    addComponentSpec(compSpec) {
+        return this.compositeComponent.addComponentSpec(compSpec);
+    }
+
+    /**
+     * @param parentState
+     * @return {boolean} whether an update occured or not
+     */
+    updateWithKidsState(parentState) {
+        return this.compositeComponent.updateWithKidsState(parentState);
+    }
+
+    /**
+     * @return {Promise<[]>}
+     */
+    initKids() {
+        return this.compositeComponent.init();
+    }
+
+    /**
+     * @param stateChanges {StateChange[]|undefined}
+     * @param applyChangesStartingFromLatest {boolean|undefined}
+     * @return {Promise<StateChange[]>}
+     */
     updateViewOnStateChanges(stateChanges, applyChangesStartingFromLatest) {
         return this.stateChangesDispatcher.updateViewOnStateChanges(stateChanges, applyChangesStartingFromLatest);
     }
 
+    /**
+     * @param stateChange {StateChange|undefined}
+     * @return {Promise<StateChange>}
+     */
     updateViewOnStateChange(stateChange) {
         return this.stateChangesDispatcher.updateViewOnStateChange(stateChange);
     }
@@ -40,6 +76,7 @@ class AbstractComponent {
     }
 
     close() {
+        this.compositeComponent.close();
         if (this.view.$elem) {
             this.view.$elem.off(this._eventsNamespace);
         }
