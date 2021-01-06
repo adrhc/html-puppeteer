@@ -1,7 +1,6 @@
 class CatsComponentSpec extends ChildComponentSpecification {
     constructor() {
         super("[data-id='catsTable']",
-            CatsComponentSpec.createCatsTable,
             CatsComponentSpec.updateParentStateWithCats);
     }
 
@@ -11,24 +10,25 @@ class CatsComponentSpec extends ChildComponentSpecification {
     }
 
     /**
-     * @param $tableElem {jQuery<HTMLElement>}
-     * @param parentState {SimpleRowState}
-     * @return {EditableListComponent}
+     * @param parentComp {AbstractComponent}
+     * @return {AbstractComponent}
      */
-    static createCatsTable($tableElem, parentState) {
+    createComp(parentComp) {
+        const $parentElem = this._childOf(parentComp.view.$elem);
         const catRow = SimpleRowFactory.prototype.createIdentifiableRow(
-            $tableElem, {
+            $parentElem, {
                 rowTmpl: "editableCatsRowTmpl", tableRelativePositionOnCreate: "append"
             });
 
+        // parentComp.state is {SimpleRowState}
         const repository = new InMemoryCrudRepository(new EntityHelper(),
-            $.extend(true, [], parentState.rowState.cats));
+            $.extend(true, [], parentComp.state.rowState.cats));
 
         return EditableListFactory.prototype.create({
             repository,
             // CatsListState cancels swapping events so there's no need for editableRow and deletableRow
             state: new CatsListState(repository),
-            tableId: $tableElem,
+            tableId: $parentElem,
             bodyRowTmplId: "editableCatsRowTmpl",
             readOnlyRow: catRow
         });

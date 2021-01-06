@@ -40,17 +40,8 @@ class CompositeComponent {
     updateWithKidsState(parentState) {
         const result = {};
         this.componentsAndSpecs.forEach(compAndSpec => {
-            /**
-             * @type {ChildComponentSpecification}
-             */
-            const compSpec = compAndSpec[1];
-            if (typeof compSpec.parentStateUpdater === "function") {
-                result.existsChange = result.existsChange ||
-                    compSpec.parentStateUpdater(parentState, compAndSpec[0]);
-            } else {
-                result.existsChange = result.existsChange ||
-                    compSpec.parentStateUpdater.update(parentState, compAndSpec[0]);
-            }
+            result.existsChange = result.existsChange ||
+                compAndSpec[1].updateParentState(parentState, compAndSpec[0]);
         });
         return result.existsChange;
     }
@@ -68,31 +59,9 @@ class CompositeComponent {
      * @return {Promise<[]>} array of StateChange[]
      */
     init() {
-        this.componentsAndSpecs = this.componentSpecs.map(cmpSpec => [this._createComp(cmpSpec), cmpSpec]);
+        this.componentsAndSpecs = this.componentSpecs.map(cmpSpec => [cmpSpec.createComp(this.parentComp), cmpSpec]);
         const promises = this.componentsAndSpecs.map(compAndSpec => compAndSpec[0].init());
         return Promise.allSettled(promises);
-    }
-
-    /**
-     * @param componentSpec {ChildComponentSpecification}
-     * @protected
-     */
-    _$elemOf(componentSpec) {
-        return $(componentSpec.elemSelector, this.parentComp.view.$elem)
-    }
-
-    /**
-     * @param compSpec {ChildComponentSpecification}
-     * @return {AbstractComponent}
-     * @protected
-     */
-    _createComp(compSpec) {
-        const $elem = this._$elemOf(compSpec);
-        if (typeof compSpec.compFactory === "function") {
-            return compSpec.compFactory($elem, this.parentComp.state);
-        } else {
-            return compSpec.compFactory.create($elem, this.parentComp.state);
-        }
     }
 
     close() {
