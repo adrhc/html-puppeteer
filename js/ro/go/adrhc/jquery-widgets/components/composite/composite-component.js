@@ -1,19 +1,19 @@
+/**
+ * this encapsulates the "component composition" capability of a component
+ */
 class CompositeComponent {
     /**
      * @type {AbstractComponent}
      */
     parentComp;
     /**
-     * @type {ChildComponentSpecification[]}
+     * @type {ChildComponentFactory[]}
      */
     componentSpecs = []
     /**
-     * Array[0] is {AbstractComponent}
-     * Array[1] is {ChildComponentSpecification}
-     *
-     * @type {Array[]}
+     * @type {AbstractComponent[]}
      */
-    componentsAndSpecs = []
+    childComponents = []
 
     /**
      * @param parentComp {AbstractComponent}
@@ -23,7 +23,7 @@ class CompositeComponent {
     }
 
     /**
-     * @param compSpec {ChildComponentSpecification|ChildComponentSpecification[]}
+     * @param compSpec {ChildComponentFactory|ChildComponentFactory[]}
      */
     addComponentSpec(compSpec) {
         if ($.isArray(compSpec)) {
@@ -39,9 +39,8 @@ class CompositeComponent {
      */
     updateWithKidsState(parentState) {
         const result = {};
-        this.componentsAndSpecs.forEach(compAndSpec => {
-            result.existsChange = result.existsChange ||
-                compAndSpec[1].updateParentState(parentState, compAndSpec[0]);
+        this.childComponents.forEach(kid => {
+            result.existsChange = result.existsChange || kid.updateParentState(parentState);
         });
         return result.existsChange;
     }
@@ -59,12 +58,12 @@ class CompositeComponent {
      * @return {Promise<[]>} array of StateChange[]
      */
     init() {
-        this.componentsAndSpecs = this.componentSpecs.map(cmpSpec => [cmpSpec.createComp(this.parentComp), cmpSpec]);
-        const promises = this.componentsAndSpecs.map(compAndSpec => compAndSpec[0].init());
+        this.childComponents = this.componentSpecs.map(cmpSpec => cmpSpec.createComp(this.parentComp));
+        const promises = this.childComponents.map(kid => kid.init());
         return Promise.allSettled(promises);
     }
 
     close() {
-        this.componentsAndSpecs.forEach(compAndSpec => compAndSpec[0].close());
+        this.childComponents.forEach(kid => kid.close());
     }
 }

@@ -1,12 +1,6 @@
-class CatsComponentSpec extends ChildComponentSpecification {
+class CatsChildCompFactory extends ChildComponentFactory {
     constructor() {
-        super("[data-id='catsTable']",
-            CatsComponentSpec.updateParentStateWithCats);
-    }
-
-    static updateParentStateWithCats(parentState, childComp) {
-        parentState.cats = childComp.extractAllEntities(true);
-        return true;
+        super("[data-id='catsTable']");
     }
 
     /**
@@ -14,11 +8,18 @@ class CatsComponentSpec extends ChildComponentSpecification {
      * @return {AbstractComponent}
      */
     createComp(parentComp) {
-        const $parentElem = this._childOf(parentComp.view.$elem);
+        const $parentElem = this._childOf(parentComp);
         const catRow = SimpleRowFactory.prototype.createIdentifiableRow(
             $parentElem, {
                 rowTmpl: "editableCatsRowTmpl", tableRelativePositionOnCreate: "append"
             });
+
+        const catsChildOperations = new ChildComponent(undefined, parentComp);
+        catsChildOperations.updateParentState = (parentState) => {
+            // catsChildOperations.myComp is {EditableListComponent}
+            parentState.cats = catsChildOperations.myComp.extractAllEntities(true);
+            return true;
+        }
 
         // parentComp.state is {SimpleRowState}
         const repository = new InMemoryCrudRepository(new EntityHelper(),
@@ -30,7 +31,8 @@ class CatsComponentSpec extends ChildComponentSpecification {
             state: new CatsListState(repository),
             tableId: $parentElem,
             bodyRowTmplId: "editableCatsRowTmpl",
-            readOnlyRow: catRow
+            readOnlyRow: catRow,
+            childComponent: catsChildOperations
         });
     }
 }

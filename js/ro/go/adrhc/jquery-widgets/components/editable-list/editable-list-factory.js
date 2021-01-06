@@ -10,6 +10,7 @@ class EditableListFactory {
      * @param readOnlyRow {IdentifiableRowComponent}
      * @param editableRow {IdentifiableRowComponent}
      * @param deletableRow {IdentifiableRowComponent}
+     * @param childComponent {ChildComponent}
      * @return {EditableListComponent}
      */
     create({
@@ -19,11 +20,16 @@ class EditableListFactory {
                mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, bodyRowTmplId),
                repository = new InMemoryCrudRepository(new EntityHelper(), items),
                state = new EditableListState(),
+               view = new SimpleListView(mustacheTableElemAdapter),
                readOnlyRow,
                editableRow,
                deletableRow,
-               view = new SimpleListView(mustacheTableElemAdapter)
+               childComponent
            }) {
-        return new EditableListComponent(repository, state, view, readOnlyRow, editableRow, deletableRow);
+        const editableListComponent = new EditableListComponent(repository, state, view, readOnlyRow, editableRow, deletableRow);
+        if (childComponent) {
+            editableListComponent.childComponent = childComponent;
+        }
+        return editableListComponent;
     }
 }

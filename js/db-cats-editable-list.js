@@ -44,7 +44,7 @@ if (Modernizr.template) {
         const editableRow = SimpleRowFactory.prototype.createIdentifiableRow(
             tableId, {
                 rowTmpl: "personsTableEditableRowTmpl",
-                childCompSpecs: new CatsComponentSpec()
+                childCompSpecs: new CatsChildCompFactory()
             });
 
         // doesn't make sense to use tableRelativePositionOnCreate

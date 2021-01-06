@@ -15,6 +15,40 @@ class AbstractComponent {
      * @type {CompositeComponent}
      */
     compositeComponent;
+    /**
+     * see this as the "child component" capability of the current/this component
+     *
+     * @type {ChildComponent}
+     */
+    _childComponent;
+
+    get childComponent() {
+        return this._childComponent;
+    }
+
+    /**
+     * @param childComponent {ChildComponent}
+     */
+    set childComponent(childComponent) {
+        childComponent.myComp = this;
+        this._childComponent = childComponent;
+    }
+
+    get parentComp() {
+        return this._childComponent.parentComp;
+    }
+
+    set parentComp(value) {
+        this._childComponent.parentComp = value;
+    }
+
+    /**
+     * @param parentState
+     * @return {boolean}
+     */
+    updateParentState(parentState) {
+        return this._childComponent.updateParentState(parentState);
+    }
 
     /**
      * @param state {BasicState}
@@ -25,10 +59,11 @@ class AbstractComponent {
         this.view = view;
         this.stateChangesDispatcher = new StateChangesDispatcher(this);
         this.compositeComponent = new CompositeComponent(this);
+        this._childComponent = new ChildComponent(this);
     }
 
     /**
-     * @param compSpec {ChildComponentSpecification|ChildComponentSpecification[]}
+     * @param compSpec {ChildComponentFactory|ChildComponentFactory[]}
      */
     addComponentSpec(compSpec) {
         return this.compositeComponent.addComponentSpec(compSpec);
