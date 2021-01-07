@@ -3,6 +3,8 @@
  */
 class ChildComponent {
     /**
+     * kidComp means "me/this/current" relative to ChildComponent
+     *
      * @type {AbstractComponent}
      */
     kidComp

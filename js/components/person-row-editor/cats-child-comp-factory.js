@@ -13,7 +13,8 @@ class CatsChildCompFactory extends ChildComponentFactory {
 
         const catsChildOperations = new ChildComponent(undefined, parentComp);
         catsChildOperations.copyKidState = (parentState) => {
-            // catsChildOperations.kidComp is {EditableListComponent}
+            // catsChildOperations.kidComp is {EditableListComponent} = cats table component
+            // kidComp means "me/this/current" relative to ChildComponent
             parentState.cats = catsChildOperations.kidComp.extractAllEntities(true);
             return true;
         }
@@ -22,6 +23,7 @@ class CatsChildCompFactory extends ChildComponentFactory {
         const repository = new InMemoryCrudRepository(new EntityHelper(),
             $.extend(true, [], parentComp.state.rowState.cats));
 
+        // cats table component
         return EditableListFactory.create({
             repository,
             // CatsListState cancels swapping events so there's no need for editableRow and deletableRow
