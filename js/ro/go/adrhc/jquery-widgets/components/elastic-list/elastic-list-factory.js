@@ -21,7 +21,6 @@ class ElasticListFactory {
         idRowCompFactoryFn = (item, afterItemId, mustacheTableElemAdapter) => {
             const idRowComp = SimpleRowFactory.createIdentifiableRow({
                 mustacheTableElemAdapter,
-                bodyRowTmplId,
                 tableRelativePositionOnCreate: addNewRowsAtEnd ? "append" : "prepend"
             });
             idRowComp.simpleRowState.update(item, "CREATE", afterItemId);
