@@ -23,7 +23,7 @@ class SelectableSwappingData {
             && (this.context == null && selectableSwappingData.context == null
                 || this.context == selectableSwappingData.context)
             && (this.itemId == null && selectableSwappingData.itemId == null
-                || EntityUtils.prototype.idsAreEqual(this.itemId, selectableSwappingData.itemId));
+                || EntityUtils.idsAreEqual(this.itemId, selectableSwappingData.itemId));
     }
 
     /**

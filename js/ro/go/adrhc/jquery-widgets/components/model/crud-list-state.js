@@ -19,7 +19,7 @@ class CrudListState extends SimpleListState {
      * @return {IdentifiableEntity}
      */
     createNewItem(append = this.append) {
-        const item = EntityUtils.prototype.newIdentifiableEntity();
+        const item = EntityUtils.newIdentifiableEntity();
         return this.insertItem(item, append);
     }
 
@@ -30,7 +30,7 @@ class CrudListState extends SimpleListState {
      * @return {IdentifiableEntity} the insert or update result
      */
     save(item, itemIdToRemove, append = this.append) {
-        if (!!itemIdToRemove && !EntityUtils.prototype.idsAreEqual(item.id, itemIdToRemove)) {
+        if (!!itemIdToRemove && !EntityUtils.idsAreEqual(item.id, itemIdToRemove)) {
             this.removeById(itemIdToRemove);
             return this.insertItem(item, append);
         } else {
@@ -60,7 +60,7 @@ class CrudListState extends SimpleListState {
      * @return {IdentifiableEntity}
      */
     updateItem(item) {
-        EntityUtils.prototype.findAndReplaceById(item, this.items);
+        EntityUtils.findAndReplaceById(item, this.items);
         this.collectStateChange(new StateChange("UPDATE", item));
         return item;
     }
@@ -70,7 +70,7 @@ class CrudListState extends SimpleListState {
      * @return {IdentifiableEntity}
      */
     removeById(id) {
-        const removedItem = EntityUtils.prototype.removeById(id, this.items);
+        const removedItem = EntityUtils.removeById(id, this.items);
         if (!!removedItem) {
             this.collectStateChange(new StateChange("DELETE", removedItem));
         } else {
@@ -83,7 +83,7 @@ class CrudListState extends SimpleListState {
      * @return {IdentifiableEntity|IdentifiableEntity[]} removed positions (aka indexes)
      */
     removeTransient() {
-        const removedItems = EntityUtils.prototype.removeTransient(this.items);
+        const removedItems = EntityUtils.removeTransient(this.items);
         this.collectStateChange(new StateChange("DELETE", removedItems));
         return removedItems;
     }
@@ -93,6 +93,6 @@ class CrudListState extends SimpleListState {
      * @return {IdentifiableEntity}
      */
     findById(id) {
-        return EntityUtils.prototype.findById(id, this.items)
+        return EntityUtils.findById(id, this.items)
     }
 }

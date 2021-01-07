@@ -32,16 +32,6 @@ class SimpleRowComponent extends AbstractComponent {
     }
 
     /**
-     * @param positionStateChange {PositionStateChange}
-     * @return {Promise<StateChange[]>}
-     */
-    process(positionStateChange) {
-        return this.doWithState((simpleRowState) => {
-            simpleRowState.update(positionStateChange.data, positionStateChange.requestType, positionStateChange.afterItemId);
-        }).then(stateChanges => this.initKids().then(() => stateChanges));
-    }
-
-    /**
      * @param stateChange {StateChange}
      * @return {Promise<StateChange>}
      */
@@ -49,5 +39,15 @@ class SimpleRowComponent extends AbstractComponent {
         this.close();
         this.simpleRowView.deleteRowByDataId(stateChange.data.id);
         return Promise.resolve(stateChange);
+    }
+
+    /**
+     * @param positionStateChange {PositionStateChange}
+     * @return {Promise<StateChange[]>}
+     */
+    process(positionStateChange) {
+        return this.doWithState((simpleRowState) => {
+            simpleRowState.update(positionStateChange.data, positionStateChange.requestType, positionStateChange.afterItemId);
+        }).then(stateChanges => this.initKids().then(() => stateChanges));
     }
 }

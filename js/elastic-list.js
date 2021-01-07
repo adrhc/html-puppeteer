@@ -11,9 +11,12 @@ if (Modernizr.template) {
 
     $(() => {
         const items = [{id: 1, name: "dog1"}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
+        const addNewRowsAtEnd = true;
 
         // dogs table with read-only row (default: on creation prepend to table)
-        const component = ElasticListFactory.create("dogsTable", "dogsTableRowTmpl", {items});
+        const component = ElasticListFactory.create("dogsTable", "dogsTableRowTmpl", {
+            items, addNewRowsAtEnd
+        });
 
         component
             .init()
@@ -22,7 +25,10 @@ if (Modernizr.template) {
                     crudListState.createNewItem().name = "new dog";
                     crudListState.updateItem({id: 3, name: "updated dog3"});
                     crudListState.removeById(2);
-                    crudListState.insertItem({id: 2, name: "restored dog2"});
+                    crudListState.insertItem({
+                        id: 2,
+                        name: `restored dog2 with ${addNewRowsAtEnd ? "append" : "preppend"}`
+                    });
                 });
             });
     });

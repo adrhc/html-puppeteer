@@ -56,7 +56,7 @@ class EditableListComponent extends SelectableListComponent {
         const editableList = ev.data;
         const context = $(this).data("btn");
         editableList.doWithState((editableListState) => {
-            if (editableListState.findById(EntityUtils.prototype.transientId)) {
+            if (editableListState.findById(EntityUtils.transientId)) {
                 // new item already exists, do nothing
                 return;
             }

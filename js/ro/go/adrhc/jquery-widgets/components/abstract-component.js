@@ -81,6 +81,16 @@ class AbstractComponent {
 
     /**
      * @param stateChange {StateChange}
+     * @param kidsFilter {function(comp: AbstractComponent): boolean}
+     * @param removeAfterProcessing {boolean}
+     * @return {Promise<StateChange[][]>}
+     */
+    processKids(stateChange, kidsFilter, removeAfterProcessing) {
+        return this.compositeComponent.process(stateChange, kidsFilter, removeAfterProcessing)
+    }
+
+    /**
+     * @param stateChange {StateChange}
      * @return {Promise<StateChange[]>}
      */
     process(stateChange) {
@@ -148,7 +158,7 @@ class AbstractComponent {
      */
     extractEntity(useOwnerOnFields) {
         const inputValues = this.extractInputValues(useOwnerOnFields);
-        return EntityUtils.prototype.removeTransientId(inputValues);
+        return EntityUtils.removeTransientId(inputValues);
     }
 
     /**

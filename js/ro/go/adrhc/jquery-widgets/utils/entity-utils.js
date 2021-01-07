@@ -1,40 +1,40 @@
 class EntityUtils {
-    get transientId() {
+    static get transientId() {
         return "newId";
     }
 
-    idsAreEqual(id1, id2) {
-        if (EntityUtils.prototype.isTransientId(id1) && EntityUtils.prototype.isTransientId(id2)) {
+    static idsAreEqual(id1, id2) {
+        if (EntityUtils.isTransientId(id1) && EntityUtils.isTransientId(id2)) {
             return true;
         }
         return +id1 === +id2;
     }
 
-    haveSameId(item1, item2) {
+    static haveSameId(item1, item2) {
         if (!item1 || !item2 || !item1.id || !item2.id) {
             return false;
         }
-        return EntityUtils.prototype.idsAreEqual(item1.id, item2.id);
+        return EntityUtils.idsAreEqual(item1.id, item2.id);
     }
 
     /**
      * @return {number}
      */
-    generateId() {
+    static generateId() {
         return -1 - Math.random();
     }
 
-    isIdGenerated(id) {
-        return !EntityUtils.prototype.isEmptyId(id) && +id < 0;
+    static isIdGenerated(id) {
+        return !EntityUtils.isEmptyId(id) && +id < 0;
     }
 
-    removeGeneratedIds(array) {
-        array.forEach(it => EntityUtils.prototype.removeGeneratedId(it));
+    static removeGeneratedIds(array) {
+        array.forEach(it => EntityUtils.removeGeneratedId(it));
         return array;
     }
 
-    removeGeneratedId(object) {
-        if (EntityUtils.prototype.isIdGenerated(object.id)) {
+    static removeGeneratedId(object) {
+        if (EntityUtils.isIdGenerated(object.id)) {
             delete object.id;
         }
         return object;
@@ -44,14 +44,14 @@ class EntityUtils {
      * @param items {Array<IdentifiableEntity>}
      * @return {IdentifiableEntity|IdentifiableEntity[]} removed entities
      */
-    removeTransient(items) {
+    static removeTransient(items) {
         let removedEntities = [];
         if (!items || !items.length) {
             return removedEntities;
         }
         let lastRemovedEntity;
         do {
-            lastRemovedEntity = EntityUtils.prototype.removeById(EntityUtils.prototype.transientId, items);
+            lastRemovedEntity = EntityUtils.removeById(EntityUtils.transientId, items);
             if (lastRemovedEntity) {
                 removedEntities.push(lastRemovedEntity);
             }
@@ -59,27 +59,27 @@ class EntityUtils {
         return removedEntities.length === 1 ? removedEntities[0] : removedEntities;
     }
 
-    removeTransientId(object) {
-        if (EntityUtils.prototype.isTransient(object)) {
+    static removeTransientId(object) {
+        if (EntityUtils.isTransient(object)) {
             delete object.id;
         }
         return object;
     }
 
-    isEmptyId(id) {
+    static isEmptyId(id) {
         return !$.isNumeric(id);
     }
 
-    hasEmptyId(item) {
-        return EntityUtils.prototype.isEmptyId(item.id);
+    static hasEmptyId(item) {
+        return EntityUtils.isEmptyId(item.id);
     }
 
-    isTransientId(id) {
-        return id === EntityUtils.prototype.transientId;
+    static isTransientId(id) {
+        return id === EntityUtils.transientId;
     }
 
-    isTransient(item) {
-        return item.id === EntityUtils.prototype.transientId;
+    static isTransient(item) {
+        return item.id === EntityUtils.transientId;
     }
 
     /**
@@ -87,9 +87,9 @@ class EntityUtils {
      * @param items {Array<IdentifiableEntity>}
      * @return {number} item index
      */
-    findAndReplaceById(item, items) {
-        return ArrayUtils.prototype.findAndReplaceByFilter(item, items,
-            (it) => EntityUtils.prototype.haveSameId(it, item));
+    static findAndReplaceById(item, items) {
+        return ArrayUtils.findAndReplaceByFilter(item, items,
+            (it) => EntityUtils.haveSameId(it, item));
     }
 
     /**
@@ -97,12 +97,12 @@ class EntityUtils {
      * @param items {Array<IdentifiableEntity>}
      * @return {number}
      */
-    findIndex(item, items) {
-        return items.findIndex((it) => EntityUtils.prototype.haveSameId(it, item));
+    static findIndex(item, items) {
+        return items.findIndex((it) => EntityUtils.haveSameId(it, item));
     }
 
-    findIndexById(id, items) {
-        return items.findIndex((it) => EntityUtils.prototype.idsAreEqual(it.id, id));
+    static findIndexById(id, items) {
+        return items.findIndex((it) => EntityUtils.idsAreEqual(it.id, id));
     }
 
     /**
@@ -110,8 +110,8 @@ class EntityUtils {
      * @param items {Array<IdentifiableEntity>}
      * @return {IdentifiableEntity}
      */
-    findById(id, items) {
-        return ArrayUtils.prototype.findFirstByKeyAndNumberValue("id", id, items);
+    static findById(id, items) {
+        return ArrayUtils.findFirstByKeyAndNumberValue("id", id, items);
     }
 
     /**
@@ -119,16 +119,16 @@ class EntityUtils {
      * @param items {Array<IdentifiableEntity>}
      * @return {IdentifiableEntity} removed entity
      */
-    removeById(id, items) {
-        return ArrayUtils.prototype.removeFirstByFilter(items,
-            (it) => EntityUtils.prototype.idsAreEqual(it.id, id))
+    static removeById(id, items) {
+        return ArrayUtils.removeFirstByFilter(items,
+            (it) => EntityUtils.idsAreEqual(it.id, id))
     }
 
     /**
      * @param id {number|string|undefined}
      * @return {IdentifiableEntity}
      */
-    newIdentifiableEntity(id) {
-        return new IdentifiableEntity(!!id ? id : EntityUtils.prototype.transientId);
+    static newIdentifiableEntity(id) {
+        return new IdentifiableEntity(!!id ? id : EntityUtils.transientId);
     }
 }

@@ -20,11 +20,9 @@ class ElasticListComponent extends SimpleListComponent {
          * @type {Array}
          */
         const items = stateChange.data;
-        items.forEach((item, index) => this.addChildComponent(
-            this.idRowCompFactoryFn(item,
-                index === 0 ? undefined : items[index - 1],
-                this.tableBasedView.tableAdapter)
-        ));
+        const kids = items.map((item, index) => this.idRowCompFactoryFn(item,
+            index === 0 ? undefined : items[index - 1], this.tableBasedView.tableAdapter));
+        this.addChildComponent(kids);
         return this.initKids();
     }
 
@@ -35,17 +33,25 @@ class ElasticListComponent extends SimpleListComponent {
      */
     updateViewOnCREATE(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnCREATE:\n${JSON.stringify(stateChange)}`);
-        this.idRowCompFactoryFn(stateChange.data, stateChange.afterItemId, this.tableBasedView.tableAdapter)
-            .updateViewOnStateChanges();
+        const idRowComp = this.idRowCompFactoryFn(stateChange.data, stateChange.afterItemId, this.tableBasedView.tableAdapter);
+        this.addChildComponent(idRowComp);
+        return idRowComp.updateViewOnStateChanges();
     }
 
     /**
      * @param stateChange {PositionStateChange}
-     * @return {Promise<PositionStateChange>}
-     * @private
+     * @return {Promise}
      */
     updateViewOnAny(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
-        return Promise.resolve(stateChange);
+        return this.processKids(stateChange, this.kidsFilterOf(stateChange), stateChange.requestType === "DELETE");
+    }
+
+    /**
+     * @param stateChange {PositionStateChange}
+     * @return {function(kid: IdentifiableRowComponent): boolean}
+     */
+    kidsFilterOf(stateChange) {
+        return (kid) => EntityUtils.haveSameId(kid.simpleRowState.rowState, stateChange.data);
     }
 }

@@ -65,15 +65,25 @@ class CompositeComponent {
 
     /**
      * @param stateChange {StateChange}
+     * @param kidsFilter {function(comp: AbstractComponent): boolean}
+     * @param removeAfterProcessing {boolean}
+     * @return {Promise<StateChange[][]>}
      */
-    process(stateChange) {
-
+    process(stateChange, kidsFilter, removeAfterProcessing = false) {
+        const components = this.childComponents.filter(kidsFilter);
+        const promises = components.map(comp => comp.process(stateChange));
+        return Promise.allSettled(promises).then(it => {
+            if (removeAfterProcessing) {
+                ArrayUtils.removeElements(this.childComponents, components);
+            }
+            return it;
+        });
     }
 
     /**
      * create the child component then init it
      *
-     * @return {Promise<[]>} array of StateChange[]
+     * @return {Promise<Array<StateChange>[]>}
      */
     init() {
         this.childComponents = this._createComponents();
@@ -82,7 +92,7 @@ class CompositeComponent {
     }
 
     /**
-     * @return {Promise<StateChange[]|undefined>[]}
+     * @return {Promise<StateChange[]>[]}
      * @protected
      */
     _initializeComponents() {

@@ -17,7 +17,7 @@ class InMemoryCrudRepository extends CrudRepository {
     }
 
     delete(id) {
-        const removedItem = EntityUtils.prototype.removeById(id, this.items);
+        const removedItem = EntityUtils.removeById(id, this.items);
         if (removedItem) {
             return Promise.resolve(removedItem);
         } else {
@@ -50,7 +50,7 @@ class InMemoryCrudRepository extends CrudRepository {
      * @return {Promise<IdentifiableEntity>}
      */
     update(item) {
-        const removedIndex = EntityUtils.prototype.findAndReplaceById(item, this.items);
+        const removedIndex = EntityUtils.findAndReplaceById(item, this.items);
         if (removedIndex < 0) {
             return Promise.reject(`repository couldn't find item to update:\n${JSON.stringify(item)}`);
         } else {

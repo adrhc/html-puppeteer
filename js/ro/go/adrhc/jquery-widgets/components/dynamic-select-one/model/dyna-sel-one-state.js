@@ -115,7 +115,7 @@ class DynaSelOneState {
         if (!this.options) {
             return undefined;
         }
-        return this.options.find(opt => EntityUtils.prototype.idsAreEqual(opt.id, id));
+        return this.options.find(opt => EntityUtils.idsAreEqual(opt.id, id));
     }
 
     /**

@@ -1,14 +1,14 @@
 class ArrayUtils {
     /**
      * @param item
-     * @param items {Array<IdentifiableEntity>}
+     * @param array {Array<IdentifiableEntity>}
      * @param filter
      * @return {number} item index
      */
-    findAndReplaceByFilter(item, items, filter) {
-        const index = items.findIndex(filter);
+    static findAndReplaceByFilter(item, array, filter) {
+        const index = array.findIndex(filter);
         if (index >= 0) {
-            items.splice(index, 1, item);
+            array.splice(index, 1, item);
         }
         return index;
     }
@@ -16,34 +16,42 @@ class ArrayUtils {
     /**
      * @param keyName {string}
      * @param keyValue {number|string}
-     * @param items {Array<{}>}
+     * @param array {Array<{}>}
      * @return {{}}
      */
-    findFirstByKeyAndNumberValue(keyName, keyValue, items) {
-        return items.find(it => it[keyName] == keyValue);
+    static findFirstByKeyAndNumberValue(keyName, keyValue, array) {
+        return array.find(it => it[keyName] == keyValue);
     }
 
     /**
-     * @param items {Array<{}>}
-     * @param filter
+     * @param array {Array<{}>}
+     * @param filter {function(value: *, index: number, obj: []): boolean}
      * @return removed item
      */
-    removeFirstByFilter(items, filter) {
-        const index = items.findIndex(filter);
+    static removeFirstByFilter(array, filter) {
+        const index = array.findIndex(filter);
         if (index < 0) {
             return undefined;
         }
-        const itemToRemove = items[index];
-        items.splice(index, 1);
+        const itemToRemove = array[index];
+        array.splice(index, 1);
         return itemToRemove;
+    }
+
+    /**
+     * @param array {Array}
+     * @param elements {Array}
+     */
+    static removeElements(array, elements) {
+        elements.forEach(el => array.splice(array.indexOf(el), 1))
     }
 
     /**
      * @param item
      * @param index {number}
-     * @param items {Array}
+     * @param array {Array}
      */
-    insert(item, index, items) {
-        items.splice(index, 0, item);
+    static insert(item, index, array) {
+        array.splice(index, 0, item);
     }
 }
