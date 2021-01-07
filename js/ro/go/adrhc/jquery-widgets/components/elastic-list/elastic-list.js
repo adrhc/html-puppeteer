@@ -16,13 +16,7 @@ class ElasticListComponent extends SimpleListComponent {
     }
 
     updateViewOnUPDATE_ALL(stateChange) {
-        /**
-         * @type {Array}
-         */
-        const items = stateChange.data;
-        const kids = items.map((item, index) => this.idRowCompFactoryFn(item,
-            index === 0 ? undefined : items[index - 1], this.tableBasedView.tableAdapter));
-        this.addChildComponent(kids);
+        this.addChildComponent(this._createChildComponents(stateChange.data));
         return this.initKids();
     }
 
@@ -33,7 +27,7 @@ class ElasticListComponent extends SimpleListComponent {
      */
     updateViewOnCREATE(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnCREATE:\n${JSON.stringify(stateChange)}`);
-        const idRowComp = this.idRowCompFactoryFn(stateChange.data, stateChange.afterItemId, this.tableBasedView.tableAdapter);
+        const idRowComp = this._createChildComponent(stateChange);
         this.addChildComponent(idRowComp);
         return idRowComp.updateViewOnStateChanges();
     }
@@ -44,14 +38,34 @@ class ElasticListComponent extends SimpleListComponent {
      */
     updateViewOnAny(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
-        return this.processKids(stateChange, this.kidsFilterOf(stateChange), stateChange.requestType === "DELETE");
+        return this.processKids(stateChange, this._kidsFilterOf(stateChange), stateChange.requestType === "DELETE");
     }
 
     /**
      * @param stateChange {PositionStateChange}
      * @return {function(kid: IdentifiableRowComponent): boolean}
+     * @protected
      */
-    kidsFilterOf(stateChange) {
+    _kidsFilterOf(stateChange) {
         return (kid) => EntityUtils.haveSameId(kid.simpleRowState.rowState, stateChange.data);
+    }
+
+    /**
+     * @param items {Array}
+     * @return {IdentifiableRowComponent[]}
+     * @protected
+     */
+    _createChildComponents(items) {
+        return items.map((item, index) => this.idRowCompFactoryFn(item,
+            index === 0 ? undefined : items[index - 1], this.tableBasedView.tableAdapter));
+    }
+
+    /**
+     * @param positionStateChange {PositionStateChange}
+     * @return {IdentifiableRowComponent}
+     * @protected
+     */
+    _createChildComponent(positionStateChange) {
+        return this.idRowCompFactoryFn(positionStateChange.data, positionStateChange.afterItemId, this.tableBasedView.tableAdapter);
     }
 }
