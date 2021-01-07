@@ -33,6 +33,17 @@ class ElasticListComponent extends SimpleListComponent {
      * @return {Promise<PositionStateChange>}
      * @private
      */
+    updateViewOnCREATE(stateChange) {
+        console.log(`${this.constructor.name}.updateViewOnCREATE:\n${JSON.stringify(stateChange)}`);
+        this.idRowCompFactoryFn(stateChange.data, stateChange.afterItemId, this.tableBasedView.tableAdapter)
+            .updateViewOnStateChanges();
+    }
+
+    /**
+     * @param stateChange {PositionStateChange}
+     * @return {Promise<PositionStateChange>}
+     * @private
+     */
     updateViewOnAny(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
         return Promise.resolve(stateChange);
