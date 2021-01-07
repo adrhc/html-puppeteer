@@ -23,10 +23,9 @@ if (Modernizr.template) {
         const personsRepository = new InMemoryPersonsRepository(new EntityHelper(), persons);
 
         // DYNAMIC-SELECT-ONE
-        DynamicSelectOneFactory.create({
-            elemIdOrJQuery: "dyna-sel-one",
-            repository: personsRepository,
-            placeholder: "the name to search for"
+        DynamicSelectOneFactory.create("dyna-sel-one", personsRepository, {
+            placeholder: "the name to search for",
+            focusOnInit: true
         }).init();
 
         // EDITABLE-LIST

@@ -25,17 +25,16 @@ if (Modernizr.template) {
         ];
         const personsRepository = new InMemoryPersonsRepository(new EntityHelper(), persons);
 
-        const items = [{id: 1, name: "dog1", person: person1}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
-        const addNewRowsAtEnd = true;
+        const dogs = [{id: 1, name: "dog1", person: person1}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
 
-        // see interface ChildComponentFactory
-        const rowChildCompFactories = {
+        // DynamicSelectOneComponent child component factory (see ChildComponentFactory)
+        const dynaSelOneCompFactory = {
             /**
              * @param idRowCompParent {IdentifiableRowComponent}
              * @return {DynamicSelectOneComponent}
              */
             createComp: (idRowCompParent) => {
-                AssertionUtils.assertNotNull(idRowCompParent.view.$elem, "rowChildCompFactories, DynamicSelectOneFactory");
+                AssertionUtils.assertNotNull(idRowCompParent.view.$elem, "dynaSelOneCompFactory, DynamicSelectOneFactory");
 
                 return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", idRowCompParent.view.$elem), personsRepository, {
                     placeholder: "the name to search for",
@@ -44,14 +43,18 @@ if (Modernizr.template) {
             }
         };
 
-        // dogs table with read-only row (default: on creation prepend to table)
-        const elasticList = ElasticListFactory.create("dogsTable", "dogsTableRowTmpl", {
-            items, addNewRowsAtEnd, rowChildCompFactories
+        // by default on creation the row is prepended to table
+        const addNewRowsAtEnd = true;
+
+        // dogs table row
+        const createDeleteList = CreateDeleteListFactory.create("dogsTable", "dogsTableRowTmpl", {
+            items: dogs, addNewRowsAtEnd, rowChildCompFactories: dynaSelOneCompFactory
         });
 
-        elasticList
+        // some doWithState operations on createDeleteList
+        createDeleteList
             .init()
-            .then(() => elasticList.doWithState((crudListState) => {
+            .then(() => createDeleteList.doWithState((crudListState) => {
                 crudListState.createNewItem().name = "new dog";
                 crudListState.updateItem({id: 3, name: "updated dog3"});
                 crudListState.removeById(2);
@@ -61,7 +64,7 @@ if (Modernizr.template) {
                 });
             }))
             .then(() => console.log("ElasticListComponent.extractAllEntities:\n",
-                elasticList.extractAllEntities()));
+                createDeleteList.extractAllEntities()));
     });
 } else {
     // Find another way to add the rows to the table because

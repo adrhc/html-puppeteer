@@ -82,8 +82,8 @@ class TableElementAdapter {
     }
 
     /**
-     * @param elem {HTMLElement|jQuery}
-     * @param searchParentsForDataIdIfMissingOnElem {boolean|undefined}
+     * @param elem {HTMLElement|jQuery<HTMLElement>}
+     * @param [searchParentsForDataIdIfMissingOnElem] {boolean}
      * @return {string|number}
      */
     rowDataIdOf(elem, searchParentsForDataIdIfMissingOnElem) {

@@ -26,10 +26,9 @@ if (Modernizr.template) {
         const personsRepository = new PersonsRepository();
 
         // DYNAMIC-SELECT-ONE
-        DynamicSelectOneFactory.create({
-            elemIdOrJQuery: "dyna-sel-one",
-            repository: personsRepository,
+        DynamicSelectOneFactory.create("dyna-sel-one", personsRepository, {
             placeholder: "the name to search for",
+            focusOnInit: true,
             useLastSearchResult: true
         }).init();
 

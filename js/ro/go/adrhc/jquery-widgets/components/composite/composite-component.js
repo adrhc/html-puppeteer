@@ -154,8 +154,12 @@ class CompositeComponent {
         }
     }
 
+    /**
+     * childComponentFactories is "configuration" that's why is not cleared
+     */
     close() {
         this.childComponents.forEach(kid => kid.close());
         this.childComponents = [];
+
     }
 }
