@@ -1,3 +1,6 @@
+/**
+ * creates CreateDeleteListComponent to be used as a component while editing a person
+ */
 class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
     static personsRepository = new InMemoryPersonsRepository([
         new Person(1, "gigi1", "kent1",
@@ -37,7 +40,10 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
 
         // create-delete cats list (aka table)
         return CreateDeleteListFactory.create($catsTable, "editableCatsRowTmpl", {
-            items: parentComp.state.rowState.cats, addNewRowsAtEnd: true, rowChildCompFactories: dynaSelOneCompFactory
+            items: parentComp.state.rowState.cats,
+            addNewRowsAtEnd: true,
+            rowChildCompFactories: dynaSelOneCompFactory,
+            childOperations: new CatsCreateDeleteListChildOperations(parentComp, "cats")
         });
     }
 }
