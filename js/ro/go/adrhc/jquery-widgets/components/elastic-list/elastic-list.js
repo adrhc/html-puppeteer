@@ -1,5 +1,7 @@
 class ElasticListComponent extends SimpleListComponent {
     /**
+     * create the row component and set its state
+     *
      * @type {function(identifiableEntity: IdentifiableEntity, afterItemId: number|string, mustacheTableElemAdapter: MustacheTableElemAdapter): IdentifiableRowComponent}
      */
     idRowCompFactoryFn;
@@ -23,14 +25,14 @@ class ElasticListComponent extends SimpleListComponent {
 
     /**
      * @param stateChange {PositionStateChange}
-     * @return {Promise<PositionStateChange>}
+     * @return {Promise}
      * @private
      */
     updateViewOnCREATE(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnCREATE:\n${JSON.stringify(stateChange)}`);
         const idRowComp = this._createChildComponent(stateChange);
         this.addChildComponent(idRowComp);
-        return idRowComp.updateViewOnStateChanges();
+        return idRowComp.updateViewOnStateChanges().then(() => idRowComp.initKids());
     }
 
     /**

@@ -42,14 +42,14 @@ class SimpleRowComponent extends AbstractComponent {
     }
 
     /**
-     * kids can be initialized because the parent state exists
+     * After deletion the kids will be also removed so initKids will have no effect (which is good).
      *
-     * @param positionStateChange {PositionStateChange}
+     * @param stateUpdaterFn {function(state: BasicState)}
+     * @param delayViewUpdate {boolean} whether to (immediately) update the view based or not
      * @return {Promise<StateChange[]>}
      */
-    process(positionStateChange) {
-        return this.doWithState((simpleRowState) => {
-            simpleRowState.update(positionStateChange.data, positionStateChange.requestType, positionStateChange.afterItemId);
-        }).then(stateChanges => this.initKids().then(() => stateChanges));
+    doWithState(stateUpdaterFn, delayViewUpdate) {
+        return super.doWithState(stateUpdaterFn, delayViewUpdate)
+            .then(stateChanges => this.initKids().then(() => stateChanges));
     }
 }
