@@ -18,7 +18,9 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @return {Promise<StateChange[]|undefined>}
      */
     init() {
-        return this._reloadState().then(() => super.init()).then(() => this.initKids());
+        return this._reloadState()
+            .then(() => super.init())
+            .then((stateChanges) => this.initKids().then(() => stateChanges));
     }
 
     /**
