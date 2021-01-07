@@ -10,14 +10,14 @@ class SimpleListFactory {
      * @return {SimpleListComponent}
      */
     static create({
-               items = [],
-               tableIdOrJQuery,
-               bodyRowTmplId,
-               mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId),
-               repository = new InMemoryCrudRepository(new EntityHelper(), items),
-               state = new SimpleListState(),
-               view = new SimpleListView(mustacheTableElemAdapter)
-           }) {
+                      items = [],
+                      tableIdOrJQuery,
+                      bodyRowTmplId,
+                      mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId),
+                      repository = new InMemoryCrudRepository(items),
+                      state = new SimpleListState(),
+                      view = new SimpleListView(mustacheTableElemAdapter)
+                  }) {
         return new SimpleListComponent(repository, state, view);
     }
 }

@@ -20,8 +20,7 @@ class CatsChildCompFactory extends ChildComponentFactory {
         }
 
         // parentComp.state is {SimpleRowState}
-        const repository = new InMemoryCrudRepository(new EntityHelper(),
-            $.extend(true, [], parentComp.state.rowState.cats));
+        const repository = new InMemoryCrudRepository($.extend(true, [], parentComp.state.rowState.cats));
 
         // cats table component
         return EditableListFactory.create({

@@ -23,7 +23,7 @@ if (Modernizr.template) {
             new Person(3, "gigi3", "kent3",
                 [{id: 31, name: "cat31"}, {id: 32, name: "cat32"}, {id: 33, name: "cat33"}])
         ];
-        const personsRepository = new InMemoryPersonsRepository(new EntityHelper(), persons);
+        const personsRepository = new InMemoryPersonsRepository(persons);
 
         const dogs = [{id: 1, name: "dog1", person: person1}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
 

@@ -14,7 +14,7 @@ class ElasticListFactory {
      */
     static create(tableIdOrJQuery, bodyRowTmplId, {
         items = [],
-        repository = new InMemoryCrudRepository(new EntityHelper(), items),
+        repository = new InMemoryCrudRepository(items),
         addNewRowsAtEnd,
         crudListState = new CrudListState(addNewRowsAtEnd),
         mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId),

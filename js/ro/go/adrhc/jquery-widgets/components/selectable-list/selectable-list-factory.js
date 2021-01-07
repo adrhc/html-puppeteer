@@ -16,7 +16,7 @@ class SelectableListFactory {
                       tableIdOrJQuery,
                       bodyRowTmplId,
                       mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId),
-                      repository = new InMemoryCrudRepository(new EntityHelper(), items),
+                      repository = new InMemoryCrudRepository(items),
                       state = new SelectableListState(),
                       notSelectedRow,
                       selectedRow,

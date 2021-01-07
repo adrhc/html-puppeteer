@@ -20,7 +20,7 @@ if (Modernizr.template) {
             new Person(3, "gigi3", "kent3",
                 [{id: 31, name: "cat31"}, {id: 32, name: "cat32"}, {id: 33, name: "cat33"}])
         ];
-        const personsRepository = new InMemoryPersonsRepository(new EntityHelper(), persons);
+        const personsRepository = new InMemoryPersonsRepository(persons);
 
         // DYNAMIC-SELECT-ONE
         DynamicSelectOneFactory.create("dyna-sel-one", personsRepository, {

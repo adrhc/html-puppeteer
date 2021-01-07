@@ -2,8 +2,8 @@
  * also extends DynaSelOneRepository.findByTitle
  */
 class InMemoryPersonsRepository extends InMemoryCrudRepository {
-    constructor(entityHelper, items) {
-        super(entityHelper, items);
+    constructor(items) {
+        super(items);
     }
 
     findByTitle(title) {
