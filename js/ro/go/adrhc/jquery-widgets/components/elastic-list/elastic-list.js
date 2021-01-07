@@ -12,12 +12,13 @@ class ElasticListComponent extends SimpleListComponent {
      */
     constructor(repository, state, view, idRowCompFactoryFn) {
         super(repository, state, view);
+        this.crudListState = state;
         this.idRowCompFactoryFn = idRowCompFactoryFn;
     }
 
-    updateViewOnUPDATE_ALL(stateChange) {
-        this.addChildComponent(this._createChildComponents(stateChange.data));
-        return this.initKids();
+    initKids() {
+        this.addChildComponent(this._createChildComponents(this.crudListState.items));
+        return super.initKids();
     }
 
     /**

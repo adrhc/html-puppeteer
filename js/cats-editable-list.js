@@ -24,7 +24,7 @@ if (Modernizr.template) {
 
         // DYNAMIC-SELECT-ONE
         DynamicSelectOneFactory.create({
-            elemId: "dyna-sel-one",
+            elemIdOrJQuery: "dyna-sel-one",
             placeholder: "the name to search for", repository: personsRepository
         }).init();
 

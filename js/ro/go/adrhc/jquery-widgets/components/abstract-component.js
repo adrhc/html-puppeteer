@@ -118,6 +118,7 @@ class AbstractComponent {
 
     /**
      * component initializer: (re)load state, update the view, configure events
+     * kids could be initialized only when the state is (re)loaded
      *
      * @return {Promise<StateChange[]|undefined>}
      */

@@ -1,16 +1,16 @@
 class DynamicSelectOneView extends AbstractView {
     /**
-     * @param elemId {string}
+     * @param elemIdOrJQuery {string|jQuery<HTMLTableRowElement>}
      * @param placeholder {string}
      * @param optionsToShow {number}
      * @param tmplUrl {string}
      */
-    constructor(elemId, {
+    constructor(elemIdOrJQuery, {
         placeholder, optionsToShow = 10,
         tmplUrl = "js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/templates/dyna-sel-one.html"
     }) {
         super();
-        this._setupElem(elemId);
+        this._setupElem(elemIdOrJQuery);
         this._setupOwner();
         this.tmpl = new CachedAjax(tmplUrl);
         this.placeholder = placeholder;

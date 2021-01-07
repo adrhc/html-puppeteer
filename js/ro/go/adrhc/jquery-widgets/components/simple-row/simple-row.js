@@ -36,12 +36,14 @@ class SimpleRowComponent extends AbstractComponent {
      * @return {Promise<StateChange>}
      */
     updateViewOnDELETE(stateChange) {
-        this.close();
+        this.close(); // kids also closed
         this.simpleRowView.deleteRowByDataId(stateChange.data.id);
         return Promise.resolve(stateChange);
     }
 
     /**
+     * kids can be initialized because the parent state exists
+     *
      * @param positionStateChange {PositionStateChange}
      * @return {Promise<StateChange[]>}
      */

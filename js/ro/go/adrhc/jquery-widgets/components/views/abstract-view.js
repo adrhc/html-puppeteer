@@ -15,14 +15,14 @@ class AbstractView {
     _owner;
 
     /**
-     * @param elemId {string|jQuery<HTMLTableRowElement>}
+     * @param elemIdOrJQuery {string|jQuery<HTMLTableRowElement>}
      * @protected
      */
-    _setupElem(elemId) {
-        if (elemId instanceof jQuery) {
-            this._$elem = elemId;
+    _setupElem(elemIdOrJQuery) {
+        if (elemIdOrJQuery instanceof jQuery) {
+            this._$elem = elemIdOrJQuery;
         } else {
-            this._$elem = $(`#${elemId}`);
+            this._$elem = $(`#${elemIdOrJQuery}`);
         }
     }
 
