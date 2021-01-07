@@ -4,7 +4,7 @@
 class DynamicSelectOneView extends AbstractView {
     /**
      * @param elemIdOrJQuery {string|jQuery<HTMLTableRowElement>}
-     * @param placeholder {string}
+     * @param [placeholder] {string}
      * @param optionsToShow {number}
      * @param tmplUrl {string}
      */

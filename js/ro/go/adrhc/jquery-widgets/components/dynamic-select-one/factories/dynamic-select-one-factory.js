@@ -4,11 +4,16 @@ class DynamicSelectOneFactory {
      * @param repository {DynaSelOneRepository}
      * @param placeholder {string}
      * @param searchLastSearchResult {boolean|undefined}
+     * @param childOperations {ChildComponent}
      * @return {DynamicSelectOneComponent}
      */
-    static create({elemIdOrJQuery, repository, placeholder, searchLastSearchResult}) {
-        const dynaSelOneView = new DynamicSelectOneView(elemIdOrJQuery, placeholder);
+    static create({elemIdOrJQuery, repository, placeholder, searchLastSearchResult, childOperations}) {
+        const dynaSelOneView = new DynamicSelectOneView(elemIdOrJQuery, {placeholder});
         const dynaSelOneState = new DynaSelOneState(repository, {searchLastSearchResult});
-        return new DynamicSelectOneComponent(dynaSelOneView, dynaSelOneState);
+        const dynaSelOneComp = new DynamicSelectOneComponent(dynaSelOneView, dynaSelOneState);
+        if (childOperations) {
+            dynaSelOneComp.childComponent = childOperations;
+        }
+        return dynaSelOneComp;
     }
 }

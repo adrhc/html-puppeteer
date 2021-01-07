@@ -1,13 +1,13 @@
 class DynamicSelectOneComponent extends AbstractComponent {
     /**
-     * @param dynaSelOneView {DynamicSelectOneView}
+     * @param view {DynamicSelectOneView}
      * @param state {DynaSelOneState}
      */
-    constructor(dynaSelOneView, state) {
+    constructor(view, state) {
         // todo: adapt DynamicSelectOneView to BasicState
-        super(state, dynaSelOneView);
-        this.dynaSelOneView = dynaSelOneView;
-        this.state = state;
+        super(state, view);
+        this.dynaSelOneState = state;
+        this.dynaSelOneView = view;
     }
 
     onOptionClick(ev) {
@@ -16,7 +16,7 @@ class DynamicSelectOneComponent extends AbstractComponent {
             return true;
         }
         const _this = ev.data;
-        _this.state.updateById($(this).val())
+        _this.dynaSelOneState.updateById($(this).val())
             .then(state => _this.updateView(state));
     }
 
@@ -33,21 +33,24 @@ class DynamicSelectOneComponent extends AbstractComponent {
     }
 
     _onEscape() {
-        this.state.updateByTitle().finally(() => this.updateView(this.state, true));
+        this.dynaSelOneState.updateByTitle().finally(() => this.updateView(this.state, true));
     }
 
     _onEnter(text) {
-        this.state.updateByTitle(text).then(state => this.updateView(state, true));
+        this.dynaSelOneState.updateByTitle(text).then(state => this.updateView(state, true));
     }
 
     _onBlur(text) {
-        this.state.updateByTitle(text).then(state => this.updateView(state));
+        this.dynaSelOneState.updateByTitle(text).then(state => this.updateView(state));
     }
 
+    /**
+     * @return {Promise<void>}
+     */
     init() {
         this._clearOnBlurHandlers();
         return this.dynaSelOneView
-            .update(this.state, true)
+            .update(this.dynaSelOneState, true)
             .then(() => this._configureEvents());
     }
 
@@ -83,7 +86,7 @@ class DynamicSelectOneComponent extends AbstractComponent {
             this.onKeyup.bind(ev.target)(ev, true);
         };
         // console.log(`DynamicSelectOneComponent._configureOnBlur:\n${JSON.stringify(this.extractEntity())}`);
-        // console.log("DynamicSelectOneComponent selectedItem:\n", this.state.selectedItem);
+        // console.log("DynamicSelectOneComponent selectedItem:\n", this.dynaSelOneState.selectedItem);
     }
 
     _clearOnBlurHandlers() {

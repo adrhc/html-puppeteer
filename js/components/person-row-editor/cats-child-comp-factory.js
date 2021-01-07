@@ -11,7 +11,7 @@ class CatsChildCompFactory extends ChildComponentFactory {
             tableRelativePositionOnCreate: "append"
         });
 
-        const catsChildOperations = new ChildComponent(undefined, parentComp);
+        const catsChildOperations = new ChildComponent(parentComp);
         catsChildOperations.copyKidState = (parentState) => {
             // catsChildOperations.kidComp is {EditableListComponent} = cats table component
             // kidComp means "me/this/current" relative to ChildComponent

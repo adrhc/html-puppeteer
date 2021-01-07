@@ -31,7 +31,8 @@ if (Modernizr.template) {
                     });
                 });
             })
-            .then(() => console.log("component.extractAllEntities:\n", component.extractAllEntities(true)));
+            .then(() => console.log("component.extractAllEntities:\n",
+                component.extractAllEntities(true)));
     });
 } else {
     // Find another way to add the rows to the table because

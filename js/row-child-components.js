@@ -10,9 +10,12 @@ if (Modernizr.template) {
     });
 
     $(() => {
+        const person1 = new Person(1, "gigi1", "kent1");
+
         const persons = [
-            new Person(1, "gigi1", "kent1",
-                [{id: 1, name: "cat1"}, {id: 2, name: "cat2"}, {id: 3, name: "cat3"}]),
+            $.extend(new Person(), person1, {
+                cats: [{id: 1, name: "cat1"}, {id: 2, name: "cat2"}, {id: 3, name: "cat3"}]
+            }),
             new Person(2, "gigi2", "kent2",
                 [{id: 21, name: "cat21"}, {id: 22, name: "cat22"}, {id: 23, name: "cat23"}]),
             new Person(4, "gigi4", "kent4",
@@ -22,17 +25,23 @@ if (Modernizr.template) {
         ];
         const personsRepository = new InMemoryPersonsRepository(new EntityHelper(), persons);
 
-        const items = [{id: 1, name: "dog1"}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
+        const items = [{id: 1, name: "dog1", person: person1}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
         const addNewRowsAtEnd = true;
 
         // see interface ChildComponentFactory
         const rowChildCompFactories = {
+            /**
+             * @param idRowCompParent {IdentifiableRowComponent}
+             * @return {DynamicSelectOneComponent}
+             */
             createComp: (idRowCompParent) => {
                 AssertionUtils.assertNotNull(idRowCompParent.view.$elem, "rowChildCompFactories, DynamicSelectOneFactory");
+
                 return DynamicSelectOneFactory.create({
                     elemIdOrJQuery: $("[data-id='dyna-sel-one']", idRowCompParent.view.$elem),
                     placeholder: "the name to search for",
-                    repository: personsRepository
+                    repository: personsRepository,
+                    childOperations: new DynaSelOneChildComp(idRowCompParent)
                 })
             }
         };

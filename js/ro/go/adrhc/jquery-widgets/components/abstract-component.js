@@ -35,7 +35,7 @@ class AbstractComponent {
      * @return {boolean}
      */
     copyMyState(parentState) {
-        return this._childComponent.copyKidState(parentState);
+        return this._childComponent && this._childComponent.copyKidState(parentState);
     }
 
     /**
@@ -47,7 +47,6 @@ class AbstractComponent {
         this.view = view;
         this.stateChangesDispatcher = new StateChangesDispatcher(this);
         this.compositeComponent = new CompositeComponent(this);
-        this._childComponent = new ChildComponent(this);
     }
 
     /**

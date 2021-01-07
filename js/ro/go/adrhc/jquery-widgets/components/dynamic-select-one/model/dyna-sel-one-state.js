@@ -72,8 +72,8 @@ class DynaSelOneState extends BasicState {
     /**
      * update the model then compute derivatives
      *
-     * @param title {string|undefined}
-     * @param options {DynaSelOneItem[]|undefined}
+     * @param [title] {string}
+     * @param [options] {DynaSelOneItem[]}
      * @private
      */
     _update(title, options) {
@@ -83,6 +83,17 @@ class DynaSelOneState extends BasicState {
             this.title = this.selectedItem.title;
         } else {
             this.title = title;
+        }
+    }
+
+    /**
+     * @param dynaSelOneItem {DynaSelOneItem}
+     */
+    updateWithDynaSelOneItem(dynaSelOneItem) {
+        if (dynaSelOneItem) {
+            this._update(dynaSelOneItem.title, [dynaSelOneItem]);
+        } else {
+            this._update();
         }
     }
 

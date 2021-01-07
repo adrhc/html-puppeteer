@@ -7,19 +7,25 @@ class ChildComponent {
      *
      * @type {AbstractComponent}
      */
-    kidComp
+    _kidComp
     /**
      * @type {AbstractComponent}
      */
     parentComp;
 
     /**
-     * @param myComp {AbstractComponent|undefined}
      * @param parentComp {AbstractComponent|undefined}
      */
-    constructor(myComp, parentComp) {
-        this.kidComp = myComp;
+    constructor(parentComp) {
         this.parentComp = parentComp;
+    }
+
+    get kidComp() {
+        return this._kidComp;
+    }
+
+    set kidComp(value) {
+        this._kidComp = value;
     }
 
     /**
