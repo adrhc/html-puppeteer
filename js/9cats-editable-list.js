@@ -39,12 +39,12 @@ if (Modernizr.template) {
             tableRelativePositionOnCreate
         });
 
-        // EDITABLE ROW (using child component from CatsChildCompFactory)
+        // EDITABLE ROW (using child component from CatsEditableListChildFactory)
         const editableRow = SimpleRowFactory.createIdentifiableRow(
             {
                 tableIdOrJQuery,
                 rowTmpl: "personsTableEditableRowTmpl",
-                childCompFactories: [new CatsChildCompFactory()]
+                childCompFactories: [new CatsEditableListChildFactory()]
             });
 
         // DELETABLE ROW

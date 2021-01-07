@@ -46,7 +46,7 @@ if (Modernizr.template) {
             {
                 tableIdOrJQuery,
                 rowTmpl: "personsTableEditableRowTmpl",
-                childCompFactories: new CatsChildCompFactory()
+                childCompFactories: new CatsEditableListChildFactory()
             });
 
         // doesn't make sense to use tableRelativePositionOnCreate

@@ -1,4 +1,4 @@
-class CatsChildCompFactory extends ChildComponentFactory {
+class CatsEditableListChildFactory extends ChildComponentFactory {
     /**
      * @param parentComp {AbstractComponent}
      * @return {AbstractComponent}
