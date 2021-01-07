@@ -6,7 +6,7 @@ class DynamicSelectOneFactory {
      * @param searchLastSearchResult {boolean|undefined}
      * @return {DynamicSelectOneComponent}
      */
-    create({elemId, repository, placeholder, searchLastSearchResult}) {
+    static create({elemId, repository, placeholder, searchLastSearchResult}) {
         const dynaSelOneView = new DynamicSelectOneView(elemId, placeholder);
         const dynaSelOneState = new DynaSelOneState(repository, {searchLastSearchResult});
         return new DynamicSelectOneComponent(dynaSelOneView, dynaSelOneState);

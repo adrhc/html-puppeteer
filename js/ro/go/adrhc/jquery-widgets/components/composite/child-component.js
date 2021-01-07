@@ -5,7 +5,7 @@ class ChildComponent {
     /**
      * @type {AbstractComponent}
      */
-    myComp
+    kidComp
     /**
      * @type {AbstractComponent}
      */
@@ -16,15 +16,15 @@ class ChildComponent {
      * @param parentComp {AbstractComponent|undefined}
      */
     constructor(myComp, parentComp) {
-        this.myComp = myComp;
+        this.kidComp = myComp;
         this.parentComp = parentComp;
     }
 
     /**
      * @param parentState
-     * @return {boolean} whether an update occurred or not
+     * @return {boolean} whether something was copied or not
      */
-    updateParentState(parentState) {
+    copyKidState(parentState) {
         return false;
     }
 }

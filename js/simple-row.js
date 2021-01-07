@@ -13,16 +13,15 @@ if (Modernizr.template) {
 
         // dogs table with editable row
         const dogsTableWithEdit = "dogsTableWithEdit";
-        SimpleListFactory.prototype
-            .create({items: dogs, tableId: dogsTableWithEdit})
+        SimpleListFactory.create({items: dogs, tableIdOrJQuery: dogsTableWithEdit})
             .init()
             .then(updateAllStateChanges => {
                 const items = updateAllStateChanges[0].data;
-                const editableRow = SimpleRowFactory.prototype
-                    .createIdentifiableRow(dogsTableWithEdit, {
-                        rowTmpl: "dogsTableWithEditSelectedRowTmpl",
-                        tableRelativePositionOnCreate: "prepend"
-                    });
+                const editableRow = SimpleRowFactory.createIdentifiableRow({
+                    tableIdOrJQuery: dogsTableWithEdit,
+                    rowTmpl: "dogsTableWithEditSelectedRowTmpl",
+                    tableRelativePositionOnCreate: "prepend"
+                });
                 editableRow
                     // switch to existing row (aka enter "edit" mode)
                     .update(items[0])
@@ -36,8 +35,10 @@ if (Modernizr.template) {
                         .update({id: EntityUtils.prototype.transientId, name: "new dog (after id 3)"},
                             "CREATE", 3))
                     .then(() => editableRow
-                        .update({id: 999,
-                                name: `new dog (using view's default positioning: ${editableRow.simpleRowView.tableRelativePositionOnCreate})`},
+                        .update({
+                                id: 999,
+                                name: `new dog (using view's default positioning: ${editableRow.simpleRowView.tableRelativePositionOnCreate})`
+                            },
                             "CREATE"))
                     .then(() => {
                         const extractedEntity = editableRow.extractEntity();
@@ -47,13 +48,19 @@ if (Modernizr.template) {
 
         // dogs table with deleted row
         const dogsTableWithDelete = "dogsTableWithDelete";
-        SimpleListFactory.prototype
-            .create({items: dogs, tableId: dogsTableWithDelete, bodyRowTmplId: "dogsTableWithDeleteReadOnlyRowTmpl"})
+        SimpleListFactory.create({
+            items: dogs,
+            tableIdOrJQuery: dogsTableWithDelete,
+            bodyRowTmplId: "dogsTableWithDeleteReadOnlyRowTmpl"
+        })
             .init()
             .then(updateAllStateChanges => {
                 const items = updateAllStateChanges[0].data;
-                const simpleRow = SimpleRowFactory.prototype.createSimpleRow(
-                    dogsTableWithDelete, {rowTmpl: "dogsTableWithDeleteDeletedRowTmpl"});
+                const simpleRow = SimpleRowFactory.createSimpleRow(
+                    {
+                        tableIdOrJQuery: dogsTableWithDelete,
+                        rowTmpl: "dogsTableWithDeleteDeletedRowTmpl"
+                    });
                 // switching to "simpleRow" display type (i.e. line-through text style)
                 simpleRow.update(items[0])
                     // removing the row

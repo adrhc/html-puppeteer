@@ -24,12 +24,21 @@ class SimpleRowComponent extends AbstractComponent {
      * @param item
      * @param requestType {"CREATE"|"UPDATE"}
      * @param afterItemId {number|string}
-     * @return {Promise<StateChange>}
+     * @return {Promise<StateChange[]>}
      */
     update(item, requestType = "UPDATE", afterItemId) {
-        this.simpleRowState.update(item, requestType, afterItemId);
-        return this.updateViewOnStateChange()
-            .then(stateChange => this.initKids().then(() => stateChange));
+        const stateChange = new PositionStateChange(requestType, item, afterItemId);
+        return this.process(stateChange);
+    }
+
+    /**
+     * @param positionStateChange {PositionStateChange}
+     * @return {Promise<StateChange[]>}
+     */
+    process(positionStateChange) {
+        return this.doWithState((simpleRowState) => {
+            simpleRowState.update(positionStateChange.data, positionStateChange.requestType, positionStateChange.afterItemId);
+        }).then(stateChanges => this.initKids().then(() => stateChanges));
     }
 
     /**

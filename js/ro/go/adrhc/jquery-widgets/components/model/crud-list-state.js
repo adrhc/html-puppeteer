@@ -7,6 +7,14 @@ class CrudListState extends SimpleListState {
     append;
 
     /**
+     * @param append {boolean}
+     */
+    constructor(append) {
+        super();
+        this.append = append;
+    }
+
+    /**
      * @param append {boolean|undefined}
      * @return {IdentifiableEntity}
      */

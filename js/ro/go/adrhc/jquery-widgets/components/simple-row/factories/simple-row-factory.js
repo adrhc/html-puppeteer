@@ -1,46 +1,36 @@
 class SimpleRowFactory {
-    createSimpleRow(
-        tableId = "selectableTable",
+    static createSimpleRow(
         {
-            state = new SimpleRowState(),
+            tableIdOrJQuery,
             rowTmpl,
-            rowTmplHtml,
+            mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, rowTmpl),
             tableRelativePositionOnCreate,
-            childCompSpecs
+            simpleRowView = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate),
+            state = new SimpleRowState(),
+            simpleRowComponent = new SimpleRowComponent(state, simpleRowView),
+            childCompFactories
         }
     ) {
-        const mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, rowTmpl);
-        const view = new SimpleRowView(mustacheTableElemAdapter, {
-            rowTmpl,
-            rowTmplHtml,
-            tableRelativePositionOnCreate
-        });
-        const simpleRowComponent = new SimpleRowComponent(state, view);
-        if (childCompSpecs) {
-            simpleRowComponent.addComponentSpec(childCompSpecs);
+        if (childCompFactories) {
+            simpleRowComponent.addChildComponentFactory(childCompFactories);
         }
         return simpleRowComponent;
     }
 
-    createIdentifiableRow(
-        tableId = "selectableTable",
+    static createIdentifiableRow(
         {
-            state = new SimpleRowState(),
+            tableIdOrJQuery,
             rowTmpl,
-            rowTmplHtml,
+            mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, rowTmpl),
             tableRelativePositionOnCreate,
-            childCompSpecs
+            simpleRowView = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate),
+            state = new SimpleRowState(),
+            identifiableRowComponent = new IdentifiableRowComponent(state, simpleRowView),
+            childCompFactories
         }
     ) {
-        const mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, rowTmpl);
-        const view = new SimpleRowView(mustacheTableElemAdapter, {
-            rowTmpl,
-            rowTmplHtml,
-            tableRelativePositionOnCreate
-        });
-        const identifiableRowComponent = new IdentifiableRowComponent(state, view);
-        if (childCompSpecs) {
-            identifiableRowComponent.addComponentSpec(childCompSpecs);
+        if (childCompFactories) {
+            identifiableRowComponent.addChildComponentFactory(childCompFactories);
         }
         return identifiableRowComponent;
     }

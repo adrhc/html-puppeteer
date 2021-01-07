@@ -1,26 +1,33 @@
 class ElasticListFactory {
     /**
-     * @param items {IdentifiableEntity[]}
-     * @param tableId {string}
+     * @param tableIdOrJQuery {string|jQuery<HTMLTableElement>}
      * @param bodyRowTmplId {string}
-     * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
+     * @param items {IdentifiableEntity[]}
      * @param repository {CrudRepository}
-     * @param state {CrudListState}
-     * @param view {SimpleListView}
-     * @param simpleRow {SimpleRowComponent}
+     * @param crudListState {CrudListState}
+     * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
+     * @param simpleListView {SimpleListView}
+     * @param tableRelativePositionOnCreate {boolean}
+     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, afterItemId: number|string, mustacheTableElemAdapter: MustacheTableElemAdapter): IdentifiableRowComponent}
      * @return {ElasticListComponent}
      */
-    create({
-               items = [],
-               tableId = "elasticSimpleList",
-               bodyRowTmplId,
-               mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, bodyRowTmplId),
-               repository = new InMemoryCrudRepository(new EntityHelper(), items),
-               state = new CrudListState(),
-               view = new SimpleListView(mustacheTableElemAdapter),
-               simpleRow = SimpleRowFactory.prototype
-                   .createSimpleRow(tableId, {bodyRowTmplId})
-           }) {
-        return new ElasticListComponent(repository, state, view, simpleRow);
+    static create(tableIdOrJQuery, bodyRowTmplId, {
+        items = [],
+        repository = new InMemoryCrudRepository(new EntityHelper(), items),
+        tableRelativePositionOnCreate,
+        crudListState = new CrudListState(tableRelativePositionOnCreate),
+        mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId),
+        simpleListView = new SimpleListView(mustacheTableElemAdapter),
+        idRowCompFactoryFn = (item, afterItemId, mustacheTableElemAdapter) => {
+            const idRowComp = SimpleRowFactory.createIdentifiableRow({
+                mustacheTableElemAdapter,
+                bodyRowTmplId,
+                tableRelativePositionOnCreate
+            });
+            idRowComp.simpleRowState.update(item, "CREATE", afterItemId);
+            return idRowComp;
+        }
+    }) {
+        return new ElasticListComponent(repository, crudListState, simpleListView, idRowCompFactoryFn);
     }
 }

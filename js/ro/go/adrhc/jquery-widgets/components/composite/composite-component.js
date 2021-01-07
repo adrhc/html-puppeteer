@@ -9,11 +9,11 @@ class CompositeComponent {
     /**
      * @type {ChildComponentFactory[]}
      */
-    componentSpecs = []
+    childComponentFactories = [];
     /**
      * @type {AbstractComponent[]}
      */
-    childComponents = []
+    childComponents = [];
 
     /**
      * @param parentComp {AbstractComponent}
@@ -23,13 +23,24 @@ class CompositeComponent {
     }
 
     /**
-     * @param compSpec {ChildComponentFactory|ChildComponentFactory[]}
+     * @param childCompFactory {ChildComponentFactory|ChildComponentFactory[]}
      */
-    addComponentSpec(compSpec) {
-        if ($.isArray(compSpec)) {
-            compSpec.forEach(it => this.componentSpecs.push(it));
+    addChildComponentFactory(childCompFactory) {
+        if ($.isArray(childCompFactory)) {
+            childCompFactory.forEach(it => this.childComponentFactories.push(it));
         } else {
-            return this.componentSpecs.push(compSpec);
+            this.childComponentFactories.push(childCompFactory);
+        }
+    }
+
+    /**
+     * @param childComp {AbstractComponent|AbstractComponent[]}
+     */
+    addChildComponent(childComp) {
+        if ($.isArray(childComp)) {
+            childComp.forEach(it => this.childComponents.push(it));
+        } else {
+            this.childComponents.push(childComp);
         }
     }
 
@@ -37,10 +48,10 @@ class CompositeComponent {
      * @param parentState
      * @return {boolean} whether an update occured or not
      */
-    updateWithKidsState(parentState) {
+    copyKidsState(parentState) {
         const result = {};
         this.childComponents.forEach(kid => {
-            result.existsChange = result.existsChange || kid.updateParentState(parentState);
+            result.existsChange = result.existsChange || kid.copyMyState(parentState);
         });
         return result.existsChange;
     }
@@ -48,8 +59,15 @@ class CompositeComponent {
     /**
      * @return {boolean} whether has component specifications or not
      */
-    hasComponentSpecifications() {
-        return this.componentSpecs.length > 0;
+    hasKids() {
+        return this.childComponents.length > 0;
+    }
+
+    /**
+     * @param stateChange {StateChange}
+     */
+    process(stateChange) {
+
     }
 
     /**
@@ -58,12 +76,33 @@ class CompositeComponent {
      * @return {Promise<[]>} array of StateChange[]
      */
     init() {
-        this.childComponents = this.componentSpecs.map(cmpSpec => cmpSpec.createComp(this.parentComp));
-        const promises = this.childComponents.map(kid => kid.init());
+        this.childComponents = this._createComponents();
+        const promises = this._initializeComponents();
         return Promise.allSettled(promises);
+    }
+
+    /**
+     * @return {Promise<StateChange[]|undefined>[]}
+     * @protected
+     */
+    _initializeComponents() {
+        return this.childComponents.map(kid => kid.init());
+    }
+
+    /**
+     * @return {AbstractComponent[]}
+     * @protected
+     */
+    _createComponents() {
+        if (this.childComponentFactories.length) {
+            return this.childComponentFactories.map(compFactory => compFactory.createComp(this.parentComp));
+        } else {
+            return this.childComponents;
+        }
     }
 
     close() {
         this.childComponents.forEach(kid => kid.close());
+        this.childComponents = [];
     }
 }

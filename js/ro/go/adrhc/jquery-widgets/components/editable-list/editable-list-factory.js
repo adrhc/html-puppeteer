@@ -1,7 +1,7 @@
 class EditableListFactory {
     /**
      * @param items {IdentifiableEntity[]}
-     * @param tableId {string}
+     * @param tableIdOrJQuery {string|jQuery<HTMLTableElement>}
      * @param bodyRowTmplId {string}
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param repository {CrudRepository}
@@ -13,19 +13,19 @@ class EditableListFactory {
      * @param childComponent {ChildComponent}
      * @return {EditableListComponent}
      */
-    create({
-               items = [],
-               tableId = "crudList",
-               bodyRowTmplId,
-               mustacheTableElemAdapter = new MustacheTableElemAdapter(tableId, bodyRowTmplId),
-               repository = new InMemoryCrudRepository(new EntityHelper(), items),
-               state = new EditableListState(),
-               view = new SimpleListView(mustacheTableElemAdapter),
-               readOnlyRow,
-               editableRow,
-               deletableRow,
-               childComponent
-           }) {
+    static create({
+                      items = [],
+                      tableIdOrJQuery,
+                      bodyRowTmplId,
+                      mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId),
+                      repository = new InMemoryCrudRepository(new EntityHelper(), items),
+                      state = new EditableListState(),
+                      view = new SimpleListView(mustacheTableElemAdapter),
+                      readOnlyRow,
+                      editableRow,
+                      deletableRow,
+                      childComponent
+                  }) {
         const editableListComponent = new EditableListComponent(repository, state, view, readOnlyRow, editableRow, deletableRow);
         if (childComponent) {
             editableListComponent.childComponent = childComponent;

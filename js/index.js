@@ -10,9 +10,9 @@ if (Modernizr.template) {
     });
     $(() => {
         const dogs = [{id: 1, name: "dog1"}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
-        SimpleListFactory.prototype.create({
+        SimpleListFactory.create({
             items: dogs,
-            tableId: "dogsTable"
+            tableIdOrJQuery: "dogsTable"
         }).init();
 
         /*
@@ -30,7 +30,7 @@ if (Modernizr.template) {
                 // const personsRepository = new PersonsRepository();
 
                 TableEditorFactory.prototype.create({
-                    tableId: "personsTable", bodyRowTmplId: "personsRoRowTmpl", repository: personsRepository,
+                    tableIdOrJQuery: "personsTable", bodyRowTmplId: "personsRoRowTmpl", repository: personsRepository,
                     rowEditorComponentFactory: PersonRowEditorOldFactory.prototype.create
                 }).init();
 

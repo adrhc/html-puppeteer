@@ -75,7 +75,7 @@ class Dequeue {
     }
 
     /**
-     * @param predicate {function}
+     * @param predicate {function(stateChange: StateChange): boolean}
      * @return {undefined|*}
      */
     findFirstFromBack(predicate) {

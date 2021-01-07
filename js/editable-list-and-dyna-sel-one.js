@@ -23,7 +23,7 @@ if (Modernizr.template) {
         const personsRepository = new InMemoryPersonsRepository(new EntityHelper(), persons);
 
         // DYNAMIC-SELECT-ONE
-        DynamicSelectOneFactory.prototype.create({
+        DynamicSelectOneFactory.create({
             elemId: "dyna-sel-one",
             placeholder: "the name to search for",
             repository: personsRepository,
@@ -32,24 +32,34 @@ if (Modernizr.template) {
 
         // EDITABLE-LIST
         // dogs table with both read-only and editable row
-        const tableId = "personsTable";
+        const tableIdOrJQuery = "personsTable";
         const tableRelativePositionOnCreate = "prepend";
 
-        const readOnlyRow = SimpleRowFactory.prototype.createIdentifiableRow(
-            tableId, {tableRelativePositionOnCreate});
-        const editableRow = SimpleRowFactory.prototype.createIdentifiableRow(
-            tableId, {
-                rowTmpl: "personsTableEditableRowTmpl", tableRelativePositionOnCreate
+        const readOnlyRow = SimpleRowFactory.createIdentifiableRow(
+            {
+                tableIdOrJQuery, tableRelativePositionOnCreate
+            });
+        const editableRow = SimpleRowFactory.createIdentifiableRow(
+            {
+                tableIdOrJQuery,
+                rowTmpl: "personsTableEditableRowTmpl",
+                tableRelativePositionOnCreate
             });
         // doesn't make sense to use tableRelativePositionOnCreate
         // because the row to delete always have to already exist
-        const deletableRow = SimpleRowFactory.prototype.createIdentifiableRow(
-            tableId, {
+        const deletableRow = SimpleRowFactory.createIdentifiableRow(
+            {
+                tableIdOrJQuery,
                 rowTmpl: "personsTableDeletableRowTmpl"
             });
 
-        const component = EditableListFactory.prototype
-            .create({repository: personsRepository, tableId, readOnlyRow, editableRow, deletableRow});
+        const component = EditableListFactory.create({
+            tableIdOrJQuery,
+            repository: personsRepository,
+            readOnlyRow,
+            editableRow,
+            deletableRow
+        });
 
         component.init();
     })

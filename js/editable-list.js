@@ -13,25 +13,28 @@ if (Modernizr.template) {
         const items = [{id: 1, name: "dog1"}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
 
         // dogs table with both read-only and editable row
-        const tableId = "dogsTable";
+        const tableIdOrJQuery = "dogsTable";
         const tableRelativePositionOnCreate = "prepend";
 
-        const readOnlyRow = SimpleRowFactory.prototype.createIdentifiableRow(
-            tableId, {tableRelativePositionOnCreate});
-        const editableRow = SimpleRowFactory.prototype.createIdentifiableRow(
-            tableId, {
+        const readOnlyRow = SimpleRowFactory.createIdentifiableRow(
+            {
+                tableIdOrJQuery, tableRelativePositionOnCreate
+            });
+        const editableRow = SimpleRowFactory.createIdentifiableRow(
+            {
+                tableIdOrJQuery,
                 rowTmpl: "dogsTableEditableRowTmpl",
                 tableRelativePositionOnCreate
             });
         // doesn't make sense to use tableRelativePositionOnCreate
         // because the row to delete always have to already exist
-        const deletableRow = SimpleRowFactory.prototype.createIdentifiableRow(
-            tableId, {
+        const deletableRow = SimpleRowFactory.createIdentifiableRow(
+            {
+                tableIdOrJQuery,
                 rowTmpl: "dogsTableDeletableRowTmpl"
             });
 
-        const component = EditableListFactory.prototype
-            .create({items, tableId, readOnlyRow, editableRow, deletableRow});
+        const component = EditableListFactory.create({items, tableIdOrJQuery, readOnlyRow, editableRow, deletableRow});
 
         component
             .init()
@@ -40,9 +43,9 @@ if (Modernizr.template) {
                     crudListState.updateItem({id: 3, name: "component only (not repository) updated dog3"});
                     crudListState.removeById(2);
                     crudListState.insertItem({
-                            id: 2,
-                            name: `component only (not repository) restored dog2 (using append)`
-                        }, true);
+                        id: 2,
+                        name: `component only (not repository) restored dog2 (using append)`
+                    }, true);
                     crudListState.insertItem({
                         id: 4,
                         name: `component only (not repository) added dog4 (using prepend)`

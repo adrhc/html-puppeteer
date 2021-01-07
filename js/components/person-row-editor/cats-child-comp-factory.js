@@ -1,23 +1,20 @@
 class CatsChildCompFactory extends ChildComponentFactory {
-    constructor() {
-        super("[data-id='catsTable']");
-    }
-
     /**
      * @param parentComp {AbstractComponent}
      * @return {AbstractComponent}
      */
     createComp(parentComp) {
-        const $parentElem = this._childOf(parentComp);
-        const catRow = SimpleRowFactory.prototype.createIdentifiableRow(
-            $parentElem, {
-                rowTmpl: "editableCatsRowTmpl", tableRelativePositionOnCreate: "append"
-            });
+        const $parentElem = $("[data-id='catsTable']", parentComp.view.$elem);
+        const catRow = SimpleRowFactory.createIdentifiableRow({
+            tableIdOrJQuery: $parentElem,
+            rowTmpl: "editableCatsRowTmpl",
+            tableRelativePositionOnCreate: "append"
+        });
 
         const catsChildOperations = new ChildComponent(undefined, parentComp);
-        catsChildOperations.updateParentState = (parentState) => {
-            // catsChildOperations.myComp is {EditableListComponent}
-            parentState.cats = catsChildOperations.myComp.extractAllEntities(true);
+        catsChildOperations.copyKidState = (parentState) => {
+            // catsChildOperations.kidComp is {EditableListComponent}
+            parentState.cats = catsChildOperations.kidComp.extractAllEntities(true);
             return true;
         }
 
@@ -25,11 +22,11 @@ class CatsChildCompFactory extends ChildComponentFactory {
         const repository = new InMemoryCrudRepository(new EntityHelper(),
             $.extend(true, [], parentComp.state.rowState.cats));
 
-        return EditableListFactory.prototype.create({
+        return EditableListFactory.create({
             repository,
             // CatsListState cancels swapping events so there's no need for editableRow and deletableRow
             state: new CatsListState(repository),
-            tableId: $parentElem,
+            tableIdOrJQuery: $parentElem,
             bodyRowTmplId: "editableCatsRowTmpl",
             readOnlyRow: catRow,
             childComponent: catsChildOperations

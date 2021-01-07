@@ -27,7 +27,7 @@ class StateChangesDispatcher {
         if (!stateChanges || !stateChanges.length) {
             // can happen when switching to undefined multiple times (e.g. dblclick on header)
             // or clicking in an input box on an editable row
-            console.warn("no state changes!");
+            console.warn(`${this.component.constructor.name}: no state changes!`);
             return Promise.resolve(stateChanges);
         }
         const promiseHolder = {};
@@ -48,7 +48,7 @@ class StateChangesDispatcher {
     updateViewOnStateChange(stateChange) {
         stateChange = stateChange ? stateChange : this.component.state.consumeOne();
         if (!stateChange) {
-            console.warn("no state change!");
+            console.warn(`${this.component.constructor.name}: no state changes!`);
             return Promise.resolve(stateChange);
         }
         const fnName = `updateViewOn${stateChange.requestType}`;

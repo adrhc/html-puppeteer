@@ -5,13 +5,13 @@
 class SimpleListComponent extends AbstractTableBasedComponent {
     /**
      * @param repository {CrudRepository}
-     * @param state {CrudListState}
+     * @param state {SimpleListState}
      * @param view {SimpleListView}
      */
     constructor(repository, state, view) {
         super(state, view);
+        this.simpleListState = state;
         this.repository = repository;
-        this.state = state;
     }
 
     /**
@@ -29,7 +29,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
         return this._handleRepoErrors(this.repository.getAll())
             .then((items) => {
                 console.log(`${this.constructor.name} items:\n`, JSON.stringify(items));
-                this.state.updateAll(items);
+                this.simpleListState.updateAll(items);
                 return items;
             });
     }

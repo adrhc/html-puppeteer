@@ -4,7 +4,7 @@
  * than the next onSwapping will determine swappingState to render as "deselected" the previous
  * item but only if already exists (its row) otherwise nothing will be rendered for it.
  */
-class SelectableListComponent extends ElasticListComponent {
+class SelectableListComponent extends SimpleListComponent {
     /**
      * @type {SelectableListState}
      */
@@ -19,10 +19,15 @@ class SelectableListComponent extends ElasticListComponent {
      */
     constructor(repository, state, view,
                 notSelectedRow, selectedRow) {
-        super(repository, state, view, notSelectedRow);
+        super(repository, state, view);
+        this.stateChangesDispatcher.knownRequestTypes.splice(0, 0, "CREATE", "UPDATE", "DELETE");
         this.selectableListState = state;
         this.simpleListView = view;
-        // true/false relates to swappingDetails.isPrevious
+        /**
+         * true/false relates to swappingDetails.isPrevious
+         *
+         * @type {{false: IdentifiableRowComponent, true: IdentifiableRowComponent}}
+         */
         this.swappingRowSelector = {
             false: selectedRow,
             true: notSelectedRow
@@ -38,6 +43,16 @@ class SelectableListComponent extends ElasticListComponent {
                 this._configureEvents();
                 return stateChanges;
             });
+    }
+
+    /**
+     * @param stateChange {PositionStateChange}
+     * @return {Promise<StateChange[]>}
+     * @protected
+     */
+    updateViewOnKnownStateChange(stateChange) {
+        console.log(`${this.constructor.name}.updateViewOnStateChange:\n${JSON.stringify(stateChange)}`);
+        return this.swappingRowSelector[true].process(stateChange);
     }
 
     /**
@@ -87,7 +102,7 @@ class SelectableListComponent extends ElasticListComponent {
 
     /**
      * @param swappingDetails {SwappingDetails}
-     * @return {Promise<StateChange>}
+     * @return {Promise<StateChange[]>}
      * @protected
      */
     _rowPickAndUpdate(swappingDetails) {
@@ -99,8 +114,7 @@ class SelectableListComponent extends ElasticListComponent {
             return Promise.resolve(undefined);
         }
         const rowComponent = this._rowComponentFor(swappingDetails);
-        return rowComponent.init()
-            .then(() => rowComponent.update(item, "UPDATE"));
+        return rowComponent.init().then(() => rowComponent.update(item));
     }
 
     /**

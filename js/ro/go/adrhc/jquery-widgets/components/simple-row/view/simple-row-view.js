@@ -14,22 +14,16 @@ class SimpleRowView extends AbstractView {
 
     /**
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
-     * @param rowTmpl {string|undefined}
-     * @param rowTmplHtml {string|undefined}
      * @param tableRelativePositionOnCreate {"prepend"|"append"|undefined}
      */
-    constructor(mustacheTableElemAdapter, {
-        rowTmpl,
-        rowTmplHtml = mustacheTableElemAdapter.bodyRowTmplHtml,
-        tableRelativePositionOnCreate
-    }) {
+    constructor(mustacheTableElemAdapter, tableRelativePositionOnCreate) {
         super();
         /**
          * @type {MustacheTableElemAdapter}
          */
         this.tableAdapter = mustacheTableElemAdapter;
         this.owner = this.tableAdapter.owner;
-        this.rowTmplHtml = HtmlUtils.prototype.templateOf(rowTmpl, rowTmplHtml);
+        this.rowTmplHtml = mustacheTableElemAdapter.bodyRowTmplHtml;
         this.tableRelativePositionOnCreate = tableRelativePositionOnCreate;
     }
 

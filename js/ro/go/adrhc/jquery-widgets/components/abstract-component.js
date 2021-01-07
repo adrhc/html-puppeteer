@@ -22,32 +22,20 @@ class AbstractComponent {
      */
     _childComponent;
 
-    get childComponent() {
-        return this._childComponent;
-    }
-
     /**
      * @param childComponent {ChildComponent}
      */
     set childComponent(childComponent) {
-        childComponent.myComp = this;
+        childComponent.kidComp = this;
         this._childComponent = childComponent;
-    }
-
-    get parentComp() {
-        return this._childComponent.parentComp;
-    }
-
-    set parentComp(value) {
-        this._childComponent.parentComp = value;
     }
 
     /**
      * @param parentState
      * @return {boolean}
      */
-    updateParentState(parentState) {
-        return this._childComponent.updateParentState(parentState);
+    copyMyState(parentState) {
+        return this._childComponent.copyKidState(parentState);
     }
 
     /**
@@ -63,18 +51,25 @@ class AbstractComponent {
     }
 
     /**
-     * @param compSpec {ChildComponentFactory|ChildComponentFactory[]}
+     * @param childCompFactory {ChildComponentFactory|ChildComponentFactory[]}
      */
-    addComponentSpec(compSpec) {
-        return this.compositeComponent.addComponentSpec(compSpec);
+    addChildComponentFactory(childCompFactory) {
+        this.compositeComponent.addChildComponentFactory(childCompFactory);
+    }
+
+    /**
+     * @param childComp {AbstractComponent|AbstractComponent[]}
+     */
+    addChildComponent(childComp) {
+        this.compositeComponent.addChildComponent(childComp);
     }
 
     /**
      * @param parentState
      * @return {boolean} whether an update occured or not
      */
-    updateWithKidsState(parentState) {
-        return this.compositeComponent.updateWithKidsState(parentState);
+    copyKidsState(parentState) {
+        return this.compositeComponent.copyKidsState(parentState);
     }
 
     /**
@@ -82,6 +77,16 @@ class AbstractComponent {
      */
     initKids() {
         return this.compositeComponent.init();
+    }
+
+    /**
+     * @param stateChange {StateChange}
+     * @return {Promise<StateChange[]>}
+     */
+    process(stateChange) {
+        return this.doWithState((basicState) => {
+            basicState.collectStateChange(stateChange);
+        });
     }
 
     /**
@@ -107,7 +112,7 @@ class AbstractComponent {
      * @return {Promise<StateChange[]|undefined>}
      */
     init() {
-        return Promise.resolve(undefined);
+        return this.updateViewOnStateChanges();
     }
 
     close() {
@@ -117,6 +122,22 @@ class AbstractComponent {
         }
         this.state.reset();
         this.view.reset();
+    }
+
+    /**
+     * Offer the state for manipulation then update the view.
+     *
+     * @param stateUpdaterFn {function(state: BasicState)}
+     * @param delayViewUpdate {boolean} whether to (immediately) update the view based or not
+     * @return {Promise<StateChange[]>}
+     */
+    doWithState(stateUpdaterFn, delayViewUpdate = false) {
+        console.log(`${this.constructor.name}.doWithState: delayViewUpdate = ${delayViewUpdate}`);
+        stateUpdaterFn(this.state);
+        if (delayViewUpdate) {
+            return Promise.resolve(this.state.peekAll());
+        }
+        return this.updateViewOnStateChanges();
     }
 
     /**
@@ -134,9 +155,9 @@ class AbstractComponent {
      * @param useOwnerOnFields {boolean}
      * @return {*}
      */
-    extractInputValues(useOwnerOnFields = this.compositeComponent.hasComponentSpecifications()) {
+    extractInputValues(useOwnerOnFields = this.compositeComponent.hasKids()) {
         const item = this.view.extractInputValues(useOwnerOnFields);
-        this.updateWithKidsState(item);
+        this.copyKidsState(item);
         return item;
     }
 
@@ -145,12 +166,12 @@ class AbstractComponent {
      * @return {Promise<StateChange>}
      */
     updateViewOnKnownStateChange(stateChange) {
-        console.debug(`${this.constructor.name}._updateViewOnKnownStateChange:\n${JSON.stringify(stateChange)}`);
-        return this.view.update(stateChange);
+        console.log(`${this.constructor.name}.updateViewOnKnownStateChange:\n${JSON.stringify(stateChange)}`);
+        throw "Not implemented!";
     }
 
     updateViewOnAny(stateChange) {
-        console.debug(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
+        console.log(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
         return this.view.update(stateChange);
     }
 
@@ -167,7 +188,7 @@ class AbstractComponent {
                 alert(jqXHR);
                 throw jqXHR;
             } else {
-                console.log(`errorThrown: ${errorThrown}`);
+                console.log(`${this.constructor.name} errorThrown: ${errorThrown}`);
                 alert(`${textStatus}\n${jqXHR.responseText}`);
                 throw textStatus;
             }
