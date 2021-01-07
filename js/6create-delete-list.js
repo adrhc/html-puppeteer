@@ -38,7 +38,7 @@ if (Modernizr.template) {
 
                 return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", idRowCompParent.view.$elem), personsRepository, {
                     placeholder: "the name to search for",
-                    childOperations: new DynaSelOneChildComp(idRowCompParent)
+                    childOperations: new DynaSelOneChildComp(idRowCompParent, "person", () => new Person())
                 })
             }
         };
@@ -46,7 +46,7 @@ if (Modernizr.template) {
         // by default on creation the row is prepended to table
         const addNewRowsAtEnd = true;
 
-        // dogs table row
+        // dogs table
         const createDeleteList = CreateDeleteListFactory.create("dogsTable", "dogsTableRowTmpl", {
             items: dogs, addNewRowsAtEnd, rowChildCompFactories: dynaSelOneCompFactory
         });

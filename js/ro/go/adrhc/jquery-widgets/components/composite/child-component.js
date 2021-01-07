@@ -14,7 +14,7 @@ class ChildComponent {
     parentComp;
 
     /**
-     * @param parentComp {AbstractComponent|undefined}
+     * @param parentComp {AbstractComponent}
      */
     constructor(parentComp) {
         this.parentComp = parentComp;

@@ -1,5 +1,16 @@
 class DynaSelOneChildComp extends ChildComponent {
     /**
+     * @param parentComp {AbstractComponent}
+     * @param parentProperty {string} is the parentState property where to save the selectedItem
+     * @param newEntityFactoryFn {function(): IdentifiableEntity}
+     */
+    constructor(parentComp, parentProperty, newEntityFactoryFn) {
+        super(parentComp);
+        this.parentProperty = parentProperty;
+        this.newEntityFactoryFn = newEntityFactoryFn;
+    }
+
+    /**
      * When having kids and useOwnerOnFields is null than the owner is used otherwise useOwnerOnFields is considered.
      *
      * @param parentState
@@ -12,9 +23,9 @@ class DynaSelOneChildComp extends ChildComponent {
          */
         const dynaSelOneState = this._kidComp.dynaSelOneState;
         if (dynaSelOneState.selectedItem) {
-            parentState.person = $.extend(new Person(), dynaSelOneState.selectedItem);
+            parentState[this.parentProperty] = $.extend(this.newEntityFactoryFn(), dynaSelOneState.selectedItem);
         } else {
-            parentState.person = undefined;
+            parentState[this.parentProperty] = undefined;
         }
         return true;
     }
@@ -25,11 +36,8 @@ class DynaSelOneChildComp extends ChildComponent {
      * @param value {DynamicSelectOneComponent}
      */
     set kidComp(value) {
-        /**
-         * @type {Person}
-         */
-        const person = this.parentComp.simpleRowState.rowState.person;
-        value.dynaSelOneState.updateWithDynaSelOneItem(person);
+        const identifiableEntity = this.parentComp.simpleRowState.rowState[this.parentProperty];
+        value.dynaSelOneState.updateWithDynaSelOneItem(identifiableEntity);
         this._kidComp = value;
     }
 }

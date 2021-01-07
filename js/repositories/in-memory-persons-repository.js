@@ -1,11 +1,14 @@
-/**
- * also extends DynaSelOneRepository.findByTitle
- */
 class InMemoryPersonsRepository extends InMemoryCrudRepository {
     constructor(items) {
         super(items);
     }
 
+    /**
+     * see DynaSelOneRepository.findByTitle
+     *
+     * @param title {string}
+     * @return {Promise<Person[]>}
+     */
     findByTitle(title) {
         const searchFor = title.toLowerCase();
         return this.getAll()
