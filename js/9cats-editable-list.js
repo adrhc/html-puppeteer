@@ -33,11 +33,13 @@ if (Modernizr.template) {
         const tableIdOrJQuery = "personsTable";
         const tableRelativePositionOnCreate = "prepend";
 
+        // READ-ONLY ROW
         const readOnlyRow = SimpleRowFactory.createIdentifiableRow({
             tableIdOrJQuery,
             tableRelativePositionOnCreate
         });
 
+        // EDITABLE ROW (using CatsChildCompFactory)
         const editableRow = SimpleRowFactory.createIdentifiableRow(
             {
                 tableIdOrJQuery,
@@ -45,6 +47,7 @@ if (Modernizr.template) {
                 childCompFactories: new CatsChildCompFactory()
             });
 
+        // DELETABLE ROW
         // doesn't make sense to use tableRelativePositionOnCreate
         // because the row to delete always have to already exist
         const deletableRow = SimpleRowFactory.createIdentifiableRow(
@@ -52,7 +55,8 @@ if (Modernizr.template) {
                 tableIdOrJQuery, rowTmpl: "personsTableDeletableRowTmpl"
             });
 
-        const component = EditableListFactory.create({
+        // EDITABLE LIST
+        const editableList = EditableListFactory.create({
             tableIdOrJQuery,
             repository: personsRepository,
             readOnlyRow,
@@ -60,7 +64,7 @@ if (Modernizr.template) {
             deletableRow
         });
 
-        component.init();
+        editableList.init();
     })
 } else {
     // Find another way to add the rows to the table because
