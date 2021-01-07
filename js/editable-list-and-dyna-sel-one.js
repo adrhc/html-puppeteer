@@ -25,9 +25,9 @@ if (Modernizr.template) {
         // DYNAMIC-SELECT-ONE
         DynamicSelectOneFactory.create({
             elemIdOrJQuery: "dyna-sel-one",
-            placeholder: "the name to search for",
             repository: personsRepository,
-            searchLastSearchResult: false
+            placeholder: "the name to search for",
+            useLastSearchResult: false
         }).init();
 
         // EDITABLE-LIST

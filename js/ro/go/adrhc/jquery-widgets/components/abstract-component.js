@@ -89,23 +89,11 @@ class AbstractComponent {
     }
 
     /**
-     * @param kidHandlerFn {function(kid: AbstractComponent)}
-     * @param kidsFilter {function(comp: AbstractComponent): boolean}
-     * @param removeAfterProcessing {boolean}
-     * @return {Promise}
-     */
-    doWithKids(kidHandlerFn, kidsFilter, removeAfterProcessing) {
-        return this.compositeComponent.doWithKids(kidHandlerFn, kidsFilter, removeAfterProcessing);
-    }
-
-    /**
      * @param stateChange {StateChange}
      * @return {Promise<StateChange[]>}
      */
     process(stateChange) {
-        return this.doWithState((basicState) => {
-            basicState.collectStateChange(stateChange);
-        });
+        return this.doWithState((basicState) => basicState.collectStateChange(stateChange));
     }
 
     /**
@@ -161,9 +149,10 @@ class AbstractComponent {
     }
 
     /**
-     * by default this component won't use the owner to detect its fields
+     * When having kids and useOwnerOnFields is null than the owner is used otherwise useOwnerOnFields is considered.
+     * When this.extractInputValues exists than this.extractEntity must use it instead of using super.extractEntity!
      *
-     * @param useOwnerOnFields {boolean}
+     * @param [useOwnerOnFields] {boolean}
      * @return {*}
      */
     extractEntity(useOwnerOnFields) {
@@ -172,10 +161,15 @@ class AbstractComponent {
     }
 
     /**
-     * @param useOwnerOnFields {boolean}
-     * @return {*}
+     * When having kids and useOwnerOnFields is null than the owner is used otherwise useOwnerOnFields is considered.
+     *
+     * @param [useOwnerOnFields] {boolean}
+     * @return {{}}
      */
-    extractInputValues(useOwnerOnFields = this.compositeComponent.hasKids()) {
+    extractInputValues(useOwnerOnFields) {
+        if (useOwnerOnFields == null) {
+            useOwnerOnFields = this.compositeComponent.hasKids();
+        }
         const item = this.view.extractInputValues(useOwnerOnFields);
         this.copyKidsState(item);
         return item;

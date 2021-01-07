@@ -69,22 +69,42 @@ class CompositeComponent {
      * @param removeAfterProcessing {boolean}
      * @return {Promise<StateChange[][]>}
      */
-    process(stateChange, kidsFilter, removeAfterProcessing = false) {
+    process(stateChange, kidsFilter = () => true, removeAfterProcessing = false) {
         const components = this.childComponents.filter(kidsFilter);
         const promises = components.map(comp => comp.process(stateChange));
         return this._promiseAllSettledAndKidsRemove(promises, components, removeAfterProcessing);
     }
 
     /**
-     * @param kidHandlerFn {function(kid: AbstractComponent)}
+     * @param kidHandlerFn {function(kid: AbstractComponent): *}
      * @param kidsFilter {function(comp: AbstractComponent): boolean}
      * @param removeAfterProcessing {boolean}
-     * @return {Promise}
+     * @return {Array}
      */
-    doWithKids(kidHandlerFn, kidsFilter, removeAfterProcessing = false) {
+    doWithKids(kidHandlerFn, kidsFilter = () => true, removeAfterProcessing = false) {
         const components = this.childComponents.filter(kidsFilter);
-        const promises = components.map(comp => kidHandlerFn(comp));
-        return this._promiseAllSettledAndKidsRemove(promises, components, removeAfterProcessing);
+        return components.map(comp => kidHandlerFn(comp));
+    }
+
+    /**
+     * When having kids and useOwnerOnFields is null than the owner is used otherwise useOwnerOnFields is considered.
+     * When this.extractAllInputValues exists than this.extractAllEntities must use it instead of using super.extractAllEntities!
+     *
+     * @param [useOwnerOnFields] {boolean}
+     * @return {Array<IdentifiableEntity>}
+     */
+    extractAllEntities(useOwnerOnFields) {
+        return this.extractAllInputValues().map(iv => EntityUtils.removeTransientId(iv));
+    }
+
+    /**
+     * When having kids and useOwnerOnFields is null than the owner is used otherwise useOwnerOnFields is considered.
+     *
+     * @param [useOwnerOnFields] {boolean}
+     * @return {Array<IdentifiableEntity>}
+     */
+    extractAllInputValues(useOwnerOnFields) {
+        return this.doWithKids((kid) => kid.extractInputValues(useOwnerOnFields));
     }
 
     /**

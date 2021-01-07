@@ -20,17 +20,15 @@ if (Modernizr.template) {
 
         component
             .init()
-            .then(() => {
-                component.doWithState((crudListState) => {
-                    crudListState.createNewItem().name = "new dog";
-                    crudListState.updateItem({id: 3, name: "updated dog3"});
-                    crudListState.removeById(2);
-                    crudListState.insertItem({
-                        id: 2,
-                        name: `restored dog2 with ${addNewRowsAtEnd ? "append" : "preppend"}`
-                    });
+            .then(() => component.doWithState((crudListState) => {
+                crudListState.createNewItem().name = "new dog";
+                crudListState.updateItem({id: 3, name: "updated dog3"});
+                crudListState.removeById(2);
+                crudListState.insertItem({
+                    id: 2,
+                    name: `restored dog2 with ${addNewRowsAtEnd ? "append" : "preppend"}`
                 });
-            })
+            }))
             .then(() => console.log("component.extractAllEntities:\n",
                 component.extractAllEntities(true)));
     });

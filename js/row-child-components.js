@@ -39,8 +39,8 @@ if (Modernizr.template) {
 
                 return DynamicSelectOneFactory.create({
                     elemIdOrJQuery: $("[data-id='dyna-sel-one']", idRowCompParent.view.$elem),
-                    placeholder: "the name to search for",
                     repository: personsRepository,
+                    placeholder: "the name to search for",
                     childOperations: new DynaSelOneChildComp(idRowCompParent)
                 })
             }
@@ -53,18 +53,17 @@ if (Modernizr.template) {
 
         component
             .init()
-            .then(() => {
-                component.doWithState((crudListState) => {
-                    crudListState.createNewItem().name = "new dog";
-                    crudListState.updateItem({id: 3, name: "updated dog3"});
-                    crudListState.removeById(2);
-                    crudListState.insertItem({
-                        id: 2,
-                        name: `restored dog2 with ${addNewRowsAtEnd ? "append" : "preppend"}`
-                    });
+            .then(() => component.doWithState((crudListState) => {
+                crudListState.createNewItem().name = "new dog";
+                crudListState.updateItem({id: 3, name: "updated dog3"});
+                crudListState.removeById(2);
+                crudListState.insertItem({
+                    id: 2,
+                    name: `restored dog2 with ${addNewRowsAtEnd ? "append" : "preppend"}`
                 });
-            })
-            .then(() => console.log("component.extractAllEntities:\n", component.extractAllEntities(true)));
+            }))
+            .then(() => console.log("ElasticListComponent.extractAllEntities:\n",
+                component.extractAllEntities()));
     });
 } else {
     // Find another way to add the rows to the table because

@@ -31,17 +31,15 @@ if (Modernizr.template) {
 
         component
             .init()
-            .then(() => {
-                component.doWithState((selectableListState) => {
-                    selectableListState.createNewItem().name = `new dog (with table ${tableRelativePositionOnCreate})`;
-                    selectableListState.updateItem({id: 3, name: "updated dog3"});
-                    selectableListState.removeById(2);
-                    selectableListState.insertItem({
-                        id: 2,
-                        name: `restored dog2 (with table ${tableRelativePositionOnCreate})`
-                    }, tableRelativePositionOnCreate === "append");
-                });
-            });
+            .then(() => component.doWithState((selectableListState) => {
+                selectableListState.createNewItem().name = `new dog (with table ${tableRelativePositionOnCreate})`;
+                selectableListState.updateItem({id: 3, name: "updated dog3"});
+                selectableListState.removeById(2);
+                selectableListState.insertItem({
+                    id: 2,
+                    name: `restored dog2 (with table ${tableRelativePositionOnCreate})`
+                }, tableRelativePositionOnCreate === "append");
+            }));
     })
 } else {
     // Find another way to add the rows to the table because

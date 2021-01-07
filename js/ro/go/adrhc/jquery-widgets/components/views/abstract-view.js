@@ -48,7 +48,7 @@ class AbstractView {
     }
 
     /**
-     * @param useOwnerOnFields {boolean|undefined}
+     * @param [useOwnerOnFields] {boolean}
      * @return {{}}
      */
     extractInputValues(useOwnerOnFields) {

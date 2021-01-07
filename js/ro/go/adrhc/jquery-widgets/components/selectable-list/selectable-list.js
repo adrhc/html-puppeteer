@@ -73,9 +73,10 @@ class SelectableListComponent extends SimpleListComponent {
     /**
      * @param context {string|boolean|undefined}
      * @param rowDataId {number|string}
+     * @return {Promise<StateChange[]>}
      */
     switchTo(rowDataId, context) {
-        this.doWithState((selectableListState) => {
+        return this.doWithState((selectableListState) => {
             if (rowDataId) {
                 selectableListState.switchTo(rowDataId, context);
             } else {
@@ -177,7 +178,10 @@ class SelectableListComponent extends SimpleListComponent {
     }
 
     /**
-     * @param useOwnerOnFields {boolean|undefined}
+     * When having kids and useOwnerOnFields is null than the owner is used otherwise useOwnerOnFields is considered.
+     * When this.extractInputValues exists than this.extractEntity must use it instead of using super.extractEntity!
+     *
+     * @param [useOwnerOnFields] {boolean}
      * @return {{}}
      */
     extractEntity(useOwnerOnFields) {

@@ -3,21 +3,30 @@
  */
 class DynaSelOneState extends BasicState {
     /**
+     * @type {string}
+     */
+    title;
+    /**
+     * @type {DynaSelOneItem}
+     */
+    selectedItem;
+
+    /**
      * @param repository {DynaSelOneRepository}
      * @param minCharsToSearch {number}
-     * @param options {DynaSelOneItem[]|undefined}
-     * @param searchLastSearchResult {boolean|undefined}
+     * @param [options] {DynaSelOneItem[]}
+     * @param [useLastSearchResult] {boolean}
      */
     constructor(repository, {
         minCharsToSearch = 3,
         options,
-        searchLastSearchResult
+        useLastSearchResult
     }) {
         super();
         this.repository = repository;
         this.minCharsToSearch = minCharsToSearch;
         this.options = options;
-        this.searchLastSearchResult = searchLastSearchResult;
+        this.useLastSearchResult = useLastSearchResult;
     }
 
     /**
@@ -45,7 +54,7 @@ class DynaSelOneState extends BasicState {
      */
     updateByTitle(title) {
         console.log("DynaSelOneState.updateByTitle title =", title);
-        if (this.searchLastSearchResult && this.title === title) {
+        if (this.useLastSearchResult && this.title === title) {
             // updating with same title
             console.log(`rejecting update with same title: ${!!title ? title : "nothing"}`);
             return Promise.reject(this);
@@ -56,7 +65,7 @@ class DynaSelOneState extends BasicState {
             return Promise.resolve(this);
         }
         let optionsPromise;
-        if (this.searchLastSearchResult && this.currentOptionsAreResultOfSearch && title.startsWith(this.title)) {
+        if (this.useLastSearchResult && this.currentOptionsAreResultOfSearch && title.startsWith(this.title)) {
             // new title contains the current title: searching existing options
             optionsPromise = Promise.resolve(this._findOptionsByTitleStartingWith(title));
         } else {

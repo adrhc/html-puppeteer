@@ -29,10 +29,13 @@ class ChildComponent {
     }
 
     /**
+     * When having kids and useOwnerOnFields is null than the owner is used otherwise useOwnerOnFields is considered.
+     *
      * @param parentState
+     * @param [useOwnerOnFields] {boolean}
      * @return {boolean} whether something was copied or not
      */
-    copyKidState(parentState) {
+    copyKidState(parentState, useOwnerOnFields) {
         return false;
     }
 }

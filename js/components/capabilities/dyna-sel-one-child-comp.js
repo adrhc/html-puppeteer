@@ -1,6 +1,21 @@
 class DynaSelOneChildComp extends ChildComponent {
-    copyKidState(parentState) {
-        parentState.person = $.extend(new Person(), this.kidComp.extractEntity(true));
+    /**
+     * When having kids and useOwnerOnFields is null than the owner is used otherwise useOwnerOnFields is considered.
+     *
+     * @param parentState
+     * @param [useOwnerOnFields] {boolean}
+     * @return {boolean}
+     */
+    copyKidState(parentState, useOwnerOnFields) {
+        /**
+         * @type {DynaSelOneState}
+         */
+        const dynaSelOneState = this._kidComp.dynaSelOneState;
+        if (dynaSelOneState.selectedItem) {
+            parentState.person = $.extend(new Person(), dynaSelOneState.selectedItem);
+        } else {
+            parentState.person = undefined;
+        }
         return true;
     }
 
