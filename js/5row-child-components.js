@@ -47,13 +47,13 @@ if (Modernizr.template) {
         };
 
         // dogs table with read-only row (default: on creation prepend to table)
-        const component = ElasticListFactory.create("dogsTable", "dogsTableRowTmpl", {
+        const elasticList = ElasticListFactory.create("dogsTable", "dogsTableRowTmpl", {
             items, addNewRowsAtEnd, rowChildCompFactories
         });
 
-        component
+        elasticList
             .init()
-            .then(() => component.doWithState((crudListState) => {
+            .then(() => elasticList.doWithState((crudListState) => {
                 crudListState.createNewItem().name = "new dog";
                 crudListState.updateItem({id: 3, name: "updated dog3"});
                 crudListState.removeById(2);
@@ -63,7 +63,7 @@ if (Modernizr.template) {
                 });
             }))
             .then(() => console.log("ElasticListComponent.extractAllEntities:\n",
-                component.extractAllEntities()));
+                elasticList.extractAllEntities()));
     });
 } else {
     // Find another way to add the rows to the table because
