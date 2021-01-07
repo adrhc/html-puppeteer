@@ -30,7 +30,8 @@ if (Modernizr.template) {
                         name: `restored dog2 with ${addNewRowsAtEnd ? "append" : "preppend"}`
                     });
                 });
-            });
+            })
+            .then(() => console.log("component.extractAllEntities:\n", component.extractAllEntities(true)));
     });
 } else {
     // Find another way to add the rows to the table because
