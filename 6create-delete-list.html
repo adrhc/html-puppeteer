@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/ro/go/adrhc/responstable-table.css">
     <link rel="stylesheet" href="css/ro/go/adrhc/util.css">
+    <link rel="stylesheet" href="css/ro/go/adrhc/editable-list.css">
     <link rel="stylesheet" href="css/ro/go/adrhc/dyna-sel-one.css">
     <link rel="stylesheet" href="css/app.css">
     <script src="libraries/modernizr-custom.js"></script>
@@ -22,6 +23,13 @@
         <tr data-owner="dogsTable">
             <th>Dog</th>
             <th>Person</th>
+            <th>
+                <div class="buttons">
+                    <img data-owner="dogsTable" data-btn="reload" alt="reload"
+                         src="images/ro/go/adrhc/reload-button-32.png"/>
+                    <img data-owner="dogsTable" data-btn="add" alt="add" src="images/ro/go/adrhc/add-button-32.png"/>
+                </div>
+            </th>
         </tr>
         </thead>
     </table>
@@ -37,6 +45,12 @@
         <td>
             <div data-owner="dyna-sel-one" data-id="dyna-sel-one" class="dyna-sel-one-comp"
                  data-name="firstName" data-value="personId" data-description="person-description"></div>
+        </td>
+        <td>
+            <div class="buttons">
+                <img data-owner="dogsTable" data-btn="delete" alt="delete"
+                     src="images/ro/go/adrhc/delete-button-32.png"/>
+            </div>
         </td>
     </tr>
 </template>

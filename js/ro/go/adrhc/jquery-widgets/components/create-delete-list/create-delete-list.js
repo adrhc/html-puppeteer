@@ -36,7 +36,7 @@ class CreateDeleteListComponent extends ElasticListComponent {
          */
         const createDeleteListComponent = ev.data;
         createDeleteListComponent.doWithState((crudListState) => {
-            crudListState.createNewItem();
+            crudListState.createNewItem().id = EntityUtils.generateId();
         });
     }
 
@@ -52,10 +52,23 @@ class CreateDeleteListComponent extends ElasticListComponent {
          */
         const createDeleteListComponent = ev.data;
         const rowDataId = createDeleteListComponent.tableBasedView.rowDataIdOf(this, true);
-        createDeleteListComponent._handleRepoErrors(createDeleteListComponent.repository.delete(rowDataId))
-            .then(() => createDeleteListComponent.doWithState((crudListState) => {
-                crudListState.removeById(rowDataId);
-            }));
+        if (EntityUtils.isIdGenerated(rowDataId)) {
+            createDeleteListComponent._removeById(rowDataId);
+        } else {
+            createDeleteListComponent._handleRepoErrors(createDeleteListComponent.repository.delete(rowDataId))
+                .then(() => createDeleteListComponent._removeById(rowDataId));
+        }
+    }
+
+    /**
+     * @param rowDataId {string|number}
+     * @return {Promise<StateChange[]>}
+     * @protected
+     */
+    _removeById(rowDataId) {
+        return this.doWithState((crudListState) => {
+            crudListState.removeById(rowDataId);
+        });
     }
 
     reload() {

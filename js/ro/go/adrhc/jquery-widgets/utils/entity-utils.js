@@ -1,4 +1,6 @@
 class EntityUtils {
+    static lastGeneratedId = -1;
+
     static get transientId() {
         return "newId";
     }
@@ -21,7 +23,7 @@ class EntityUtils {
      * @return {number}
      */
     static generateId() {
-        return -1 - Math.random();
+        return EntityUtils.lastGeneratedId--;
     }
 
     static isIdGenerated(id) {
