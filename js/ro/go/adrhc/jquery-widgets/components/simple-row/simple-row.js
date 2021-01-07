@@ -52,4 +52,12 @@ class SimpleRowComponent extends AbstractComponent {
         return super.doWithState(stateUpdaterFn, delayViewUpdate)
             .then(stateChanges => this.initKids().then(() => stateChanges));
     }
+
+    init() {
+        if (this.simpleRowState.rowState) {
+            return this.updateViewOnStateChanges().then(() => this.initKids());
+        } else {
+            return this.updateViewOnStateChanges();
+        }
+    }
 }
