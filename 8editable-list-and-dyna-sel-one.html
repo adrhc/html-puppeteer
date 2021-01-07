@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/ro/go/adrhc/responstable-table.css">
     <link rel="stylesheet" href="css/ro/go/adrhc/util.css">
+    <link rel="stylesheet" href="css/ro/go/adrhc/editable-list.css">
     <link rel="stylesheet" href="css/ro/go/adrhc/dyna-sel-one.css">
     <link rel="stylesheet" href="css/app.css">
     <script src="libraries/modernizr-custom.js"></script>
@@ -15,31 +16,86 @@
 </head>
 
 <body>
-<!-- dogs table -->
-<div class="dogsTable">
-    <table id="dogsTable" class="responstable">
+<div id="dyna-sel-one" class="dyna-sel-one-comp"
+     data-name="person" data-value="value" data-description="description"></div>
+
+<!-- persons table -->
+<div class="personsTable">
+    <table id="personsTable" class="responstable">
         <thead>
-        <tr data-owner="dogsTable">
-            <th>Dogs</th>
+        <tr data-owner="personsTable">
+            <th>Id</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>
+                <div class="buttons">
+                    <img data-owner="personsTable" data-btn="reload" alt="reload" src="images/ro/go/adrhc/reload-button-32.png" title="reîncarcă datele"/>
+                    <img data-owner="personsTable" data-btn="showAdd" alt="show add" src="images/ro/go/adrhc/add-button-32.png" title="către adăugare"/>
+                </div>
+            </th>
         </tr>
         </thead>
     </table>
 </div>
 
-<!-- dogs row template -->
-<template id="dogsTableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}">
+<!-- READ-ONLY row template -->
+<template id="personsTableRowTmpl">
+    <tr data-owner="personsTable" data-id="{{id}}">
+        <td>{{id}}</td>
+        <td>{{firstName}}</td>
+        <td>{{lastName}}</td>
         <td>
-            <input data-owner="dogsTable" type="hidden" name="id" value="{{id}}">
-            {{{name}}}
+            <div class="buttons">
+                <img data-owner="personsTable" data-btn="showDelete" alt="show delete" src="images/ro/go/adrhc/delete-button-32.png" title="către ștergere"/>
+                <img data-owner="personsTable" data-btn="showEdit" alt="show edit" src="images/ro/go/adrhc/edit-button-32.png" title="către editare"/>
+            </div>
         </td>
+    </tr>
+</template>
+
+<!-- DELETE row template -->
+<template id="personsTableDeletableRowTmpl">
+    <tr data-owner="personsTable" data-id="{{id}}" class="deletable-row">
+        <td>{{id}}</td>
+        <td>{{firstName}}</td>
+        <td>{{lastName}}</td>
+        <td>
+            <div class="buttons">
+                <img data-owner="personsTable" data-btn="cancel" alt="cancel" src="images/ro/go/adrhc/cancel-button-32.png" title="anulează ștergerea"/>
+                <img data-owner="personsTable" data-btn="delete" alt="delete" src="images/ro/go/adrhc/delete-button-32.png" title="confirmă ștergerea"/>
+            </div>
+        </td>
+    </tr>
+</template>
+
+<!-- EDIT row template -->
+<template id="personsTableEditableRowTmpl">
+    <tr data-owner="personsTable" data-id="{{id}}" class="row-editor">
+        <td>
+            <input data-owner="personsTable" type="hidden" name="id" value="{{id}}">
+        </td>
+        <td>
+            <input data-owner="personsTable" type="text" autocomplete="off"
+                   name="firstName" value="{{firstName}}" data-focus-me="true">
+        </td>
+        <td>
+            <input data-owner="personsTable" type="text" autocomplete="off" name="lastName" value="{{lastName}}">
+        </td>
+        <td>
+            <div class="buttons">
+                <img data-owner="personsTable" data-btn="cancel" alt="cancel" src="images/ro/go/adrhc/cancel-button-32.png" title="anulează modificarea"/>
+                <img data-owner="personsTable" data-btn="update" alt="update" src="images/ro/go/adrhc/save-button-32.png" title="confirmă salvarea"/>
+            </div>
+        </td>
+    </tr>
+    <tr data-owner="personsTable" data-secondary-row-part="{{id}}" class="row-part">
+        <td colspan="4">secondary-row-part {{id}}</td>
     </tr>
 </template>
 
 <!-- utils -->
 <script src="js/ro/go/adrhc/jquery-widgets/utils/ajax-utils.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/utils/array-utils.js"></script>
-<script src="js/ro/go/adrhc/jquery-widgets/utils/assertion-utils.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/utils/converters.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/model/deque.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/utils/entity-form-utils.js"></script>
@@ -78,6 +134,13 @@
 <script src="js/ro/go/adrhc/jquery-widgets/components/state-changes-dispatcher.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/abstract-component.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/abstract-table-based-component.js"></script>
+<!-- dynamic-select-one -->
+<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/repository/dyna-sel-one-repository.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/model/dyna-sel-one-item.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/model/dyna-sel-one-state.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/view/dynamic-select-one-view.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/dynamic-select-one.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/factories/dynamic-select-one-factory.js"></script>
 <!-- components/simple-list -->
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-list/view/simple-list-view.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-list/simple-list.js"></script>
@@ -88,17 +151,21 @@
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-row/simple-row.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-row/identifiable-row.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-row/factories/simple-row-factory.js"></script>
-<!-- components/elastic-list -->
-<script src="js/ro/go/adrhc/jquery-widgets/components/elastic-list/elastic-list.js"></script>
-<script src="js/ro/go/adrhc/jquery-widgets/components/elastic-list/elastic-list-factory.js"></script>
 <!-- components/selectable-list -->
 <script src="js/ro/go/adrhc/jquery-widgets/components/selectable-list/selectable-swapping-data.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/selectable-list/selectable-list-state.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/selectable-list/selectable-list.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/selectable-list/selectable-list-factory.js"></script>
-
+<!-- components/editable-list -->
+<script src="js/ro/go/adrhc/jquery-widgets/components/editable-list/editable-list-state.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/editable-list/editable-list.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/editable-list/editable-list-factory.js"></script>
+<!-- app -->
+<script src="js/model/person.js"></script>
+<script src="js/repositories/in-memory-persons-repository.js"></script>
+<script src="js/repositories/persons-repository.js"></script>
 <!-- index -->
-<script src="js/elastic-list.js"></script>
+<script src="js/8editable-list-and-dyna-sel-one.js"></script>
 </body>
 
 </html>
