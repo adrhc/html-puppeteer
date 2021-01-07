@@ -1,4 +1,7 @@
-class DynaSelOneState {
+/**
+ * todo: adapt to BasicState usage
+ */
+class DynaSelOneState extends BasicState {
     /**
      * @param repository {DynaSelOneRepository}
      * @param minCharsToSearch {number}
@@ -10,6 +13,7 @@ class DynaSelOneState {
         options,
         searchLastSearchResult
     }) {
+        super();
         this.repository = repository;
         this.minCharsToSearch = minCharsToSearch;
         this.options = options;

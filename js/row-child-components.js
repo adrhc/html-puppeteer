@@ -28,6 +28,7 @@ if (Modernizr.template) {
         // see interface ChildComponentFactory
         const rowChildCompFactories = {
             createComp: (idRowCompParent) => {
+                AssertionUtils.assertNotNull(idRowCompParent.view.$elem, "rowChildCompFactories, DynamicSelectOneFactory");
                 return DynamicSelectOneFactory.create({
                     elemIdOrJQuery: $("[data-id='dyna-sel-one']", idRowCompParent.view.$elem),
                     placeholder: "the name to search for",

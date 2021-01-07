@@ -1,3 +1,6 @@
+/**
+ * todo: adapt to AbstractView usage
+ */
 class DynamicSelectOneView extends AbstractView {
     /**
      * @param elemIdOrJQuery {string|jQuery<HTMLTableRowElement>}

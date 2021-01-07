@@ -50,7 +50,12 @@ class SimpleRowComponent extends AbstractComponent {
      */
     doWithState(stateUpdaterFn, delayViewUpdate) {
         return super.doWithState(stateUpdaterFn, delayViewUpdate)
-            .then(stateChanges => this.initKids().then(() => stateChanges));
+            .then(stateChanges => {
+                if (stateChanges.filter(sc => sc.requestType === "DELETE").length) {
+                    return stateChanges;
+                }
+                return this.initKids().then(() => stateChanges);
+            });
     }
 
     init() {

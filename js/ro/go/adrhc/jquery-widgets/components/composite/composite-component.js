@@ -72,6 +72,29 @@ class CompositeComponent {
     process(stateChange, kidsFilter, removeAfterProcessing = false) {
         const components = this.childComponents.filter(kidsFilter);
         const promises = components.map(comp => comp.process(stateChange));
+        return this._promiseAllSettledAndKidsRemove(promises, components, removeAfterProcessing);
+    }
+
+    /**
+     * @param kidHandlerFn {function(kid: AbstractComponent)}
+     * @param kidsFilter {function(comp: AbstractComponent): boolean}
+     * @param removeAfterProcessing {boolean}
+     * @return {Promise}
+     */
+    doWithKids(kidHandlerFn, kidsFilter, removeAfterProcessing = false) {
+        const components = this.childComponents.filter(kidsFilter);
+        const promises = components.map(comp => kidHandlerFn(comp));
+        return this._promiseAllSettledAndKidsRemove(promises, components, removeAfterProcessing);
+    }
+
+    /**
+     * @param promises {Promise<StateChange[]>[]}
+     * @param components {AbstractComponent[]}
+     * @param removeAfterProcessing {boolean}
+     * @return {Promise}
+     * @protected
+     */
+    _promiseAllSettledAndKidsRemove(promises, components, removeAfterProcessing) {
         return Promise.allSettled(promises).then(it => {
             if (removeAfterProcessing) {
                 ArrayUtils.removeElements(this.childComponents, components);

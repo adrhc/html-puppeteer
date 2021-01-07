@@ -90,6 +90,16 @@ class AbstractComponent {
     }
 
     /**
+     * @param kidHandlerFn {function(kid: AbstractComponent)}
+     * @param kidsFilter {function(comp: AbstractComponent): boolean}
+     * @param removeAfterProcessing {boolean}
+     * @return {Promise}
+     */
+    doWithKids(kidHandlerFn, kidsFilter, removeAfterProcessing) {
+        return this.compositeComponent.doWithKids(kidHandlerFn, kidsFilter, removeAfterProcessing);
+    }
+
+    /**
      * @param stateChange {StateChange}
      * @return {Promise<StateChange[]>}
      */
