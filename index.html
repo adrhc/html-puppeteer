@@ -48,7 +48,7 @@
         <td>{{firstName}}</td>
         <td>{{lastName}}</td>
         <td>{{#each cats}}
-            <div>{{{this.name}}}</div>
+            <div>{{{this.name}}}, {{{this.person.title}}</div>
             {{/each}}
         </td>
         <td>
@@ -69,7 +69,7 @@
         <td>{{firstName}}</td>
         <td>{{lastName}}</td>
         <td>{{#each cats}}
-            <div>{{{this.name}}}</div>
+            <div>{{{this.name}}}, {{{this.person.title}}</div>
             {{/each}}
         </td>
         <td>
@@ -104,10 +104,13 @@
                 <thead>
                 <tr data-owner="catsTable">
                     <th>Name</th>
+                    <th>Owner</th>
                     <th>
                         <div class="buttons">
-                            <img data-owner="catsTable" data-btn="showAdd" alt="show add"
-                                 src="images/ro/go/adrhc/add-button-32.png" title="către adăugare"/>
+                            <!--                            <img data-owner="catsTable" data-btn="reload" alt="reload"-->
+                            <!--                                 src="images/ro/go/adrhc/reload-button-32.png"/>-->
+                            <img data-owner="catsTable" data-btn="add" alt="add"
+                                 src="images/ro/go/adrhc/add-button-32.png" title="adaugă"/>
                         </div>
                     </th>
                 </tr>
@@ -128,23 +131,21 @@
     <!--    </tr>-->
 </template>
 
-<template id="readOnlyCatsRowTmpl">
-    <tr data-owner="catsTable" data-id="{{id}}">
-        <td>{{{name}}}</td>
-    </tr>
-</template>
-
 <template id="editableCatsRowTmpl">
     <tr data-owner="catsTable" data-id="{{id}}">
         <td>
             <input data-owner="catsTable" type="hidden" name="id" value="{{id}}">
-            <input data-owner="catsTable" type="text" autocomplete="off" name="name" value="{{name}}"
-                   data-focus-me="true">
+            <input data-owner="catsTable" type="text" autocomplete="off"
+                   name="name" value="{{name}}" data-focus-me="true">
+        </td>
+        <td>
+            <div data-owner="dyna-sel-one" data-id="dyna-sel-one" class="dyna-sel-one-comp"
+                 data-name="firstName" data-value="personId" data-description="person-description"></div>
         </td>
         <td>
             <div class="buttons">
-                <img data-owner="catsTable" data-btn="delete" alt="delete" src="images/ro/go/adrhc/delete-button-32.png"
-                     title="confirmă ștergerea"/>
+                <img data-owner="catsTable" data-btn="delete" alt="delete"
+                     src="images/ro/go/adrhc/delete-button-32.png" title="șterge"/>
             </div>
         </td>
     </tr>
@@ -153,6 +154,7 @@
 <!-- utils -->
 <script src="js/ro/go/adrhc/jquery-widgets/utils/ajax-utils.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/utils/array-utils.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/utils/assertion-utils.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/utils/converters.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/model/deque.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/utils/entity-form-utils.js"></script>
@@ -207,6 +209,12 @@
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-row/simple-row.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-row/identifiable-row.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-row/factories/simple-row-factory.js"></script>
+<!-- components/elastic-list -->
+<script src="js/ro/go/adrhc/jquery-widgets/components/elastic-list/elastic-list.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/elastic-list/elastic-list-factory.js"></script>
+<!-- components/create-delete-list -->
+<script src="js/ro/go/adrhc/jquery-widgets/components/create-delete-list/create-delete-list.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/create-delete-list/create-delete-list-factory.js"></script>
 <!-- components/selectable-list -->
 <script src="js/ro/go/adrhc/jquery-widgets/components/selectable-list/selectable-swapping-data.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/selectable-list/selectable-list-state.js"></script>
@@ -222,8 +230,11 @@
 <script src="js/repositories/in-memory-persons-repository.js"></script>
 <script src="js/repositories/persons-repository.js"></script>
 <script src="js/components/person-row-editor/cats-editable-list-child-factory.js"></script>
+<script src="js/components/person-row-editor/cats-create-delete-list-child-factory.js"></script>
+<script src="js/components/person-row-editor/cats-create-delete-list-child-oper.js"></script>
 <!-- index -->
-<script src="js/9cats-editable-list.js"></script>
+<script src="js/components/capabilities/dyna-sel-one-child-comp.js"></script>
+<script src="js/10person-with-cats.js"></script>
 </body>
 
 </html>
