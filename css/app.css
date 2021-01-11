@@ -24,3 +24,8 @@ table td input {
 tr.row-editor, tr.row-part {
     background-color: floralwhite !important;
 }
+
+/* cancel responstable-table.css */
+body {
+    padding: unset;
+}
