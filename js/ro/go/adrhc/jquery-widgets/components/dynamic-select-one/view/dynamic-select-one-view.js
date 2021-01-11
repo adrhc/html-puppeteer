@@ -58,8 +58,10 @@ class DynamicSelectOneView extends AbstractView {
         }
         if (viewModel.description) {
             this.$selectionInfoElem.removeClass("removed");
+            this.$titleElem.addClass("selected-title");
         } else {
             this.$selectionInfoElem.addClass("removed");
+            this.$selectionInfoElem.removeClass("selected-title");
         }
         if (viewModel.nothingFound) {
             this.$nothingFound.removeClass("removed");

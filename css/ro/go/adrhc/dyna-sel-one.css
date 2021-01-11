@@ -1,5 +1,5 @@
 div.dyna-sel-one-comp input {
-    margin-bottom: 0.2em;
+    /*margin-bottom: 0.1em;*/
     width: 100%;
     width: -webkit-fill-available;
     width: -moz-available;
@@ -12,8 +12,14 @@ div.dyna-sel-one-comp select {
 }
 
 .dyna-sel-one-info {
+    padding-bottom: 1.2em;
+    font-size: smaller;
 }
 
 .removed {
     display: none !important;
+}
+
+.selected-title {
+    width: auto !important;
 }
