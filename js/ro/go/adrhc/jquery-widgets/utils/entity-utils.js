@@ -127,7 +127,7 @@ class EntityUtils {
     }
 
     /**
-     * @param id {number|string|undefined}
+     * @param [id] {number|string}
      * @return {IdentifiableEntity}
      */
     static newIdentifiableEntity(id) {
