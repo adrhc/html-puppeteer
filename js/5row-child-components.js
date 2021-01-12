@@ -34,7 +34,7 @@ if (Modernizr.template) {
              * @param idRowCompParent {IdentifiableRowComponent}
              * @return {DynamicSelectOneComponent}
              */
-            createComp: (idRowCompParent) => {
+            createChildComponent: (idRowCompParent) => {
                 AssertionUtils.assertNotNull(idRowCompParent.view.$elem, "rowChildCompFactories, DynamicSelectOneFactory");
 
                 return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", idRowCompParent.view.$elem), personsRepository, {

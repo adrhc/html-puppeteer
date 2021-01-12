@@ -129,7 +129,7 @@ class CompositeComponent {
      * @return {Promise<Array<StateChange>[]>}
      */
     init() {
-        this.childComponents = this._createComponents();
+        this.childComponents = this._createChildComponents();
         const promises = this._initializeComponents();
         return Promise.allSettled(promises);
     }
@@ -146,7 +146,7 @@ class CompositeComponent {
      * @return {AbstractComponent[]}
      * @protected
      */
-    _createComponents() {
+    _createChildComponents() {
         if (this.childComponentFactories.length) {
             return this.childComponentFactories.map(compFactory => compFactory.createChildComponent(this.parentComp));
         } else {

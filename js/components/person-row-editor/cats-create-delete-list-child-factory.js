@@ -26,7 +26,7 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
              * @param idRowCompParent {IdentifiableRowComponent}
              * @return {DynamicSelectOneComponent}
              */
-            createComp: (idRowCompParent) => {
+            createChildComponent: (idRowCompParent) => {
                 const $parentElem = idRowCompParent.view.$elem;
                 AssertionUtils.assertNotNull($parentElem, "dynaSelOneCompFactory, DynamicSelectOneFactory");
 
