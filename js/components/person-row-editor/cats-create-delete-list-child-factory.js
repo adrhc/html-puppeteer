@@ -33,7 +33,7 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
                 return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", $parentElem),
                     CatsCreateDeleteListChildFactory.personsRepository, {
                         placeholder: "the name to search for",
-                        childOperations: new DynaSelOneChildComp(idRowCompParent, "person", () => new Person())
+                        childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent, "person", () => new Person())
                     })
             }
         };
@@ -43,7 +43,7 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
             items: parentComp.state.rowState.cats,
             addNewRowsAtEnd: true,
             rowChildCompFactories: dynaSelOneCompFactory,
-            childOperations: new CatsCreateDeleteListChildOperations(parentComp, "cats")
+            childishBehaviour: new CatsCreateDeleteListChildishBehaviour(parentComp, "cats")
         });
     }
 }

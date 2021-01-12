@@ -20,14 +20,14 @@ class AbstractComponent {
      *
      * @type {ChildishBehaviour}
      */
-    _childComponent;
+    _childishBehaviour;
 
     /**
-     * @param childComponent {ChildishBehaviour}
+     * @param childishBehaviour {ChildishBehaviour}
      */
-    set childComponent(childComponent) {
-        childComponent.kidComp = this;
-        this._childComponent = childComponent;
+    set childishBehaviour(childishBehaviour) {
+        childishBehaviour.childComp = this;
+        this._childishBehaviour = childishBehaviour;
     }
 
     /**
@@ -35,7 +35,7 @@ class AbstractComponent {
      * @return {boolean}
      */
     copyMyState(parentState) {
-        return this._childComponent && this._childComponent.copyKidState(parentState);
+        return this._childishBehaviour && this._childishBehaviour.copyChildState(parentState);
     }
 
     /**

@@ -10,7 +10,7 @@ class EditableListFactory {
      * @param readOnlyRow {IdentifiableRowComponent}
      * @param editableRow {IdentifiableRowComponent}
      * @param deletableRow {IdentifiableRowComponent}
-     * @param childComponent {ChildishBehaviour}
+     * @param childishBehaviour {ChildishBehaviour}
      * @return {EditableListComponent}
      */
     static create({
@@ -24,11 +24,11 @@ class EditableListFactory {
                       readOnlyRow,
                       editableRow,
                       deletableRow,
-                      childComponent
+                      childishBehaviour
                   }) {
         const editableListComponent = new EditableListComponent(repository, state, view, readOnlyRow, editableRow, deletableRow);
-        if (childComponent) {
-            editableListComponent.childComponent = childComponent;
+        if (childishBehaviour) {
+            editableListComponent.childishBehaviour = childishBehaviour;
         }
         return editableListComponent;
     }

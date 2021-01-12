@@ -1,4 +1,4 @@
-class DynaSelOneChildComp extends ChildishBehaviour {
+class DynaSelOneChildishBehaviour extends ChildishBehaviour {
     /**
      * @param parentComp {AbstractComponent}
      * @param parentProperty {string} is the parentState property where to save the selectedItem
@@ -17,11 +17,11 @@ class DynaSelOneChildComp extends ChildishBehaviour {
      * @param [useOwnerOnFields] {boolean}
      * @return {boolean}
      */
-    copyKidState(parentState, useOwnerOnFields) {
+    copyChildState(parentState, useOwnerOnFields) {
         /**
          * @type {DynaSelOneState}
          */
-        const dynaSelOneState = this._kidComp.dynaSelOneState;
+        const dynaSelOneState = this._childComp.dynaSelOneState;
         if (dynaSelOneState.selectedItem) {
             parentState[this.parentProperty] = $.extend(this.newEntityFactoryFn(), dynaSelOneState.selectedItem);
         } else {
@@ -35,9 +35,9 @@ class DynaSelOneChildComp extends ChildishBehaviour {
      *
      * @param value {DynamicSelectOneComponent}
      */
-    set kidComp(value) {
+    set childComp(value) {
         const identifiableEntity = this.parentComp.simpleRowState.rowState[this.parentProperty];
         value.dynaSelOneState.updateWithDynaSelOneItem(identifiableEntity);
-        this._kidComp = value;
+        this._childComp = value;
     }
 }

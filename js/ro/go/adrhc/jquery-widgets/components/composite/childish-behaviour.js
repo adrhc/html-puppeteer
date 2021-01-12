@@ -3,11 +3,11 @@
  */
 class ChildishBehaviour {
     /**
-     * kidComp means "me/this/current" relative to ChildishBehaviour
+     * childComp means "me/this/current" relative to ChildishBehaviour
      *
      * @type {AbstractComponent}
      */
-    _kidComp
+    _childComp
     /**
      * @type {AbstractComponent}
      */
@@ -20,12 +20,12 @@ class ChildishBehaviour {
         this.parentComp = parentComp;
     }
 
-    get kidComp() {
-        return this._kidComp;
+    get childComp() {
+        return this._childComp;
     }
 
-    set kidComp(value) {
-        this._kidComp = value;
+    set childComp(value) {
+        this._childComp = value;
     }
 
     /**
@@ -35,7 +35,7 @@ class ChildishBehaviour {
      * @param [useOwnerOnFields] {boolean}
      * @return {boolean} whether something was copied or not
      */
-    copyKidState(parentState, useOwnerOnFields) {
+    copyChildState(parentState, useOwnerOnFields) {
         return false;
     }
 }

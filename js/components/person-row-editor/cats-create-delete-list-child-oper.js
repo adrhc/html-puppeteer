@@ -2,7 +2,7 @@
  * Creates the capability to update a CreateDeleteListComponent's parent state (snapshot).
  * The "capability" must be attached to a CreateDeleteListComponent instance!
  */
-class CatsCreateDeleteListChildOperations extends ChildishBehaviour {
+class CatsCreateDeleteListChildishBehaviour extends ChildishBehaviour {
     /**
      * @param parentComp {AbstractComponent}
      * @param parentProperty {string} is the parentState property where to save the selectedItem
@@ -19,11 +19,11 @@ class CatsCreateDeleteListChildOperations extends ChildishBehaviour {
      * @param [useOwnerOnFields] {boolean}
      * @return {boolean}
      */
-    copyKidState(parentState, useOwnerOnFields) {
+    copyChildState(parentState, useOwnerOnFields) {
         /**
          * @type {CreateDeleteListComponent}
          */
-        const createDeleteListComponent = this._kidComp;
+        const createDeleteListComponent = this._childComp;
         parentState[this.parentProperty] = createDeleteListComponent.extractAllEntities(useOwnerOnFields);
         return true;
     }

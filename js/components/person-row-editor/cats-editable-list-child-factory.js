@@ -11,11 +11,11 @@ class CatsEditableListChildFactory extends ChildComponentFactory {
             tableRelativePositionOnCreate: "append"
         });
 
-        const catsChildOperations = new ChildishBehaviour(parentComp);
-        catsChildOperations.copyKidState = (parentState) => {
-            // catsChildOperations.kidComp is {EditableListComponent} = cats table component
-            // kidComp means "me/this/current" relative to ChildishBehaviour
-            parentState.cats = catsChildOperations.kidComp.extractAllEntities(true);
+        const childishBehaviour = new ChildishBehaviour(parentComp);
+        childishBehaviour.copyChildState = (parentState) => {
+            // childishBehaviour.childComp is {EditableListComponent} = cats table component
+            // childComp means "me/this/current" relative to ChildishBehaviour
+            parentState.cats = childishBehaviour.childComp.extractAllEntities(true);
             return true;
         }
 
@@ -30,7 +30,7 @@ class CatsEditableListChildFactory extends ChildComponentFactory {
             tableIdOrJQuery: $catsTable,
             bodyRowTmplId: "editableCatsRowTmpl",
             readOnlyRow: catRow,
-            childComponent: catsChildOperations
+            childishBehaviour
         });
     }
 }

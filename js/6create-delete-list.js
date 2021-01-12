@@ -38,7 +38,7 @@ if (Modernizr.template) {
 
                 return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", idRowCompParent.view.$elem), personsRepository, {
                     placeholder: "the name to search for",
-                    childOperations: new DynaSelOneChildComp(idRowCompParent, "person", () => new Person())
+                    childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent, "person", () => new Person())
                 })
             }
         };
