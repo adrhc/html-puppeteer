@@ -2,12 +2,12 @@ class DynaSelOneChildishBehaviour extends ChildishBehaviour {
     /**
      * @param parentComp {AbstractComponent}
      * @param parentProperty {string} is the parentState property where to save the selectedItem
-     * @param newParentPropertyInstanceFactoryFn {function(): IdentifiableEntity}
+     * @param newParentPropertyFactoryFn {function(): IdentifiableEntity}
      */
-    constructor(parentComp, parentProperty, newParentPropertyInstanceFactoryFn) {
+    constructor(parentComp, parentProperty, newParentPropertyFactoryFn) {
         super(parentComp);
         this.parentProperty = parentProperty;
-        this.newEntityFactoryFn = newParentPropertyInstanceFactoryFn;
+        this.newEntityFactoryFn = newParentPropertyFactoryFn;
     }
 
     /**
