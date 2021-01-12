@@ -2,12 +2,12 @@ class CrudListState extends SimpleListState {
     /**
      * whether to append or prepend new items
      *
-     * @type {boolean|undefined}
+     * @type {boolean}
      */
     append;
 
     /**
-     * @param append {boolean}
+     * @param [append] {boolean}
      */
     constructor(append) {
         super();
@@ -15,7 +15,7 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @param append {boolean|undefined}
+     * @param [append] {boolean}
      * @return {IdentifiableEntity}
      */
     createNewItem(append = this.append) {
