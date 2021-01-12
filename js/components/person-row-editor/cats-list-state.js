@@ -8,8 +8,8 @@ class CatsListState extends EditableListState {
     }
 
     createNewItem(append) {
-        const savedItem = this.repository.insert(new IdentifiableEntity(), true);
-        return this.insertItem(savedItem, true);
+        const repoItem = this.repository.createNewItem();
+        return this.insertItem(repoItem, true);
     }
 
     switchTo(id, context) {
