@@ -1,7 +1,7 @@
 /**
  * this encapsulates the "component composition" capability of a component
  */
-class CompositeComponent {
+class CompositeBehaviour {
     /**
      * @type {AbstractComponent}
      */

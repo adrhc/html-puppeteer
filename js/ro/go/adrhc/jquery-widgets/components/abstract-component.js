@@ -12,7 +12,7 @@ class AbstractComponent {
      */
     stateChangesDispatcher;
     /**
-     * @type {CompositeComponent}
+     * @type {CompositeBehaviour}
      */
     compositeComponent;
     /**
@@ -46,7 +46,7 @@ class AbstractComponent {
         this.state = state;
         this.view = view;
         this.stateChangesDispatcher = new StateChangesDispatcher(this);
-        this.compositeComponent = new CompositeComponent(this);
+        this.compositeComponent = new CompositeBehaviour(this);
     }
 
     /**
