@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/ro/go/adrhc/util.css">
     <link rel="stylesheet" href="css/ro/go/adrhc/editable-list.css">
     <link rel="stylesheet" href="css/ro/go/adrhc/dyna-sel-one.css">
+    <link rel="stylesheet" href="css/library-customizations/responstable-table.css">
     <link rel="stylesheet" href="css/app.css">
     <script src="libraries/modernizr-custom.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -25,7 +26,7 @@
         <thead>
         <tr data-owner="personsTable">
             <th>Id</th>
-            <th>First name</th>
+            <th data-th="Details"><span>First name</span></th>
             <th>Last name</th>
             <th>Cats</th>
             <th>
@@ -107,8 +108,8 @@
                     <th>Owner</th>
                     <th>
                         <div class="buttons">
-                            <!--                            <img data-owner="catsTable" data-btn="reload" alt="reload"-->
-                            <!--                                 src="images/ro/go/adrhc/reload-button-32.png"/>-->
+<!--                            <img data-owner="catsTable" data-btn="reload" alt="reload"-->
+<!--                                 src="images/ro/go/adrhc/reload-button-32.png"/>-->
                             <img data-owner="catsTable" data-btn="add" alt="add"
                                  src="images/ro/go/adrhc/add-button-32.png" title="adaugă"/>
                         </div>
