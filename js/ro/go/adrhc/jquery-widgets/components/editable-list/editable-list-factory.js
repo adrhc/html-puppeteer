@@ -10,7 +10,7 @@ class EditableListFactory {
      * @param readOnlyRow {IdentifiableRowComponent}
      * @param editableRow {IdentifiableRowComponent}
      * @param deletableRow {IdentifiableRowComponent}
-     * @param childComponent {ChildComponent}
+     * @param childComponent {ChildishBehaviour}
      * @return {EditableListComponent}
      */
     static create({

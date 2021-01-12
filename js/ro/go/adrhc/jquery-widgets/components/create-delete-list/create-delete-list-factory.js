@@ -10,7 +10,7 @@ class CreateDeleteListFactory {
      * @param addNewRowsAtEnd {boolean} whether to append or prepend
      * @param rowChildCompFactories {ChildComponentFactory|ChildComponentFactory[]} are components placed on a row
      * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, afterItemId: number|string, mustacheTableElemAdapter: MustacheTableElemAdapter): IdentifiableRowComponent}
-     * @param childOperations {ChildComponent} permit CreateDeleteListComponent to update its parent
+     * @param childOperations {ChildishBehaviour} permit CreateDeleteListComponent to update its parent
      * @return {ElasticListComponent}
      */
     static create(tableIdOrJQuery, bodyRowTmplId, {

@@ -1,4 +1,4 @@
-class DynaSelOneChildComp extends ChildComponent {
+class DynaSelOneChildComp extends ChildishBehaviour {
     /**
      * @param parentComp {AbstractComponent}
      * @param parentProperty {string} is the parentState property where to save the selectedItem

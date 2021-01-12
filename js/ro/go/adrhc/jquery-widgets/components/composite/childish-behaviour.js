@@ -1,9 +1,9 @@
 /**
  * this encapsulates the "child component" capability of a component
  */
-class ChildComponent {
+class ChildishBehaviour {
     /**
-     * kidComp means "me/this/current" relative to ChildComponent
+     * kidComp means "me/this/current" relative to ChildishBehaviour
      *
      * @type {AbstractComponent}
      */

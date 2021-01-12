@@ -4,7 +4,7 @@ class DynamicSelectOneFactory {
      * @param repository {DynaSelOneRepository}
      * @param [placeholder] {string}
      * @param [useLastSearchResult] {boolean}
-     * @param [childOperations] {ChildComponent}
+     * @param [childOperations] {ChildishBehaviour}
      * @param [focusOnInit] {boolean}
      * @return {DynamicSelectOneComponent}
      */

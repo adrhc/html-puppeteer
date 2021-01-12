@@ -18,12 +18,12 @@ class AbstractComponent {
     /**
      * see this as the "child component" capability of the current/this component
      *
-     * @type {ChildComponent}
+     * @type {ChildishBehaviour}
      */
     _childComponent;
 
     /**
-     * @param childComponent {ChildComponent}
+     * @param childComponent {ChildishBehaviour}
      */
     set childComponent(childComponent) {
         childComponent.kidComp = this;

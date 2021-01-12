@@ -11,10 +11,10 @@ class CatsEditableListChildFactory extends ChildComponentFactory {
             tableRelativePositionOnCreate: "append"
         });
 
-        const catsChildOperations = new ChildComponent(parentComp);
+        const catsChildOperations = new ChildishBehaviour(parentComp);
         catsChildOperations.copyKidState = (parentState) => {
             // catsChildOperations.kidComp is {EditableListComponent} = cats table component
-            // kidComp means "me/this/current" relative to ChildComponent
+            // kidComp means "me/this/current" relative to ChildishBehaviour
             parentState.cats = catsChildOperations.kidComp.extractAllEntities(true);
             return true;
         }
