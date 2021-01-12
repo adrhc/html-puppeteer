@@ -148,7 +148,7 @@ class CompositeComponent {
      */
     _createComponents() {
         if (this.childComponentFactories.length) {
-            return this.childComponentFactories.map(compFactory => compFactory.createComp(this.parentComp));
+            return this.childComponentFactories.map(compFactory => compFactory.createChildComponent(this.parentComp));
         } else {
             return this.childComponents;
         }

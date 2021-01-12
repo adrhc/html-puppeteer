@@ -180,8 +180,7 @@ class AbstractComponent {
      * @return {Promise<StateChange>}
      */
     updateViewOnKnownStateChange(stateChange) {
-        console.log(`${this.constructor.name}.updateViewOnKnownStateChange:\n${JSON.stringify(stateChange)}`);
-        throw "Not implemented!";
+        throw `${this.constructor.name}.updateViewOnKnownStateChange is not implemented!`;
     }
 
     updateViewOnAny(stateChange) {

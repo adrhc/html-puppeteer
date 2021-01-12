@@ -3,7 +3,7 @@ class CatsEditableListChildFactory extends ChildComponentFactory {
      * @param parentComp {AbstractComponent}
      * @return {AbstractComponent}
      */
-    createComp(parentComp) {
+    createChildComponent(parentComp) {
         const $catsTable = $("[data-id='catsTable']", parentComp.view.$elem);
         const catRow = SimpleRowFactory.createIdentifiableRow({
             tableIdOrJQuery: $catsTable,

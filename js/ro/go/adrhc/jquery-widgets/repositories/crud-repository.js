@@ -16,7 +16,7 @@ class CrudRepository {
      * @return {Promise<IdentifiableEntity>}
      */
     insert(item) {
-        throw "Not implemented!";
+        throw `${this.constructor.name}.insert is not implemented!`;
     }
 
     /**
@@ -24,7 +24,7 @@ class CrudRepository {
      * @return {Promise<IdentifiableEntity>}
      */
     delete(id) {
-        throw "Not implemented!";
+        throw `${this.constructor.name}.delete is not implemented!`;
     }
 
     /**
@@ -32,13 +32,13 @@ class CrudRepository {
      * @return {Promise<IdentifiableEntity>}
      */
     update(item) {
-        throw "Not implemented!";
+        throw `${this.constructor.name}.update is not implemented!`;
     }
 
     /**
      * @return {Promise<IdentifiableEntity[]>}
      */
     getAll() {
-        throw "Not implemented!";
+        throw `${this.constructor.name}.getAll is not implemented!`;
     }
 }

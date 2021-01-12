@@ -17,7 +17,7 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
             [{id: 31, name: "cat31"}, {id: 32, name: "cat32"}, {id: 33, name: "cat33"}])
     ]);
 
-    createComp(parentComp) {
+    createChildComponent(parentComp) {
         const $catsTable = $("[data-id='catsTable']", parentComp.view.$elem);
 
         // DynamicSelectOneComponent child component factory (see ChildComponentFactory)

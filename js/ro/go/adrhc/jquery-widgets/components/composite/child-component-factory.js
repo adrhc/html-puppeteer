@@ -7,7 +7,7 @@ class ChildComponentFactory {
      * @return {AbstractComponent}
      * @abstract
      */
-    createComp(parentComp) {
-        throw "Not implemented!";
+    createChildComponent(parentComp) {
+        throw `${this.constructor.name}.createChildComponent is not implemented!`;
     }
 }
