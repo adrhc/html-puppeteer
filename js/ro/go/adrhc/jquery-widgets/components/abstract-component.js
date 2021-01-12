@@ -14,7 +14,7 @@ class AbstractComponent {
     /**
      * @type {CompositeBehaviour}
      */
-    compositeComponent;
+    compositeBehaviour;
     /**
      * see this as the "child component" capability of the current/this component
      *
@@ -46,21 +46,21 @@ class AbstractComponent {
         this.state = state;
         this.view = view;
         this.stateChangesDispatcher = new StateChangesDispatcher(this);
-        this.compositeComponent = new CompositeBehaviour(this);
+        this.compositeBehaviour = new CompositeBehaviour(this);
     }
 
     /**
      * @param childCompFactory {ChildComponentFactory|ChildComponentFactory[]}
      */
     addChildComponentFactory(childCompFactory) {
-        this.compositeComponent.addChildComponentFactory(childCompFactory);
+        this.compositeBehaviour.addChildComponentFactory(childCompFactory);
     }
 
     /**
      * @param childComp {AbstractComponent|AbstractComponent[]}
      */
     addChildComponent(childComp) {
-        this.compositeComponent.addChildComponent(childComp);
+        this.compositeBehaviour.addChildComponent(childComp);
     }
 
     /**
@@ -68,14 +68,14 @@ class AbstractComponent {
      * @return {boolean} whether an update occured or not
      */
     copyKidsState(parentState) {
-        return this.compositeComponent.copyKidsState(parentState);
+        return this.compositeBehaviour.copyKidsState(parentState);
     }
 
     /**
      * @return {Promise<[]>}
      */
     initKids() {
-        return this.compositeComponent.init();
+        return this.compositeBehaviour.init();
     }
 
     /**
@@ -85,7 +85,7 @@ class AbstractComponent {
      * @return {Promise<StateChange[][]>}
      */
     processKids(stateChange, kidsFilter, removeAfterProcessing) {
-        return this.compositeComponent.process(stateChange, kidsFilter, removeAfterProcessing)
+        return this.compositeBehaviour.process(stateChange, kidsFilter, removeAfterProcessing)
     }
 
     /**
@@ -124,7 +124,7 @@ class AbstractComponent {
     }
 
     close() {
-        this.compositeComponent.close();
+        this.compositeBehaviour.close();
         if (this.view.$elem) {
             this.view.$elem.off(this._eventsNamespace);
         }
@@ -168,7 +168,7 @@ class AbstractComponent {
      */
     extractInputValues(useOwnerOnFields) {
         if (useOwnerOnFields == null) {
-            useOwnerOnFields = this.compositeComponent.hasKids();
+            useOwnerOnFields = this.compositeBehaviour.hasKids();
         }
         const item = this.view.extractInputValues(useOwnerOnFields);
         this.copyKidsState(item);

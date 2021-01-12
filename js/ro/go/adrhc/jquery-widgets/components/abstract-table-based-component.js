@@ -15,7 +15,7 @@ class AbstractTableBasedComponent extends AbstractComponent {
 
     /**
      * When this.extractAllInputValues exists than this.extractAllEntities must use it instead of using super.extractAllEntities!
-     * Drawback: this approach ignores this.compositeComponent (aka kids)!
+     * Drawback: this approach ignores this.compositeBehaviour (aka kids)!
      *
      * @param useOwnerOnFields {boolean|undefined}
      * @return {Array<IdentifiableEntity>}
