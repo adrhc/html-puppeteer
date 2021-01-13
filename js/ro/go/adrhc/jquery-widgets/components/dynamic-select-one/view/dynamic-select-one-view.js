@@ -46,33 +46,12 @@ class DynamicSelectOneView extends AbstractView {
      * @param viewModel {Object}
      */
     _applyCss(viewModel) {
-        if (viewModel.options) {
-            this.$optionsElem.removeClass("removed");
-        } else {
-            this.$optionsElem.addClass("removed");
-        }
-        if (viewModel.description) {
-            this.$selectionInfoElem.removeClass("removed");
-            this.$titleElem.addClass("selected-title");
-        } else {
-            this.$selectionInfoElem.addClass("removed");
-            this.$selectionInfoElem.removeClass("selected-title");
-        }
-        if (viewModel.nothingFound) {
-            this.$nothingFound.removeClass("removed");
-        } else {
-            this.$nothingFound.addClass("removed");
-        }
-        if (viewModel.tooMany) {
-            this.$tooMany.removeClass("removed");
-        } else {
-            this.$tooMany.addClass("removed");
-        }
-        if (viewModel.minCharsToSearch) {
-            this.$tooLessChars.removeClass("removed");
-        } else {
-            this.$tooLessChars.addClass("removed");
-        }
+        CssUtils.switchClasses(this.$optionsElem, "removed", viewModel.options);
+        CssUtils.switchClasses(this.$selectionInfoElem, "removed", viewModel.description);
+        CssUtils.switchClasses(this.$titleElem, "selected-title", !viewModel.description);
+        CssUtils.switchClasses(this.$nothingFound, "removed", viewModel.nothingFound);
+        CssUtils.switchClasses(this.$tooMany, "removed", viewModel.tooMany);
+        CssUtils.switchClasses(this.$tooLessChars, "removed", viewModel.minCharsToSearch);
     }
 
     /**

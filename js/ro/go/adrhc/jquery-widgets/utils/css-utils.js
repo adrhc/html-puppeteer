@@ -1,25 +1,14 @@
 class CssUtils {
     /**
      * @param $elem {jQuery<HTMLElement>}
-     * @param classesToRemove {string} class names separated by a space
-     * @param classesToAdd {string} class names separated by a space
-     * @param reversedBehaviour {boolean} means to add the classesToRemove and remove the classesToAdd
+     * @param classesToAddOrRemove {string} class names separated by a space
+     * @param remove {boolean} true = remove, false = add the classes listed in classesToAddOrRemove
      */
-    static addRemoveClasses($elem, classesToRemove, classesToAdd, reversedBehaviour) {
-        if (reversedBehaviour) {
-            if (classesToRemove) {
-                $elem.addClass(classesToRemove);
-            }
-            if (classesToAdd) {
-                $elem.removeClass(classesToAdd);
-            }
+    static switchClasses($elem, classesToAddOrRemove, remove) {
+        if (remove) {
+            $elem.removeClass(classesToAddOrRemove);
         } else {
-            if (classesToAdd) {
-                $elem.addClass(classesToAdd);
-            }
-            if (classesToRemove) {
-                $elem.removeClass(classesToRemove);
-            }
+            $elem.addClass(classesToAddOrRemove);
         }
     }
 }
