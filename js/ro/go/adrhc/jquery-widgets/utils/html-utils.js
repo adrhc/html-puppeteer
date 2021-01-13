@@ -3,7 +3,7 @@ class HtmlUtils {
      * @param tmplId is the template html-element id
      * @return {string} the template's html extracted from template html-element id (i.e. tmplId)
      */
-    templateTextOf(tmplId) {
+    static templateTextOf(tmplId) {
         const $tmpl = $(`#${tmplId}`);
         if (!$tmpl.length) {
             return undefined;
@@ -22,11 +22,16 @@ class HtmlUtils {
      * @param tmplHtml is the template's html
      * @return {string} the template's html extracted from template html-element id or tmplHtml if null tmplId
      */
-    templateOf(tmplId, tmplHtml) {
+    static templateOf(tmplId, tmplHtml) {
         if (tmplId) {
-            return HtmlUtils.prototype.templateTextOf(tmplId);
+            return HtmlUtils.templateTextOf(tmplId);
         } else if (tmplHtml) {
             return tmplHtml;
         }
+    }
+
+    static focus($elem) {
+        const value = $elem.val();
+        $elem.focus().val("").val(value);
     }
 }

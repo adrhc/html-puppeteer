@@ -2,14 +2,12 @@ class DynamicSelectOneComponent extends AbstractComponent {
     /**
      * @param view {DynamicSelectOneView}
      * @param state {DynaSelOneState}
-     * @param [focusOnInit] {boolean}
      */
-    constructor(view, state, {focusOnInit}) {
+    constructor(view, state) {
         // todo: adapt DynamicSelectOneView to BasicState
         super(state, view);
         this.dynaSelOneState = state;
         this.dynaSelOneView = view;
-        this.focusOnInit = focusOnInit;
     }
 
     onOptionClick(ev) {
@@ -102,5 +100,9 @@ class DynamicSelectOneComponent extends AbstractComponent {
     close() {
         this._clearOnBlurHandlers();
         super.close();
+    }
+
+    get focusOnInit() {
+        return this.view.$elem.data("focus") === true;
     }
 }

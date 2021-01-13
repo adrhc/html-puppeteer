@@ -14,7 +14,6 @@ if (Modernizr.template) {
 
         // DYNAMIC-SELECT-ONE
         DynamicSelectOneFactory.create("dyna-sel-one", personsRepository, {
-            focusOnInit: true,
             useLastSearchResult: true
         }).init();
 

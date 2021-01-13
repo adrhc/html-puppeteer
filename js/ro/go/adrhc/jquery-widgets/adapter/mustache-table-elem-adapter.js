@@ -8,7 +8,7 @@ class MustacheTableElemAdapter extends TableElementAdapter {
                 bodyRowTmplId = `${tableId}RowTmpl`,
                 bodyTmplHtml = undefined) {
         super(tableId);
-        this.bodyRowTmplHtml = HtmlUtils.prototype.templateTextOf(bodyRowTmplId);
+        this.bodyRowTmplHtml = HtmlUtils.templateTextOf(bodyRowTmplId);
         if (this.bodyRowTmplHtml) {
             this.bodyTmplHtml = bodyTmplHtml ? bodyTmplHtml : "{{#items}}{{> bodyRowTmpl}}{{/items}}";
         } else {
@@ -34,15 +34,15 @@ class MustacheTableElemAdapter extends TableElementAdapter {
      * @param createIfNotExists {boolean|undefined}
      */
     renderRowWithTemplate({
-                           rowDataId,
-                           data,
-                           rowTmplHtml,
-                           replaceExisting,
-                           neighbourRowDataId,
-                           neighbourRelativePosition,
-                           tableRelativePosition,
-                           createIfNotExists
-                       }) {
+                              rowDataId,
+                              data,
+                              rowTmplHtml,
+                              replaceExisting,
+                              neighbourRowDataId,
+                              neighbourRelativePosition,
+                              tableRelativePosition,
+                              createIfNotExists
+                          }) {
         const rowHtml = this._renderTemplate(data, rowTmplHtml);
         super.renderRow({
             rowDataId,

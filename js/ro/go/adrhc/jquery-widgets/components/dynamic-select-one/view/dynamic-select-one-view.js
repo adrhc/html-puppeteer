@@ -26,7 +26,7 @@ class DynamicSelectOneView extends AbstractView {
             .then(() => {
                 this._applyCss(viewModel);
                 if (focusOnSearchInput) {
-                    this._focusOnSearchInput();
+                    HtmlUtils.focus(this.$titleElem);
                 }
                 return viewModel;
             });
@@ -119,12 +119,6 @@ class DynamicSelectOneView extends AbstractView {
             });
         }
         return viewModel;
-    }
-
-    _focusOnSearchInput() {
-        const searchInput = this.$titleElem;
-        const value = searchInput.val();
-        searchInput.focus().val("").val(value);
     }
 
     /**

@@ -13,9 +13,7 @@ if (Modernizr.template) {
         const personsRepository = DbMock.PERSONS_REPOSITORY;
 
         // DYNAMIC-SELECT-ONE
-        DynamicSelectOneFactory.create("dyna-sel-one", personsRepository, {
-            focusOnInit: true
-        }).init();
+        DynamicSelectOneFactory.create("dyna-sel-one", personsRepository, {}).init();
 
         // EDITABLE-LIST
         // dogs table with both read-only and editable row
