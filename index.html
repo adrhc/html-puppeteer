@@ -17,7 +17,7 @@
 </head>
 
 <body>
-<div id="dyna-sel-one" class="dyna-sel-one-comp" data-owner="personSearch"
+<div id="dyna-sel-one" class="dyna-sel-one-comp" data-owner="personSearch" data-placeholder="first name"
      data-name="firstName" data-value="personId" data-description="person-description"></div>
 
 <!-- persons table -->
@@ -140,7 +140,7 @@
                    name="name" value="{{name}}" data-focus-me="true">
         </td>
         <td>
-            <div data-owner="dyna-sel-one" data-id="dyna-sel-one" class="dyna-sel-one-comp"
+            <div data-owner="dyna-sel-one" data-id="dyna-sel-one" class="dyna-sel-one-comp" data-placeholder="first name"
                  data-name="firstName" data-value="personId" data-description="person-description"></div>
         </td>
         <td>
@@ -230,11 +230,12 @@
 <script src="js/model/person.js"></script>
 <script src="js/repositories/in-memory-persons-repository.js"></script>
 <script src="js/repositories/persons-repository.js"></script>
+<script src="js/mock/db-mock.js"></script>
 <script src="js/components/person-row-editor/cats-editable-list-child-factory.js"></script>
 <script src="js/components/person-row-editor/cats-create-delete-list-child-factory.js"></script>
 <script src="js/components/person-row-editor/cats-create-delete-list-child-oper.js"></script>
-<!-- index -->
 <script src="js/components/capabilities/dyna-sel-one-childish-behaviour.js"></script>
+<!-- index -->
 <script src="js/10person-with-cats.js"></script>
 </body>
 

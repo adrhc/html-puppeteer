@@ -4,19 +4,17 @@
 class DynamicSelectOneView extends AbstractView {
     /**
      * @param elemIdOrJQuery {string|jQuery<HTMLTableRowElement>}
-     * @param [placeholder] {string}
      * @param optionsToShow {number}
      * @param tmplUrl {string}
      */
     constructor(elemIdOrJQuery, {
-        placeholder, optionsToShow = 10,
+        optionsToShow = 10,
         tmplUrl = "js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/templates/dyna-sel-one.html"
     }) {
         super();
         this._setupElem(elemIdOrJQuery);
         this._setupOwner();
         this.tmpl = new CachedAjax(tmplUrl);
-        this.placeholder = placeholder;
         this.optionsToShow = optionsToShow;
     }
 
@@ -82,7 +80,7 @@ class DynamicSelectOneView extends AbstractView {
 
     /**
      * @param state {DynaSelOneState}
-     * @return {{placeholder: string, optionsToShow: number, title: string}}
+     * @return {{}}
      * @private
      */
     _viewModelOf(state) {
@@ -178,6 +176,10 @@ class DynamicSelectOneView extends AbstractView {
 
     get titleInputName() {
         return this.$elem.data("name");
+    }
+
+    get placeholder() {
+        return this.$elem.data("placeholder");
     }
 
     get valueInputName() {

@@ -1,3 +1,7 @@
+# setup
+- java backend: https://github.com/adrhc/spring-boot-data-jpa-rest.git
+- Webstorm debug URL example: http://localhost:63342/jquery-widgets/10person-with-cats.html
+
 # order
 1. simple-row.html
 2. simple-list-read-only.html

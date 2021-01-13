@@ -10,11 +10,10 @@ if (Modernizr.template) {
     });
 
     $(() => {
-        const personsRepository = CatsCreateDeleteListChildFactory.personsRepository;
+        const personsRepository = DbMock.PERSONS_REPOSITORY;
 
         // DYNAMIC-SELECT-ONE
         DynamicSelectOneFactory.create("dyna-sel-one", personsRepository, {
-            placeholder: "the name to search for",
             focusOnInit: true
         }).init();
 
