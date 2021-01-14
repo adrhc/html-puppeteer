@@ -3,7 +3,7 @@ class Person extends DynaSelOneItem {
         super(id);
         this.firstName = firstName;
         this.lastName = lastName;
-        this.cats = cats;
+        this.cats = cats ? cats : [];
     }
 
     get title() {
