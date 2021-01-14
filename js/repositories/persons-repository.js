@@ -2,7 +2,8 @@
  * also extends DynaSelOneRepository.findByTitle
  */
 class PersonsRepository extends CrudRepository {
-    URL = "http://127.0.0.1:8011/persons";
+    SERVER_URL = "http://127.0.0.1:8011";
+    URL = `${this.SERVER_URL}/persons`;
 
     /**
      * @param title {String}
@@ -10,7 +11,7 @@ class PersonsRepository extends CrudRepository {
      */
     findByTitle(title) {
         return $.ajax({
-            url: "dynaselone",
+            url: `${this.SERVER_URL}/dynaselone`,
             data: {title: title, entity: "person"},
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             processData: true

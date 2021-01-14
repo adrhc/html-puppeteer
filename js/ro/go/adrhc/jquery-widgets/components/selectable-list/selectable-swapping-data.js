@@ -20,10 +20,22 @@ class SelectableSwappingData {
      */
     similarTo(selectableSwappingData) {
         return selectableSwappingData
-            && (this.context == null && selectableSwappingData.context == null
-                || this.context == selectableSwappingData.context)
-            && (this.itemId == null && selectableSwappingData.itemId == null
-                || EntityUtils.idsAreEqual(this.itemId, selectableSwappingData.itemId));
+            &&
+            (
+                (
+                    (
+                        this.context == null && selectableSwappingData.context == null
+                        || this.context == selectableSwappingData.context
+                    )
+                    &&
+                    (
+                        this.itemId == null && selectableSwappingData.itemId == null
+                        || EntityUtils.idsAreEqual(this.itemId, selectableSwappingData.itemId)
+                    )
+                )
+                ||
+                EntityUtils.isTransientId(this.itemId) && EntityUtils.isTransientId(selectableSwappingData.itemId)
+            );
     }
 
     /**
