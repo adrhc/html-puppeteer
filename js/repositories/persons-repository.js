@@ -10,8 +10,8 @@ class PersonsRepository extends CrudRepository {
      */
     findByTitle(title) {
         return $.ajax({
-            url: `${this.URL}/search/findByFirstNameStartingWith`,
-            data: {firstName: title},
+            url: "dynaselone",
+            data: {title: title, entity: "person"},
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             processData: true
         }).then(data => {
