@@ -38,7 +38,7 @@ class CrudRepository {
     /**
      * @return {Promise<IdentifiableEntity[]>}
      */
-    getAll() {
+    findAll() {
         throw `${this.constructor.name}.getAll is not implemented!`;
     }
 }

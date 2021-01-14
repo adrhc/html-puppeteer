@@ -11,7 +11,7 @@ class InMemoryPersonsRepository extends InMemoryCrudRepository {
      */
     findByTitle(title) {
         const searchFor = title.toLowerCase();
-        return this.getAll()
+        return this.findAll()
             .then(items => items.map(it => $.extend(true, this.entityFactoryFn(), it)))
             .then(items => items.filter(it => it.firstName.toLowerCase().startsWith(searchFor)));
     }

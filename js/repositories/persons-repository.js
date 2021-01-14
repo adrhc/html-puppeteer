@@ -23,7 +23,7 @@ class PersonsRepository extends CrudRepository {
     /**
      * @return {Promise<Person[]>}
      */
-    getAll() {
+    findAll() {
         return $.getJSON(`${this.URL}?projection=PersonWithCats`)
             .then(data => RestUtils.prototype.unwrapHAL(data));
     }
