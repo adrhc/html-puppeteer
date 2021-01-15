@@ -80,10 +80,10 @@ class DynamicSelectOneView extends AbstractView {
             viewModel.searchedTitle = state.title;
             if (state.optionsLength > 1) {
                 // too many results
-                viewModel.tooMany = state.title;
-            } else {
+                viewModel.tooMany = true;
+            } else if (state.optionsLength === 0) {
                 // no search result
-                viewModel.nothingFound = state.title;
+                viewModel.nothingFound = true;
             }
         } else {
             // search with too less characters

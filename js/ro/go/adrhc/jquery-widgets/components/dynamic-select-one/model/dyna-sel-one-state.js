@@ -67,7 +67,7 @@ class DynaSelOneState extends BasicState {
         let optionsPromise;
         if (this.useLastSearchResult && this.currentOptionsAreResultOfSearch && title.startsWith(this.title)) {
             // new title contains the current title: searching existing options
-            optionsPromise = Promise.resolve(this._findOptionsByTitleStartingWith(title));
+            optionsPromise = Promise.resolve(this._findOptionsByTitlePrefix(title));
         } else {
             // new title doesn't contain the current title: searching the DB
             optionsPromise = this.repository.findByTitle(title);
@@ -87,7 +87,7 @@ class DynaSelOneState extends BasicState {
      */
     _update(title, options) {
         this.options = options;
-        this.selectedItem = this._findOptionByTitle(title);
+        this.selectedItem = this._findOptionByExactTitle(title);
         if (this.selectedItem) {
             this.title = this.selectedItem.title;
         } else {
@@ -111,7 +111,7 @@ class DynaSelOneState extends BasicState {
      * @returns {DynaSelOneItem[]|undefined}
      * @private
      */
-    _findOptionsByTitleStartingWith(text) {
+    _findOptionsByTitlePrefix(text) {
         if (!this.options) {
             return undefined;
         }
@@ -123,7 +123,7 @@ class DynaSelOneState extends BasicState {
      * @returns {DynaSelOneItem|undefined}
      * @private
      */
-    _findOptionByTitle(title) {
+    _findOptionByExactTitle(title) {
         if (!this.options) {
             return undefined;
         }
