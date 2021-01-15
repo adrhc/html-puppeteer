@@ -1,6 +1,6 @@
 class InMemoryCrudRepository extends CrudRepository {
     /**
-     * @type {function(): IdentifiableEntity} create a new, pristine, IdentifiableEntity
+     * @type {function(): IdentifiableEntity} creates a new, pristine, IdentifiableEntity
      */
     entityFactoryFn;
 
@@ -12,6 +12,16 @@ class InMemoryCrudRepository extends CrudRepository {
         super();
         this.items = items;
         this.entityFactoryFn = entityFactoryFn;
+    }
+
+    /**
+     * @return {IdentifiableEntity}
+     */
+    createNewItem() {
+        const identifiableEntity = this.entityFactoryFn();
+        identifiableEntity.id = EntityUtils.generateId();
+        this.items.unshift(identifiableEntity);
+        return identifiableEntity;
     }
 
     /**
@@ -28,16 +38,6 @@ class InMemoryCrudRepository extends CrudRepository {
         } else {
             return Promise.reject(`repository couldn't find id to delete: ${id}`);
         }
-    }
-
-    /**
-     * @return {IdentifiableEntity}
-     */
-    createNewItem() {
-        const identifiableEntity = this.entityFactoryFn();
-        identifiableEntity.id = EntityUtils.generateId();
-        this.items.unshift(identifiableEntity);
-        return identifiableEntity;
     }
 
     /**

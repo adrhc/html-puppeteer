@@ -10,7 +10,7 @@ if (Modernizr.template) {
     });
 
     $(() => {
-        const personsRepository = new DbPersonsRepository();
+        const personsRepository = new DbCrudRepository("persons", () => new Person());
         const dynaSelOneRepository = new DbDynaSelOneRepository("person", () => new Person());
 
         // DYNAMIC-SELECT-ONE
