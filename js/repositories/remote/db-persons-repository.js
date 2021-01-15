@@ -10,8 +10,7 @@ class DbPersonsRepository extends CrudRepository {
     findAll() {
         return $.getJSON(`${this.PERSONS_URL}?projection=PersonWithCats`)
             .then(data => RestUtils.prototype.unwrapHAL(data))
-            .then(items => items
-                .map(item => this._typedEntityOf(item)));
+            .then(items => items.map(item => this._typedEntityOf(item)));
     }
 
     update(person) {
