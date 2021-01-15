@@ -41,13 +41,27 @@ class InMemoryCrudRepository extends CrudRepository {
     }
 
     /**
+     * @param id {number|string}
+     * @param [dontUsePromise] {boolean}
+     * @return {Promise<IdentifiableEntity>|IdentifiableEntity}
+     */
+    getById(id, dontUsePromise) {
+        const resultItem = this._typedEntityOf(EntityUtils.findById(id, this.items));
+        if (dontUsePromise) {
+            return resultItem;
+        } else {
+            return Promise.resolve(resultItem);
+        }
+    }
+
+    /**
      * usually, after saving, the item is no longer used by the caller so I can store it directly into this.items
      *
      * @param item {IdentifiableEntity}
      * @param [dontUsePromise] {boolean}
      * @return {Promise<IdentifiableEntity>|IdentifiableEntity}
      */
-    insert(item, dontUsePromise = false) {
+    insert(item, dontUsePromise) {
         item.id = EntityUtils.generateId();
         this.items.unshift(item);
         const resultItem = this._typedEntityOf(item);

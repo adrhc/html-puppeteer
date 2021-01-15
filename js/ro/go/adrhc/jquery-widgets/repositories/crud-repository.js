@@ -12,6 +12,14 @@ class CrudRepository {
     }
 
     /**
+     * @param id {number|string}
+     * @return {Promise<IdentifiableEntity>}
+     */
+    getById(id) {
+        throw `${this.constructor.name}.getById is not implemented!`;
+    }
+
+    /**
      * @param item {IdentifiableEntity}
      * @return {Promise<IdentifiableEntity>}
      */

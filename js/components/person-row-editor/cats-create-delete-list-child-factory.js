@@ -16,7 +16,7 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
                 AssertionUtils.assertNotNull($parentElem, "dynaSelOneCompFactory, DynamicSelectOneFactory");
 
                 return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", $parentElem),
-                    DbMock.PERSONS_REPOSITORY, {
+                    DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
                         childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent, "person", () => new Person())
                     })
             }

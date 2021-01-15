@@ -10,10 +10,8 @@ if (Modernizr.template) {
     });
 
     $(() => {
-        const personsRepository = DbMock.PERSONS_REPOSITORY;
-
         // DYNAMIC-SELECT-ONE
-        DynamicSelectOneFactory.create("dyna-sel-one", personsRepository, {
+        DynamicSelectOneFactory.create("dyna-sel-one", DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
             useLastSearchResult: false
         }).init();
 
@@ -42,7 +40,7 @@ if (Modernizr.template) {
 
         const component = EditableListFactory.create({
             tableIdOrJQuery,
-            repository: personsRepository,
+            repository: DbMock.PERSONS_REPOSITORY,
             readOnlyRow,
             editableRow,
             deletableRow

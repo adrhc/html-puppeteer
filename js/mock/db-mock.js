@@ -1,5 +1,5 @@
 class DbMock {
-    static PERSONS_REPOSITORY = new InMemoryPersonsRepository([
+    static PERSONS_REPOSITORY = new InMemoryCrudRepository([
         new Person(1, "gigi1", "kent1",
             [{id: 1, name: "cat1", person: new Person(1, "gigi1", "kent1")},
                 {id: 2, name: "cat2", person: new Person(1, "gigi1", "kent1")},
@@ -16,5 +16,7 @@ class DbMock {
             [{id: 31, name: "cat31"},
                 {id: 32, name: "cat32"},
                 {id: 33, name: "cat33"}])
-    ]);
+    ], () => new Person());
+
+    static DYNA_SEL_ONE_PERS_REPOSITORY = new InMemoryDynaSelOneRepository(DbMock.PERSONS_REPOSITORY);
 }

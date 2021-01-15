@@ -10,9 +10,8 @@ if (Modernizr.template) {
     });
 
     $(() => {
-        const personsRepository = DbMock.PERSONS_REPOSITORY;
-
-        const dogs = [{id: 1, name: "dog1", person: DbMock.PERSONS_REPOSITORY[0]}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
+        const dogs = [{id: 1, name: "dog1", person: DbMock.PERSONS_REPOSITORY.getById(1, true)},
+            {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
 
         // DynamicSelectOneComponent child component factory (see ChildComponentFactory)
         const dynaSelOneCompFactory = {
@@ -23,7 +22,7 @@ if (Modernizr.template) {
             createChildComponent: (idRowCompParent) => {
                 AssertionUtils.assertNotNull(idRowCompParent.view.$elem, "dynaSelOneCompFactory, DynamicSelectOneFactory");
 
-                return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", idRowCompParent.view.$elem), personsRepository, {
+                return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", idRowCompParent.view.$elem), DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
                     childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent, "person", () => new Person())
                 })
             }

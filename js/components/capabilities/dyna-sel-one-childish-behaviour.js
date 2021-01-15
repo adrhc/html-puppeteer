@@ -33,11 +33,11 @@ class DynaSelOneChildishBehaviour extends ChildishBehaviour {
     /**
      * this.parentComp must be {IdentifiableRowComponent}
      *
-     * @param value {DynamicSelectOneComponent}
+     * @param childComp {DynamicSelectOneComponent}
      */
-    set childComp(value) {
+    set childComp(childComp) {
         const identifiableEntity = this.parentComp.simpleRowState.rowState[this.parentProperty];
-        value.dynaSelOneState.updateWithDynaSelOneItem(identifiableEntity);
-        this._childComp = value;
+        childComp.dynaSelOneState.updateWithDynaSelOneItem(identifiableEntity);
+        this._childComp = childComp;
     }
 }

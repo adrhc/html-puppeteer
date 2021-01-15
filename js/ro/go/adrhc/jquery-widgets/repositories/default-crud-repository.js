@@ -55,6 +55,12 @@ class DefaultCrudRepository extends CrudRepository {
             .then(it => RestUtils.prototype.unwrapHAL(it));
     }
 
+    getById(id) {
+        return $.get(`${this.url}/${id}`)
+            .then(it => RestUtils.prototype.unwrapHAL(it))
+            .then(it => this._typedEntityOf(it));
+    }
+
     _typedEntityOf(item) {
         return $.extend(true, this.entityFactoryFn(), item);
     }

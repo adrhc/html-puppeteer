@@ -10,11 +10,8 @@ if (Modernizr.template) {
     });
 
     $(() => {
-        const personsRepository = new DbCrudRepository("persons", () => new Person());
-        const dynaSelOneRepository = new DbDynaSelOneRepository("person", () => new Person());
-
         // DYNAMIC-SELECT-ONE
-        DynamicSelectOneFactory.create("dyna-sel-one", dynaSelOneRepository, {
+        DynamicSelectOneFactory.create("dyna-sel-one", DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
             useLastSearchResult: true
         }).init();
 
@@ -48,7 +45,7 @@ if (Modernizr.template) {
         // EDITABLE LIST
         const editableList = EditableListFactory.create({
             tableIdOrJQuery,
-            repository: personsRepository,
+            repository: DbMock.PERSONS_REPOSITORY,
             readOnlyRow,
             editableRow,
             deletableRow
