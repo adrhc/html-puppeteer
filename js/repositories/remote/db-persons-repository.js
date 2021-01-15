@@ -11,7 +11,7 @@ class DbPersonsRepository extends CrudRepository {
         return $.getJSON(`${this.PERSONS_URL}?projection=PersonWithCats`)
             .then(data => RestUtils.prototype.unwrapHAL(data))
             .then(items => items
-                .map(item => this.typedEntityOf(item)));
+                .map(item => this._typedEntityOf(item)));
     }
 
     update(person) {
@@ -21,7 +21,7 @@ class DbPersonsRepository extends CrudRepository {
             data: person,
         })
             .then(it => RestUtils.prototype.unwrapHAL(it))
-            .then(it => this.typedEntityOf(it));
+            .then(it => this._typedEntityOf(it));
     }
 
     insert(person) {
@@ -31,7 +31,7 @@ class DbPersonsRepository extends CrudRepository {
             data: person,
         })
             .then(it => RestUtils.prototype.unwrapHAL(it))
-            .then(it => this.typedEntityOf(it));
+            .then(it => this._typedEntityOf(it));
     }
 
     delete(id) {
@@ -42,7 +42,7 @@ class DbPersonsRepository extends CrudRepository {
             .then(it => RestUtils.prototype.unwrapHAL(it));
     }
 
-    typedEntityOf(item) {
+    _typedEntityOf(item) {
         return $.extend(true, new Person(), item);
     }
 }

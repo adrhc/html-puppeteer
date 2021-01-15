@@ -18,7 +18,7 @@ class InMemoryCrudRepository extends CrudRepository {
      * @return {Promise<IdentifiableEntity[]>}
      */
     findAll() {
-        return Promise.resolve(this.items.map(item => $.extend(true, this.entityFactoryFn(), item)));
+        return Promise.resolve(this.items.map(item => this._typedEntityOf(item)));
     }
 
     delete(id) {
@@ -50,7 +50,7 @@ class InMemoryCrudRepository extends CrudRepository {
     insert(item, dontUsePromise = false) {
         item.id = EntityUtils.generateId();
         this.items.unshift(item);
-        const resultItem = $.extend(true, this.entityFactoryFn(), item);
+        const resultItem = this._typedEntityOf(item);
         if (dontUsePromise) {
             return resultItem;
         } else {
@@ -69,7 +69,11 @@ class InMemoryCrudRepository extends CrudRepository {
         if (removedIndex < 0) {
             return Promise.reject(`repository couldn't find item to update:\n${JSON.stringify(item)}`);
         } else {
-            return Promise.resolve($.extend(true, this.entityFactoryFn(), item));
+            return Promise.resolve(this._typedEntityOf(item));
         }
+    }
+
+    _typedEntityOf(item) {
+        return $.extend(true, this.entityFactoryFn(), item);
     }
 }
