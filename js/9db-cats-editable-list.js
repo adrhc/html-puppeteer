@@ -10,10 +10,11 @@ if (Modernizr.template) {
     });
 
     $(() => {
-        const personsRepository = new PersonsRepository();
+        const personsRepository = new DbPersonsRepository();
+        const dynaSelOneRepository = new DbDynaSelOneRepository("person", () => new Person());
 
         // DYNAMIC-SELECT-ONE
-        DynamicSelectOneFactory.create("dyna-sel-one", personsRepository, {
+        DynamicSelectOneFactory.create("dyna-sel-one", dynaSelOneRepository, {
             useLastSearchResult: true
         }).init();
 
@@ -26,7 +27,7 @@ if (Modernizr.template) {
         const readOnlyRow = SimpleRowFactory.createIdentifiableRow({
             tableIdOrJQuery,
             tableRelativePositionOnCreate
-            });
+        });
 
         // EDITABLE ROW (using child component from CatsEditableListChildFactory)
         const editableRow = SimpleRowFactory.createIdentifiableRow(
@@ -46,12 +47,12 @@ if (Modernizr.template) {
 
         // EDITABLE LIST
         const editableList = EditableListFactory.create({
-                tableIdOrJQuery,
-                repository: personsRepository,
-                readOnlyRow,
-                editableRow,
-                deletableRow
-            });
+            tableIdOrJQuery,
+            repository: personsRepository,
+            readOnlyRow,
+            editableRow,
+            deletableRow
+        });
 
         editableList.init();
     })

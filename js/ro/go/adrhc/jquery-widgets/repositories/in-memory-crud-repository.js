@@ -18,7 +18,7 @@ class InMemoryCrudRepository extends CrudRepository {
      * @return {Promise<IdentifiableEntity[]>}
      */
     findAll() {
-        return Promise.resolve($.extend(true, [], this.items));
+        return Promise.resolve(this.items.map(item => $.extend(true, this.entityFactoryFn(), item)));
     }
 
     delete(id) {
