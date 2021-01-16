@@ -20,4 +20,9 @@ class SimpleRowState extends BasicState {
         this.rowState = stateChange.data;
         super.collectStateChange(stateChange);
     }
+
+    reset() {
+        super.reset();
+        this.rowState = undefined;
+    }
 }
