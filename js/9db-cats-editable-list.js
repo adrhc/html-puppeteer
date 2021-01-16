@@ -15,7 +15,7 @@ if (Modernizr.template) {
 
         // DYNAMIC-SELECT-ONE
         DynamicSelectOneFactory.create("dyna-sel-one", dynaSelOneRepository, {
-            useLastSearchResult: true
+            useLastSearchResult: false
         }).init();
 
         // EDITABLE-LIST
