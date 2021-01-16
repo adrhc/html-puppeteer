@@ -51,7 +51,8 @@ class CompositeBehaviour {
     copyKidsState(parentState) {
         const result = {};
         this.childComponents.forEach(kid => {
-            result.existsChange = result.existsChange || kid.copyMyState(parentState);
+            // kid.copyMyState must come before result.existsChange to always be called
+            result.existsChange = kid.copyMyState(parentState) || result.existsChange;
         });
         return result.existsChange;
     }
