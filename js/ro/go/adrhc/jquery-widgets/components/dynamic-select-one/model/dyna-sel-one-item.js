@@ -1,16 +1,13 @@
 class DynaSelOneItem {
+    /**
+     * @type {number|string}
+     */
+    id;
+
     constructor(id, title, description) {
-        this._id = id;
+        this.id = id;
         this._title = title;
         this._description = description;
-    }
-
-    get id() {
-        return this._id;
-    }
-
-    set id(value) {
-        this._id = value;
     }
 
     get title() {
