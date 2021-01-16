@@ -41,7 +41,7 @@ class DynamicSelectOneComponent extends AbstractComponent {
     }
 
     _onBlur(text) {
-        this.dynaSelOneState.updateByTitle(text).then(state => this.updateView(state));
+        this.dynaSelOneState.updateByTitle(text, true).then(state => this.updateView(state));
     }
 
     /**

@@ -50,11 +50,12 @@ class DynaSelOneState extends BasicState {
      * - gather all data then update the model then compute derivatives then cache
      *
      * @param title {string|undefined}
+     * @param [isOnBlur] {boolean}
      * @returns {Promise<DynaSelOneState>}
      */
-    updateByTitle(title) {
+    updateByTitle(title, isOnBlur) {
         console.log("DynaSelOneState.updateByTitle title =", title);
-        if (this.useLastSearchResult && this.title === title) {
+        if ((this.useLastSearchResult || isOnBlur) && this.title === title) {
             // updating with same title
             console.log(`rejecting update with same title: ${!!title ? title : "nothing"}`);
             return Promise.reject(this);
