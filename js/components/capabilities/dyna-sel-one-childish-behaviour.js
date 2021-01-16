@@ -23,7 +23,7 @@ class DynaSelOneChildishBehaviour extends ChildishBehaviour {
          */
         const dynaSelOneState = this._childComp.dynaSelOneState;
         if (dynaSelOneState.selectedItem) {
-            parentState[this.parentProperty] = $.extend(this.newEntityFactoryFn(), dynaSelOneState.selectedItem);
+            parentState[this.parentProperty] = this._typedEntityOf(dynaSelOneState.selectedItem);
         } else {
             parentState[this.parentProperty] = undefined;
         }
@@ -37,7 +37,14 @@ class DynaSelOneChildishBehaviour extends ChildishBehaviour {
      */
     set childComp(childComp) {
         const identifiableEntity = this.parentComp.simpleRowState.rowState[this.parentProperty];
-        childComp.dynaSelOneState.updateWithDynaSelOneItem(identifiableEntity);
+        if (identifiableEntity) {
+            const entity = this._typedEntityOf(identifiableEntity);
+            childComp.dynaSelOneState.updateWithDynaSelOneItem(entity);
+        }
         this._childComp = childComp;
+    }
+
+    _typedEntityOf(item) {
+        return $.extend(true, this.newEntityFactoryFn(), item);
     }
 }
