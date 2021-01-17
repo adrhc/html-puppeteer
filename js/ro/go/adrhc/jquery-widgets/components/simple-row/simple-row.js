@@ -51,11 +51,17 @@ class SimpleRowComponent extends AbstractComponent {
     doWithState(stateUpdaterFn, delayViewUpdate) {
         return super.doWithState(stateUpdaterFn, delayViewUpdate)
             .then(stateChanges => {
-                if (stateChanges.filter(sc => sc.requestType === "DELETE").length) {
+                if (this._isLastStateChangeADelete(stateChanges)) {
                     return stateChanges;
                 }
+                // todo: reconsider whether to initKids after every doWithState call
                 return this.initKids().then(() => stateChanges);
             });
+    }
+
+    _isLastStateChangeADelete(stateChanges) {
+        const lastStateChange = stateChanges && stateChanges.length ? stateChanges[stateChanges.length - 1] : undefined;
+        return lastStateChange && lastStateChange.requestType === "DELETE";
     }
 
     init() {
