@@ -40,9 +40,10 @@ if (Modernizr.template) {
         createDeleteList
             .init()
             .then(() => createDeleteList.doWithState((crudListState) => {
-                const newDog = crudListState.createNewItem();
-                newDog.id = EntityUtils.generateId();
-                newDog.name = "new dog";
+                crudListState.insertItem({
+                    id: EntityUtils.generateId(),
+                    name: "new dog"
+                });
                 crudListState.updateItem({id: 3, name: "updated dog3"});
                 crudListState.removeById(2);
                 crudListState.insertItem({

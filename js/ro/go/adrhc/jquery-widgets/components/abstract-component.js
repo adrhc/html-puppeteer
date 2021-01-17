@@ -58,9 +58,11 @@ class AbstractComponent {
 
     /**
      * @param childComp {AbstractComponent|AbstractComponent[]}
+     * @return {AbstractComponent|AbstractComponent[]} the childComp parameter
      */
     addChildComponents(childComp) {
         this.compositeBehaviour.addChildComponent(childComp);
+        return childComp;
     }
 
     /**
@@ -72,7 +74,7 @@ class AbstractComponent {
     }
 
     /**
-     * @return {Promise<[]>}
+     * @return {Promise<Array<StateChange>[]>}
      */
     initKids() {
         return this.compositeBehaviour.init();
@@ -89,6 +91,8 @@ class AbstractComponent {
     }
 
     /**
+     * Calls doWithState with the provided stateChange.
+     *
      * @param stateChange {StateChange}
      * @return {Promise<StateChange[]>}
      */
@@ -136,7 +140,7 @@ class AbstractComponent {
     }
 
     /**
-     * Offer the state for manipulation then update the view.
+     * Offers the state for manipulation then updates the view.
      *
      * @param stateUpdaterFn {function(state: BasicState)}
      * @param delayViewUpdate {boolean} whether to (immediately) update the view based or not

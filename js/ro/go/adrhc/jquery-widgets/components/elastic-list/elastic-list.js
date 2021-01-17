@@ -18,21 +18,25 @@ class ElasticListComponent extends SimpleListComponent {
         this.idRowCompFactoryFn = idRowCompFactoryFn;
     }
 
+    /**
+     * Creates a component for each item, stores it, then init all stored components.
+     *
+     * @return {Promise<Array<StateChange>[]>}
+     */
     initKids() {
         this.addChildComponents(this._createChildComponents(this.crudListState.items));
         return super.initKids();
     }
 
     /**
+     * This does what this.initKids() does but for only 1 item.
+     *
      * @param stateChange {PositionStateChange}
      * @return {Promise}
-     * @private
      */
     updateViewOnCREATE(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnCREATE:\n${JSON.stringify(stateChange)}`);
-        const idRowComp = this._createChildComponent(stateChange);
-        this.addChildComponents(idRowComp);
-        return idRowComp.updateViewOnStateChanges().then(() => idRowComp.initKids());
+        return this.addChildComponents(this._createChildComponent(stateChange)).init();
     }
 
     /**
@@ -57,7 +61,7 @@ class ElasticListComponent extends SimpleListComponent {
 
     /**
      * @param stateChange {PositionStateChange}
-     * @return {function(kid: IdentifiableRowComponent): boolean}
+     * @return {function(kid: IdentifiableRowComponent): boolean} a predicate for kid.id = stateChange...id
      * @protected
      */
     _kidsFilterOf(stateChange) {
