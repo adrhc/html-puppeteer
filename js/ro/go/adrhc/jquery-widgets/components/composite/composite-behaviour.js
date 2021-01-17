@@ -131,7 +131,7 @@ class CompositeBehaviour {
      */
     init() {
         this.childComponents = this._createChildComponents();
-        const promises = this._initializeComponents();
+        const promises = this._initChildComponents();
         return Promise.allSettled(promises);
     }
 
@@ -139,7 +139,7 @@ class CompositeBehaviour {
      * @return {Promise<StateChange[]>[]}
      * @protected
      */
-    _initializeComponents() {
+    _initChildComponents() {
         return this.childComponents.map(kid => kid.init());
     }
 
