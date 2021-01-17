@@ -26,6 +26,11 @@ class Dequeue {
         this.count++;
     }
 
+    /**
+     * front = oldest
+     *
+     * @return {undefined|*}
+     */
     removeFront() {
         if (this.isEmpty()) {
             return undefined;
@@ -38,6 +43,11 @@ class Dequeue {
 
     }
 
+    /**
+     * back = newest
+     *
+     * @return {undefined|*}
+     */
     removeBack() {
         if (this.isEmpty()) {
             return undefined;
@@ -49,7 +59,7 @@ class Dequeue {
     }
 
     /**
-     * aka peek from left (newest)
+     * aka peek from left (oldest)
      *
      * @param count {number} how muck further from left to pick; 0 means 1th from left
      * @return {undefined|*}
@@ -62,7 +72,7 @@ class Dequeue {
     }
 
     /**
-     * aka peek from right (older)
+     * aka peek from right (newest)
      *
      * @param count {number} how muck back from right to pick; 0 means 1th from right
      * @return {undefined|*}
