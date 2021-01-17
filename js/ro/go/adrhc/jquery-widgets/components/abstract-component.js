@@ -123,8 +123,8 @@ class AbstractComponent {
         return this.updateViewOnStateChanges();
     }
 
-    close() {
-        this.compositeBehaviour.close();
+    reset() {
+        this.compositeBehaviour.reset();
         if (this.view.$elem) {
             this.view.$elem.off(this._eventsNamespace);
         }

@@ -97,9 +97,9 @@ class DynamicSelectOneComponent extends AbstractComponent {
         }
     }
 
-    close() {
+    reset() {
         this._clearOnBlurHandlers();
-        super.close();
+        super.reset();
     }
 
     get focusOnInit() {

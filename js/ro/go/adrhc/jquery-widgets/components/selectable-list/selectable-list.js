@@ -97,7 +97,7 @@ class SelectableListComponent extends SimpleListComponent {
          * @type {SwappingDetails}
          */
         const swappingDetails = swappingStateChange.data;
-        this._closePreviousRow(swappingDetails);
+        this._resetPreviousRow(swappingDetails);
         return this._rowPickAndUpdate(swappingDetails).then(() => swappingStateChange);
     }
 
@@ -125,7 +125,7 @@ class SelectableListComponent extends SimpleListComponent {
      * @param swappingDetails {SwappingDetails}
      * @protected
      */
-    _closePreviousRow(swappingDetails) {
+    _resetPreviousRow(swappingDetails) {
         // closing previous view (selectedRow)
         if (swappingDetails.isPrevious) {
             // swappingDetails.data is {SelectableSwappingData}
@@ -134,10 +134,10 @@ class SelectableListComponent extends SimpleListComponent {
              * @type {IdentifiableRowComponent}
              */
             const identifiableRow = this.swappingRowSelector[context];
-            // removeSecondaryRowParts needs existing state which is reset by close()
-            // so we need to call removeSecondaryRowParts before identifiableRow.close()
+            // removeSecondaryRowParts needs existing state which is reset by reset()
+            // so we need to call removeSecondaryRowParts before identifiableRow.reset()
             identifiableRow.removeSecondaryRowParts();
-            identifiableRow.close();
+            identifiableRow.reset();
         }
     }
 

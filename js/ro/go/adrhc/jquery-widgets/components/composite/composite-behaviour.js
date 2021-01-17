@@ -158,8 +158,8 @@ class CompositeBehaviour {
     /**
      * childComponentFactories is "configuration" that's why is not cleared
      */
-    close() {
-        this.childComponents.forEach(kid => kid.close());
+    reset() {
+        this.childComponents.forEach(kid => kid.reset());
         this.childComponents = [];
 
     }
