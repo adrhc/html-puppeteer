@@ -22,8 +22,8 @@ class SimpleRowComponent extends AbstractComponent {
      * Updates the state then the view based on state changes.
      *
      * @param item
-     * @param requestType {"CREATE"|"UPDATE"}
-     * @param afterItemId {number|string}
+     * @param [requestType] {"CREATE"|"UPDATE"}
+     * @param [afterItemId] {number|string}
      * @return {Promise<StateChange[]>}
      */
     update(item, requestType = "UPDATE", afterItemId) {
