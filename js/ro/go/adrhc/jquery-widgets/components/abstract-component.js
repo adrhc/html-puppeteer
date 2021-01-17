@@ -123,6 +123,9 @@ class AbstractComponent {
         return this.updateViewOnStateChanges();
     }
 
+    /**
+     * brings the component to the state existing at its creation
+     */
     reset() {
         this.compositeBehaviour.reset();
         if (this.view.$elem) {
