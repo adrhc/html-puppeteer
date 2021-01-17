@@ -19,7 +19,7 @@ class ElasticListComponent extends SimpleListComponent {
     }
 
     initKids() {
-        this.addChildComponent(this._createChildComponents(this.crudListState.items));
+        this.addChildComponents(this._createChildComponents(this.crudListState.items));
         return super.initKids();
     }
 
@@ -31,7 +31,7 @@ class ElasticListComponent extends SimpleListComponent {
     updateViewOnCREATE(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnCREATE:\n${JSON.stringify(stateChange)}`);
         const idRowComp = this._createChildComponent(stateChange);
-        this.addChildComponent(idRowComp);
+        this.addChildComponents(idRowComp);
         return idRowComp.updateViewOnStateChanges().then(() => idRowComp.initKids());
     }
 

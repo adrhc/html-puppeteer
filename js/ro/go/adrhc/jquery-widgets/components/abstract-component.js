@@ -59,7 +59,7 @@ class AbstractComponent {
     /**
      * @param childComp {AbstractComponent|AbstractComponent[]}
      */
-    addChildComponent(childComp) {
+    addChildComponents(childComp) {
         this.compositeBehaviour.addChildComponent(childComp);
     }
 

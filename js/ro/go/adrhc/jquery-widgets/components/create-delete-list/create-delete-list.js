@@ -52,21 +52,7 @@ class CreateDeleteListComponent extends ElasticListComponent {
          */
         const createDeleteListComponent = ev.data;
         const rowDataId = createDeleteListComponent.tableBasedView.rowDataIdOf(this, true);
-        if (EntityUtils.isIdGenerated(rowDataId)) {
-            createDeleteListComponent._removeById(rowDataId);
-        } else {
-            createDeleteListComponent._handleRepoErrors(createDeleteListComponent.repository.delete(rowDataId))
-                .then(() => createDeleteListComponent._removeById(rowDataId));
-        }
-    }
-
-    /**
-     * @param rowDataId {string|number}
-     * @return {Promise<StateChange[]>}
-     * @protected
-     */
-    _removeById(rowDataId) {
-        return this.doWithState((crudListState) => {
+        createDeleteListComponent.doWithState((crudListState) => {
             crudListState.removeById(rowDataId);
         });
     }
