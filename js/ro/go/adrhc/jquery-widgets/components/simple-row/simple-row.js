@@ -59,6 +59,11 @@ class SimpleRowComponent extends AbstractComponent {
             });
     }
 
+    /**
+     * @param stateChanges {StateChange[]}
+     * @return {boolean} whether the last change in stateChanges is a DELETE
+     * @protected
+     */
     _isLastStateChangeADelete(stateChanges) {
         const lastStateChange = stateChanges && stateChanges.length ? stateChanges[stateChanges.length - 1] : undefined;
         return lastStateChange && lastStateChange.requestType === "DELETE";
