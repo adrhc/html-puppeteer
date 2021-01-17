@@ -73,7 +73,7 @@ class CreateDeleteListComponent extends ElasticListComponent {
 
     reload() {
         this.compositeBehaviour.reset();
-        return this._reloadState().then(() => super.init());
+        return super.init();
     }
 
     /**
