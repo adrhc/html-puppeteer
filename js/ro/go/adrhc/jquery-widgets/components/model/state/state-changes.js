@@ -9,21 +9,21 @@ class StateChanges {
     }
 
     /**
-     * @param fromLatest {boolean} is the consumption starting point
+     * @param fromNewest {boolean} is the consumption starting point
      * @return {StateChange}
      */
-    consumeOne(fromLatest = false) {
-        return fromLatest ? this.changes.removeBack() : this.changes.removeFront();
+    consumeOne(fromNewest = false) {
+        return fromNewest ? this.changes.removeBack() : this.changes.removeFront();
     }
 
     /**
-     * @param fromLatest {boolean|undefined} is the consumption starting point
+     * @param fromNewest {boolean|undefined} is the consumption starting point
      * @return {StateChange[]}
      */
-    consumeAll(fromLatest = false) {
+    consumeAll(fromNewest = false) {
         const changes = [];
         while (!this.changes.isEmpty()) {
-            changes.push(this.consumeOne(fromLatest));
+            changes.push(this.consumeOne(fromNewest));
         }
         return changes;
     }

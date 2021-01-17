@@ -14,26 +14,26 @@ class BasicState {
 
     /**
      * @param stateChanges {StateChanges}
-     * @param fromLatest {boolean|undefined}
+     * @param fromNewest {boolean|undefined}
      */
-    collectByConsumingStateChanges(stateChanges, fromLatest = false) {
-        stateChanges.consumeAll(fromLatest).forEach(stateChange => this.collectStateChange(stateChange));
+    collectByConsumingStateChanges(stateChanges, fromNewest = false) {
+        stateChanges.consumeAll(fromNewest).forEach(stateChange => this.collectStateChange(stateChange));
     }
 
     /**
-     * @param fromLatest {boolean|undefined}
+     * @param fromNewest {boolean|undefined}
      * @return {StateChange}
      */
-    consumeOne(fromLatest = false) {
-        return this._stateChanges.consumeOne(fromLatest);
+    consumeOne(fromNewest = false) {
+        return this._stateChanges.consumeOne(fromNewest);
     }
 
     /**
-     * @param fromLatest {boolean|undefined}
+     * @param fromNewest {boolean|undefined}
      * @return {StateChange[]}
      */
-    consumeAll(fromLatest) {
-        return this._stateChanges.consumeAll(fromLatest);
+    consumeAll(fromNewest) {
+        return this._stateChanges.consumeAll(fromNewest);
     }
 
     /**
