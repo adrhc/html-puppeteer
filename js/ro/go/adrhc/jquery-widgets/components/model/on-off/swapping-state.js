@@ -30,7 +30,7 @@ class SwappingState extends BasicState {
     }
 
     /**
-     * @param data
+     * @param data (e.g. SelectableSwappingData)
      * @return {boolean} whether the switch actually happened or not
      */
     switchTo(data) {
