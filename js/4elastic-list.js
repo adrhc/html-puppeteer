@@ -21,9 +21,11 @@ if (Modernizr.template) {
         component
             .init()
             .then(() => component.doWithState((crudListState) => {
+                // creating a new item with a transient id
                 crudListState.createNewItem().name = "new dog";
                 crudListState.updateItem({id: 3, name: "updated dog3"});
                 crudListState.removeById(2);
+                // creating a new item with a not transient id (here id=2)
                 crudListState.insertItem({
                     id: 2,
                     name: `restored dog2 with ${addNewRowsAtEnd ? "append" : "preppend"}`
