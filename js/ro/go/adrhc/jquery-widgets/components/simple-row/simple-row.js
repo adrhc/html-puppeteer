@@ -45,7 +45,7 @@ class SimpleRowComponent extends AbstractComponent {
 
     init() {
         if (this.simpleRowState.rowState) {
-            return this.updateViewOnStateChanges().then(() => this.initKids());
+            return super.init();
         } else {
             return this.updateViewOnStateChanges();
         }

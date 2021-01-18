@@ -124,7 +124,10 @@ class AbstractComponent {
      * @return {Promise<StateChange[]|undefined>}
      */
     init() {
-        return this.updateViewOnStateChanges();
+        // reload state
+        return this.updateViewOnStateChanges()
+            // init kids
+            .then((stateChanges) => this.initKids().then(() => stateChanges));
     }
 
     /**
