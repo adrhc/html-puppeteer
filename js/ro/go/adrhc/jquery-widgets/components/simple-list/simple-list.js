@@ -40,7 +40,15 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     }
 
     /**
-     * called by AbstractComponent.updateViewOnStateChange
+     * It won't do what init() does: e.g. it won't initKids
+     * or configure events, only init() should do that!
+     *
+     * Reason: this competes with init() on initKids() call; should this method call also initKids()
+     * then init() shouldn't do it or other way around. There's no reason to manually update the
+     * state (aka, by using doWithState) but if indeed there is one then the caller must take care
+     * of everything (including calling initKids)
+     *
+     * see also ElasticListComponent.updateViewOnCREATE
      *
      * @param stateChange {StateChange|undefined}
      * @return {Promise<StateChange>}

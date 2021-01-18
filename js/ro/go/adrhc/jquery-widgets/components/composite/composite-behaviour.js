@@ -65,14 +65,16 @@ class CompositeBehaviour {
     }
 
     /**
+     * Kids selected with kidsFilter will each process the stateChange.
+     *
      * @param stateChange {StateChange}
      * @param kidsFilter {function(comp: AbstractComponent): boolean}
      * @param removeAfterProcessing {boolean}
      * @return {Promise<StateChange[][]>}
      */
-    process(stateChange, kidsFilter = () => true, removeAfterProcessing = false) {
+    processStateChange(stateChange, kidsFilter = () => true, removeAfterProcessing = false) {
         const components = this.childComponents.filter(kidsFilter);
-        const promises = components.map(comp => comp.process(stateChange));
+        const promises = components.map(comp => comp.processStateChange(stateChange));
         return this._promiseAllSettledAndKidsRemove(promises, components, removeAfterProcessing);
     }
 

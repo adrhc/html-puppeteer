@@ -83,20 +83,20 @@ class AbstractComponent {
     /**
      * @param stateChange {StateChange}
      * @param kidsFilter {function(comp: AbstractComponent): boolean}
-     * @param removeAfterProcessing {boolean}
+     * @param removeKidsAfterProcessing {boolean}
      * @return {Promise<StateChange[][]>}
      */
-    processKids(stateChange, kidsFilter, removeAfterProcessing) {
-        return this.compositeBehaviour.process(stateChange, kidsFilter, removeAfterProcessing)
+    processStateChangeWithKids(stateChange, kidsFilter, removeKidsAfterProcessing) {
+        return this.compositeBehaviour.processStateChange(stateChange, kidsFilter, removeKidsAfterProcessing)
     }
 
     /**
-     * Calls doWithState with the provided stateChange.
+     * shorthand method: calls doWithState with the provided stateChange
      *
      * @param stateChange {StateChange}
      * @return {Promise<StateChange[]>}
      */
-    process(stateChange) {
+    processStateChange(stateChange) {
         return this.doWithState((basicState) => basicState.collectStateChange(stateChange));
     }
 
@@ -118,8 +118,8 @@ class AbstractComponent {
     }
 
     /**
-     * component initializer: (re)load state, update the view, configure events
-     * kids could be initialized only when the state is (re)loaded
+     * component initializer: (re)load state, update the view, configure events kids
+     * could be initialized only when the state is (re)loaded and after the view is shown
      *
      * @return {Promise<StateChange[]|undefined>}
      */

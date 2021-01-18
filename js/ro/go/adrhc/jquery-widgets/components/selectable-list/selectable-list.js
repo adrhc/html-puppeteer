@@ -1,8 +1,8 @@
 /**
  * todo: should I reset the swappingState when receiving an UPDATE_ALL state change?
- * When receiving UPDATE_ALL, and notSelectedRow is not automatically creating the related row,
+ * When receiving UPDATE_ALL and notSelectedRow is not automatically creating the related row,
  * than the next onSwapping will determine swappingState to render as "deselected" the previous
- * item but only if already exists (its row) otherwise nothing will be rendered for it.
+ * item but only if already exists (in table) otherwise nothing will be rendered for it.
  */
 class SelectableListComponent extends SimpleListComponent {
     /**
@@ -52,7 +52,7 @@ class SelectableListComponent extends SimpleListComponent {
      */
     updateViewOnKnownStateChange(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnStateChange:\n${JSON.stringify(stateChange)}`);
-        return this.swappingRowSelector[true].process(stateChange);
+        return this.swappingRowSelector[true].processStateChange(stateChange);
     }
 
     /**
@@ -97,11 +97,19 @@ class SelectableListComponent extends SimpleListComponent {
          * @type {SwappingDetails}
          */
         const swappingDetails = swappingStateChange.data;
-        this._resetPreviousRow(swappingDetails);
+        // e.g. this could be the (previously) edited row whose state is reset
+        if (swappingDetails.isPrevious) {
+            this._resetPreviousRow(swappingDetails);
+        }
+        // e.g. this could be the read-only row which is shown over the edited row (meanwhile reset anyway)
         return this._rowPickAndUpdate(swappingDetails).then(() => swappingStateChange);
     }
 
     /**
+     * Because the selected row (the html element) is a different one at each selection
+     * that's why we have to use init(); otherwise we could use processStateChangeWithKids
+     * to only update the kids view (and state).
+     *
      * @param swappingDetails {SwappingDetails}
      * @return {Promise<StateChange[]>}
      * @protected
@@ -115,7 +123,8 @@ class SelectableListComponent extends SimpleListComponent {
             return Promise.resolve(undefined);
         }
         const rowComponent = this._rowComponentFor(swappingDetails);
-        return rowComponent.init().then(() => rowComponent.update(item));
+        rowComponent.simpleRowState.update(item);
+        return rowComponent.init();
     }
 
     /**
@@ -126,19 +135,16 @@ class SelectableListComponent extends SimpleListComponent {
      * @protected
      */
     _resetPreviousRow(swappingDetails) {
-        // closing previous view (selectedRow)
-        if (swappingDetails.isPrevious) {
-            // swappingDetails.data is {SelectableSwappingData}
-            const context = !!swappingDetails.data.context ? swappingDetails.data.context : false;
-            /**
-             * @type {IdentifiableRowComponent}
-             */
-            const identifiableRow = this.swappingRowSelector[context];
-            // removeSecondaryRowParts needs existing state which is reset by reset()
-            // so we need to call removeSecondaryRowParts before identifiableRow.reset()
-            identifiableRow.removeSecondaryRowParts();
-            identifiableRow.reset();
-        }
+        // swappingDetails.data is {SelectableSwappingData}
+        const context = !!swappingDetails.data.context ? swappingDetails.data.context : false;
+        /**
+         * @type {IdentifiableRowComponent}
+         */
+        const identifiableRow = this.swappingRowSelector[context];
+        // removeSecondaryRowParts needs existing state which is reset by reset()
+        // so we need to call removeSecondaryRowParts before identifiableRow.reset()
+        identifiableRow.removeSecondaryRowParts();
+        identifiableRow.reset();
     }
 
     /**

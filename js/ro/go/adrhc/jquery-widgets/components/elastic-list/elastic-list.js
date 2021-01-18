@@ -1,3 +1,6 @@
+/**
+ * A SimpleListComponent
+ */
 class ElasticListComponent extends SimpleListComponent {
     /**
      * create the row component and set its state
@@ -31,6 +34,13 @@ class ElasticListComponent extends SimpleListComponent {
     /**
      * This does what this.initKids() does but for only 1 item.
      *
+     * Reason: the whole purpose of this component is to allow one to manually manipulate the
+     * state (aka, by using doWithState) so one might simply add a new item in which case the
+     * associated view must be created completely (including calling initKids); this is very
+     * similar to init() but for 1 row only.
+     *
+     * see also SimpleListComponent.updateViewOnUPDATE_ALL
+     *
      * @param stateChange {PositionStateChange}
      * @return {Promise}
      */
@@ -45,7 +55,8 @@ class ElasticListComponent extends SimpleListComponent {
      */
     updateViewOnAny(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
-        return this.processKids(stateChange, this._kidsFilterOf(stateChange), stateChange.requestType === "DELETE");
+        const removeKidAfterProcessing = stateChange.requestType === "DELETE";
+        return this.processStateChangeWithKids(stateChange, this._kidsInterestedInStateChangeFilter(stateChange), removeKidAfterProcessing);
     }
 
     /**
@@ -64,18 +75,22 @@ class ElasticListComponent extends SimpleListComponent {
      * @return {function(kid: IdentifiableRowComponent): boolean} a predicate for kid.id = stateChange...id
      * @protected
      */
-    _kidsFilterOf(stateChange) {
+    _kidsInterestedInStateChangeFilter(stateChange) {
         return (kid) => EntityUtils.haveSameId(kid.simpleRowState.rowState, stateChange.data);
     }
 
     /**
+     * Creates child components from items while computing the afterItemId based on items ordering.
+     *
      * @param items {Array}
      * @return {IdentifiableRowComponent[]}
      * @protected
      */
     _createChildComponents(items) {
-        return items.map((item, index) => this.idRowCompFactoryFn(item,
-            index === 0 ? undefined : items[index - 1], this.tableBasedView.tableAdapter));
+        return items.map((item, index) => {
+            const afterItemId = index === 0 ? undefined : items[index - 1].id;
+            return this.idRowCompFactoryFn(item, afterItemId, this.tableBasedView.tableAdapter);
+        });
     }
 
     /**

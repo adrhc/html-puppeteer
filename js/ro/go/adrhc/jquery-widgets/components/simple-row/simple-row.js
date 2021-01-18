@@ -19,16 +19,18 @@ class SimpleRowComponent extends AbstractComponent {
     }
 
     /**
-     * Updates the state then the view based on state changes.
+     * Updates the state and the view based on the provided parameters.
+     * CREATE won't do what init() does: e.g. it won't initKids or
+     * configure events, only init() should do that!
      *
      * @param item
-     * @param [requestType] {"CREATE"|"UPDATE"}
+     * @param [requestType] {"CREATE"|"UPDATE"|"DELETE"}
      * @param [afterItemId] {number|string}
      * @return {Promise<StateChange[]>}
      */
     update(item, requestType = "UPDATE", afterItemId) {
         const stateChange = new PositionStateChange(requestType, item, afterItemId);
-        return this.process(stateChange);
+        return this.processStateChange(stateChange);
     }
 
     /**
@@ -39,34 +41,6 @@ class SimpleRowComponent extends AbstractComponent {
         this.reset(); // kids are also reset
         this.simpleRowView.deleteRowByDataId(stateChange.data.id);
         return Promise.resolve(stateChange);
-    }
-
-    /**
-     * After deletion the kids will be also removed so initKids will have no effect (which is good).
-     *
-     * @param stateUpdaterFn {function(state: BasicState)}
-     * @param delayViewUpdate {boolean} whether to (immediately) update the view based or not
-     * @return {Promise<StateChange[]>}
-     */
-    doWithState(stateUpdaterFn, delayViewUpdate) {
-        return super.doWithState(stateUpdaterFn, delayViewUpdate)
-            .then(stateChanges => {
-                if (this._isLastStateChangeADelete(stateChanges)) {
-                    return stateChanges;
-                }
-                // todo: reconsider whether to initKids after every doWithState call
-                return this.initKids().then(() => stateChanges);
-            });
-    }
-
-    /**
-     * @param stateChanges {StateChange[]}
-     * @return {boolean} whether the last change in stateChanges is a DELETE
-     * @protected
-     */
-    _isLastStateChangeADelete(stateChanges) {
-        const lastStateChange = stateChanges && stateChanges.length ? stateChanges[stateChanges.length - 1] : undefined;
-        return lastStateChange && lastStateChange.requestType === "DELETE";
     }
 
     init() {
