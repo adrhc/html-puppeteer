@@ -28,6 +28,7 @@
             <th>Id</th>
             <th data-th="Details"><span>First name</span></th>
             <th>Last name</th>
+            <th>Friend</th>
             <th>Cats</th>
             <th>
                 <div class="buttons">
@@ -48,6 +49,7 @@
         <td>{{id}}</td>
         <td>{{firstName}}</td>
         <td>{{lastName}}</td>
+        <td>{{friend.title}}</td>
         <td>{{#each cats}}
             <div>{{{this.name}}}, {{{this.person.title}}</div>
             {{/each}}
@@ -69,6 +71,7 @@
         <td>{{id}}</td>
         <td>{{firstName}}</td>
         <td>{{lastName}}</td>
+        <td>{{friend.title}}</td>
         <td>{{#each cats}}
             <div>{{{this.name}}}, {{{this.person.title}}</div>
             {{/each}}
@@ -99,6 +102,10 @@
         </td>
         <td>
             <input data-owner="personsTable" type="text" autocomplete="off" name="lastName" value="{{lastName}}">
+        </td>
+        <td><!-- friend -->
+            <div data-owner="dyna-sel-one" data-id="dyna-sel-one" class="dyna-sel-one-comp" data-placeholder="first name"
+                 data-name="firstName" data-value="personId" data-description="person-description"></div>
         </td>
         <td>
             <table data-id="catsTable" class="catsTable">
