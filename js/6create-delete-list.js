@@ -37,6 +37,7 @@ if (Modernizr.template) {
         });
 
         // some doWithState operations on createDeleteList
+        const TO_UPDATE_ID = 3;
         createDeleteList
             .init()
             .then(() => createDeleteList.doWithState((crudListState) => {
@@ -44,13 +45,19 @@ if (Modernizr.template) {
                     id: EntityUtils.generateId(),
                     name: "new dog"
                 });
-                crudListState.updateItem({id: 3, name: "updated dog3"});
+                crudListState.updateItem({id: TO_UPDATE_ID, name: `updated dog${TO_UPDATE_ID}`});
                 crudListState.removeById(2);
                 crudListState.insertItem({
                     id: 2,
                     name: `restored dog2 with ${addNewRowsAtEnd ? "append" : "preppend"}`
                 });
             }))
+            // manually init child components for the above updated id=3 entity
+            .then(() =>
+                Promise.allSettled(createDeleteList.compositeBehaviour
+                    .findKids((kid) => EntityUtils.idsAreEqual(kid.state.currentState.id, TO_UPDATE_ID))
+                    .map((kid) => kid.init())))
+            // showing the entire table extracted data
             .then(() => console.log("ElasticListComponent.extractAllEntities:\n",
                 createDeleteList.extractAllEntities()));
     });

@@ -46,15 +46,9 @@ class CompositeBehaviour {
 
     /**
      * @param parentState
-     * @return {boolean} whether an update occured or not
      */
     copyKidsState(parentState) {
-        const result = {};
-        this.childComponents.forEach(kid => {
-            // kid.copyMyState must come before result.existsChange to always be called
-            result.existsChange = kid.copyMyState(parentState) || result.existsChange;
-        });
-        return result.existsChange;
+        this.childComponents.forEach(kid => kid.copyMyState(parentState));
     }
 
     /**
@@ -65,39 +59,41 @@ class CompositeBehaviour {
     }
 
     /**
-     * Kids selected with kidsFilter will each process the stateChange.
-     *
      * @param stateChange {StateChange}
-     * @param kidsFilter {function(comp: AbstractComponent): boolean}
-     * @param removeAfterProcessing {boolean}
-     * @return {Promise<StateChange[][]>}
+     * @param [kidsFilter] {function(kid: AbstractComponent): boolean} filter the kids interested in the state change
+     * @param [stateChangeKidAdapter] {function(kid: AbstractComponent): StateChange}
+     * @return {Promise<StateChange[]>}
      */
-    processStateChange(stateChange, kidsFilter = () => true, removeAfterProcessing = false) {
-        const components = this.childComponents.filter(kidsFilter);
-        const promises = components.map(comp => comp.processStateChange(stateChange));
-        return this._promiseAllSettledAndKidsRemove(promises, components, removeAfterProcessing);
+    processStateChangeWithKids(stateChange,
+                               kidsFilter = () => true,
+                               stateChangeKidAdapter = () => stateChange) {
+        const promises = this.childComponents.filter(kidsFilter).map(kidComp => {
+            const stateChangeKidPart = stateChangeKidAdapter(kidComp);
+            return kidComp.processStateChange(stateChangeKidPart);
+        });
+        return Promise.allSettled(promises);
     }
 
     /**
-     * @param kidHandlerFn {function(kid: AbstractComponent): *}
-     * @param kidsFilter {function(comp: AbstractComponent): boolean}
-     * @param removeAfterProcessing {boolean}
-     * @return {Array}
+     * @param kidsFilter {function(kid: AbstractComponent): boolean}
+     * @return {AbstractComponent[]}
      */
-    doWithKids(kidHandlerFn, kidsFilter = () => true, removeAfterProcessing = false) {
-        const components = this.childComponents.filter(kidsFilter);
-        return components.map(comp => kidHandlerFn(comp));
+    findKids(kidsFilter) {
+        return this.childComponents.filter(kidsFilter);
     }
 
     /**
-     * When having kids and useOwnerOnFields is null than the owner is used otherwise useOwnerOnFields is considered.
-     * When this.extractAllInputValues exists than this.extractAllEntities must use it instead of using super.extractAllEntities!
+     * When having kids and useOwnerOnFields is null than the owner must be is
+     * used for the parent fields otherwise useOwnerOnFields value considered.
+     *
+     * When this.extractAllInputValues exists than this.extractAllEntities
+     * must use it instead of using super.extractAllEntities!
      *
      * @param [useOwnerOnFields] {boolean}
      * @return {Array<IdentifiableEntity>}
      */
     extractAllEntities(useOwnerOnFields) {
-        return this.extractAllInputValues().map(iv => EntityUtils.removeTransientId(iv));
+        return this.extractAllInputValues(useOwnerOnFields).map(iv => EntityUtils.removeTransientId(iv));
     }
 
     /**
@@ -107,23 +103,7 @@ class CompositeBehaviour {
      * @return {Array<IdentifiableEntity>}
      */
     extractAllInputValues(useOwnerOnFields) {
-        return this.doWithKids((kid) => kid.extractInputValues(useOwnerOnFields));
-    }
-
-    /**
-     * @param promises {Promise<StateChange[]>[]}
-     * @param components {AbstractComponent[]}
-     * @param removeAfterProcessing {boolean}
-     * @return {Promise}
-     * @protected
-     */
-    _promiseAllSettledAndKidsRemove(promises, components, removeAfterProcessing) {
-        return Promise.allSettled(promises).then(it => {
-            if (removeAfterProcessing) {
-                ArrayUtils.removeElements(this.childComponents, components);
-            }
-            return it;
-        });
+        return this.childComponents.map((kid) => kid.extractInputValues(useOwnerOnFields));
     }
 
     /**

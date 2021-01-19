@@ -8,4 +8,8 @@ class SimpleListState extends BasicState {
         this.items = items;
         this.collectStateChange(new StateChange("UPDATE_ALL", items));
     }
+
+    get currentState() {
+        return this.items;
+    }
 }

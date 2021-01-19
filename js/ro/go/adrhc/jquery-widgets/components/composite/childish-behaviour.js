@@ -24,18 +24,41 @@ class ChildishBehaviour {
         return this._childComp;
     }
 
+    /**
+     * This should happen after setting the parent! usually this should
+     * happen anyway because the parent is set by the constructor.
+     *
+     * @param value
+     */
     set childComp(value) {
         this._childComp = value;
     }
 
     /**
-     * When having kids and useOwnerOnFields is null than the owner is used otherwise useOwnerOnFields is considered.
+     * useOwnerOnFields == null: when having kids the owner is used otherwise is not used
+     * useOwnerOnFields != null: useOwnerOnFields is used to decide whether to use the owner or not
      *
      * @param parentState
      * @param [useOwnerOnFields] {boolean}
-     * @return {boolean} whether something was copied or not
      */
     copyChildState(parentState, useOwnerOnFields) {
-        return false;
+        // do nothing
+    }
+
+    /**
+     * Double purpose method:
+     * 1. parentState != null: extract the child state from parentState
+     * 2. parentState == null: extract the child state from this.parentComp.state.currentState
+     *
+     * @param [parentState]
+     * @return {*} the child state extracted from the parent
+     */
+    extractChildState(parentState) {
+        return parentState ? parentState :
+            this.parentComp ? this.parentComp.state.currentState : undefined;
+    }
+
+    detachChild() {
+        ArrayUtils.removeElements(this.parentComp.compositeBehaviour.childComponents, this._childComp);
     }
 }

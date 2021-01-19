@@ -6,6 +6,13 @@ class BasicState {
     _stateChanges = new StateChanges();
 
     /**
+     * @abstract
+     */
+    get currentState() {
+        throw "Not implemented!";
+    }
+
+    /**
      * @param stateChange {StateChange}
      */
     collectStateChange(stateChange) {

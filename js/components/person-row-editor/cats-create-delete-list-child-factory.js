@@ -27,7 +27,7 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
             items: parentComp.state.rowState.cats,
             addNewRowsAtEnd: true,
             rowChildCompFactories: dynaSelOneCompFactory,
-            childishBehaviour: new CatsCreateDeleteListChildishBehaviour(parentComp, "cats")
+            childishBehaviour: new DefaultTableChildishBehaviour(parentComp, "cats")
         });
     }
 }

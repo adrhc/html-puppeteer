@@ -44,7 +44,7 @@ class AbstractView {
      * @return {Promise<StateChange|StateChange[]>}
      */
     update(stageChanges) {
-        // do nothing
+        return Promise.resolve(stageChanges);
     }
 
     /**

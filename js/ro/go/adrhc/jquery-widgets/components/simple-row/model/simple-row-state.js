@@ -25,4 +25,8 @@ class SimpleRowState extends BasicState {
         super.reset();
         this.rowState = undefined;
     }
+
+    get currentState() {
+        return this.rowState;
+    }
 }

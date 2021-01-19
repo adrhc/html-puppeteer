@@ -40,9 +40,9 @@ class ArrayUtils {
 
     /**
      * @param array {Array}
-     * @param elements {Array}
+     * @param elements
      */
-    static removeElements(array, elements) {
+    static removeElements(array, ...elements) {
         elements.forEach(el => array.splice(array.indexOf(el), 1))
     }
 

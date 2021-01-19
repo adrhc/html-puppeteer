@@ -5,7 +5,7 @@ class ElasticListComponent extends SimpleListComponent {
     /**
      * create the row component and set its state
      *
-     * @type {function(identifiableEntity: IdentifiableEntity, afterItemId: number|string, mustacheTableElemAdapter: MustacheTableElemAdapter): IdentifiableRowComponent}
+     * @type {function(identifiableEntity: IdentifiableEntity, afterItemId: number|string, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
      */
     idRowCompFactoryFn;
 
@@ -13,12 +13,13 @@ class ElasticListComponent extends SimpleListComponent {
      * @param repository {CrudRepository}
      * @param state {CrudListState}
      * @param view {SimpleListView}
-     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, afterItemId: number|string, mustacheTableElemAdapter: MustacheTableElemAdapter): IdentifiableRowComponent}
+     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, afterItemId: number|string, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
      */
     constructor(repository, state, view, idRowCompFactoryFn) {
         super(repository, state, view);
-        this.crudListState = state;
+        this.compositeBehaviour = new ElasticListCompositeBehaviour(this);
         this.idRowCompFactoryFn = idRowCompFactoryFn;
+        this.crudListState = state;
     }
 
     /**
@@ -50,13 +51,31 @@ class ElasticListComponent extends SimpleListComponent {
     }
 
     /**
-     * @param stateChange {PositionStateChange}
+     * Creates child components from items while computing the afterItemId based on items ordering.
+     *
+     * @param items {Array}
+     * @return {IdentifiableRowComponent[]}
+     * @protected
+     */
+    _createChildComponents(items) {
+        return items.map((item, index) => {
+            const afterItemId = index === 0 ? undefined : items[index - 1].id;
+            return this.idRowCompFactoryFn(item, afterItemId, this);
+        });
+    }
+
+    /**
+     * This is an ElasticListComponent where its view (SimpleListView) is able to handle a collection
+     * of items but not a single item; for 1 item update we should delegate to it the update call.
+     *
+     * @param stateChange
      * @return {Promise}
      */
     updateViewOnAny(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
-        const removeKidAfterProcessing = stateChange.requestType === "DELETE";
-        return this.processStateChangeWithKids(stateChange, this._kidsInterestedInStateChangeFilter(stateChange), removeKidAfterProcessing);
+        AssertionUtils.assertNotTrue($.isArray(stateChange),
+            `stateChange is an Array!\n${JSON.stringify(stateChange)}`)
+        return this.processStateChangeWithKids(stateChange).then(() => stateChange);
     }
 
     /**
@@ -71,34 +90,11 @@ class ElasticListComponent extends SimpleListComponent {
     }
 
     /**
-     * @param stateChange {PositionStateChange}
-     * @return {function(kid: IdentifiableRowComponent): boolean} a predicate for kid.id = stateChange...id
-     * @protected
-     */
-    _kidsInterestedInStateChangeFilter(stateChange) {
-        return (kid) => EntityUtils.haveSameId(kid.simpleRowState.rowState, stateChange.data);
-    }
-
-    /**
-     * Creates child components from items while computing the afterItemId based on items ordering.
-     *
-     * @param items {Array}
-     * @return {IdentifiableRowComponent[]}
-     * @protected
-     */
-    _createChildComponents(items) {
-        return items.map((item, index) => {
-            const afterItemId = index === 0 ? undefined : items[index - 1].id;
-            return this.idRowCompFactoryFn(item, afterItemId, this.tableBasedView.tableAdapter);
-        });
-    }
-
-    /**
      * @param positionStateChange {PositionStateChange}
      * @return {IdentifiableRowComponent}
      * @protected
      */
     _createChildComponent(positionStateChange) {
-        return this.idRowCompFactoryFn(positionStateChange.data, positionStateChange.afterItemId, this.tableBasedView.tableAdapter);
+        return this.idRowCompFactoryFn(positionStateChange.data, positionStateChange.afterItemId, this);
     }
 }

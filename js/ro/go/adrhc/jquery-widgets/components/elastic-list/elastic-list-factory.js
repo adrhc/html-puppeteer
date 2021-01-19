@@ -9,7 +9,9 @@ class ElasticListFactory {
      * @param simpleListView {SimpleListView}
      * @param addNewRowsAtEnd {boolean} whether to append or prepend
      * @param rowChildCompFactories {ChildComponentFactory|ChildComponentFactory[]}
-     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, afterItemId: number|string, mustacheTableElemAdapter: MustacheTableElemAdapter): IdentifiableRowComponent}
+     * @param rowChildishBehaviourFactoryFn
+     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, afterItemId: number|string, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
+     * @param childishBehaviour
      * @return {ElasticListComponent}
      */
     static create(tableIdOrJQuery, bodyRowTmplId, {
@@ -20,16 +22,28 @@ class ElasticListFactory {
         mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId),
         simpleListView = new SimpleListView(mustacheTableElemAdapter),
         rowChildCompFactories,
-        idRowCompFactoryFn = (item, afterItemId, mustacheTableElemAdapter) => {
+        rowChildishBehaviourFactoryFn = (parentComp) =>
+            new DefaultChildishBehaviour(parentComp, undefined),
+        idRowCompFactoryFn = (item, afterItemId, elasticListComponent) => {
             const idRowComp = SimpleRowFactory.createIdentifiableRow({
-                mustacheTableElemAdapter,
+                mustacheTableElemAdapter: elasticListComponent.tableBasedView.tableAdapter,
                 childCompFactories: rowChildCompFactories,
+                childishBehaviour,
                 tableRelativePositionOnCreate: addNewRowsAtEnd ? "append" : "prepend"
             });
+            const rowChildishBehaviour = rowChildishBehaviourFactoryFn(elasticListComponent);
+            if (rowChildishBehaviour) {
+                idRowComp.childishBehaviour = rowChildishBehaviour;
+            }
             idRowComp.simpleRowState.update(item, "CREATE", afterItemId);
             return idRowComp;
-        }
+        },
+        childishBehaviour
     }) {
-        return new ElasticListComponent(repository, crudListState, simpleListView, idRowCompFactoryFn);
+        const elasticListComponent = new ElasticListComponent(repository, crudListState, simpleListView, idRowCompFactoryFn);
+        if (childishBehaviour) {
+            elasticListComponent.childishBehaviour = childishBehaviour;
+        }
+        return elasticListComponent;
     }
 }

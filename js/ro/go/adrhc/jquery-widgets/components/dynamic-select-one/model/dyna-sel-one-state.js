@@ -164,4 +164,8 @@ class DynaSelOneState extends BasicState {
     get optionsLength() {
         return !this.options || !this.options.length ? 0 : this.options.length;
     }
+
+    get currentState() {
+        return this.selectedItem;
+    }
 }

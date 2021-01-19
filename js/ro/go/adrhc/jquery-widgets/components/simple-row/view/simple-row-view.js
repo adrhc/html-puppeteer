@@ -42,7 +42,7 @@ class SimpleRowView extends AbstractView {
             rowTmplHtml: this.rowTmplHtml,
             createIfNotExists: stateChange.requestType === "CREATE",
             tableRelativePosition: this._tableRelativePositionOf(stateChange)
-        })
+        });
         this.$elem = this.tableAdapter.$getRowByDataId(updatedRowState.id);
         return Promise.resolve(stateChange);
     }

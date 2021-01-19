@@ -9,7 +9,8 @@ class CreateDeleteListFactory {
      * @param simpleListView {SimpleListView}
      * @param addNewRowsAtEnd {boolean} whether to append or prepend
      * @param rowChildCompFactories {ChildComponentFactory|ChildComponentFactory[]} are components placed on a row
-     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, afterItemId: number|string, mustacheTableElemAdapter: MustacheTableElemAdapter): IdentifiableRowComponent}
+     * @param rowChildishBehaviourFactoryFn
+     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, afterItemId: number|string, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
      * @param childishBehaviour {ChildishBehaviour} permit CreateDeleteListComponent to update its parent
      * @return {ElasticListComponent}
      */
@@ -21,12 +22,18 @@ class CreateDeleteListFactory {
         mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId),
         simpleListView = new SimpleListView(mustacheTableElemAdapter),
         rowChildCompFactories,
-        idRowCompFactoryFn = (item, afterItemId, mustacheTableElemAdapter) => {
+        rowChildishBehaviourFactoryFn = (parentComp) =>
+            new DefaultChildishBehaviour(parentComp, undefined),
+        idRowCompFactoryFn = (item, afterItemId, elasticListComponent) => {
             const idRowComp = SimpleRowFactory.createIdentifiableRow({
-                mustacheTableElemAdapter,
+                mustacheTableElemAdapter: elasticListComponent.tableBasedView.tableAdapter,
                 childCompFactories: rowChildCompFactories,
                 tableRelativePositionOnCreate: addNewRowsAtEnd ? "append" : "prepend"
             });
+            const rowChildishBehaviour = rowChildishBehaviourFactoryFn(elasticListComponent);
+            if (rowChildishBehaviour) {
+                idRowComp.childishBehaviour = rowChildishBehaviour;
+            }
             idRowComp.simpleRowState.update(item, "CREATE", afterItemId);
             return idRowComp;
         },

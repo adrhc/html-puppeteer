@@ -30,12 +30,18 @@ class AbstractComponent {
         this._childishBehaviour = childishBehaviour;
     }
 
+    get childishBehaviour() {
+        return this._childishBehaviour;
+    }
+
     /**
      * @param parentState
      * @return {boolean}
      */
     copyMyState(parentState) {
-        return this._childishBehaviour && this._childishBehaviour.copyChildState(parentState);
+        if (this._childishBehaviour) {
+            this._childishBehaviour.copyChildState(parentState);
+        }
     }
 
     /**
@@ -67,7 +73,6 @@ class AbstractComponent {
 
     /**
      * @param parentState
-     * @return {boolean} whether an update occured or not
      */
     copyKidsState(parentState) {
         return this.compositeBehaviour.copyKidsState(parentState);
@@ -78,16 +83,6 @@ class AbstractComponent {
      */
     initKids() {
         return this.compositeBehaviour.init();
-    }
-
-    /**
-     * @param stateChange {StateChange}
-     * @param kidsFilter {function(comp: AbstractComponent): boolean}
-     * @param removeKidsAfterProcessing {boolean}
-     * @return {Promise<StateChange[][]>}
-     */
-    processStateChangeWithKids(stateChange, kidsFilter, removeKidsAfterProcessing) {
-        return this.compositeBehaviour.processStateChange(stateChange, kidsFilter, removeKidsAfterProcessing)
     }
 
     /**
@@ -171,7 +166,11 @@ class AbstractComponent {
     }
 
     /**
-     * When having kids and useOwnerOnFields is null than the owner is used otherwise useOwnerOnFields is considered.
+     * When having kids and useOwnerOnFields is null than the owner must be is
+     * used for the parent fields otherwise useOwnerOnFields value considered.
+     *
+     * When this.extractAllInputValues exists than this.extractAllEntities
+     * must use it instead of using super.extractAllEntities!
      *
      * @param [useOwnerOnFields] {boolean}
      * @return {{}}
@@ -193,9 +192,23 @@ class AbstractComponent {
         throw `${this.constructor.name}.updateViewOnKnownStateChange is not implemented!`;
     }
 
+    /**
+     * @param stateChange {StateChange}
+     * @return {Promise}
+     */
     updateViewOnAny(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
-        return this.view.update(stateChange);
+        return this.view.update(stateChange)
+            .then(() => this.processStateChangeWithKids(stateChange))
+            .then(() => stateChange);
+    }
+
+    /**
+     * @param stateChange {StateChange}
+     * @return {Promise<StateChange[][]>}
+     */
+    processStateChangeWithKids(stateChange) {
+        return this.compositeBehaviour.processStateChangeWithKids(stateChange);
     }
 
     /**
