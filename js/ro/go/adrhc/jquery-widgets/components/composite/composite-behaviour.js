@@ -66,7 +66,7 @@ class CompositeBehaviour {
      */
     processStateChangeWithKids(stateChange,
                                kidsFilter = () => true,
-                               stateChangeKidAdapter = (kid) => this._stateChangeKidAdapter(kid, stateChange)) {
+                               stateChangeKidAdapter = (kid) => this._extractChildState(kid, stateChange)) {
         const promises = this.childComponents.filter(kidsFilter).map(kidComp => {
             const stateChangeKidPart = stateChangeKidAdapter(kidComp);
             return kidComp.processStateChange(stateChangeKidPart);
@@ -80,7 +80,7 @@ class CompositeBehaviour {
      * @return {StateChange}
      * @protected
      */
-    _stateChangeKidAdapter(stateChange, kid) {
+    _extractChildState(stateChange, kid) {
         if (kid.childishBehaviour) {
             const kidState = kid.childishBehaviour.extractChildState(stateChange.data);
             return $.extend(true, new StateChange(), stateChange, {data: kidState});
