@@ -11,8 +11,6 @@ class CatsEditableListChildFactory extends ChildComponentFactory {
             tableRelativePositionOnCreate: "append"
         });
 
-        const childishBehaviour = new DefaultTableChildishBehaviour(parentComp, "cats");
-
         // parentComp.state is {SimpleRowState}
         const repository = new InMemoryCrudRepository($.extend(true, [], parentComp.state.rowState.cats));
 
@@ -24,7 +22,7 @@ class CatsEditableListChildFactory extends ChildComponentFactory {
             tableIdOrJQuery: $catsTable,
             bodyRowTmplId: "editableCatsRowTmpl",
             readOnlyRow: catRow,
-            childishBehaviour
+            childishBehaviour: new DefaultTableChildishBehaviour(parentComp, "cats")
         });
     }
 }

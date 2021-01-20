@@ -2,10 +2,14 @@
  * creates CreateDeleteListComponent to be used as a component while editing a person
  */
 class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
+    /**
+     * @param parentComp {IdentifiableRowComponent}
+     * @return {ElasticListComponent}
+     */
     createChildComponent(parentComp) {
         const $catsTable = $("[data-id='catsTable']", parentComp.view.$elem);
 
-        // DynamicSelectOneComponent child component factory (see ChildComponentFactory)
+        // see ChildComponentFactory
         const ownerDynaSelOneCompFactory = {
             /**
              * @param idRowCompParent {IdentifiableRowComponent}
@@ -24,7 +28,7 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
 
         // create-delete cats list (aka table)
         return CreateDeleteListFactory.create($catsTable, "editableCatsRowTmpl", {
-            items: parentComp.state.rowState.cats,
+            items: parentComp.simpleRowState.rowState.cats,
             addNewRowsAtEnd: true,
             rowChildCompFactories: ownerDynaSelOneCompFactory,
             childishBehaviour: new DefaultTableChildishBehaviour(parentComp, "cats")
