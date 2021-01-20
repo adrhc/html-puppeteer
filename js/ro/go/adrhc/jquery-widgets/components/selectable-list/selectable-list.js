@@ -90,6 +90,12 @@ class SelectableListComponent extends SimpleListComponent {
         if (swappingDetails.isPrevious) {
             this._resetPreviousRow(swappingDetails);
         }
+        // item could be undefined when "previously" is a saved transient item which after
+        // SelectableListState._reloadLastSwappedOffItem is set to undefined; same happens
+        // when removing an item
+        if (!swappingDetails.data.item) {
+            return Promise.resolve(undefined);
+        }
         // e.g. this could be the read-only row which is shown over the edited row (meanwhile reset anyway)
         return this._rowPickAndUpdate(swappingDetails).then(() => swappingStateChange);
     }
@@ -104,15 +110,8 @@ class SelectableListComponent extends SimpleListComponent {
      * @protected
      */
     _rowPickAndUpdate(swappingDetails) {
-        // item could be undefined when "previously" is a saved transient item which after
-        // SelectableListState._reloadLastSwappedOffItem) is set to undefined; same happens
-        // when removing an item
-        const item = swappingDetails.data.item;
-        if (!item) {
-            return Promise.resolve(undefined);
-        }
         const rowComponent = this._rowComponentFor(swappingDetails);
-        rowComponent.simpleRowState.update(item);
+        rowComponent.simpleRowState.update(swappingDetails.data.item);
         return rowComponent.init();
     }
 
