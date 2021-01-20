@@ -22,8 +22,7 @@ class ElasticListFactory {
         mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId),
         simpleListView = new SimpleListView(mustacheTableElemAdapter),
         rowChildCompFactories,
-        rowChildishBehaviourFactoryFn = (parentComp) =>
-            new DefaultChildishBehaviour(parentComp, undefined),
+        rowChildishBehaviourFactoryFn = (parentComp) => new DefaultChildishBehaviour(parentComp),
         idRowCompFactoryFn = (item, afterItemId, elasticListComponent) => {
             const idRowComp = SimpleRowFactory.createIdentifiableRow({
                 mustacheTableElemAdapter: elasticListComponent.tableBasedView.tableAdapter,

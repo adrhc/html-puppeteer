@@ -3,13 +3,6 @@
  */
 class ElasticListComponent extends SimpleListComponent {
     /**
-     * create the row component and set its state
-     *
-     * @type {function(identifiableEntity: IdentifiableEntity, afterItemId: number|string, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
-     */
-    idRowCompFactoryFn;
-
-    /**
      * @param repository {CrudRepository}
      * @param state {CrudListState}
      * @param view {SimpleListView}
@@ -18,7 +11,6 @@ class ElasticListComponent extends SimpleListComponent {
     constructor(repository, state, view, idRowCompFactoryFn) {
         super(repository, state, view);
         this.compositeBehaviour = new ElasticListCompositeBehaviour(this, idRowCompFactoryFn);
-        this.idRowCompFactoryFn = idRowCompFactoryFn;
     }
 
     /**
@@ -36,7 +28,7 @@ class ElasticListComponent extends SimpleListComponent {
      */
     updateViewOnCREATE(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnCREATE:\n${JSON.stringify(stateChange)}`);
-        return this.addChildComponents(this.compositeBehaviour.createChildComponent(stateChange)).init();
+        return this.addChildComponents(this.elasticListCompositeBehaviour.createChildComponent(stateChange)).init();
     }
 
     /**
@@ -62,5 +54,12 @@ class ElasticListComponent extends SimpleListComponent {
      */
     extractAllEntities(useOwnerOnFields) {
         return this.compositeBehaviour.extractAllEntities(useOwnerOnFields);
+    }
+
+    /**
+     * @return {ElasticListCompositeBehaviour}
+     */
+    get elasticListCompositeBehaviour() {
+        return this.compositeBehaviour;
     }
 }

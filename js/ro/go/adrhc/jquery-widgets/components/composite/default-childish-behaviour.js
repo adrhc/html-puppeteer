@@ -4,7 +4,7 @@
 class DefaultChildishBehaviour extends ChildishBehaviour {
     /**
      * @param parentComp {AbstractComponent}
-     * @param childStateProperty {string} is the parent state's property storing the child state
+     * @param [childStateProperty] {string} is the parent state's property storing the child state
      */
     constructor(parentComp, childStateProperty) {
         super(parentComp);
@@ -17,11 +17,20 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
      * @return {boolean}
      */
     copyChildState(parentState, useOwnerOnFields) {
-        parentState[this.childStateProperty] = this._childComp.extractEntity(useOwnerOnFields);
+        const childEntity = this._childComp.extractEntity(useOwnerOnFields);
+        if (!!this.childStateProperty) {
+            parentState[this.childStateProperty] = childEntity;
+        } else {
+            $.extend(true, parentState, childEntity);
+        }
     }
 
     extractChildState(parentState) {
         parentState = parentState ? parentState : this.parentComp.state.currentState;
-        return parentState[this.childStateProperty];
+        if (!!this.childStateProperty) {
+            return parentState[this.childStateProperty];
+        } else {
+            return $.extend(true, {}, parentState);
+        }
     }
 }
