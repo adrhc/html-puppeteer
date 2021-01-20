@@ -1,11 +1,11 @@
 class AssertionUtils {
     /**
      * @param object
-     * @param message {string}
+     * @param [message] {string}
      */
     static isNotNull(object, message) {
         if (object == null) {
-            throw `${message}: null object!`;
+            throw !!message ? `${message}: null object!` : "null object!";
         }
     }
 

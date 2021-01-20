@@ -25,14 +25,14 @@ if (Modernizr.template) {
         });
 
         // DynamicSelectOneComponent child component factory (see ChildComponentFactory)
-        const dynaSelOneCompFactory = {
+        const friendDynaSelOneCompFactory = {
             /**
              * @param idRowCompParent {IdentifiableRowComponent}
              * @return {DynamicSelectOneComponent}
              */
             createChildComponent: (idRowCompParent) => {
                 const $parentElem = idRowCompParent.view.$elem;
-                AssertionUtils.isNotNull($parentElem, "dynaSelOneCompFactory, DynamicSelectOneFactory");
+                AssertionUtils.isNotNull($parentElem, "friendDynaSelOneCompFactory.createChildComponent");
 
                 return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", $parentElem),
                     DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
@@ -46,7 +46,7 @@ if (Modernizr.template) {
             {
                 tableIdOrJQuery,
                 rowTmpl: "personsTableEditableRowTmpl",
-                childCompFactories: [dynaSelOneCompFactory, new CatsCreateDeleteListChildFactory()]
+                childCompFactories: [friendDynaSelOneCompFactory, new CatsCreateDeleteListChildFactory()]
             });
 
         // DELETABLE ROW

@@ -6,14 +6,14 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
         const $catsTable = $("[data-id='catsTable']", parentComp.view.$elem);
 
         // DynamicSelectOneComponent child component factory (see ChildComponentFactory)
-        const dynaSelOneCompFactory = {
+        const ownerDynaSelOneCompFactory = {
             /**
              * @param idRowCompParent {IdentifiableRowComponent}
              * @return {DynamicSelectOneComponent}
              */
             createChildComponent: (idRowCompParent) => {
                 const $parentElem = idRowCompParent.view.$elem;
-                AssertionUtils.isNotNull($parentElem, "dynaSelOneCompFactory, DynamicSelectOneFactory");
+                AssertionUtils.isNotNull($parentElem, "ownerDynaSelOneCompFactory.createChildComponent");
 
                 return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", $parentElem),
                     DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
@@ -26,7 +26,7 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
         return CreateDeleteListFactory.create($catsTable, "editableCatsRowTmpl", {
             items: parentComp.state.rowState.cats,
             addNewRowsAtEnd: true,
-            rowChildCompFactories: dynaSelOneCompFactory,
+            rowChildCompFactories: ownerDynaSelOneCompFactory,
             childishBehaviour: new DefaultTableChildishBehaviour(parentComp, "cats")
         });
     }
