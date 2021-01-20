@@ -66,12 +66,27 @@ class CompositeBehaviour {
      */
     processStateChangeWithKids(stateChange,
                                kidsFilter = () => true,
-                               stateChangeKidAdapter = () => stateChange) {
+                               stateChangeKidAdapter = (kid) => this._stateChangeKidAdapter(kid, stateChange)) {
         const promises = this.childComponents.filter(kidsFilter).map(kidComp => {
             const stateChangeKidPart = stateChangeKidAdapter(kidComp);
             return kidComp.processStateChange(stateChangeKidPart);
         });
         return Promise.allSettled(promises);
+    }
+
+    /**
+     * @param stateChange {StateChange}
+     * @param kid {AbstractComponent}
+     * @return {StateChange}
+     * @protected
+     */
+    _stateChangeKidAdapter(stateChange, kid) {
+        if (kid.childishBehaviour) {
+            const kidState = kid.childishBehaviour.extractChildState(stateChange.data);
+            return $.extend(true, new StateChange(), stateChange, {data: kidState});
+        } else {
+            return stateChange;
+        }
     }
 
     /**
