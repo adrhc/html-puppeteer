@@ -14,9 +14,12 @@ class BasicState {
 
     /**
      * @param stateChange {StateChange}
+     * @param [dontRecordEvents] {boolean}
      */
-    collectStateChange(stateChange) {
-        this._stateChanges.collect(stateChange);
+    collectStateChange(stateChange, dontRecordEvents) {
+        if (!dontRecordEvents) {
+            this._stateChanges.collect(stateChange);
+        }
     }
 
     /**
