@@ -14,10 +14,10 @@ class SelectableListState extends CrudListState {
     swappingState;
 
     /**
-     * @param [swappingState] {SwappingState}
      * @param [newItemsGoToTheEndOfTheList] {boolean}
+     * @param [swappingState] {SwappingState}
      */
-    constructor(swappingState, newItemsGoToTheEndOfTheList) {
+    constructor(newItemsGoToTheEndOfTheList, swappingState) {
         super(newItemsGoToTheEndOfTheList);
         this.swappingState = swappingState ? swappingState : new SwappingState();
     }

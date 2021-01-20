@@ -5,7 +5,7 @@ class CatsListState extends EditableListState {
      * @param [swappingState] {SwappingState}
      */
     constructor(repository, newItemsGoToTheEndOfTheList, swappingState) {
-        super(swappingState, newItemsGoToTheEndOfTheList);
+        super(newItemsGoToTheEndOfTheList, swappingState);
         this.repository = repository;
     }
 
