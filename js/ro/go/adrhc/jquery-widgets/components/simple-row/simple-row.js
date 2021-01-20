@@ -56,7 +56,10 @@ class SimpleRowComponent extends AbstractComponent {
         console.log(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
         // why reset? because we have to detach the event handlers on previous row
         this.reset();
+        // above reset will also apply to the state so we must restore it (the state)
         this.state.collectStateChange(stateChange, true);
+        // after recreating the view one has to again bind the event
+        // handlers, initKids, etc (do something similar to an init)
         return this.view.update(stateChange)
             .then(() => this.initKids())
             .then(() => stateChange);

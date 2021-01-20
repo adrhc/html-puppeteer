@@ -89,19 +89,20 @@ class AbstractComponent {
      * shorthand method: calls doWithState with the provided stateChange
      *
      * @param stateChange {StateChange}
+     * @param [dontRecordStateEvents] {boolean}
      * @return {Promise<StateChange[]>}
      */
-    processStateChange(stateChange) {
-        return this.doWithState((basicState) => basicState.collectStateChange(stateChange));
+    processStateChange(stateChange, dontRecordStateEvents) {
+        return this.doWithState((basicState) => basicState.collectStateChange(stateChange, dontRecordStateEvents));
     }
 
     /**
      * @param [stateChanges] {StateChange[]}
-     * @param [applyChangesStartingFromLatest] {boolean}
+     * @param [applyChangesStartingFromNewest] {boolean}
      * @return {Promise<StateChange[]>}
      */
-    updateViewOnStateChanges(stateChanges, applyChangesStartingFromLatest) {
-        return this.stateChangesDispatcher.updateViewOnStateChanges(stateChanges, applyChangesStartingFromLatest);
+    updateViewOnStateChanges(stateChanges, applyChangesStartingFromNewest) {
+        return this.stateChangesDispatcher.updateViewOnStateChanges(stateChanges, applyChangesStartingFromNewest);
     }
 
     /**

@@ -19,11 +19,11 @@ class StateChangesDispatcher {
      * Process (orderly) multiple state changes to update the view.
      *
      * @param [stateChanges] {StateChange[]|undefined}
-     * @param [applyChangesStartingFromLatest] {boolean}
+     * @param [applyChangesStartingFromNewest] {boolean}
      * @return {Promise<StateChange[]>}
      */
-    updateViewOnStateChanges(stateChanges, applyChangesStartingFromLatest) {
-        stateChanges = stateChanges ? stateChanges : this.component.state.consumeAll(applyChangesStartingFromLatest);
+    updateViewOnStateChanges(stateChanges, applyChangesStartingFromNewest) {
+        stateChanges = stateChanges ? stateChanges : this.component.state.consumeAll(applyChangesStartingFromNewest);
         if (!stateChanges || !stateChanges.length) {
             // can happen when switching to undefined multiple times (e.g. dblclick on header)
             // or clicking in an input box on an editable row
