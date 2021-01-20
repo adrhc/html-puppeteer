@@ -1,9 +1,9 @@
-.personsTable {
-    margin-top: 0.5em;
+table th {
+    text-align: center !important;
 }
 
-.personsTable table tr td:first-child {
-    max-width: 100px;
+tr.row-editor, tr.row-part {
+    background-color: floralwhite !important;
 }
 
 table td input {
@@ -13,16 +13,41 @@ table td input {
     width: fill-available;
 }
 
-.catsTable {
-    width: 100%;
-}
-
 .simple-deletable-row {
     text-decoration: line-through;
 }
 
-tr.row-editor, tr.row-part {
-    background-color: floralwhite !important;
+/* editable table */
+.deletable-row td:not(:last-child) {
+    text-decoration: line-through;
+}
+
+/* various tables */
+.personsTable {
+    margin-top: 0.5em;
+}
+
+.personsTable table tr td:first-child {
+    max-width: 100px;
+}
+
+.catsTable {
+    width: 100%;
+}
+
+/* buttons */
+div.buttons {
+    height: 24px;
+    text-align: center !important;
+    margin: auto;
+}
+
+[data-btn] {
+    cursor: pointer;
+}
+
+img[data-btn] {
+    height: 24px;
 }
 
 /* cancel responstable-table.css */

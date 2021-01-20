@@ -51,7 +51,7 @@ class DynamicSelectOneComponent extends AbstractComponent {
         this._clearOnBlurHandlers();
         return this.dynaSelOneView
             .update(this.dynaSelOneState, this.focusOnInit)
-            .then(() => this._configureEvents());
+            .then(() => this.configureEvents());
     }
 
     updateView(state, focusOnSearchInput) {
@@ -64,7 +64,7 @@ class DynamicSelectOneComponent extends AbstractComponent {
     /**
      * linking "outside" (and/or default) triggers to component's handlers (aka capabilities)
      */
-    _configureEvents() {
+    configureEvents() {
         const view = this.dynaSelOneView;
         const $comp = view.$elem;
 

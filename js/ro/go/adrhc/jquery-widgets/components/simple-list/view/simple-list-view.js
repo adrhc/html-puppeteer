@@ -3,13 +3,6 @@
  */
 class SimpleListView extends AbstractTableBasedView {
     /**
-     * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
-     */
-    constructor(mustacheTableElemAdapter) {
-        super(mustacheTableElemAdapter);
-    }
-
-    /**
      * @param stateChange {StateChange}
      */
     update(stateChange) {

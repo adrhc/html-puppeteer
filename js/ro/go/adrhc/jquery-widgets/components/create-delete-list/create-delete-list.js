@@ -1,30 +1,5 @@
 class CreateDeleteListComponent extends ElasticListComponent {
     /**
-     * @return {Promise<StateChange[]|undefined>}
-     */
-    init() {
-        return super.init()
-            .then((stateChanges) => {
-                this._configureEvents();
-                return stateChanges;
-            });
-    }
-
-    /**
-     * RELOAD
-     *
-     * @param ev {Event}
-     */
-    onReload(ev) {
-        ev.stopPropagation();
-        /**
-         * @type {CreateDeleteListComponent}
-         */
-        const createDeleteListComponent = ev.data;
-        createDeleteListComponent.reload();
-    }
-
-    /**
      * ADD
      *
      * @param ev {Event}
@@ -57,23 +32,17 @@ class CreateDeleteListComponent extends ElasticListComponent {
         });
     }
 
-    reload() {
-        this.compositeBehaviour.reset();
-        return super.init();
-    }
-
     /**
      * linking triggers to component's handlers (aka capabilities)
      *
      * @private
      */
-    _configureEvents() {
+    configureEvents() {
+        super.configureEvents();
         this.view.$elem
+            .on(this._appendNamespaceTo("click"),
+                this._btnSelector("add"), this, this.onAdd)
             .on(this._appendNamespaceTo('click'),
-                `${this._ownerSelector}[data-btn='add']`, this, this.onAdd)
-            .on(this._appendNamespaceTo('click'),
-                `${this._ownerSelector}[data-btn='reload']`, this, this.onReload)
-            .on(this._appendNamespaceTo('click'),
-                `${this._ownerSelector}[data-btn='delete']`, this, this.onDelete);
+                this._btnSelector("delete"), this, this.onDelete);
     }
 }

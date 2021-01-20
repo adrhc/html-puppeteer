@@ -20,7 +20,7 @@ class SelectableListComponent extends SimpleListComponent {
     constructor(repository, state, view,
                 notSelectedRow, selectedRow) {
         super(repository, state, view);
-        this.stateChangesDispatcher.knownRequestTypes.splice(0, 0, "CREATE", "UPDATE", "DELETE");
+        this.stateChangesDispatcher.prependKnownRequestTypes("CREATE", "UPDATE", "DELETE");
         this.selectableListState = state;
         this.simpleListView = view;
         /**
@@ -35,23 +35,12 @@ class SelectableListComponent extends SimpleListComponent {
     }
 
     /**
-     * @return {Promise<StateChange[]|undefined>}
-     */
-    init() {
-        return super.init()
-            .then((stateChanges) => {
-                this._configureEvents();
-                return stateChanges;
-            });
-    }
-
-    /**
      * @param stateChange {PositionStateChange}
      * @return {Promise<StateChange[]>}
      * @protected
      */
     updateViewOnKnownStateChange(stateChange) {
-        console.log(`${this.constructor.name}.updateViewOnStateChange:\n${JSON.stringify(stateChange)}`);
+        console.log(`${this.constructor.name}.updateViewOnKnownStateChange:\n${JSON.stringify(stateChange)}`);
         return this.swappingRowSelector[true].processStateChange(stateChange);
     }
 
@@ -199,9 +188,10 @@ class SelectableListComponent extends SimpleListComponent {
      * linking "outside" (and/or default) triggers to component's handlers (aka capabilities)
      * @protected
      */
-    _configureEvents() {
+    configureEvents() {
+        super.configureEvents();
         this.simpleListView.$elem
-            .on(this._appendNamespaceTo('dblclick'),
+            .on(this._appendNamespaceTo("dblclick"),
                 `tr${this._ownerSelector}`, this, this.onSwapping);
     }
 }

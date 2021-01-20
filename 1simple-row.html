@@ -5,6 +5,7 @@
     <title>JavaScript components</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/ro/go/adrhc/responstable-table.css">
+    <link rel="stylesheet" href="css/library-customizations/responstable-table.css">
     <link rel="stylesheet" href="css/ro/go/adrhc/util.css">
     <link rel="stylesheet" href="css/ro/go/adrhc/dyna-sel-one.css">
     <link rel="stylesheet" href="css/app.css">
@@ -20,7 +21,9 @@
     <table id="dogsTableWithEdit" class="responstable">
         <thead>
         <tr data-owner="dogsTableWithEdit">
-            <th>Dogs with editable row</th>
+            <th data-owner="dogsTableWithEdit" data-btn="reload" title="reload">
+                Dogs with editable row
+            </th>
         </tr>
         </thead>
     </table>
@@ -52,8 +55,10 @@
 <div class="dogsTable">
     <table id="dogsTableWithDelete" class="responstable">
         <thead>
-        <tr data-owner="dogsTableWithDelete">
-            <th>Dogs with deleted row</th>
+        <tr>
+            <th data-owner="dogsTableWithDelete" data-btn="reload" title="reload">
+                Dogs with deleted row
+            </th>
         </tr>
         </thead>
     </table>

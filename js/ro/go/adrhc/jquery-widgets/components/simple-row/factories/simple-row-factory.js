@@ -16,7 +16,7 @@ class SimpleRowFactory {
             simpleRowComponent.childishBehaviour = childishBehaviour;
         }
         if (childCompFactories) {
-            simpleRowComponent.addChildComponentFactory(childCompFactories);
+            simpleRowComponent.compositeBehaviour.addChildComponentFactory(childCompFactories);
         }
         return simpleRowComponent;
     }
@@ -38,7 +38,7 @@ class SimpleRowFactory {
             identifiableRowComponent.childishBehaviour = childishBehaviour;
         }
         if (childCompFactories) {
-            identifiableRowComponent.addChildComponentFactory(childCompFactories);
+            identifiableRowComponent.compositeBehaviour.addChildComponentFactory(childCompFactories);
         }
         return identifiableRowComponent;
     }

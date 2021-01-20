@@ -13,18 +13,19 @@ if (Modernizr.template) {
 
         // dogs table with editable row
         const dogsTableWithEdit = "dogsTableWithEdit";
-        SimpleListFactory.create({items: dogs, tableIdOrJQuery: dogsTableWithEdit})
-            .init()
-            .then(updateAllStateChanges => {
-                const items = updateAllStateChanges[0].data;
-                const editableRow = SimpleRowFactory.createIdentifiableRow({
-                    tableIdOrJQuery: dogsTableWithEdit,
-                    rowTmpl: "dogsTableWithEditSelectedRowTmpl",
-                    tableRelativePositionOnCreate: "prepend"
-                });
-                editableRow
-                    // switch to existing row (aka enter "edit" mode)
-                    .update(items[0])
+        SimpleListFactory.create({
+            items: dogs,
+            tableIdOrJQuery: dogsTableWithEdit
+        }).init().then(updateAllStateChanges => {
+            const items = updateAllStateChanges[0].data;
+            const editableRow = SimpleRowFactory.createIdentifiableRow({
+                tableIdOrJQuery: dogsTableWithEdit,
+                rowTmpl: "dogsTableWithEditSelectedRowTmpl",
+                tableRelativePositionOnCreate: "prepend"
+            });
+            return editableRow.init().then(() =>
+                // switch to existing row (aka enter "edit" mode)
+                editableRow.update(items[0])
                     // extracting row data for e.g. save
                     .then(() => {
                         const extractedEntity = editableRow.extractEntity();
@@ -43,8 +44,8 @@ if (Modernizr.template) {
                     .then(() => {
                         const extractedEntity = editableRow.extractEntity();
                         console.log("2. extractedEntity:\n", JSON.stringify(extractedEntity));
-                    })
-            });
+                    }))
+        });
 
         // dogs table with deleted row
         const dogsTableWithDelete = "dogsTableWithDelete";
@@ -52,20 +53,19 @@ if (Modernizr.template) {
             items: dogs,
             tableIdOrJQuery: dogsTableWithDelete,
             bodyRowTmplId: "dogsTableWithDeleteReadOnlyRowTmpl"
-        })
-            .init()
-            .then(updateAllStateChanges => {
-                const items = updateAllStateChanges[0].data;
-                const simpleRow = SimpleRowFactory.createSimpleRow(
-                    {
-                        tableIdOrJQuery: dogsTableWithDelete,
-                        rowTmpl: "dogsTableWithDeleteDeletedRowTmpl"
-                    });
-                // switching to "simpleRow" display type (i.e. line-through text style)
-                simpleRow.update(items[0])
+        }).init().then(updateAllStateChanges => {
+            const items = updateAllStateChanges[0].data;
+            const simpleRow = SimpleRowFactory.createSimpleRow(
+                {
+                    tableIdOrJQuery: dogsTableWithDelete,
+                    rowTmpl: "dogsTableWithDeleteDeletedRowTmpl"
+                });
+            // switching to "simpleRow" display type (i.e. line-through text style)
+            return simpleRow.init()
+                .then(() => simpleRow.update(items[0])
                     // removing the row
-                    .then(() => simpleRow.update(items[1], "DELETE"));
-            });
+                    .then(() => simpleRow.update(items[1], "DELETE")));
+        });
     })
 } else {
     // Find another way to add the rows to the table because

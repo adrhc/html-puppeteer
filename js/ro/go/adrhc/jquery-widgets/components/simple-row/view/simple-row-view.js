@@ -1,6 +1,8 @@
 /**
- * This is a view able to compute at each update its $elem and owner but unable to reset its tableAdapter;
- * it's almost like a stateless view, the $elem and owner are useful only when updating the view.
+ * This is a view able to compute at each update its $elem and owner but should not reset its
+ * tableAdapter because tableAdapter is like a provided configuration managed by someone else.
+ *
+ * tableAdapter, tableRelativePositionOnCreate are configurations managed by the provider
  */
 class SimpleRowView extends AbstractView {
     /**
@@ -23,7 +25,6 @@ class SimpleRowView extends AbstractView {
          */
         this.tableAdapter = mustacheTableElemAdapter;
         this.owner = this.tableAdapter.owner;
-        this.rowTmplHtml = mustacheTableElemAdapter.bodyRowTmplHtml;
         this.tableRelativePositionOnCreate = tableRelativePositionOnCreate;
     }
 
@@ -39,7 +40,7 @@ class SimpleRowView extends AbstractView {
         this.tableAdapter.renderRowWithTemplate({
             rowDataId: updatedRowState.id,
             data: updatedRowState,
-            rowTmplHtml: this.rowTmplHtml,
+            rowTmplHtml: this.tableAdapter.bodyRowTmplHtml,
             createIfNotExists: stateChange.requestType === "CREATE",
             tableRelativePosition: this._tableRelativePositionOf(stateChange)
         });

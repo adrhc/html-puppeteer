@@ -14,12 +14,12 @@ class ElasticListComponent extends SimpleListComponent {
     }
 
     /**
-     * This does what this.initKids() does but for only 1 item.
+     * This does what this.compositeBehaviour.init() does but for only 1 item.
      *
      * Reason: the whole purpose of this component is to allow one to manually manipulate the
      * state (aka, by using doWithState) so one might simply add a new item in which case the
-     * associated view must be created completely (including calling initKids); this is very
-     * similar to init() but for 1 row only.
+     * associated view must be created completely (including calling compositeBehaviour.init);
+     * this is very similar to init() but for 1 row only.
      *
      * see also SimpleListComponent.updateViewOnUPDATE_ALL
      *
@@ -28,7 +28,7 @@ class ElasticListComponent extends SimpleListComponent {
      */
     updateViewOnCREATE(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnCREATE:\n${JSON.stringify(stateChange)}`);
-        return this.addChildComponents(this.elasticListCompositeBehaviour.createChildComponent(stateChange)).init();
+        return this.elasticListComposite.createChildComponent(stateChange).init();
     }
 
     /**
@@ -40,9 +40,7 @@ class ElasticListComponent extends SimpleListComponent {
      */
     updateViewOnAny(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
-        AssertionUtils.isFalse($.isArray(stateChange),
-            `stateChange is an Array!\n${JSON.stringify(stateChange)}`);
-        const idRowComp = this.elasticListCompositeBehaviour.findKidById(stateChange.data.id);
+        const idRowComp = this.elasticListComposite.findKidById(stateChange.data.id);
         return idRowComp.processStateChange(stateChange);
     }
 
@@ -60,7 +58,7 @@ class ElasticListComponent extends SimpleListComponent {
     /**
      * @return {ElasticListCompositeBehaviour}
      */
-    get elasticListCompositeBehaviour() {
+    get elasticListComposite() {
         return this.compositeBehaviour;
     }
 }

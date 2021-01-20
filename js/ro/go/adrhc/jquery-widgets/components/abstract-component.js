@@ -56,36 +56,6 @@ class AbstractComponent {
     }
 
     /**
-     * @param childCompFactory {ChildComponentFactory|ChildComponentFactory[]}
-     */
-    addChildComponentFactory(childCompFactory) {
-        this.compositeBehaviour.addChildComponentFactory(childCompFactory);
-    }
-
-    /**
-     * @param childComp {AbstractComponent|AbstractComponent[]}
-     * @return {AbstractComponent|AbstractComponent[]} the childComp parameter
-     */
-    addChildComponents(childComp) {
-        this.compositeBehaviour.addChildComponent(childComp);
-        return childComp;
-    }
-
-    /**
-     * @param parentState
-     */
-    copyKidsState(parentState) {
-        return this.compositeBehaviour.copyKidsState(parentState);
-    }
-
-    /**
-     * @return {Promise<Array<StateChange>[]>}
-     */
-    initKids() {
-        return this.compositeBehaviour.init();
-    }
-
-    /**
      * shorthand method: calls doWithState with the provided stateChange
      *
      * @param stateChange {StateChange}
@@ -106,25 +76,36 @@ class AbstractComponent {
     }
 
     /**
-     * @param stateChange {StateChange|undefined}
-     * @return {Promise<StateChange>}
-     */
-    updateViewOnStateChange(stateChange) {
-        return this.stateChangesDispatcher.updateViewOnStateChange(stateChange);
-    }
-
-    /**
      * component initializer: (re)load state, update the view, configure events then init kids
      *
-     * @return {Promise<StateChange[]|undefined>}
+     * @return {Promise<StateChange[]>}
      */
     init() {
         AssertionUtils.isNullOrEmpty(this.compositeBehaviour.childComponents,
             `${this.constructor.name}.init: childComponents is not empty!`);
-        // reload state
-        return this.updateViewOnStateChanges()
-            // init kids
-            .then((stateChanges) => this.initKids().then(() => stateChanges));
+        return this.reloadState()
+            .then(() => this.updateViewOnStateChanges())
+            .then((stateChanges) => {
+                this.configureEvents();
+                return this.compositeBehaviour.init().then(() => stateChanges);
+            });
+    }
+
+    /**
+     * Reloading the state from somewhere (e.g. a repository).
+     *
+     * @return {Promise<*>}
+     * @protected
+     */
+    reloadState() {
+        return Promise.resolve();
+    }
+
+    /**
+     * @protected
+     */
+    configureEvents() {
+        // do nothing
     }
 
     /**
@@ -135,8 +116,8 @@ class AbstractComponent {
         if (this.view.$elem) {
             this.view.$elem.off(this._eventsNamespace);
         }
-        this.state.reset();
         this.view.reset();
+        this.state.reset();
     }
 
     /**
@@ -182,7 +163,7 @@ class AbstractComponent {
             useOwnerOnFields = this.compositeBehaviour.hasKids();
         }
         const item = this.view.extractInputValues(useOwnerOnFields);
-        this.copyKidsState(item);
+        this.compositeBehaviour.copyKidsState(item);
         return item;
     }
 
@@ -201,16 +182,7 @@ class AbstractComponent {
     updateViewOnAny(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
         return this.view.update(stateChange)
-            .then(() => this.processStateChangeWithKids(stateChange))
-            .then(() => stateChange);
-    }
-
-    /**
-     * @param stateChange {StateChange}
-     * @return {Promise<StateChange[][]>}
-     */
-    processStateChangeWithKids(stateChange) {
-        return this.compositeBehaviour.processStateChangeWithKids(stateChange);
+            .then(() => this.compositeBehaviour.processStateChangeWithKids(stateChange));
     }
 
     /**
@@ -244,6 +216,19 @@ class AbstractComponent {
         } else {
             return `${events}${this._eventsNamespace}`;
         }
+    }
+
+    /**
+     * @param btnNames {string[]|string}
+     * @param [dontUseOwner] {boolean}
+     * @return {string} a selector e.g. [data-owner='personsTable'][data-btn='reload']
+     * @protected
+     */
+    _btnSelector(btnNames, dontUseOwner) {
+        if (!$.isArray(btnNames)) {
+            btnNames = [btnNames];
+        }
+        return btnNames.map(name => `${this._ownerSelector}[data-btn='${name}']`).join();
     }
 
     /**

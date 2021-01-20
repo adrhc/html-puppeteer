@@ -1,4 +1,6 @@
 /**
+ * Owner and $elem are something like a configuration so should not be reset.
+ *
  * @abstract
  */
 class AbstractView {
@@ -87,7 +89,13 @@ class AbstractView {
         this._$elem = $elem;
     }
 
+    /**
+     * owner and $elem are something like a configuration so should not be reset
+     *
+     * owner and $elem: if any would be changed then the new value would be
+     * used while there's no loss if the previous value is simply overwritten
+     */
     reset() {
-        this._$elem = undefined;
+        // do nothing
     }
 }

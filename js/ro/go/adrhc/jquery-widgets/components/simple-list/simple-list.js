@@ -15,40 +15,49 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     }
 
     /**
-     * @return {Promise<StateChange[]|undefined>}
-     */
-    init() {
-        return this._reloadState().then(() => super.init());
-    }
-
-    /**
      * @return {Promise<*>}
-     * @protected
      */
-    _reloadState() {
-        return this._handleRepoErrors(this.repository.findAll())
+    reloadState() {
+        return this._handleRepoErrors(this.repository.findAll()
             .then((items) => {
                 console.log(`${this.constructor.name} items:\n`, JSON.stringify(items));
                 this.simpleListState.updateAll(items);
                 return items;
-            });
+            }));
     }
 
     /**
-     * It won't do what init() does: e.g. it won't initKids
-     * or configure events, only init() should do that!
+     * RELOAD
      *
-     * Reason: this competes with init() on initKids() call; should this method call also initKids()
-     * then init() shouldn't do it or other way around. There's no reason to manually update the
-     * state (aka, by using doWithState) but if indeed there is one then the caller must take care
-     * of everything (including calling initKids)
-     *
+     * @param ev {Event}
+     */
+    onReload(ev) {
+        ev.stopPropagation();
+        /**
+         * @type {SimpleListComponent}
+         */
+        const simpleListComponent = ev.data;
+        simpleListComponent.reset();
+        simpleListComponent.init();
+    }
+
+    /**
      * see also ElasticListComponent.updateViewOnCREATE
      *
-     * @param stateChange {StateChange|undefined}
+     * @param stateChange {StateChange}
      * @return {Promise<StateChange>}
      */
     updateViewOnUPDATE_ALL(stateChange) {
         return this.view.update(stateChange);
+    }
+
+    /**
+     * linking triggers to component's handlers (aka capabilities)
+     *
+     * @protected
+     */
+    configureEvents() {
+        this.view.$elem.on(this._appendNamespaceTo("click"),
+            this._btnSelector("reload"), this, this.onReload);
     }
 }

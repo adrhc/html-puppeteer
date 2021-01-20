@@ -8,7 +8,19 @@
  *      StateChange.swappingDetails.data = SelectableSwappingData
  */
 class SelectableListState extends CrudListState {
-    swappingState = new SwappingState();
+    /**
+     * @type {SwappingState}
+     */
+    swappingState;
+
+    /**
+     * @param [swappingState] {SwappingState}
+     * @param [newItemsGoToTheEndOfTheList] {boolean}
+     */
+    constructor(swappingState, newItemsGoToTheEndOfTheList) {
+        super(newItemsGoToTheEndOfTheList);
+        this.swappingState = swappingState ? swappingState : new SwappingState();
+    }
 
     /**
      * @param id {numeric|string}
@@ -89,7 +101,8 @@ class SelectableListState extends CrudListState {
         selectableSwappingData.item = this.findById(selectableSwappingData.reloadedId);
     }
 
-    resetSwappingState() {
+    reset() {
+        super.reset();
         this.swappingState.reset();
     }
 

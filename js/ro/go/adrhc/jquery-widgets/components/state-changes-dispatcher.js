@@ -60,4 +60,11 @@ class StateChangesDispatcher {
             return this.component.updateViewOnAny(stateChange);
         }
     }
+
+    /**
+     * @param requestType {string}
+     */
+    prependKnownRequestTypes(...requestType) {
+        requestType.forEach(it => this.knownRequestTypes.splice(0, 0, it));
+    }
 }

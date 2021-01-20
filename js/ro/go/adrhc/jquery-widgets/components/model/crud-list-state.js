@@ -7,11 +7,11 @@ class CrudListState extends SimpleListState {
     append;
 
     /**
-     * @param [append] {boolean}
+     * @param [newItemsGoToTheEndOfTheList] {boolean}
      */
-    constructor(append) {
+    constructor(newItemsGoToTheEndOfTheList) {
         super();
-        this.append = append;
+        this.append = newItemsGoToTheEndOfTheList;
     }
 
     /**

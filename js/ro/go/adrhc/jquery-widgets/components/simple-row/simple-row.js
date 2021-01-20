@@ -20,8 +20,8 @@ class SimpleRowComponent extends AbstractComponent {
 
     /**
      * Updates the state and the view based on the provided parameters.
-     * CREATE won't do what init() does: e.g. it won't initKids or
-     * configure events, only init() should do that!
+     * For CREATE won't do what init() does: e.g. it won't compositeBehaviour.init
+     * or configure events, only init() should do that!
      *
      * @param item
      * @param [requestType] {"CREATE"|"UPDATE"|"DELETE"}
@@ -58,15 +58,17 @@ class SimpleRowComponent extends AbstractComponent {
         this.reset();
         // above reset will also apply to the state so we must restore it (the state)
         this.state.collectStateChange(stateChange, true);
-        // after recreating the view one has to again bind the event
-        // handlers, initKids, etc (do something similar to an init)
+        // after recreating the view one has to again bind the event handlers,
+        // call compositeBehaviour.init, etc (do something similar to an init)
         return this.view.update(stateChange)
-            .then(() => this.initKids())
-            .then(() => stateChange);
+            .then(() => {
+                this.configureEvents();
+                return this.compositeBehaviour.init();
+            });
     }
 
     /**
-     * It's not necessary to call initKids because that is called by this.updateViewOnAny.
+     * It's not necessary to call compositeBehaviour.init because it is called by this.updateViewOnAny.
      *
      * @return {Promise<StateChange[]>}
      */

@@ -1,4 +1,6 @@
 /**
+ * tableAdapter is configuration managed by the provider
+ *
  * @abstract
  */
 class AbstractTableBasedView extends AbstractView {

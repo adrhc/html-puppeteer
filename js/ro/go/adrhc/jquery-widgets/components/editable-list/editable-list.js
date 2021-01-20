@@ -69,38 +69,6 @@ class EditableListComponent extends SelectableListComponent {
     }
 
     /**
-     * RELOAD
-     *
-     * @param ev {Event}
-     */
-    onReload(ev) {
-        ev.stopPropagation();
-        /**
-         * @type {EditableListComponent}
-         */
-        const editableList = ev.data;
-        editableList._reloadState().then(() => editableList.updateViewOnStateChanges());
-    }
-
-    _reloadState() {
-        return super._reloadState().then((stateValue) => {
-            this.editableListState.resetSwappingState();
-            this.resetSwappingRowSelector();
-            return stateValue;
-        })
-    }
-
-    resetSwappingRowSelector() {
-        this.swappingRowSelector[true].reset();
-        if (this.swappingRowSelector[false]) {
-            this.swappingRowSelector[false].reset();
-        }
-        if (this.swappingRowSelector["showDelete"]) {
-            this.swappingRowSelector["showDelete"].reset();
-        }
-    }
-
-    /**
      * CANCEL
      *
      * @param ev {Event}
@@ -126,12 +94,12 @@ class EditableListComponent extends SelectableListComponent {
          */
         const editableList = ev.data;
         const rowDataId = editableList.simpleListView.rowDataIdOf(this, true);
-        editableList._handleRepoErrors(editableList.repository.delete(rowDataId))
+        editableList._handleRepoErrors(editableList.repository.delete(rowDataId)
             .then(() =>
                 editableList.doWithState((editableListState) => {
                     editableListState.switchToOff();
                     editableListState.removeById(rowDataId);
-                }));
+                })));
     }
 
     /**
@@ -147,7 +115,7 @@ class EditableListComponent extends SelectableListComponent {
         const editableList = ev.data;
         const rowDataId = editableList.simpleListView.rowDataIdOf(this, true);
         const entity = editableList.extractEntity();
-        editableList._handleRepoErrors(editableList.repository.save(entity))
+        editableList._handleRepoErrors(editableList.repository.save(entity)
             .then(savedEntity =>
                 editableList.doWithState((editableListState) => {
                     // events: SWAP (isPrevious=true, if any previous exists) + DELETE (transient, if any)
@@ -155,29 +123,44 @@ class EditableListComponent extends SelectableListComponent {
                     // todo: sync "append" save param with notSelectedRow.tableRelativePositionOnCreate
                     // events: DELETE (transient, if any) + CREATE or just UPDATE
                     editableListState.save(savedEntity, rowDataId);
-                }));
+                })));
     }
 
     /**
      * linking triggers to component's handlers (aka capabilities)
      *
-     * @private
+     * @protected
      */
-    _configureEvents() {
-        super._configureEvents();
+    configureEvents() {
+        super.configureEvents();
         this.simpleListView.$elem
             .on(this._appendNamespaceTo('click'),
-                `${this._ownerSelector}[data-btn='showDelete'],
-                ${this._ownerSelector}[data-btn='showEdit']`, this, this.onShowDU)
+                `${this._btnSelector(['showDelete', 'showEdit'])}`, this, this.onShowDU)
             .on(this._appendNamespaceTo('click'),
                 `${this._ownerSelector}[data-btn='showAdd']`, this, this.onShowAdd)
-            .on(this._appendNamespaceTo('click'),
-                `${this._ownerSelector}[data-btn='reload']`, this, this.onReload)
             .on(this._appendNamespaceTo('click'),
                 `${this._ownerSelector}[data-btn='cancel']`, this, this.onCancel)
             .on(this._appendNamespaceTo('click'),
                 `${this._ownerSelector}[data-btn='delete']`, this, this.onDelete)
             .on(this._appendNamespaceTo('click'),
                 `${this._ownerSelector}[data-btn='update']`, this, this.onUpdate);
+    }
+
+    reset() {
+        super.reset();
+        this._resetSwappingRowSelector();
+    }
+
+    /**
+     * @protected
+     */
+    _resetSwappingRowSelector() {
+        this.swappingRowSelector[true].reset();
+        if (this.swappingRowSelector[false]) {
+            this.swappingRowSelector[false].reset();
+        }
+        if (this.swappingRowSelector["showDelete"]) {
+            this.swappingRowSelector["showDelete"].reset();
+        }
     }
 }
