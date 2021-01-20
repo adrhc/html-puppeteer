@@ -31,18 +31,9 @@ class ElasticListComponent extends SimpleListComponent {
         return this.addChildComponents(this.elasticListCompositeBehaviour.createChildComponent(stateChange)).init();
     }
 
-    updateViewOnDELETE(stateChange) {
-        console.log(`${this.constructor.name}.updateViewOnDELETE:\n${JSON.stringify(stateChange)}`);
-        const idRowComp = this.elasticListCompositeBehaviour.findKidById(stateChange.data.id);
-        return idRowComp.processStateChange(stateChange);
-    }
-
     /**
      * This is an ElasticListComponent where its view (SimpleListView) is able to handle a collection
      * of items but not a single item; for 1 item-update I'm delegating to its row the update-view call.
-     *
-     * Because the IdentifiableRowComponent is completely recreated on update
-     * I have to init it on each update in order to also have its kids initialized.
      *
      * @param stateChange
      * @return {Promise}
@@ -52,9 +43,7 @@ class ElasticListComponent extends SimpleListComponent {
         AssertionUtils.isFalse($.isArray(stateChange),
             `stateChange is an Array!\n${JSON.stringify(stateChange)}`);
         const idRowComp = this.elasticListCompositeBehaviour.findKidById(stateChange.data.id);
-        idRowComp.reset();
-        idRowComp.state.collectStateChange(stateChange);
-        return idRowComp.init();
+        return idRowComp.processStateChange(stateChange);
     }
 
     /**

@@ -46,11 +46,26 @@ class SimpleRowComponent extends AbstractComponent {
         return Promise.resolve(stateChange);
     }
 
+    /**
+     * Because the IdentifiableRowComponent is completely recreated on update I have to manually init its kids.
+     *
+     * @param stateChange
+     * @return {Promise}
+     */
+    updateViewOnAny(stateChange) {
+        console.log(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
+        this.compositeBehaviour.reset();
+        return this.view.update(stateChange)
+            .then(() => this.initKids())
+            .then(() => stateChange);
+    }
+
+    /**
+     * It's not necessary to call initKids because that is called by this.updateViewOnAny.
+     *
+     * @return {Promise<StateChange[]>}
+     */
     init() {
-        if (this.simpleRowState.rowState) {
-            return super.init();
-        } else {
-            return this.updateViewOnStateChanges();
-        }
+        return this.updateViewOnStateChanges();
     }
 }
