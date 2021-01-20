@@ -139,6 +139,5 @@ class CompositeBehaviour {
     reset() {
         this.childComponents.forEach(kid => kid.reset());
         this.childComponents = [];
-
     }
 }
