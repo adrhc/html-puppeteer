@@ -11,13 +11,7 @@ class CatsEditableListChildFactory extends ChildComponentFactory {
             tableRelativePositionOnCreate: "append"
         });
 
-        const childishBehaviour = new ChildishBehaviour(parentComp);
-        childishBehaviour.copyChildState = (parentState) => {
-            // childishBehaviour.childComp is {EditableListComponent} = cats table component
-            // childComp means "me/this/current" relative to ChildishBehaviour
-            parentState.cats = childishBehaviour.childComp.extractAllEntities(true);
-            return true;
-        }
+        const childishBehaviour = new DefaultTableChildishBehaviour(parentComp, "cats");
 
         // parentComp.state is {SimpleRowState}
         const repository = new InMemoryCrudRepository($.extend(true, [], parentComp.state.rowState.cats));
