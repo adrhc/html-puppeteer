@@ -66,12 +66,4 @@ class SimpleRowView extends AbstractView {
     $getOwnedRowByData(dataKey, dataValue) {
         return this.tableAdapter.$getOwnedRowByData(dataKey, dataValue);
     }
-
-    /**
-     * reset $elem but keep the rest:
-     * tableAdapter, owner (which anyway makes sense only with its associated tableAdapter) and the table's event bindings
-     */
-    reset() {
-        this.$elem = undefined;
-    }
 }

@@ -17,19 +17,8 @@ class ElasticListComponent extends SimpleListComponent {
      */
     constructor(repository, state, view, idRowCompFactoryFn) {
         super(repository, state, view);
-        this.compositeBehaviour = new ElasticListCompositeBehaviour(this);
+        this.compositeBehaviour = new ElasticListCompositeBehaviour(this, idRowCompFactoryFn);
         this.idRowCompFactoryFn = idRowCompFactoryFn;
-        this.crudListState = state;
-    }
-
-    /**
-     * Creates a component for each item, stores it, then init all stored components.
-     *
-     * @return {Promise<Array<StateChange>[]>}
-     */
-    initKids() {
-        this.addChildComponents(this._createChildComponents(this.crudListState.items));
-        return super.initKids();
     }
 
     /**
@@ -47,21 +36,7 @@ class ElasticListComponent extends SimpleListComponent {
      */
     updateViewOnCREATE(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnCREATE:\n${JSON.stringify(stateChange)}`);
-        return this.addChildComponents(this._createChildComponent(stateChange)).init();
-    }
-
-    /**
-     * Creates child components from items while computing the afterItemId based on items ordering.
-     *
-     * @param items {Array}
-     * @return {IdentifiableRowComponent[]}
-     * @protected
-     */
-    _createChildComponents(items) {
-        return items.map((item, index) => {
-            const afterItemId = index === 0 ? undefined : items[index - 1].id;
-            return this.idRowCompFactoryFn(item, afterItemId, this);
-        });
+        return this.addChildComponents(this.compositeBehaviour.createChildComponent(stateChange)).init();
     }
 
     /**
@@ -73,7 +48,7 @@ class ElasticListComponent extends SimpleListComponent {
      */
     updateViewOnAny(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
-        AssertionUtils.assertNotTrue($.isArray(stateChange),
+        AssertionUtils.isFalse($.isArray(stateChange),
             `stateChange is an Array!\n${JSON.stringify(stateChange)}`)
         return this.processStateChangeWithKids(stateChange).then(() => stateChange);
     }
@@ -87,14 +62,5 @@ class ElasticListComponent extends SimpleListComponent {
      */
     extractAllEntities(useOwnerOnFields) {
         return this.compositeBehaviour.extractAllEntities(useOwnerOnFields);
-    }
-
-    /**
-     * @param positionStateChange {PositionStateChange}
-     * @return {IdentifiableRowComponent}
-     * @protected
-     */
-    _createChildComponent(positionStateChange) {
-        return this.idRowCompFactoryFn(positionStateChange.data, positionStateChange.afterItemId, this);
     }
 }

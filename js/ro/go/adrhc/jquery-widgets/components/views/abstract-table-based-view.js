@@ -38,12 +38,4 @@ class AbstractTableBasedView extends AbstractView {
     rowDataIdOf(elem, searchParentsForDataIdIfMissingOnElem) {
         return this.tableAdapter.rowDataIdOf(elem, searchParentsForDataIdIfMissingOnElem);
     }
-
-    /**
-     * keep owner and tableAdapter
-     */
-    reset() {
-        super.reset();
-        this.tableAdapter = undefined;
-    }
 }

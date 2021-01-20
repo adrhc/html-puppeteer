@@ -85,8 +85,15 @@ class EditableListComponent extends SelectableListComponent {
     _reloadState() {
         return super._reloadState().then((stateValue) => {
             this.editableListState.resetSwappingState();
+            this.resetSwappingRowSelector();
             return stateValue;
         })
+    }
+
+    resetSwappingRowSelector() {
+        this.swappingRowSelector[true].reset();
+        this.swappingRowSelector[false].reset();
+        this.swappingRowSelector["showDelete"].reset();
     }
 
     /**

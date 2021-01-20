@@ -32,7 +32,7 @@ if (Modernizr.template) {
              */
             createChildComponent: (idRowCompParent) => {
                 const $parentElem = idRowCompParent.view.$elem;
-                AssertionUtils.assertNotNull($parentElem, "dynaSelOneCompFactory, DynamicSelectOneFactory");
+                AssertionUtils.isNotNull($parentElem, "dynaSelOneCompFactory, DynamicSelectOneFactory");
 
                 return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", $parentElem),
                     DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {

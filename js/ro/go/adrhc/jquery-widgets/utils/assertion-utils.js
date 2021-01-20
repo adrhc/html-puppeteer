@@ -3,7 +3,7 @@ class AssertionUtils {
      * @param object
      * @param message {string}
      */
-    static assertNotNull(object, message) {
+    static isNotNull(object, message) {
         if (object == null) {
             throw `${message}: null object!`;
         }
@@ -15,8 +15,20 @@ class AssertionUtils {
      * @param expression {boolean}
      * @param message {string}
      */
-    static assertNotTrue(expression, message) {
+    static isFalse(expression, message) {
         if (expression === true) {
+            throw message;
+        }
+    }
+
+    /**
+     * @param array {Array}
+     * @param message {string}
+     */
+    static isNullOrEmpty(array, message) {
+        if (array && !$.isArray(array)) {
+            throw `this is not an array:\n${JSON.stringify(array)}`;
+        } else if (array && array.length !== 0) {
             throw message;
         }
     }

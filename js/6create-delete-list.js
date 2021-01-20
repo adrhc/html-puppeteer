@@ -20,7 +20,7 @@ if (Modernizr.template) {
              * @return {DynamicSelectOneComponent}
              */
             createChildComponent: (idRowCompParent) => {
-                AssertionUtils.assertNotNull(idRowCompParent.view.$elem, "dynaSelOneCompFactory, DynamicSelectOneFactory");
+                AssertionUtils.isNotNull(idRowCompParent.view.$elem, "dynaSelOneCompFactory, DynamicSelectOneFactory");
 
                 return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", idRowCompParent.view.$elem), DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
                     childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent, "person", () => new Person())

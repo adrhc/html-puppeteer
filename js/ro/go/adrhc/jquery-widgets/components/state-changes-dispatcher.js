@@ -18,8 +18,8 @@ class StateChangesDispatcher {
     /**
      * Process (orderly) multiple state changes to update the view.
      *
-     * @param stateChanges {StateChange[]|undefined}
-     * @param applyChangesStartingFromLatest {boolean|undefined}
+     * @param [stateChanges] {StateChange[]|undefined}
+     * @param [applyChangesStartingFromLatest] {boolean}
      * @return {Promise<StateChange[]>}
      */
     updateViewOnStateChanges(stateChanges, applyChangesStartingFromLatest) {
@@ -42,7 +42,7 @@ class StateChangesDispatcher {
     }
 
     /**
-     * @param stateChange {StateChange|undefined}
+     * @param [stateChange] {StateChange}
      * @return {Promise<StateChange>}
      */
     updateViewOnStateChange(stateChange) {

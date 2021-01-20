@@ -109,7 +109,7 @@ class CompositeBehaviour {
     /**
      * create the child component then init it
      *
-     * @return {Promise<Array<StateChange>[]>}
+     * @return {Promise<StateChange[]>}
      */
     init() {
         this.childComponents = this._createChildComponents();
@@ -130,11 +130,7 @@ class CompositeBehaviour {
      * @protected
      */
     _createChildComponents() {
-        if (this.childComponentFactories.length) {
-            return this.childComponentFactories.map(compFactory => compFactory.createChildComponent(this.parentComp));
-        } else {
-            return this.childComponents;
-        }
+        return this.childComponentFactories.map(compFactory => compFactory.createChildComponent(this.parentComp));
     }
 
     /**

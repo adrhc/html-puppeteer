@@ -89,6 +89,5 @@ class AbstractView {
 
     reset() {
         this._$elem = undefined;
-        this._owner = undefined;
     }
 }

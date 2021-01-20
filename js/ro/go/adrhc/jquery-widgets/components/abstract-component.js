@@ -96,8 +96,8 @@ class AbstractComponent {
     }
 
     /**
-     * @param stateChanges {StateChange[]|undefined}
-     * @param applyChangesStartingFromLatest {boolean|undefined}
+     * @param [stateChanges] {StateChange[]}
+     * @param [applyChangesStartingFromLatest] {boolean}
      * @return {Promise<StateChange[]>}
      */
     updateViewOnStateChanges(stateChanges, applyChangesStartingFromLatest) {
@@ -119,6 +119,8 @@ class AbstractComponent {
      * @return {Promise<StateChange[]|undefined>}
      */
     init() {
+        AssertionUtils.isNullOrEmpty(this.compositeBehaviour.childComponents,
+            `${this.constructor.name}.init: childComponents is not empty!`);
         // reload state
         return this.updateViewOnStateChanges()
             // init kids
