@@ -10,10 +10,14 @@ class ElasticListCompositeBehaviour extends CompositeBehaviour {
         this.elasticListComponent = parentComp;
     }
 
-    processStateChangeWithKids(stateChange,
-                               kidsFilter = (kid) => EntityUtils.haveSameId(kid.simpleRowState.rowState, stateChange.data),
-                               stateChangeKidAdapter) {
-        return super.processStateChangeWithKids(stateChange, kidsFilter, stateChangeKidAdapter);
+    /**
+     * @param id {number|string}
+     * @return {AbstractComponent}
+     */
+    findKidById(id) {
+        const kids = this.findKids((kid) => EntityUtils.idsAreEqual(kid.state.currentState.id, id));
+        AssertionUtils.isTrue(kids.length === 1);
+        return kids[0];
     }
 
     /**

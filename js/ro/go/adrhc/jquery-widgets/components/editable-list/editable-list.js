@@ -92,8 +92,12 @@ class EditableListComponent extends SelectableListComponent {
 
     resetSwappingRowSelector() {
         this.swappingRowSelector[true].reset();
-        this.swappingRowSelector[false].reset();
-        this.swappingRowSelector["showDelete"].reset();
+        if (this.swappingRowSelector[false]) {
+            this.swappingRowSelector[false].reset();
+        }
+        if (this.swappingRowSelector["showDelete"]) {
+            this.swappingRowSelector["showDelete"].reset();
+        }
     }
 
     /**

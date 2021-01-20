@@ -34,14 +34,13 @@ if (Modernizr.template) {
             items, addNewRowsAtEnd, rowChildCompFactories
         });
 
-        const TO_UPDATE_ID = 3;
         elasticList
             .init()
             .then(() => elasticList.doWithState((crudListState) => {
                 // elasticList.updateViewOnCREATE will init the child components
                 crudListState.createNewItem().name = "new dog";
                 // elasticList.updateViewOnAny won't init the child components
-                crudListState.updateItem({id: TO_UPDATE_ID, name: `updated dog${TO_UPDATE_ID}`});
+                crudListState.updateItem({id: 3, name: "updated dog3"});
                 // this will get to SimpleRowComponent.updateViewOnDELETE
                 crudListState.removeById(2); // remove from elasticList's state but not from the repository
                 // elasticList.updateViewOnCREATE will init the child components
@@ -50,11 +49,6 @@ if (Modernizr.template) {
                     name: `restored dog2 with ${addNewRowsAtEnd ? "append" : "preppend"}`
                 });
             }))
-            // manually init child components for the above updated id=3 entity
-            .then(() =>
-                Promise.allSettled(elasticList.compositeBehaviour
-                    .findKids((kid) => EntityUtils.idsAreEqual(kid.state.currentState.id, TO_UPDATE_ID))
-                    .map((kid) => kid.init())))
             // showing the entire table extracted data
             .then(() => console.log("ElasticListComponent.extractAllEntities:\n", elasticList.extractAllEntities()));
     });
