@@ -11,18 +11,19 @@ if (Modernizr.template) {
 
     // html templates
     const urlPrefix = "scenarios/11person-with-cats-cached-htmls";
-    const cachedUrls = new CachedUrls(
-        {
-            name: "readOnlyPersonsRow",
-            url: `${urlPrefix}/read-only-persons-row.html`
-        }, {
-            name: "deletablePersonsRow",
-            url: `${urlPrefix}/deletable-persons-row.html`
-        }, {
-            name: "editablePersonsRow",
-            url: `${urlPrefix}/editable-persons-row.html`
-        }
-    );
+    const cachedUrls = new CachedUrls({
+        name: "personsReadOnlyRow",
+        url: `${urlPrefix}/persons-read-only-row.html`
+    }, {
+        name: "personsDeletableRow",
+        url: `${urlPrefix}/persons-deletable-row.html`
+    }, {
+        name: "personsEditableRow",
+        url: `${urlPrefix}/persons-editable-row.html`
+    }, {
+        name: "catsEditableRow",
+        url: `${urlPrefix}/cats-editable-row.html`
+    });
 
     // main
     $(() => cachedUrls.namedUrls.then((namedUrls) => {
@@ -37,7 +38,7 @@ if (Modernizr.template) {
         // READ-ONLY ROW
         const readOnlyRow = SimpleRowFactory.createIdentifiableRow({
             tableIdOrJQuery,
-            rowTmplHtml: namedUrls["readOnlyPersonsRow"],
+            rowTmplHtml: namedUrls["personsReadOnlyRow"],
             tableRelativePositionOnCreate
         });
 
@@ -53,7 +54,8 @@ if (Modernizr.template) {
 
                 return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", $parentElem),
                     DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
-                        childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent, "friend", () => new Person())
+                        childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent,
+                            "friend", () => new Person())
                     })
             }
         };
@@ -62,8 +64,9 @@ if (Modernizr.template) {
         const editableRow = SimpleRowFactory.createIdentifiableRow(
             {
                 tableIdOrJQuery,
-                rowTmplHtml: namedUrls["editablePersonsRow"],
-                childCompFactories: [friendDynaSelOneCompFactory, new CatsCreateDeleteListChildFactory()]
+                rowTmplHtml: namedUrls["personsEditableRow"],
+                childCompFactories: [friendDynaSelOneCompFactory,
+                    new CatsCreateDeleteListChildFactory(namedUrls["catsEditableRow"])]
             });
 
         // DELETABLE ROW
@@ -71,7 +74,7 @@ if (Modernizr.template) {
         // because the row to delete always have to already exist
         const deletableRow = SimpleRowFactory.createIdentifiableRow(
             {
-                tableIdOrJQuery, rowTmplHtml: namedUrls["deletablePersonsRow"]
+                tableIdOrJQuery, rowTmplHtml: namedUrls["personsDeletableRow"]
             });
 
         // EDITABLE LIST

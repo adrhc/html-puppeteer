@@ -3,6 +3,21 @@
  */
 class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
     /**
+     * cats row html template
+     *
+     * @type {string}
+     */
+    bodyRowTmplHtml;
+
+    /**
+     * @param [bodyRowTmplHtml] {string}
+     */
+    constructor(bodyRowTmplHtml) {
+        super();
+        this.bodyRowTmplHtml = bodyRowTmplHtml;
+    }
+
+    /**
      * @param parentComp {IdentifiableRowComponent}
      * @return {ElasticListComponent}
      */
@@ -31,6 +46,7 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
             items: parentComp.simpleRowState.rowState.cats,
             addNewRowsAtEnd: true,
             bodyRowTmplId: "editableCatsRowTmpl",
+            bodyRowTmplHtml: this.bodyRowTmplHtml,
             rowChildCompFactories: ownerDynaSelOneCompFactory,
             childishBehaviour: new DefaultTableChildishBehaviour(parentComp, "cats")
         });
