@@ -19,6 +19,6 @@ class Person extends DynaSelOneItem {
     }
 
     get description() {
-        return `${this.firstName} ${this.lastName}`;
+        return this.lastName;
     }
 }

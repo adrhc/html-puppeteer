@@ -194,12 +194,14 @@ class AbstractComponent {
      */
     _handleRepoErrors(promise) {
         return promise.catch((jqXHR, textStatus, errorThrown) => {
-            if (typeof jqXHR === "string" || typeof jqXHR === "number") {
-                alert(jqXHR);
+            if (jqXHR instanceof RepositoryError) {
+                const repositoryError = JSON.stringify(jqXHR, null, 2);
+                console.log(`${this.constructor.name}, repositoryError:\n${repositoryError}`);
+                alert(repositoryError);
                 throw jqXHR;
             } else {
-                console.log(`${this.constructor.name} errorThrown: ${errorThrown}`);
-                alert(`${textStatus}\n${jqXHR.responseText}`);
+                console.log(`${this.constructor.name}, textStatus = ${textStatus}, responseText:\n${jqXHR.responseText} \nerrorThrown:\n${errorThrown}`);
+                alert(`textStatus = ${textStatus}, responseText:\n${jqXHR.responseText}`);
                 throw textStatus;
             }
         });
