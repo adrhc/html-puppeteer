@@ -35,7 +35,7 @@ class DefaultDynaSelOneRepository extends DynaSelOneRepository {
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             processData: true
         }).then(data => {
-            const items = RestUtils.prototype.unwrapHAL(data);
+            const items = RestUtils.unwrapHAL(data);
             return items.map(it => $.extend(true, this.entityFactoryFn(), it));
         });
     }

@@ -23,7 +23,7 @@ class DefaultCrudRepository extends CrudRepository {
      */
     findAll() {
         return $.getJSON(this.url)
-            .then(data => RestUtils.prototype.unwrapHAL(data))
+            .then(data => RestUtils.unwrapHAL(data))
             .then(items => items.map(item => this._typedEntityOf(item)));
     }
 
@@ -33,8 +33,7 @@ class DefaultCrudRepository extends CrudRepository {
             method: "PUT",
             data: identifiableEntity,
         })
-            .then(it => RestUtils.prototype.unwrapHAL(it))
-            .then(it => this._typedEntityOf(it));
+            .then(it => this._typedEntityOf(RestUtils.unwrapHAL(it)));
     }
 
     insert(identifiableEntity) {
@@ -43,8 +42,7 @@ class DefaultCrudRepository extends CrudRepository {
             method: "POST",
             data: identifiableEntity,
         })
-            .then(it => RestUtils.prototype.unwrapHAL(it))
-            .then(it => this._typedEntityOf(it));
+            .then(it => this._typedEntityOf(RestUtils.unwrapHAL(it)));
     }
 
     delete(id) {
@@ -52,13 +50,12 @@ class DefaultCrudRepository extends CrudRepository {
             url: `${this.url}/${id}`,
             method: "DELETE"
         })
-            .then(it => RestUtils.prototype.unwrapHAL(it));
+            .then(it => RestUtils.unwrapHAL(it));
     }
 
     getById(id) {
         return $.get(`${this.url}/${id}`)
-            .then(it => RestUtils.prototype.unwrapHAL(it))
-            .then(it => this._typedEntityOf(it));
+            .then(it => this._typedEntityOf(RestUtils.unwrapHAL(it)));
     }
 
     _typedEntityOf(item) {
