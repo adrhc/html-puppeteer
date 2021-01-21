@@ -36,7 +36,7 @@ class InMemoryCrudRepository extends CrudRepository {
         if (removedItem) {
             return Promise.resolve(removedItem);
         } else {
-            return Promise.reject(new RepositoryError("repository couldn't find id to delete", id));
+            return Promise.reject(new SimpleError("repository couldn't find id to delete", id));
         }
     }
 
@@ -81,7 +81,7 @@ class InMemoryCrudRepository extends CrudRepository {
     update(item) {
         const removedIndex = EntityUtils.findAndReplaceById(item, this.items);
         if (removedIndex < 0) {
-            return Promise.reject(new RepositoryError("repository couldn't find item to update", item));
+            return Promise.reject(new SimpleError("repository couldn't find item to update", item));
         } else {
             return Promise.resolve(this._typedEntityOf(item));
         }

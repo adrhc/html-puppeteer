@@ -23,7 +23,7 @@ class DefaultRepoErrorHandler extends RepoErrorHandler {
             let error;
             if (jqXHR.responseText) {
                 try {
-                    error = $.extend(true, new RepositoryError(), JSON.parse(jqXHR.responseText));
+                    error = $.extend(true, new SimpleError(), JSON.parse(jqXHR.responseText));
                     if (error.data == null) {
                         error.data = data;
                     }
@@ -31,7 +31,7 @@ class DefaultRepoErrorHandler extends RepoErrorHandler {
                     // do nothing
                 }
             }
-            throw error ? error : new RepositoryError(this.messages[operation], data);
+            throw error ? error : new SimpleError(this.messages[operation], data);
         });
     }
 

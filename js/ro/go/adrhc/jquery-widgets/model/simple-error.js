@@ -1,4 +1,4 @@
-class RepositoryError {
+class SimpleError {
     /**
      * @type {string}
      */

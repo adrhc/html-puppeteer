@@ -207,7 +207,7 @@ class AbstractComponent {
     _handleRepoErrors(promise) {
         return promise.catch((jqXHR, textStatus) => {
             console.log(`${this.constructor.name}._handleRepoErrors`);
-            if (jqXHR instanceof RepositoryError) {
+            if (jqXHR instanceof SimpleError) {
                 alert(jqXHR.message);
                 throw jqXHR;
             } else {
