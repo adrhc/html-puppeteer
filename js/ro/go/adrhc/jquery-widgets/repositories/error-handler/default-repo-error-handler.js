@@ -13,7 +13,7 @@ class DefaultRepoErrorHandler extends RepoErrorHandler {
     /**
      * @param promise {Promise}
      * @param operation {string}
-     * @param data
+     * @param [data] {*}
      * @return {Promise}
      * @protected
      */

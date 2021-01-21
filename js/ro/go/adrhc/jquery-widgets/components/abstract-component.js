@@ -83,11 +83,16 @@ class AbstractComponent {
     init() {
         AssertionUtils.isNullOrEmpty(this.compositeBehaviour.childComponents,
             `${this.constructor.name}.init: childComponents is not empty!`);
-        return this.reloadState()
+        return this._reloadState()
             .then(() => this.updateViewOnStateChanges())
             .then((stateChanges) => {
                 this.configureEvents();
                 return this.compositeBehaviour.init().then(() => stateChanges);
+            })
+            .catch((err) => {
+                // ugly fix replacing missing ajax finally
+                this.configureEvents();
+                throw err;
             });
     }
 
@@ -97,7 +102,7 @@ class AbstractComponent {
      * @return {Promise<*>}
      * @protected
      */
-    reloadState() {
+    _reloadState() {
         return Promise.resolve();
     }
 
@@ -194,6 +199,7 @@ class AbstractComponent {
      */
     _handleRepoErrors(promise) {
         return promise.catch((jqXHR, textStatus) => {
+            console.log(`${this.constructor.name}._handleRepoErrors`);
             if (jqXHR instanceof RepositoryError) {
                 alert(jqXHR.message);
                 throw jqXHR;

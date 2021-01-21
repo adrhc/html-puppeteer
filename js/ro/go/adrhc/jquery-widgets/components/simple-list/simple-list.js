@@ -17,17 +17,12 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     /**
      * @return {Promise<*>}
      */
-    reloadState() {
-        return this.repository.findAll()
+    _reloadState() {
+        return this._handleRepoErrors(this.repository.findAll())
             .then((items) => {
                 console.log(`${this.constructor.name} items:\n`, JSON.stringify(items));
                 this.simpleListState.updateAll(items);
                 return items;
-            })
-            .catch((repositoryError) => {
-                alert(repositoryError.message);
-                this.simpleListState.updateAll();
-                return [];
             });
     }
 
@@ -42,8 +37,12 @@ class SimpleListComponent extends AbstractTableBasedComponent {
          * @type {SimpleListComponent}
          */
         const simpleListComponent = ev.data;
-        simpleListComponent.reset();
-        simpleListComponent.init();
+        simpleListComponent._reload();
+    }
+
+    _reload() {
+        this.reset();
+        return this.init();
     }
 
     /**
@@ -62,6 +61,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @protected
      */
     configureEvents() {
+        console.log(`${this.constructor.name}.configureEvents`);
         this.view.$elem.on(this._appendNamespaceTo("click"),
             this._btnSelector("reload"), this, this.onReload);
     }

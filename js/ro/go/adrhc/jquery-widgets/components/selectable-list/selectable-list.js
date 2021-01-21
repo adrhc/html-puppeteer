@@ -34,6 +34,17 @@ class SelectableListComponent extends SimpleListComponent {
         };
     }
 
+    _reload() {
+        // If we reset here and a "new" row exists and _reloadState fails than
+        // the "new" row will remain without event handlers on its buttons:
+        // one have to remove in advance the new row.
+        return this._cancel().then(() => super._reload());
+    }
+
+    _cancel() {
+        return this.doWithState(editableListState => editableListState.switchToOff());
+    }
+
     /**
      * @param stateChange {PositionStateChange}
      * @return {Promise<StateChange[]>}
