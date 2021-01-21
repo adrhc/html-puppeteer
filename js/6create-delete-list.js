@@ -32,8 +32,11 @@ if (Modernizr.template) {
         const addNewRowsAtEnd = true;
 
         // dogs table
-        const createDeleteList = CreateDeleteListFactory.create("dogsTable", "dogsTableRowTmpl", {
-            items: dogs, addNewRowsAtEnd, rowChildCompFactories: dynaSelOneCompFactory
+        const createDeleteList = CreateDeleteListFactory.create("dogsTable", {
+            items: dogs,
+            addNewRowsAtEnd,
+            bodyRowTmplId: "dogsTableRowTmpl",
+            rowChildCompFactories: dynaSelOneCompFactory
         });
 
         // some doWithState operations on createDeleteList

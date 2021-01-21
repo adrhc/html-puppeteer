@@ -27,9 +27,10 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
         };
 
         // create-delete cats list (aka table)
-        return CreateDeleteListFactory.create($catsTable, "editableCatsRowTmpl", {
+        return CreateDeleteListFactory.create($catsTable, {
             items: parentComp.simpleRowState.rowState.cats,
             addNewRowsAtEnd: true,
+            bodyRowTmplId: "editableCatsRowTmpl",
             rowChildCompFactories: ownerDynaSelOneCompFactory,
             childishBehaviour: new DefaultTableChildishBehaviour(parentComp, "cats")
         });
