@@ -1,10 +1,10 @@
 class SimpleListState extends BasicState {
-    items = undefined;
+    items = [];
 
     /**
-     * @param items {IdentifiableEntity[]}
+     * @param [items=[]] {IdentifiableEntity[]}
      */
-    updateAll(items) {
+    updateAll(items = []) {
         this.items = items;
         this.collectStateChange(new StateChange("UPDATE_ALL", items));
     }

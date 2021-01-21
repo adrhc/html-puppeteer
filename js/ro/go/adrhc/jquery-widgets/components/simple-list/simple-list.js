@@ -18,12 +18,17 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @return {Promise<*>}
      */
     reloadState() {
-        return this._handleRepoErrors(this.repository.findAll()
+        return this.repository.findAll()
             .then((items) => {
                 console.log(`${this.constructor.name} items:\n`, JSON.stringify(items));
                 this.simpleListState.updateAll(items);
                 return items;
-            }));
+            })
+            .catch((repositoryError) => {
+                alert(repositoryError.message);
+                this.simpleListState.updateAll();
+                return [];
+            });
     }
 
     /**

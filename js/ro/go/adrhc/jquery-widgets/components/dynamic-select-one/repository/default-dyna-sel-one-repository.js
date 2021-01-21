@@ -37,6 +37,6 @@ class DefaultDynaSelOneRepository extends DynaSelOneRepository {
         }).then(data => {
             const items = RestUtils.unwrapHAL(data);
             return items.map(it => $.extend(true, this.entityFactoryFn(), it));
-        });
+        }).catch(() => alert("Nu s-au putut încărca datele!"));
     }
 }

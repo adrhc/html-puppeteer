@@ -188,33 +188,20 @@ class AbstractComponent {
     /**
      * (internal) errors handler
      *
-     * @param promise
-     * @return {Promise<any>}
+     * @param promise {Promise}
+     * @return {Promise}
      * @protected
      */
     _handleRepoErrors(promise) {
-        return promise.catch((jqXHR, textStatus, errorThrown) => {
+        return promise.catch((jqXHR, textStatus) => {
             if (jqXHR instanceof RepositoryError) {
-                const repositoryError = JSON.stringify(jqXHR, null, 2);
-                console.log(`${this.constructor.name}, repositoryError:\n${repositoryError}`);
-                alert(repositoryError);
+                alert(jqXHR.message);
                 throw jqXHR;
             } else {
-                this._logPromiseCatch(jqXHR, textStatus, errorThrown);
                 alert(`textStatus = ${textStatus}${jqXHR.responseText ? ', responseText:\n' + jqXHR.responseText : ''}`);
                 throw textStatus;
             }
         });
-    }
-
-    _logPromiseCatch(jqXHR, textStatus, errorThrown) {
-        console.log(`${this.constructor.name}, textStatus = ${textStatus}`);
-        if (jqXHR.responseText) {
-            console.log(`responseText:\n${jqXHR.responseText}`);
-        }
-        if (errorThrown) {
-            console.log(`errorThrown:\n${errorThrown}`);
-        }
     }
 
     /**
