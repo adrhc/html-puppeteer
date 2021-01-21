@@ -23,6 +23,17 @@ class AbstractComponent {
     _childishBehaviour;
 
     /**
+     * @param state {BasicState}
+     * @param view {AbstractView}
+     */
+    constructor(state, view) {
+        this.state = state;
+        this.view = view;
+        this.stateChangesDispatcher = new StateChangesDispatcher(this);
+        this.compositeBehaviour = new CompositeBehaviour(this);
+    }
+
+    /**
      * @param childishBehaviour {ChildishBehaviour}
      */
     set childishBehaviour(childishBehaviour) {
@@ -42,17 +53,6 @@ class AbstractComponent {
         if (this._childishBehaviour) {
             this._childishBehaviour.copyChildState(parentState);
         }
-    }
-
-    /**
-     * @param state {BasicState}
-     * @param view {AbstractView}
-     */
-    constructor(state, view) {
-        this.state = state;
-        this.view = view;
-        this.stateChangesDispatcher = new StateChangesDispatcher(this);
-        this.compositeBehaviour = new CompositeBehaviour(this);
     }
 
     /**
@@ -192,6 +192,11 @@ class AbstractComponent {
         console.log(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
         return this.view.update(stateChange)
             .then(() => this.compositeBehaviour.processStateChangeWithKids(stateChange));
+    }
+
+    updateViewOnERROR(stateChange) {
+        console.log(`${this.constructor.name}.updateViewOnERROR:\n${JSON.stringify(stateChange)}`);
+        return Promise.resolve(stateChange);
     }
 
     /**

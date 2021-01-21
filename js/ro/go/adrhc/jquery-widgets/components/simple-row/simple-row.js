@@ -7,15 +7,21 @@ class SimpleRowComponent extends AbstractComponent {
      * @type {SimpleRowView}
      */
     simpleRowView;
+    /**
+     * @type {AbstractComponent}
+     */
+    errorComponent;
 
     /**
      * @param state {SimpleRowState}
      * @param view {SimpleRowView}
+     * @param [errorComponent] {AbstractComponent}
      */
-    constructor(state, view) {
+    constructor(state, view, errorComponent) {
         super(state, view);
         this.simpleRowState = state;
         this.simpleRowView = view;
+        this.errorComponent = errorComponent;
     }
 
     /**
@@ -48,7 +54,11 @@ class SimpleRowComponent extends AbstractComponent {
 
     updateViewOnERROR(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnERROR:\n${JSON.stringify(stateChange)}`);
-        return Promise.resolve(stateChange);
+        if (this.errorComponent) {
+            this.errorComponent.state.collectStateChange(stateChange);
+            return this.errorComponent.init();
+        }
+        return super.updateViewOnERROR(stateChange);
     }
 
     /**

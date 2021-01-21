@@ -63,8 +63,8 @@ class MustacheTableElemAdapter extends TableElementAdapter {
      * @param rowTmplHtml {string}
      * @param replaceExisting {boolean|undefined}
      * @param neighbourRowDataId {number|string}
-     * @param neighbourRelativePosition {"before"|"after"|undefined}
-     * @param tableRelativePosition {"prepend"|"append"|undefined}
+     * @param neighbourRelativePosition {"before"|"after"}
+     * @param tableRelativePosition {"prepend"|"append"}
      * @param createIfNotExists {boolean|undefined}
      */
     renderRowWithTemplate({

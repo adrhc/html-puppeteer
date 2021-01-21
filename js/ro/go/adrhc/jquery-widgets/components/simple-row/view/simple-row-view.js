@@ -10,15 +10,26 @@ class SimpleRowView extends AbstractView {
      */
     tableAdapter;
     /**
-     * @type {"prepend"|"append"|undefined}
+     * @type {"prepend"|"append"}
      */
     tableRelativePositionOnCreate;
+    /**
+     * @type {number|string}
+     */
+    neighbourRowDataId;
+    /**
+     * @type {"before"|"after"}
+     */
+    neighbourRelativePosition;
 
     /**
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
-     * @param tableRelativePositionOnCreate {"prepend"|"append"|undefined}
+     * @param [tableRelativePositionOnCreate] {"prepend"|"append"}
+     * @param [neighbourRowDataId] {number|string}
+     * @param [neighbourRelativePosition] {"before"|"after"}
      */
-    constructor(mustacheTableElemAdapter, tableRelativePositionOnCreate) {
+    constructor(mustacheTableElemAdapter, tableRelativePositionOnCreate,
+                neighbourRowDataId, neighbourRelativePosition) {
         super();
         /**
          * @type {MustacheTableElemAdapter}
@@ -26,6 +37,8 @@ class SimpleRowView extends AbstractView {
         this.tableAdapter = mustacheTableElemAdapter;
         this.owner = this.tableAdapter.owner;
         this.tableRelativePositionOnCreate = tableRelativePositionOnCreate;
+        this.neighbourRowDataId = neighbourRowDataId;
+        this.neighbourRelativePosition = neighbourRelativePosition;
     }
 
     /**
@@ -42,7 +55,9 @@ class SimpleRowView extends AbstractView {
             data: updatedRowState,
             rowTmplHtml: this.tableAdapter.bodyRowTmplHtml,
             createIfNotExists: stateChange.requestType === "CREATE",
-            tableRelativePosition: this._tableRelativePositionOf(stateChange)
+            tableRelativePosition: this._tableRelativePositionOf(stateChange),
+            neighbourRowDataId: this.neighbourRowDataId,
+            neighbourRelativePosition: this.neighbourRelativePosition
         });
         this.$elem = this.tableAdapter.$getRowByDataId(updatedRowState.id);
         return Promise.resolve(stateChange);
