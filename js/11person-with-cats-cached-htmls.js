@@ -33,34 +33,18 @@ if (Modernizr.template) {
         // EDITABLE-LIST
         // dogs table with both read-only and editable row
         const tableIdOrJQuery = "personsTable";
-        const tableRelativePositionOnCreate = "prepend";
 
         // READ-ONLY ROW
         const readOnlyRow = SimpleRowFactory.createIdentifiableRow({
             tableIdOrJQuery,
-            rowTmplHtml: namedUrls["personsReadOnlyRow"],
-            tableRelativePositionOnCreate
+            rowTmplHtml: namedUrls["personsReadOnlyRow"]
         });
 
-        // DynamicSelectOneComponent child component factory (see ChildComponentFactory)
-        const friendDynaSelOneCompFactory = {
-            /**
-             * @param idRowCompParent {IdentifiableRowComponent}
-             * @return {DynamicSelectOneComponent}
-             */
-            createChildComponent: (idRowCompParent) => {
-                const $parentElem = idRowCompParent.view.$elem;
-                AssertionUtils.isNotNull($parentElem, "friendDynaSelOneCompFactory.createChildComponent");
+        // friend (Person) dyna select one child component
+        const friendDynaSelOneCompFactory = DynamicSelectOneFactory.createChildComponentFactory(
+            "friend", () => new Person(), DbMock.DYNA_SEL_ONE_PERS_REPOSITORY);
 
-                return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", $parentElem),
-                    DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
-                        childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent,
-                            "friend", () => new Person())
-                    })
-            }
-        };
-
-        // EDITABLE ROW (using child component from CatsEditableListChildFactory)
+        // EDITABLE ROW
         const editableRow = SimpleRowFactory.createIdentifiableRow(
             {
                 tableIdOrJQuery,
@@ -70,8 +54,6 @@ if (Modernizr.template) {
             });
 
         // DELETABLE ROW
-        // doesn't make sense to use tableRelativePositionOnCreate
-        // because the row to delete always have to already exist
         const deletableRow = SimpleRowFactory.createIdentifiableRow(
             {
                 tableIdOrJQuery, rowTmplHtml: namedUrls["personsDeletableRow"]
@@ -86,7 +68,7 @@ if (Modernizr.template) {
             deletableRow
         });
 
-        editableList.init();
+        return editableList.init();
     }))
 } else {
     // Find another way to add the rows to the table because

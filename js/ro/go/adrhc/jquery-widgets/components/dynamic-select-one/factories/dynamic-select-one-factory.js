@@ -17,4 +17,26 @@ class DynamicSelectOneFactory {
         }
         return dynaSelOneComp;
     }
+
+    /**
+     * @param childStateProperty {string}
+     * @param newChildEntityFactoryFn {function(): IdentifiableEntity}
+     * @param repository {DynaSelOneRepository}
+     * @param [dynaSelOneSelector=[data-id='dyna-sel-one']] {string}
+     */
+    static createChildComponentFactory(childStateProperty, newChildEntityFactoryFn, repository,
+                                       dynaSelOneSelector = "[data-id='dyna-sel-one']") {
+        return $.extend(true, new ChildComponentFactory(), {
+            createChildComponent: (parentComp) => {
+                const $parentElem = parentComp.view.$elem;
+                AssertionUtils.isNotNull($parentElem, `${childStateProperty} dynaSelOne child factory`);
+
+                return DynamicSelectOneFactory.create($(dynaSelOneSelector, $parentElem),
+                    repository, {
+                        childishBehaviour: new DynaSelOneChildishBehaviour(parentComp,
+                            childStateProperty, newChildEntityFactoryFn)
+                    })
+            }
+        });
+    }
 }
