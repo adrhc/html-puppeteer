@@ -200,11 +200,21 @@ class AbstractComponent {
                 alert(repositoryError);
                 throw jqXHR;
             } else {
-                console.log(`${this.constructor.name}, textStatus = ${textStatus}, responseText:\n${jqXHR.responseText} \nerrorThrown:\n${errorThrown}`);
-                alert(`textStatus = ${textStatus}, responseText:\n${jqXHR.responseText}`);
+                this._logPromiseCatch(jqXHR, textStatus, errorThrown);
+                alert(`textStatus = ${textStatus}${jqXHR.responseText ? ', responseText:\n' + jqXHR.responseText : ''}`);
                 throw textStatus;
             }
         });
+    }
+
+    _logPromiseCatch(jqXHR, textStatus, errorThrown) {
+        console.log(`${this.constructor.name}, textStatus = ${textStatus}`);
+        if (jqXHR.responseText) {
+            console.log(`responseText:\n${jqXHR.responseText}`);
+        }
+        if (errorThrown) {
+            console.log(`errorThrown:\n${errorThrown}`);
+        }
     }
 
     /**
