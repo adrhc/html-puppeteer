@@ -26,13 +26,13 @@ if (Modernizr.template) {
             });
         const editableRow = SimpleRowFactory.createIdentifiableRow(
             {
-                tableIdOrJQuery, rowTmpl: "personsTableEditableRowTmpl"
+                tableIdOrJQuery, rowTmplId: "personsTableEditableRowTmpl"
             });
         // doesn't make sense to use tableRelativePositionOnCreate
         // because the row to delete always have to already exist
         const deletableRow = SimpleRowFactory.createIdentifiableRow(
             {
-                tableIdOrJQuery, rowTmpl: "personsTableDeletableRowTmpl"
+                tableIdOrJQuery, rowTmplId: "personsTableDeletableRowTmpl"
             });
 
         const component = EditableListFactory.create({

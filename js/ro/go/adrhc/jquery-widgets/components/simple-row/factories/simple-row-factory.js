@@ -2,8 +2,9 @@ class SimpleRowFactory {
     static createSimpleRow(
         {
             tableIdOrJQuery,
-            rowTmpl,
-            mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, rowTmpl),
+            rowTmplId,
+            rowTmplHtml,
+            mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, rowTmplId, rowTmplHtml),
             tableRelativePositionOnCreate,
             simpleRowView = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate),
             state = new SimpleRowState(),
@@ -24,8 +25,9 @@ class SimpleRowFactory {
     static createIdentifiableRow(
         {
             tableIdOrJQuery,
-            rowTmpl,
-            mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, rowTmpl),
+            rowTmplId,
+            rowTmplHtml,
+            mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, rowTmplId, rowTmplHtml),
             tableRelativePositionOnCreate,
             simpleRowView = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate),
             state = new SimpleRowState(),

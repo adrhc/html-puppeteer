@@ -5,7 +5,7 @@ class AjaxUtils {
      */
 
     /*
-        loadHtml(url) {
+        loadText(url) {
             return $.ajax({url: url, dataType: html});
         }
     */
@@ -14,7 +14,7 @@ class AjaxUtils {
      * @param url {string}
      * @return {Promise<string>}
      */
-    loadHtml(url) {
+    static loadText(url) {
         return fetch(url).then((response) => response.text());
     }
 }

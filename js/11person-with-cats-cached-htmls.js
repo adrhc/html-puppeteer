@@ -9,7 +9,23 @@ if (Modernizr.template) {
         }
     });
 
-    $(() => {
+    // html templates
+    const urlPrefix = "scenarios/11person-with-cats-cached-htmls";
+    const cachedUrls = new CachedUrls(
+        {
+            name: "readOnlyPersonsRow",
+            url: `${urlPrefix}/read-only-persons-row.html`
+        }, {
+            name: "deletablePersonsRow",
+            url: `${urlPrefix}/deletable-persons-row.html`
+        }, {
+            name: "editablePersonsRow",
+            url: `${urlPrefix}/editable-persons-row.html`
+        }
+    );
+
+    // main
+    $(() => cachedUrls.namedUrls.then((namedUrls) => {
         // DYNAMIC-SELECT-ONE
         DynamicSelectOneFactory.create("dyna-sel-one", DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {}).init();
 
@@ -21,6 +37,7 @@ if (Modernizr.template) {
         // READ-ONLY ROW
         const readOnlyRow = SimpleRowFactory.createIdentifiableRow({
             tableIdOrJQuery,
+            rowTmplHtml: namedUrls["readOnlyPersonsRow"],
             tableRelativePositionOnCreate
         });
 
@@ -45,7 +62,7 @@ if (Modernizr.template) {
         const editableRow = SimpleRowFactory.createIdentifiableRow(
             {
                 tableIdOrJQuery,
-                rowTmplId: "personsTableEditableRowTmpl",
+                rowTmplHtml: namedUrls["editablePersonsRow"],
                 childCompFactories: [friendDynaSelOneCompFactory, new CatsCreateDeleteListChildFactory()]
             });
 
@@ -54,7 +71,7 @@ if (Modernizr.template) {
         // because the row to delete always have to already exist
         const deletableRow = SimpleRowFactory.createIdentifiableRow(
             {
-                tableIdOrJQuery, rowTmplId: "personsTableDeletableRowTmpl"
+                tableIdOrJQuery, rowTmplHtml: namedUrls["deletablePersonsRow"]
             });
 
         // EDITABLE LIST
@@ -67,7 +84,7 @@ if (Modernizr.template) {
         });
 
         editableList.init();
-    })
+    }))
 } else {
     // Find another way to add the rows to the table because
     // the HTML template element is not supported.

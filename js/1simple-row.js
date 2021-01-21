@@ -20,7 +20,7 @@ if (Modernizr.template) {
             const items = updateAllStateChanges[0].data;
             const editableRow = SimpleRowFactory.createIdentifiableRow({
                 tableIdOrJQuery: dogsTableWithEdit,
-                rowTmpl: "dogsTableWithEditSelectedRowTmpl",
+                rowTmplId: "dogsTableWithEditSelectedRowTmpl",
                 tableRelativePositionOnCreate: "prepend"
             });
             return editableRow.init().then(() =>
@@ -58,7 +58,7 @@ if (Modernizr.template) {
             const simpleRow = SimpleRowFactory.createSimpleRow(
                 {
                     tableIdOrJQuery: dogsTableWithDelete,
-                    rowTmpl: "dogsTableWithDeleteDeletedRowTmpl"
+                    rowTmplId: "dogsTableWithDeleteDeletedRowTmpl"
                 });
             // switching to "simpleRow" display type (i.e. line-through text style)
             return simpleRow.init()

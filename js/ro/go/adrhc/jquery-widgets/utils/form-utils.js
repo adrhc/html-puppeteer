@@ -16,6 +16,6 @@ class FormUtils {
         } else {
             inputs = $element.find(":input[name]").serializeArray();
         }
-        return Converters.prototype.mapOfArray(inputs, "value", "name");
+        return Converters.objectFromKeyValues(inputs, "name", "value");
     }
 }

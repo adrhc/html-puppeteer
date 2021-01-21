@@ -1,9 +1,9 @@
-class CachedAjax {
+class CachedUrl {
     /**
      * @param url {string}
      */
     constructor(url) {
-        this._cache = AjaxUtils.prototype.loadHtml(url);
+        this._cache = AjaxUtils.loadText(url);
     }
 
     /**

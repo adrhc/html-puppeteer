@@ -28,7 +28,7 @@ if (Modernizr.template) {
         const editableRow = SimpleRowFactory.createIdentifiableRow(
             {
                 tableIdOrJQuery,
-                rowTmpl: "personsTableEditableRowTmpl",
+                rowTmplId: "personsTableEditableRowTmpl",
                 childCompFactories: [new CatsEditableListChildFactory()]
             });
 
@@ -37,7 +37,7 @@ if (Modernizr.template) {
         // because the row to delete always have to already exist
         const deletableRow = SimpleRowFactory.createIdentifiableRow(
             {
-                tableIdOrJQuery, rowTmpl: "personsTableDeletableRowTmpl"
+                tableIdOrJQuery, rowTmplId: "personsTableDeletableRowTmpl"
             });
 
         // EDITABLE LIST

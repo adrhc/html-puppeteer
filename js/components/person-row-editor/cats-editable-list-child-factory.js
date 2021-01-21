@@ -7,7 +7,7 @@ class CatsEditableListChildFactory extends ChildComponentFactory {
         const $catsTable = $("[data-id='catsTable']", parentComp.view.$elem);
         const catRow = SimpleRowFactory.createIdentifiableRow({
             tableIdOrJQuery: $catsTable,
-            rowTmpl: "editableCatsRowTmpl",
+            rowTmplId: "editableCatsRowTmpl",
             tableRelativePositionOnCreate: "append"
         });
 

@@ -11,6 +11,11 @@ class TableElementAdapter {
      * @type {string}
      * @private
      */
+    _tableId;
+    /**
+     * @type {string}
+     * @private
+     */
     _owner;
 
     /**
@@ -18,6 +23,7 @@ class TableElementAdapter {
      */
     constructor(tableId) {
         this._setupElem(tableId);
+        this._setupTableId();
         this._setupOwner();
     }
 
@@ -33,6 +39,11 @@ class TableElementAdapter {
         }
     }
 
+    _setupTableId() {
+        const dataId = this.$table.data("id");
+        this._tableId = dataId ? dataId : this.$table.attr("id");
+    }
+
     /**
      * @protected
      */
@@ -41,8 +52,7 @@ class TableElementAdapter {
         if (dataOwner) {
             this._owner = dataOwner;
         } else {
-            const dataId = this.$table.data("id");
-            this._owner = dataId ? dataId : this.$table.attr("id");
+            this._owner = this._tableId;
         }
     }
 
@@ -182,6 +192,10 @@ class TableElementAdapter {
      */
     get $table() {
         return this._$table;
+    }
+
+    get tableId() {
+        return this._tableId;
     }
 
     /**

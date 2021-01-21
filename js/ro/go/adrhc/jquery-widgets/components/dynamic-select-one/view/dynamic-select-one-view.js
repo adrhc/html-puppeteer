@@ -12,7 +12,7 @@ class DynamicSelectOneView extends AbstractView {
         super();
         this._setupElem(elemIdOrJQuery);
         this._setupOwner();
-        this.tmpl = new CachedAjax(tmplUrl);
+        this.tmpl = new CachedUrl(tmplUrl);
     }
 
     /**

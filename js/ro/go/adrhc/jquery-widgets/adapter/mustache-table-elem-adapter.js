@@ -1,24 +1,58 @@
+/**
+ * Defaults:
+ *
+ * tableId = tableId or $table.data("id") or $table.attr("id")
+ * bodyRowTmplId = bodyRowTmplId or ${tableId}RowTmpl
+ */
 class MustacheTableElemAdapter extends TableElementAdapter {
     /**
      * @param tableId {string|jQuery<HTMLTableRowElement>}
      * @param bodyRowTmplId {string}
-     * @param bodyTmplHtml {string|undefined}
+     * @param [bodyRowTmplHtml] {string}
+     * @param [bodyTmplHtml] {string}
      */
     constructor(tableId,
-                bodyRowTmplId = `${tableId}RowTmpl`,
-                bodyTmplHtml = undefined) {
+                bodyRowTmplId,
+                bodyRowTmplHtml,
+                bodyTmplHtml) {
         super(tableId);
-        this.bodyRowTmplHtml = HtmlUtils.templateTextOf(bodyRowTmplId);
-        if (this.bodyRowTmplHtml) {
-            this.bodyTmplHtml = bodyTmplHtml ? bodyTmplHtml : "{{#items}}{{> bodyRowTmpl}}{{/items}}";
-        } else {
+        this._setupBodyRowTmplHtml(bodyRowTmplId, bodyRowTmplHtml);
+        this._setupBodyTmplHtml(bodyTmplHtml);
+    }
+
+    /**
+     * This is the table row.
+     *
+     * @param bodyRowTmplId {string}
+     * @param bodyRowTmplHtml {string}
+     * @protected
+     */
+    _setupBodyRowTmplHtml(bodyRowTmplId, bodyRowTmplHtml) {
+        bodyRowTmplId = !!bodyRowTmplId ? bodyRowTmplId : `${this.tableId}RowTmpl`;
+        if (!!bodyRowTmplHtml) {
+            this.bodyRowTmplHtml = bodyRowTmplHtml;
+        } else if ($(`#${bodyRowTmplId}`).length) {
+            this.bodyRowTmplHtml = HtmlUtils.templateTextOf(bodyRowTmplId);
+        }
+    }
+
+    /**
+     * This is the table body.
+     *
+     * @param bodyTmplHtml {string}
+     * @protected
+     */
+    _setupBodyTmplHtml(bodyTmplHtml) {
+        if (!!bodyTmplHtml) {
             this.bodyTmplHtml = bodyTmplHtml;
+        } else if (this.bodyRowTmplHtml) {
+            this.bodyTmplHtml = "{{#items}}{{> bodyRow}}{{/items}}";
         }
     }
 
     renderBodyWithTemplate(data) {
-        // return Mustache.render(this.bodyTmplHtml, data, {bodyRowTmpl: this.bodyRowTmplHtml})
-        Handlebars.registerPartial("bodyRowTmpl", this.bodyRowTmplHtml)
+        // return Mustache.render(this.bodyTmplHtml, data, {bodyRow: this.bodyRowTmplHtml})
+        Handlebars.registerPartial("bodyRow", this.bodyRowTmplHtml)
         const html = this._renderTemplate(data, this.bodyTmplHtml);
         super.$tbody.html(html);
     }

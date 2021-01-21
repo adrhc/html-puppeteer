@@ -22,7 +22,7 @@ if (Modernizr.template) {
             });
         const selectedRow = SimpleRowFactory.createIdentifiableRow(
             {
-                tableIdOrJQuery, rowTmpl: "dogsTableEditableRowTmpl"
+                tableIdOrJQuery, rowTmplId: "dogsTableEditableRowTmpl"
             });
 
         const component = SelectableListFactory.create({items, tableIdOrJQuery, notSelectedRow, selectedRow});

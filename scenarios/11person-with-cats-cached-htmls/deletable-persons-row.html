@@ -1,0 +1,21 @@
+<tr data-owner="personsTable" data-id="{{id}}" class="deletable-row">
+    <td>{{id}}</td>
+    <td>{{firstName}}</td>
+    <td>{{lastName}}</td>
+    <td>{{friend.title}}</td>
+    <td>{{#each cats}}
+        <div>{{{this.name}}}, {{{this.person.title}}</div>
+        {{/each}}
+    </td>
+    <td>
+        <div class="buttons">
+            <img data-owner="personsTable" data-btn="cancel" alt="cancel"
+                 src="images/ro/go/adrhc/cancel-button-32.png" title="anulează ștergerea"/>
+            <img data-owner="personsTable" data-btn="delete" alt="delete"
+                 src="images/ro/go/adrhc/delete-button-32.png" title="confirmă ștergerea"/>
+        </div>
+    </td>
+</tr>
+<!--    <tr data-owner="personsTable" data-secondary-row-part="{{id}}">-->
+<!--        <td colspan="4">secondary-row-part</td>-->
+<!--    </tr>-->

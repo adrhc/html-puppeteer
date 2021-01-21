@@ -1,8 +1,12 @@
 class EditableListFactory {
     /**
+     * When bodyRowTmplId and bodyRowTmplHtml are both null then we won't rely on MustacheTableElemAdapter
+     * defaults (i.e. bodyRowTmplId = ${tableId}RowTmpl) but will use readOnlyRow's bodyRowTmplHtml.
+     *
      * @param items {IdentifiableEntity[]}
      * @param tableIdOrJQuery {string|jQuery<HTMLTableElement>}
      * @param bodyRowTmplId {string}
+     * @param bodyRowTmplHtml {string}
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param repository {CrudRepository}
      * @param state {EditableListState}
@@ -17,11 +21,12 @@ class EditableListFactory {
                       items = [],
                       tableIdOrJQuery,
                       bodyRowTmplId,
-                      mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId),
+                      bodyRowTmplHtml,
+                      readOnlyRow,
+                      mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId, !!bodyRowTmplHtml ? bodyRowTmplHtml : (!!bodyRowTmplId ? undefined : readOnlyRow.simpleRowView.tableAdapter.bodyRowTmplHtml)),
                       repository = new InMemoryCrudRepository(items),
                       state = new EditableListState(),
                       view = new SimpleListView(mustacheTableElemAdapter),
-                      readOnlyRow,
                       editableRow,
                       deletableRow,
                       childishBehaviour
