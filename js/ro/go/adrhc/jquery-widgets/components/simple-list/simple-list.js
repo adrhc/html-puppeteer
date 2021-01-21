@@ -27,6 +27,16 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     }
 
     /**
+     * Although very similar to init, reload is another scenario, that's why it's ok to have its own method.
+     *
+     * @return {Promise<StateChange[]>}
+     * @protected
+     */
+    _reload() {
+        return this.init(new ComponentInitConfig(true, () => this.reset()));
+    }
+
+    /**
      * RELOAD
      *
      * @param ev {Event}
@@ -38,11 +48,6 @@ class SimpleListComponent extends AbstractTableBasedComponent {
          */
         const simpleListComponent = ev.data;
         simpleListComponent._reload();
-    }
-
-    _reload() {
-        this.reset();
-        return this.init();
     }
 
     /**

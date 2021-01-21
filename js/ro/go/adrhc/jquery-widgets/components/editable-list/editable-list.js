@@ -79,7 +79,7 @@ class EditableListComponent extends SelectableListComponent {
          * @type {EditableListComponent}
          */
         const editableList = ev.data;
-        editableList._cancel();
+        return editableList.doWithState(editableListState => editableListState.switchToOff());
     }
 
     /**

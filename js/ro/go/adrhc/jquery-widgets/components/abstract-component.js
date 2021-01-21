@@ -78,20 +78,27 @@ class AbstractComponent {
     /**
      * component initializer: (re)load state, update the view, configure events then init kids
      *
+     * @param [config] {ComponentInitConfig}
      * @return {Promise<StateChange[]>}
      */
-    init() {
+    init(config = new ComponentInitConfig()) {
         AssertionUtils.isNullOrEmpty(this.compositeBehaviour.childComponents,
             `${this.constructor.name}.init: childComponents is not empty!`);
         return this._reloadState()
-            .then(() => this.updateViewOnStateChanges())
+            .then((loadedState) => {
+                config.beforeViewUpdateFn(loadedState);
+                return this.updateViewOnStateChanges();
+            })
             .then((stateChanges) => {
                 this.configureEvents();
                 return this.compositeBehaviour.init().then(() => stateChanges);
             })
             .catch((err) => {
-                // ugly fix replacing missing ajax finally
-                this.configureEvents();
+                if (!config.dontConfigEventsOnError) {
+                    // jqXHR is missing finally, so, if we would need to configureEvents
+                    // on errors too, we would have to use catch anyway
+                    this.configureEvents();
+                }
                 throw err;
             });
     }
