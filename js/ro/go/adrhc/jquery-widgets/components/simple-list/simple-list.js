@@ -21,6 +21,8 @@ class SimpleListComponent extends AbstractTableBasedComponent {
         return this._handleRepoErrors(this.repository.findAll())
             .then((items) => {
                 console.log(`${this.constructor.name} items:\n`, JSON.stringify(items));
+                // reset must be before updateAll because it resets the state too!
+                this.reset();
                 this.simpleListState.updateAll(items);
                 return items;
             });
@@ -33,7 +35,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @protected
      */
     _reload() {
-        return this.init(new ComponentInitConfig(true, () => this.reset()));
+        return this.init(new ComponentInitConfig(true));
     }
 
     /**

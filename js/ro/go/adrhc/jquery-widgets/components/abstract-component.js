@@ -85,10 +85,7 @@ class AbstractComponent {
         AssertionUtils.isNullOrEmpty(this.compositeBehaviour.childComponents,
             `${this.constructor.name}.init: childComponents is not empty!`);
         return this._reloadState()
-            .then((loadedState) => {
-                config.beforeViewUpdateFn(loadedState);
-                return this.updateViewOnStateChanges();
-            })
+            .then(() => this.updateViewOnStateChanges())
             .then((stateChanges) => {
                 this.configureEvents();
                 return this.compositeBehaviour.init().then(() => stateChanges);
