@@ -22,6 +22,10 @@ class BasicState {
         }
     }
 
+    collectErrorStateChange(stateChange) {
+        this._stateChanges.collect(stateChange);
+    }
+
     /**
      * @param stateChanges {StateChanges}
      * @param fromNewest {boolean|undefined}

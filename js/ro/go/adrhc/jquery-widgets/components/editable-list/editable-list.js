@@ -123,7 +123,13 @@ class EditableListComponent extends SelectableListComponent {
                     // todo: sync "append" save param with notSelectedRow.tableRelativePositionOnCreate
                     // events: DELETE (transient, if any) + CREATE or just UPDATE
                     editableListState.save(savedEntity, rowDataId);
-                })));
+                }))
+            .catch((simpleError) => {
+                return editableList._selectedRowComponent.doWithState((editableListState) => {
+                    editableListState.collectErrorStateChange(new ErrorStateChange(
+                        "UPDATE_OR_CREATE", simpleError, entity))
+                });
+            }));
     }
 
     /**

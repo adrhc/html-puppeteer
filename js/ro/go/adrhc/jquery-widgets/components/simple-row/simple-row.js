@@ -46,6 +46,10 @@ class SimpleRowComponent extends AbstractComponent {
         return Promise.resolve(stateChange);
     }
 
+    updateViewOnERROR(stateChange) {
+        return Promise.resolve(stateChange);
+    }
+
     /**
      * Because the IdentifiableRowComponent is completely recreated on update I have to basically init it here.
      *
