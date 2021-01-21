@@ -7,7 +7,7 @@ class RepositoryError {
      * fatal: total crash, request not fulfilled
      * warning: partial crash, request partially fulfilled
      *
-     * @type {"fatal", "warning"}
+     * @type {"FATAL", "WARNING"}
      */
     type;
     /**
@@ -20,7 +20,7 @@ class RepositoryError {
      * @param [data] {*}
      * @param [type=error] {string}
      */
-    constructor(message, data, type = "error") {
+    constructor(message, data, type = "FATAL") {
         this.message = message;
         this.data = data;
         this.type = type;
