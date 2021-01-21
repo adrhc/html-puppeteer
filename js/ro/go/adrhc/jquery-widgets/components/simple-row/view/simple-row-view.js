@@ -14,9 +14,9 @@ class SimpleRowView extends AbstractView {
      */
     tableRelativePositionOnCreate;
     /**
-     * @type {number|string}
+     * @type {function(): number|string}
      */
-    neighbourRowDataId;
+    neighbourRowDataIdSupplier;
     /**
      * @type {"before"|"after"}
      */
@@ -25,11 +25,11 @@ class SimpleRowView extends AbstractView {
     /**
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param [tableRelativePositionOnCreate] {"prepend"|"append"}
-     * @param [neighbourRowDataId] {number|string}
+     * @param [neighbourRowDataIdSupplier] {function(): number|string}
      * @param [neighbourRelativePosition] {"before"|"after"}
      */
     constructor(mustacheTableElemAdapter, tableRelativePositionOnCreate,
-                neighbourRowDataId, neighbourRelativePosition) {
+                neighbourRowDataIdSupplier, neighbourRelativePosition) {
         super();
         /**
          * @type {MustacheTableElemAdapter}
@@ -37,7 +37,7 @@ class SimpleRowView extends AbstractView {
         this.tableAdapter = mustacheTableElemAdapter;
         this.owner = this.tableAdapter.owner;
         this.tableRelativePositionOnCreate = tableRelativePositionOnCreate;
-        this.neighbourRowDataId = neighbourRowDataId;
+        this.neighbourRowDataIdSupplier = neighbourRowDataIdSupplier;
         this.neighbourRelativePosition = neighbourRelativePosition;
     }
 
@@ -56,7 +56,7 @@ class SimpleRowView extends AbstractView {
             rowTmplHtml: this.tableAdapter.bodyRowTmplHtml,
             createIfNotExists: stateChange.requestType === "CREATE",
             tableRelativePosition: this._tableRelativePositionOf(stateChange),
-            neighbourRowDataId: this.neighbourRowDataId,
+            neighbourRowDataId: this.neighbourRowDataIdSupplier(),
             neighbourRelativePosition: this.neighbourRelativePosition
         });
         this.$elem = this.tableAdapter.$getRowByDataId(updatedRowState.id);
