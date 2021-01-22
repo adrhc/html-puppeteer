@@ -36,7 +36,7 @@ class InMemoryCrudRepository extends CrudRepository {
         if (removedItem) {
             return Promise.resolve(removedItem);
         } else {
-            return Promise.reject(new SimpleError("repository couldn't find id to delete", "delete", id));
+            return Promise.reject(new SimpleError(`Repository couldn't find the id ${id} to delete!`, "delete", id));
         }
     }
 
@@ -54,7 +54,7 @@ class InMemoryCrudRepository extends CrudRepository {
         }
     }
 
-    /**
+        /**
      * usually, after saving, the item is no longer used by the caller so I can store it directly into this.items
      *
      * @param item {IdentifiableEntity}
@@ -68,6 +68,9 @@ class InMemoryCrudRepository extends CrudRepository {
         if (dontUsePromise) {
             return resultItem;
         } else {
+            if (item.firstName === "error") {
+                return Promise.reject(new SimpleError("Salvarea datelor a eşuat!", "insert", item));
+            }
             return Promise.resolve(resultItem);
         }
     }
@@ -81,8 +84,11 @@ class InMemoryCrudRepository extends CrudRepository {
     update(item) {
         const removedIndex = EntityUtils.findAndReplaceById(item, this.items);
         if (removedIndex < 0) {
-            return Promise.reject(new SimpleError("repository couldn't find item to update", "update", item));
+            return Promise.reject(new SimpleError("Repository couldn't find the item to update!", "update", item));
         } else {
+            if (item.firstName === "error") {
+                return Promise.reject(new SimpleError("Actualizarea datelor a eşuat!", "update", item));
+            }
             return Promise.resolve(this._typedEntityOf(item));
         }
     }
