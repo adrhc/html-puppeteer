@@ -1,3 +1,24 @@
+<!--
+     "data-id" could be anything but it'll be used for "switching" (at double click). If it is an entityId than the
+     switching will "activate" on this row the entity pointed by entityId - this usually makes no sense so "data-id"
+     shouldn't be an entityId but a dummy id in which case switching will be toward "off"
+     (aka cancels previously edited entity).
+
+     "data-secondary-row-part" is used to remove this row when the (edited) entity row is closing.
+     Its value must be the entityId.
+
+     this.type comes from the server (e.g. FATAL, WARNING)
+-->
 <tr data-owner="personsTable" data-id="{{id}}" data-secondary-row-part="{{failedId}}">
-    <td colspan="6">{{error.message}}</td>
+    <td colspan="6">
+        <table class="errors-table">
+            <tr><th colspan="2">{{{message}}}</th></tr>
+            {{#each problems}}
+            <tr class="{{this.type}}">
+                <td class="error-data">{{this.data}}</td>
+                <td class="error-message">{{this.message}}</td>
+            </tr>
+            {{/each}}
+        </table>
+    </td>
 </tr>

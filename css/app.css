@@ -54,3 +54,34 @@ img[data-btn] {
 body {
     padding: unset;
 }
+
+/* errors-table */
+.errors-table {
+    background-color: #f7f5e5 !important;
+    color: #244446;
+    width: 100%;
+}
+
+.errors-table tr {
+    background-color: inherit !important;
+    color: inherit !important;
+    border: 1px solid #ddd;
+}
+
+.errors-table th, .errors-table td {
+    background-color: inherit !important;
+    color: inherit !important;
+    border: inherit !important;
+    vertical-align: middle;
+}
+
+.errors-table td {
+}
+
+.errors-table td.error-data {
+    width: 25%;
+}
+
+.errors-table td.error-message {
+
+}

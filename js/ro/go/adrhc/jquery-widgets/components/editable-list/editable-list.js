@@ -126,8 +126,7 @@ class EditableListComponent extends SelectableListComponent {
                 }))
             .catch((simpleError) => {
                 return editableList._selectedRowComponent.doWithState((editableListState) => {
-                    editableListState.collectErrorStateChange(new ErrorStateChange(
-                        "UPDATE_OR_CREATE", simpleError, entity))
+                    editableListState.collectFromSimpleError(simpleError, "UPDATE_OR_CREATE", entity);
                 });
             }));
     }

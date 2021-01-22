@@ -28,10 +28,14 @@ class SelectableListState extends CrudListState {
      * @return {boolean} whether the switch actually happened or not
      */
     switchTo(id, context) {
+        if (id == null) {
+            console.log(`${this.constructor.name}, context = ${context}, id is null! switching off`)
+            return this.switchToOff();
+        }
         const previousSelectableSwappingData = this.currentSelectableSwappingData;
         const item = this.findById(id);
         if (!item) {
-            console.log(`no item found for id = ${id}! switching off`)
+            console.log(`${this.constructor.name}, context = ${context}, no item found for id = ${id}! switching off`)
             return this.switchToOff();
         }
         const newSelectableSwappingData = new SelectableSwappingData(item, context);

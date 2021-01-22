@@ -66,11 +66,7 @@ class SelectableListComponent extends SimpleListComponent {
      */
     switchTo(rowDataId, context) {
         return this.doWithState((selectableListState) => {
-            if (rowDataId) {
-                selectableListState.switchTo(rowDataId, context);
-            } else {
-                selectableListState.switchToOff();
-            }
+            selectableListState.switchTo(rowDataId, context);
         });
     }
 

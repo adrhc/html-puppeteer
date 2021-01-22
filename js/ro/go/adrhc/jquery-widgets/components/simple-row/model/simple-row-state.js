@@ -19,11 +19,11 @@ class SimpleRowState extends BasicState {
 
     /**
      * @param stateChange {StateChange}
-     * @param [dontRecordEvents] {boolean}
+     * @param [dontCollectStateChange] {boolean}
      */
-    collectStateChange(stateChange, dontRecordEvents) {
+    collectStateChange(stateChange, dontCollectStateChange) {
         this.rowState = stateChange.data;
-        super.collectStateChange(stateChange, dontRecordEvents);
+        super.collectStateChange(stateChange, dontCollectStateChange);
     }
 
     reset() {

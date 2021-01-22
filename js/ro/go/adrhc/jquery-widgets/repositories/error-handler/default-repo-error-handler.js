@@ -1,9 +1,9 @@
 class DefaultRepoErrorHandler extends RepoErrorHandler {
     constructor(messages = {
         findAll: "Nu s-au putut încărca datele!",
-        update: "Actualizarea datelor a eșuat!",
-        insert: "Salvarea datelor a eșuat!",
-        delete: "Ștergerea nu a reușit!",
+        update: "Actualizarea datelor a eşuat!",
+        insert: "Salvarea datelor a eşuat!",
+        delete: "Ştergerea nu a reuşit!",
         getById: "Nu s-au putut încărca datele!"
     }) {
         super();
@@ -12,26 +12,28 @@ class DefaultRepoErrorHandler extends RepoErrorHandler {
 
     /**
      * @param promise {Promise}
-     * @param operation {string}
+     * @param requestType {string}
      * @param [data] {*}
      * @return {Promise}
      * @protected
      */
-    catch(promise, operation, data) {
+    catch(promise, requestType, data) {
         return promise.catch((jqXHR, textStatus, errorThrown) => {
             this._logPromiseCatch(jqXHR, textStatus, errorThrown);
             let error;
             if (jqXHR.responseText) {
                 try {
-                    error = $.extend(true, new SimpleError(), JSON.parse(jqXHR.responseText));
-                    if (error.data == null) {
-                        error.data = data;
+                    const problems = ServerError.parse(JSON.parse(jqXHR.responseText));
+                    if ($.isArray(problems)) {
+                        error = new SimpleError(this.messages[requestType], requestType, data, problems);
+                    } else {
+                        error = new SimpleError(this.messages[requestType], requestType, data, [problems]);
                     }
                 } catch (ex) {
-                    // do nothing
+                    console.log(`error parsing as json:\n${jqXHR.responseText}`);
                 }
             }
-            throw error ? error : new SimpleError(this.messages[operation], data);
+            throw error ? error : new SimpleError(this.messages[requestType], requestType, data);
         });
     }
 

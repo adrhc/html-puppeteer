@@ -52,10 +52,15 @@ class SimpleRowComponent extends AbstractComponent {
         return Promise.resolve(stateChange);
     }
 
+    /**
+     * @param stateChange {StateChange}
+     * @return {Promise<*>|Promise<StateChange[]>}
+     */
     updateViewOnERROR(stateChange) {
         if (this.errorComponent) {
             console.log(`${this.constructor.name}.updateViewOnERROR:\n${JSON.stringify(stateChange)}`);
-            this.errorComponent.state.collectErrorStateChange(stateChange);
+            stateChange.requestType = "CREATE"; // allows to create the row if doesn't exist
+            this.errorComponent.state.collectStateChange(stateChange);
             return this.errorComponent.init();
         }
         return super.updateViewOnERROR(stateChange);

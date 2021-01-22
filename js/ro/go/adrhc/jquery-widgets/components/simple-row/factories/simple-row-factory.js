@@ -52,21 +52,18 @@ class SimpleRowFactory {
     }
 
     /**
-     * @param parentRow {IdentifiableRowComponent}
-     * @param rowTmplId {string}
-     * @param rowTmplHtml {string}
+     * The error row is presented as a "data-secondary-row-part".
+     *
+     * @param parentRow {IdentifiableRowComponent} the parent row for the error row
+     * @param rowTmplId {string} error row template id
+     * @param rowTmplHtml {string} error row html
      * @return {IdentifiableRowComponent}
      */
-    static createErrorRow(parentRow, {
-        rowTmplId,
-        rowTmplHtml
-    }) {
-        const errorRow = SimpleRowFactory.createIdentifiableRow({
+    static createErrorRow(parentRow, {rowTmplId, rowTmplHtml}) {
+        return SimpleRowFactory.createIdentifiableRow({
             tableIdOrJQuery: parentRow.simpleRowView.tableAdapter.$table,
-            rowTmplId, rowTmplHtml,
-            state: new ErrorRowState()
+            childishBehaviour: new ChildishBehaviour(parentRow),
+            rowTmplId, rowTmplHtml
         });
-        errorRow.childishBehaviour = new ChildishBehaviour(parentRow);
-        return errorRow;
     }
 }

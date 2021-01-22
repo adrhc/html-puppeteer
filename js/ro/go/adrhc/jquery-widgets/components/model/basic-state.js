@@ -11,16 +11,32 @@ class BasicState {
 
     /**
      * @param stateChange {StateChange}
-     * @param [dontRecordEvents] {boolean}
+     * @param [dontCollectStateChange] {boolean}
      */
-    collectStateChange(stateChange, dontRecordEvents) {
-        if (!dontRecordEvents) {
+    collectStateChange(stateChange, dontCollectStateChange) {
+        if (!dontCollectStateChange) {
             this._stateChanges.collect(stateChange);
         }
     }
 
-    collectErrorStateChange(stateChange) {
-        this._stateChanges.collect(stateChange);
+    /**
+     * @param simpleError {SimpleError}
+     * @param requestType {string}
+     * @param [entity] {IdentifiableEntity}
+     */
+    collectFromSimpleError(simpleError, requestType, entity) {
+        AssertionUtils.isTrue(!entity || entity === simpleError.data);
+        let failedId = !!entity.id ? entity.id : EntityUtils.transientId;
+        const data = $.extend(true, {
+            // id is used to identify the row to update and for setting the "data-id" attribute
+            id: `error-row-${failedId}`,
+            // failedId is used for setting "data-secondary-row-part" attribute
+            failedId,
+            entity: simpleError.data,
+            failedRequestType: requestType
+        }, simpleError);
+        // avoid storing state while collecting error-based state changes
+        this._stateChanges.collect(new PositionStateChange("ERROR", data, undefined, failedId));
     }
 
     /**
