@@ -214,6 +214,9 @@ class AbstractComponent {
             if (jqXHR instanceof SimpleError) {
                 alert(jqXHR.message);
                 throw jqXHR;
+            } else if (typeof jqXHR === "string") {
+                alert(jqXHR);
+                throw jqXHR;
             } else {
                 alert(`textStatus = ${textStatus}${jqXHR.responseText ? ', responseText:\n' + jqXHR.responseText : ''}`);
                 throw textStatus;
