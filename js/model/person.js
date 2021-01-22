@@ -21,4 +21,15 @@ class Person extends DynaSelOneItem {
     get description() {
         return this.lastName;
     }
+
+    static entityConverter(object) {
+        if (!object) {
+            return undefined;
+        }
+        const person = $.extend(true, new Person(), object);
+        if (object.friend) {
+            person.friend = $.extend(true, new Person(), object.friend);
+        }
+        return person;
+    }
 }

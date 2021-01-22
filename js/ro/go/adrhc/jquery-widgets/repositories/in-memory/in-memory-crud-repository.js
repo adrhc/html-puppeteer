@@ -1,24 +1,24 @@
 class InMemoryCrudRepository extends CrudRepository {
     /**
-     * @type {function(): IdentifiableEntity} creates a new, pristine, IdentifiableEntity
+     * @type {function({}): IdentifiableEntity} creates a new, pristine, IdentifiableEntity
      */
-    entityFactoryFn;
+    entityConverter;
 
     /**
      * @param items {Array<IdentifiableEntity>}
-     * @param [entityFactoryFn] {function(): IdentifiableEntity}
+     * @param [entityConverter] {function({}): IdentifiableEntity}
      */
-    constructor(items = [], entityFactoryFn = () => new IdentifiableEntity()) {
+    constructor(items = [], entityConverter = IdentifiableEntity.entityConverter) {
         super();
         this.items = items;
-        this.entityFactoryFn = entityFactoryFn;
+        this.entityConverter = entityConverter;
     }
 
     /**
      * @return {IdentifiableEntity}
      */
     createNewItem() {
-        const identifiableEntity = this.entityFactoryFn();
+        const identifiableEntity = this.entityConverter({});
         identifiableEntity.id = EntityUtils.generateId();
         this.items.unshift(identifiableEntity);
         return identifiableEntity;
@@ -88,6 +88,6 @@ class InMemoryCrudRepository extends CrudRepository {
     }
 
     _typedEntityOf(item) {
-        return $.extend(true, this.entityFactoryFn(), item);
+        return this.entityConverter(item);
     }
 }

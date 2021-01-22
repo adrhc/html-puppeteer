@@ -30,8 +30,8 @@ if (Modernizr.template) {
 
     // main
     $(() => cachedUrls.namedUrls.then((namedUrls) => {
-        const personsRepository = new DbCrudRepository("persons", () => new Person());
-        const dynaSelOnePersRepo = new DbDynaSelOneRepository("person", () => new Person());
+        const personsRepository = new DbCrudRepository("persons", Person.entityConverter);
+        const dynaSelOnePersRepo = new DbDynaSelOneRepository("person", Person.entityConverter);
 
         // DYNAMIC-SELECT-ONE
         DynamicSelectOneFactory.create("dyna-sel-one", dynaSelOnePersRepo, {}).init();
@@ -48,7 +48,7 @@ if (Modernizr.template) {
 
         // friend (Person) dyna select one child component
         const friendDynaSelOneCompFactory = DynamicSelectOneFactory.createChildComponentFactory(
-            "friend", () => new Person(), dynaSelOnePersRepo);
+            "friend", Person.entityConverter, dynaSelOnePersRepo);
 
         // EDITABLE ROW
         const editableRow = SimpleRowFactory.createIdentifiableRow(

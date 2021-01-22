@@ -4,9 +4,9 @@
 class DbCrudRepository extends DefaultCrudRepository {
     /**
      * @param serverRelativePath {string}
-     * @param [entityFactoryFn] {function(): IdentifiableEntity}
+     * @param [entityConverterFn] {function({}): IdentifiableEntity}
      */
-    constructor(serverRelativePath, entityFactoryFn) {
-        super(`http://127.0.0.1:8011/${serverRelativePath}`, entityFactoryFn);
+    constructor(serverRelativePath, entityConverterFn) {
+        super(`http://127.0.0.1:8011/${serverRelativePath}`, entityConverterFn);
     }
 }

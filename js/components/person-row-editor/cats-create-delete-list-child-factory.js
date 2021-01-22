@@ -42,7 +42,7 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
 
                 return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", $parentElem),
                     this.dynaSelOnePersRepo, {
-                        childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent, "person", () => new Person())
+                        childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent, "person", Person.entityConverter)
                     })
             }
         };

@@ -30,6 +30,10 @@ class SelectableListState extends CrudListState {
     switchTo(id, context) {
         const previousSelectableSwappingData = this.currentSelectableSwappingData;
         const item = this.findById(id);
+        if (!item) {
+            console.log(`no item found for id = ${id}! switching off`)
+            return this.switchToOff();
+        }
         const newSelectableSwappingData = new SelectableSwappingData(item, context);
         if (newSelectableSwappingData.similarTo(previousSelectableSwappingData)) {
             console.log(`switch cancelled:\n${JSON.stringify(previousSelectableSwappingData)}\nis similar to\n${JSON.stringify(newSelectableSwappingData)}`)

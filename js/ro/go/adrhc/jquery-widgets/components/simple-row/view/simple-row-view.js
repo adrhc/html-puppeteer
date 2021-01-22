@@ -14,10 +14,6 @@ class SimpleRowView extends AbstractView {
      */
     tableRelativePositionOnCreate;
     /**
-     * @type {function(): number|string}
-     */
-    neighbourRowDataIdSupplier;
-    /**
      * @type {"before"|"after"}
      */
     neighbourRelativePosition;
@@ -25,11 +21,10 @@ class SimpleRowView extends AbstractView {
     /**
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param [tableRelativePositionOnCreate] {"prepend"|"append"}
-     * @param [neighbourRowDataIdSupplier] {function(): number|string}
      * @param [neighbourRelativePosition] {"before"|"after"}
      */
-    constructor(mustacheTableElemAdapter, tableRelativePositionOnCreate,
-                neighbourRowDataIdSupplier, neighbourRelativePosition) {
+    constructor(mustacheTableElemAdapter,
+                tableRelativePositionOnCreate, neighbourRelativePosition) {
         super();
         /**
          * @type {MustacheTableElemAdapter}
@@ -37,7 +32,6 @@ class SimpleRowView extends AbstractView {
         this.tableAdapter = mustacheTableElemAdapter;
         this.owner = this.tableAdapter.owner;
         this.tableRelativePositionOnCreate = tableRelativePositionOnCreate;
-        this.neighbourRowDataIdSupplier = neighbourRowDataIdSupplier;
         this.neighbourRelativePosition = neighbourRelativePosition;
     }
 
@@ -56,11 +50,28 @@ class SimpleRowView extends AbstractView {
             rowTmplHtml: this.tableAdapter.bodyRowTmplHtml,
             createIfNotExists: stateChange.requestType === "CREATE",
             tableRelativePosition: this._tableRelativePositionOf(stateChange),
-            neighbourRowDataId: this.neighbourRowDataIdSupplier ? this.neighbourRowDataIdSupplier() : undefined,
-            neighbourRelativePosition: this.neighbourRelativePosition
+            neighbourRowDataId: this._neighbourRowDataIdOf(stateChange),
+            neighbourRelativePosition: this._neighbourRelativePosition(stateChange)
         });
         this.$elem = this.tableAdapter.$getRowByDataId(updatedRowState.id);
         return Promise.resolve(stateChange);
+    }
+
+    _neighbourRelativePosition(stateChange) {
+        if (!!this.neighbourRelativePosition) {
+            return this.neighbourRelativePosition;
+        }
+        if (!!stateChange.beforeItemId) {
+            return "before";
+        }
+        if (!!stateChange.afterItemId) {
+            return "after";
+        }
+        return undefined;
+    }
+
+    _neighbourRowDataIdOf(stateChange) {
+        return !!stateChange.beforeItemId ? stateChange.beforeItemId : stateChange.afterItemId;
     }
 
     /**
@@ -69,10 +80,16 @@ class SimpleRowView extends AbstractView {
      * @protected
      */
     _tableRelativePositionOf(stateChange) {
-        if (stateChange.afterItemId == null) {
+        if (stateChange.afterItemId == null && stateChange.beforeItemId == null) {
             return this.tableRelativePositionOnCreate;
         }
-        return !!stateChange.afterItemId ? "append" : "prepend"
+        if (stateChange.afterItemId != null) {
+            return "append";
+        }
+        if (stateChange.beforeItemId != null) {
+            return "prepend";
+        }
+        return undefined;
     }
 
     deleteRowByDataId(rowDataId) {

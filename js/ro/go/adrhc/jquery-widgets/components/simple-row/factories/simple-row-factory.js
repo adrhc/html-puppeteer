@@ -29,9 +29,7 @@ class SimpleRowFactory {
             rowTmplHtml,
             mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, rowTmplId, rowTmplHtml),
             tableRelativePositionOnCreate,
-            neighbourRowDataIdSupplier,
-            simpleRowView = new SimpleRowView(mustacheTableElemAdapter,
-                tableRelativePositionOnCreate, neighbourRowDataIdSupplier),
+            simpleRowView = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate),
             state = new SimpleRowState(),
             identifiableRowComponent = new IdentifiableRowComponent(state, simpleRowView),
             childCompFactories,
@@ -42,7 +40,7 @@ class SimpleRowFactory {
     ) {
         if (errorRowTmplId || errorRowTmplHtml) {
             identifiableRowComponent.errorComponent = SimpleRowFactory.createErrorRow(
-                identifiableRowComponent, {errorRowTmplId, errorRowTmplHtml});
+                identifiableRowComponent, {rowTmplId: errorRowTmplId, rowTmplHtml: errorRowTmplHtml});
         }
         if (childishBehaviour) {
             identifiableRowComponent.childishBehaviour = childishBehaviour;
@@ -64,8 +62,9 @@ class SimpleRowFactory {
         rowTmplHtml
     }) {
         const errorRow = SimpleRowFactory.createIdentifiableRow({
-            tableIdOrJQuery: parentRow.simpleRowView.tableAdapter.$table, rowTmplId, rowTmplHtml,
-            state: new ErrorRowState(), neighbourRowDataIdSupplier: () => parentRow.state.currentState.id
+            tableIdOrJQuery: parentRow.simpleRowView.tableAdapter.$table,
+            rowTmplId, rowTmplHtml,
+            state: new ErrorRowState()
         });
         errorRow.childishBehaviour = new ChildishBehaviour(parentRow);
         return errorRow;

@@ -10,8 +10,8 @@ if (Modernizr.template) {
     });
 
     $(() => {
-        const personsRepository = new DbCrudRepository("persons", () => new Person());
-        const dynaSelOneRepository = new DbDynaSelOneRepository("person", () => new Person());
+        const personsRepository = new DbCrudRepository("persons", Person.entityConverter);
+        const dynaSelOneRepository = new DbDynaSelOneRepository("person", Person.entityConverter);
 
         // DYNAMIC-SELECT-ONE
         DynamicSelectOneFactory.create("dyna-sel-one", dynaSelOneRepository, {

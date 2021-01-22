@@ -45,7 +45,7 @@ if (Modernizr.template) {
 
         // friend (Person) dyna select one child component
         const friendDynaSelOneCompFactory = DynamicSelectOneFactory.createChildComponentFactory(
-            "friend", () => new Person(), DbMock.DYNA_SEL_ONE_PERS_REPOSITORY);
+            "friend", Person.entityConverter, DbMock.DYNA_SEL_ONE_PERS_REPOSITORY);
 
         // EDITABLE ROW
         const editableRow = SimpleRowFactory.createIdentifiableRow(

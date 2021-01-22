@@ -23,7 +23,7 @@ if (Modernizr.template) {
                 AssertionUtils.isNotNull(idRowCompParent.view.$elem, "dynaSelOneCompFactory, DynamicSelectOneFactory");
 
                 return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", idRowCompParent.view.$elem), DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
-                    childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent, "person", () => new Person())
+                    childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent, "person", Person.entityConverter)
                 })
             }
         };

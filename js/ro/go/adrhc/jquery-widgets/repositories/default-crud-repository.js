@@ -4,9 +4,9 @@ class DefaultCrudRepository extends CrudRepository {
      */
     url;
     /**
-     * @type {function(): IdentifiableEntity}
+     * @type {function({}): IdentifiableEntity}
      */
-    entityFactoryFn;
+    entityConverter;
     /**
      * @type {RepoErrorHandler}
      */
@@ -14,14 +14,14 @@ class DefaultCrudRepository extends CrudRepository {
 
     /**
      * @param url {string}
-     * @param [entityFactoryFn] {function(): IdentifiableEntity}
+     * @param [entityConverter] {function({}): IdentifiableEntity}
      * @param errorHandler {RepoErrorHandler}
      */
-    constructor(url, entityFactoryFn = () => new IdentifiableEntity(),
+    constructor(url, entityConverter = IdentifiableEntity.entityConverter,
                 errorHandler = new DefaultRepoErrorHandler()) {
         super();
         this.url = url;
-        this.entityFactoryFn = entityFactoryFn;
+        this.entityConverter = entityConverter;
         this.errorHandler = errorHandler;
     }
 
@@ -31,7 +31,7 @@ class DefaultCrudRepository extends CrudRepository {
     findAll() {
         return this.errorHandler.catch($.getJSON(this.url)
                 .then(data => RestUtils.unwrapHAL(data))
-                .then(items => items.map(item => this._typedEntityOf(item))),
+                .then(items => items.map(item => this.entityConverter(item))),
             "findAll");
     }
 
@@ -40,7 +40,7 @@ class DefaultCrudRepository extends CrudRepository {
                 url: `${this.url}/${identifiableEntity.id}`,
                 method: "PUT",
                 data: identifiableEntity,
-            }).then(it => this._typedEntityOf(RestUtils.unwrapHAL(it))),
+            }).then(it => this.entityConverter(RestUtils.unwrapHAL(it))),
             "update", identifiableEntity);
     }
 
@@ -49,7 +49,7 @@ class DefaultCrudRepository extends CrudRepository {
                 url: this.url,
                 method: "POST",
                 data: identifiableEntity,
-            }).then(it => this._typedEntityOf(RestUtils.unwrapHAL(it))),
+            }).then(it => this.entityConverter(RestUtils.unwrapHAL(it))),
             "insert", identifiableEntity);
     }
 
@@ -63,11 +63,7 @@ class DefaultCrudRepository extends CrudRepository {
 
     getById(id) {
         return this.errorHandler.catch($.get(`${this.url}/${id}`)
-                .then(it => this._typedEntityOf(RestUtils.unwrapHAL(it))),
+                .then(it => this.entityConverter(RestUtils.unwrapHAL(it))),
             "getById", id);
-    }
-
-    _typedEntityOf(item) {
-        return $.extend(true, this.entityFactoryFn(), item);
     }
 }
