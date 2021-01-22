@@ -12,7 +12,12 @@
 <tr data-owner="personsTable" data-id="{{id}}" data-secondary-row-part="{{failedId}}">
     <td colspan="6">
         <table class="errors-table">
-            <tr><th colspan="2">{{{message}}}</th></tr>
+            <tr>
+                <th colspan="2">
+                    <div class="title">{{{message}}}</div>
+                    <div class="time">{{time}}</div>
+                </th>
+            </tr>
             {{#each problems}}
             <tr class="{{this.type}}">
                 <td class="error-data">{{this.data}}</td>

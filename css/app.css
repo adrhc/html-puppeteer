@@ -62,6 +62,14 @@ body {
     width: 100%;
 }
 
+.errors-table .title {
+    color: #291f25;
+}
+
+.errors-table .time {
+    font-size: x-small;
+}
+
 .errors-table tr {
     background-color: inherit !important;
     color: inherit !important;
@@ -85,3 +93,22 @@ body {
 .errors-table td.error-message {
 
 }
+
+/* document */
+body {
+  padding: 0 2em;
+  font-family: Arial, sans-serif;
+  color: #024457;
+  background: #f2f2f2;
+}
+
+h1 {
+  font-family: Verdana, serif;
+  font-weight: normal;
+  color: #024457;
+}
+
+h1 span {
+  color: #167F92;
+}
+

@@ -34,6 +34,7 @@ class SimpleError {
         this.operation = operation;
         this.data = data;
         this.problems = problems;
+        this.time = new Date(Date.now()).toLocaleString();
     }
 
     /**
