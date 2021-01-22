@@ -62,15 +62,15 @@ class InMemoryCrudRepository extends CrudRepository {
      * @return {Promise<IdentifiableEntity>|IdentifiableEntity}
      */
     insert(item, dontUsePromise) {
+        if (item.firstName === "error") {
+            return Promise.reject(new SimpleError("Salvarea datelor a eşuat!", "insert", item));
+        }
         item.id = EntityUtils.generateId();
         this.items.unshift(item);
         const resultItem = this._typedEntityOf(item);
         if (dontUsePromise) {
             return resultItem;
         } else {
-            if (item.firstName === "error") {
-                return Promise.reject(new SimpleError("Salvarea datelor a eşuat!", "insert", item));
-            }
             return Promise.resolve(resultItem);
         }
     }
@@ -82,13 +82,13 @@ class InMemoryCrudRepository extends CrudRepository {
      * @return {Promise<IdentifiableEntity>}
      */
     update(item) {
+        if (item.firstName === "error") {
+            return Promise.reject(new SimpleError("Actualizarea datelor a eşuat!", "update", item));
+        }
         const removedIndex = EntityUtils.findAndReplaceById(item, this.items);
         if (removedIndex < 0) {
             return Promise.reject(new SimpleError("Repository couldn't find the item to update!", "update", item));
         } else {
-            if (item.firstName === "error") {
-                return Promise.reject(new SimpleError("Actualizarea datelor a eşuat!", "update", item));
-            }
             return Promise.resolve(this._typedEntityOf(item));
         }
     }
