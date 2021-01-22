@@ -47,7 +47,7 @@ class DynamicSelectOneView extends AbstractView {
      */
     _applyCss(viewModel) {
         CssUtils.switchClasses([
-            {$elem: this.$titleElem, classes: "selected-title", remove: !viewModel.found},
+            {$elem: this.$titleElem, classes: "found", remove: !viewModel.found},
             {$elem: this.$selectionInfoElem, classes: "removed", remove: viewModel.found},
             {$elem: this.$optionsElem, classes: "removed", remove: viewModel.options},
             {$elem: this.$nothingFound, classes: "removed", remove: viewModel.nothingFound},

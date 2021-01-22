@@ -6,6 +6,11 @@ div.dyna-sel-one-comp input {
     width: fill-available;
 }
 
+div.dyna-sel-one-comp input.found {
+    width: auto !important;
+    border: green 2px solid;
+}
+
 div.dyna-sel-one-comp select {
     display: block;
     width: 100%;
@@ -22,8 +27,4 @@ div.dyna-sel-one-comp select {
 
 .removed {
     display: none !important;
-}
-
-.selected-title {
-    width: auto !important;
 }
