@@ -29,13 +29,21 @@ class SimpleRowFactory {
             rowTmplHtml,
             mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, rowTmplId, rowTmplHtml),
             tableRelativePositionOnCreate,
-            simpleRowView = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate),
+            neighbourRowDataIdSupplier,
+            simpleRowView = new SimpleRowView(mustacheTableElemAdapter,
+                tableRelativePositionOnCreate, neighbourRowDataIdSupplier),
             state = new SimpleRowState(),
             identifiableRowComponent = new IdentifiableRowComponent(state, simpleRowView),
             childCompFactories,
-            childishBehaviour
+            childishBehaviour,
+            errorRowTmplId,
+            errorRowTmplHtml,
         }
     ) {
+        if (errorRowTmplId || errorRowTmplHtml) {
+            identifiableRowComponent.errorComponent = SimpleRowFactory.createErrorRow(
+                identifiableRowComponent, {errorRowTmplId, errorRowTmplHtml});
+        }
         if (childishBehaviour) {
             identifiableRowComponent.childishBehaviour = childishBehaviour;
         }
@@ -43,5 +51,23 @@ class SimpleRowFactory {
             identifiableRowComponent.compositeBehaviour.addChildComponentFactory(childCompFactories);
         }
         return identifiableRowComponent;
+    }
+
+    /**
+     * @param parentRow {IdentifiableRowComponent}
+     * @param rowTmplId {string}
+     * @param rowTmplHtml {string}
+     * @return {IdentifiableRowComponent}
+     */
+    static createErrorRow(parentRow, {
+        rowTmplId,
+        rowTmplHtml
+    }) {
+        const errorRow = SimpleRowFactory.createIdentifiableRow({
+            tableIdOrJQuery: parentRow.simpleRowView.tableAdapter.$table, rowTmplId, rowTmplHtml,
+            state: new ErrorRowState(), neighbourRowDataIdSupplier: () => parentRow.state.currentState.id
+        });
+        errorRow.childishBehaviour = new ChildishBehaviour(parentRow);
+        return errorRow;
     }
 }

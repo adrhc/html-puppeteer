@@ -53,8 +53,8 @@ class SimpleRowComponent extends AbstractComponent {
     }
 
     updateViewOnERROR(stateChange) {
-        console.log(`${this.constructor.name}.updateViewOnERROR:\n${JSON.stringify(stateChange)}`);
         if (this.errorComponent) {
+            console.log(`${this.constructor.name}.updateViewOnERROR:\n${JSON.stringify(stateChange)}`);
             this.errorComponent.state.collectStateChange(stateChange);
             return this.errorComponent.init();
         }

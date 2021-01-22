@@ -8,13 +8,19 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
      * @type {string}
      */
     bodyRowTmplHtml;
+    /**
+     * @type {DynaSelOneRepository}
+     */
+    dynaSelOnePersRepo;
 
     /**
      * @param [bodyRowTmplHtml] {string}
+     * @param [dynaSelOnePersRepo] {DynaSelOneRepository}
      */
-    constructor(bodyRowTmplHtml) {
+    constructor(bodyRowTmplHtml, dynaSelOnePersRepo = DbMock.DYNA_SEL_ONE_PERS_REPOSITORY) {
         super();
         this.bodyRowTmplHtml = bodyRowTmplHtml;
+        this.dynaSelOnePersRepo = dynaSelOnePersRepo;
     }
 
     /**
@@ -35,7 +41,7 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
                 AssertionUtils.isNotNull($parentElem, "ownerDynaSelOneCompFactory.createChildComponent");
 
                 return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", $parentElem),
-                    DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
+                    this.dynaSelOnePersRepo, {
                         childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent, "person", () => new Person())
                     })
             }

@@ -18,7 +18,7 @@ class SimpleRowState extends BasicState {
     }
 
     /**
-     * @param stateChange
+     * @param stateChange {StateChange}
      * @param [dontRecordEvents] {boolean}
      */
     collectStateChange(stateChange, dontRecordEvents) {

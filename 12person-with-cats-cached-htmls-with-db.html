@@ -16,72 +16,32 @@
 </head>
 
 <body>
-<!-- dogs table -->
-<div class="dogsTable">
-    <table id="dogsTable" class="responstable">
+<div id="dyna-sel-one" class="dyna-sel-one-comp" data-owner="personSearch" data-placeholder="first name"
+     data-focus="true"
+     data-name="firstName" data-value="personId" data-description="person-description" data-options-to-show="5"></div>
+
+<!-- persons table -->
+<div class="personsTable">
+    <table id="personsTable" class="responstable">
         <thead>
-        <tr data-owner="dogsTable">
-            <th>Dogs</th>
+        <tr data-owner="personsTable">
+            <th>Id</th>
+            <th data-th="Details"><span>First name</span></th>
+            <th>Last name</th>
+            <th>Friend</th>
+            <th>Cats</th>
             <th>
                 <div class="buttons">
-                    <img data-owner="dogsTable" data-btn="reload" alt="reload" src="images/ro/go/adrhc/reload-button-32.png"/>
-                    <img data-owner="dogsTable" data-btn="showAdd" alt="show add" src="images/ro/go/adrhc/add-button-32.png"/>
+                    <img data-owner="personsTable" data-btn="reload" alt="reload"
+                         src="images/ro/go/adrhc/reload-button-32.png" title="reîncarcă datele"/>
+                    <img data-owner="personsTable" data-btn="showAdd" alt="show add"
+                         src="images/ro/go/adrhc/add-button-32.png" title="către adăugare"/>
                 </div>
             </th>
         </tr>
         </thead>
     </table>
 </div>
-
-<!-- READ-ONLY row template -->
-<template id="dogsTableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}">
-        <td>
-            <input type="hidden" name="id" value="{{id}}">{{{name}}}
-        </td>
-        <td>
-            <div class="buttons">
-                <img data-owner="dogsTable" data-btn="showDelete" alt="show delete" src="images/ro/go/adrhc/delete-button-32.png"/>
-                <img data-owner="dogsTable" data-btn="showEdit" alt="show edit" src="images/ro/go/adrhc/edit-button-32.png"/>
-            </div>
-        </td>
-    </tr>
-</template>
-
-<!-- DELETE row template -->
-<template id="dogsTableDeletableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}" class="deletable-row">
-        <td>{{{name}}}</td>
-        <td>
-            <div class="buttons">
-                <img data-owner="dogsTable" data-btn="cancel" alt="cancel" src="images/ro/go/adrhc/cancel-button-32.png"/>
-                <img data-owner="dogsTable" data-btn="delete" alt="delete" src="images/ro/go/adrhc/delete-button-32.png"/>
-            </div>
-        </td>
-    </tr>
-    <tr data-owner="dogsTable" data-secondary-row-part="{{id}}" class="row-part">
-        <td colspan="2">DELETE secondary-row-part {{id}}</td>
-    </tr>
-</template>
-
-<!-- EDIT row template -->
-<template id="dogsTableEditableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}" class="row-editor">
-        <td>
-            <input type="hidden" name="id" value="{{id}}">
-            <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
-        </td>
-        <td>
-            <div class="buttons">
-                <img data-owner="dogsTable" data-btn="cancel" alt="cancel" src="images/ro/go/adrhc/cancel-button-32.png"/>
-                <img data-owner="dogsTable" data-btn="update" alt="update" src="images/ro/go/adrhc/save-button-32.png"/>
-            </div>
-        </td>
-    </tr>
-    <tr data-owner="dogsTable" data-secondary-row-part="{{id}}" class="row-part">
-        <td colspan="2">EDIT secondary-row-part {{id}}</td>
-    </tr>
-</template>
 
 <!-- utils -->
 <script src="js/ro/go/adrhc/jquery-widgets/utils/ajax-utils.js"></script>
@@ -96,6 +56,8 @@
 <script src="js/ro/go/adrhc/jquery-widgets/utils/rest-utils.js"></script>
 <!-- helpers -->
 <script src="js/ro/go/adrhc/jquery-widgets/helper/cached-url.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/helper/named-url.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/helper/cached-urls.js"></script>
 <!-- adapters -->
 <script src="js/ro/go/adrhc/jquery-widgets/adapter/table-element-adapter.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/adapter/mustache-table-elem-adapter.js"></script>
@@ -133,6 +95,14 @@
 <script src="js/ro/go/adrhc/jquery-widgets/components/component-init-config.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/abstract-component.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/abstract-table-based-component.js"></script>
+<!-- dynamic-select-one -->
+<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/repository/dyna-sel-one-repository.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/repository/default-dyna-sel-one-repository.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/model/dyna-sel-one-item.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/model/dyna-sel-one-state.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/view/dynamic-select-one-view.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/dynamic-select-one.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/factories/dynamic-select-one-factory.js"></script>
 <!-- components/simple-list -->
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-list/view/simple-list-view.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-list/simple-list.js"></script>
@@ -144,6 +114,13 @@
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-row/simple-row.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-row/identifiable-row.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-row/factories/simple-row-factory.js"></script>
+<!-- components/elastic-list -->
+<script src="js/ro/go/adrhc/jquery-widgets/components/elastic-list/elastic-list-composite-behaviour.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/elastic-list/elastic-list.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/elastic-list/elastic-list-factory.js"></script>
+<!-- components/create-delete-list -->
+<script src="js/ro/go/adrhc/jquery-widgets/components/create-delete-list/create-delete-list.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/create-delete-list/create-delete-list-factory.js"></script>
 <!-- components/selectable-list -->
 <script src="js/ro/go/adrhc/jquery-widgets/components/selectable-list/selectable-swapping-data.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/selectable-list/selectable-list-state.js"></script>
@@ -151,11 +128,20 @@
 <script src="js/ro/go/adrhc/jquery-widgets/components/selectable-list/selectable-list-factory.js"></script>
 <!-- components/editable-list -->
 <script src="js/ro/go/adrhc/jquery-widgets/components/editable-list/editable-list-state.js"></script>
+<script src="js/components/person-row-editor/cats-list-state.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/editable-list/editable-list.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/editable-list/editable-list-factory.js"></script>
-
+<!-- app -->
+<script src="js/model/person.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/repositories/in-memory/in-memory-dyna-sel-one-repository.js"></script>
+<script src="js/repositories/remote/db-dyna-sel-one-repository.js"></script>
+<script src="js/repositories/remote/db-crud-repository.js"></script>
+<script src="js/mock/db-mock.js"></script>
+<script src="js/components/person-row-editor/cats-editable-list-child-factory.js"></script>
+<script src="js/components/person-row-editor/cats-create-delete-list-child-factory.js"></script>
+<script src="js/components/capabilities/dyna-sel-one-childish-behaviour.js"></script>
 <!-- index -->
-<script src="js/7editable-list.js"></script>
+<script src="js/12person-with-cats-cached-htmls-with-db.js"></script>
 </body>
 
 </html>

@@ -54,8 +54,7 @@ class ChildishBehaviour {
      * @return {*} the child state extracted from the parent
      */
     extractChildState(parentState) {
-        return parentState ? parentState :
-            this.parentComp ? this.parentComp.state.currentState : undefined;
+        return undefined;
     }
 
     detachChild() {

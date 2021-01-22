@@ -30,8 +30,11 @@ if (Modernizr.template) {
 
     // main
     $(() => cachedUrls.namedUrls.then((namedUrls) => {
+        const personsRepository = new DbCrudRepository("persons", () => new Person());
+        const dynaSelOnePersRepo = new DbDynaSelOneRepository("person", () => new Person());
+
         // DYNAMIC-SELECT-ONE
-        DynamicSelectOneFactory.create("dyna-sel-one", DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {}).init();
+        DynamicSelectOneFactory.create("dyna-sel-one", dynaSelOnePersRepo, {}).init();
 
         // EDITABLE-LIST
         // dogs table with both read-only and editable row
@@ -45,7 +48,7 @@ if (Modernizr.template) {
 
         // friend (Person) dyna select one child component
         const friendDynaSelOneCompFactory = DynamicSelectOneFactory.createChildComponentFactory(
-            "friend", () => new Person(), DbMock.DYNA_SEL_ONE_PERS_REPOSITORY);
+            "friend", () => new Person(), dynaSelOnePersRepo);
 
         // EDITABLE ROW
         const editableRow = SimpleRowFactory.createIdentifiableRow(
@@ -54,7 +57,7 @@ if (Modernizr.template) {
                 rowTmplHtml: namedUrls["personsEditableRow"],
                 errorRowTmplHtml: namedUrls["personsErrorRow"],
                 childCompFactories: [friendDynaSelOneCompFactory,
-                    new CatsCreateDeleteListChildFactory(namedUrls["catsEditableRow"])]
+                    new CatsCreateDeleteListChildFactory(namedUrls["catsEditableRow"], dynaSelOnePersRepo)]
             });
 
         // DELETABLE ROW
@@ -66,7 +69,7 @@ if (Modernizr.template) {
         // EDITABLE LIST
         const editableList = EditableListFactory.create({
             tableIdOrJQuery,
-            repository: DbMock.PERSONS_REPOSITORY,
+            repository: personsRepository,
             readOnlyRow,
             editableRow,
             deletableRow
