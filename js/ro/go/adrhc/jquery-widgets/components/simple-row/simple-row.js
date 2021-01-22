@@ -62,6 +62,8 @@ class SimpleRowComponent extends AbstractComponent {
             stateChange.requestType = "CREATE"; // allows to create the row if doesn't exist
             this.errorComponent.state.collectStateChange(stateChange);
             return this.errorComponent.init();
+        } else {
+            alert(`${stateChange.data.message}\n${JSON.stringify(stateChange, null, 2)}`);
         }
         return super.updateViewOnERROR(stateChange);
     }
