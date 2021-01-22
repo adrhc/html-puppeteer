@@ -82,10 +82,12 @@ class AbstractComponent {
      * @return {Promise<StateChange[]>}
      */
     init(config = new ComponentInitConfig()) {
-        AssertionUtils.isNullOrEmpty(this.compositeBehaviour.childComponents,
-            `${this.constructor.name}.init: childComponents is not empty!`);
         return this._reloadState()
-            .then(() => this.updateViewOnStateChanges())
+            .then(() => {
+                AssertionUtils.isNullOrEmpty(this.compositeBehaviour.childComponents,
+                    `${this.constructor.name}.init: childComponents is not empty!`);
+                return this.updateViewOnStateChanges();
+            })
             .then((stateChanges) => {
                 this.configureEvents();
                 return this.compositeBehaviour.init().then(() => stateChanges);
