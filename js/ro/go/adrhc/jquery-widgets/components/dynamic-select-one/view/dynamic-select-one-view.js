@@ -47,8 +47,8 @@ class DynamicSelectOneView extends AbstractView {
      */
     _applyCss(viewModel) {
         CssUtils.switchClasses([
-            {$elem: this.$titleElem, classes: "selected-title", remove: !viewModel.description},
-            {$elem: this.$selectionInfoElem, classes: "removed", remove: viewModel.description},
+            {$elem: this.$titleElem, classes: "selected-title", remove: !viewModel.found},
+            {$elem: this.$selectionInfoElem, classes: "removed", remove: viewModel.found},
             {$elem: this.$optionsElem, classes: "removed", remove: viewModel.options},
             {$elem: this.$nothingFound, classes: "removed", remove: viewModel.nothingFound},
             {$elem: this.$tooMany, classes: "removed", remove: viewModel.tooMany},
@@ -76,6 +76,7 @@ class DynamicSelectOneView extends AbstractView {
             // search success: selected/found exactly 1 item
             viewModel.description = state.selectedItem.description;
             viewModel.id = state.selectedItem.id;
+            viewModel.found = true;
         } else if (state.isEnoughTextToSearch(state.title)) {
             viewModel.searchedTitle = state.title;
             if (state.optionsLength > 1) {
