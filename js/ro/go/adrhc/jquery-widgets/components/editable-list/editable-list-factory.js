@@ -15,6 +15,7 @@ class EditableListFactory {
      * @param editableRow {IdentifiableRowComponent}
      * @param deletableRow {IdentifiableRowComponent}
      * @param childishBehaviour {ChildishBehaviour}
+     * @param extractedEntityToRepoConverterFn {function(extractedEntity: IdentifiableEntity): IdentifiableEntity}
      * @return {EditableListComponent}
      */
     static create({
@@ -29,9 +30,11 @@ class EditableListFactory {
                       view = new SimpleListView(mustacheTableElemAdapter),
                       editableRow,
                       deletableRow,
-                      childishBehaviour
+                      childishBehaviour,
+                      extractedEntityToRepoConverterFn
                   }) {
-        const editableListComponent = new EditableListComponent(repository, state, view, readOnlyRow, editableRow, deletableRow);
+        const editableListComponent = new EditableListComponent(repository, state, view,
+            readOnlyRow, editableRow, deletableRow, extractedEntityToRepoConverterFn);
         if (childishBehaviour) {
             editableListComponent.childishBehaviour = childishBehaviour;
         }
