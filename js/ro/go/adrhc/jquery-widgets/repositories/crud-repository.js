@@ -4,7 +4,7 @@ class CrudRepository {
      * @return {Promise<IdentifiableEntity>}
      */
     save(item) {
-        if (EntityUtils.hasEmptyId(item)) {
+        if (EntityUtils.hasInvalidId(item)) {
             return this.insert(item);
         } else {
             return this.update(item);

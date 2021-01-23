@@ -27,7 +27,7 @@ class EntityUtils {
     }
 
     static isIdGenerated(id) {
-        return !EntityUtils.isEmptyId(id) && +id < 0;
+        return !EntityUtils.isInvalidId(id) && +id < 0;
     }
 
     static removeGeneratedIds(array) {
@@ -61,6 +61,13 @@ class EntityUtils {
         return removedEntities.length === 1 ? removedEntities[0] : removedEntities;
     }
 
+    static removeGeneratedOrInvalidId(object) {
+        if (EntityUtils.isIdGenerated(object) || EntityUtils.isInvalidId(object)) {
+            delete object.id;
+        }
+        return object;
+    }
+
     static removeTransientId(object) {
         if (EntityUtils.isTransient(object)) {
             delete object.id;
@@ -68,12 +75,12 @@ class EntityUtils {
         return object;
     }
 
-    static isEmptyId(id) {
+    static isInvalidId(id) {
         return !$.isNumeric(id);
     }
 
-    static hasEmptyId(item) {
-        return EntityUtils.isEmptyId(item.id);
+    static hasInvalidId(item) {
+        return EntityUtils.isInvalidId(item.id);
     }
 
     static isTransientId(id) {
