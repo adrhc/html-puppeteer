@@ -8,7 +8,19 @@ class DefaultTableChildishBehaviour extends DefaultChildishBehaviour {
      * @return {boolean}
      */
     copyChildState(parentState, useOwnerOnFields) {
-        parentState[this.childStateProperty] = this.tableBasedComponent.extractAllEntities(useOwnerOnFields);
+        const childEntities = this.tableBasedComponent.extractAllEntities(useOwnerOnFields);
+        if (!!this.childStateProperty) {
+            parentState[this.childStateProperty] = childEntities;
+        } else if (childEntities == null) {
+            console.log(`${this.constructor.name}.copyChildState: childStateProperty and childEntities are both null`);
+        } else if ($.isArray(parentState)) {
+            console.log(`${this.constructor.name}.copyChildState: childStateProperty is null`);
+            parentState.length = 0;
+            parentState.push(...childEntity);
+        } else {
+            console.log(`${this.constructor.name}.copyChildState: childEntities is Array while parentState is not!`);
+            throw `${this.constructor.name}.copyChildState`;
+        }
     }
 
     /**

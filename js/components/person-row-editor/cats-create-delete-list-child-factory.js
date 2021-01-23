@@ -54,7 +54,7 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
             bodyRowTmplId: "editableCatsRowTmpl",
             bodyRowTmplHtml: this.bodyRowTmplHtml,
             rowChildCompFactories: ownerDynaSelOneCompFactory,
-            childishBehaviour: new DefaultTableChildishBehaviour(parentComp, "cats")
+            childishBehaviour: new DefaultChildishBehaviour(parentComp, "cats")
         });
     }
 }

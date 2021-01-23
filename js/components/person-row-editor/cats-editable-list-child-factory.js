@@ -22,6 +22,9 @@ class CatsEditableListChildFactory extends ChildComponentFactory {
             tableIdOrJQuery: $catsTable,
             bodyRowTmplId: "editableCatsRowTmpl",
             readOnlyRow: catRow,
+            // EditableListComponent.extractEntity (aka SelectableListComponent.extractEntity)
+            // is using selectedRow to extract the entity while we need to extract all of them
+            // (i.e. AbstractTableBasedComponent extractEntity/extractAllEntities behaviour).
             childishBehaviour: new DefaultTableChildishBehaviour(parentComp, "cats")
         });
     }
