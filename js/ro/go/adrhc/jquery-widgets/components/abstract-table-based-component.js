@@ -24,4 +24,8 @@ class AbstractTableBasedComponent extends AbstractComponent {
         return this.tableBasedView.extractAllRowsInputValues(useOwnerOnFields)
             .map(it => EntityUtils.removeTransientId(it));
     }
+
+    extractEntity(useOwnerOnFields) {
+        return this.extractAllEntities(useOwnerOnFields);
+    }
 }
