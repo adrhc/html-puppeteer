@@ -50,6 +50,9 @@ class ChildishBehaviour {
      * 1. parentState != null: extract the child state from parentState
      * 2. parentState == null: extract the child state from this.parentComp.state.currentState
      *
+     * Used by CompositeBehaviour.processStateChangeWithKids
+     * where each kid extracts its part from the parent state.
+     *
      * @param [parentState]
      * @return {*} the child state extracted from the parent
      */
