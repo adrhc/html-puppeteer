@@ -1,4 +1,18 @@
+/**
+ * A component acting as a container for its kids. Its view is irrelevant because is composed by the kids views!
+ */
 class CreateDeleteListComponent extends ElasticListComponent {
+    /**
+     * remove the previous kids before reloading the table
+     */
+    _reload() {
+        this.doWithState((crudListState) => {
+            this.compositeBehaviour.childComponents.forEach(kid => {
+                crudListState.removeById(kid.state.currentState.id);
+            });
+        }).then(() => super._reload());
+    }
+
     /**
      * ADD
      *
