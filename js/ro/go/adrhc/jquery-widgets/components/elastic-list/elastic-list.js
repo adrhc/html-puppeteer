@@ -1,5 +1,6 @@
 /**
- * A SimpleListComponent
+ * A component acting as a container for its kids.
+ * Its view is irrelevant because is composed by the kids views!
  */
 class ElasticListComponent extends SimpleListComponent {
     /**
@@ -11,6 +12,27 @@ class ElasticListComponent extends SimpleListComponent {
     constructor(repository, state, view, idRowCompFactoryFn) {
         super(repository, state, view);
         this.compositeBehaviour = new ElasticListCompositeBehaviour(this, idRowCompFactoryFn);
+    }
+
+    /**
+     * remove the previous kids before reloading the table
+     */
+    _reload() {
+        this.doWithState((crudListState) => {
+            this.compositeBehaviour.childComponents.forEach(kid => {
+                crudListState.removeById(kid.state.currentState.id);
+            });
+        }).then(() => super._reload());
+    }
+
+    /**
+     * The rows are created as child components (see ElasticListCompositeBehaviour._createChildComponents).
+     *
+     * @param stateChange
+     * @return {Promise<StateChange>}
+     */
+    updateViewOnUPDATE_ALL(stateChange) {
+        return Promise.resolve(stateChange);
     }
 
     /**
@@ -45,6 +67,8 @@ class ElasticListComponent extends SimpleListComponent {
     }
 
     /**
+     * extractAllEntities calls this
+     *
      * @param [useOwnerOnFields] {boolean}
      * @return {Array<IdentifiableEntity>}
      */

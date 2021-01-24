@@ -168,13 +168,13 @@ class SelectableListComponent extends SimpleListComponent {
     }
 
     /**
-     * When having kids and useOwnerOnFields is null than the owner is used otherwise useOwnerOnFields is considered.
-     * When this.extractInputValues exists than this.extractEntity must use it instead of using super.extractEntity!
+     * This could be considered the extracted-entity behaviour of the component or a new behaviour.
+     * To abey the Liskov Substitution Principle principle (see SOLID principles) I consider this new behaviour.
      *
      * @param [useOwnerOnFields] {boolean}
      * @return {{}}
      */
-    extractEntity(useOwnerOnFields) {
+    extractSelectedEntity(useOwnerOnFields) {
         const selectedRow = this._selectedRowComponent;
         return selectedRow ? selectedRow.extractEntity(useOwnerOnFields) : undefined;
     }

@@ -51,7 +51,7 @@ class AbstractView {
 
     /**
      * @param [useOwnerOnFields] {boolean}
-     * @return {{}}
+     * @return {{}} the partially or totally the entity/entities data presented by the view
      */
     extractInputValues(useOwnerOnFields) {
         if (!this.$elem || !this.$elem.length) {

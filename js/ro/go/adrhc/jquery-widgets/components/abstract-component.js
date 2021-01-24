@@ -152,7 +152,7 @@ class AbstractComponent {
      * When this.extractInputValues exists than this.extractEntity must use it instead of using super.extractEntity!
      *
      * @param [useOwnerOnFields] {boolean}
-     * @return {*}
+     * @return {IdentifiableEntity|IdentifiableEntity[]} the entity/entities managed by the component
      */
     extractEntity(useOwnerOnFields) {
         const inputValues = this.extractInputValues(useOwnerOnFields);
@@ -174,11 +174,8 @@ class AbstractComponent {
      * When having kids and useOwnerOnFields is null than the owner must be is
      * used for the parent fields otherwise useOwnerOnFields value considered.
      *
-     * When this.extractAllInputValues exists than this.extractAllEntities
-     * must use it instead of using super.extractAllEntities!
-     *
      * @param [useOwnerOnFields] {boolean}
-     * @return {{}}
+     * @return {{}} the partially or totally the entity/entities data managed by the component
      */
     extractInputValues(useOwnerOnFields) {
         if (useOwnerOnFields == null) {

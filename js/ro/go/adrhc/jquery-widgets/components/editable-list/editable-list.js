@@ -121,7 +121,7 @@ class EditableListComponent extends SelectableListComponent {
          */
         const editableList = ev.data;
         const rowDataId = editableList.simpleListView.rowDataIdOf(this, true);
-        let entity = editableList.extractEntity();
+        let entity = editableList.extractSelectedEntity();
         entity = editableList.extractedEntityToRepoConverterFn(entity);
         editableList._handleRepoErrors(editableList.repository.save(entity)
             .then(savedEntity =>
