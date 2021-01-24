@@ -40,7 +40,8 @@ if (Modernizr.template) {
             repository: DbMock.PERSONS_REPOSITORY,
             readOnlyRow,
             editableRow,
-            deletableRow
+            deletableRow,
+            extractedEntityToRepoConverterFn: DbMock.parsePersonOnSave
         });
 
         component.init();
