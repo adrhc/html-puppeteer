@@ -51,7 +51,8 @@ if (Modernizr.template) {
             repository: personsRepository,
             readOnlyRow,
             editableRow,
-            deletableRow
+            deletableRow,
+            extractedEntityToRepoConverterFn: Person.parse
         });
 
         editableList.init();
