@@ -1,5 +1,9 @@
 /**
- * The child state is a property (Array type) in the parent state.
+ * EditableListComponent.extractEntity (aka SelectableListComponent.extractEntity)
+ * is using selectedRow to extract the entity while we need to extract all of them
+ * (i.e. AbstractTableBasedComponent extractEntity/extractAllEntities behaviour).
+ *
+ * Here the child state is a property (Array type) in the parent state.
  */
 class DefaultTableChildishBehaviour extends DefaultChildishBehaviour {
     /**
