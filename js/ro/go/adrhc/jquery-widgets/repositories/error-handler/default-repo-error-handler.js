@@ -33,6 +33,9 @@ class DefaultRepoErrorHandler extends RepoErrorHandler {
                     console.log(`error parsing as json:\n${jqXHR.responseText}`);
                 }
             }
+            if (typeof jqXHR === "string") {
+                console.log(`${this.constructor.name}.catch (jqXHR is string):\n${jqXHR}`);
+            }
             throw error ? error : new SimpleError(this.messages[requestType], requestType, data);
         });
     }
