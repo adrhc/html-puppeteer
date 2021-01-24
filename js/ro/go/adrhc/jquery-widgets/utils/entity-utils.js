@@ -64,7 +64,7 @@ class EntityUtils {
     }
 
     static removeGeneratedOrInvalidId(object) {
-        if (EntityUtils.isIdGenerated(object) || EntityUtils.isInvalidId(object)) {
+        if (EntityUtils.isIdGenerated(object.id) || EntityUtils.isInvalidId(object.id)) {
             if (object.id != null) {
                 object.id = undefined;
             }
