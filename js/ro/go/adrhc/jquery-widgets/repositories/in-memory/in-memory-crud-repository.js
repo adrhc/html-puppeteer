@@ -15,11 +15,14 @@ class InMemoryCrudRepository extends CrudRepository {
     }
 
     /**
+     * @param [item] {IdentifiableEntity}
      * @return {IdentifiableEntity}
      */
-    createNewItem() {
-        const identifiableEntity = this.entityConverter({});
-        identifiableEntity.id = EntityUtils.generateId();
+    createNewItem(item = new IdentifiableEntity()) {
+        const identifiableEntity = this.entityConverter(item);
+        if (identifiableEntity.id == null) {
+            identifiableEntity.id = EntityUtils.generateId();
+        }
         this.items.unshift(identifiableEntity);
         return identifiableEntity;
     }
@@ -28,7 +31,7 @@ class InMemoryCrudRepository extends CrudRepository {
      * @return {Promise<IdentifiableEntity[]>}
      */
     findAll() {
-        return Promise.resolve(this.items.map(item => this._typedEntityOf(item)));
+        return Promise.resolve(this.items.map(item => this.entityConverter(item)));
     }
 
     delete(id) {
@@ -46,7 +49,7 @@ class InMemoryCrudRepository extends CrudRepository {
      * @return {Promise<IdentifiableEntity>|IdentifiableEntity}
      */
     getById(id, dontUsePromise) {
-        const resultItem = this._typedEntityOf(EntityUtils.findById(id, this.items));
+        const resultItem = this.entityConverter(EntityUtils.findById(id, this.items));
         if (dontUsePromise) {
             return resultItem;
         } else {
@@ -67,7 +70,7 @@ class InMemoryCrudRepository extends CrudRepository {
         }
         item.id = EntityUtils.generateId();
         this.items.unshift(item);
-        const resultItem = this._typedEntityOf(item);
+        const resultItem = this.entityConverter(item);
         if (dontUsePromise) {
             return resultItem;
         } else {
@@ -89,11 +92,7 @@ class InMemoryCrudRepository extends CrudRepository {
         if (removedIndex < 0) {
             return Promise.reject(new SimpleError("Repository couldn't find the item to update!", "update", item));
         } else {
-            return Promise.resolve(this._typedEntityOf(item));
+            return Promise.resolve(this.entityConverter(item));
         }
-    }
-
-    _typedEntityOf(item) {
-        return this.entityConverter(item);
     }
 }

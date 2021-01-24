@@ -18,5 +18,25 @@ class DbMock {
                 {id: 33, name: "cat33"}])
     ], Person.parse);
 
+    static parsePersonOnSave(object) {
+        if (object.cats != null && $.isArray(object.cats)) {
+            object.cats.forEach(cat => {
+                if (cat.id == null) {
+                    cat.id = Math.abs(EntityUtils.generateId());
+                } else {
+                    cat.id = Math.abs(cat.id);
+                }
+            })
+        }
+        if (object.id == null) {
+            object.id = Math.abs(EntityUtils.generateId());
+            const person = Person.parse(object);
+            DbMock.PERSONS_REPOSITORY.items.unshift(person);
+            return person;
+
+        }
+        return Person.parse(object);
+    }
+
     static DYNA_SEL_ONE_PERS_REPOSITORY = new InMemoryDynaSelOneRepository(DbMock.PERSONS_REPOSITORY);
 }

@@ -1,5 +1,5 @@
 class EntityUtils {
-    static lastGeneratedId = -1;
+    static lastGeneratedId = -999;
 
     static get transientId() {
         return "newId";
