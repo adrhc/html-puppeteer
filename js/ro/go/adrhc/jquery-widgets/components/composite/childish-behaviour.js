@@ -3,7 +3,7 @@
  */
 class ChildishBehaviour {
     /**
-     * childComp means "me/this/current" relative to ChildishBehaviour
+     * childComp, in relation to ChildishBehaviour, means: "me" or "this" or "current"
      *
      * @type {AbstractComponent}
      */
