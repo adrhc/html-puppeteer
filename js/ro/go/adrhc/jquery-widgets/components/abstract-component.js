@@ -156,7 +156,18 @@ class AbstractComponent {
      */
     extractEntity(useOwnerOnFields) {
         const inputValues = this.extractInputValues(useOwnerOnFields);
-        return EntityUtils.removeTransientId(inputValues);
+        if (inputValues == null) {
+            return inputValues;
+        }
+        if ($.isArray(inputValues)) {
+            return inputValues.map(it => this._clearInvalidId(it));
+        } else {
+            return this._clearInvalidId(inputValues);
+        }
+    }
+
+    _clearInvalidId(inputValues) {
+        return EntityUtils.removeGeneratedOrInvalidId(inputValues);
     }
 
     /**
