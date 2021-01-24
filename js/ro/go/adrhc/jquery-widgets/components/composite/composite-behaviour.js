@@ -101,14 +101,16 @@ class CompositeBehaviour {
      * When having kids and useOwnerOnFields is null than the owner must be is
      * used for the parent fields otherwise useOwnerOnFields value considered.
      *
-     * When this.extractAllInputValues exists than this.extractAllEntities
+     * Not sure about the below because each kid should know to extract its
+     * inputValues so should be no reason to overwrite extractAllInputValues:
+     * when this.extractAllInputValues exists than this.extractAllEntities
      * must use it instead of using super.extractAllEntities!
      *
      * @param [useOwnerOnFields] {boolean}
      * @return {Array<IdentifiableEntity>}
      */
     extractAllEntities(useOwnerOnFields) {
-        return this.extractAllInputValues(useOwnerOnFields).map(iv => EntityUtils.removeTransientId(iv));
+        return this.childComponents.map((kid) => kid.extractEntity(useOwnerOnFields));
     }
 
     /**
