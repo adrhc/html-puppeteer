@@ -31,7 +31,11 @@ class Person extends DynaSelOneItem {
             person.friend = $.extend(true, new Person(), object.friend);
         }
         if (person.cats) {
-            person.cats.forEach(cat => EntityUtils.removeGeneratedOrInvalidId(cat))
+            person.cats.forEach(cat => {
+                cat.friendId = cat.person ? cat.person.id : cat.friendId;
+                cat.person = Person.parse(cat.person);
+                return EntityUtils.removeGeneratedOrInvalidId(cat);
+            })
         } else {
             // https://stackoverflow.com/questions/5587482/hibernate-a-collection-with-cascade-all-delete-orphan-was-no-longer-referenc
             person.cats = [];
