@@ -45,13 +45,10 @@ class ElasticListComponent extends SimpleListComponent {
     }
 
     /**
-     * When having kids and useOwnerOnFields is null than the owner is used otherwise useOwnerOnFields is considered.
-     * When this.extractAllInputValues exists than this.extractAllEntities must use it instead of using super.extractAllEntities!
-     *
      * @param [useOwnerOnFields] {boolean}
      * @return {Array<IdentifiableEntity>}
      */
-    extractAllEntities(useOwnerOnFields) {
+    extractEntity(useOwnerOnFields) {
         return this.compositeBehaviour.extractAllEntities(useOwnerOnFields);
     }
 
