@@ -22,13 +22,19 @@ class Person extends DynaSelOneItem {
         return this.lastName;
     }
 
-    static entityConverter(object) {
+    static parse(object) {
         if (!object) {
             return undefined;
         }
         const person = $.extend(true, new Person(), object);
         if (object.friend) {
             person.friend = $.extend(true, new Person(), object.friend);
+        }
+        if (person.cats) {
+            person.cats.forEach(cat => EntityUtils.removeGeneratedOrInvalidId(cat))
+        } else {
+            // https://stackoverflow.com/questions/5587482/hibernate-a-collection-with-cascade-all-delete-orphan-was-no-longer-referenc
+            person.cats = [];
         }
         return person;
     }

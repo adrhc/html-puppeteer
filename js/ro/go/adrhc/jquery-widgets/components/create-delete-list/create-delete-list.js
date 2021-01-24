@@ -33,6 +33,16 @@ class CreateDeleteListComponent extends ElasticListComponent {
     }
 
     /**
+     * The rows are created as child components (see ElasticListCompositeBehaviour._createChildComponents).
+     *
+     * @param stateChange
+     * @return {Promise<StateChange>}
+     */
+    updateViewOnUPDATE_ALL(stateChange) {
+        return Promise.resolve(stateChange);
+    }
+
+    /**
      * linking triggers to component's handlers (aka capabilities)
      *
      * @private

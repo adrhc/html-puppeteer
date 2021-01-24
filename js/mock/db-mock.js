@@ -16,7 +16,7 @@ class DbMock {
             [{id: 31, name: "cat31"},
                 {id: 32, name: "cat32"},
                 {id: 33, name: "cat33"}])
-    ], Person.entityConverter);
+    ], Person.parse);
 
     static DYNA_SEL_ONE_PERS_REPOSITORY = new InMemoryDynaSelOneRepository(DbMock.PERSONS_REPOSITORY);
 }

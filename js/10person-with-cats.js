@@ -32,11 +32,11 @@ if (Modernizr.template) {
              */
             createChildComponent: (idRowCompParent) => {
                 const $parentElem = idRowCompParent.view.$elem;
-                AssertionUtils.isNotNull($parentElem, "friendDynaSelOneCompFactory.createChildComponent");
+                AssertionUtils.isTrue($parentElem && $parentElem.length === 1, "friendDynaSelOneCompFactory.createChildComponent");
 
                 return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", $parentElem),
                     DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
-                        childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent, "friend", Person.entityConverter)
+                        childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent, "friend", Person.parse)
                     })
             }
         };

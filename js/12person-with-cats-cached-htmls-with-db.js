@@ -30,8 +30,8 @@ if (Modernizr.template) {
 
     // main
     $(() => cachedUrls.namedUrls.then((namedUrls) => {
-        const personsRepository = new DbCrudRepository("persons", Person.entityConverter);
-        const dynaSelOnePersRepo = new DbDynaSelOneRepository("person", Person.entityConverter);
+        const personsRepository = new DbCrudRepository("persons", Person.parse);
+        const dynaSelOnePersRepo = new DbDynaSelOneRepository("person", Person.parse);
 
         // DYNAMIC-SELECT-ONE
         DynamicSelectOneFactory.create("dyna-sel-one", dynaSelOnePersRepo, {}).init();
@@ -48,7 +48,7 @@ if (Modernizr.template) {
 
         // friend (Person) dyna select one child component
         const friendDynaSelOneCompFactory = DynamicSelectOneFactory.createChildComponentFactory(
-            "friend", Person.entityConverter, dynaSelOnePersRepo);
+            "friend", Person.parse, dynaSelOnePersRepo);
 
         // EDITABLE ROW
         const editableRow = SimpleRowFactory.createIdentifiableRow(
@@ -72,7 +72,8 @@ if (Modernizr.template) {
             repository: personsRepository,
             readOnlyRow,
             editableRow,
-            deletableRow
+            deletableRow,
+            extractedEntityToRepoConverterFn: Person.parse
         });
 
         return editableList.init();

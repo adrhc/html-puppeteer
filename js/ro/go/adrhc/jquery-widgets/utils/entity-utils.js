@@ -37,7 +37,9 @@ class EntityUtils {
 
     static removeGeneratedId(object) {
         if (EntityUtils.isIdGenerated(object.id)) {
-            delete object.id;
+            if (object.id != null) {
+                object.id = undefined;
+            }
         }
         return object;
     }
@@ -63,14 +65,18 @@ class EntityUtils {
 
     static removeGeneratedOrInvalidId(object) {
         if (EntityUtils.isIdGenerated(object) || EntityUtils.isInvalidId(object)) {
-            delete object.id;
+            if (object.id != null) {
+                object.id = undefined;
+            }
         }
         return object;
     }
 
     static removeTransientId(object) {
         if (EntityUtils.isTransient(object)) {
-            delete object.id;
+            if (object.id != null) {
+                object.id = undefined;
+            }
         }
         return object;
     }

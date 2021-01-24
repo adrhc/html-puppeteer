@@ -38,11 +38,11 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
              */
             createChildComponent: (idRowCompParent) => {
                 const $parentElem = idRowCompParent.view.$elem;
-                AssertionUtils.isNotNull($parentElem, "ownerDynaSelOneCompFactory.createChildComponent");
+                AssertionUtils.isTrue($parentElem && $parentElem.length === 1, "ownerDynaSelOneCompFactory.createChildComponent");
 
                 return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", $parentElem),
                     this.dynaSelOnePersRepo, {
-                        childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent, "person", Person.entityConverter)
+                        childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent, "person", Person.parse)
                     })
             }
         };

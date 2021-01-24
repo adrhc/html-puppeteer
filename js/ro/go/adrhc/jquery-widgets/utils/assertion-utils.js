@@ -5,6 +5,7 @@ class AssertionUtils {
      */
     static isNotNull(object, message) {
         if (object == null) {
+            console.log(`AssertionUtils.isNotNull failed: ${message}`);
             throw !!message ? `${message}: null object!` : "null object!";
         }
     }
@@ -17,6 +18,7 @@ class AssertionUtils {
      */
     static isTrue(expression, message) {
         if (expression !== true) {
+            console.log(`AssertionUtils.isTrue failed: ${message}`);
             throw !!message ? message : `${this.constructor.name}.isTrue failed`;
         }
     }
@@ -29,6 +31,7 @@ class AssertionUtils {
      */
     static isFalse(expression, message) {
         if (expression !== false) {
+            console.log(`AssertionUtils.isFalse failed: ${message}`);
             throw !!message ? message : `${this.constructor.name}.isFalse failed`;
         }
     }
@@ -39,8 +42,10 @@ class AssertionUtils {
      */
     static isNullOrEmpty(array, message) {
         if (array && !$.isArray(array)) {
+            console.log(`AssertionUtils.isNullOrEmpty failed: ${message}`);
             throw `this is not an array:\n${JSON.stringify(array)}`;
         } else if (array && array.length !== 0) {
+            console.log(`AssertionUtils.isNullOrEmpty failed: ${message}`);
             throw !!message ? message : `${this.constructor.name}.isNullOrEmpty failed`;
         }
     }
