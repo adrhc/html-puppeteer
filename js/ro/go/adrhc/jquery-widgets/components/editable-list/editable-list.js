@@ -130,6 +130,7 @@ class EditableListComponent extends SelectableListComponent {
                     editableListState.switchToOff();
                     // todo: sync "append" save param with notSelectedRow.tableRelativePositionOnCreate
                     // events: DELETE (transient, if any) + CREATE or just UPDATE
+                    console.log(`${this.constructor.name}.onUpdate, savedEntity:\n${JSON.stringify(savedEntity)}`);
                     editableListState.save(savedEntity, rowDataId);
                 }))
             .catch((simpleError) => {
