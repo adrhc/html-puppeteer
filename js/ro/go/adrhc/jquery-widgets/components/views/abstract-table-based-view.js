@@ -20,12 +20,13 @@ class AbstractTableBasedView extends AbstractView {
     }
 
     /**
-     * by default this component won't use the owner to detect its fields
+     * By default this component won't use the owner to detect its fields.
      *
      * @param useOwnerOnFields {boolean|undefined}
      * @return {Array<{}>}
+     * @protected
      */
-    extractAllRowsInputValues(useOwnerOnFields) {
+    extractInputValues(useOwnerOnFields) {
         return this.tableAdapter.$getAllRows()
             .map((index, elem) =>
                 FormUtils.prototype.objectifyInputsOf($(elem), useOwnerOnFields ? this.owner : undefined))
