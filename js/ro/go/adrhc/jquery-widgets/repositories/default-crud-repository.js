@@ -6,7 +6,11 @@ class DefaultCrudRepository extends CrudRepository {
     /**
      * @type {function({}): IdentifiableEntity}
      */
-    entityConverter;
+    responseConverter;
+    /**
+     * @type {function({}): IdentifiableEntity}
+     */
+    requestConverter;
     /**
      * @type {RepoErrorHandler}
      */
@@ -15,13 +19,16 @@ class DefaultCrudRepository extends CrudRepository {
     /**
      * @param url {string}
      * @param [entityConverter] {function({}): IdentifiableEntity}
+     * @param [requestConverter] {function({}): IdentifiableEntity}
      * @param errorHandler {RepoErrorHandler}
      */
     constructor(url, entityConverter = IdentifiableEntity.entityConverter,
+                requestConverter = (reqData) => reqData,
                 errorHandler = new DefaultRepoErrorHandler()) {
         super();
         this.url = url;
-        this.entityConverter = entityConverter;
+        this.responseConverter = entityConverter;
+        this.requestConverter = requestConverter;
         this.errorHandler = errorHandler;
     }
 
@@ -31,7 +38,7 @@ class DefaultCrudRepository extends CrudRepository {
     findAll() {
         return this.errorHandler.catch($.getJSON(this.url)
                 .then(data => RestUtils.unwrapHAL(data))
-                .then(items => items.map(item => this.entityConverter(item))),
+                .then(items => items.map(item => this.responseConverter(item))),
             "findAll");
     }
 
@@ -39,8 +46,8 @@ class DefaultCrudRepository extends CrudRepository {
         return this.errorHandler.catch($.ajax({
                 url: `${this.url}/${identifiableEntity.id}`,
                 method: "PUT",
-                data: identifiableEntity,
-            }).then(it => this.entityConverter(RestUtils.unwrapHAL(it))),
+                data: this.requestConverter(identifiableEntity),
+            }).then(it => this.responseConverter(RestUtils.unwrapHAL(it))),
             "update", identifiableEntity);
     }
 
@@ -48,8 +55,8 @@ class DefaultCrudRepository extends CrudRepository {
         return this.errorHandler.catch($.ajax({
                 url: this.url,
                 method: "POST",
-                data: identifiableEntity,
-            }).then(it => this.entityConverter(RestUtils.unwrapHAL(it))),
+                data: this.requestConverter(identifiableEntity),
+            }).then(it => this.responseConverter(RestUtils.unwrapHAL(it))),
             "insert", identifiableEntity);
     }
 
@@ -63,7 +70,7 @@ class DefaultCrudRepository extends CrudRepository {
 
     getById(id) {
         return this.errorHandler.catch($.get(`${this.url}/${id}`)
-                .then(it => this.entityConverter(RestUtils.unwrapHAL(it))),
+                .then(it => this.responseConverter(RestUtils.unwrapHAL(it))),
             "getById", id);
     }
 }
