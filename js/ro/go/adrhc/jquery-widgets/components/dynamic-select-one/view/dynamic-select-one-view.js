@@ -3,16 +3,35 @@
  */
 class DynamicSelectOneView extends AbstractView {
     /**
+     * @type {CachedUrl}
+     */
+    tmpl;
+
+    /**
      * @param elemIdOrJQuery {string|jQuery<HTMLTableRowElement>}
      * @param tmplUrl {string}
      */
-    constructor(elemIdOrJQuery, {
-        tmplUrl = "js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/templates/dyna-sel-one.html"
-    }) {
+    constructor(elemIdOrJQuery, {tmplUrl}) {
         super();
         this._setupElem(elemIdOrJQuery);
         this._setupOwner();
-        this.tmpl = new CachedUrl(tmplUrl);
+        this._setupCachedUrl(tmplUrl);
+    }
+
+    _setupCachedUrl(dynaSelOneHtml) {
+        if (dynaSelOneHtml) {
+            this.tmpl = new CachedUrl(dynaSelOneHtml);
+        } else {
+            dynaSelOneHtml = "js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/templates/dyna-sel-one.html";
+            if (JqueryWidgetsConfig.serverRoot.endsWith("/")) {
+                dynaSelOneHtml = `${JqueryWidgetsConfig.serverRoot}${dynaSelOneHtml}`;
+            } else if (!JqueryWidgetsConfig.serverRoot || !JqueryWidgetsConfig.serverRoot.trim()) {
+                // nothing to do here
+            } else {
+                dynaSelOneHtml = `${JqueryWidgetsConfig.serverRoot}/${dynaSelOneHtml}`;
+            }
+            this.tmpl = new CachedUrl(dynaSelOneHtml);
+        }
     }
 
     /**

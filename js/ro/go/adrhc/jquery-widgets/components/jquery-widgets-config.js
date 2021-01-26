@@ -1,0 +1,3 @@
+class JqueryWidgetsConfig {
+    static serverRoot = "";
+}
