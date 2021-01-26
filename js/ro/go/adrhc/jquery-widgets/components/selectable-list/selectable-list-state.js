@@ -87,6 +87,7 @@ class SelectableListState extends CrudListState {
         const swappingStateChange = this.swappingState.findFirstFromNewest((swappingStateChange) => swappingStateChange.data.isPrevious);
         if (!swappingStateChange) {
             // error: no isPrevious (true) state change
+            console.error("found no isPrevious = true state change!");
             throw "found no isPrevious = true state change!";
         }
         /**
@@ -96,6 +97,7 @@ class SelectableListState extends CrudListState {
         const selectableSwappingData = swappingStateChange.data.data;
         if (selectableSwappingData.reloadedId != null) {
             // error: reloadedId != null
+            console.error(`reloadedId (${selectableSwappingData.reloadedId}) != null:\n${JSON.stringify(swappingStateChange)}`);
             throw `reloadedId (${selectableSwappingData.reloadedId}) != null:\n${JSON.stringify(swappingStateChange)}`;
         }
         if (selectableSwappingData.itemId == null) {

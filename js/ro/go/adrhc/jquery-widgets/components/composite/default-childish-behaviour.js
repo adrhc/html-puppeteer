@@ -24,7 +24,7 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
         } else if ($.isArray(childEntity)) {
             console.log(`${this.constructor.name}.copyChildState: childStateProperty is null`);
             if (!$.isArray(parentState)) {
-                console.log(`${this.constructor.name}.copyChildState: childEntity is Array while parentState is not!`);
+                console.error(`${this.constructor.name}.copyChildState: childEntity is Array while parentState is not!`);
                 throw `${this.constructor.name}.copyChildState`;
             } else {
                 parentState.length = 0;
@@ -33,7 +33,7 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
         } else {
             console.log(`${this.constructor.name}.copyChildState: childStateProperty is null`);
             if ($.isArray(parentState)) {
-                console.log(`${this.constructor.name}.copyChildState: parentState is Array while childEntity is not!`);
+                console.error(`${this.constructor.name}.copyChildState: parentState is Array while childEntity is not!`);
                 throw `${this.constructor.name}.copyChildState`;
             } else {
                 $.extend(true, parentState, childEntity);

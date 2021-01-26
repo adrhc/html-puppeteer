@@ -51,7 +51,8 @@ class SwappingState extends BasicState {
      */
     switchOff(dontIgnoreMissingSwappingDetails) {
         if (dontIgnoreMissingSwappingDetails && !this.swappingDetails) {
-            throw "switchOff: missing swappingDetails"
+            console.error("switchOff: missing swappingDetails");
+            throw "switchOff: missing swappingDetails";
         } else if (!this.swappingDetails || this.swappingDetails.isPrevious) {
             // previous doesn't exist or is already "off"
             return false;
