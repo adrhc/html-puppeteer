@@ -2,14 +2,11 @@ class DynaSelOneChildishBehaviour extends DefaultChildishBehaviour {
     /**
      * @param parentComp {AbstractComponent}
      * @param childStateProperty {string} is the parentState property where to save the selectedItem
-     * @param childCompToEntityConverter {function({}): IdentifiableEntity} converts child-component state-snapshot to child entity
-     * @param parentSectionToChildEntityConverter {function({}): IdentifiableEntity} converts the portion from parent that belongs to the child to child entity
+     * @param childEntityConverter {function({}): IdentifiableEntity}
      */
-    constructor(parentComp, childStateProperty, childCompToEntityConverter,
-                parentSectionToChildEntityConverter = childCompToEntityConverter) {
+    constructor(parentComp, childStateProperty, childEntityConverter) {
         super(parentComp, childStateProperty);
-        this.childCompToEntityConverter = childCompToEntityConverter;
-        this.parentSectionToChildEntityConverter = parentSectionToChildEntityConverter;
+        this.childEntityConverter = childEntityConverter;
     }
 
     /**
@@ -20,13 +17,14 @@ class DynaSelOneChildishBehaviour extends DefaultChildishBehaviour {
      * @param [useOwnerOnFields] {boolean}
      */
     copyChildState(parentState, useOwnerOnFields) {
+        // selectedItem should already be a curated entity such that childEntityConverter would be useless
         const selectedItem = this._childComp.state.currentState;
-        parentState[this.childStateProperty] = this.childCompToEntityConverter(selectedItem);
+        parentState[this.childStateProperty] = this.childEntityConverter(selectedItem);
     }
 
     /**
      * I assume that parentComp will already be set!
-     *ddd
+     *
      * this.parentComp must be {IdentifiableRowComponent}
      *
      * @param childComp {DynamicSelectOneComponent}
@@ -36,10 +34,5 @@ class DynaSelOneChildishBehaviour extends DefaultChildishBehaviour {
         const parentState = this.parentComp.state.currentState;
         const dynaSelOneItem = this.extractChildState(parentState);
         childComp.dynaSelOneState.updateWithDynaSelOneItem(dynaSelOneItem);
-    }
-
-    extractChildState(parentState) {
-        const childStateFromParent = super.extractChildState(parentState);
-        return this.parentSectionToChildEntityConverter(childStateFromParent);
     }
 }

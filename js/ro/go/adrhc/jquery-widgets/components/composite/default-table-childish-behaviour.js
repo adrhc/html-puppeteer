@@ -22,8 +22,8 @@ class DefaultTableChildishBehaviour extends DefaultChildishBehaviour {
             parentState.length = 0;
             parentState.push(...childEntity);
         } else {
-            console.error(`${this.constructor.name}.copyChildState: childEntities is Array while parentState is not!`);
-            throw `${this.constructor.name}.copyChildState`;
+            console.error(`${this.constructor.name}.copyChildState: childEntities is Array while parentState is not and childStateProperty = null!`);
+            throw `${this.constructor.name}.copyChildState: childEntities is Array while parentState is not and childStateProperty = null!`;
         }
     }
 

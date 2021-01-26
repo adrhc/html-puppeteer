@@ -148,11 +148,11 @@ class AbstractComponent {
     }
 
     /**
-     * When having kids and useOwnerOnFields is null than the owner is used otherwise useOwnerOnFields is considered.
-     * When this.extractInputValues exists than this.extractEntity must use it instead of using super.extractEntity!
+     * When having kids and useOwnerOnFields is null than the owner is used despite
+     * of the useOwnerOnFields value otherwise the useOwnerOnFields value is used.
      *
      * @param [useOwnerOnFields] {boolean}
-     * @return {IdentifiableEntity|IdentifiableEntity[]} the entity/entities managed by the component
+     * @return {IdentifiableEntity} the entity managed by the component when managing only 1 entity
      */
     extractEntity(useOwnerOnFields) {
         const inputValues = this.extractInputValues(useOwnerOnFields);
@@ -160,9 +160,30 @@ class AbstractComponent {
             return inputValues;
         }
         if ($.isArray(inputValues)) {
-            return inputValues.map(it => this._clearInvalidId(it));
+            console.error("extractEntity is managing 1 entity only!");
+            throw `${this.constructor.name}.extractEntity: unsupported operation!`;
         } else {
             return this._clearInvalidId(inputValues);
+        }
+    }
+
+    /**
+     * When having kids and useOwnerOnFields is null than the owner is used despite
+     * of the useOwnerOnFields value otherwise the useOwnerOnFields value is used.
+     *
+     * @param [useOwnerOnFields] {boolean}
+     * @return {IdentifiableEntity|undefined} the entities managed by the component (could be only 1 entity)
+     */
+    extractAllEntities(useOwnerOnFields) {
+        const inputValues = this.extractInputValues(useOwnerOnFields);
+        if (inputValues == null) {
+            return inputValues;
+        }
+        if ($.isArray(inputValues)) {
+            return inputValues.map(it => this._clearInvalidId(it));
+        } else {
+            console.error("extractEntity is managing more than 1 entity!");
+            throw `${this.constructor.name}.extractAllEntities: unsupported operation!`;
         }
     }
 
@@ -191,6 +212,7 @@ class AbstractComponent {
      * @return {Promise<StateChange>}
      */
     updateViewOnKnownStateChange(stateChange) {
+        console.error(`${this.constructor.name}.updateViewOnKnownStateChange is not implemented!`);
         throw `${this.constructor.name}.updateViewOnKnownStateChange is not implemented!`;
     }
 

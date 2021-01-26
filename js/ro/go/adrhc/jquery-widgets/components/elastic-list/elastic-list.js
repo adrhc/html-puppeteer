@@ -72,7 +72,7 @@ class ElasticListComponent extends SimpleListComponent {
      * @param [useOwnerOnFields] {boolean}
      * @return {Array<IdentifiableEntity>}
      */
-    extractEntity(useOwnerOnFields) {
+    extractAllEntities(useOwnerOnFields) {
         return this.compositeBehaviour.extractAllEntities(useOwnerOnFields);
     }
 

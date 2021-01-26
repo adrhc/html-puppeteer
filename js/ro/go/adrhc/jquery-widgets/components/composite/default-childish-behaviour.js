@@ -17,27 +17,25 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
      */
     copyChildState(parentState, useOwnerOnFields) {
         const childEntity = this._childComp.extractEntity(useOwnerOnFields);
-        if (!!this.childStateProperty) {
+        if (!!childEntity && $.isArray(childEntity)) {
+            console.error(`${this.constructor.name}.copyChildState: Array is unsupported for childEntity! use DefaultTableChildishBehaviour`);
+            throw `${this.constructor.name}.copyChildState: Array is unsupported for childEntity!`;
+        }
+        if (childEntity == null && parentState == null) {
+            console.log(`${this.constructor.name}.copyChildState: both childEntity and parentState are null`);
+        } else if (parentState == null) {
+            console.error(`${this.constructor.name}.copyChildState: parentState is null`);
+            throw `${this.constructor.name}.copyChildState: parentState is null`;
+        } else if ($.isArray(parentState)) {
+            parentState.push(childEntity);
+        } else if (!!this.childStateProperty) {
             parentState[this.childStateProperty] = childEntity;
-        } else if (childEntity == null) {
-            console.log(`${this.constructor.name}.copyChildState: childStateProperty and childEntity are both null`);
-        } else if ($.isArray(childEntity)) {
+        } else if (!!childEntity && typeof childEntity === "object") {
             console.log(`${this.constructor.name}.copyChildState: childStateProperty is null`);
-            if (!$.isArray(parentState)) {
-                console.error(`${this.constructor.name}.copyChildState: childEntity is Array while parentState is not!`);
-                throw `${this.constructor.name}.copyChildState`;
-            } else {
-                parentState.length = 0;
-                parentState.push(...childEntity);
-            }
+            $.extend(true, parentState, childEntity);
         } else {
-            console.log(`${this.constructor.name}.copyChildState: childStateProperty is null`);
-            if ($.isArray(parentState)) {
-                console.error(`${this.constructor.name}.copyChildState: parentState is Array while childEntity is not!`);
-                throw `${this.constructor.name}.copyChildState`;
-            } else {
-                $.extend(true, parentState, childEntity);
-            }
+            console.error(`${this.constructor.name}.copyChildState: childEntity = ${childEntity}`);
+            throw `${this.constructor.name}.copyChildState: childEntity is not object! childEntity = ${childEntity}`;
         }
     }
 

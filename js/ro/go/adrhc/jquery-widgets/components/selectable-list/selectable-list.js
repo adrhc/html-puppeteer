@@ -179,6 +179,10 @@ class SelectableListComponent extends SimpleListComponent {
         return selectedRow ? selectedRow.extractEntity(useOwnerOnFields) : undefined;
     }
 
+    extractEntity(useOwnerOnFields) {
+        return this.extractSelectedEntity();
+    }
+
     /**
      * linking "outside" (and/or default) triggers to component's handlers (aka capabilities)
      * @protected

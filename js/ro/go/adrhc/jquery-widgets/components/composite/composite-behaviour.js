@@ -110,7 +110,13 @@ class CompositeBehaviour {
      * @return {Array<IdentifiableEntity>}
      */
     extractAllEntities(useOwnerOnFields) {
-        return this.childComponents.map((kid) => kid.extractEntity(useOwnerOnFields));
+        return this.childComponents.map((kid) => {
+            try {
+                return kid.extractEntity(useOwnerOnFields);
+            } catch (e) {
+                return kid.extractAllEntities(useOwnerOnFields);
+            }
+        });
     }
 
     /**
