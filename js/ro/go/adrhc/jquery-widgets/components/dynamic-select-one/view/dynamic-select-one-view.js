@@ -112,7 +112,7 @@ class DynamicSelectOneView extends AbstractView {
         if (state.optionsLength > 1 || state.optionsLength === 1 && !state.selectedItem) {
             // rendering options
             viewModel.options = state.options.map(o => {
-                const option = {id: o.id, description: o.description, selected: ""};
+                const option = new DynaSelOneOption(o.id, o.optionText);
                 if (state.selectedItem && o.id === state.selectedItem.id) {
                     option.selected = "selected";
                 }

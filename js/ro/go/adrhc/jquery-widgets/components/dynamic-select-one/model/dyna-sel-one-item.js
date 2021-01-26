@@ -4,10 +4,11 @@ class DynaSelOneItem {
      */
     id;
 
-    constructor(id, title, description) {
+    constructor(id, title, description, optionText) {
         this.id = id;
         this._title = title;
         this._description = description;
+        this._optionText = optionText;
     }
 
     get title() {
@@ -24,5 +25,13 @@ class DynaSelOneItem {
 
     set description(value) {
         this._description = value;
+    }
+
+    get optionText() {
+        return this._optionText;
+    }
+
+    set optionText(value) {
+        this._optionText = value;
     }
 }

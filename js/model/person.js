@@ -22,6 +22,10 @@ class Person extends DynaSelOneItem {
         return this.lastName;
     }
 
+    get optionText() {
+        return `${this.firstName} - ${this.lastName}`;
+    }
+
     static parse(object) {
         if (!object) {
             return undefined;
