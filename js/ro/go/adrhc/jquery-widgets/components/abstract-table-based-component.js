@@ -24,6 +24,8 @@ class AbstractTableBasedComponent extends AbstractComponent {
      * the kids shouldn't though do something different; conclusion: I'll relay on the
      * kids to obey Liskov Substitution Principle principle.
      *
+     * see also AbstractTableBasedView.extractInputValues
+     *
      * @param useOwnerOnFields {boolean|undefined}
      * @return {Array<IdentifiableEntity>}
      */
