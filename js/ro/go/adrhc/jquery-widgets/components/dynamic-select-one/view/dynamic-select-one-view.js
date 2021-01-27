@@ -18,20 +18,8 @@ class DynamicSelectOneView extends AbstractView {
         this._setupCachedUrl(tmplUrl);
     }
 
-    _setupCachedUrl(dynaSelOneHtml) {
-        if (dynaSelOneHtml) {
-            this.tmpl = new CachedUrl(dynaSelOneHtml);
-        } else {
-            dynaSelOneHtml = "js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/templates/dyna-sel-one.html";
-            if (JqueryWidgetsConfig.serverRoot.endsWith("/")) {
-                dynaSelOneHtml = `${JqueryWidgetsConfig.serverRoot}${dynaSelOneHtml}`;
-            } else if (!JqueryWidgetsConfig.serverRoot || !JqueryWidgetsConfig.serverRoot.trim()) {
-                // nothing to do here
-            } else {
-                dynaSelOneHtml = `${JqueryWidgetsConfig.serverRoot}/${dynaSelOneHtml}`;
-            }
-            this.tmpl = new CachedUrl(dynaSelOneHtml);
-        }
+    _setupCachedUrl(dynaSelOneHtml = "js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/templates/dyna-sel-one.html") {
+        this.tmpl = new CachedUrl(JqueryWidgetsConfig.urlOf(dynaSelOneHtml));
     }
 
     /**
