@@ -11,6 +11,9 @@ class DynaSelOneItem {
         this._optionText = optionText;
     }
 
+    /**
+     * @return {string} the searched value
+     */
     get title() {
         return this._title;
     }
@@ -19,6 +22,9 @@ class DynaSelOneItem {
         this._title = value;
     }
 
+    /**
+     * @return {string} the found value placed near the search (title) value
+     */
     get description() {
         return this._description;
     }
@@ -27,6 +33,9 @@ class DynaSelOneItem {
         this._description = value;
     }
 
+    /**
+     * @return {string} the text to show in the list with findings
+     */
     get optionText() {
         return this._optionText;
     }
