@@ -1,4 +1,7 @@
 class AbstractComponent {
+    static EXTRACT_ENTITY_UNSUPPORTED = "AbstractComponent.extractEntity: unsupported operation!";
+    static EXTRACT_ENTITIES_UNSUPPORTED = "AbstractComponent.extractAllEntities: unsupported operation!";
+
     /**
      * @type {BasicState}
      */
@@ -46,6 +49,8 @@ class AbstractComponent {
     }
 
     /**
+     * copies children state (if any) into the parentState
+     *
      * @param parentState
      * @return {boolean}
      */
@@ -84,15 +89,18 @@ class AbstractComponent {
     init(config = new ComponentInitConfig()) {
         return this._reloadState()
             .then(() => {
+                console.log(`${this.constructor.name}.init: updateViewOnStateChanges`);
                 AssertionUtils.isNullOrEmpty(this.compositeBehaviour.childComponents,
-                    `${this.constructor.name}.init: childComponents is not empty!`);
+                    `${this.constructor.name}.init: childComponents should be empty!`);
                 return this.updateViewOnStateChanges();
             })
             .then((stateChanges) => {
+                console.log(`${this.constructor.name}.init: compositeBehaviour.init`);
                 this.configureEvents();
                 return this.compositeBehaviour.init().then(() => stateChanges);
             })
             .catch((err) => {
+                console.error(`${this.constructor.name}.init, dontConfigEventsOnError = ${config.dontConfigEventsOnError}, error:\n`, err);
                 if (!config.dontConfigEventsOnError) {
                     // jqXHR is missing finally, so, if we would need to configureEvents
                     // on errors too, we would have to use catch anyway
@@ -149,7 +157,7 @@ class AbstractComponent {
 
     /**
      * When having kids and useOwnerOnFields is null than the owner is used despite
-     * of the useOwnerOnFields value otherwise the useOwnerOnFields value is used.
+     * of the useOwnerOnFields value; otherwise the useOwnerOnFields value is used.
      *
      * @param [useOwnerOnFields] {boolean}
      * @return {IdentifiableEntity} the entity managed by the component when managing only 1 entity
@@ -161,7 +169,7 @@ class AbstractComponent {
         }
         if ($.isArray(inputValues)) {
             console.error("extractEntity is managing 1 entity only!");
-            throw `${this.constructor.name}.extractEntity: unsupported operation!`;
+            throw AbstractComponent.EXTRACT_ENTITY_UNSUPPORTED;
         } else {
             return this._clearInvalidId(inputValues);
         }
@@ -183,7 +191,7 @@ class AbstractComponent {
             return inputValues.map(it => this._clearInvalidId(it));
         } else {
             console.error("extractEntity is managing more than 1 entity!");
-            throw `${this.constructor.name}.extractAllEntities: unsupported operation!`;
+            throw AbstractComponent.EXTRACT_ENTITIES_UNSUPPORTED;
         }
     }
 
