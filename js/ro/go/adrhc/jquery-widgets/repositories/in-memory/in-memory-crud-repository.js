@@ -1,5 +1,9 @@
 class InMemoryCrudRepository extends CrudRepository {
     /**
+     * @type {function({}): {}}
+     */
+    requestConverter;
+    /**
      * converts server's response
      *
      * @type {function({}): IdentifiableEntity}
@@ -7,12 +11,14 @@ class InMemoryCrudRepository extends CrudRepository {
     responseConverter;
 
     /**
-     * @param items {Array<IdentifiableEntity>}
+     * @param [items] {Array<IdentifiableEntity>}
      * @param [responseConverter] {function({}): IdentifiableEntity}
+     * @param [requestConverter] {function({}): IdentifiableEntity}
      */
-    constructor(items = [], responseConverter = IdentifiableEntity.entityConverter) {
+    constructor(items = [], responseConverter = IdentifiableEntity.entityConverter, requestConverter = IdentifiableEntity.entityConverter) {
         super();
         this.items = items;
+        this.requestConverter = requestConverter;
         this.responseConverter = responseConverter;
     }
 
@@ -24,9 +30,9 @@ class InMemoryCrudRepository extends CrudRepository {
         if (item.id == null) {
             item.id = EntityUtils.generateId();
         }
-        const identifiableEntity = this.responseConverter(item);
-        this.items.unshift(identifiableEntity);
-        return identifiableEntity;
+        const reqItem = this.requestConverter(item);
+        this.items.unshift(reqItem);
+        return this.responseConverter(reqItem);
     }
 
     /**
@@ -68,12 +74,13 @@ class InMemoryCrudRepository extends CrudRepository {
      */
     insert(item, dontUsePromise) {
         item.id = EntityUtils.generateId();
-        const resultItem = this.responseConverter(item);
-        this.items.unshift(resultItem);
+        const reqItem = this.requestConverter(item);
+        this.items.unshift(reqItem);
+        const respItem = this.responseConverter(reqItem);
         if (dontUsePromise) {
-            return resultItem;
+            return respItem;
         } else {
-            return Promise.resolve(resultItem);
+            return Promise.resolve(respItem);
         }
     }
 
@@ -84,12 +91,12 @@ class InMemoryCrudRepository extends CrudRepository {
      * @return {Promise<IdentifiableEntity>}
      */
     update(item) {
-        const resultItem = this.responseConverter(item);
-        const removedIndex = EntityUtils.findAndReplaceById(resultItem, this.items);
+        const reqItem = this.requestConverter(item);
+        const removedIndex = EntityUtils.findAndReplaceById(reqItem, this.items);
         if (removedIndex < 0) {
             return Promise.reject(new SimpleError("Repository couldn't find the item to update!", "update", item));
         } else {
-            return Promise.resolve(resultItem);
+            return Promise.resolve(this.responseConverter(reqItem));
         }
     }
 }

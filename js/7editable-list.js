@@ -31,7 +31,11 @@ if (Modernizr.template) {
                 tableIdOrJQuery, rowTmplId: "dogsTableDeletableRowTmpl"
             });
 
-        const component = EditableListFactory.create({items, tableIdOrJQuery, readOnlyRow, editableRow, deletableRow});
+        const repository = new InMemoryCrudRepository(items, undefined, (it) => {
+            it.id = Math.abs(it.id);
+            return it;
+        });
+        const component = EditableListFactory.create({repository, tableIdOrJQuery, readOnlyRow, editableRow, deletableRow});
 
         component
             .init()
