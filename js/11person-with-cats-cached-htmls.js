@@ -73,7 +73,7 @@ if (Modernizr.template) {
             editableRow,
             deletableRow,
             // the default is: () => IdentifiableEntity(TRANSIENT_ID)
-            newEntityFactoryFn: () => new Person(IdentifiableEntity.TRANSIENT_ID),
+            // newEntityFactoryFn: () => new Person(IdentifiableEntity.TRANSIENT_ID),
             extractedEntityConverterFn: Person.parse
         });
 
