@@ -1,5 +1,9 @@
 class CrudListState extends SimpleListState {
     /**
+     * @type {function(): IdentifiableEntity}
+     */
+    newEntityFactoryFn;
+    /**
      * whether to append or prepend new items
      *
      * @type {boolean}
@@ -7,10 +11,12 @@ class CrudListState extends SimpleListState {
     append;
 
     /**
+     * @param [newEntityFactoryFn] {function(): IdentifiableEntity}
      * @param [newItemsGoToTheEndOfTheList] {boolean}
      */
-    constructor(newItemsGoToTheEndOfTheList) {
+    constructor({newEntityFactoryFn = EntityUtils.newIdentifiableEntity, newItemsGoToTheEndOfTheList}) {
         super();
+        this.newEntityFactoryFn = newEntityFactoryFn;
         this.append = newItemsGoToTheEndOfTheList;
     }
 
@@ -23,7 +29,7 @@ class CrudListState extends SimpleListState {
      * @return {IdentifiableEntity}
      */
     createNewItem(append = this.append) {
-        const item = EntityUtils.newIdentifiableEntity();
+        const item = this.newEntityFactoryFn();
         return this.insertItem(item, append);
     }
 

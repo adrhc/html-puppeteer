@@ -1,8 +1,10 @@
 class InMemoryCrudRepository extends CrudRepository {
     /**
-     * @type {function({}): IdentifiableEntity} creates a new, pristine, IdentifiableEntity
+     * converts server's response
+     *
+     * @type {function({}): IdentifiableEntity}
      */
-    entityConverter;
+    responseConverter;
 
     /**
      * @param items {Array<IdentifiableEntity>}
@@ -11,7 +13,7 @@ class InMemoryCrudRepository extends CrudRepository {
     constructor(items = [], entityConverter = IdentifiableEntity.entityConverter) {
         super();
         this.items = items;
-        this.entityConverter = entityConverter;
+        this.responseConverter = entityConverter;
     }
 
     /**
@@ -19,7 +21,7 @@ class InMemoryCrudRepository extends CrudRepository {
      * @return {IdentifiableEntity}
      */
     createNewItem(item = new IdentifiableEntity()) {
-        const identifiableEntity = this.entityConverter(item);
+        const identifiableEntity = this.responseConverter(item);
         if (identifiableEntity.id == null) {
             identifiableEntity.id = EntityUtils.generateId();
         }
@@ -31,7 +33,7 @@ class InMemoryCrudRepository extends CrudRepository {
      * @return {Promise<IdentifiableEntity[]>}
      */
     findAll() {
-        return Promise.resolve(this.items.map(item => this.entityConverter(item)));
+        return Promise.resolve(this.items.map(item => this.responseConverter(item)));
     }
 
     delete(id) {
@@ -49,7 +51,7 @@ class InMemoryCrudRepository extends CrudRepository {
      * @return {Promise<IdentifiableEntity>|IdentifiableEntity}
      */
     getById(id, dontUsePromise) {
-        const resultItem = this.entityConverter(EntityUtils.findById(id, this.items));
+        const resultItem = this.responseConverter(EntityUtils.findById(id, this.items));
         if (dontUsePromise) {
             return resultItem;
         } else {
@@ -69,8 +71,8 @@ class InMemoryCrudRepository extends CrudRepository {
             return Promise.reject(new SimpleError("Salvarea datelor a eşuat!", "insert", item));
         }
         item.id = EntityUtils.generateId();
-        this.items.unshift(item);
-        const resultItem = this.entityConverter(item);
+        const resultItem = this.responseConverter(item);
+        this.items.unshift(resultItem);
         if (dontUsePromise) {
             return resultItem;
         } else {
@@ -88,11 +90,12 @@ class InMemoryCrudRepository extends CrudRepository {
         if (item.firstName === "error") {
             return Promise.reject(new SimpleError("Actualizarea datelor a eşuat!", "update", item));
         }
-        const removedIndex = EntityUtils.findAndReplaceById(item, this.items);
+        const resultItem = this.responseConverter(item);
+        const removedIndex = EntityUtils.findAndReplaceById(resultItem, this.items);
         if (removedIndex < 0) {
             return Promise.reject(new SimpleError("Repository couldn't find the item to update!", "update", item));
         } else {
-            return Promise.resolve(this.entityConverter(item));
+            return Promise.resolve(resultItem);
         }
     }
 }

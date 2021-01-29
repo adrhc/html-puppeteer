@@ -12,7 +12,7 @@ if (Modernizr.template) {
     $(() => {
         const items = [{id: 1, name: "dog1", person: DbMock.PERSONS_REPOSITORY.getById(1, true)},
             {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
-        const addNewRowsAtEnd = true;
+        const newItemsGoToTheEndOfTheList = true;
 
         // see interface ChildComponentFactory
         const rowChildCompFactories = {
@@ -32,7 +32,7 @@ if (Modernizr.template) {
 
         // dogs table with read-only row (default: on creation prepend to table)
         const elasticList = ElasticListFactory.create("dogsTable", "dogsTableRowTmpl", {
-            items, addNewRowsAtEnd, rowChildCompFactories
+            items, newItemsGoToTheEndOfTheList, rowChildCompFactories
         });
 
         elasticList
@@ -47,7 +47,7 @@ if (Modernizr.template) {
                 // elasticList.updateViewOnCREATE will init the child components
                 crudListState.insertItem({
                     id: 2,
-                    name: `restored dog2 with ${addNewRowsAtEnd ? "append" : "preppend"}`
+                    name: `restored dog2 with ${newItemsGoToTheEndOfTheList ? "append" : "preppend"}`
                 });
             }))
             // showing the entire table extracted data

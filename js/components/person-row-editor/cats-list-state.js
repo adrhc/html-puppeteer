@@ -1,11 +1,12 @@
 class CatsListState extends EditableListState {
     /**
      * @param repository {InMemoryCrudRepository}
+     * @param [newEntityFactoryFn] {function(): IdentifiableEntity}
      * @param [newItemsGoToTheEndOfTheList] {boolean}
      * @param [swappingState] {SwappingState}
      */
-    constructor(repository, newItemsGoToTheEndOfTheList, swappingState) {
-        super(newItemsGoToTheEndOfTheList, swappingState);
+    constructor(repository, {newEntityFactoryFn, newItemsGoToTheEndOfTheList, swappingState}) {
+        super({newEntityFactoryFn, newItemsGoToTheEndOfTheList, swappingState});
         this.repository = repository;
     }
 

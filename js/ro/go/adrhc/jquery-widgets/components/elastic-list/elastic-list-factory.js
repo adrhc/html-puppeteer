@@ -7,7 +7,8 @@ class ElasticListFactory {
      * @param crudListState {CrudListState}
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param simpleListView {SimpleListView}
-     * @param addNewRowsAtEnd {boolean} whether to append or prepend
+     * @param newItemsGoToTheEndOfTheList {boolean} whether to append or prepend
+     * @param newEntityFactoryFn {function(): IdentifiableEntity}
      * @param rowChildCompFactories {ChildComponentFactory|ChildComponentFactory[]}
      * @param rowChildishBehaviourFactoryFn
      * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, afterItemId: number|string, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
@@ -17,8 +18,9 @@ class ElasticListFactory {
     static create(tableIdOrJQuery, bodyRowTmplId, {
         items = [],
         repository = new InMemoryCrudRepository(items),
-        addNewRowsAtEnd,
-        crudListState = new CrudListState(addNewRowsAtEnd),
+        newItemsGoToTheEndOfTheList,
+        newEntityFactoryFn,
+        crudListState = new CrudListState({newEntityFactoryFn, newItemsGoToTheEndOfTheList}),
         mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId),
         simpleListView = new SimpleListView(mustacheTableElemAdapter),
         rowChildCompFactories,
@@ -28,7 +30,7 @@ class ElasticListFactory {
                 mustacheTableElemAdapter: elasticListComponent.tableBasedView.tableAdapter,
                 childCompFactories: rowChildCompFactories,
                 childishBehaviour,
-                tableRelativePositionOnCreate: addNewRowsAtEnd ? "append" : "prepend"
+                tableRelativePositionOnCreate: newItemsGoToTheEndOfTheList ? "append" : "prepend"
             });
             const rowChildishBehaviour = rowChildishBehaviourFactoryFn(elasticListComponent);
             if (rowChildishBehaviour) {

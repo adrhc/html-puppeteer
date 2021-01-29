@@ -9,6 +9,8 @@ class EditableListFactory {
      * @param bodyRowTmplHtml {string}
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param repository {CrudRepository}
+     * @param newItemsGoToTheEndOfTheList {boolean} whether to append or prepend
+     * @param newEntityFactoryFn {function(): IdentifiableEntity}
      * @param state {EditableListState}
      * @param view {SimpleListView}
      * @param readOnlyRow {IdentifiableRowComponent}
@@ -26,7 +28,9 @@ class EditableListFactory {
                       readOnlyRow,
                       mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId, !!bodyRowTmplHtml ? bodyRowTmplHtml : (!!bodyRowTmplId ? undefined : readOnlyRow.simpleRowView.tableAdapter.bodyRowTmplHtml)),
                       repository = new InMemoryCrudRepository(items),
-                      state = new EditableListState(),
+                      newItemsGoToTheEndOfTheList,
+                      newEntityFactoryFn,
+                      state = new EditableListState({newEntityFactoryFn, newItemsGoToTheEndOfTheList}),
                       view = new SimpleListView(mustacheTableElemAdapter),
                       editableRow,
                       deletableRow,

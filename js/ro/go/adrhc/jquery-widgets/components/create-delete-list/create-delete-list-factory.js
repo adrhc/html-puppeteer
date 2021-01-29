@@ -7,7 +7,8 @@ class CreateDeleteListFactory {
      * @param bodyRowTmplId {string}
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param simpleListView {SimpleListView}
-     * @param addNewRowsAtEnd {boolean} whether to append or prepend
+     * @param newItemsGoToTheEndOfTheList {boolean} whether to append or prepend
+     * @param newEntityFactoryFn {function(): IdentifiableEntity}
      * @param bodyRowTmplHtml {string}
      * @param rowChildCompFactories {ChildComponentFactory|ChildComponentFactory[]} are components placed on a row
      * @param rowChildishBehaviourFactoryFn
@@ -18,8 +19,9 @@ class CreateDeleteListFactory {
     static create(tableIdOrJQuery, {
         items = [],
         repository = new InMemoryCrudRepository(items),
-        addNewRowsAtEnd,
-        crudListState = new CrudListState(addNewRowsAtEnd),
+        newItemsGoToTheEndOfTheList,
+        newEntityFactoryFn,
+        crudListState = new CrudListState({newEntityFactoryFn, newItemsGoToTheEndOfTheList}),
         bodyRowTmplId,
         bodyRowTmplHtml,
         mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId, bodyRowTmplHtml),
@@ -30,7 +32,7 @@ class CreateDeleteListFactory {
             const idRowComp = SimpleRowFactory.createIdentifiableRow({
                 mustacheTableElemAdapter: elasticListComponent.tableBasedView.tableAdapter,
                 childCompFactories: rowChildCompFactories,
-                tableRelativePositionOnCreate: addNewRowsAtEnd ? "append" : "prepend"
+                tableRelativePositionOnCreate: newItemsGoToTheEndOfTheList ? "append" : "prepend"
             });
             const rowChildishBehaviour = rowChildishBehaviourFactoryFn(elasticListComponent);
             if (rowChildishBehaviour) {

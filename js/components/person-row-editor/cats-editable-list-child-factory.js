@@ -18,7 +18,7 @@ class CatsEditableListChildFactory extends ChildComponentFactory {
         return EditableListFactory.create({
             repository,
             // CatsListState cancels swapping events so there's no need for editableRow and deletableRow
-            state: new CatsListState(repository, true),
+            state: new CatsListState(repository, {newItemsGoToTheEndOfTheList: true}),
             tableIdOrJQuery: $catsTable,
             bodyRowTmplId: "editableCatsRowTmpl",
             readOnlyRow: catRow,

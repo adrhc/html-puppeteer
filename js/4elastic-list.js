@@ -11,11 +11,11 @@ if (Modernizr.template) {
 
     $(() => {
         const items = [{id: 1, name: "dog1"}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
-        const addNewRowsAtEnd = true;
+        const newItemsGoToTheEndOfTheList = true;
 
         // dogs table with read-only row (default: on creation prepend to table)
         const component = ElasticListFactory.create("dogsTable", "dogsTableRowTmpl", {
-            items, addNewRowsAtEnd
+            items, newItemsGoToTheEndOfTheList
         });
 
         component
@@ -28,7 +28,7 @@ if (Modernizr.template) {
                 // creating a new item with a not transient id (here id=2)
                 crudListState.insertItem({
                     id: 2,
-                    name: `restored dog2 with ${addNewRowsAtEnd ? "append" : "preppend"}`
+                    name: `restored dog2 with ${newItemsGoToTheEndOfTheList ? "append" : "preppend"}`
                 });
             }))
             .then(() => console.log("component.extractAllEntities:\n",

@@ -30,12 +30,12 @@ if (Modernizr.template) {
         };
 
         // by default on creation the row is prepended to table
-        const addNewRowsAtEnd = true;
+        const newItemsGoToTheEndOfTheList = true;
 
         // dogs table
         const createDeleteList = CreateDeleteListFactory.create("dogsTable", {
             items: dogs,
-            addNewRowsAtEnd,
+            newItemsGoToTheEndOfTheList,
             bodyRowTmplId: "dogsTableRowTmpl",
             rowChildCompFactories: dynaSelOneCompFactory
         });
@@ -52,7 +52,7 @@ if (Modernizr.template) {
                 crudListState.removeById(2);
                 crudListState.insertItem({
                     id: 2,
-                    name: `restored dog2 with ${addNewRowsAtEnd ? "append" : "preppend"}`
+                    name: `restored dog2 with ${newItemsGoToTheEndOfTheList ? "append" : "preppend"}`
                 });
             }))
             // showing the entire table extracted data

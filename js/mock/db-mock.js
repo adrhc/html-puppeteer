@@ -18,7 +18,14 @@ class DbMock {
                 {id: 33, name: "cat33"}])
     ], Person.parse);
 
+    /**
+     * This works only with the PERSONS_REPOSITORY as the component's repository!
+     *
+     * @param object
+     * @return {Person}
+     */
     static parsePersonOnSave(object) {
+        // changing generated cat ids to valid, not generated ids
         if (object.cats != null && $.isArray(object.cats)) {
             object.cats.forEach(cat => {
                 if (cat.id == null) {
@@ -31,6 +38,9 @@ class DbMock {
         if (object.id == null) {
             object.id = Math.abs(EntityUtils.generateId());
             const person = Person.parse(object);
+            // this will force the next EditableListComponent.onUpdate do call an InMemoryCrudRepository.update
+            // such that in the end PERSONS_REPOSITORY.items will only contain the object to save with a valid,
+            // not generated, id.
             DbMock.PERSONS_REPOSITORY.items.unshift(person);
             return person;
 

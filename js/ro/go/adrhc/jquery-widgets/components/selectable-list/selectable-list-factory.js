@@ -5,6 +5,8 @@ class SelectableListFactory {
      * @param bodyRowTmplId {string}
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param repository {CrudRepository}
+     * @param newItemsGoToTheEndOfTheList {boolean} whether to append or prepend
+     * @param newEntityFactoryFn {function(): IdentifiableEntity}
      * @param state {SelectableListState}
      * @param notSelectedRow {IdentifiableRowComponent}
      * @param selectedRow {IdentifiableRowComponent}
@@ -17,7 +19,9 @@ class SelectableListFactory {
                       bodyRowTmplId,
                       mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId),
                       repository = new InMemoryCrudRepository(items),
-                      state = new SelectableListState(),
+                      newItemsGoToTheEndOfTheList,
+                      newEntityFactoryFn,
+                      state = new SelectableListState({newEntityFactoryFn, newItemsGoToTheEndOfTheList}),
                       notSelectedRow,
                       selectedRow,
                       view = new SimpleListView(mustacheTableElemAdapter)

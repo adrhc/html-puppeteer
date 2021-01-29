@@ -50,7 +50,7 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
         // create-delete cats list (aka table)
         return CreateDeleteListFactory.create($catsTable, {
             items: parentComp.simpleRowState.rowState.cats,
-            addNewRowsAtEnd: true,
+            newItemsGoToTheEndOfTheList: true,
             bodyRowTmplId: "editableCatsRowTmpl",
             bodyRowTmplHtml: this.bodyRowTmplHtml,
             rowChildCompFactories: ownerDynaSelOneCompFactory,
