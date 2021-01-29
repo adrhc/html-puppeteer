@@ -46,7 +46,9 @@ if (Modernizr.template) {
             {
                 tableIdOrJQuery,
                 rowTmplId: "personsTableEditableRowTmpl",
-                childCompFactories: [friendDynaSelOneCompFactory, new CatsCreateDeleteListChildFactory()]
+                childCompFactories: [friendDynaSelOneCompFactory, new CatsCreateDeleteListChildFactory(DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
+                    bodyRowTmplId: "editableCatsRowTmpl"
+                })]
             });
 
         // DELETABLE ROW

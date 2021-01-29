@@ -14,13 +14,15 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
     dynaSelOnePersRepo;
 
     /**
+     * @param dynaSelOnePersRepo {DynaSelOneRepository}
+     * @param [bodyRowTmplId] {string}
      * @param [bodyRowTmplHtml] {string}
-     * @param [dynaSelOnePersRepo] {DynaSelOneRepository}
      */
-    constructor(bodyRowTmplHtml, dynaSelOnePersRepo) {
+    constructor(dynaSelOnePersRepo, {bodyRowTmplId, bodyRowTmplHtml}) {
         super();
-        this.bodyRowTmplHtml = bodyRowTmplHtml;
         this.dynaSelOnePersRepo = dynaSelOnePersRepo;
+        this.bodyRowTmplId = bodyRowTmplId;
+        this.bodyRowTmplHtml = bodyRowTmplHtml;
     }
 
     /**
@@ -51,7 +53,7 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
         return CreateDeleteListFactory.create($catsTable, {
             items: parentComp.simpleRowState.rowState.cats,
             newItemsGoToTheEndOfTheList: true,
-            bodyRowTmplId: "editableCatsRowTmpl",
+            bodyRowTmplId: this.bodyRowTmplId,
             bodyRowTmplHtml: this.bodyRowTmplHtml,
             rowChildCompFactories: ownerDynaSelOneCompFactory,
             childishBehaviour: new DefaultTableChildishBehaviour(parentComp, "cats")

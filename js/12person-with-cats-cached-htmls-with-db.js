@@ -56,7 +56,9 @@ if (Modernizr.template) {
                 rowTmplHtml: namedUrls["personsEditableRow"],
                 errorRowTmplHtml: namedUrls["personsErrorRow"],
                 childCompFactories: [friendDynaSelOneCompFactory,
-                    new CatsCreateDeleteListChildFactory(namedUrls["catsEditableRow"], DYNA_SEL_ONE_PERS_REPOSITORY)]
+                    new CatsCreateDeleteListChildFactory(DYNA_SEL_ONE_PERS_REPOSITORY, {
+                        bodyRowTmplHtml: namedUrls["catsEditableRow"]
+                    })]
             });
 
         // DELETABLE ROW

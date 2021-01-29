@@ -54,7 +54,9 @@ if (Modernizr.template) {
                 rowTmplHtml: namedUrls["personsEditableRow"],
                 errorRowTmplHtml: namedUrls["personsErrorRow"],
                 childCompFactories: [friendDynaSelOneCompFactory,
-                    new CatsCreateDeleteListChildFactory(namedUrls["catsEditableRow"], DbMock.DYNA_SEL_ONE_PERS_REPOSITORY)]
+                    new CatsCreateDeleteListChildFactory(DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
+                        bodyRowTmplHtml: namedUrls["catsEditableRow"]
+                    })]
             });
 
         // DELETABLE ROW
