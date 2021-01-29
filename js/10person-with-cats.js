@@ -66,7 +66,7 @@ if (Modernizr.template) {
             readOnlyRow,
             editableRow,
             deletableRow,
-            extractedEntityConverterFn: DbMock.parsePersonOnSave
+            extractedEntityConverterFn: Person.parse
         });
 
         editableList.init();

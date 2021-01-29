@@ -16,36 +16,26 @@ class DbMock {
             [{id: 31, name: "cat31"},
                 {id: 32, name: "cat32"},
                 {id: 33, name: "cat33"}])
-    ], Person.parse);
+    ], Person.parse, DbMock.parsePersonBeforeUpsert);
 
-    /**
-     * This works only with the PERSONS_REPOSITORY as the component's repository!
-     *
-     * @param object
-     * @return {Person}
-     */
-    static parsePersonOnSave(object) {
+    static parsePersonBeforeUpsert(object) {
         // changing generated cat ids to valid, not generated ids
         if (object.cats != null && $.isArray(object.cats)) {
             object.cats.forEach(cat => {
-                if (cat.id == null) {
-                    cat.id = Math.abs(EntityUtils.generateId());
-                } else {
-                    cat.id = Math.abs(cat.id);
-                }
+                cat.id = DbMock._dbLikeIdOf(cat.id);
             })
         }
-        if (object.id == null) {
-            object.id = Math.abs(EntityUtils.generateId());
-            const person = Person.parse(object);
-            // this will force the next EditableListComponent.onUpdate do call an InMemoryCrudRepository.update
-            // such that in the end PERSONS_REPOSITORY.items will only contain the object to save with a valid,
-            // not generated, id.
-            DbMock.PERSONS_REPOSITORY.items.unshift(person);
-            return person;
-
-        }
+        object.id = DbMock._dbLikeIdOf(object.id);
         return Person.parse(object);
+    }
+
+    static _dbLikeIdOf(id) {
+        if (EntityUtils.isInvalidId(id)) {
+            return Math.abs(EntityUtils.generateId());
+        } else if (EntityUtils.isIdGenerated(id)) {
+            return Math.abs(id);
+        }
+        return id;
     }
 
     static DYNA_SEL_ONE_PERS_REPOSITORY = new InMemoryDynaSelOneRepository(DbMock.PERSONS_REPOSITORY);

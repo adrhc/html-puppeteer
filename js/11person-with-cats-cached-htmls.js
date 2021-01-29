@@ -72,9 +72,9 @@ if (Modernizr.template) {
             readOnlyRow,
             editableRow,
             deletableRow,
-            // default: () => IdentifiableEntity(TRANSIENT_ID)
+            // the default is: () => IdentifiableEntity(TRANSIENT_ID)
             newEntityFactoryFn: () => new Person(IdentifiableEntity.TRANSIENT_ID),
-            extractedEntityConverterFn: DbMock.parsePersonOnSave
+            extractedEntityConverterFn: Person.parse
         });
 
         return editableList.init();
