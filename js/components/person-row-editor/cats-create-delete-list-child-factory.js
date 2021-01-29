@@ -17,7 +17,7 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
      * @param [bodyRowTmplHtml] {string}
      * @param [dynaSelOnePersRepo] {DynaSelOneRepository}
      */
-    constructor(bodyRowTmplHtml, dynaSelOnePersRepo = DbMock.DYNA_SEL_ONE_PERS_REPOSITORY) {
+    constructor(bodyRowTmplHtml, dynaSelOnePersRepo) {
         super();
         this.bodyRowTmplHtml = bodyRowTmplHtml;
         this.dynaSelOnePersRepo = dynaSelOnePersRepo;

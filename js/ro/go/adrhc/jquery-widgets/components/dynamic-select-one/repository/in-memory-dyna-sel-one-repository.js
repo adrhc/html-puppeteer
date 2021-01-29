@@ -18,7 +18,6 @@ class InMemoryDynaSelOneRepository extends DynaSelOneRepository {
     findByTitle(title) {
         const searchFor = title.toLowerCase();
         return this.crudRepository.findAll()
-            .then(items => items.map(it => this.crudRepository.responseConverter(it)))
             .then(items => items.filter(it => it.firstName.toLowerCase().startsWith(searchFor)));
     }
 }

@@ -1,5 +1,5 @@
 class DbMock {
-    static PERSONS_REPOSITORY = new InMemoryCrudRepository([
+    static PERSONS_REPOSITORY = new InMemoryPersonsRepository([
         new Person(1, "gigi1", "kent1", new Person(2, "gigi2", "kent2"),
             [{id: 1, name: "cat1", person: new Person(1, "gigi1", "kent1")},
                 {id: 2, name: "cat2", person: new Person(1, "gigi1", "kent1")},

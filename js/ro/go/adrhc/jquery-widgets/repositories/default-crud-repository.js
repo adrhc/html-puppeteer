@@ -4,11 +4,11 @@ class DefaultCrudRepository extends CrudRepository {
      */
     url;
     /**
-     * @type {function({}): IdentifiableEntity}
+     * @type {function({}): {}}
      */
     responseConverter;
     /**
-     * @type {function({}): IdentifiableEntity}
+     * @type {function({}): {}}
      */
     requestConverter;
     /**
@@ -18,16 +18,16 @@ class DefaultCrudRepository extends CrudRepository {
 
     /**
      * @param url {string}
-     * @param [entityConverter] {function({}): IdentifiableEntity}
+     * @param [responseConverter] {function({}): IdentifiableEntity}
      * @param [requestConverter] {function({}): IdentifiableEntity}
-     * @param errorHandler {RepoErrorHandler}
+     * @param [errorHandler] {RepoErrorHandler}
      */
-    constructor(url, entityConverter = IdentifiableEntity.entityConverter,
+    constructor(url, responseConverter = IdentifiableEntity.entityConverter,
                 requestConverter = (reqData) => reqData,
                 errorHandler = new DefaultRepoErrorHandler()) {
         super();
         this.url = url;
-        this.responseConverter = entityConverter;
+        this.responseConverter = responseConverter;
         this.requestConverter = requestConverter;
         this.errorHandler = errorHandler;
     }

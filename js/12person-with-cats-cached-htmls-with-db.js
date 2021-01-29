@@ -30,11 +30,10 @@ if (Modernizr.template) {
 
     // main
     $(() => cachedUrls.namedUrls.then((namedUrls) => {
-        const personsRepository = new DbCrudRepository("persons", Person.parse);
-        const dynaSelOnePersRepo = new DbDynaSelOneRepository("person", Person.parse);
+        const DYNA_SEL_ONE_PERS_REPOSITORY = new DbDynaSelOneRepository("person", Person.parse);
 
         // DYNAMIC-SELECT-ONE
-        DynamicSelectOneFactory.create("dyna-sel-one", dynaSelOnePersRepo, {}).init();
+        DynamicSelectOneFactory.create("dyna-sel-one", DYNA_SEL_ONE_PERS_REPOSITORY, {}).init();
 
         // EDITABLE-LIST
         // dogs table with both read-only and editable row
@@ -48,7 +47,7 @@ if (Modernizr.template) {
 
         // friend (Person) dyna select one child component
         const friendDynaSelOneCompFactory = DynamicSelectOneFactory.createChildComponentFactory(
-            "friend", Person.parse, dynaSelOnePersRepo);
+            "friend", Person.parse, DYNA_SEL_ONE_PERS_REPOSITORY);
 
         // EDITABLE ROW
         const editableRow = SimpleRowFactory.createIdentifiableRow(
@@ -57,7 +56,7 @@ if (Modernizr.template) {
                 rowTmplHtml: namedUrls["personsEditableRow"],
                 errorRowTmplHtml: namedUrls["personsErrorRow"],
                 childCompFactories: [friendDynaSelOneCompFactory,
-                    new CatsCreateDeleteListChildFactory(namedUrls["catsEditableRow"], dynaSelOnePersRepo)]
+                    new CatsCreateDeleteListChildFactory(namedUrls["catsEditableRow"], DYNA_SEL_ONE_PERS_REPOSITORY)]
             });
 
         // DELETABLE ROW
@@ -69,10 +68,12 @@ if (Modernizr.template) {
         // EDITABLE LIST
         const editableList = EditableListFactory.create({
             tableIdOrJQuery,
-            repository: personsRepository,
+            repository: new DbCrudRepository("persons", Person.parse),
             readOnlyRow,
             editableRow,
             deletableRow,
+            // default: () => IdentifiableEntity(TRANSIENT_ID)
+            newEntityFactoryFn: () => new Person(IdentifiableEntity.TRANSIENT_ID),
             extractedEntityConverterFn: Person.parse
         });
 

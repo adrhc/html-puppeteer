@@ -33,7 +33,7 @@ if (Modernizr.template) {
                     })
                     // switch to new row (aka ADD then enter "edit" mode)
                     .then(() => editableRow
-                        .update({id: EntityUtils.transientId, name: "new dog (after id 3)"},
+                        .update({id: IdentifiableEntity.TRANSIENT_ID, name: "new dog (after id 3)"},
                             "CREATE", 3))
                     .then(() => editableRow
                         .update({

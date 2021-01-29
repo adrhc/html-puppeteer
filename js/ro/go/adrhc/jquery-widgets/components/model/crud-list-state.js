@@ -14,14 +14,16 @@ class CrudListState extends SimpleListState {
      * @param [newEntityFactoryFn] {function(): IdentifiableEntity}
      * @param [newItemsGoToTheEndOfTheList] {boolean}
      */
-    constructor({newEntityFactoryFn = EntityUtils.newIdentifiableEntity, newItemsGoToTheEndOfTheList}) {
+    constructor({
+                    newEntityFactoryFn = () => new IdentifiableEntity(IdentifiableEntity.TRANSIENT_ID),
+                    newItemsGoToTheEndOfTheList
+                }) {
         super();
         this.newEntityFactoryFn = newEntityFactoryFn;
         this.append = newItemsGoToTheEndOfTheList;
     }
 
     /**
-     * returned item will have the id: transientId!
      * must return the original item (the one stored in this.items) for the receiver to be able to change its id
      * risk: the item is also used with the collectStateChange; a change by the final receiver will impact this.items!
      *

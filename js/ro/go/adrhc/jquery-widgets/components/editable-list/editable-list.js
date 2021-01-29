@@ -11,18 +11,20 @@ class EditableListComponent extends SelectableListComponent {
      * @param notSelectedRow {IdentifiableRowComponent}
      * @param selectedRow {IdentifiableRowComponent}
      * @param deletableRow {IdentifiableRowComponent}
-     * @param extractedEntityConverterFn {function(extractedEntity: IdentifiableEntity): IdentifiableEntity}
+     * @param [extractedEntityConverterFn] {function(extractedEntity: {}): IdentifiableEntity}
      */
     constructor(repository, state, view,
                 notSelectedRow, selectedRow,
                 deletableRow,
-                extractedEntityConverterFn = (extractedEntity) => extractedEntity) {
+                extractedEntityConverterFn) {
         super(repository, state, view, notSelectedRow, selectedRow);
         this.editableListState = state;
         this.swappingRowSelector["showAdd"] = selectedRow;
         this.swappingRowSelector["showEdit"] = selectedRow; // is equal to super.swappingRowSelector[false]
         this.swappingRowSelector["showDelete"] = deletableRow;
-        this.entityExtractor.entityConverterFn = extractedEntityConverterFn;
+        if (extractedEntityConverterFn) {
+            this.selectableListEntityExtractor.entityConverterFn = extractedEntityConverterFn;
+        }
     }
 
     /**
@@ -59,7 +61,7 @@ class EditableListComponent extends SelectableListComponent {
         const editableList = ev.data;
         const context = $(this).data("btn");
         editableList.doWithState((editableListState) => {
-            if (editableListState.findById(EntityUtils.transientId)) {
+            if (editableListState.findById(IdentifiableEntity.TRANSIENT_ID)) {
                 // new item already exists, do nothing
                 return;
             }

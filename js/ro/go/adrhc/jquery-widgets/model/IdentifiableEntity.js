@@ -1,4 +1,6 @@
 class IdentifiableEntity {
+    static TRANSIENT_ID = "newId";
+
     /**
      * @param [id] {number|string}
      */

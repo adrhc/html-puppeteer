@@ -1,10 +1,10 @@
 class Person extends DynaSelOneItem {
     /**
-     * @param id {number|string}
-     * @param firstName {string}
-     * @param lastName {string}
-     * @param friend {Person}
-     * @param cats {{}[]}
+     * @param [id] {number|string}
+     * @param [firstName] {string}
+     * @param [lastName] {string}
+     * @param [friend] {Person}
+     * @param [cats] {{}[]}
      */
     constructor(id, firstName, lastName, friend, cats) {
         super(id);

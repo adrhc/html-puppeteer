@@ -10,18 +10,18 @@ class DefaultDynaSelOneRepository extends DynaSelOneRepository {
     /**
      * @type {function({}): IdentifiableEntity}
      */
-    entityConverter;
+    responseConverter;
 
     /**
      * @param url {string}
      * @param entity {string}
-     * @param entityConverter {function({}): IdentifiableEntity}
+     * @param responseConverter {function({}): IdentifiableEntity}
      */
-    constructor(url, entity, entityConverter = IdentifiableEntity.entityConverter) {
+    constructor(url, entity, responseConverter = IdentifiableEntity.entityConverter) {
         super();
         this.url = url;
         this.entity = entity;
-        this.entityConverter = entityConverter;
+        this.responseConverter = responseConverter;
     }
 
     /**
@@ -36,7 +36,7 @@ class DefaultDynaSelOneRepository extends DynaSelOneRepository {
             processData: true
         }).then(data => {
             const items = RestUtils.unwrapHAL(data);
-            return items.map(it => this.entityConverter(it));
+            return items.map(it => this.responseConverter(it));
         }).catch(() => alert("Nu s-au putut încărca datele!"));
     }
 }

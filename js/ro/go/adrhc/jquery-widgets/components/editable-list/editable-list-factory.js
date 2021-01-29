@@ -3,21 +3,21 @@ class EditableListFactory {
      * When bodyRowTmplId and bodyRowTmplHtml are both null then we won't rely on MustacheTableElemAdapter
      * defaults (i.e. bodyRowTmplId = ${tableId}RowTmpl) but will use readOnlyRow's bodyRowTmplHtml.
      *
-     * @param items {IdentifiableEntity[]}
-     * @param tableIdOrJQuery {string|jQuery<HTMLTableElement>}
-     * @param bodyRowTmplId {string}
-     * @param bodyRowTmplHtml {string}
-     * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
-     * @param repository {CrudRepository}
-     * @param newItemsGoToTheEndOfTheList {boolean} whether to append or prepend
-     * @param newEntityFactoryFn {function(): IdentifiableEntity}
-     * @param state {EditableListState}
-     * @param view {SimpleListView}
-     * @param readOnlyRow {IdentifiableRowComponent}
-     * @param editableRow {IdentifiableRowComponent}
-     * @param deletableRow {IdentifiableRowComponent}
-     * @param childishBehaviour {ChildishBehaviour}
-     * @param extractedEntityConverterFn {function(extractedEntity: IdentifiableEntity): IdentifiableEntity}
+     * @param [items] {IdentifiableEntity[]}
+     * @param [tableIdOrJQuery] {string|jQuery<HTMLTableElement>}
+     * @param [bodyRowTmplId] {string}
+     * @param [bodyRowTmplHtml] {string}
+     * @param [mustacheTableElemAdapter] {MustacheTableElemAdapter}
+     * @param [repository] {CrudRepository}
+     * @param [newItemsGoToTheEndOfTheList] {boolean} whether to append or prepend
+     * @param [newEntityFactoryFn] {function(): IdentifiableEntity} used by CrudListState.createNewItem
+     * @param [state] {EditableListState}
+     * @param [view] {SimpleListView}
+     * @param [readOnlyRow] {IdentifiableRowComponent}
+     * @param [editableRow] {IdentifiableRowComponent}
+     * @param [deletableRow] {IdentifiableRowComponent}
+     * @param [childishBehaviour] {ChildishBehaviour}
+     * @param [extractedEntityConverterFn] {function(extractedEntity: {}): IdentifiableEntity} used DefaultEntityExtractor.extractEntity
      * @return {EditableListComponent}
      */
     static create({

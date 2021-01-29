@@ -54,7 +54,7 @@ if (Modernizr.template) {
                 rowTmplHtml: namedUrls["personsEditableRow"],
                 errorRowTmplHtml: namedUrls["personsErrorRow"],
                 childCompFactories: [friendDynaSelOneCompFactory,
-                    new CatsCreateDeleteListChildFactory(namedUrls["catsEditableRow"])]
+                    new CatsCreateDeleteListChildFactory(namedUrls["catsEditableRow"], DbMock.DYNA_SEL_ONE_PERS_REPOSITORY)]
             });
 
         // DELETABLE ROW
@@ -70,6 +70,8 @@ if (Modernizr.template) {
             readOnlyRow,
             editableRow,
             deletableRow,
+            // default: () => IdentifiableEntity(TRANSIENT_ID)
+            newEntityFactoryFn: () => new Person(IdentifiableEntity.TRANSIENT_ID),
             extractedEntityConverterFn: DbMock.parsePersonOnSave
         });
 

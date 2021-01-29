@@ -8,12 +8,12 @@ class InMemoryCrudRepository extends CrudRepository {
 
     /**
      * @param items {Array<IdentifiableEntity>}
-     * @param [entityConverter] {function({}): IdentifiableEntity}
+     * @param [responseConverter] {function({}): IdentifiableEntity}
      */
-    constructor(items = [], entityConverter = IdentifiableEntity.entityConverter) {
+    constructor(items = [], responseConverter = IdentifiableEntity.entityConverter) {
         super();
         this.items = items;
-        this.responseConverter = entityConverter;
+        this.responseConverter = responseConverter;
     }
 
     /**
@@ -21,10 +21,10 @@ class InMemoryCrudRepository extends CrudRepository {
      * @return {IdentifiableEntity}
      */
     createNewItem(item = new IdentifiableEntity()) {
-        const identifiableEntity = this.responseConverter(item);
-        if (identifiableEntity.id == null) {
-            identifiableEntity.id = EntityUtils.generateId();
+        if (item.id == null) {
+            item.id = EntityUtils.generateId();
         }
+        const identifiableEntity = this.responseConverter(item);
         this.items.unshift(identifiableEntity);
         return identifiableEntity;
     }
@@ -67,9 +67,6 @@ class InMemoryCrudRepository extends CrudRepository {
      * @return {Promise<IdentifiableEntity>|IdentifiableEntity}
      */
     insert(item, dontUsePromise) {
-        if (item.firstName === "error") {
-            return Promise.reject(new SimpleError("Salvarea datelor a eşuat!", "insert", item));
-        }
         item.id = EntityUtils.generateId();
         const resultItem = this.responseConverter(item);
         this.items.unshift(resultItem);
@@ -87,9 +84,6 @@ class InMemoryCrudRepository extends CrudRepository {
      * @return {Promise<IdentifiableEntity>}
      */
     update(item) {
-        if (item.firstName === "error") {
-            return Promise.reject(new SimpleError("Actualizarea datelor a eşuat!", "update", item));
-        }
         const resultItem = this.responseConverter(item);
         const removedIndex = EntityUtils.findAndReplaceById(resultItem, this.items);
         if (removedIndex < 0) {

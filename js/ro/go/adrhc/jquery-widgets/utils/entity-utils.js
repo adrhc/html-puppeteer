@@ -1,10 +1,6 @@
 class EntityUtils {
     static lastGeneratedId = -9999.99;
 
-    static get transientId() {
-        return "newId";
-    }
-
     static idsAreEqual(id1, id2) {
         if (EntityUtils.isTransientId(id1) && EntityUtils.isTransientId(id2)) {
             return true;
@@ -64,7 +60,7 @@ class EntityUtils {
         }
         let lastRemovedEntity;
         do {
-            lastRemovedEntity = EntityUtils.removeById(EntityUtils.transientId, items);
+            lastRemovedEntity = EntityUtils.removeById(IdentifiableEntity.TRANSIENT_ID, items);
             if (lastRemovedEntity) {
                 removedEntities.push(lastRemovedEntity);
             }
@@ -105,11 +101,11 @@ class EntityUtils {
     }
 
     static isTransientId(id) {
-        return id === EntityUtils.transientId;
+        return id === IdentifiableEntity.TRANSIENT_ID;
     }
 
     static isTransient(item) {
-        return item.id === EntityUtils.transientId;
+        return item.id === IdentifiableEntity.TRANSIENT_ID;
     }
 
     /**
@@ -152,13 +148,5 @@ class EntityUtils {
     static removeById(id, items) {
         return ArrayUtils.removeFirstByFilter(items,
             (it) => EntityUtils.idsAreEqual(it.id, id))
-    }
-
-    /**
-     * @param [id] {number|string}
-     * @return {IdentifiableEntity}
-     */
-    static newIdentifiableEntity(id) {
-        return new IdentifiableEntity(!!id ? id : EntityUtils.transientId);
     }
 }

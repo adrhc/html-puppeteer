@@ -9,6 +9,12 @@ class SelectableListComponent extends SimpleListComponent {
      * @type {SelectableListState}
      */
     selectableListState;
+    /**
+     * field having SelectableListEntityExtractor type instead of the generic EntityExtractor type
+     *
+     * @type {SelectableListEntityExtractor}
+     */
+    selectableListEntityExtractor;
 
     /**
      * @param repository {CrudRepository}
@@ -24,6 +30,7 @@ class SelectableListComponent extends SimpleListComponent {
         this.selectableListState = state;
         this.simpleListView = view;
         this.entityExtractor = new SelectableListEntityExtractor(this, {});
+        this.selectableListEntityExtractor = this.entityExtractor;
         /**
          * true/false relates to swappingDetails.isPrevious
          *
