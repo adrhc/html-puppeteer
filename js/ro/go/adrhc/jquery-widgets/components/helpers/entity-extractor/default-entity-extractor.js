@@ -3,13 +3,25 @@ class DefaultEntityExtractor extends EntityExtractor {
      * @type {AbstractComponent}
      */
     component;
+    /**
+     * @type {boolean}
+     */
+    dontRemoveGeneratedId;
+    /**
+     * @type {function({}): IdentifiableEntity}
+     */
+    entityConverterFn;
 
     /**
      * @param component {AbstractComponent}
+     * @param [dontRemoveGeneratedId] {boolean}
+     * @param [entityConverterFn] {function({}): IdentifiableEntity}
      */
-    constructor(component) {
+    constructor(component, {dontRemoveGeneratedId, entityConverterFn = IdentifiableEntity.entityConverter}) {
         super();
         this.component = component;
+        this.dontRemoveGeneratedId = dontRemoveGeneratedId;
+        this.entityConverterFn = entityConverterFn;
     }
 
     extractEntity(useOwnerOnFields) {
@@ -21,7 +33,8 @@ class DefaultEntityExtractor extends EntityExtractor {
             console.error("extractEntity is managing 1 entity only!");
             throw EntityExtractor.EXTRACT_ENTITY_UNSUPPORTED;
         } else {
-            return this._clearInvalidId(inputValues);
+            const itemData = this._clearInvalidId(inputValues);
+            return this.entityConverterFn(itemData);
         }
     }
 
@@ -31,7 +44,10 @@ class DefaultEntityExtractor extends EntityExtractor {
             return inputValues;
         }
         if ($.isArray(inputValues)) {
-            return inputValues.map(it => this._clearInvalidId(it));
+            return inputValues.map(it => {
+                const itemData = this._clearInvalidId(it);
+                return this.entityConverterFn(itemData);
+            });
         } else {
             console.error("extractEntity is managing more than 1 entity!");
             throw EntityExtractor.EXTRACT_ENTITIES_UNSUPPORTED;
@@ -56,6 +72,10 @@ class DefaultEntityExtractor extends EntityExtractor {
     }
 
     _clearInvalidId(inputValues) {
-        return EntityUtils.removeGeneratedOrInvalidId(inputValues);
+        if (this.dontRemoveGeneratedId) {
+            return EntityUtils.removeInvalidId(inputValues);
+        } else {
+            return EntityUtils.removeGeneratedOrInvalidId(inputValues);
+        }
     }
 }

@@ -73,7 +73,7 @@ if (Modernizr.template) {
             readOnlyRow,
             editableRow,
             deletableRow,
-            extractedEntityToRepoConverterFn: Person.parse
+            extractedEntityConverterFn: Person.parse
         });
 
         return editableList.init();

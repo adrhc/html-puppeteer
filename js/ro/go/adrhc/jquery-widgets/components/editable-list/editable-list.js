@@ -3,10 +3,6 @@ class EditableListComponent extends SelectableListComponent {
      * @type {EditableListState}
      */
     editableListState;
-    /**
-     * @type {function(extractedEntity: IdentifiableEntity): IdentifiableEntity}
-     */
-    extractedEntityToRepoConverterFn;
 
     /**
      * @param repository {CrudRepository}
@@ -15,18 +11,18 @@ class EditableListComponent extends SelectableListComponent {
      * @param notSelectedRow {IdentifiableRowComponent}
      * @param selectedRow {IdentifiableRowComponent}
      * @param deletableRow {IdentifiableRowComponent}
-     * @param extractedEntityToRepoConverterFn {function(extractedEntity: IdentifiableEntity): IdentifiableEntity}
+     * @param extractedEntityConverterFn {function(extractedEntity: IdentifiableEntity): IdentifiableEntity}
      */
     constructor(repository, state, view,
                 notSelectedRow, selectedRow,
                 deletableRow,
-                extractedEntityToRepoConverterFn = (extractedEntity) => extractedEntity) {
+                extractedEntityConverterFn = (extractedEntity) => extractedEntity) {
         super(repository, state, view, notSelectedRow, selectedRow);
         this.editableListState = state;
         this.swappingRowSelector["showAdd"] = selectedRow;
         this.swappingRowSelector["showEdit"] = selectedRow; // is equal to super.swappingRowSelector[false]
         this.swappingRowSelector["showDelete"] = deletableRow;
-        this.extractedEntityToRepoConverterFn = extractedEntityToRepoConverterFn;
+        this.entityExtractor.entityConverterFn = extractedEntityConverterFn;
     }
 
     /**
@@ -122,7 +118,6 @@ class EditableListComponent extends SelectableListComponent {
         const editableList = ev.data;
         const rowDataId = editableList.simpleListView.rowDataIdOf(this, true);
         let entity = editableList.extractEntity();
-        entity = editableList.extractedEntityToRepoConverterFn(entity);
         editableList._handleRepoErrors(editableList.repository.save(entity)
             .then(savedEntity =>
                 editableList.doWithState((editableListState) => {

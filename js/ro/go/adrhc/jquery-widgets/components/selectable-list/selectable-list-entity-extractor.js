@@ -4,9 +4,9 @@ class SelectableListEntityExtractor extends DefaultEntityExtractor {
      */
     selectableList;
 
-    constructor(component) {
-        super(component);
-        this. selectableList = component;
+    constructor(component, {dontRemoveGeneratedId, entityConverterFn = (it) => it}) {
+        super(component, {dontRemoveGeneratedId, entityConverterFn});
+        this.selectableList = component;
     }
 
     /**
@@ -18,7 +18,7 @@ class SelectableListEntityExtractor extends DefaultEntityExtractor {
      */
     extractSelectedEntity(useOwnerOnFields) {
         const selectedRow = this.selectableList.selectedRowComponent;
-        return selectedRow ? selectedRow.extractEntity(useOwnerOnFields) : undefined;
+        return selectedRow ? this.entityConverterFn(selectedRow.extractEntity(useOwnerOnFields)) : undefined;
     }
 
     extractEntity(useOwnerOnFields) {

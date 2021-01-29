@@ -12,7 +12,7 @@ class ElasticListComponent extends SimpleListComponent {
     constructor(repository, state, view, idRowCompFactoryFn) {
         super(repository, state, view);
         this.compositeBehaviour = new ElasticListCompositeBehaviour(this, idRowCompFactoryFn);
-        this.entityExtractor = new ElasticListEntityExtractor(this);
+        this.entityExtractor = new ElasticListEntityExtractor(this, {});
     }
 
     /**

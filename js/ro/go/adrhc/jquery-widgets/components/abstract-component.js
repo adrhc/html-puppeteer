@@ -35,7 +35,7 @@ class AbstractComponent {
         this.view = view;
         this.stateChangesDispatcher = new StateChangesDispatcher(this);
         this.compositeBehaviour = new CompositeBehaviour(this);
-        this.entityExtractor = new DefaultEntityExtractor(this);
+        this.entityExtractor = new DefaultEntityExtractor(this, {});
     }
 
     /**

@@ -15,7 +15,7 @@ class EditableListFactory {
      * @param editableRow {IdentifiableRowComponent}
      * @param deletableRow {IdentifiableRowComponent}
      * @param childishBehaviour {ChildishBehaviour}
-     * @param extractedEntityToRepoConverterFn {function(extractedEntity: IdentifiableEntity): IdentifiableEntity}
+     * @param extractedEntityConverterFn {function(extractedEntity: IdentifiableEntity): IdentifiableEntity}
      * @return {EditableListComponent}
      */
     static create({
@@ -31,10 +31,10 @@ class EditableListFactory {
                       editableRow,
                       deletableRow,
                       childishBehaviour,
-                      extractedEntityToRepoConverterFn
+                      extractedEntityConverterFn
                   }) {
         const editableListComponent = new EditableListComponent(repository, state, view,
-            readOnlyRow, editableRow, deletableRow, extractedEntityToRepoConverterFn);
+            readOnlyRow, editableRow, deletableRow, extractedEntityConverterFn);
         if (childishBehaviour) {
             editableListComponent.childishBehaviour = childishBehaviour;
         }

@@ -44,6 +44,15 @@ class EntityUtils {
         return object;
     }
 
+    static removeInvalidId(object) {
+        if (EntityUtils.isInvalidId(object.id)) {
+            if (object.id != null) {
+                object.id = undefined;
+            }
+        }
+        return object;
+    }
+
     /**
      * @param items {Array<IdentifiableEntity>}
      * @return {IdentifiableEntity|IdentifiableEntity[]} removed entities

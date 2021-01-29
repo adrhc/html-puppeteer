@@ -23,7 +23,7 @@ class SelectableListComponent extends SimpleListComponent {
         this.stateChangesDispatcher.prependKnownRequestTypes("CREATE", "UPDATE", "DELETE");
         this.selectableListState = state;
         this.simpleListView = view;
-        this.entityExtractor = new SelectableListEntityExtractor(this);
+        this.entityExtractor = new SelectableListEntityExtractor(this, {});
         /**
          * true/false relates to swappingDetails.isPrevious
          *
@@ -156,7 +156,6 @@ class SelectableListComponent extends SimpleListComponent {
      * present otherwise is the this.swappingRowSelector[false].
      *
      * @return {IdentifiableRowComponent} responsible for the currently "selected" row
-     * @protected
      */
     get selectedRowComponent() {
         const selectableSwappingData = this.selectableListState.currentSelectableSwappingData;
