@@ -57,7 +57,7 @@ class DynaSelOneState extends BasicState {
         console.log("DynaSelOneState.updateByTitle title =", title);
         if ((this.useLastSearchResult || isOnBlur) && this.title === title) {
             // updating with same title
-            console.log(`rejecting update with same title: ${!!title ? title : "nothing"}`);
+            console.warn(`${this.constructor.name}.updateByTitle, rejecting update with same title: ${!!title ? title : "nothing"}`);
             return Promise.reject(this);
         }
         if (!this.isEnoughTextToSearch(title)) {

@@ -81,6 +81,12 @@ class EntityUtils {
         return object;
     }
 
+    /**
+     * "invalid" means "not numeric"
+     *
+     * @param id
+     * @return {boolean}
+     */
     static isInvalidId(id) {
         return !$.isNumeric(id);
     }

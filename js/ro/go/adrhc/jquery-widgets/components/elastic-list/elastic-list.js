@@ -12,6 +12,7 @@ class ElasticListComponent extends SimpleListComponent {
     constructor(repository, state, view, idRowCompFactoryFn) {
         super(repository, state, view);
         this.compositeBehaviour = new ElasticListCompositeBehaviour(this, idRowCompFactoryFn);
+        this.entityExtractor = new ElasticListEntityExtractor(this);
     }
 
     /**
@@ -64,16 +65,6 @@ class ElasticListComponent extends SimpleListComponent {
         console.log(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
         const idRowComp = this.elasticListComposite.findKidById(stateChange.data.id);
         return idRowComp.processStateChange(stateChange);
-    }
-
-    /**
-     * extractAllEntities calls this
-     *
-     * @param [useOwnerOnFields] {boolean}
-     * @return {Array<IdentifiableEntity>}
-     */
-    extractAllEntities(useOwnerOnFields) {
-        return this.compositeBehaviour.extractAllEntities(useOwnerOnFields);
     }
 
     /**

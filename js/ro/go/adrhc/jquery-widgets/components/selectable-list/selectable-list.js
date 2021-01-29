@@ -23,6 +23,7 @@ class SelectableListComponent extends SimpleListComponent {
         this.stateChangesDispatcher.prependKnownRequestTypes("CREATE", "UPDATE", "DELETE");
         this.selectableListState = state;
         this.simpleListView = view;
+        this.entityExtractor = new SelectableListEntityExtractor(this);
         /**
          * true/false relates to swappingDetails.isPrevious
          *
@@ -157,7 +158,7 @@ class SelectableListComponent extends SimpleListComponent {
      * @return {IdentifiableRowComponent} responsible for the currently "selected" row
      * @protected
      */
-    get _selectedRowComponent() {
+    get selectedRowComponent() {
         const selectableSwappingData = this.selectableListState.currentSelectableSwappingData;
         if (!selectableSwappingData) {
             return undefined;
@@ -165,22 +166,6 @@ class SelectableListComponent extends SimpleListComponent {
         // swappingRowSelector is true/false based where false means "active" (also means that isPrevious is false)
         const context = !!selectableSwappingData.context ? selectableSwappingData.context : false;
         return this.swappingRowSelector[context];
-    }
-
-    /**
-     * This could be considered the extracted-entity behaviour of the component or a new behaviour.
-     * To abey the Liskov Substitution Principle principle (see SOLID principles) I consider this new behaviour.
-     *
-     * @param [useOwnerOnFields] {boolean}
-     * @return {{}}
-     */
-    extractSelectedEntity(useOwnerOnFields) {
-        const selectedRow = this._selectedRowComponent;
-        return selectedRow ? selectedRow.extractEntity(useOwnerOnFields) : undefined;
-    }
-
-    extractEntity(useOwnerOnFields) {
-        return this.extractSelectedEntity();
     }
 
     /**

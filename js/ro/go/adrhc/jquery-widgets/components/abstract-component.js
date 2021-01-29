@@ -1,7 +1,4 @@
 class AbstractComponent {
-    static EXTRACT_ENTITY_UNSUPPORTED = "AbstractComponent.extractEntity: unsupported operation!";
-    static EXTRACT_ENTITIES_UNSUPPORTED = "AbstractComponent.extractAllEntities: unsupported operation!";
-
     /**
      * @type {BasicState}
      */
@@ -19,6 +16,10 @@ class AbstractComponent {
      */
     compositeBehaviour;
     /**
+     * @type {EntityExtractor}
+     */
+    entityExtractor;
+    /**
      * see this as the "child component" capability of the current/this component
      *
      * @type {ChildishBehaviour}
@@ -34,6 +35,7 @@ class AbstractComponent {
         this.view = view;
         this.stateChangesDispatcher = new StateChangesDispatcher(this);
         this.compositeBehaviour = new CompositeBehaviour(this);
+        this.entityExtractor = new DefaultEntityExtractor(this);
     }
 
     /**
@@ -72,12 +74,68 @@ class AbstractComponent {
     }
 
     /**
+     * Offers the state for manipulation then updates the view.
+     *
+     * @param stateUpdaterFn {function(state: BasicState)}
+     * @param delayViewUpdate {boolean} whether to (immediately) update the view based or not
+     * @return {Promise<StateChange[]>}
+     */
+    doWithState(stateUpdaterFn, delayViewUpdate = false) {
+        console.log(`${this.constructor.name}.doWithState: delayViewUpdate = ${delayViewUpdate}`);
+        stateUpdaterFn(this.state);
+        if (delayViewUpdate) {
+            return Promise.resolve(this.state.peekAll());
+        }
+        return this.updateViewOnStateChanges();
+    }
+
+    /**
+     * @param [useOwnerOnFields] {boolean}
+     * @return {IdentifiableEntity} the entity managed by the component when managing only 1 entity
+     */
+    extractEntity(useOwnerOnFields) {
+        return this.entityExtractor.extractEntity(useOwnerOnFields)
+    }
+
+    /**
+     * @param [useOwnerOnFields] {boolean}
+     * @return {IdentifiableEntity[]} the entities managed by the component (could be only 1 entity)
+     */
+    extractAllEntities(useOwnerOnFields) {
+        return this.entityExtractor.extractAllEntities(useOwnerOnFields)
+    }
+
+    /**
      * @param [stateChanges] {StateChange[]}
      * @param [applyChangesStartingFromNewest] {boolean}
      * @return {Promise<StateChange[]>}
      */
     updateViewOnStateChanges(stateChanges, applyChangesStartingFromNewest) {
         return this.stateChangesDispatcher.updateViewOnStateChanges(stateChanges, applyChangesStartingFromNewest);
+    }
+
+    /**
+     * @param stateChange {StateChange|undefined}
+     * @return {Promise<StateChange>}
+     */
+    updateViewOnKnownStateChange(stateChange) {
+        console.error(`${this.constructor.name}.updateViewOnKnownStateChange is not implemented!`);
+        throw `${this.constructor.name}.updateViewOnKnownStateChange is not implemented!`;
+    }
+
+    /**
+     * @param stateChange {StateChange}
+     * @return {Promise}
+     */
+    updateViewOnAny(stateChange) {
+        console.log(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
+        return this.view.update(stateChange)
+            .then(() => this.compositeBehaviour.processStateChangeWithKids(stateChange));
+    }
+
+    updateViewOnERROR(stateChange) {
+        console.log(`${this.constructor.name}.updateViewOnERROR:\n${JSON.stringify(stateChange)}`);
+        return Promise.resolve(stateChange);
     }
 
     /**
@@ -137,106 +195,6 @@ class AbstractComponent {
         }
         this.view.reset();
         this.state.reset();
-    }
-
-    /**
-     * Offers the state for manipulation then updates the view.
-     *
-     * @param stateUpdaterFn {function(state: BasicState)}
-     * @param delayViewUpdate {boolean} whether to (immediately) update the view based or not
-     * @return {Promise<StateChange[]>}
-     */
-    doWithState(stateUpdaterFn, delayViewUpdate = false) {
-        console.log(`${this.constructor.name}.doWithState: delayViewUpdate = ${delayViewUpdate}`);
-        stateUpdaterFn(this.state);
-        if (delayViewUpdate) {
-            return Promise.resolve(this.state.peekAll());
-        }
-        return this.updateViewOnStateChanges();
-    }
-
-    /**
-     * When having kids and useOwnerOnFields is null than the owner is used despite
-     * of the useOwnerOnFields value; otherwise the useOwnerOnFields value is used.
-     *
-     * @param [useOwnerOnFields] {boolean}
-     * @return {IdentifiableEntity} the entity managed by the component when managing only 1 entity
-     */
-    extractEntity(useOwnerOnFields) {
-        const inputValues = this.extractInputValues(useOwnerOnFields);
-        if (inputValues == null) {
-            return inputValues;
-        }
-        if ($.isArray(inputValues)) {
-            console.error("extractEntity is managing 1 entity only!");
-            throw AbstractComponent.EXTRACT_ENTITY_UNSUPPORTED;
-        } else {
-            return this._clearInvalidId(inputValues);
-        }
-    }
-
-    /**
-     * When having kids and useOwnerOnFields is null than the owner is used despite
-     * of the useOwnerOnFields value otherwise the useOwnerOnFields value is used.
-     *
-     * @param [useOwnerOnFields] {boolean}
-     * @return {IdentifiableEntity|undefined} the entities managed by the component (could be only 1 entity)
-     */
-    extractAllEntities(useOwnerOnFields) {
-        const inputValues = this.extractInputValues(useOwnerOnFields);
-        if (inputValues == null) {
-            return inputValues;
-        }
-        if ($.isArray(inputValues)) {
-            return inputValues.map(it => this._clearInvalidId(it));
-        } else {
-            console.error("extractEntity is managing more than 1 entity!");
-            throw AbstractComponent.EXTRACT_ENTITIES_UNSUPPORTED;
-        }
-    }
-
-    _clearInvalidId(inputValues) {
-        return EntityUtils.removeGeneratedOrInvalidId(inputValues);
-    }
-
-    /**
-     * When having kids and useOwnerOnFields is null than the owner must be is
-     * used for the parent fields otherwise useOwnerOnFields value considered.
-     *
-     * @param [useOwnerOnFields] {boolean}
-     * @return {{}} the partially or totally the entity/entities data managed by the component
-     */
-    extractInputValues(useOwnerOnFields) {
-        if (useOwnerOnFields == null) {
-            useOwnerOnFields = this.compositeBehaviour.hasKids();
-        }
-        const item = this.view.extractInputValues(useOwnerOnFields);
-        this.compositeBehaviour.copyKidsState(item);
-        return item;
-    }
-
-    /**
-     * @param stateChange {StateChange|undefined}
-     * @return {Promise<StateChange>}
-     */
-    updateViewOnKnownStateChange(stateChange) {
-        console.error(`${this.constructor.name}.updateViewOnKnownStateChange is not implemented!`);
-        throw `${this.constructor.name}.updateViewOnKnownStateChange is not implemented!`;
-    }
-
-    /**
-     * @param stateChange {StateChange}
-     * @return {Promise}
-     */
-    updateViewOnAny(stateChange) {
-        console.log(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
-        return this.view.update(stateChange)
-            .then(() => this.compositeBehaviour.processStateChangeWithKids(stateChange));
-    }
-
-    updateViewOnERROR(stateChange) {
-        console.log(`${this.constructor.name}.updateViewOnERROR:\n${JSON.stringify(stateChange)}`);
-        return Promise.resolve(stateChange);
     }
 
     /**

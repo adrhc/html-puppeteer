@@ -114,7 +114,7 @@ class CompositeBehaviour {
             try {
                 return kid.extractEntity(useOwnerOnFields);
             } catch (e) {
-                if (e === AbstractComponent.EXTRACT_ENTITY_UNSUPPORTED) {
+                if (e === EntityExtractor.EXTRACT_ENTITY_UNSUPPORTED) {
                     return kid.extractAllEntities(useOwnerOnFields);
                 }
                 throw e;

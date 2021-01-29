@@ -121,7 +121,7 @@ class EditableListComponent extends SelectableListComponent {
          */
         const editableList = ev.data;
         const rowDataId = editableList.simpleListView.rowDataIdOf(this, true);
-        let entity = editableList.extractSelectedEntity();
+        let entity = editableList.extractEntity();
         entity = editableList.extractedEntityToRepoConverterFn(entity);
         editableList._handleRepoErrors(editableList.repository.save(entity)
             .then(savedEntity =>
@@ -134,7 +134,7 @@ class EditableListComponent extends SelectableListComponent {
                     editableListState.save(savedEntity, rowDataId);
                 }))
             .catch((simpleError) => {
-                return editableList._selectedRowComponent.doWithState((editableListState) => {
+                return editableList.selectedRowComponent.doWithState((editableListState) => {
                     editableListState.collectFromSimpleError(simpleError, "UPDATE_OR_CREATE", entity);
                 });
             }));
