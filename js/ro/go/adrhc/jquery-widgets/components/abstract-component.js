@@ -246,14 +246,15 @@ class AbstractComponent {
      * @return {Promise}
      * @protected
      */
+
     _handleRepoErrors(promise) {
         return promise.catch((jqXHR, textStatus) => {
-            console.log(`${this.constructor.name}._handleRepoErrors`);
-            if (jqXHR instanceof SimpleError) {
-                alert(jqXHR.message);
-                throw jqXHR;
-            } else if (typeof jqXHR === "string") {
+            console.error(`${this.constructor.name}._handleRepoErrors`);
+            if (typeof jqXHR === "string") {
                 alert(jqXHR);
+                throw jqXHR;
+            } else if (jqXHR instanceof SimpleError) {
+                alert(jqXHR.message);
                 throw jqXHR;
             } else {
                 alert(`textStatus = ${textStatus}${jqXHR.responseText ? ', responseText:\n' + jqXHR.responseText : ''}`);

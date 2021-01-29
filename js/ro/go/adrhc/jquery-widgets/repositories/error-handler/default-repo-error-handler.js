@@ -21,32 +21,43 @@ class DefaultRepoErrorHandler extends RepoErrorHandler {
         return promise.catch((jqXHR, textStatus, errorThrown) => {
             this._logPromiseCatch(jqXHR, textStatus, errorThrown);
             let error;
-            if (jqXHR.responseText) {
-                try {
-                    const problems = ServerError.parse(JSON.parse(jqXHR.responseText));
-                    if ($.isArray(problems)) {
-                        error = new SimpleError(this.messages[requestType], requestType, data, problems);
-                    } else {
-                        error = new SimpleError(this.messages[requestType], requestType, data, [problems]);
-                    }
-                } catch (ex) {
-                    console.log(`error parsing as json:\n${jqXHR.responseText}`);
-                }
-            }
             if (typeof jqXHR === "string") {
-                console.log(`${this.constructor.name}.catch (jqXHR is string):\n${jqXHR}`);
+                // do nothing
+            } else if (jqXHR instanceof SimpleError) {
+                throw jqXHR;
+            } else if (jqXHR.responseText) {
+                error = this._simpleErrorOf(jqXHR.responseText, requestType, data);
             }
             throw error ? error : new SimpleError(this.messages[requestType], requestType, data);
         });
     }
 
+    _simpleErrorOf(text, requestType, data) {
+        try {
+            const problems = ServerError.parse(JSON.parse(text));
+            if ($.isArray(problems)) {
+                return new SimpleError(this.messages[requestType], requestType, data, problems);
+            } else {
+                return new SimpleError(this.messages[requestType], requestType, data, [problems]);
+            }
+        } catch (ex) {
+            console.error(`${this.constructor.name}.parseSimpleErrors exception:\n`, ex);
+            console.error(`${this.constructor.name}.parseSimpleErrors, JSON.parse error for text:\n`, text);
+        }
+        return undefined;
+    }
+
     _logPromiseCatch(jqXHR, textStatus, errorThrown) {
         console.log(`${this.constructor.name}, textStatus = ${textStatus}`);
-        if (jqXHR.responseText) {
-            console.log(`responseText:\n${jqXHR.responseText}`);
+        if (typeof jqXHR === "string") {
+            console.error(`${this.constructor.name}.catch (jqXHR is string):\n${jqXHR}`);
+        } else if (jqXHR instanceof SimpleError) {
+            console.error(`${this.constructor.name}.catch (jqXHR is SimpleError):\n`, jqXHR);
+        } else if (jqXHR.responseText) {
+            console.log(`${this.constructor.name}.catch responseText:\n${jqXHR.responseText}`);
         }
         if (errorThrown) {
-            console.log(`errorThrown:\n${errorThrown}`);
+            console.log(`${this.constructor.name}.catch errorThrown:\n`, errorThrown);
         }
     }
 }
