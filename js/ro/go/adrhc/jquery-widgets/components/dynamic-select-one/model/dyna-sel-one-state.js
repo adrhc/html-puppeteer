@@ -50,10 +50,10 @@ class DynaSelOneState extends BasicState {
      * - gather all data then update the model then compute derivatives then cache
      *
      * @param title {string|undefined}
-     * @param [isOnBlur] {boolean}
+     * @param [isOnBlur] {boolean} for true reject update with same title
      * @returns {Promise<DynaSelOneState>}
      */
-    updateByTitle(title, isOnBlur) {
+    updateByTitle(title = "", isOnBlur) {
         console.log("DynaSelOneState.updateByTitle title =", title);
         if ((this.useCachedSearchResult || isOnBlur) && this.title === title) {
             // updating with same title
@@ -155,7 +155,7 @@ class DynaSelOneState extends BasicState {
      * @returns {boolean}
      */
     isEnoughTextToSearch(text) {
-        return !!text && text.length >= this.minCharsToSearch;
+        return this.minCharsToSearch === 0 || !!text && text.length >= this.minCharsToSearch;
     }
 
     /**

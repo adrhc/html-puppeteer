@@ -49,8 +49,8 @@ class DynamicSelectOneComponent extends AbstractComponent {
      */
     init() {
         this._clearOnBlurHandlers();
-        return this.dynaSelOneView
-            .update(this.dynaSelOneState, this.focusOnInit)
+        return this.dynaSelOneState.updateByTitle()
+            .then(state => this.dynaSelOneView.update(state, this.focusOnInit))
             .then(() => this.configureEvents());
     }
 

@@ -85,7 +85,7 @@ class DynamicSelectOneView extends AbstractView {
             viewModel.id = state.selectedItem.id;
             viewModel.found = true;
         } else if (state.isEnoughTextToSearch(state.title)) {
-            viewModel.searchedTitle = state.title;
+            viewModel.searchedDetails = state.title ? `s-a căutat <i>${state.title}</i>` : "s-a căutat întreg setul de date";
             if (state.optionsLength > 1) {
                 // too many results
                 viewModel.tooMany = true;
