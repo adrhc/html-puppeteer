@@ -3,15 +3,19 @@ class DynamicSelectOneFactory {
      * @param elemIdOrJQuery {string|jQuery<HTMLTableRowElement>}
      * @param repository {DynaSelOneRepository}
      * @param [minCharsToSearch] {number}
-     * @param [useLastSearchResult] {boolean}
+     * @param [useCachedSearchResult] {boolean}
      * @param [childishBehaviour] {ChildishBehaviour}
      * @return {DynamicSelectOneComponent}
      */
     static create(elemIdOrJQuery, repository, {
-        minCharsToSearch, useLastSearchResult, childishBehaviour
+        minCharsToSearch, useCachedSearchResult, childishBehaviour
     }) {
+        const config = DomUtils.jQueryOf(elemIdOrJQuery).data();
         const dynaSelOneView = new DynamicSelectOneView(elemIdOrJQuery, {});
-        const dynaSelOneState = new DynaSelOneState(repository, {minCharsToSearch, useLastSearchResult});
+        const dynaSelOneState = new DynaSelOneState(repository, {
+            minCharsToSearch: !!minCharsToSearch ? minCharsToSearch : config.minCharsToSearch,
+            useCachedSearchResult: !!useCachedSearchResult ? useCachedSearchResult : config.useCachedSearchResult
+        });
         const dynaSelOneComp = new DynamicSelectOneComponent(dynaSelOneView, dynaSelOneState);
         if (childishBehaviour) {
             dynaSelOneComp.childishBehaviour = childishBehaviour;

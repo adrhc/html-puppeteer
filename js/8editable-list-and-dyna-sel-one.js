@@ -12,7 +12,7 @@ if (Modernizr.template) {
     $(() => {
         // DYNAMIC-SELECT-ONE
         DynamicSelectOneFactory.create("dyna-sel-one", DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
-            useLastSearchResult: false
+            useCachedSearchResult: false
         }).init();
 
         // EDITABLE-LIST

@@ -21,11 +21,7 @@ class AbstractView {
      * @protected
      */
     _setupElem(elemIdOrJQuery) {
-        if (elemIdOrJQuery instanceof jQuery) {
-            this._$elem = elemIdOrJQuery;
-        } else {
-            this._$elem = $(`#${elemIdOrJQuery}`);
-        }
+        this._$elem = DomUtils.jQueryOf(elemIdOrJQuery);
     }
 
     /**
