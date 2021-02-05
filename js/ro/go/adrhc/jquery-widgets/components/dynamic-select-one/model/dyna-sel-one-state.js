@@ -124,7 +124,7 @@ class DynaSelOneState extends BasicState {
      * @returns {DynaSelOneItem|undefined}
      * @private
      */
-    _findOptionByExactTitle(title) {
+    _findOptionByExactTitle(title = "") {
         if (!this.options) {
             return undefined;
         }
