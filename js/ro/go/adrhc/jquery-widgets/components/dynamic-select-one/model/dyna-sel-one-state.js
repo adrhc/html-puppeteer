@@ -10,23 +10,46 @@ class DynaSelOneState extends BasicState {
      * @type {DynaSelOneItem}
      */
     selectedItem;
+    /**
+     * @type {DynaSelOneItem[]}
+     */
+    options;
+    /**
+     * @type {boolean}
+     */
+    repositoryWasSearched;
+    /**
+     * this is configuration
+     *
+     * @type {boolean}
+     */
+    useCachedSearchResult;
+    /**
+     * this is configuration
+     *
+     * @type {boolean}
+     */
+    searchOnBlur;
 
     /**
      * @param repository {DynaSelOneRepository}
      * @param minCharsToSearch {number}
      * @param [options] {DynaSelOneItem[]}
      * @param [useCachedSearchResult] {boolean}
+     * @param [searchOnBlur] {boolean}
      */
     constructor(repository, {
         minCharsToSearch = 3,
         options,
-        useCachedSearchResult
+        useCachedSearchResult,
+        searchOnBlur = minCharsToSearch > 0
     }) {
         super();
         this.repository = repository;
         this.minCharsToSearch = minCharsToSearch;
         this.options = options;
         this.useCachedSearchResult = useCachedSearchResult;
+        this.searchOnBlur = searchOnBlur;
     }
 
     /**
@@ -71,12 +94,20 @@ class DynaSelOneState extends BasicState {
             optionsPromise = Promise.resolve(this._findOptionsByTitlePrefix(title));
         } else {
             // new title doesn't contain the current title: searching the DB
-            optionsPromise = this.repository.findByTitle(title);
+            optionsPromise = this.repositoryFindByTitle(title);
         }
         return optionsPromise.then(options => {
             this._update(title, options);
             return this;
         });
+    }
+
+    /**
+     * @param title {string|undefined}
+     */
+    repositoryFindByTitle(title) {
+        this.repositoryWasSearched = true;
+        return this.repository.findByTitle(title);
     }
 
     /**
@@ -167,5 +198,13 @@ class DynaSelOneState extends BasicState {
 
     get currentState() {
         return this.selectedItem;
+    }
+
+    reset() {
+        super.reset();
+        this.title = undefined;
+        this.options = undefined;
+        this.selectedItem = undefined;
+        this.repositoryWasSearched = undefined;
     }
 }

@@ -33,7 +33,8 @@ class DynamicSelectOneComponent extends AbstractComponent {
     }
 
     _onEscape() {
-        this.dynaSelOneState.updateByTitle().finally(() => this.updateView(this.state, true));
+        this.dynaSelOneState.reset();
+        this.updateView(this.state, true);
     }
 
     _onEnter(text) {
@@ -86,6 +87,9 @@ class DynamicSelectOneComponent extends AbstractComponent {
     }
 
     _configureOnBlur() {
+        if (!this.dynaSelOneState.searchOnBlur) {
+            return;
+        }
         // from jquery docs: blur does not propagate
         this.dynaSelOneView.$titleElem[0].onblur = (ev) => {
             ev.data = this;

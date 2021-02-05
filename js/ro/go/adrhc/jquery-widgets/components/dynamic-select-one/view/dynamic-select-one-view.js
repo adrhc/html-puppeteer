@@ -59,7 +59,8 @@ class DynamicSelectOneView extends AbstractView {
             {$elem: this.$optionsElem, classes: "removed", remove: viewModel.options},
             {$elem: this.$nothingFound, classes: "removed", remove: viewModel.nothingFound},
             {$elem: this.$tooMany, classes: "removed", remove: viewModel.tooMany},
-            {$elem: this.$tooLessChars, classes: "removed", remove: viewModel.minCharsToSearch}
+            {$elem: this.$tooLessChars1, classes: "removed", remove: viewModel.minCharsToSearch},
+            {$elem: this.$tooLessChars2, classes: "removed", remove: viewModel.minCharsToSearch === 0}
         ]);
     }
 
@@ -84,7 +85,7 @@ class DynamicSelectOneView extends AbstractView {
             viewModel.description = state.selectedItem.description;
             viewModel.id = state.selectedItem.id;
             viewModel.found = true;
-        } else if (state.isEnoughTextToSearch(state.title)) {
+        } else if (state.repositoryWasSearched && state.isEnoughTextToSearch(state.title)) {
             viewModel.searchedDetails = state.title ? `s-a căutat <i>${state.title}</i>` : "s-a căutat întreg setul de date";
             if (state.optionsLength > 1) {
                 // too many results
@@ -113,8 +114,12 @@ class DynamicSelectOneView extends AbstractView {
     /**
      * @returns {jQuery<HTMLElement>}
      */
-    get $tooLessChars() {
-        return this.$elem.find(`[data-name='too-less-chars']`);
+    get $tooLessChars1() {
+        return this.$elem.find(`[data-name='too-less-chars1']`);
+    }
+
+    get $tooLessChars2() {
+        return this.$elem.find(`[data-name='too-less-chars2']`);
     }
 
     /**

@@ -1,5 +1,5 @@
 /**
- * @interface
+ * @abstract
  */
 class DynaSelOneRepository {
     /**
