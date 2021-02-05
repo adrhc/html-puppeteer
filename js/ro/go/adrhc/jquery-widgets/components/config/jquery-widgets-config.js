@@ -1,17 +1,17 @@
 class JqueryWidgetsConfig {
-    static serverRoot = "";
+    static SERVER_ROOT = "";
 
     /**
      * @param path {string}
      * @return {string}
      */
     static urlOf(path) {
-        if (JqueryWidgetsConfig.serverRoot.endsWith("/")) {
-            return `${JqueryWidgetsConfig.serverRoot}${path}`;
-        } else if (!JqueryWidgetsConfig.serverRoot || !JqueryWidgetsConfig.serverRoot.trim()) {
+        if (JqueryWidgetsConfig.SERVER_ROOT.endsWith("/")) {
+            return `${JqueryWidgetsConfig.SERVER_ROOT}${path}`;
+        } else if (!JqueryWidgetsConfig.SERVER_ROOT || !JqueryWidgetsConfig.SERVER_ROOT.trim()) {
             return path;
         } else {
-            return `${JqueryWidgetsConfig.serverRoot}/${path}`;
+            return `${JqueryWidgetsConfig.SERVER_ROOT}/${path}`;
         }
     }
 }

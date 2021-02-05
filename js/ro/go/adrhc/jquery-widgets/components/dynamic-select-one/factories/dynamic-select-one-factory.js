@@ -11,7 +11,9 @@ class DynamicSelectOneFactory {
         minCharsToSearch, useCachedSearchResult, childishBehaviour
     }) {
         const config = DomUtils.jQueryOf(elemIdOrJQuery).data();
-        const dynaSelOneView = new DynamicSelectOneView(elemIdOrJQuery, {});
+        const dynaSelOneView = new DynamicSelectOneView(elemIdOrJQuery, {
+            tmplUrl: config.tmplUrl
+        });
         const dynaSelOneState = new DynaSelOneState(repository, {
             minCharsToSearch: !!minCharsToSearch ? minCharsToSearch : config.minCharsToSearch,
             useCachedSearchResult: !!useCachedSearchResult ? useCachedSearchResult : config.useCachedSearchResult
