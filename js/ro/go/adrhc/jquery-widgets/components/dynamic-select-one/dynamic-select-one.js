@@ -49,9 +49,14 @@ class DynamicSelectOneComponent extends AbstractComponent {
      */
     init() {
         this._clearOnBlurHandlers();
-        return this.dynaSelOneState.updateByTitle()
-            .then(state => this.dynaSelOneView.update(state, this.focusOnInit))
-            .then(() => this.configureEvents());
+        let promise;
+        if (this.dynaSelOneState.minCharsToSearch === 0 && !this.dynaSelOneState.title) {
+            promise = this.dynaSelOneState.updateByTitle()
+                .then(state => this.dynaSelOneView.update(state, this.focusOnInit))
+        } else {
+            promise = this.dynaSelOneView.update(this.dynaSelOneState, this.focusOnInit);
+        }
+        return promise.then(() => this.configureEvents());
     }
 
     updateView(state, focusOnSearchInput) {
