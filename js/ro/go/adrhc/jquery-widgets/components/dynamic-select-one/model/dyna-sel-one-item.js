@@ -1,3 +1,6 @@
+/**
+ * this relates to the found items
+ */
 class DynaSelOneItem {
     /**
      * @type {number|string}

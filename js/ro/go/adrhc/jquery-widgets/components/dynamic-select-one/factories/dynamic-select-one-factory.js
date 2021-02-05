@@ -2,15 +2,16 @@ class DynamicSelectOneFactory {
     /**
      * @param elemIdOrJQuery {string|jQuery<HTMLTableRowElement>}
      * @param repository {DynaSelOneRepository}
+     * @param [minCharsToSearch] {number}
      * @param [useLastSearchResult] {boolean}
      * @param [childishBehaviour] {ChildishBehaviour}
      * @return {DynamicSelectOneComponent}
      */
     static create(elemIdOrJQuery, repository, {
-        useLastSearchResult, childishBehaviour
+        minCharsToSearch, useLastSearchResult, childishBehaviour
     }) {
         const dynaSelOneView = new DynamicSelectOneView(elemIdOrJQuery, {});
-        const dynaSelOneState = new DynaSelOneState(repository, {useLastSearchResult});
+        const dynaSelOneState = new DynaSelOneState(repository, {minCharsToSearch, useLastSearchResult});
         const dynaSelOneComp = new DynamicSelectOneComponent(dynaSelOneView, dynaSelOneState);
         if (childishBehaviour) {
             dynaSelOneComp.childishBehaviour = childishBehaviour;

@@ -1,3 +1,6 @@
+/**
+ * this relates to the <select/> options
+ */
 class DynaSelOneOption {
     /**
      * @type {number|string}
