@@ -38,6 +38,7 @@ table td input {
 /* buttons */
 div.buttons {
     height: 24px;
+    min-width: 56px;
     text-align: center !important;
     margin: auto;
 }
