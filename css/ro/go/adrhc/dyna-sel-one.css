@@ -1,4 +1,4 @@
-div.dyna-sel-one-comp input {
+.dyna-sel-one-comp input {
     /*margin-bottom: 0.1em;*/
     width: 100%;
     width: -webkit-fill-available;
@@ -6,12 +6,12 @@ div.dyna-sel-one-comp input {
     width: fill-available;
 }
 
-div.dyna-sel-one-comp input.found {
+.dyna-sel-one-comp input.found {
     width: auto !important;
     border: green 2px solid;
 }
 
-div.dyna-sel-one-comp select {
+.dyna-sel-one-comp select {
     display: block;
     width: 100%;
 }
