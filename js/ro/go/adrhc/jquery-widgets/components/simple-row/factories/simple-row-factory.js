@@ -1,4 +1,18 @@
 class SimpleRowFactory {
+    /**
+     * @param [tableIdOrJQuery]
+     * @param [rowTmplId]
+     * @param [rowTmplHtml]
+     * @param [mustacheTableElemAdapter]
+     * @param [tableRelativePositionOnCreate] {"prepend"|"append"}
+     * @param [neighbourRelativePosition] {"before"|"after"}
+     * @param [simpleRowView]
+     * @param [state]
+     * @param [simpleRowComponent]
+     * @param [childCompFactories]
+     * @param [childishBehaviour]
+     * @return {SimpleRowComponent}
+     */
     static createSimpleRow(
         {
             tableIdOrJQuery,
@@ -6,7 +20,8 @@ class SimpleRowFactory {
             rowTmplHtml,
             mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, rowTmplId, rowTmplHtml),
             tableRelativePositionOnCreate,
-            simpleRowView = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate),
+            neighbourRelativePosition,
+            simpleRowView = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate, neighbourRelativePosition),
             state = new SimpleRowState(),
             simpleRowComponent = new SimpleRowComponent(state, simpleRowView),
             childCompFactories,
@@ -22,6 +37,22 @@ class SimpleRowFactory {
         return simpleRowComponent;
     }
 
+    /**
+     * @param [tableIdOrJQuery]
+     * @param [rowTmplId]
+     * @param [rowTmplHtml]
+     * @param [mustacheTableElemAdapter]
+     * @param [tableRelativePositionOnCreate] {"prepend"|"append"}
+     * @param [neighbourRelativePosition] {"before"|"after"}
+     * @param [simpleRowView]
+     * @param [state]
+     * @param [identifiableRowComponent]
+     * @param [childCompFactories]
+     * @param [childishBehaviour]
+     * @param [errorRowTmplId]
+     * @param [errorRowTmplHtml]
+     * @return {IdentifiableRowComponent}
+     */
     static createIdentifiableRow(
         {
             tableIdOrJQuery,
@@ -29,7 +60,8 @@ class SimpleRowFactory {
             rowTmplHtml,
             mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, rowTmplId, rowTmplHtml),
             tableRelativePositionOnCreate,
-            simpleRowView = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate),
+            neighbourRelativePosition,
+            simpleRowView = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate, neighbourRelativePosition),
             state = new SimpleRowState(),
             identifiableRowComponent = new IdentifiableRowComponent(state, simpleRowView),
             childCompFactories,
@@ -55,8 +87,8 @@ class SimpleRowFactory {
      * The error row is presented as a "data-secondary-row-part".
      *
      * @param parentRow {IdentifiableRowComponent} the parent row for the error row
-     * @param rowTmplId {string} error row template id
-     * @param rowTmplHtml {string} error row html
+     * @param [rowTmplId] {string} error row template id
+     * @param [rowTmplHtml] {string} error row html
      * @return {IdentifiableRowComponent}
      */
     static createErrorRow(parentRow, {rowTmplId, rowTmplHtml}) {
