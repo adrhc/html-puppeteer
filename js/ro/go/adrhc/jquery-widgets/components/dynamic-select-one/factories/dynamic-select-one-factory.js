@@ -39,8 +39,8 @@ class DynamicSelectOneFactory {
         return $.extend(true, new ChildComponentFactory(), {
             createChildComponent: (parentComp) => {
                 const $parentElem = parentComp.view.$elem;
-                AssertionUtils.isTrue($parentElem && $parentElem.length === 1, `${childStateProperty} dynaSelOne child factory`);
-
+                AssertionUtils.isTrue($parentElem && $parentElem.length === 1,
+                    `${childStateProperty} dynaSelOne child factory`);
                 return DynamicSelectOneFactory.create($(dynaSelOneSelector, $parentElem),
                     repository, {
                         childishBehaviour: new DynaSelOneChildishBehaviour(parentComp,
