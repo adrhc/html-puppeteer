@@ -30,6 +30,10 @@ class DynaSelOneState extends BasicState {
      * @type {boolean}
      */
     searchOnBlur;
+    /**
+     * @type {boolean}
+     */
+    reloadOptionsOnInit;
 
     /**
      * @param repository {DynaSelOneRepository}
@@ -37,12 +41,14 @@ class DynaSelOneState extends BasicState {
      * @param [options] {DynaSelOneItem[]}
      * @param [useCachedSearchResult] {boolean}
      * @param [searchOnBlur] {boolean}
+     * @param [reloadOptionsOnInit] {boolean}
      */
     constructor(repository, {
         minCharsToSearch = 3,
         options,
         useCachedSearchResult,
-        searchOnBlur = minCharsToSearch > 0
+        searchOnBlur = minCharsToSearch > 0,
+        reloadOptionsOnInit = minCharsToSearch === 0
     }) {
         super();
         this.repository = repository;
@@ -50,6 +56,7 @@ class DynaSelOneState extends BasicState {
         this.options = options;
         this.useCachedSearchResult = useCachedSearchResult;
         this.searchOnBlur = searchOnBlur;
+        this.reloadOptionsOnInit = reloadOptionsOnInit;
     }
 
     /**
@@ -68,9 +75,8 @@ class DynaSelOneState extends BasicState {
 
     /**
      * principle:
-     * - don't do 2 things in same step (e.g. update the model and cache some values)
-     * - do multiple things sequentially (if not possible in parallel)
-     * - gather all data then update the model then compute derivatives then cache
+     * - don't do 2 things in same function (e.g. update the model and cache some values)
+     * - gather all data then update the model then compute aggregated values then update the cache
      *
      * @param title {string|undefined}
      * @param [isOnBlur] {boolean} for true reject update with same title
