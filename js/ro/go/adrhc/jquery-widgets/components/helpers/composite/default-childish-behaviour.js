@@ -12,7 +12,9 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
     }
 
     /**
-     * @param parentState {Person}
+     * extract the child state from its view then copy it into the parent state
+     *
+     * @param parentState {*}
      * @param [useOwnerOnFields] {boolean}
      */
     copyChildState(parentState, useOwnerOnFields) {
@@ -39,8 +41,14 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
         }
     }
 
+    /**
+     * if not null, extract the child state from @param parentState, otherwise from parentComp.state
+     *
+     * @param parentState {*}
+     * @return {*}
+     */
     extractChildState(parentState) {
-        parentState = parentState ? parentState : this.parentComp.state.currentState;
+        parentState = parentState == null ? this.parentComp.state.currentState : parentState;
         if (!!this.childStateProperty) {
             return parentState[this.childStateProperty];
         } else {
