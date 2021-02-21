@@ -35,6 +35,8 @@ class ChildishBehaviour {
     }
 
     /**
+     * Extract the child state from its view then copy it into the parent state.
+     *
      * useOwnerOnFields == null: when having kids the owner is used otherwise is not used
      * useOwnerOnFields != null: useOwnerOnFields is used to decide whether to use the owner or not
      *
