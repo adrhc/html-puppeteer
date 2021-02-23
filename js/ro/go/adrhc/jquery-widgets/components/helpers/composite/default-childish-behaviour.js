@@ -12,7 +12,10 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
     }
 
     /**
-     * extract the child state from its view then copy it into the parent state
+     * Extracts the child state from its view then copy it into the parent state.
+     * This is the flow for extracting the data from view.
+     *
+     * entityExtractor._extractInputValues -> compositeBehaviour.copyKidsState -> kid.copyMyState -> kid._childishBehaviour.copyChildState
      *
      * @param parentState {*}
      * @param [useOwnerOnFields] {boolean}
@@ -42,13 +45,16 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
     }
 
     /**
-     * if not null, extract the child state from @param parentState, otherwise from parentComp.state
+     * If not null, extract the child state from @param parentState, otherwise from parentComp.state.
+     * This is the flow for updating the children view from a parent-StateChange.
      *
-     * @param parentState {*}
+     * updateViewOnAny -> compositeBehaviour.processStateChangeWithKids -> compositeBehaviour._extractChildState -> childishBehaviour.extractChildState
+     *
+     * @param parentState {*} available from a parent-StateChange
      * @return {*}
      */
     extractChildState(parentState) {
-        parentState = parentState == null ? this.parentComp.state.currentState : parentState;
+        // parentState = parentState == null ? this.parentComp.state.currentState : parentState;
         if (!!this.childStateProperty) {
             return parentState[this.childStateProperty];
         } else {

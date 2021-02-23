@@ -45,6 +45,8 @@ class CompositeBehaviour {
     }
 
     /**
+     * entityExtractor._extractInputValues -> compositeBehaviour.copyKidsState -> kid.copyMyState -> kid._childishBehaviour.copyChildState
+     *
      * @param parentState
      */
     copyKidsState(parentState) {
@@ -59,6 +61,15 @@ class CompositeBehaviour {
     }
 
     /**
+     * Extracts the child state from @param stateChange as a
+     * child-related-StateChange then apply it to the child component.
+     *
+     * This works fine if @param stateChange contains all child related
+     * data otherwise a kid might not know whether its state was cleared
+     * or is just missing from the @param stateChange.
+     *
+     * updateViewOnAny -> compositeBehaviour.processStateChangeWithKids -> compositeBehaviour._extractChildState -> childishBehaviour.extractChildState
+     *
      * @param stateChange {StateChange}
      * @param [kidsFilter] {function(kid: AbstractComponent): boolean} filter the kids interested in the state change
      * @param [stateChangeKidAdapter] {function(kid: AbstractComponent): StateChange}
