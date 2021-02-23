@@ -48,6 +48,9 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
      * If not null, extract the child state from @param parentState, otherwise from parentComp.state.
      * This is the flow for updating the children view from a parent-StateChange.
      *
+     * see also CompositeBehaviour.processStateChangeWithKids
+     * todo: cope with @param parentState missing this child state
+     *
      * updateViewOnAny -> compositeBehaviour.processStateChangeWithKids -> compositeBehaviour._extractChildState -> childishBehaviour.extractChildState
      *
      * @param parentState {*} available from a parent-StateChange
