@@ -78,7 +78,7 @@ class CompositeBehaviour {
      */
     processStateChangeWithKids(stateChange,
                                kidsFilter = () => true,
-                               stateChangeKidAdapter = (kid) => this._extractChildState(kid, stateChange)) {
+                               stateChangeKidAdapter = (kid) => this._extractChildState(stateChange, kid)) {
         const promises = this.childComponents.filter(kidsFilter).map(kidComp => {
             const stateChangeKidPart = stateChangeKidAdapter(kidComp);
             return kidComp.processStateChange(stateChangeKidPart);
@@ -97,7 +97,7 @@ class CompositeBehaviour {
             const kidState = kid.childishBehaviour.extractChildState(stateChange.data);
             return $.extend(true, new StateChange(), stateChange, {data: kidState});
         } else {
-            return stateChange;
+            return stateChange.data;
         }
     }
 

@@ -26,7 +26,16 @@ if (Modernizr.template) {
             }
         });
 
-        return comp.init();
+        return comp.init().then(it => new Promise((resolve) => {
+            setTimeout(() => {
+                const currentState = comp.state.currentState;
+                const date = new Date().toLocaleTimeString();
+                comp.processStateChange({
+                    name: `${currentState.name} ${date}`,
+                    surname: `${currentState.surname} ${date}`
+                }).then((newStateChange) => resolve(newStateChange));
+            }, 3000)
+        }));
     });
 } else {
     // Find another way to add the rows to the table because

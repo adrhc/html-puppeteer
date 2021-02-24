@@ -4,7 +4,7 @@ class AbstractComponent {
      *
      * @type {ComponentConfiguration}
      */
-    config
+    config;
     /**
      * @type {BasicState}
      */
@@ -73,12 +73,19 @@ class AbstractComponent {
     /**
      * shorthand method: calls doWithState with the provided stateChange
      *
-     * @param {StateChange} stateChange
+     * @param {StateChange|*} stateChangeOrJustData
      * @param {boolean} [dontRecordStateEvents]
      * @return {Promise<StateChange[]>}
      */
-    processStateChange(stateChange, dontRecordStateEvents) {
-        return this.doWithState((basicState) => basicState.collectStateChange(stateChange, dontRecordStateEvents));
+    processStateChange(stateChangeOrJustData, dontRecordStateEvents) {
+        let stateChange;
+        if (typeof stateChange === "object" && stateChange instanceof StateChange) {
+            stateChange = stateChangeOrJustData;
+        } else {
+            stateChange = new StateChange(this.config.stateChangeRequest, stateChangeOrJustData);
+        }
+        return this.doWithState((basicState) =>
+            basicState.collectStateChange(stateChange, dontRecordStateEvents));
     }
 
     /**
