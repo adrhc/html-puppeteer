@@ -17,7 +17,7 @@ class LayoutComponent extends AbstractComponent {
     }
 
     _reloadState() {
-        if (this.config.dontAutoInitialize) {
+        if (this.config.dontLoadStateFromData) {
             return super._reloadState();
         } else {
             return new Promise((resolve) => {

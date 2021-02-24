@@ -8,6 +8,10 @@ class ComponentConfiguration {
      */
     dontAutoInitialize;
     /**
+     * @type boolean
+     */
+    dontLoadStateFromData;
+    /**
      * @type string
      */
     stateChangeRequest = "UPDATE";
