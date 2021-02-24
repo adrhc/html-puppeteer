@@ -5,7 +5,7 @@ class AbstractTemplatingView extends AbstractView {
      * @param {string} [htmlTmpl]
      * @protected
      */
-    _setupCachedHtmlTemplate({tmplUrl, tmplId, htmlTmpl}) {
+    _setupCachedHtmlTemplate({tmplUrl, tmplId, htmlTmpl, $el}) {
         if (tmplUrl) {
             this.template = new CachedHtmlTemplate({url: tmplUrl});
         } else if (htmlTmpl) {
@@ -14,7 +14,8 @@ class AbstractTemplatingView extends AbstractView {
             htmlTmpl = HtmlUtils.templateTextOf(tmplId);
             this.template = new CachedHtmlTemplate({htmlTmpl});
         } else {
-            console.warn(`${this.constructor.name}._setupCachedHtmlTemplate: tmplUrl, htmlTmplId, htmlTmpl are all empty; this.template is not set!`);
+            htmlTmpl = $el.html();
+            this.template = new CachedHtmlTemplate({htmlTmpl});
         }
     }
 
