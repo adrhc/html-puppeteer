@@ -25,6 +25,8 @@ class AbstractView {
     }
 
     /**
+     * Depends on this._$elem!
+     *
      * @protected
      */
     _setupOwner() {
@@ -38,11 +40,11 @@ class AbstractView {
     }
 
     /**
-     * @param stageChanges {StateChange|StateChange[]}
+     * @param stateChanges {StateChange|StateChange[]}
      * @return {Promise<StateChange|StateChange[]>}
      */
-    update(stageChanges) {
-        return Promise.resolve(stageChanges);
+    update(stateChanges) {
+        return Promise.resolve(stateChanges);
     }
 
     /**

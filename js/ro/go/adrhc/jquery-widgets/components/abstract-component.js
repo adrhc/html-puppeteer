@@ -1,5 +1,11 @@
 class AbstractComponent {
     /**
+     * component's configuration
+     *
+     * @type {ComponentConfiguration}
+     */
+    config
+    /**
      * @type {BasicState}
      */
     state;
@@ -29,10 +35,12 @@ class AbstractComponent {
     /**
      * @param state {BasicState}
      * @param view {AbstractView}
+     * @param {{}} [config]
      */
-    constructor(state, view) {
+    constructor(state, view, config = new ComponentConfiguration()) {
         this.state = state;
         this.view = view;
+        this.config = config;
         this.stateChangesDispatcher = new StateChangesDispatcher(this);
         this.compositeBehaviour = new CompositeBehaviour(this);
         this.entityExtractor = new DefaultEntityExtractor(this, {});
@@ -65,8 +73,8 @@ class AbstractComponent {
     /**
      * shorthand method: calls doWithState with the provided stateChange
      *
-     * @param stateChange {StateChange}
-     * @param [dontRecordStateEvents] {boolean}
+     * @param {StateChange} stateChange
+     * @param {boolean} [dontRecordStateEvents]
      * @return {Promise<StateChange[]>}
      */
     processStateChange(stateChange, dontRecordStateEvents) {
@@ -141,10 +149,10 @@ class AbstractComponent {
     /**
      * component initializer: (re)load state, update the view, configure events then init kids
      *
-     * @param [config] {ComponentInitConfig}
+     * @param {ComponentInitConfig} [config]
      * @return {Promise<StateChange[]>}
      */
-    init(config = new ComponentInitConfig()) {
+    init(config = new ComponentInitConfig(this.config.dontConfigEventsOnError)) {
         return this._reloadState()
             .then(() => {
                 console.log(`${this.constructor.name}.init: updateViewOnStateChanges`);
@@ -171,7 +179,7 @@ class AbstractComponent {
     /**
      * Reloading the state from somewhere (e.g. a repository).
      *
-     * @return {Promise<*>}
+     * @return {Promise<*>} the loaded state
      * @protected
      */
     _reloadState() {

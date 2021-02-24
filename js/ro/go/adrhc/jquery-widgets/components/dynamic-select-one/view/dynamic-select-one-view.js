@@ -3,7 +3,7 @@
  */
 class DynamicSelectOneView extends AbstractView {
     /**
-     * @type {CachedUrl}
+     * @type {CachedHtmlTemplate}
      */
     tmpl;
 
@@ -19,7 +19,7 @@ class DynamicSelectOneView extends AbstractView {
     }
 
     _setupCachedUrl(dynaSelOneHtml = "js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/templates/dyna-sel-one.html") {
-        this.tmpl = new CachedUrl(JqueryWidgetsConfig.urlOf(dynaSelOneHtml));
+        this.tmpl = new CachedHtmlTemplate({url: JqueryWidgetsConfig.urlOf(dynaSelOneHtml)});
     }
 
     /**
@@ -44,7 +44,7 @@ class DynamicSelectOneView extends AbstractView {
      * @return {Promise<jQuery>}
      */
     _renderView(viewModel) {
-        return this.tmpl.cache
+        return this.tmpl.cached
             .then(html => Mustache.render(html, viewModel))
             .then(html => this.$elem.html(html.trim()));
     }
