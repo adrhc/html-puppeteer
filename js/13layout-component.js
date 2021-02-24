@@ -9,8 +9,6 @@ if (Modernizr.template) {
         }
     });
 
-    $(() => new LayoutComponent("layout-comp"));
-
 /*
     $(() => {
         const comp = new LayoutComponent("layout-comp");
@@ -19,6 +17,9 @@ if (Modernizr.template) {
         return comp.init();
     });
 */
+
+    // $(() => new LayoutComponent("layout-comp"));
+    $(() => JqueryWidgetsUtil.autoInit());
 } else {
     // Find another way to add the rows to the table because
     // the HTML template element is not supported.
