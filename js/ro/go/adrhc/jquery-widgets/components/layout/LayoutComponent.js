@@ -5,7 +5,8 @@ class LayoutComponent extends AbstractComponent {
      * @param {DefaultTemplatingView} [view]
      * @param {ComponentConfiguration} [config]
      */
-    constructor(elemIdOrJQuery, config = DomUtils.jQueryOf(elemIdOrJQuery).data(),
+    constructor(elemIdOrJQuery,
+                config = DomUtils.jQueryOf(elemIdOrJQuery).data(),
                 state = new BasicState(),
                 view = new DefaultTemplatingView(elemIdOrJQuery, config)) {
         super(state, view, config);
