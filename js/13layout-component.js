@@ -19,6 +19,7 @@ if (Modernizr.template) {
 */
 
     // $(() => new LayoutComponent("layout-comp"));
+
     $(() => JqueryWidgetsUtil.autoInit());
 } else {
     // Find another way to add the rows to the table because
