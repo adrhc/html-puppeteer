@@ -10,7 +10,7 @@ class ComponentConfiguration {
     /**
      * @type boolean
      */
-    dontLoadStateFromData;
+    dontReloadFromState;
     /**
      * @type string
      */

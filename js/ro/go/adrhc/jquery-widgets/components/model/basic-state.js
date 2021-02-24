@@ -4,9 +4,20 @@ class BasicState {
      * @private
      */
     _stateChanges = new StateChanges();
+    /**
+     * @private
+     */
+    _currentState;
+
+    /**
+     * @param currentState
+     */
+    constructor(currentState) {
+        this._currentState = currentState;
+    }
 
     get currentState() {
-        return undefined;
+        return this._currentState;
     }
 
     /**
@@ -14,6 +25,7 @@ class BasicState {
      * @param [dontCollectStateChange] {boolean}
      */
     collectStateChange(stateChange, dontCollectStateChange) {
+        this._currentState = stateChange.data;
         if (!dontCollectStateChange) {
             this._stateChanges.collect(stateChange);
         }

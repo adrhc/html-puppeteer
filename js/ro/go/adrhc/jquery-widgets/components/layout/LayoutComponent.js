@@ -7,7 +7,7 @@ class LayoutComponent extends AbstractComponent {
      */
     constructor(elemIdOrJQuery,
                 config = DomUtils.jQueryOf(elemIdOrJQuery).data(),
-                state = new BasicState(),
+                state = new BasicState(config),
                 view = new DefaultTemplatingView(elemIdOrJQuery, config)) {
         super(state, view, config);
         if (config.dontAutoInitialize) {
@@ -17,15 +17,31 @@ class LayoutComponent extends AbstractComponent {
     }
 
     _reloadState() {
-        if (this.config.dontLoadStateFromData) {
+        if (this.config.dontReloadFromState) {
             return super._reloadState();
         } else {
-            return new Promise((resolve) => {
-                console.debug(`${this.constructor.name}._reloadState:\n${JSON.stringify(this.config)}`);
-                const stateChange = new StateChange(this.config.stateChangeRequest, this.config);
-                this.state.collectStateChange(stateChange);
-                setTimeout(() => resolve(stateChange))
-            })
+            return this._stateChangePromiseFromState();
         }
+    }
+
+    /**
+     * @return {StateChange}
+     * @protected
+     */
+    _stateChangeFromState() {
+        console.debug(`${this.constructor.name}._stateChangeFromState:\n${JSON.stringify(this.state.currentState)}`);
+        return new StateChange(this.config.stateChangeRequest, this.state.currentState);
+    }
+
+    /**
+     * @return {Promise<StateChange>}
+     * @protected
+     */
+    _stateChangePromiseFromState() {
+        return new Promise((resolve) => {
+            const stateChange = this._stateChangeFromState();
+            this.state.collectStateChange(stateChange);
+            setTimeout(() => resolve(stateChange))
+        })
     }
 }
