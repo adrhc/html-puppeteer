@@ -19,6 +19,12 @@ if (Modernizr.template) {
                 return SimpleListFactory.create({items, tableIdOrJQuery});
             }
         });
+        comp.compositeBehaviour.addChildComponentFactory({
+            createChildComponent(parentComp) {
+                const elemIdOrJQuery = $("#dyna-sel-one", parentComp.view.$elem);
+                return DynamicSelectOneFactory.create(elemIdOrJQuery, DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {});
+            }
+        });
 
         return comp.init();
     });

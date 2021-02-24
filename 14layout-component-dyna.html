@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/ro/go/adrhc/responstable-table.css">
     <link rel="stylesheet" href="css/library-customizations/responstable-table.css">
     <link rel="stylesheet" href="css/ro/go/adrhc/util.css">
+    <link rel="stylesheet" href="css/ro/go/adrhc/dyna-sel-one.css">
     <link rel="stylesheet" href="css/app.css">
     <script src="libraries/modernizr-custom.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -29,6 +30,11 @@
 <div id="layout-comp" data-dont-auto-initialize="true" data-name="Kent" data-surname="Gigi">
     <div><label>name</label>: {{name}}</div>
     <div><label>surname</label>: {{surname}}</div>
+    <br>
+    <!-- dyna-sel-one -->
+    <div id="dyna-sel-one" class="dyna-sel-one-comp" data-placeholder="first name"
+         data-focus="true" data-min-chars-to-search="0" data-use-cached-search-result="false" data-search-on-blur="true"
+         data-name="firstName" data-value="personId" data-options-to-show="5"></div>
     <br>
     <!-- dogs table -->
     <div class="dogsTable">
@@ -145,7 +151,9 @@
 <script src="js/ro/go/adrhc/jquery-widgets/components/editable-list/editable-list.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/editable-list/editable-list-factory.js"></script>
 <!-- app -->
+<script src="js/model/person.js"></script>
+<script src="js/repositories/in-memory/in-memory-persons-repository.js"></script>
+<script src="js/mock/db-mock.js"></script>
 <!-- index -->
 <script src="js/14layout-component-dyna.js"></script>
 </body>
-
