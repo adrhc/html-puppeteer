@@ -1,4 +1,4 @@
-class LayoutComponent extends AbstractComponent {
+class DrawingComponent extends AbstractComponent {
     /**
      * @param {string|jQuery<HTMLElement} elemIdOrJQuery
      * @param {BasicState} [state]
@@ -31,21 +31,14 @@ class LayoutComponent extends AbstractComponent {
     }
 
     /**
-     * @return {StateChange}
-     * @protected
-     */
-    _stateChangeFromState() {
-        console.debug(`${this.constructor.name}._stateChangeFromState:\n${JSON.stringify(this.state.currentState)}`);
-        return new StateChange(this.config.stateChangeRequest, this.state.currentState);
-    }
-
-    /**
      * @return {Promise<StateChange>}
      * @protected
      */
     _stateChangePromiseFromState() {
         return new Promise((resolve) => {
-            const stateChange = this._stateChangeFromState();
+            console.debug(`${this.constructor.name}._stateChangePromiseFromState`);
+            console.debug(JSON.stringify(this.state.currentState));
+            const stateChange = new StateChange(this.config.stateChangeRequest, this.state.currentState);
             this.state.collectStateChange(stateChange);
             setTimeout(() => resolve(stateChange))
         })

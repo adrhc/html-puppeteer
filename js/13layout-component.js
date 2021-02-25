@@ -11,14 +11,14 @@ if (Modernizr.template) {
 
     /*
         $(() => {
-            const comp = new LayoutComponent("layout-comp");
+            const comp = new DrawingComponent("layout-comp");
             const stateChange = new StateChange("UPDATE", comp.config);
             comp.state.collectStateChange(stateChange);
             return comp.init();
         });
     */
 
-    // $(() => new LayoutComponent("layout-comp"));
+    // $(() => new DrawingComponent("layout-comp"));
 
     $(() => JqueryWidgetsUtil.autoInit());
 } else {

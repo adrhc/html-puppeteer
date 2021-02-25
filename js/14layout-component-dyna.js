@@ -21,7 +21,7 @@ if (Modernizr.template) {
     $(() => {
         const items = [{id: 1, name: "dog1"}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
 
-        const comp = new LayoutComponent("layout-comp");
+        const comp = new DrawingComponent("layout-comp");
         comp.compositeBehaviour.addChildComponentFactory([(parentComp) => {
             const tableIdOrJQuery = $("#dogsTable", parentComp.view.$elem);
             return SimpleListFactory.create({items, tableIdOrJQuery});

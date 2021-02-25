@@ -25,7 +25,7 @@ class JqueryWidgetsUtil {
     /**
      * @param {string} type
      * @param {jQuery<HTMLElement>} $el
-     * @return {LayoutComponent}
+     * @return {DrawingComponent}
      */
     static instantiateByName(type, $el) {
         const dynamicClass = eval(type);
