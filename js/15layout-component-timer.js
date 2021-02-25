@@ -12,6 +12,7 @@ if (Modernizr.template) {
     function generateNewState() {
         const date = new Date().toLocaleTimeString();
         return {
+            seconds: 1,
             name: `Kent ${date}`,
             surname: `Gigi ${date}`
         };
@@ -20,9 +21,11 @@ if (Modernizr.template) {
     $(() => {
         const comp = new LayoutComponent("layout-comp");
 
+        const seconds = comp.state.currentState.seconds;
+
         comp.init().then(() => setInterval(() =>
             comp.processStateChange(generateNewState(), true)
-                .then(() => comp.init()), 1000));
+                .then(() => comp.init()), seconds * 1000));
     });
 } else {
     // Find another way to add the rows to the table because

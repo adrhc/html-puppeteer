@@ -9,9 +9,10 @@ if (Modernizr.template) {
         }
     });
 
-    function generateNewState() {
+    function generateNewState(seconds) {
         const date = new Date().toLocaleTimeString();
         return {
+            seconds: seconds,
             name: `Kent ${date}`,
             surname: `Gigi ${date}`
         };
@@ -34,9 +35,12 @@ if (Modernizr.template) {
             }
         });
 
-        return comp.init().then(() => setInterval(() =>
-            comp.processStateChange(generateNewState(), true)
-                .then(() => comp.init()), 2000));
+        const seconds = comp.state.currentState.seconds;
+
+        return comp.init()
+            .then(() => setInterval(() =>
+                comp.processStateChange(generateNewState(seconds), true)
+                    .then(() => comp.init()), seconds * 1000));
     });
 } else {
     // Find another way to add the rows to the table because
