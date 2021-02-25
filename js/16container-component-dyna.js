@@ -3,11 +3,19 @@ function findDogsListComp(comp) {
         (kid) => kid instanceof SimpleListComponent).pop();
 }
 
+function newPerson() {
+    const date = new Date().toLocaleTimeString();
+    return {
+        name: `Kent ${date}`,
+        surname: `Gigi ${date}`
+    };
+}
+
 function procStateChangeFnOf(comp) {
     return () => {
         const dogs = findDogsListComp(comp).repository.items;
         dogs.push({id: dogs.length + 1, name: `dog${dogs.length + 1}`});
-        return comp.processStateChange(new StateChange("UPDATE_ALL", {dogs}));
+        return comp.processStateChange(new StateChange("UPDATE_ALL", {dogs, person: newPerson()}));
     };
 }
 
@@ -15,8 +23,8 @@ $(() => {
     // const comp = new ContainerComponent($("[data-jqw-type='ContainerComponent']"));
     const comp = JqueryWidgetsUtil.autoCreate();
     comp.compositeBehaviour.addChildComponentFactory([(parentComp) => {
-        const elemIdOrJQuery = $("#page-section", parentComp.view.$elem);
-        return new ContainerComponent(elemIdOrJQuery);
+        const elemIdOrJQuery = $("#person", parentComp.view.$elem);
+        return new DrawingComponent(elemIdOrJQuery);
     }, (parentComp) => {
         const tableIdOrJQuery = $("#dogsTable", parentComp.view.$elem);
         return SimpleListFactory.create({items: DbMock.DOGS, tableIdOrJQuery});

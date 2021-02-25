@@ -20,14 +20,12 @@
 <!-- dogs row template -->
 <template id="dogsTableRowTmpl">
     <tr data-owner="dogsTable" data-id="{{id}}">
-        <td>
-            <input type="hidden" name="id" value="{{id}}">
-            {{name}}
-        </td>
+        <td>{{id}}</td>
+        <td>{{name}}</td>
     </tr>
 </template>
 
-<template id="page-section-tmpl">
+<template id="person-tmpl">
     <div><label>name</label>: {{name}}</div>
     <div><label>surname</label>: {{surname}}</div>
 </template>
@@ -35,8 +33,8 @@
 <div data-jqw-type="ContainerComponent" data-dont-auto-initialize="true" data-seconds="2">
     <div>Components container: adding a new dog every {{seconds}} seconds</div>
     <br>
-    <div id="page-section" data-dont-auto-initialize="true" data-tmpl-id="page-section-tmpl"
-         data-name="Kent" data-surname="Gigi" data-seconds="2">loading ...
+    <div id="person" data-dont-auto-initialize="true" data-tmpl-id="person-tmpl"
+         data-name="Kent" data-surname="Gigi" data-seconds="2" data-child-property="person">loading ...
     </div>
     <br>
     <!-- dyna-sel-one -->
@@ -49,6 +47,7 @@
         <table id="dogsTable" class="responstable" data-child-property="dogs">
             <thead>
             <tr>
+                <th data-owner="dogsTable" data-btn="reload" title="reload">Id</th>
                 <th data-owner="dogsTable" data-btn="reload" title="reload">Dogs</th>
             </tr>
             </thead>
