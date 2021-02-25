@@ -19,7 +19,7 @@ if (Modernizr.template) {
     }
 
     $(() => {
-        JqueryWidgetsUtil.autoInit()
+        JqueryWidgetsUtil.autoCreate()
             .then(comp => comp.processStateChange({
                 seconds: comp.state.currentState.seconds,
                 name: "Gigi",

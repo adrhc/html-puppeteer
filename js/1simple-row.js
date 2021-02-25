@@ -9,12 +9,10 @@ if (Modernizr.template) {
         }
     });
     $(() => {
-        const dogs = [{id: 1, name: "dog1"}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
-
         // dogs table with editable row
         const dogsTableWithEdit = "dogsTableWithEdit";
         SimpleListFactory.create({
-            items: dogs,
+            items: DbMock.DOGS,
             tableIdOrJQuery: dogsTableWithEdit
         }).init().then(updateAllStateChanges => {
             const items = updateAllStateChanges[0].data;
@@ -50,7 +48,7 @@ if (Modernizr.template) {
         // dogs table with deleted row
         const dogsTableWithDelete = "dogsTableWithDelete";
         SimpleListFactory.create({
-            items: dogs,
+            items: DbMock.DOGS,
             tableIdOrJQuery: dogsTableWithDelete,
             bodyRowTmplId: "dogsTableWithDeleteReadOnlyRowTmpl"
         }).init().then(updateAllStateChanges => {

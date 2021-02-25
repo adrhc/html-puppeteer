@@ -37,6 +37,9 @@ class AbstractView {
             const dataId = this.$elem.data("id");
             this._owner = dataId ? dataId : this.$elem.attr("id");
         }
+        if (!this._owner) {
+            this._owner = this.$elem.data("jqw-type")
+        }
     }
 
     /**

@@ -10,8 +10,6 @@ if (Modernizr.template) {
     });
 
     $(() => {
-        const items = [{id: 1, name: "dog1"}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
-
         // dogs table with both read-only and editable row
         const tableIdOrJQuery = "dogsTable";
         const tableRelativePositionOnCreate = "prepend";
@@ -31,7 +29,7 @@ if (Modernizr.template) {
                 tableIdOrJQuery, rowTmplId: "dogsTableDeletableRowTmpl"
             });
 
-        const repository = new InMemoryCrudRepository(items, undefined, (it) => {
+        const repository = new InMemoryCrudRepository(DbMock.DOGS, undefined, (it) => {
             it.id = Math.abs(it.id);
             return it;
         });

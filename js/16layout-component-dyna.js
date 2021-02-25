@@ -28,13 +28,6 @@ if (Modernizr.template) {
             const elemIdOrJQuery = $("#dyna-sel-one", parentComp.view.$elem);
             return DynamicSelectOneFactory.create(elemIdOrJQuery, DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {});
         }]);
-
-        const seconds = comp.state.currentState.seconds;
-
-        return comp.init().then(() => setInterval(() =>
-            // comp has children: comp must be re-init to work as expected (i.e. children to be init-ed too)
-            comp.processStateChange(generateNewState(seconds), true)
-                .then(() => comp.init()), seconds * 1000));
     });
 } else {
     // Find another way to add the rows to the table because

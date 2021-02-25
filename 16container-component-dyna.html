@@ -4,7 +4,10 @@
 <head>
     <title>JavaScript components</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/ro/go/adrhc/responstable-table.css">
+    <link rel="stylesheet" href="css/library-customizations/responstable-table.css">
     <link rel="stylesheet" href="css/ro/go/adrhc/util.css">
+    <link rel="stylesheet" href="css/ro/go/adrhc/dyna-sel-one.css">
     <link rel="stylesheet" href="css/app.css">
     <script src="libraries/modernizr-custom.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -14,27 +17,37 @@
 
 <body>
 
-<!--
-<template id="drawing-template">
-    <div>Updating every {{seconds}} seconds</div><br>
-    <div><label>name</label>: {{name}}</div>
-    <div><label>surname</label>: {{surname}}</div>
+<!-- dogs row template -->
+<template id="dogsTableRowTmpl">
+    <tr data-owner="dogsTable" data-id="{{id}}">
+        <td>
+            <input type="hidden" name="id" value="{{id}}">
+            {{name}}
+        </td>
+    </tr>
 </template>
-<div data-tmpl-id="drawing-template" data-jqw-type="DrawingComponent"
-     data-name="Kent" data-surname="Gigi" data-seconds="1">loading ...
-</div>
--->
 
-<!--
-<div data-tmpl-url="scenarios/13container-component-htmls/container-component-template.html"
-     data-jqw-type="DrawingComponent" data-name="Kent" data-surname="Gigi" data-seconds="1">loading ...
-</div>
--->
-
-<div data-jqw-type="DrawingComponent" data-seconds="1">
+<div data-jqw-type="DrawingComponent" data-dont-auto-initialize="true"
+     data-name="Kent" data-surname="Gigi" data-seconds="3">
     <div>Updating every {{seconds}} seconds</div><br>
     <div><label>name</label>: {{name}}</div>
     <div><label>surname</label>: {{surname}}</div>
+    <br>
+    <!-- dyna-sel-one -->
+    <div id="dyna-sel-one" class="dyna-sel-one-comp" data-placeholder="first name"
+         data-focus="true" data-min-chars-to-search="0" data-use-cached-search-result="false" data-search-on-blur="true"
+         data-name="firstName" data-value="personId" data-options-to-show="5"></div>
+    <br>
+    <!-- dogs table -->
+    <div class="dogsTable">
+        <table id="dogsTable" class="responstable">
+            <thead>
+            <tr>
+                <th data-owner="dogsTable" data-btn="reload" title="reload">Dogs</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
 </div>
 
 <!-- utils -->
@@ -142,7 +155,9 @@
 <script src="js/ro/go/adrhc/jquery-widgets/components/editable-list/editable-list.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/editable-list/editable-list-factory.js"></script>
 <!-- app -->
+<script src="js/model/person.js"></script>
+<script src="js/repositories/in-memory/in-memory-persons-repository.js"></script>
+<script src="js/mock/db-mock.js"></script>
 <!-- index -->
-<script src="js/15layout-component-timer.js"></script>
+<script src="js/16layout-component-dyna.js"></script>
 </body>
-

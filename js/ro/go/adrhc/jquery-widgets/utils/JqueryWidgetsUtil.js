@@ -2,10 +2,10 @@ class JqueryWidgetsUtil {
     /**
      * @return {AbstractComponent|Array<AbstractComponent|Promise<AbstractComponent>>}
      */
-    static autoInit() {
-        const components = $("[data-jq-type]").map((index, el) => {
+    static autoCreate() {
+        const components = $("[data-jqw-type]").map((index, el) => {
             const $el = $(el);
-            const type = $el.data("jq-type");
+            const type = $el.data("jqw-type");
             // const comp = eval(`new ${type}()`);
             // const comp = new window[type]($el);
             // const comp = (Function(`return new ${type}`))($el);

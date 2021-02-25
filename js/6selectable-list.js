@@ -10,8 +10,6 @@ if (Modernizr.template) {
     });
 
     $(() => {
-        const items = [{id: 1, name: "dog1"}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
-
         // dogs table with both read-only and editable row
         const tableIdOrJQuery = "dogsTable";
         const tableRelativePositionOnCreate = "append";
@@ -25,7 +23,7 @@ if (Modernizr.template) {
                 tableIdOrJQuery, rowTmplId: "dogsTableEditableRowTmpl"
             });
 
-        const component = SelectableListFactory.create({items, tableIdOrJQuery, notSelectedRow, selectedRow});
+        const component = SelectableListFactory.create({items: DbMock.DOGS, tableIdOrJQuery, notSelectedRow, selectedRow});
 
         component
             .init()

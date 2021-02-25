@@ -20,7 +20,7 @@ if (Modernizr.template) {
 
     // $(() => new DrawingComponent("drawing-comp"));
 
-    $(() => JqueryWidgetsUtil.autoInit());
+    $(() => JqueryWidgetsUtil.autoCreate());
 } else {
     // Find another way to add the rows to the table because
     // the HTML template element is not supported.

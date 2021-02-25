@@ -10,12 +10,11 @@ if (Modernizr.template) {
     });
 
     $(() => {
-        const items = [{id: 1, name: "dog1"}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
         const newItemsGoToTheEndOfTheList = true;
 
         // dogs table with read-only row (default: on creation prepend to table)
         const component = ElasticListFactory.create("dogsTable", "dogsTableRowTmpl", {
-            items, newItemsGoToTheEndOfTheList
+            items: DbMock.DOGS, newItemsGoToTheEndOfTheList
         });
 
         component

@@ -18,6 +18,8 @@ class DbMock {
                 {id: 33, name: "cat33"}])
     ], Person.parse, DbMock.parsePersonBeforeUpsert);
 
+    static DOGS = [{id: 1, name: "dog1"}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
+
     static parsePersonBeforeUpsert(object) {
         // changing generated cat ids to valid, not generated ids
         if (object.cats != null && $.isArray(object.cats)) {

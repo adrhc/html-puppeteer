@@ -9,9 +9,8 @@ if (Modernizr.template) {
         }
     });
     $(() => {
-        const dogs = [{id: 1, name: "dog1"}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
         SimpleListFactory.create({
-            items: dogs,
+            items: DbMock.DOGS,
             tableIdOrJQuery: "dogsTable"
         }).init();
     })
