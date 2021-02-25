@@ -14,14 +14,14 @@ class LayoutComponent extends AbstractComponent {
         if (config.dontAutoInitialize) {
             return;
         }
-        return super.init();
+        return super.init().then(() => this);
     }
 
     processStateChange(stateChangeOrJustData, dontRecordStateEvents) {
         super.reset();
         return super.processStateChange(stateChangeOrJustData, dontRecordStateEvents);
     }
-    
+
     _reloadState() {
         if (this.config.dontReloadFromState) {
             return super._reloadState();
