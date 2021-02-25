@@ -9,14 +9,14 @@ if (Modernizr.template) {
         }
     });
 
-/*
-    $(() => {
-        const comp = new LayoutComponent("layout-comp");
-        const stateChange = new StateChange("UPDATE", comp.config);
-        comp.state.collectStateChange(stateChange);
-        return comp.init();
-    });
-*/
+    /*
+        $(() => {
+            const comp = new LayoutComponent("layout-comp");
+            const stateChange = new StateChange("UPDATE", comp.config);
+            comp.state.collectStateChange(stateChange);
+            return comp.init();
+        });
+    */
 
     // $(() => new LayoutComponent("layout-comp"));
 

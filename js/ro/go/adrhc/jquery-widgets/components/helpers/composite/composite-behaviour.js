@@ -23,11 +23,15 @@ class CompositeBehaviour {
     }
 
     /**
-     * @param childCompFactory {ChildComponentFactory|ChildComponentFactory[]}
+     * @param {function(parentComp: AbstractComponent): AbstractComponent|Array<function(parentComp: AbstractComponent): AbstractComponent>|ChildComponentFactory|ChildComponentFactory[]} childCompFactory
      */
     addChildComponentFactory(childCompFactory) {
         if ($.isArray(childCompFactory)) {
-            childCompFactory.forEach(it => this.childComponentFactories.push(it));
+            childCompFactory.forEach(it => this.addChildComponentFactory(it));
+        } else if (typeof childCompFactory === "function") {
+            this.childComponentFactories.push($.extend(new ChildComponentFactory(), {
+                createChildComponent: childCompFactory
+            }));
         } else {
             this.childComponentFactories.push(childCompFactory);
         }

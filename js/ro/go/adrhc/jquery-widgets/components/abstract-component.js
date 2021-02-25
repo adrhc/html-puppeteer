@@ -1,3 +1,6 @@
+/**
+ * see also https://jsdoc.app/tags-type.html
+ */
 class AbstractComponent {
     /**
      * component's configuration
