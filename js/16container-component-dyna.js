@@ -28,7 +28,7 @@ if (Modernizr.template) {
             const elemIdOrJQuery = $("#dyna-sel-one", parentComp.view.$elem);
             return DynamicSelectOneFactory.create(elemIdOrJQuery, DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {});
         }]);
-        comp.init();
+        comp.init().then(() => console.log("16container-component-dyna.js started"));
     });
 } else {
     // Find another way to add the rows to the table because
