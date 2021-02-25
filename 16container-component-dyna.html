@@ -27,15 +27,21 @@
     </tr>
 </template>
 
-<div data-jqw-type="ContainerComponent" data-dont-auto-initialize="true"
-     data-name="Kent" data-surname="Gigi" data-seconds="2">
-    <div>Components container: adding a new dog every {{seconds}} seconds</div><br>
+<template id="page-section-tmpl">
     <div><label>name</label>: {{name}}</div>
     <div><label>surname</label>: {{surname}}</div>
+</template>
+
+<div data-jqw-type="ContainerComponent" data-dont-auto-initialize="true" data-seconds="2">
+    <div>Components container: adding a new dog every {{seconds}} seconds</div>
+    <br>
+    <div id="page-section" data-dont-auto-initialize="true" data-tmpl-id="page-section-tmpl"
+         data-name="Kent" data-surname="Gigi" data-seconds="2">loading ...
+    </div>
     <br>
     <!-- dyna-sel-one -->
-    <div id="dyna-sel-one" class="dyna-sel-one-comp" data-placeholder="first name"
-         data-focus="true" data-min-chars-to-search="0" data-use-cached-search-result="false" data-search-on-blur="true"
+    <div id="dyna-sel-one" class="dyna-sel-one-comp" data-placeholder="first name" data-focus="true"
+         data-min-chars-to-search="0" data-use-cached-search-result="false" data-search-on-blur="true"
          data-name="firstName" data-value="personId" data-options-to-show="5"></div>
     <br>
     <!-- dogs table -->

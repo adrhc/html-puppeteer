@@ -15,6 +15,9 @@ $(() => {
     // const comp = new ContainerComponent($("[data-jqw-type='ContainerComponent']"));
     const comp = JqueryWidgetsUtil.autoCreate();
     comp.compositeBehaviour.addChildComponentFactory([(parentComp) => {
+        const elemIdOrJQuery = $("#page-section", parentComp.view.$elem);
+        return new ContainerComponent(elemIdOrJQuery);
+    }, (parentComp) => {
         const tableIdOrJQuery = $("#dogsTable", parentComp.view.$elem);
         return SimpleListFactory.create({items: DbMock.DOGS, tableIdOrJQuery});
     }, (parentComp) => {
