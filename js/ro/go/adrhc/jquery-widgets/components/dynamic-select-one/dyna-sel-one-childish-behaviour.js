@@ -1,11 +1,11 @@
 class DynaSelOneChildishBehaviour extends DefaultChildishBehaviour {
     /**
      * @param parentComp {AbstractComponent}
-     * @param childStateProperty {string} is the parentState property where to save the selectedItem
+     * @param childProperty {string} is the parentState property where to save the selectedItem
      * @param childEntityConverter {function({}): IdentifiableEntity}
      */
-    constructor(parentComp, childStateProperty, childEntityConverter) {
-        super(parentComp, childStateProperty);
+    constructor(parentComp, childProperty, childEntityConverter) {
+        super(parentComp, childProperty);
         this.childEntityConverter = childEntityConverter;
     }
 
@@ -19,7 +19,7 @@ class DynaSelOneChildishBehaviour extends DefaultChildishBehaviour {
     copyChildState(parentState, useOwnerOnFields) {
         // selectedItem should already be a curated entity such that childEntityConverter would be useless
         const selectedItem = this._childComp.state.currentState.selectedItem;
-        parentState[this.childStateProperty] = this.childEntityConverter(selectedItem);
+        parentState[this.childProperty] = this.childEntityConverter(selectedItem);
     }
 
     /**

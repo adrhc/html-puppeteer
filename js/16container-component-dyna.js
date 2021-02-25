@@ -16,7 +16,7 @@ $(() => {
     const comp = JqueryWidgetsUtil.autoCreate();
     comp.compositeBehaviour.addChildComponentFactory([(parentComp) => {
         const tableIdOrJQuery = $("#dogsTable", parentComp.view.$elem);
-        return SimpleListFactory.create({items: DbMock.DOGS, tableIdOrJQuery, childStateProperty: "dogs"});
+        return SimpleListFactory.create({items: DbMock.DOGS, tableIdOrJQuery, childProperty: "dogs"});
     }, (parentComp) => {
         const elemIdOrJQuery = $("#dyna-sel-one", parentComp.view.$elem);
         return DynamicSelectOneFactory.create(elemIdOrJQuery, DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {});

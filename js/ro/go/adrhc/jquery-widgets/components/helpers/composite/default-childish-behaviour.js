@@ -4,11 +4,11 @@
 class DefaultChildishBehaviour extends ChildishBehaviour {
     /**
      * @param parentComp {AbstractComponent}
-     * @param [childStateProperty] {string} is the parent state's property storing the child state
+     * @param [childProperty] {string} is the parent state's property storing the child state
      */
-    constructor(parentComp, childStateProperty) {
+    constructor(parentComp, childProperty) {
         super(parentComp);
-        this.childStateProperty = childStateProperty;
+        this.childProperty = childProperty;
     }
 
     /**
@@ -33,10 +33,10 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
             throw `${this.constructor.name}.copyChildState: parentState is null`;
         } else if ($.isArray(parentState)) {
             parentState.push(childEntity);
-        } else if (!!this.childStateProperty) {
-            parentState[this.childStateProperty] = childEntity;
+        } else if (!!this.childProperty) {
+            parentState[this.childProperty] = childEntity;
         } else if (!!childEntity && typeof childEntity === "object") {
-            console.log(`${this.constructor.name}.copyChildState: childStateProperty is null`);
+            console.log(`${this.constructor.name}.copyChildState: childProperty is null`);
             $.extend(true, parentState, childEntity);
         } else {
             console.error(`${this.constructor.name}.copyChildState: childEntity = ${childEntity}`);
@@ -58,8 +58,8 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
      */
     extractChildState(parentState) {
         // parentState = parentState == null ? this.parentComp.state.currentState : parentState;
-        if (!!this.childStateProperty) {
-            return parentState[this.childStateProperty];
+        if (!!this.childProperty) {
+            return parentState[this.childProperty];
         } else {
             return $.extend(true, {}, parentState);
         }

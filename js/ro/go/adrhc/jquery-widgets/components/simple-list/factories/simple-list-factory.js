@@ -8,7 +8,7 @@ class SimpleListFactory {
      * @param [repository] {CrudRepository}
      * @param [state] {SimpleListState}
      * @param [view] {SimpleListView}
-     * @param [childStateProperty] {string}
+     * @param [childProperty] {string}
      * @param [childishBehaviour] {ChildishBehaviour} permit CreateDeleteListComponent to update its parent
      * @return {SimpleListComponent}
      */
@@ -21,12 +21,12 @@ class SimpleListFactory {
                       repository = new InMemoryCrudRepository(items),
                       state = new SimpleListState(),
                       view = new SimpleListView(mustacheTableElemAdapter),
-                      childStateProperty,
+                      childProperty,
                       childishBehaviour
                   }) {
         const comp = new SimpleListComponent(repository, state, view);
-        if (childStateProperty) {
-            comp.childishBehaviour = new DefaultChildishBehaviour(comp, childStateProperty);
+        if (childProperty) {
+            comp.childishBehaviour = new DefaultChildishBehaviour(comp, childProperty);
         } else if (childishBehaviour) {
             comp.childishBehaviour = childishBehaviour;
         }

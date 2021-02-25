@@ -13,17 +13,17 @@ class DefaultTableChildishBehaviour extends DefaultChildishBehaviour {
      */
     copyChildState(parentState, useOwnerOnFields) {
         const childEntities = this.tableBasedComponent.extractAllEntities(useOwnerOnFields);
-        if (!!this.childStateProperty) {
-            parentState[this.childStateProperty] = childEntities;
+        if (!!this.childProperty) {
+            parentState[this.childProperty] = childEntities;
         } else if (childEntities == null) {
-            console.log(`${this.constructor.name}.copyChildState: childStateProperty and childEntities are both null`);
+            console.log(`${this.constructor.name}.copyChildState: childProperty and childEntities are both null`);
         } else if ($.isArray(parentState)) {
-            console.log(`${this.constructor.name}.copyChildState: childStateProperty is null`);
+            console.log(`${this.constructor.name}.copyChildState: childProperty is null`);
             parentState.length = 0;
             parentState.push(...childEntity);
         } else {
-            console.error(`${this.constructor.name}.copyChildState: childEntities is Array while parentState is not and childStateProperty = null!`);
-            throw `${this.constructor.name}.copyChildState: childEntities is Array while parentState is not and childStateProperty = null!`;
+            console.error(`${this.constructor.name}.copyChildState: childEntities is Array while parentState is not and childProperty = null!`);
+            throw `${this.constructor.name}.copyChildState: childEntities is Array while parentState is not and childProperty = null!`;
         }
     }
 
