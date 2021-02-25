@@ -9,10 +9,10 @@ if (Modernizr.template) {
         }
     });
 
-    function generateNewState() {
+    function generateNewState(seconds) {
         const date = new Date().toLocaleTimeString();
         return {
-            seconds: 1,
+            seconds,
             name: `Kent ${date}`,
             surname: `Gigi ${date}`
         };
@@ -24,7 +24,7 @@ if (Modernizr.template) {
         const seconds = comp.state.currentState.seconds;
 
         comp.init().then(() => setInterval(() =>
-            comp.processStateChange(generateNewState(), true)
+            comp.processStateChange(generateNewState(seconds), true)
                 .then(() => comp.init()), seconds * 1000));
     });
 } else {

@@ -12,7 +12,7 @@ if (Modernizr.template) {
     function generateNewState(seconds) {
         const date = new Date().toLocaleTimeString();
         return {
-            seconds: seconds,
+            seconds,
             name: `Kent ${date}`,
             surname: `Gigi ${date}`
         };
