@@ -147,7 +147,15 @@ class AbstractComponent {
      */
     updateViewOnAny(stateChange) {
         this._safelyLogStateChange(stateChange);
+        if (this.config.skipOwnViewUpdates) {
+            return this.compositeBehaviour.processStateChangeWithKids(stateChange);
+        }
         return this.view.update(stateChange)
+            .then(() => {
+                if (this.config.updateViewOnce) {
+                    this.config.skipOwnViewUpdates = true
+                }
+            })
             .then(() => this.compositeBehaviour.processStateChangeWithKids(stateChange));
     }
 

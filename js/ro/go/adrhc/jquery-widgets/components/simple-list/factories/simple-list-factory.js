@@ -8,6 +8,8 @@ class SimpleListFactory {
      * @param [repository] {CrudRepository}
      * @param [state] {SimpleListState}
      * @param [view] {SimpleListView}
+     * @param [childStateProperty] {string}
+     * @param [childishBehaviour] {ChildishBehaviour} permit CreateDeleteListComponent to update its parent
      * @return {SimpleListComponent}
      */
     static create({
@@ -18,8 +20,16 @@ class SimpleListFactory {
                       mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId, bodyRowTmplHtml),
                       repository = new InMemoryCrudRepository(items),
                       state = new SimpleListState(),
-                      view = new SimpleListView(mustacheTableElemAdapter)
+                      view = new SimpleListView(mustacheTableElemAdapter),
+                      childStateProperty,
+                      childishBehaviour
                   }) {
-        return new SimpleListComponent(repository, state, view);
+        const comp = new SimpleListComponent(repository, state, view);
+        if (childStateProperty) {
+            comp.childishBehaviour = new DefaultChildishBehaviour(comp, childStateProperty);
+        } else if (childishBehaviour) {
+            comp.childishBehaviour = childishBehaviour;
+        }
+        return comp;
     }
 }

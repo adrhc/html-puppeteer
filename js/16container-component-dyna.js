@@ -14,12 +14,16 @@ if (Modernizr.template) {
         const comp = JqueryWidgetsUtil.autoCreate();
         comp.compositeBehaviour.addChildComponentFactory([(parentComp) => {
             const tableIdOrJQuery = $("#dogsTable", parentComp.view.$elem);
-            return SimpleListFactory.create({items: DbMock.DOGS, tableIdOrJQuery});
+            return SimpleListFactory.create({items: DbMock.DOGS, tableIdOrJQuery, childStateProperty: "dogs"});
         }, (parentComp) => {
             const elemIdOrJQuery = $("#dyna-sel-one", parentComp.view.$elem);
             return DynamicSelectOneFactory.create(elemIdOrJQuery, DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {});
         }]);
-        comp.init().then(() => console.log("16container-component-dyna.js started"));
+        comp.init()
+            .then(() => comp.processStateChange(new StateChange("UPDATE_ALL", {
+                dogs: [{id: 4, name: "dog4"}, ...DbMock.DOGS]
+            })))
+            .then(() => console.log("16container-component-dyna.js started"));
     });
 } else {
     // Find another way to add the rows to the table because
