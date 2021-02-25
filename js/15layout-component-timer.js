@@ -24,8 +24,8 @@ if (Modernizr.template) {
         const seconds = comp.state.currentState.seconds;
 
         comp.init().then(() => setInterval(() =>
-            comp.processStateChange(generateNewState(seconds), true)
-                .then(() => comp.init()), seconds * 1000));
+            // comp has no children: comp.processStateChange works as expected
+            comp.processStateChange(generateNewState(seconds)), seconds * 1000));
     });
 } else {
     // Find another way to add the rows to the table because
