@@ -4,12 +4,13 @@
  */
 class SimpleListComponent extends AbstractTableBasedComponent {
     /**
-     * @param repository {CrudRepository}
-     * @param state {SimpleListState}
-     * @param view {SimpleListView}
+     * @param {CrudRepository} repository
+     * @param {SimpleListState} state
+     * @param {SimpleListView} view
+     * @param {ComponentConfiguration} [config]
      */
-    constructor(repository, state, view) {
-        super(state, view);
+    constructor(repository, state, view, config) {
+        super(state, view, config);
         this.simpleListState = state;
         this.repository = repository;
     }

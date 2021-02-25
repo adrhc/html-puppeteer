@@ -24,10 +24,11 @@ class SimpleListFactory {
                       childProperty,
                       childishBehaviour
                   }) {
-        const comp = new SimpleListComponent(repository, state, view);
-        if (childProperty) {
-            comp.childishBehaviour = new DefaultChildishBehaviour(comp, childProperty);
-        } else if (childishBehaviour) {
+        const props = DomUtils.jQueryOf(tableIdOrJQuery).data();
+        const configFn = (config) => $.extend(new ComponentConfiguration(), props, config);
+        const config = configFn({childProperty});
+        const comp = new SimpleListComponent(repository, state, view, config);
+        if (childishBehaviour) {
             comp.childishBehaviour = childishBehaviour;
         }
         return comp;

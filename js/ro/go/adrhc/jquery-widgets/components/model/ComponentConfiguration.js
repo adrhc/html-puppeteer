@@ -1,30 +1,34 @@
 class ComponentConfiguration {
     /**
-     * @type boolean
+     * @type {boolean}
      */
     dontConfigEventsOnError;
     /**
-     * @type boolean
+     * @type {boolean}
      */
     dontAutoInitialize;
     /**
-     * @type boolean
+     * @type {boolean}
      */
     dontReloadFromState;
     /**
-     * @type string
+     * @type {string}
      */
     stateChangeRequest = "UPDATE";
     /**
-     * @type boolean
+     * @type {boolean}
      */
     clearChildrenOnReset;
     /**
-     * @type boolean
+     * @type {boolean}
      */
     updateViewOnce;
     /**
-     * @type boolean
+     * @type {boolean}
      */
     skipOwnViewUpdates;
+    /**
+     * @type {string}
+     */
+    childProperty;
 }

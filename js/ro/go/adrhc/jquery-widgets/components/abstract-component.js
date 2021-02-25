@@ -38,7 +38,7 @@ class AbstractComponent {
     /**
      * @param state {BasicState}
      * @param view {AbstractView}
-     * @param {{}} [config]
+     * @param {ComponentConfiguration} [config]
      */
     constructor(state, view, config = new ComponentConfiguration()) {
         this.state = state;
@@ -47,6 +47,9 @@ class AbstractComponent {
         this.stateChangesDispatcher = new StateChangesDispatcher(this);
         this.compositeBehaviour = new CompositeBehaviour(this);
         this.entityExtractor = new DefaultEntityExtractor(this, {});
+        if (config.childProperty) {
+            this.childishBehaviour = new DefaultChildishBehaviour(this, config.childProperty);
+        }
     }
 
     /**

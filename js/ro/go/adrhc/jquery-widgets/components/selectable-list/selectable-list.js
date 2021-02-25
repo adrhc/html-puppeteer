@@ -22,10 +22,11 @@ class SelectableListComponent extends SimpleListComponent {
      * @param view {SimpleListView}
      * @param notSelectedRow {IdentifiableRowComponent}
      * @param selectedRow {IdentifiableRowComponent}
+     * @param {ComponentConfiguration} [config]
      */
     constructor(repository, state, view,
-                notSelectedRow, selectedRow) {
-        super(repository, state, view);
+                notSelectedRow, selectedRow, config) {
+        super(repository, state, view, config);
         this.stateChangesDispatcher.prependKnownRequestTypes("CREATE", "UPDATE", "DELETE");
         this.selectableListState = state;
         this.simpleListView = view;

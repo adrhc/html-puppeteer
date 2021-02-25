@@ -87,6 +87,7 @@ class CompositeBehaviour {
                                stateChangeKidAdapter = (kid) => this._extractChildState(stateChange, kid)) {
         const promises = this.childComponents.filter(kidsFilter).map(kidComp => {
             const kidStateChange = stateChangeKidAdapter(kidComp);
+            // todo: ignore undefined kidStateChange - means the parent is missing the child, so probably doesn't intend to update it
             return kidComp.processStateChange(kidStateChange);
         });
         return Promise.allSettled(promises);

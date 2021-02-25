@@ -8,9 +8,10 @@ class ElasticListComponent extends SimpleListComponent {
      * @param state {CrudListState}
      * @param view {SimpleListView}
      * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, afterItemId: number|string, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
+     * @param {ComponentConfiguration} [config]
      */
-    constructor(repository, state, view, idRowCompFactoryFn) {
-        super(repository, state, view);
+    constructor(repository, state, view, idRowCompFactoryFn, config) {
+        super(repository, state, view, config);
         this.compositeBehaviour = new ElasticListCompositeBehaviour(this, idRowCompFactoryFn);
         this.entityExtractor = new ElasticListEntityExtractor(this, {});
     }

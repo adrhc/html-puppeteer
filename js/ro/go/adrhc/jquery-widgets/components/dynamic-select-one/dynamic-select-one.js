@@ -1,13 +1,18 @@
 class DynamicSelectOneComponent extends AbstractComponent {
     /**
-     * @param view {DynamicSelectOneView}
-     * @param state {DynaSelOneState}
+     * @param {DynamicSelectOneView} view
+     * @param {DynaSelOneState} state
+     * @param {DynaSelOneConfig} [config]
      */
-    constructor(view, state) {
+    constructor(view, state, config) {
         // todo: adapt DynamicSelectOneView to BasicState
-        super(state, view);
+        super(state, view, config);
         this.dynaSelOneState = state;
         this.dynaSelOneView = view;
+        if (config.childProperty) {
+            this.childishBehaviour = new DynaSelOneChildishBehaviour(this,
+                config.childProperty, config.newChildEntityFactoryFn);
+        }
     }
 
     onOptionClick(ev) {

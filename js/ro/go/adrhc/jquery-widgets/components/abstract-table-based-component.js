@@ -7,9 +7,10 @@ class AbstractTableBasedComponent extends AbstractComponent {
     /**
      * @param state {BasicState}
      * @param view {AbstractTableBasedView}
+     * @param {ComponentConfiguration} [config]
      */
-    constructor(state, view) {
-        super(state, view);
+    constructor(state, view, config) {
+        super(state, view, config);
         this.tableBasedView = view;
     }
 }

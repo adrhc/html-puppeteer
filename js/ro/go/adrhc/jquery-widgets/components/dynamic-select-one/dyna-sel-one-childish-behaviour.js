@@ -1,10 +1,11 @@
 class DynaSelOneChildishBehaviour extends DefaultChildishBehaviour {
     /**
-     * @param parentComp {AbstractComponent}
-     * @param childProperty {string} is the parentState property where to save the selectedItem
-     * @param childEntityConverter {function({}): IdentifiableEntity}
+     * @param {AbstractComponent} parentComp
+     * @param {string} childProperty is the parentState property where to save the selectedItem
+     * @param {function(data: {}): IdentifiableEntity} [childEntityConverter]
      */
-    constructor(parentComp, childProperty, childEntityConverter) {
+    constructor(parentComp, childProperty,
+                childEntityConverter = (it) => it) {
         super(parentComp, childProperty);
         this.childEntityConverter = childEntityConverter;
     }

@@ -12,12 +12,13 @@ class EditableListComponent extends SelectableListComponent {
      * @param selectedRow {IdentifiableRowComponent}
      * @param deletableRow {IdentifiableRowComponent}
      * @param [extractedEntityConverterFn] {function(extractedEntity: {}): IdentifiableEntity}
+     * @param {ComponentConfiguration} [config]
      */
     constructor(repository, state, view,
                 notSelectedRow, selectedRow,
                 deletableRow,
-                extractedEntityConverterFn) {
-        super(repository, state, view, notSelectedRow, selectedRow);
+                extractedEntityConverterFn, config) {
+        super(repository, state, view, notSelectedRow, selectedRow, config);
         this.editableListState = state;
         this.swappingRowSelector["showAdd"] = selectedRow;
         this.swappingRowSelector["showEdit"] = selectedRow; // is equal to super.swappingRowSelector[false]
