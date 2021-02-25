@@ -19,7 +19,7 @@ class JqueryWidgetsUtil {
             */
             // console.log(JqueryWidgetsUtil.instantiateByName(type, $el));
             JqueryWidgetsUtil.instantiateByName(type, $el);
-        })
+        });
     }
 
     /**
