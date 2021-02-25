@@ -9,15 +9,6 @@ if (Modernizr.template) {
         }
     });
 
-    function generateNewState(seconds) {
-        const date = new Date().toLocaleTimeString();
-        return {
-            seconds,
-            name: `Kent ${date}`,
-            surname: `Gigi ${date}`
-        };
-    }
-
     $(() => {
         // const comp = new DrawingComponent("drawing-comp");
         const comp = JqueryWidgetsUtil.autoCreate();
