@@ -12,24 +12,17 @@ if (Modernizr.template) {
     function generateNewState() {
         const date = new Date().toLocaleTimeString();
         return {
-            name: `${this.name} ${date}`,
-            surname: `${this.surname} ${date}`
+            name: `Kent ${date}`,
+            surname: `Gigi ${date}`
         };
     }
 
     $(() => {
         const comp = new LayoutComponent("layout-comp");
-        const genNewState = generateNewState.bind(comp.state.currentState);
 
-        const changeAfterInit = new Promise((resolve) => {
-            setInterval(() => {
-                comp.reset();
-                comp.processStateChange(genNewState(), true)
-                    .then(() => comp.init()).then(it => resolve(it));
-            }, 1000);
-        });
-
-        comp.init().then(() => changeAfterInit);
+        comp.init().then(() => setInterval(() =>
+            comp.processStateChange(generateNewState(), true)
+                .then(() => comp.init()), 1000));
     });
 } else {
     // Find another way to add the rows to the table because

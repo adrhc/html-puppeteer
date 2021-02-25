@@ -9,6 +9,14 @@ if (Modernizr.template) {
         }
     });
 
+    function generateNewState() {
+        const date = new Date().toLocaleTimeString();
+        return {
+            name: `Kent ${date}`,
+            surname: `Gigi ${date}`
+        };
+    }
+
     $(() => {
         const items = [{id: 1, name: "dog1"}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
 
@@ -26,21 +34,9 @@ if (Modernizr.template) {
             }
         });
 
-        const changeAfterInit = new Promise((resolve) => {
-            setTimeout(() => {
-                const date = new Date().toLocaleTimeString();
-                const previousState = comp.state.currentState;
-                const newState = {
-                    name: `${previousState.name} ${date}`,
-                    surname: `${previousState.surname} ${date}`
-                };
-                comp.reset();
-                comp.processStateChange(newState, true);
-                comp.init().then(it => resolve(it));
-            }, 2000);
-        });
-
-        return comp.init().then(() => changeAfterInit);
+        return comp.init().then(() => setInterval(() =>
+            comp.processStateChange(generateNewState(), true)
+                .then(() => comp.init()), 2000));
     });
 } else {
     // Find another way to add the rows to the table because

@@ -17,6 +17,11 @@ class LayoutComponent extends AbstractComponent {
         return super.init();
     }
 
+    processStateChange(stateChangeOrJustData, dontRecordStateEvents) {
+        super.reset();
+        return super.processStateChange(stateChangeOrJustData, dontRecordStateEvents);
+    }
+    
     _reloadState() {
         if (this.config.dontReloadFromState) {
             return super._reloadState();
