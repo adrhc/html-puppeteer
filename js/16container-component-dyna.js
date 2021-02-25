@@ -7,8 +7,7 @@ function procStateChangeFnOf(comp) {
     return () => {
         const dogs = findDogsListComp(comp).repository.items;
         dogs.push({id: dogs.length + 1, name: `dog${dogs.length + 1}`});
-        const updateAllStateChange = new StateChange("UPDATE_ALL", {dogs});
-        return comp.processStateChange(updateAllStateChange);
+        return comp.processStateChange(new StateChange("UPDATE_ALL", {dogs}));
     };
 }
 
