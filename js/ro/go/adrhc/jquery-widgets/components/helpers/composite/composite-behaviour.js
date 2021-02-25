@@ -71,7 +71,9 @@ class CompositeBehaviour {
      * This works fine if @param stateChange contains all child related
      * data otherwise a kid might not know whether its state was cleared
      * or is just missing from the @param stateChange.
+     *
      * todo: cope with @param parentState missing some children state
+     * todo: cope with stateChange.requestType not handleable by some children
      *
      * updateViewOnAny -> compositeBehaviour.processStateChangeWithKids -> compositeBehaviour._extractChildState -> childishBehaviour.extractChildState
      *
