@@ -11,7 +11,7 @@ function newPerson() {
     };
 }
 
-function procStateChangeFnOf(comp) {
+function dataGeneratorFnSupplierFor(comp) {
     return () => {
         const dogs = findDogsListComp(comp).repository.items;
         dogs.push({id: dogs.length + 1, name: `dog${dogs.length + 1}`});
@@ -33,6 +33,6 @@ $(() => {
         return DynamicSelectOneFactory.create(elemIdOrJQuery, DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {});
     }]);
     comp.init()
-        .then(() => setInterval(procStateChangeFnOf(comp), comp.state.currentState.seconds * 1000))
+        .then(() => setInterval(dataGeneratorFnSupplierFor(comp), comp.state.currentState.seconds * 1000))
         .then(() => console.log("16container-component-dyna.js started"));
 });
