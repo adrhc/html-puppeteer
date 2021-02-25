@@ -19,7 +19,7 @@ if (Modernizr.template) {
     }
 
     $(() => {
-        new DrawingComponent("layout-comp")
+        new DrawingComponent("drawing-comp")
             .then(comp => comp.processStateChange({
                 seconds: comp.state.currentState.seconds,
                 name: "Gigi",
