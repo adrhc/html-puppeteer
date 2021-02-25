@@ -15,4 +15,8 @@ class ComponentConfiguration {
      * @type string
      */
     stateChangeRequest = "UPDATE";
+    /**
+     * @type boolean
+     */
+    clearChildrenOnReset;
 }

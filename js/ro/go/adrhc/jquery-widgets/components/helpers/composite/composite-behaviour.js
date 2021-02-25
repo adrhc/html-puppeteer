@@ -97,7 +97,7 @@ class CompositeBehaviour {
             const kidState = kid.childishBehaviour.extractChildState(stateChange.data);
             return $.extend(true, new StateChange(), stateChange, {data: kidState});
         } else {
-            return stateChange.data;
+            return kid.state.currentState;
         }
     }
 
@@ -168,9 +168,13 @@ class CompositeBehaviour {
 
     /**
      * childComponentFactories is "configuration" that's why is not cleared
+     *
+     * @param {boolean} [clearChildren]
      */
-    reset() {
+    reset(clearChildren) {
         this.childComponents.forEach(kid => kid.reset());
-        this.childComponents = [];
+        if (clearChildren) {
+            this.childComponents = [];
+        }
     }
 }

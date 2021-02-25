@@ -18,7 +18,7 @@ class DynaSelOneChildishBehaviour extends DefaultChildishBehaviour {
      */
     copyChildState(parentState, useOwnerOnFields) {
         // selectedItem should already be a curated entity such that childEntityConverter would be useless
-        const selectedItem = this._childComp.state.currentState;
+        const selectedItem = this._childComp.state.currentState.selectedItem;
         parentState[this.childStateProperty] = this.childEntityConverter(selectedItem);
     }
 

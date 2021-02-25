@@ -21,12 +21,12 @@ class BasicState {
     }
 
     /**
-     * @param stateChange {StateChange}
-     * @param [dontCollectStateChange] {boolean}
+     * @param {StateChange} stateChange
+     * @param {boolean} [updateCurrentStateButDontCollectStateChange]
      */
-    collectStateChange(stateChange, dontCollectStateChange) {
+    collectStateChange(stateChange, updateCurrentStateButDontCollectStateChange) {
         this._currentState = stateChange.data;
-        if (!dontCollectStateChange) {
+        if (!updateCurrentStateButDontCollectStateChange) {
             this._stateChanges.collect(stateChange);
         }
     }

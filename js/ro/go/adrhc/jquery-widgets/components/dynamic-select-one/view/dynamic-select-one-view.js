@@ -28,6 +28,9 @@ class DynamicSelectOneView extends AbstractView {
      * @return {Promise<jQuery>}
      */
     update(data, focusOnSearchInput) {
+        if (typeof data === "object" && data instanceof StateChange) {
+            data = data.data;
+        }
         const viewModel = this._viewModelOf(data);
         return this._renderView(viewModel)
             .then(() => {

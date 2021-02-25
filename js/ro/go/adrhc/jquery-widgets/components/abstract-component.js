@@ -79,7 +79,7 @@ class AbstractComponent {
      */
     processStateChange(stateChangeOrJustData, dontRecordStateEvents) {
         let stateChange;
-        if (typeof stateChange === "object" && stateChange instanceof StateChange) {
+        if (typeof stateChangeOrJustData === "object" && stateChangeOrJustData instanceof StateChange) {
             stateChange = stateChangeOrJustData;
         } else {
             stateChange = new StateChange(this.config.stateChangeRequest, stateChangeOrJustData);
@@ -139,13 +139,26 @@ class AbstractComponent {
     }
 
     /**
-     * @param stateChange {StateChange}
+     * @param {StateChange} stateChange
      * @return {Promise}
      */
     updateViewOnAny(stateChange) {
-        console.log(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
+        this._safelyLogStateChange(stateChange);
         return this.view.update(stateChange)
             .then(() => this.compositeBehaviour.processStateChangeWithKids(stateChange));
+    }
+
+    /**
+     * @param {StateChange} stateChange
+     * @protected
+     */
+    _safelyLogStateChange(stateChange) {
+        try {
+            console.log(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
+        } catch (e) {
+            console.error(e);
+            console.error(`${this.constructor.name}._safelyLogStateChange:\n`, stateChange);
+        }
     }
 
     updateViewOnERROR(stateChange) {
@@ -204,7 +217,7 @@ class AbstractComponent {
      * brings the component to the state existing at its creation
      */
     reset() {
-        this.compositeBehaviour.reset();
+        this.compositeBehaviour.reset(this.config.clearChildrenOnReset);
         if (this.view.$elem) {
             this.view.$elem.off(this._eventsNamespace);
         }

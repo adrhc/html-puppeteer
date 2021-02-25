@@ -203,7 +203,7 @@ class DynaSelOneState extends BasicState {
     }
 
     get currentState() {
-        return this.selectedItem;
+        return this;
     }
 
     reset() {
