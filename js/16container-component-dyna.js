@@ -10,7 +10,7 @@ if (Modernizr.template) {
     });
 
     $(() => {
-        // const comp = new DrawingComponent("drawing-comp");
+        // const comp = new ContainerComponent($("[data-jqw-type='ContainerComponent']"));
         const comp = JqueryWidgetsUtil.autoCreate();
         comp.compositeBehaviour.addChildComponentFactory([(parentComp) => {
             const tableIdOrJQuery = $("#dogsTable", parentComp.view.$elem);

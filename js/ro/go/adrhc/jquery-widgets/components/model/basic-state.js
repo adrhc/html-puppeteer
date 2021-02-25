@@ -93,5 +93,6 @@ class BasicState {
 
     reset() {
         this._stateChanges = new StateChanges();
+        this._currentState = undefined;
     }
 }

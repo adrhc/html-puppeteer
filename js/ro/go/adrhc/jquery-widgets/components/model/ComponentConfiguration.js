@@ -19,4 +19,12 @@ class ComponentConfiguration {
      * @type boolean
      */
     clearChildrenOnReset;
+    /**
+     * @type boolean
+     */
+    updateViewOnce;
+    /**
+     * @type boolean
+     */
+    skipOwnViewUpdates;
 }

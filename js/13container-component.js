@@ -18,7 +18,7 @@ if (Modernizr.template) {
         });
     */
 
-    // $(() => new DrawingComponent("drawing-comp"));
+    // $(() => new ContainerComponent($("[data-jqw-type='ContainerComponent']")));
 
     $(() => JqueryWidgetsUtil.autoCreate());
 } else {

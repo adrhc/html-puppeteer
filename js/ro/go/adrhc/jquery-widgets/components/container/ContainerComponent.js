@@ -7,7 +7,7 @@ class ContainerComponent extends AbstractComponent {
      */
     constructor(elemIdOrJQuery,
                 config = $.extend(new ComponentConfiguration(),
-                    {clearChildrenOnReset: true}, DomUtils.jQueryOf(elemIdOrJQuery).data()),
+                    {updateViewOnce: true}, DomUtils.jQueryOf(elemIdOrJQuery).data()),
                 state = new BasicState(config),
                 view = new DefaultTemplatingView(elemIdOrJQuery, config)) {
         super(state, view, config);
@@ -15,6 +15,24 @@ class ContainerComponent extends AbstractComponent {
             return;
         }
         return super.init().then(() => this);
+    }
+
+    /**
+     * @param {StateChange} stateChange
+     * @return {Promise}
+     */
+    updateViewOnAny(stateChange) {
+        this._safelyLogStateChange(stateChange);
+        if (this.config.skipOwnViewUpdates) {
+            return this.compositeBehaviour.processStateChangeWithKids(stateChange);
+        }
+        return this.view.update(stateChange)
+            .then(() => {
+                if (this.config.updateViewOnce) {
+                    this.config.skipOwnViewUpdates = true
+                }
+            })
+            .then(() => this.compositeBehaviour.processStateChangeWithKids(stateChange));
     }
 
     _reloadState() {
