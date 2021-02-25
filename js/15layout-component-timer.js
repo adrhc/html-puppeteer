@@ -19,7 +19,7 @@ if (Modernizr.template) {
     }
 
     $(() => {
-        new DrawingComponent("drawing-comp")
+        JqueryWidgetsUtil.autoInit()
             .then(comp => comp.processStateChange({
                 seconds: comp.state.currentState.seconds,
                 name: "Gigi",

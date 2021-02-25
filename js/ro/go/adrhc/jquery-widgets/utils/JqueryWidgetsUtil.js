@@ -1,25 +1,25 @@
 class JqueryWidgetsUtil {
     /**
-     * Avoids skip-jq-auto="true".
+     * @return {AbstractComponent|Array<AbstractComponent|Promise<AbstractComponent>>}
      */
     static autoInit() {
-        $("[data-jq-type]").each((index, el) => {
+        const components = $("[data-jq-type]").map((index, el) => {
             const $el = $(el);
-            const skipAuto = $el.data("skip-jq-auto");
-            if (skipAuto) {
-                return;
-            }
             const type = $el.data("jq-type");
             // const comp = eval(`new ${type}()`);
             // const comp = new window[type]($el);
             // const comp = (Function(`return new ${type}`))($el);
             /*
-                        const dynamicClass = eval(type);
-                        const comp = new dynamicClass($el);
+                const dynamicClass = eval(type);
+                const comp = new dynamicClass($el);
             */
             // console.log(JqueryWidgetsUtil.instantiateByName(type, $el));
-            JqueryWidgetsUtil.instantiateByName(type, $el);
+            return JqueryWidgetsUtil.instantiateByName(type, $el);
         });
+        if (components.length === 1) {
+            return components[0];
+        }
+        return components;
     }
 
     /**

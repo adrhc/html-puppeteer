@@ -16,21 +16,22 @@
 
 <!--
 <template id="drawing-template">
+    <div>Updating every {{seconds}} seconds</div><br>
     <div><label>name</label>: {{name}}</div>
     <div><label>surname</label>: {{surname}}</div>
 </template>
 <div data-tmpl-id="drawing-template" data-jq-type="DrawingComponent"
-     data-name="Kent" data-surname="Gigi">loading ...
+     data-name="Kent" data-surname="Gigi" data-seconds="1">loading ...
 </div>
 -->
 
 <!--
 <div data-tmpl-url="scenarios/13container-component-htmls/container-component-template.html"
-     data-jq-type="DrawingComponent" data-name="Kent" data-surname="Gigi">loading ...
+     data-jq-type="DrawingComponent" data-name="Kent" data-surname="Gigi" data-seconds="1">loading ...
 </div>
 -->
 
-<div id="drawing-comp" data-seconds="1">
+<div data-jq-type="DrawingComponent" data-seconds="1">
     <div>Updating every {{seconds}} seconds</div><br>
     <div><label>name</label>: {{name}}</div>
     <div><label>surname</label>: {{surname}}</div>
