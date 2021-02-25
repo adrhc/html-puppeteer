@@ -9,19 +9,22 @@ if (Modernizr.template) {
         }
     });
 
+    function generateNewState() {
+        const date = new Date().toLocaleTimeString();
+        return {
+            name: `${this.name} ${date}`,
+            surname: `${this.surname} ${date}`
+        };
+    }
+
     $(() => {
         const comp = new LayoutComponent("layout-comp");
-        const initState = comp.state.currentState;
+        const genNewState = generateNewState.bind(comp.state.currentState);
 
         const changeAfterInit = new Promise((resolve) => {
             setInterval(() => {
-                const date = new Date().toLocaleTimeString();
-                const newState = {
-                    name: `${initState.name} ${date}`,
-                    surname: `${initState.surname} ${date}`
-                };
                 comp.reset();
-                comp.processStateChange(newState, true)
+                comp.processStateChange(genNewState(), true)
                     .then(() => comp.init()).then(it => resolve(it));
             }, 1000);
         });
