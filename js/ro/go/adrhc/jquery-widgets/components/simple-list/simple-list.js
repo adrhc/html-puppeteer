@@ -17,31 +17,6 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     }
 
     /**
-     * @return {Promise<*>}
-     */
-    _reloadState() {
-        return this._handleRepoErrors(this.repository.findAll())
-            .then((items) => {
-                console.log(`${this.constructor.name} items:\n`, JSON.stringify(items));
-                // reset must be before updateAll because it resets the state too!
-                this.reset();
-                this.simpleListState.updateAll(items);
-                return items;
-            });
-    }
-
-    /**
-     * Although very similar to init, reload is another scenario, that's why it's ok to have its own method.
-     * On _reloadState error reset() won't happen that's why we have ComponentInitConfig(true).
-     *
-     * @return {Promise<StateChange[]>}
-     * @protected
-     */
-    _handleReload() {
-        return this.init();
-    }
-
-    /**
      * RELOAD
      *
      * @param ev {Event}
@@ -52,7 +27,30 @@ class SimpleListComponent extends AbstractTableBasedComponent {
          * @type {SimpleListComponent}
          */
         const simpleListComponent = ev.data;
-        simpleListComponent._handleReload();
+        simpleListComponent._handleReload().then(() => console.log(`${this.constructor.name}.onReload done`));
+    }
+
+    /**
+     * Although very similar to init, reload is another scenario, that's why it's ok to have its own method.
+     *
+     * @return {Promise<StateChange[]>}
+     * @protected
+     */
+    _handleReload() {
+        this.reset();
+        return this.init();
+    }
+
+    /**
+     * @return {Promise<*>}
+     */
+    _reloadState() {
+        return this._handleRepoErrors(this.repository.findAll())
+            .then((items) => {
+                console.log(`${this.constructor.name} items:\n`, JSON.stringify(items));
+                this.simpleListState.updateAll(items);
+                return items;
+            });
     }
 
     /**
@@ -64,7 +62,5 @@ class SimpleListComponent extends AbstractTableBasedComponent {
         console.log(`${this.constructor.name}.configureEvents`);
         this.view.$elem.on(this._appendNamespaceTo("click"),
             this._btnSelector("reload"), this, this.onReload);
-        // 1th load should configure events but not the subsequent ones
-        this.config.dontConfigEventsOnError = true;
     }
 }

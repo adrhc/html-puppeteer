@@ -189,10 +189,9 @@ class AbstractComponent {
     /**
      * component initializer: (re)load state, update the view, configure events then init kids
      *
-     * @param {ComponentInitConfig} [config]
      * @return {Promise<StateChange[]>}
      */
-    init(config = new ComponentInitConfig(this.config.dontConfigEventsOnError)) {
+    init() {
         return this._reloadState()
             .then(() => {
                 console.log(`${this.constructor.name}.init: updateViewOnStateChanges`);
@@ -206,8 +205,8 @@ class AbstractComponent {
                 return this.compositeBehaviour.init().then(() => stateChanges);
             })
             .catch((err) => {
-                console.error(`${this.constructor.name}.init, dontConfigEventsOnError = ${config.dontConfigEventsOnError}, error:\n`, err);
-                if (!config.dontConfigEventsOnError) {
+                console.error(`${this.constructor.name}.init, dontConfigEventsOnError = ${this.config.dontConfigEventsOnError}, error:\n`, err);
+                if (!this.config.dontConfigEventsOnError) {
                     // jqXHR is missing finally, so, if we would need to configureEvents
                     // on errors too, we would have to use catch anyway
                     this.configureEvents();
