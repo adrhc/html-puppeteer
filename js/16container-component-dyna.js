@@ -19,11 +19,8 @@ function dogsSupplierFor(comp) {
 function personSupplierFor(comp) {
     return () => {
         const date = new Date().toLocaleTimeString();
-        const person = {
-            name: `Kent ${date}`,
-            surname: `Gigi ${date}`
-        };
-        return comp.processStateChange(new StateChange("RENDER", {person}), {});
+        const person = {name: `Kent ${date}`, surname: `Gigi ${date}`};
+        return comp.processStateChange(new RenderStateChange({person}), {});
     };
 }
 
