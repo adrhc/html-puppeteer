@@ -4,6 +4,11 @@
  */
 class ElasticListComponent extends SimpleListComponent {
     /**
+     * @type {CrudListState}
+     */
+    crudListState;
+
+    /**
      * @param repository {CrudRepository}
      * @param state {CrudListState}
      * @param view {SimpleListView}
@@ -14,15 +19,16 @@ class ElasticListComponent extends SimpleListComponent {
         super(repository, state, view, config);
         this.compositeBehaviour = new ElasticListCompositeBehaviour(this, idRowCompFactoryFn);
         this.entityExtractor = new ElasticListEntityExtractor(this, {});
+        this.crudListState = state;
     }
 
     /**
      * remove the previous kids before reloading the table
      */
     _reload() {
-        this.doWithState((crudListState) => {
+        this.doWithState(() => {
             this.compositeBehaviour.childComponents.forEach(kid => {
-                crudListState.removeById(kid.state.currentState.id);
+                this.crudListState.removeById(kid.state.currentState.id);
             });
         }).then(() => super._reload());
     }
@@ -58,6 +64,10 @@ class ElasticListComponent extends SimpleListComponent {
         return idRowComp.processStateChange(stateChange, {});
     }
 
+    /**
+     * This doesn't make sense for ElasticListComponent which displays
+     * itself through its children (see ElasticListCompositeBehaviour).
+     */
     updateViewOnAny(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnAny: ignored\n${JSON.stringify(stateChange)}`);
         return Promise.resolve(stateChange);

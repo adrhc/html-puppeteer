@@ -32,6 +32,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
 
     /**
      * Although very similar to init, reload is another scenario, that's why it's ok to have its own method.
+     * On _reloadState error reset() won't happen that's why we have ComponentInitConfig(true).
      *
      * @return {Promise<StateChange[]>}
      * @protected
