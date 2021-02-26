@@ -37,8 +37,8 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @return {Promise<StateChange[]>}
      * @protected
      */
-    _reload() {
-        return this.init(new ComponentInitConfig(true));
+    _handleReload() {
+        return this.init();
     }
 
     /**
@@ -52,7 +52,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
          * @type {SimpleListComponent}
          */
         const simpleListComponent = ev.data;
-        simpleListComponent._reload();
+        simpleListComponent._handleReload();
     }
 
     /**
@@ -64,5 +64,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
         console.log(`${this.constructor.name}.configureEvents`);
         this.view.$elem.on(this._appendNamespaceTo("click"),
             this._btnSelector("reload"), this, this.onReload);
+        // 1th load should configure events but not the subsequent ones
+        this.config.dontConfigEventsOnError = true;
     }
 }

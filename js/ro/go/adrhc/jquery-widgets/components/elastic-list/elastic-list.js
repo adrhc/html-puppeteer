@@ -25,12 +25,12 @@ class ElasticListComponent extends SimpleListComponent {
     /**
      * remove the previous kids before reloading the table
      */
-    _reload() {
+    _handleReload() {
         this.doWithState(() => {
             this.compositeBehaviour.childComponents.forEach(kid => {
                 this.crudListState.removeById(kid.state.currentState.id);
             });
-        }).then(() => super._reload());
+        }).then(() => super._handleReload());
     }
 
     /**
