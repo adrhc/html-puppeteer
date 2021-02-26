@@ -1,3 +1,7 @@
+/**
+ * @param {ContainerComponent} comp
+ * @return {AbstractComponent}
+ */
 function findDogsListComp(comp) {
     return comp.compositeBehaviour.findKids(
         (kid) => kid instanceof SimpleListComponent).pop();
@@ -13,7 +17,7 @@ function newPerson() {
 
 /**
  * @param {ContainerComponent} comp
- * @return {function(): Promise<StateChange[]>|*}
+ * @return {function(): Promise<StateChange[]>}
  */
 function dataGeneratorFnSupplierFor(comp) {
     return () => {
