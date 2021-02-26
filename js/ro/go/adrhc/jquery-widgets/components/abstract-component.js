@@ -302,6 +302,15 @@ class AbstractComponent {
     }
 
     /**
+     * @param {AbstractComponent} parent
+     * @param {AbstractComponent} clazz
+     * @return {AbstractComponent[]}
+     */
+    findKidsByClass(clazz) {
+        return this.compositeBehaviour.findKids((kid) => kid instanceof clazz);
+    }
+
+    /**
      * @returns {string}
      * @protected
      */
