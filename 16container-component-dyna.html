@@ -34,12 +34,12 @@
     <div><label>surname</label>: {{surname}}</div>
 </template>
 
-<div data-jqw-type="ContainerComponent" data-dont-auto-initialize="true" data-seconds="2">
-    <div>Components container: adding a new dog every {{seconds}} seconds</div>
+<div data-jqw-type="ContainerComponent" data-dont-auto-initialize="true" data-seconds="3">
+    <div><b>Components container</b></div>
     <br>
     <!-- person DrawingComponent -->
     <div id="person" data-dont-auto-initialize="true" data-tmpl-id="person-tmpl"
-         data-name="Kent" data-surname="Gigi" data-seconds="2" data-child-property="person">
+         data-name="Kent" data-surname="Gigi" data-seconds="1" data-child-property="person">
         loading ...
     </div>
     <br>
@@ -49,6 +49,7 @@
          data-name="firstName" data-value="personId" data-options-to-show="5"></div>
     <br>
     <!-- dogs table -->
+    <div>Adding a new dog every {{seconds}} seconds</div>
     <div class="dogsTable">
         <table id="dogsTable" class="responstable" data-child-property="dogs">
             <thead>

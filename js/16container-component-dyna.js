@@ -2,9 +2,14 @@
  * @param {ContainerComponent} comp
  * @return {AbstractComponent}
  */
-function findDogsListComp(comp) {
+function getDogsListCompFrom(comp) {
     return comp.compositeBehaviour.findKids(
         (kid) => kid instanceof SimpleListComponent).pop();
+}
+
+function getPersonCompFrom(comp) {
+    return comp.compositeBehaviour.findKids(
+        (kid) => kid instanceof DrawingComponent).pop();
 }
 
 function newPerson() {
@@ -19,14 +24,23 @@ function newPerson() {
  * @param {ContainerComponent} comp
  * @return {function(): Promise<StateChange[]>}
  */
-function dataGeneratorFnSupplierFor(comp) {
+function dogsSupplierFor(comp) {
     return () => {
         // const dogs = findDogsListComp(comp).repository.items;
         // dogs.push({id: dogs.length + 1, name: `dog${dogs.length + 1}`});
-        const oldDogs = findDogsListComp(comp).state.currentState;
+        const oldDogs = getDogsListCompFrom(comp).state.currentState;
         const dogs = [...oldDogs, {id: oldDogs.length + 1, name: `dog${oldDogs.length + 1}`}];
-        return comp.processStateChange(new StateChange("RENDER",
-            {dogs, person: newPerson()}), {});
+        return comp.processStateChange(new StateChange("UPDATE_ALL", {dogs}), {});
+    };
+}
+
+/**
+ * @param {ContainerComponent} comp
+ * @return {function(): Promise<StateChange[]>}
+ */
+function personSupplierFor(comp) {
+    return () => {
+        return comp.processStateChange(new StateChange("RENDER",{person: newPerson()}), {});
     };
 }
 
@@ -46,6 +60,7 @@ $(() => {
     }]);
 
     comp.init()
-        .then(() => setInterval(dataGeneratorFnSupplierFor(comp), comp.state.currentState.seconds * 1000))
+        .then(() => setInterval(dogsSupplierFor(comp), comp.config.seconds * 1000))
+        .then(() => setInterval(personSupplierFor(comp), getPersonCompFrom(comp).config.seconds * 1000))
         .then(() => console.log("16container-component-dyna.js started"));
 });
