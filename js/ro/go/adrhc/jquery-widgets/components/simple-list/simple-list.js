@@ -47,7 +47,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     _reloadState() {
         return this._handleRepoErrors(this.repository.findAll())
             .then((items) => {
-                console.log(`${this.constructor.name} items:\n`, JSON.stringify(items));
+                console.log(`${this.constructor.name}._reloadState items:\n`, JSON.stringify(items));
                 this.simpleListState.updateAll(items);
                 return items;
             });
