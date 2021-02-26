@@ -11,11 +11,18 @@ function newPerson() {
     };
 }
 
+/**
+ * @param {ContainerComponent} comp
+ * @return {function(): Promise<StateChange[]>|*}
+ */
 function dataGeneratorFnSupplierFor(comp) {
     return () => {
-        const dogs = findDogsListComp(comp).repository.items;
-        dogs.push({id: dogs.length + 1, name: `dog${dogs.length + 1}`});
-        return comp.processStateChange(new StateChange("UPDATE_ALL", {dogs, person: newPerson()}));
+        // const dogs = findDogsListComp(comp).repository.items;
+        // dogs.push({id: dogs.length + 1, name: `dog${dogs.length + 1}`});
+        const oldDogs = findDogsListComp(comp).state.currentState;
+        const dogs = [...oldDogs, {id: oldDogs.length + 1, name: `dog${oldDogs.length + 1}`}];
+        return comp.processStateChange(new StateChange("UPDATE_ALL",
+            {dogs, person: newPerson()}), {});
     };
 }
 

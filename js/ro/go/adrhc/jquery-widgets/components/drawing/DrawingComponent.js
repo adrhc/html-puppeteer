@@ -1,18 +1,19 @@
 class DrawingComponent extends ContainerComponent {
     /**
      * @param {string|jQuery<HTMLElement} elemIdOrJQuery
-     * @param {BasicState} [state]
-     * @param {DefaultTemplatingView} [view]
      * @param {ComponentConfiguration} [config]
+     * @param {ContainerState} [state]
+     * @param {DefaultTemplatingView} [view]
      */
     constructor(elemIdOrJQuery,
                 config = $.extend(new ComponentConfiguration(),
-                    {clearChildrenOnReset: true}, DomUtils.jQueryOf(elemIdOrJQuery).data())) {
+                    {clearChildrenOnReset: true}, DomUtils.jQueryOf(elemIdOrJQuery).data()),
+                state, view) {
         super(elemIdOrJQuery, config);
     }
 
-    processStateChange(stateChangeOrJustData, dontRecordStateEvents) {
+    processStateChange(stateChangeOrJustData, {dontRecordStateEvents, overwriteState}) {
         super.reset();
-        return super.processStateChange(stateChangeOrJustData, dontRecordStateEvents);
+        return super.processStateChange(stateChangeOrJustData, {dontRecordStateEvents, overwriteState});
     }
 }

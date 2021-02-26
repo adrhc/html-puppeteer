@@ -69,7 +69,7 @@ class SwappingState extends BasicState {
      * @private
      */
     _collectStateChange(swappingDetails) {
-        super.collectStateChange(new StateChange(this.requestType, swappingDetails));
+        super.collectStateChange(new StateChange(this.requestType, swappingDetails), {});
     }
 
     get currentState() {

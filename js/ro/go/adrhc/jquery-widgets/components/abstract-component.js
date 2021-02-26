@@ -81,9 +81,10 @@ class AbstractComponent {
      *
      * @param {StateChange|*} stateChangeOrJustData
      * @param {boolean} [dontRecordStateEvents]
+     * @param {boolean} [overwriteState]
      * @return {Promise<StateChange[]>}
      */
-    processStateChange(stateChangeOrJustData, dontRecordStateEvents) {
+    processStateChange(stateChangeOrJustData, {dontRecordStateEvents, overwriteState}) {
         let stateChange;
         if (typeof stateChangeOrJustData === "object" && stateChangeOrJustData instanceof StateChange) {
             stateChange = stateChangeOrJustData;
@@ -91,7 +92,7 @@ class AbstractComponent {
             stateChange = new StateChange(this.config.stateChangeRequest, stateChangeOrJustData);
         }
         return this.doWithState((basicState) =>
-            basicState.collectStateChange(stateChange, dontRecordStateEvents));
+            basicState.collectStateChange(stateChange, {dontRecordStateEvents, overwriteState}));
     }
 
     /**

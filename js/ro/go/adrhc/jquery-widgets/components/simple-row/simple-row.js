@@ -36,7 +36,7 @@ class SimpleRowComponent extends AbstractComponent {
      */
     update(item, requestType = "UPDATE", afterItemId) {
         const stateChange = new PositionStateChange(requestType, item, afterItemId);
-        return this.processStateChange(stateChange);
+        return this.processStateChange(stateChange, {});
     }
 
     /**
@@ -60,7 +60,7 @@ class SimpleRowComponent extends AbstractComponent {
         if (this.errorComponent) {
             console.log(`${this.constructor.name}.updateViewOnERROR:\n${JSON.stringify(stateChange)}`);
             stateChange.requestType = "CREATE"; // allows to create the row if doesn't exist
-            this.errorComponent.state.collectStateChange(stateChange);
+            this.errorComponent.state.collectStateChange(stateChange, {});
             return this.errorComponent.init();
         } else {
             alert(`${stateChange.data.message}\n${JSON.stringify(stateChange, null, 2)}`);
@@ -79,7 +79,7 @@ class SimpleRowComponent extends AbstractComponent {
         // why reset? because we have to detach the event handlers on previous row
         this.reset();
         // above reset will also apply to the state so we must restore it (the state)
-        this.state.collectStateChange(stateChange, true);
+        this.state.collectStateChange(stateChange, {dontRecordStateEvents: true});
         // after recreating the view one has to again bind the event handlers,
         // call compositeBehaviour.init, etc (do something similar to an init)
         return this.view.update(stateChange)

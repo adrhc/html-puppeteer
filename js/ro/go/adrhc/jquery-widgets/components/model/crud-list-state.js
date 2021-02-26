@@ -63,7 +63,7 @@ class CrudListState extends SimpleListState {
         } else {
             this.items.unshift(item);
         }
-        this.collectStateChange(new PositionStateChange("CREATE", item, afterItemId));
+        this.collectStateChange(new PositionStateChange("CREATE", item, afterItemId), {});
         return item;
     }
 
@@ -73,7 +73,7 @@ class CrudListState extends SimpleListState {
      */
     updateItem(item) {
         EntityUtils.findAndReplaceById(item, this.items);
-        this.collectStateChange(new StateChange("UPDATE", item));
+        this.collectStateChange(new StateChange("UPDATE", item), {});
         return item;
     }
 
@@ -84,7 +84,7 @@ class CrudListState extends SimpleListState {
     removeById(id) {
         const removedItem = EntityUtils.removeById(id, this.items);
         if (!!removedItem) {
-            this.collectStateChange(new StateChange("DELETE", removedItem));
+            this.collectStateChange(new StateChange("DELETE", removedItem), {});
         } else {
             console.log(`item id ${id} is missing (already deleted by someone else)`)
         }
@@ -96,7 +96,7 @@ class CrudListState extends SimpleListState {
      */
     removeTransient() {
         const removedItems = EntityUtils.removeTransient(this.items);
-        this.collectStateChange(new StateChange("DELETE", removedItems));
+        this.collectStateChange(new StateChange("DELETE", removedItems), {});
         return removedItems;
     }
 

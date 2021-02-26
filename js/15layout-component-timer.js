@@ -24,10 +24,10 @@ if (Modernizr.template) {
                 seconds: comp.state.currentState.seconds,
                 name: "Gigi",
                 surname: "Kent"
-            }).then(() => comp))
+            }, {}).then(() => comp))
             .then((comp) => {
                 const seconds = comp.state.currentState.seconds;
-                const procStateChgFn = () => comp.processStateChange(generateNewState(seconds));
+                const procStateChgFn = () => comp.processStateChange(generateNewState(seconds), {});
                 setInterval(procStateChgFn, seconds * 1000);
             });
     });

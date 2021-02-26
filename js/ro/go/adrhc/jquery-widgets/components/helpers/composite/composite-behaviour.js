@@ -91,7 +91,7 @@ class CompositeBehaviour {
             if (kidStateChange === undefined) {
                 return undefined;
             }
-            return kidComp.processStateChange(kidStateChange);
+            return kidComp.processStateChange(kidStateChange, {overwriteState: true});
         });
         return Promise.allSettled(promises.filter((it) => it !== undefined));
     }

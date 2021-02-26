@@ -33,7 +33,7 @@ if (Modernizr.template) {
 
         return comp.init().then(() => setInterval(() =>
             // comp has children: comp must be re-init to work as expected (i.e. children to be init-ed too)
-            comp.processStateChange(generateNewState(seconds), true)
+            comp.processStateChange(generateNewState(seconds), {dontRecordStateEvents: true})
                 .then(() => comp.init()), seconds * 1000));
     });
 } else {

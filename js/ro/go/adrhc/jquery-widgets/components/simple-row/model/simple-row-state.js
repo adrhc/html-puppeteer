@@ -4,34 +4,33 @@ class SimpleRowState extends BasicState {
      */
     constructor(rowState) {
         super();
-        this.rowState = rowState;
+        this.currentState = rowState;
     }
 
     /**
      * @param updatedRowState {*}
      * @param [requestType] {"CREATE"|"DELETE"|"UPDATE"}
      * @param [afterItemId] {number|string}
-     * @param [dontRecordEvents] {boolean}
+     * @param [dontRecordStateEvents] {boolean}
      */
-    update(updatedRowState, requestType = "UPDATE", afterItemId, dontRecordEvents) {
-        this.collectStateChange(new PositionStateChange(requestType, updatedRowState, afterItemId), dontRecordEvents);
+    update(updatedRowState, requestType = "UPDATE", afterItemId, dontRecordStateEvents) {
+        this.collectStateChange(new PositionStateChange(requestType, updatedRowState, afterItemId), {dontRecordStateEvents});
     }
 
     /**
      * @param stateChange {StateChange}
-     * @param [dontCollectStateChange] {boolean}
+     * @param {boolean} [dontRecordStateEvents]
+     * @param {boolean} [overwriteState]
      */
-    collectStateChange(stateChange, dontCollectStateChange) {
-        this.rowState = stateChange.data;
-        super.collectStateChange(stateChange, dontCollectStateChange);
+    collectStateChange(stateChange, {dontRecordStateEvents, overwriteState = true}) {
+        super.collectStateChange(stateChange, {dontRecordStateEvents, overwriteState});
     }
 
-    reset() {
-        super.reset();
-        this.rowState = undefined;
+    get rowState() {
+        return this.currentState;
     }
 
-    get currentState() {
-        return this.rowState;
+    set rowState(rowState) {
+        this.currentState = rowState;
     }
 }

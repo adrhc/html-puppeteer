@@ -50,7 +50,7 @@ class SelectableListComponent extends SimpleListComponent {
      */
     updateViewOnKnownStateChange(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnKnownStateChange:\n${JSON.stringify(stateChange)}`);
-        return this.swappingRowSelector[true].processStateChange(stateChange);
+        return this.swappingRowSelector[true].processStateChange(stateChange, {});
     }
 
     /**

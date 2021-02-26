@@ -1,7 +1,7 @@
 class BasicState {
     /**
      * @type {StateChanges}
-     * @private
+     * @protected
      */
     _stateChanges = new StateChanges();
     /**
@@ -20,13 +20,22 @@ class BasicState {
         return this._currentState;
     }
 
+    set currentState(currentState) {
+        this._currentState = currentState;
+    }
+
     /**
+     * This could be a partial state update so we can't set _currentState.
+     *
      * @param {StateChange} stateChange
-     * @param {boolean} [updateCurrentStateButDontCollectStateChange]
+     * @param {boolean} [dontRecordStateEvents]
+     * @param {boolean} [overwriteState]
      */
-    collectStateChange(stateChange, updateCurrentStateButDontCollectStateChange) {
-        this._currentState = stateChange.data;
-        if (!updateCurrentStateButDontCollectStateChange) {
+    collectStateChange(stateChange, {dontRecordStateEvents, overwriteState}) {
+        if (overwriteState) {
+            this._currentState = stateChange.data;
+        }
+        if (!dontRecordStateEvents) {
             this._stateChanges.collect(stateChange);
         }
     }
@@ -56,7 +65,7 @@ class BasicState {
      * @param fromNewest {boolean|undefined}
      */
     collectByConsumingStateChanges(stateChanges, fromNewest = false) {
-        stateChanges.consumeAll(fromNewest).forEach(stateChange => this.collectStateChange(stateChange));
+        stateChanges.consumeAll(fromNewest).forEach(stateChange => this.collectStateChange(stateChange, {}));
     }
 
     /**
