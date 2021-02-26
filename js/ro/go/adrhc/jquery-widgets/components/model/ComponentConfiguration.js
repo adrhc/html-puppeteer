@@ -14,7 +14,7 @@ class ComponentConfiguration {
     /**
      * @type {string}
      */
-    stateChangeRequest = "UPDATE";
+    stateChangeRequest = "RENDER";
     /**
      * @type {boolean}
      */
