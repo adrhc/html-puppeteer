@@ -60,7 +60,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @return {Promise<StateChange>}
      */
     updateViewOnUPDATE_ALL(stateChange) {
-        return this.view.update(stateChange);
+        return super.updateViewOnRENDER(stateChange);
     }
 
     /**

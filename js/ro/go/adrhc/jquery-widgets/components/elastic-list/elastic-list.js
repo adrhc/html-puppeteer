@@ -28,16 +28,6 @@ class ElasticListComponent extends SimpleListComponent {
     }
 
     /**
-     * The rows are created as child components (see ElasticListCompositeBehaviour._createChildComponents).
-     *
-     * @param stateChange
-     * @return {Promise<StateChange>}
-     */
-    updateViewOnUPDATE_ALL(stateChange) {
-        return Promise.resolve(stateChange);
-    }
-
-    /**
      * This does what this.compositeBehaviour.init() does but for only 1 item.
      *
      * Reason: the whole purpose of this component is to allow one to manually manipulate the

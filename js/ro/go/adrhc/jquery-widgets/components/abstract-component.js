@@ -149,8 +149,8 @@ class AbstractComponent {
      * @param {StateChange} stateChange
      * @return {Promise}
      */
-    updateViewOnAny(stateChange) {
-        this._safelyLogStateChange(stateChange);
+    updateViewOnRENDER(stateChange) {
+        this._safelyLogStateChange(stateChange, "updateViewOnRENDER");
         if (this.config.skipOwnViewUpdates) {
             return this.compositeBehaviour.processStateChangeWithKids(stateChange);
         }
@@ -165,14 +165,25 @@ class AbstractComponent {
 
     /**
      * @param {StateChange} stateChange
+     * @return {Promise}
+     */
+    updateViewOnAny(stateChange) {
+        console.warn(`${this.constructor.name}.updateViewOnAny: skipping own view update`);
+        this._safelyLogStateChange(stateChange, "updateViewOnAny");
+        return this.compositeBehaviour.processStateChangeWithKids(stateChange);
+    }
+
+    /**
+     * @param {StateChange} stateChange
+     * @param {string} methodToLogFor
      * @protected
      */
-    _safelyLogStateChange(stateChange) {
+    _safelyLogStateChange(stateChange, methodToLogFor = "_safelyLogStateChange") {
         try {
-            console.log(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
+            console.log(`${this.constructor.name}.${methodToLogFor}:\n${JSON.stringify(stateChange)}`);
         } catch (e) {
             console.error(e);
-            console.error(`${this.constructor.name}._safelyLogStateChange:\n`, stateChange);
+            console.error(`${this.constructor.name}.${methodToLogFor}:\n`, stateChange);
         }
     }
 
