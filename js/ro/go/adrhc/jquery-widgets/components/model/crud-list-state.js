@@ -9,18 +9,25 @@ class CrudListState extends SimpleListState {
      * @type {boolean}
      */
     append;
+    /**
+     * @type {string}
+     */
+    partName;
 
     /**
      * @param [newEntityFactoryFn] {function(): IdentifiableEntity}
      * @param [newItemsGoToTheEndOfTheList] {boolean}
+     * @param {string} [partName]
      */
     constructor({
                     newEntityFactoryFn = () => new IdentifiableEntity(IdentifiableEntity.TRANSIENT_ID),
-                    newItemsGoToTheEndOfTheList
+                    newItemsGoToTheEndOfTheList,
+                    partName = "ITEM"
                 }) {
         super();
         this.newEntityFactoryFn = newEntityFactoryFn;
         this.append = newItemsGoToTheEndOfTheList;
+        this.partName = partName;
     }
 
     /**
@@ -63,7 +70,8 @@ class CrudListState extends SimpleListState {
         } else {
             this.items.unshift(item);
         }
-        this.collectStateChange(new PositionStateChange("CREATE", item, afterItemId), {});
+        this.collectStateChange(new PositionStateChange("CREATE",
+            item, {afterItemId, partName: this.partName}), {});
         return item;
     }
 
@@ -73,7 +81,7 @@ class CrudListState extends SimpleListState {
      */
     updateItem(item) {
         EntityUtils.findAndReplaceById(item, this.items);
-        this.collectStateChange(new StateChange("UPDATE", item), {});
+        this.patch(item, "REPLACE", this.partName);
         return item;
     }
 
@@ -83,8 +91,8 @@ class CrudListState extends SimpleListState {
      */
     removeById(id) {
         const removedItem = EntityUtils.removeById(id, this.items);
-        if (!!removedItem) {
-            this.collectStateChange(new StateChange("DELETE", removedItem), {});
+        if (removedItem) {
+            this.patch(removedItem, "DELETE", this.partName);
         } else {
             console.log(`item id ${id} is missing (already deleted by someone else)`)
         }
@@ -96,7 +104,8 @@ class CrudListState extends SimpleListState {
      */
     removeTransient() {
         const removedItems = EntityUtils.removeTransient(this.items);
-        this.collectStateChange(new StateChange("DELETE", removedItems), {});
+        AssertionUtils.isFalse($.isArray(removedItems));
+        this.patch(removedItems, "DELETE", this.partName);
         return removedItems;
     }
 

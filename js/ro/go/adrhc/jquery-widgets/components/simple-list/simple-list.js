@@ -11,6 +11,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      */
     constructor(repository, state, view, config) {
         super(state, view, config);
+        this.stateChangesDispatcher.prependKnownRequestTypes("CREATE", "REPLACE", "DELETE");
         this.simpleListState = state;
         this.repository = repository;
     }
@@ -51,16 +52,6 @@ class SimpleListComponent extends AbstractTableBasedComponent {
          */
         const simpleListComponent = ev.data;
         simpleListComponent._reload();
-    }
-
-    /**
-     * see also ElasticListComponent.updateViewOnCREATE
-     *
-     * @param stateChange {StateChange}
-     * @return {Promise<StateChange>}
-     */
-    updateViewOnUPDATE_ALL(stateChange) {
-        return super.updateViewOnRENDER(stateChange);
     }
 
     /**

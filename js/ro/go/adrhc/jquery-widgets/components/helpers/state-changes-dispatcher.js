@@ -7,6 +7,10 @@ class StateChangesDispatcher {
      * @type {string[]}
      */
     knownRequestTypes = [];
+    /**
+     * @type {string[]}
+     */
+    knownPartRequestTypes = [];
 
     /**
      * @param component {AbstractComponent}
@@ -51,7 +55,25 @@ class StateChangesDispatcher {
             console.warn(`${this.component.constructor.name}: no state changes!`);
             return Promise.resolve(stateChange);
         }
+
+        const partName = stateChange.partName == null ? "" : stateChange.partName;
         const fnName = `updateViewOn${stateChange.requestType}`;
+
+        if (partName) {
+            let partFnName = `${fnName}${partName}`;
+            if (typeof this.component[partFnName] === "function") {
+                return this.component[partFnName](stateChange);
+            }
+            partFnName = `updateViewOnKnown${partName}StateChange`;
+            if (this.component[partFnName] && this.knownPartRequestTypes.includes(stateChange.requestType)) {
+                return this.component[partFnName](stateChange);
+            }
+            partFnName = `updateViewOnAny${partName}`;
+            if (this.component[partFnName]) {
+                return this.component[partFnName](stateChange);
+            }
+        }
+
         if (typeof this.component[fnName] === "function") {
             return this.component[fnName](stateChange);
         } else if (this.knownRequestTypes.includes(stateChange.requestType)) {
@@ -66,5 +88,32 @@ class StateChangesDispatcher {
      */
     prependKnownRequestTypes(...requestType) {
         requestType.forEach(it => this.knownRequestTypes.splice(0, 0, it));
+    }
+
+    /**
+     * @param requestType {string}
+     */
+    prependPartKnownRequestTypes(...requestType) {
+        requestType.forEach(it => this.knownPartRequestTypes.splice(0, 0, it));
+    }
+
+    /**
+     * "is know request type?" or "is not applicable (situation)?" (question)
+     *
+     * @param {string} requestType
+     * @return {boolean|boolean}
+     */
+    isKnownRequestTypeOrNA(requestType) {
+        return !this.knownRequestTypes || this.knownRequestTypes.length === 0 || this.knownRequestTypes.includes(requestType);
+    }
+
+    /**
+     * "is know request type?" or "is not applicable (situation)?" (question)
+     *
+     * @param {string} requestType
+     * @return {boolean|boolean}
+     */
+    isKnownPartRequestTypeOrNA(requestType) {
+        return !this.knownPartRequestTypes || this.knownPartRequestTypes.length === 0 || this.knownPartRequestTypes.includes(requestType);
     }
 }

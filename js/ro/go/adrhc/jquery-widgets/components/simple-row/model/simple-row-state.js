@@ -14,16 +14,7 @@ class SimpleRowState extends BasicState {
      * @param [dontRecordStateEvents] {boolean}
      */
     update(updatedRowState, requestType = "UPDATE", afterItemId, dontRecordStateEvents) {
-        this.collectStateChange(new PositionStateChange(requestType, updatedRowState, afterItemId), {dontRecordStateEvents});
-    }
-
-    /**
-     * @param stateChange {StateChange}
-     * @param {boolean} [dontRecordStateEvents]
-     * @param {boolean} [overwriteState]
-     */
-    collectStateChange(stateChange, {dontRecordStateEvents, overwriteState = true}) {
-        super.collectStateChange(stateChange, {dontRecordStateEvents, overwriteState});
+        this.replace(updatedRowState, dontRecordStateEvents);
     }
 
     get rowState() {

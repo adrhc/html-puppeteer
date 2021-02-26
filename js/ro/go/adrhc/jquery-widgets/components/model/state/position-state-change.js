@@ -4,9 +4,10 @@ class PositionStateChange extends StateChange {
      * @param [data] {*} is the change-affected state; could be the entire state or part of it
      * @param [afterItemId] {number|string}
      * @param [beforeItemId] {number|string}
+     * @param [partName] {string}
      */
-    constructor(requestType, data, afterItemId, beforeItemId) {
-        super(requestType, data);
+    constructor(requestType, data, {partName, afterItemId, beforeItemId}) {
+        super(requestType, data, partName);
         this.afterItemId = afterItemId
         this.beforeItemId = beforeItemId
     }

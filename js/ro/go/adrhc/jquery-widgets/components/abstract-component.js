@@ -141,16 +141,20 @@ class AbstractComponent {
      * @return {Promise<StateChange>}
      */
     updateViewOnKnownStateChange(stateChange) {
-        console.error(`${this.constructor.name}.updateViewOnKnownStateChange is not implemented!`);
-        throw `${this.constructor.name}.updateViewOnKnownStateChange is not implemented!`;
+        console.log(`${this.constructor.name}.updateViewOnKnownStateChange: delegating to updateViewOnAny (default implementation)`);
+        return this.updateViewOnAny(stateChange);
     }
 
     /**
      * @param {StateChange} stateChange
      * @return {Promise}
      */
-    updateViewOnRENDER(stateChange) {
+    updateViewOnAny(stateChange) {
         this._safelyLogStateChange(stateChange, "updateViewOnRENDER");
+        if (!this.stateChangesDispatcher.isKnownRequestTypeOrNA(stateChange.requestType)) {
+            console.log(`${this.constructor.name}.updateViewOnAny skipped!`);
+            return Promise.reject(stateChange);
+        }
         if (this.config.skipOwnViewUpdates) {
             return this.compositeBehaviour.processStateChangeWithKids(stateChange);
         }
@@ -161,16 +165,6 @@ class AbstractComponent {
                 }
             })
             .then(() => this.compositeBehaviour.processStateChangeWithKids(stateChange));
-    }
-
-    /**
-     * @param {StateChange} stateChange
-     * @return {Promise}
-     */
-    updateViewOnAny(stateChange) {
-        console.warn(`${this.constructor.name}.updateViewOnAny: skipping own view update`);
-        this._safelyLogStateChange(stateChange, "updateViewOnAny");
-        return this.compositeBehaviour.processStateChangeWithKids(stateChange);
     }
 
     /**

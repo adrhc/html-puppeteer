@@ -40,8 +40,8 @@ class ElasticListComponent extends SimpleListComponent {
      * @param stateChange {PositionStateChange}
      * @return {Promise}
      */
-    updateViewOnCREATE(stateChange) {
-        console.log(`${this.constructor.name}.updateViewOnCREATE:\n${JSON.stringify(stateChange)}`);
+    updateViewOnCREATEITEM(stateChange) {
+        console.log(`${this.constructor.name}.updateViewOnCREATEITEM:\n${JSON.stringify(stateChange)}`);
         return this.elasticListComposite.createChildComponent(stateChange).init();
     }
 
@@ -52,10 +52,15 @@ class ElasticListComponent extends SimpleListComponent {
      * @param stateChange
      * @return {Promise}
      */
-    updateViewOnAny(stateChange) {
-        console.log(`${this.constructor.name}.updateViewOnAny:\n${JSON.stringify(stateChange)}`);
+    updateViewOnAnyITEM(stateChange) {
+        console.log(`${this.constructor.name}.updateViewOnAnyITEM:\n${JSON.stringify(stateChange)}`);
         const idRowComp = this.elasticListComposite.findKidById(stateChange.data.id);
         return idRowComp.processStateChange(stateChange, {});
+    }
+
+    updateViewOnAny(stateChange) {
+        console.log(`${this.constructor.name}.updateViewOnAny: ignored\n${JSON.stringify(stateChange)}`);
+        return Promise.resolve(stateChange);
     }
 
     /**
