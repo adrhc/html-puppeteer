@@ -20,7 +20,7 @@ if (Modernizr.template) {
 
     $(() => {
         // const comp = new DrawingComponent("drawing-comp");
-        const comp = JqueryWidgetsUtil.autoCreate();
+        const comp = JQueryWidgetsUtil.autoCreate();
         comp.compositeBehaviour.addChildComponentFactory([(parentComp) => {
             const tableIdOrJQuery = $("#dogsTable", parentComp.view.$elem);
             return SimpleListFactory.create({items: DbMock.DOGS, tableIdOrJQuery});

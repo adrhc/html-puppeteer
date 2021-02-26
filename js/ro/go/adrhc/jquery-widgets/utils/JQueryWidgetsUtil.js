@@ -1,4 +1,4 @@
-class JqueryWidgetsUtil {
+class JQueryWidgetsUtil {
     /**
      * @return {AbstractComponent|Array<AbstractComponent|Promise<AbstractComponent>>}
      */
@@ -13,8 +13,8 @@ class JqueryWidgetsUtil {
                 const dynamicClass = eval(type);
                 const comp = new dynamicClass($el);
             */
-            // console.log(JqueryWidgetsUtil.instantiateByName(type, $el));
-            return JqueryWidgetsUtil.instantiateByName(type, $el);
+            // console.log(JQueryWidgetsUtil.instantiateByName(type, $el));
+            return JQueryWidgetsUtil.instantiateByName(type, $el);
         });
         if (components.length === 1) {
             return components[0];

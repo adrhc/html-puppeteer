@@ -20,7 +20,7 @@ if (Modernizr.template) {
 
     // $(() => new ContainerComponent($("[data-jqw-type='ContainerComponent']")));
 
-    $(() => JqueryWidgetsUtil.autoCreate());
+    $(() => JQueryWidgetsUtil.autoCreate());
 } else {
     // Find another way to add the rows to the table because
     // the HTML template element is not supported.

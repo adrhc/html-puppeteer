@@ -32,7 +32,7 @@ function dataGeneratorFnSupplierFor(comp) {
 
 $(() => {
     // const comp = new ContainerComponent($("[data-jqw-type='ContainerComponent']"));
-    const comp = JqueryWidgetsUtil.autoCreate();
+    const comp = JQueryWidgetsUtil.autoCreate();
 
     comp.compositeBehaviour.addChildComponentFactory([(parentComp) => {
         const elemIdOrJQuery = $("#person", parentComp.view.$elem);
