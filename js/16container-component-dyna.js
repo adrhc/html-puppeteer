@@ -33,6 +33,7 @@ function dataGeneratorFnSupplierFor(comp) {
 $(() => {
     // const comp = new ContainerComponent($("[data-jqw-type='ContainerComponent']"));
     const comp = JqueryWidgetsUtil.autoCreate();
+
     comp.compositeBehaviour.addChildComponentFactory([(parentComp) => {
         const elemIdOrJQuery = $("#person", parentComp.view.$elem);
         return new DrawingComponent(elemIdOrJQuery);
@@ -43,6 +44,7 @@ $(() => {
         const elemIdOrJQuery = $("#dyna-sel-one", parentComp.view.$elem);
         return DynamicSelectOneFactory.create(elemIdOrJQuery, DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {});
     }]);
+
     comp.init()
         .then(() => setInterval(dataGeneratorFnSupplierFor(comp), comp.state.currentState.seconds * 1000))
         .then(() => console.log("16container-component-dyna.js started"));
