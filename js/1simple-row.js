@@ -45,6 +45,7 @@ if (Modernizr.template) {
                     }))
         });
 
+/*
         // dogs table with deleted row
         const dogsTableWithDelete = "dogsTableWithDelete";
         SimpleListFactory.create({
@@ -64,6 +65,8 @@ if (Modernizr.template) {
                     // removing the row
                     .then(() => simpleRow.update(items[1], "DELETE")));
         });
+*/
+
     })
 } else {
     // Find another way to add the rows to the table because

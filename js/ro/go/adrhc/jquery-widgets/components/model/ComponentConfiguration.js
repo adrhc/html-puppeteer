@@ -12,10 +12,6 @@ class ComponentConfiguration {
      */
     dontReloadFromState;
     /**
-     * @type {string}
-     */
-    stateChangeRequest = "RENDER";
-    /**
      * @type {boolean}
      */
     clearChildrenOnReset;

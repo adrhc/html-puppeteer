@@ -12,7 +12,7 @@ if (Modernizr.template) {
         SimpleListFactory.create({
             items: DbMock.DOGS,
             tableIdOrJQuery: "dogsTable"
-        }).init();
+        }).init().then(() => "2simple-list-read-only.js done");
     })
 } else {
     // Find another way to add the rows to the table because

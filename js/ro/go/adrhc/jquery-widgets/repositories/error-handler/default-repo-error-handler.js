@@ -12,12 +12,12 @@ class DefaultRepoErrorHandler extends RepoErrorHandler {
 
     /**
      * @param promise {Promise}
-     * @param requestType {string}
+     * @param changeType {string}
      * @param [data] {*}
      * @return {Promise}
      * @protected
      */
-    catch(promise, requestType, data) {
+    catch(promise, changeType, data) {
         return promise.catch((jqXHR, textStatus, errorThrown) => {
             this._logPromiseCatch(jqXHR, textStatus, errorThrown);
             let error;
@@ -26,19 +26,19 @@ class DefaultRepoErrorHandler extends RepoErrorHandler {
             } else if (jqXHR instanceof SimpleError) {
                 throw jqXHR;
             } else if (jqXHR.responseText) {
-                error = this._simpleErrorOf(jqXHR.responseText, requestType, data);
+                error = this._simpleErrorOf(jqXHR.responseText, changeType, data);
             }
-            throw error ? error : new SimpleError(this.messages[requestType], requestType, data);
+            throw error ? error : new SimpleError(this.messages[changeType], changeType, data);
         });
     }
 
-    _simpleErrorOf(text, requestType, data) {
+    _simpleErrorOf(text, changeType, data) {
         try {
             const problems = ServerError.parse(JSON.parse(text));
             if ($.isArray(problems)) {
-                return new SimpleError(this.messages[requestType], requestType, data, problems);
+                return new SimpleError(this.messages[changeType], changeType, data, problems);
             } else {
-                return new SimpleError(this.messages[requestType], requestType, data, [problems]);
+                return new SimpleError(this.messages[changeType], changeType, data, [problems]);
             }
         } catch (ex) {
             console.error(`${this.constructor.name}.parseSimpleErrors exception:\n`, ex);

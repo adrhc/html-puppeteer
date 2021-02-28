@@ -1,9 +1,5 @@
 class SimpleRowComponent extends AbstractComponent {
     /**
-     * @type {SimpleRowState}
-     */
-    simpleRowState;
-    /**
      * @type {SimpleRowView}
      */
     simpleRowView;
@@ -13,13 +9,12 @@ class SimpleRowComponent extends AbstractComponent {
     errorComponent;
 
     /**
-     * @param state {SimpleRowState}
+     * @param state {BasicState}
      * @param view {SimpleRowView}
      * @param [errorComponent] {AbstractComponent}
      */
     constructor(state, view, errorComponent) {
         super(state, view);
-        this.simpleRowState = state;
         this.simpleRowView = view;
         this.errorComponent = errorComponent;
     }
@@ -30,13 +25,11 @@ class SimpleRowComponent extends AbstractComponent {
      * or configure events, only init() should do that!
      *
      * @param item
-     * @param [requestType] {"CREATE"|"UPDATE"|"DELETE"}
-     * @param [afterItemId] {number|string}
+     * @param [afterRowId] {number|string}
      * @return {Promise<StateChange[]>}
      */
-    update(item, requestType = "UPDATE", afterItemId) {
-        const stateChange = new PositionStateChange(requestType, item, {afterItemId});
-        return this.processStateChange(stateChange, {});
+    update(item, afterRowId) {
+        return this.processStateChange(new RowValues(item, {afterRowId}), {});
     }
 
     /**
@@ -44,7 +37,7 @@ class SimpleRowComponent extends AbstractComponent {
      * @return {Promise<StateChange>}
      */
     updateViewOnDELETE(stateChange) {
-        this.simpleRowView.deleteRowByDataId(stateChange.data.id);
+        this.simpleRowView.deleteRowByDataId(stateChange.stateOrPart.id);
         if (this.childishBehaviour) {
             this.childishBehaviour.detachChild();
         }
@@ -59,11 +52,11 @@ class SimpleRowComponent extends AbstractComponent {
     updateViewOnERROR(stateChange) {
         if (this.errorComponent) {
             console.log(`${this.constructor.name}.updateViewOnERROR:\n${JSON.stringify(stateChange)}`);
-            stateChange.requestType = "CREATE"; // allows to create the row if doesn't exist
+            stateChange.changeType = "CREATE"; // allows to create the row if doesn't exist
             this.errorComponent.state.collectStateChange(stateChange, {});
             return this.errorComponent.init();
         } else {
-            alert(`${stateChange.data.message}\n${JSON.stringify(stateChange, null, 2)}`);
+            alert(`${stateChange.stateOrPart.message}\n${JSON.stringify(stateChange, null, 2)}`);
         }
         return super.updateViewOnERROR(stateChange);
     }
@@ -79,7 +72,7 @@ class SimpleRowComponent extends AbstractComponent {
         // why reset? because we have to detach the event handlers on previous row
         this.reset();
         // above reset will also apply to the state so we must restore it (the state)
-        this.state.replace(stateChange.data, true);
+        this.state.replace(stateChange.stateOrPart, true);
         // after recreating the view one has to again bind the event handlers,
         // call compositeBehaviour.init, etc (do something similar to an init)
         return this.view.update(stateChange)

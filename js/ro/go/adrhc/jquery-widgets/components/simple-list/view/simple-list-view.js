@@ -6,7 +6,7 @@ class SimpleListView extends AbstractTableBasedView {
      * @param stateChange {StateChange}
      */
     update(stateChange) {
-        this.tableAdapter.renderBodyWithTemplate({items: stateChange.data});
+        this.tableAdapter.renderBodyWithTemplate({items: stateChange.stateOrPart});
         return Promise.resolve(stateChange);
     }
 }

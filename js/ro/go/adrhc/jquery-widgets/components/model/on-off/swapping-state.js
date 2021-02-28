@@ -1,28 +1,29 @@
 /**
  * SwappingState collects state changes as follows:
- *      StateChange.requestType defaults to "SWAP"
+ *      StateChange.changeType defaults to "SWAP"
  *      StateChange.data = SwappingDetails
  */
 class SwappingState extends BasicState {
     /**
-     * @type {string} is the requestType to use when reporting state changes
+     * @type {string} is the changeType to use when reporting state changes
      */
-    requestType;
+    changeType;
     /**
      * @type SwappingDetails
      */
     swappingDetails;
 
     /**
-     * @param requestType {string}
+     * @param {*} [currentState]
+     * @param changeType {string}
      */
-    constructor(requestType = "SWAP") {
-        super();
-        this.requestType = requestType;
+    constructor(currentState, changeType = "SWAP") {
+        super(currentState, {});
+        this.changeType = changeType;
     }
 
     /**
-     * won't reset requestType
+     * won't reset changeType
      */
     reset() {
         super.reset();
@@ -69,7 +70,7 @@ class SwappingState extends BasicState {
      * @private
      */
     _collectStateChange(swappingDetails) {
-        super.collectStateChange(new StateChange(this.requestType, swappingDetails), {});
+        super.collectStateChange(new StateChange(this.changeType, swappingDetails), {});
     }
 
     get currentState() {

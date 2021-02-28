@@ -24,7 +24,7 @@ class AbstractTemplatingView extends AbstractView {
      * @return {Promise<StateChange>}
      */
     update(stateChange) {
-        return this._generateHtml(stateChange.data)
+        return this._generateHtml(stateChange.stateOrPart)
             .then(html => this.$elem.html(html))
             .then(() => stateChange);
     }

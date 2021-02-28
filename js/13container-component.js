@@ -12,7 +12,7 @@ if (Modernizr.template) {
     /*
         $(() => {
             const comp = new DrawingComponent("drawing-comp");
-            const stateChange = new StateChange("UPDATE", comp.config);
+            const stateChange = new StateChange("REPLACE", comp.config);
             comp.state.collectStateChange(stateChange, {});
             return comp.init();
         });

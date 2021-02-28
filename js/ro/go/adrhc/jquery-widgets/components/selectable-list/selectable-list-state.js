@@ -2,7 +2,7 @@
  * SelectableListState extends CrudListState (which extends SimpleListState) and SwappingState
  *
  * SwappingState collects state changes as follows:
- *      StateChange.requestType = SwappingState.requestType (defaults to "SWAP")
+ *      StateChange.changeType = SwappingState.changeType (defaults to "SWAP")
  *      StateChange.data = SwappingDetails
  * SelectableListState.swappingState collects state changes as follows:
  *      StateChange.swappingDetails.data = SelectableSwappingData
@@ -14,12 +14,13 @@ class SelectableListState extends CrudListState {
     swappingState;
 
     /**
-     * @param [newEntityFactoryFn] {function(): IdentifiableEntity}
-     * @param [newItemsGoToTheEndOfTheList] {boolean}
-     * @param [swappingState] {SwappingState}
+     * @param {*} [currentState]
+     * @param {function(): IdentifiableEntity} [newEntityFactoryFn]
+     * @param {boolean} [newItemsGoToTheEndOfTheList]
+     * @param {SwappingState} [swappingState]
      */
-    constructor({newEntityFactoryFn, newItemsGoToTheEndOfTheList, swappingState = new SwappingState()}) {
-        super({newEntityFactoryFn, newItemsGoToTheEndOfTheList});
+    constructor({currentState, newEntityFactoryFn, newItemsGoToTheEndOfTheList, swappingState = new SwappingState()}) {
+        super({currentState, newEntityFactoryFn, newItemsGoToTheEndOfTheList});
         this.swappingState = swappingState;
     }
 
@@ -74,7 +75,7 @@ class SelectableListState extends CrudListState {
         if (!!previousSelectableSwappingData) {
             this._reloadLastSwappedOffItem();
         }
-        this.collectByConsumingStateChanges(this.swappingState.stateChanges)
+        this.stateChanges.collectByConsumingChanges(this.swappingState.stateChanges)
     }
 
     /**
@@ -85,7 +86,8 @@ class SelectableListState extends CrudListState {
      * @protected
      */
     _reloadLastSwappedOffItem() {
-        const swappingStateChange = this.swappingState.findFirstFromNewest((swappingStateChange) => swappingStateChange.data.isPrevious);
+        const swappingStateChange = this.swappingState.stateChanges
+            .findFirstFromNewest((swappingStateChange) => swappingStateChange.data.isPrevious);
         if (!swappingStateChange) {
             // error: no isPrevious (true) state change
             console.error("found no isPrevious = true state change!");

@@ -73,7 +73,7 @@ class CompositeBehaviour {
      * or is just missing from the @param stateChange.
      *
      * todo: cope with @param parentState missing some children state
-     * todo: cope with stateChange.requestType not handleable by some children
+     * todo: cope with stateChange.changeType not handleable by some children
      *
      * updateViewOnAny -> compositeBehaviour.processStateChangeWithKids -> compositeBehaviour._extractChildState -> childishBehaviour.extractChildState
      *
@@ -104,7 +104,7 @@ class CompositeBehaviour {
      */
     _extractChildState(stateChange, kid) {
         if (kid.childishBehaviour) {
-            const kidState = kid.childishBehaviour.extractChildState(stateChange.data);
+            const kidState = kid.childishBehaviour.extractChildState(stateChange.stateOrPart);
             // ignore undefined kidState: means that the parent is missing the child, so probably doesn't intend to update it
             if (kidState === undefined) {
                 return undefined;

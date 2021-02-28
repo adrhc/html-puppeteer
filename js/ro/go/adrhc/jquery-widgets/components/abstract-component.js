@@ -77,22 +77,30 @@ class AbstractComponent {
     }
 
     /**
-     * shorthand method: calls doWithState with the provided stateChange
-     *
-     * @param {StateChange|*} stateChangeOrJustData
+     * @param {*} stateOrPart
+     * @param {string} [partName]
      * @param {boolean} [dontRecordStateEvents]
-     * @param {boolean} [overwriteState]
      * @return {Promise<StateChange[]>}
      */
-    processStateChange(stateChangeOrJustData, {dontRecordStateEvents, overwriteState}) {
-        let stateChange;
-        if (typeof stateChangeOrJustData === "object" && stateChangeOrJustData instanceof StateChange) {
-            stateChange = stateChangeOrJustData;
-        } else {
-            stateChange = new StateChange(this.config.stateChangeRequest, stateChangeOrJustData);
-        }
-        return this.doWithState((basicState) =>
-            basicState.collectStateChange(stateChange, {dontRecordStateEvents, overwriteState}));
+    processStateChange(stateOrPart, {partName, dontRecordStateEvents}) {
+        return this.doWithState((basicState) => {
+            if (partName) {
+                basicState.replacePart(stateOrPart, partName, dontRecordStateEvents);
+            } else {
+                basicState.replace(stateOrPart, dontRecordStateEvents);
+            }
+        });
+    }
+
+    /**
+     * @param {StateChange} oldStateChange
+     * @return {Promise<StateChange[]>}
+     */
+    reprocessStateChange(oldStateChange) {
+        return this.doWithState((basicState) => {
+            // recording again the old state change event
+            basicState.stateChanges.collect(oldStateChange);
+        });
     }
 
     /**
@@ -106,7 +114,7 @@ class AbstractComponent {
         console.log(`${this.constructor.name}.doWithState: delayViewUpdate = ${delayViewUpdate}`);
         stateUpdaterFn(this.state);
         if (delayViewUpdate) {
-            return Promise.resolve(this.state.peekAll());
+            return Promise.resolve(this.state.stateChanges.peekAll());
         }
         return this.updateViewOnStateChanges();
     }
@@ -151,7 +159,7 @@ class AbstractComponent {
      */
     updateViewOnAny(stateChange) {
         this._safelyLogStateChange(stateChange, "updateViewOnRENDER");
-        if (!this.stateChangesDispatcher.isKnownRequestTypeOrNA(stateChange.requestType)) {
+        if (!this.stateChangesDispatcher.isKnownChangeTypesOrNA(stateChange.changeType)) {
             console.log(`${this.constructor.name}.updateViewOnAny skipped!`);
             return Promise.reject(stateChange);
         }

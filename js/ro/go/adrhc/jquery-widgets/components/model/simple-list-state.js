@@ -1,6 +1,6 @@
 class SimpleListState extends BasicState {
     constructor(currentState = []) {
-        super(currentState);
+        super(currentState, {});
     }
 
     /**

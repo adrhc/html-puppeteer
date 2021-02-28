@@ -6,11 +6,11 @@ class StateChangesDispatcher {
     /**
      * @type {string[]}
      */
-    knownRequestTypes = [];
+    knownChangeTypes = [];
     /**
      * @type {string[]}
      */
-    knownPartRequestTypes = [];
+    knownPartChangeTypes = [];
 
     /**
      * @param component {AbstractComponent}
@@ -27,7 +27,8 @@ class StateChangesDispatcher {
      * @return {Promise<StateChange[]>}
      */
     updateViewOnStateChanges(stateChanges, applyChangesStartingFromNewest) {
-        stateChanges = stateChanges ? stateChanges : this.component.state.consumeAll(applyChangesStartingFromNewest);
+        stateChanges = stateChanges ? stateChanges :
+            this.component.state.stateChanges.consumeAll(applyChangesStartingFromNewest);
         if (!stateChanges || !stateChanges.length) {
             // can happen when switching to undefined multiple times (e.g. dblclick on header)
             // or clicking in an input box on an editable row
@@ -50,14 +51,14 @@ class StateChangesDispatcher {
      * @return {Promise<StateChange>}
      */
     updateViewOnStateChange(stateChange) {
-        stateChange = stateChange ? stateChange : this.component.state.consumeOne();
+        stateChange = stateChange ? stateChange : this.component.state.stateChanges.consumeOne();
         if (!stateChange) {
             console.warn(`${this.component.constructor.name}: no state changes!`);
             return Promise.resolve(stateChange);
         }
 
         const partName = stateChange.partName == null ? "" : stateChange.partName;
-        const fnName = `updateViewOn${stateChange.requestType}`;
+        const fnName = `updateViewOn${stateChange.changeType}`;
 
         if (partName) {
             let partFnName = `${fnName}${partName}`;
@@ -65,7 +66,7 @@ class StateChangesDispatcher {
                 return this.component[partFnName](stateChange);
             }
             partFnName = `updateViewOnKnown${partName}StateChange`;
-            if (this.component[partFnName] && this.knownPartRequestTypes.includes(stateChange.requestType)) {
+            if (this.component[partFnName] && this.knownPartChangeTypes.includes(stateChange.changeType)) {
                 return this.component[partFnName](stateChange);
             }
             partFnName = `updateViewOnAny${partName}`;
@@ -76,7 +77,7 @@ class StateChangesDispatcher {
 
         if (typeof this.component[fnName] === "function") {
             return this.component[fnName](stateChange);
-        } else if (this.knownRequestTypes.includes(stateChange.requestType)) {
+        } else if (this.knownChangeTypes.includes(stateChange.changeType)) {
             return this.component.updateViewOnKnownStateChange(stateChange);
         } else {
             return this.component.updateViewOnAny(stateChange);
@@ -84,36 +85,36 @@ class StateChangesDispatcher {
     }
 
     /**
-     * @param requestType {string}
+     * @param changeType {string}
      */
-    prependKnownRequestTypes(...requestType) {
-        requestType.forEach(it => this.knownRequestTypes.splice(0, 0, it));
+    prependKnownChangeTypess(...changeType) {
+        changeType.forEach(it => this.knownChangeTypes.splice(0, 0, it));
     }
 
     /**
-     * @param requestType {string}
+     * @param changeType {string}
      */
-    prependPartKnownRequestTypes(...requestType) {
-        requestType.forEach(it => this.knownPartRequestTypes.splice(0, 0, it));
-    }
-
-    /**
-     * "is know request type?" or "is not applicable (situation)?" (question)
-     *
-     * @param {string} requestType
-     * @return {boolean|boolean}
-     */
-    isKnownRequestTypeOrNA(requestType) {
-        return !this.knownRequestTypes || this.knownRequestTypes.length === 0 || this.knownRequestTypes.includes(requestType);
+    prependPartKnownChangeTypess(...changeType) {
+        changeType.forEach(it => this.knownPartChangeTypes.splice(0, 0, it));
     }
 
     /**
      * "is know request type?" or "is not applicable (situation)?" (question)
      *
-     * @param {string} requestType
+     * @param {string} changeType
      * @return {boolean|boolean}
      */
-    isKnownPartRequestTypeOrNA(requestType) {
-        return !this.knownPartRequestTypes || this.knownPartRequestTypes.length === 0 || this.knownPartRequestTypes.includes(requestType);
+    isKnownChangeTypesOrNA(changeType) {
+        return !this.knownChangeTypes || this.knownChangeTypes.length === 0 || this.knownChangeTypes.includes(changeType);
+    }
+
+    /**
+     * "is know request type?" or "is not applicable (situation)?" (question)
+     *
+     * @param {string} changeType
+     * @return {boolean|boolean}
+     */
+    isKnownPartChangeTypeOrNA(changeType) {
+        return !this.knownPartChangeTypes || this.knownPartChangeTypes.length === 0 || this.knownPartChangeTypes.includes(changeType);
     }
 }

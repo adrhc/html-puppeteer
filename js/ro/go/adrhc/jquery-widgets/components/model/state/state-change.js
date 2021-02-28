@@ -1,12 +1,25 @@
 class StateChange {
     /**
-     * @param {string} changeType specify the state change type
-     * @param {*} [partialOrEntireState]
+     * @type {"CREATE"|"DELETE"|"REPLACE"}
+     */
+    changeType;
+    /**
+     * @type {*}
+     */
+    stateOrPart;
+    /**
+     * @type {string}
+     */
+    partName;
+
+    /**
+     * @param {"CREATE"|"DELETE"|"REPLACE"} changeType specify the state change type
+     * @param {*} stateOrPart
      * @param {string} [partName]
      */
-    constructor(changeType, partialOrEntireState, partName) {
-        this.requestType = changeType;
-        this.data = partialOrEntireState;
+    constructor(changeType, stateOrPart, partName) {
+        this.changeType = changeType;
+        this.stateOrPart = stateOrPart;
         this.partName = partName;
     }
 }

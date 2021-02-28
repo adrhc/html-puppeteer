@@ -43,12 +43,12 @@ class SimpleRowView extends AbstractView {
         /**
          * @type {IdentifiableEntity}
          */
-        const updatedRowState = stateChange.data;
+        const updatedRowState = stateChange.stateOrPart;
         this.tableAdapter.renderRowWithTemplate({
             rowDataId: updatedRowState.id,
             data: updatedRowState,
             rowTmplHtml: this.tableAdapter.bodyRowTmplHtml,
-            createIfNotExists: stateChange.requestType === "CREATE",
+            createIfNotExists: stateChange.changeType === "CREATE",
             tableRelativePosition: this._tableRelativePositionOf(stateChange),
             neighbourRowDataId: this._neighbourRowDataIdOf(stateChange),
             neighbourRelativePosition: this._neighbourRelativePosition(stateChange)

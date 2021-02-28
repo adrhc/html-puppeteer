@@ -27,7 +27,7 @@ class SelectableListComponent extends SimpleListComponent {
     constructor(repository, state, view,
                 notSelectedRow, selectedRow, config) {
         super(repository, state, view, config);
-        this.stateChangesDispatcher.prependKnownRequestTypes("CREATE", "UPDATE", "DELETE");
+        this.stateChangesDispatcher.prependKnownChangeTypess("CREATE", "REPLACE", "DELETE");
         this.selectableListState = state;
         this.simpleListView = view;
         this.entityExtractor = new SelectableListEntityExtractor(this, {});
@@ -81,7 +81,7 @@ class SelectableListComponent extends SimpleListComponent {
 
     /**
      * called by AbstractComponent.updateViewOnStateChange
-     * see also this.state.swappingState.requestType (defaults to "SWAP")
+     * see also this.state.swappingState.changeType (defaults to "SWAP")
      *
      * @param swappingStateChange {StateChange|undefined}
      * @return {Promise<StateChange>}
