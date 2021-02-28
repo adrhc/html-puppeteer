@@ -47,16 +47,16 @@ if (Modernizr.template) {
             const items = updateAllStateChanges[0].stateOrPart;
             const item0 = items[0];
             const item1 = items[1];
-            const row0 = createDogsWithEditRow(item0);
-            return row0.init().then(() => {
+            const rowId0 = createDogsWithEditRow(item0);
+            return rowId0.init().then(() => {
                 // here editableRow.view.$elem is not initialized
-                const extractedEntity = row0.extractEntity();
+                const extractedEntity = rowId0.extractEntity();
                 AssertionUtils.isNull(extractedEntity);
             }).then(() => {
                 // besides updating the row representation this also initializes editableRow.view.$elem
-                return row0.update({id: item0.id, name: `${item0.name}-updated`});
+                return rowId0.update({id: item0.id, name: `${item0.name}-updated`});
             }).then(() => {
-                const extractedEntity = row0.extractEntity();
+                const extractedEntity = rowId0.extractEntity();
                 AssertionUtils.isNotNull(extractedEntity.name === `${item0.name}-updated`);
             }).then(() => {
                 // creating a new row
@@ -70,8 +70,8 @@ if (Modernizr.template) {
                     name: `new dog (id = 777, row's default positioning: ${newRow.simpleRowView.tableRelativePositionOnCreate})`
                 });
             }).then(() => {
-                const row1 = createDogsWithEditRow(item1);
-                return row1.update({id: 999, name: `${item1.name} id changed to 999`}).then(() => row1);
+                const rowId1 = createDogsWithEditRow(item1);
+                return rowId1.update({id: 999, name: `${item1.name} id changed to 999`}).then(() => rowId1);
             }).then((row1) => {
                 const extractedEntity = row1.extractEntity();
                 AssertionUtils.isNotNull(extractedEntity.id === 999);
@@ -87,19 +87,19 @@ if (Modernizr.template) {
             const items = updateAllStateChanges[0].stateOrPart;
             const item0 = items[0];
             const item2 = items[2];
-            const row0 = createDogsWithDeleteRow(item0);
+            const rowId0 = createDogsWithDeleteRow(item0);
             // switching to "simpleRow" display type (i.e. line-through text style)
-            return row0.init()
+            return rowId0.init()
                 // removing the row
-                .then(() => row0.update())
+                .then(() => rowId0.update())
                 .then(() => {
                     const $tr1 = $(`#${dogsTableWithDelete} tr[data-owner='${dogsTableWithDelete}'][data-id='${item0.id}']`);
                     AssertionUtils.isFalse(!!$tr1.length);
                 })
                 // rendering the "delete" representation
                 .then(() => {
-                    const row2 = createDogsWithDeleteRow();
-                    return row2.update(item2);
+                    const rowId2 = createDogsWithDeleteRow();
+                    return rowId2.update(item2);
                 });
         });
 
