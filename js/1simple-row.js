@@ -8,64 +8,100 @@ if (Modernizr.template) {
             options.data = JSON.stringify(options.data);
         }
     });
+
+    // dogs table with editable row
+    const dogsTableWithEdit = "dogsTableWithEdit";
+
+    /**
+     * @param {*} [initialData]
+     * @return {IdentifiableRowComponent}
+     */
+    function createDogsWithEditRow(initialData) {
+        return SimpleRowFactory.createIdentifiableRow({
+            tableIdOrJQuery: dogsTableWithEdit,
+            rowTmplId: "dogsTableWithEditSelectedRowTmpl",
+            tableRelativePositionOnCreate: "prepend",
+            initialState: initialData ? new RowValues(initialData, {}) : undefined
+        });
+    }
+
+    const dogsTableWithDelete = "dogsTableWithDelete";
+
+    /**
+     * @param {*} [initialData]
+     * @return {IdentifiableRowComponent}
+     */
+    function createDogsWithDeleteRow(initialData) {
+        return SimpleRowFactory.createIdentifiableRow({
+            tableIdOrJQuery: dogsTableWithDelete,
+            rowTmplId: "dogsTableWithDeleteDeletedRowTmpl",
+            initialState: initialData ? new RowValues(initialData, {}) : undefined
+        });
+    }
+
     $(() => {
-        // dogs table with editable row
-        const dogsTableWithEdit = "dogsTableWithEdit";
         SimpleListFactory.create({
             items: DbMock.DOGS,
             tableIdOrJQuery: dogsTableWithEdit
         }).init().then(updateAllStateChanges => {
-            const items = updateAllStateChanges[0].data;
-            const editableRow = SimpleRowFactory.createIdentifiableRow({
-                tableIdOrJQuery: dogsTableWithEdit,
-                rowTmplId: "dogsTableWithEditSelectedRowTmpl",
-                tableRelativePositionOnCreate: "prepend"
+            const items = updateAllStateChanges[0].stateOrPart;
+            const item0 = items[0];
+            const item1 = items[1];
+            const row0 = createDogsWithEditRow(item0);
+            return row0.init().then(() => {
+                // here editableRow.view.$elem is not initialized
+                const extractedEntity = row0.extractEntity();
+                AssertionUtils.isNull(extractedEntity);
+            }).then(() => {
+                // besides updating the row representation this also initializes editableRow.view.$elem
+                return row0.update({id: item0.id, name: `${item0.name}-updated`});
+            }).then(() => {
+                const extractedEntity = row0.extractEntity();
+                AssertionUtils.isNotNull(extractedEntity.name === `${item0.name}-updated`);
+            }).then(() => {
+                // creating a new row
+                const newRow = createDogsWithEditRow();
+                return newRow.update({id: IdentifiableEntity.TRANSIENT_ID, name: "TRANSIENT dog (after dog 3)"}, 3);
+            }).then(() => {
+                // creating a new row
+                const newRow = createDogsWithEditRow();
+                return newRow.update({
+                    id: 777,
+                    name: `new dog (id = 777, row's default positioning: ${newRow.simpleRowView.tableRelativePositionOnCreate})`
+                });
+            }).then(() => {
+                const row1 = createDogsWithEditRow(item1);
+                return row1.update({id: 999, name: `${item1.name} id changed to 999`}).then(() => row1);
+            }).then((row1) => {
+                const extractedEntity = row1.extractEntity();
+                AssertionUtils.isNotNull(extractedEntity.id === 999);
             });
-            return editableRow.init().then(() =>
-                // switch to existing row (aka enter "edit" mode)
-                editableRow.update(items[0])
-                    // extracting row data for e.g. save
-                    .then(() => {
-                        const extractedEntity = editableRow.extractEntity();
-                        console.log("1. extractedEntity:\n", JSON.stringify(extractedEntity));
-                    })
-                    // switch to new row (aka ADD then enter "edit" mode)
-                    .then(() => editableRow
-                        .update({id: IdentifiableEntity.TRANSIENT_ID, name: "new dog (after id 3)"},
-                            "CREATE", 3))
-                    .then(() => editableRow
-                        .update({
-                                id: 999,
-                                name: `new dog (using view's default positioning: ${editableRow.simpleRowView.tableRelativePositionOnCreate})`
-                            },
-                            "CREATE"))
-                    .then(() => {
-                        const extractedEntity = editableRow.extractEntity();
-                        console.log("2. extractedEntity:\n", JSON.stringify(extractedEntity));
-                    }))
         });
 
-/*
         // dogs table with deleted row
-        const dogsTableWithDelete = "dogsTableWithDelete";
         SimpleListFactory.create({
             items: DbMock.DOGS,
             tableIdOrJQuery: dogsTableWithDelete,
             bodyRowTmplId: "dogsTableWithDeleteReadOnlyRowTmpl"
         }).init().then(updateAllStateChanges => {
-            const items = updateAllStateChanges[0].data;
-            const simpleRow = SimpleRowFactory.createSimpleRow(
-                {
-                    tableIdOrJQuery: dogsTableWithDelete,
-                    rowTmplId: "dogsTableWithDeleteDeletedRowTmpl"
-                });
+            const items = updateAllStateChanges[0].stateOrPart;
+            const item0 = items[0];
+            const item2 = items[2];
+            const row0 = createDogsWithDeleteRow(item0);
             // switching to "simpleRow" display type (i.e. line-through text style)
-            return simpleRow.init()
-                .then(() => simpleRow.update(items[0])
-                    // removing the row
-                    .then(() => simpleRow.update(items[1], "DELETE")));
+            return row0.init()
+                // removing the row
+                .then(() => row0.update())
+                .then(() => {
+                    const $tr1 = $(`#${dogsTableWithDelete} tr[data-owner='${dogsTableWithDelete}'][data-id='${item0.id}']`);
+                    AssertionUtils.isFalse(!!$tr1.length);
+                })
+                // rendering the "delete" representation
+                .then(() => {
+                    const row2 = createDogsWithDeleteRow();
+                    return row2.update(item2);
+                });
         });
-*/
 
     })
 } else {

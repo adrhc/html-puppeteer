@@ -7,6 +7,7 @@ class SimpleRowFactory {
      * @param [tableRelativePositionOnCreate] {"prepend"|"append"}
      * @param [neighbourRelativePosition] {"before"|"after"}
      * @param [simpleRowView]
+     * @param [initialState]
      * @param [state]
      * @param [simpleRowComponent]
      * @param [childCompFactories]
@@ -22,7 +23,8 @@ class SimpleRowFactory {
             tableRelativePositionOnCreate,
             neighbourRelativePosition,
             simpleRowView = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate, neighbourRelativePosition),
-            state = new SimpleRowState(),
+            initialState,
+            state = new BasicState({currentState: initialState}),
             simpleRowComponent = new SimpleRowComponent(state, simpleRowView),
             childCompFactories,
             childishBehaviour
@@ -45,6 +47,7 @@ class SimpleRowFactory {
      * @param [tableRelativePositionOnCreate] {"prepend"|"append"}
      * @param [neighbourRelativePosition] {"before"|"after"}
      * @param [simpleRowView]
+     * @param [initialState]
      * @param [state]
      * @param [identifiableRowComponent]
      * @param [childCompFactories]
@@ -62,7 +65,8 @@ class SimpleRowFactory {
             tableRelativePositionOnCreate,
             neighbourRelativePosition,
             simpleRowView = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate, neighbourRelativePosition),
-            state = new SimpleRowState(),
+            initialState,
+            state = new BasicState({currentState: initialState}),
             identifiableRowComponent = new IdentifiableRowComponent(state, simpleRowView),
             childCompFactories,
             childishBehaviour,

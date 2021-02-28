@@ -18,7 +18,7 @@ class SwappingState extends BasicState {
      * @param changeType {string}
      */
     constructor(currentState, changeType = "SWAP") {
-        super(currentState, {});
+        super({currentState});
         this.changeType = changeType;
     }
 

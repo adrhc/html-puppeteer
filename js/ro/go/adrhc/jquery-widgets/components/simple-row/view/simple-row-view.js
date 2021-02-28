@@ -36,57 +36,59 @@ class SimpleRowView extends AbstractView {
     }
 
     /**
-     * @param stateChange {PositionStateChange}
-     * @return {Promise<PositionStateChange>}
+     * @param stateChange {StateChange}
+     * @return {Promise<StateChange>}
      */
     update(stateChange) {
         /**
-         * @type {IdentifiableEntity}
+         * @type {RowValues}
          */
-        const updatedRowState = stateChange.stateOrPart;
+        const rowState = stateChange.stateOrPart;
+        const previousStateOrPart = stateChange.previousStateOrPart;
+        const rowIdToSearchFor = previousStateOrPart ? previousStateOrPart.values.id : rowState.values.id;
         this.tableAdapter.renderRowWithTemplate({
-            rowDataId: updatedRowState.id,
-            data: updatedRowState,
+            rowDataId: rowIdToSearchFor,
+            data: rowState.values,
             rowTmplHtml: this.tableAdapter.bodyRowTmplHtml,
             createIfNotExists: stateChange.changeType === "CREATE",
-            tableRelativePosition: this._tableRelativePositionOf(stateChange),
-            neighbourRowDataId: this._neighbourRowDataIdOf(stateChange),
-            neighbourRelativePosition: this._neighbourRelativePosition(stateChange)
+            tableRelativePosition: this._tableRelativePositionOf(rowState),
+            neighbourRowDataId: this._neighbourRowDataIdOf(rowState),
+            neighbourRelativePosition: this._neighbourRelativePosition(rowState)
         });
-        this.$elem = this.tableAdapter.$getRowByDataId(updatedRowState.id);
+        this.$elem = rowState ? this.tableAdapter.$getRowByDataId(rowState.values.id) : undefined;
         return Promise.resolve(stateChange);
     }
 
-    _neighbourRelativePosition(stateChange) {
+    _neighbourRelativePosition(rowValues) {
         if (!!this.neighbourRelativePosition) {
             return this.neighbourRelativePosition;
         }
-        if (!!stateChange.beforeItemId) {
+        if (!!rowValues.beforeRowId) {
             return "before";
         }
-        if (!!stateChange.afterItemId) {
+        if (!!rowValues.afterRowId) {
             return "after";
         }
         return undefined;
     }
 
-    _neighbourRowDataIdOf(stateChange) {
-        return !!stateChange.beforeItemId ? stateChange.beforeItemId : stateChange.afterItemId;
+    _neighbourRowDataIdOf(rowValues) {
+        return !!rowValues.beforeRowId ? rowValues.beforeRowId : rowValues.afterRowId;
     }
 
     /**
-     * @param stateChange {PositionStateChange}
+     * @param rowValues {RowValues}
      * @return {"prepend"|"append"|undefined|string}
      * @protected
      */
-    _tableRelativePositionOf(stateChange) {
-        if (stateChange.afterItemId == null && stateChange.beforeItemId == null) {
+    _tableRelativePositionOf(rowValues) {
+        if (rowValues.afterRowId == null && rowValues.beforeRowId == null) {
             return this.tableRelativePositionOnCreate;
         }
-        if (stateChange.afterItemId != null) {
+        if (rowValues.afterRowId != null) {
             return "append";
         }
-        if (stateChange.beforeItemId != null) {
+        if (rowValues.beforeRowId != null) {
             return "prepend";
         }
         return undefined;

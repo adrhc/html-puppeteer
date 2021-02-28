@@ -14,7 +14,7 @@ class BasicState {
      * @param {*} [currentState]
      * @param {ChangeManager} [ChangeManager]
      */
-    constructor(currentState, {changeManager = new ChangeManager()}) {
+    constructor({currentState, changeManager = new ChangeManager()}) {
         this._currentState = currentState;
         this._stateChanges = changeManager;
     }
@@ -35,15 +35,26 @@ class BasicState {
         }
 
         const changeType = this.changeTypeOf(state);
-        this._currentState = state;
+        const previousState = this._replaceImpl(state);
 
         if (dontRecordStateEvents) {
             return undefined;
         }
 
-        const stateChange = new StateChange(changeType, state);
+        const stateChange = new StateChange(changeType, previousState, state);
         this._stateChanges.collect(stateChange);
         return stateChange;
+    }
+
+    /**
+     * @param {*} state is the new state value to store
+     * @return {*} previous state
+     * @protected
+     */
+    _replaceImpl(state) {
+        const previousState = this._currentState;
+        this._currentState = state;
+        return previousState;
     }
 
     /**
@@ -53,16 +64,22 @@ class BasicState {
      * @return {StateChange}
      */
     delete(dontRecordStateEvents) {
-        if (this._isStatePristine()) {
+        if (this._isCurrentStatePristine()) {
             return undefined;
         }
-        this._currentState = undefined;
+        const prevState = this._deleteImpl();
         if (dontRecordStateEvents) {
             return undefined;
         }
-        const stateChange = new DeleteStateChange(this._currentState);
+        const stateChange = new DeleteStateChange(prevState);
         this._stateChanges.collect(stateChange);
         return stateChange;
+    }
+
+    _deleteImpl() {
+        const prevState = this._currentState;
+        this._currentState = undefined;
+        return prevState;
     }
 
     /**
@@ -75,7 +92,7 @@ class BasicState {
      * @return {StateChange}
      */
     replacePart(partialState, partName, dontRecordStateEvents) {
-        if (this._isChangeTypeOfDelete(partialState, partName)) {
+        if (this._isChangeTypeOfDelete(partName)) {
             return this.deletePart(partName, dontRecordStateEvents);
         }
         if (this._currentStatePartEquals(partialState, partName)) {
@@ -83,13 +100,13 @@ class BasicState {
         }
 
         const changeType = this.changeTypeOf(partialState, partName);
-        this._replacePartImpl(partialState, partName);
+        const previousStatePart = this._replacePartImpl(partialState, partName);
 
         if (dontRecordStateEvents) {
             return undefined;
         }
 
-        const stateChange = new StateChange(changeType, partialState, partName);
+        const stateChange = new StateChange(changeType, previousStatePart, partialState, partName);
         this._stateChanges.collect(stateChange);
         return stateChange;
     }
@@ -101,7 +118,9 @@ class BasicState {
     _replacePartImpl(partialState, partName) {
         const changeType = this.changeTypeOf(partialState);
         console.debug(`${this.constructor.name}._replacePartImpl, ${partName} ${changeType}, new part:\n${JSON.stringify(partialState)}`);
+        const previousStatePart = this.getStatePart(partName);
         this._currentState[partName] = partialState;
+        return previousStatePart;
     }
 
     /**
@@ -109,16 +128,17 @@ class BasicState {
      * @param {boolean} [dontRecordStateEvents]
      */
     deletePart(partName, dontRecordStateEvents) {
-        if (this._isStatePartPristine(partName)) {
+        if (this._isCurrentStatePartPristine(partName)) {
             return undefined;
         }
-        this._deletePartImpl(partName);
+
+        const prevStatePart = this._deletePartImpl(partName);
 
         if (dontRecordStateEvents) {
             return undefined;
         }
 
-        const stateChange = new DeleteStateChange(this.getStatePart(partName), partName);
+        const stateChange = new DeleteStateChange(prevStatePart, partName);
         this._stateChanges.collect(stateChange);
         return stateChange;
     }
@@ -129,7 +149,9 @@ class BasicState {
      */
     _deletePartImpl(partName) {
         console.debug(`${this.constructor.name}._deletePartImpl, ${partName}, currently:\n${JSON.stringify(this._currentState[partName])}`);
+        const prevStatePart = this.getStatePart(partName);
         this._currentState[partName] = undefined;
+        return prevStatePart;
     }
 
     /**
@@ -141,7 +163,7 @@ class BasicState {
     changeTypeOf(state, partName) {
         if (this._isChangeTypeOfDelete(state, partName)) {
             return "DELETE";
-        } else if (this._isStatePristine(state)) {
+        } else if (this._isStatePristine()) {
             return "CREATE";
         } else {
             return "REPLACE";
@@ -179,24 +201,32 @@ class BasicState {
      */
     _isChangeTypeOfDelete(state, partName) {
         if (partName) {
-            return this._isStatePartPristine(partName, state);
+            return this._isStatePartPristine(state, partName);
         } else {
             return this._isStatePristine(state);
         }
     }
 
-    _isStatePristine(state = this._currentState) {
+    _isCurrentStatePristine() {
+        return this._currentState == null;
+    }
+
+    _isStatePristine(state) {
         return state == null;
     }
 
     /**
+     * @param {*} part
      * @param {string} partName specify the state's part/section to change/manipulate
-     * @param {*} [part]
      * @return {boolean}
      * @protected
      */
-    _isStatePartPristine(partName, part = this.getStatePart(partName)) {
+    _isStatePartPristine(part, partName) {
         return part == null;
+    }
+
+    _isCurrentStatePartPristine(partName) {
+        return this.getStatePart(partName) == null;
     }
 
     /**

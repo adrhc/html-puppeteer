@@ -3,6 +3,17 @@ class AssertionUtils {
      * @param object
      * @param [message] {string}
      */
+    static isNull(object, message) {
+        if (object != null) {
+            console.error(`AssertionUtils.isNull failed: ${message}`);
+            throw !!message ? `${message}: null object!` : "null object!";
+        }
+    }
+
+    /**
+     * @param object
+     * @param [message] {string}
+     */
     static isNotNull(object, message) {
         if (object == null) {
             console.error(`AssertionUtils.isNotNull failed: ${message}`);

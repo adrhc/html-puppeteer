@@ -29,7 +29,12 @@ class SimpleRowComponent extends AbstractComponent {
      * @return {Promise<StateChange[]>}
      */
     update(item, afterRowId) {
-        return this.processStateChange(new RowValues(item, {afterRowId}), {});
+        if (typeof item === "object") {
+            if (!(item instanceof IdentifiableEntity)) {
+                item = Object.setPrototypeOf(item, new IdentifiableEntity());
+            }
+        }
+        return this.processStateChange(item ? new RowValues(item, {afterRowId}) : undefined, {});
     }
 
     /**
@@ -37,7 +42,7 @@ class SimpleRowComponent extends AbstractComponent {
      * @return {Promise<StateChange>}
      */
     updateViewOnDELETE(stateChange) {
-        this.simpleRowView.deleteRowByDataId(stateChange.stateOrPart.id);
+        this.simpleRowView.deleteRowByDataId(stateChange.previousStateOrPart.values.id);
         if (this.childishBehaviour) {
             this.childishBehaviour.detachChild();
         }
@@ -64,7 +69,7 @@ class SimpleRowComponent extends AbstractComponent {
     /**
      * Because the IdentifiableRowComponent is completely recreated on update I have to basically init it here.
      *
-     * @param stateChange
+     * @param {StateChange} stateChange
      * @return {Promise}
      */
     updateViewOnAny(stateChange) {

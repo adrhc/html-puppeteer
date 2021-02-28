@@ -1,5 +1,5 @@
 class DeleteStateChange extends StateChange {
-    constructor(partialOrEntireState, partName) {
-        super("DELETE", partialOrEntireState, partName);
+    constructor(previousStateOrPart, partName) {
+        super("DELETE", previousStateOrPart, undefined, partName);
     }
 }
