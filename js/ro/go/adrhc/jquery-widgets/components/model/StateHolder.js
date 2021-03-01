@@ -1,4 +1,4 @@
-class BasicState {
+class StateHolder {
     /**
      * @type {ChangeManager}
      * @protected
@@ -171,7 +171,7 @@ class BasicState {
     }
 
     /**
-     * todo: move this error state to an error related BasicState instance
+     * todo: move this error state to an error related StateHolder instance
      *
      * @param {SimpleError} simpleError
      * @param {string} changeType

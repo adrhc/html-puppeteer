@@ -5,7 +5,7 @@ class AbstractTableBasedComponent extends AbstractComponent {
     tableBasedView;
 
     /**
-     * @param state {BasicState}
+     * @param state {StateHolder}
      * @param view {AbstractTableBasedView}
      * @param {ComponentConfiguration} [config]
      */

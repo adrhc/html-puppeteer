@@ -1,6 +1,6 @@
 class IdentifiableRowComponent extends SimpleRowComponent {
     /**
-     * @param state {BasicState}
+     * @param state {StateHolder}
      * @param view {SimpleRowView}
      */
     constructor(state, view) {

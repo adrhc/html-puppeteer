@@ -3,7 +3,7 @@
  *      StateChange.changeType defaults to "SWAP"
  *      StateChange.data = SwappingDetails
  */
-class SwappingState extends BasicState {
+class SwappingState extends StateHolder {
     /**
      * @type {string} is the changeType to use when reporting state changes
      */

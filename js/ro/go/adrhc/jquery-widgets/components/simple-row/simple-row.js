@@ -9,7 +9,7 @@ class SimpleRowComponent extends AbstractComponent {
     errorComponent;
 
     /**
-     * @param state {BasicState}
+     * @param state {StateHolder}
      * @param view {SimpleRowView}
      * @param [errorComponent] {AbstractComponent}
      */

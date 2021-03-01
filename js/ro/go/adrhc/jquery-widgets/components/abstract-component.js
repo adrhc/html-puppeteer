@@ -9,7 +9,7 @@ class AbstractComponent {
      */
     config;
     /**
-     * @type {BasicState}
+     * @type {StateHolder}
      */
     state;
     /**
@@ -36,11 +36,11 @@ class AbstractComponent {
     _childishBehaviour;
 
     /**
-     * @param state {BasicState}
+     * @param state {StateHolder}
      * @param view {AbstractView}
      * @param {ComponentConfiguration} [config]
      */
-    constructor(state = new BasicState({}), view, config = new ComponentConfiguration()) {
+    constructor(state = new StateHolder({}), view, config = new ComponentConfiguration()) {
         this.state = state;
         this.view = view;
         this.config = config;
@@ -106,7 +106,7 @@ class AbstractComponent {
     /**
      * Offers the state for manipulation then updates the view.
      *
-     * @param stateUpdaterFn {function(state: BasicState)}
+     * @param stateUpdaterFn {function(state: StateHolder)}
      * @param delayViewUpdate {boolean} whether to (immediately) update the view based or not
      * @return {Promise<StateChange[]>}
      */

@@ -1,7 +1,7 @@
 /**
- * todo: adapt to BasicState usage
+ * todo: adapt to StateHolder usage
  */
-class DynaSelOneState extends BasicState {
+class DynaSelOneState extends StateHolder {
     /**
      * @type {string}
      */
