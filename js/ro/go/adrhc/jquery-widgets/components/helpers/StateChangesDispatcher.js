@@ -22,9 +22,9 @@ class StateChangesDispatcher {
     /**
      * Process (orderly) multiple state changes to update the view.
      *
-     * @param [stateChanges] {StateChange[]|undefined}
+     * @param [stateChanges] {TaggedStateChange[]|undefined}
      * @param [applyChangesStartingFromNewest] {boolean}
-     * @return {Promise<StateChange[]>}
+     * @return {Promise<TaggedStateChange[]>}
      */
     updateViewOnStateChanges(stateChanges, applyChangesStartingFromNewest) {
         stateChanges = stateChanges ? stateChanges :
@@ -47,8 +47,8 @@ class StateChangesDispatcher {
     }
 
     /**
-     * @param [stateChange] {StateChange}
-     * @return {Promise<StateChange>}
+     * @param [stateChange] {TaggedStateChange}
+     * @return {Promise<TaggedStateChange>}
      */
     updateViewOnStateChange(stateChange) {
         stateChange = stateChange ? stateChange : this.component.state.stateChanges.consumeOne();
