@@ -5,7 +5,6 @@ class SimpleRowFactory {
      * @param [rowTmplHtml]
      * @param [mustacheTableElemAdapter]
      * @param [tableRelativePositionOnCreate] {"prepend"|"append"}
-     * @param [neighbourRelativePosition] {"before"|"after"}
      * @param [simpleRowView]
      * @param [initialState]
      * @param [state]
@@ -21,8 +20,7 @@ class SimpleRowFactory {
             rowTmplHtml,
             mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, rowTmplId, rowTmplHtml),
             tableRelativePositionOnCreate,
-            neighbourRelativePosition,
-            simpleRowView = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate, neighbourRelativePosition),
+            simpleRowView = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate),
             initialState,
             state = new TaggingStateHolder({initialState}),
             simpleRowComponent = new SimpleRowComponent(state, simpleRowView),
@@ -45,7 +43,6 @@ class SimpleRowFactory {
      * @param [rowTmplHtml]
      * @param [mustacheTableElemAdapter]
      * @param [tableRelativePositionOnCreate] {"prepend"|"append"}
-     * @param [neighbourRelativePosition] {"before"|"after"}
      * @param [simpleRowView]
      * @param [initialState]
      * @param [state]
@@ -63,8 +60,7 @@ class SimpleRowFactory {
             rowTmplHtml,
             mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, rowTmplId, rowTmplHtml),
             tableRelativePositionOnCreate,
-            neighbourRelativePosition,
-            simpleRowView = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate, neighbourRelativePosition),
+            simpleRowView = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate),
             initialState,
             state = new TaggingStateHolder({initialState}),
             identifiableRowComponent = new IdentifiableRowComponent(state, simpleRowView),

@@ -25,14 +25,14 @@ class SimpleRowComponent extends AbstractComponent {
      * or configure events, only init() should do that!
      *
      * @param item
-     * @param [afterRowId] {number|string}
+     * @param {number} index
      * @return {Promise<StateChange[]>}
      */
-    update(item, afterRowId) {
+    update(item, index = this.simpleRowView.tableRelativePositionOnCreate === "prepend" ? 0 : TableElementAdapter.LAST_ROW_INDEX) {
         if (item && !(item instanceof IdentifiableEntity)) {
             item = Object.setPrototypeOf(item, new IdentifiableEntity());
         }
-        return this.processStateChange(item ? new RowValues(item, {afterRowId}) : undefined, {});
+        return this.processStateChange(item ? new RowValues(item, index) : undefined, {});
     }
 
     /**

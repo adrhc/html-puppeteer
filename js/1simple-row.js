@@ -21,7 +21,7 @@ if (Modernizr.template) {
             tableIdOrJQuery: dogsTableWithEdit,
             rowTmplId: "dogsTableWithEditSelectedRowTmpl",
             tableRelativePositionOnCreate: "prepend",
-            initialState: initialData ? new RowValues(initialData, {}) : undefined
+            initialState: initialData ? new RowValues(initialData) : undefined
         });
     }
 
@@ -35,15 +35,16 @@ if (Modernizr.template) {
         return SimpleRowFactory.createIdentifiableRow({
             tableIdOrJQuery: dogsTableWithDelete,
             rowTmplId: "dogsTableWithDeleteDeletedRowTmpl",
-            initialState: initialData ? new RowValues(initialData, {}) : undefined
+            initialState: initialData ? new RowValues(initialData) : undefined
         });
     }
 
     $(() => {
-        SimpleListFactory.create({
+        const simpleListComponent = SimpleListFactory.create({
             items: DbMock.DOGS,
             tableIdOrJQuery: dogsTableWithEdit
-        }).init().then(updateAllStateChanges => {
+        });
+        simpleListComponent.init().then(updateAllStateChanges => {
             const items = updateAllStateChanges[0].stateOrPart;
             const item0 = items[0];
             const item1 = items[1];
@@ -54,14 +55,18 @@ if (Modernizr.template) {
                 AssertionUtils.isNull(extractedEntity);
             }).then(() => {
                 // besides updating the row representation this also initializes editableRow.view.$elem
-                return rowId0.update({id: item0.id, name: `${item0.name}-updated`});
+                return rowId0.update({id: item0.id, name: `${item0.name}-updated`}, 0);
             }).then(() => {
                 const extractedEntity = rowId0.extractEntity();
                 AssertionUtils.isNotNull(extractedEntity.name === `${item0.name}-updated`);
             }).then(() => {
                 // creating a new row
                 const newRow = createDogsWithEditRow();
-                return newRow.update({id: IdentifiableEntity.TRANSIENT_ID, name: "TRANSIENT dog (after dog 3)"}, 3);
+                const index = simpleListComponent.simpleListState.items.length;
+                return newRow.update({
+                    id: IdentifiableEntity.TRANSIENT_ID,
+                    name: `TRANSIENT dog (at index ${index}, aka row ${index + 1})`
+                }, index);
             }).then(() => {
                 // creating a new row
                 const newRow = createDogsWithEditRow();
@@ -71,10 +76,18 @@ if (Modernizr.template) {
                 });
             }).then(() => {
                 const rowId1 = createDogsWithEditRow(item1);
-                return rowId1.update({id: 999, name: `${item1.name} id changed to 999`}).then(() => rowId1);
+                return rowId1.update({id: 888, name: `${item1.name} id changed to 888`},
+                    EntityUtils.findIndex(item1, simpleListComponent.state.currentState)).then(() => rowId1);
             }).then((row1) => {
                 const extractedEntity = row1.extractEntity();
-                AssertionUtils.isNotNull(extractedEntity.id === 999);
+                AssertionUtils.isNotNull(extractedEntity.id === 888);
+            }).then(() => {
+                // creating a new row
+                const newRow = createDogsWithEditRow();
+                return newRow.update({
+                    id: 999,
+                    name: `new dog (id = 999, added to end)`
+                }, TableElementAdapter.LAST_ROW_INDEX);
             });
         });
 

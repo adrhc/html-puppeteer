@@ -8,6 +8,6 @@ class RowValues {
      */
     constructor(values, index = 0) {
         this.values = values;
-        this.index = +index;
+        this.index = index;
     }
 }

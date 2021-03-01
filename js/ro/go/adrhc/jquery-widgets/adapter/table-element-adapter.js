@@ -2,6 +2,8 @@
  * Role: adapter to HTMLTableElement
  */
 class TableElementAdapter {
+    static LAST_ROW_INDEX = -1;
+
     /**
      * @type {jQuery<HTMLTableElement>}
      * @private
@@ -84,6 +86,8 @@ class TableElementAdapter {
             if (index != null) {
                 if (index === 0) {
                     this.$tbody.prepend($row);
+                } else if (index === TableElementAdapter.LAST_ROW_INDEX) {
+                    this.$tbody.append($row);
                 } else {
                     $(`tr:eq(${index - 1})`, this.$tbody).after($row);
                 }

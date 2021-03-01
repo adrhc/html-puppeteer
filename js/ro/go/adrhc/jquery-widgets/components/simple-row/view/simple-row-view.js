@@ -13,18 +13,13 @@ class SimpleRowView extends AbstractView {
      * @type {"prepend"|"append"}
      */
     tableRelativePositionOnCreate;
-    /**
-     * @type {"before"|"after"}
-     */
-    neighbourRelativePosition;
 
     /**
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param [tableRelativePositionOnCreate] {"prepend"|"append"}
-     * @param [neighbourRelativePosition] {"before"|"after"}
      */
     constructor(mustacheTableElemAdapter,
-                tableRelativePositionOnCreate, neighbourRelativePosition) {
+                tableRelativePositionOnCreate) {
         super();
         /**
          * @type {MustacheTableElemAdapter}
@@ -32,7 +27,6 @@ class SimpleRowView extends AbstractView {
         this.tableAdapter = mustacheTableElemAdapter;
         this.owner = this.tableAdapter.owner;
         this.tableRelativePositionOnCreate = tableRelativePositionOnCreate;
-        this.neighbourRelativePosition = neighbourRelativePosition;
     }
 
     /**
