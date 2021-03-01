@@ -12,7 +12,7 @@ class ElasticListComponent extends SimpleListComponent {
      * @param repository {CrudRepository}
      * @param state {CrudListState}
      * @param view {SimpleListView}
-     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, afterItemId: number|string, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
+     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, afterRowId: number|string, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
      * @param {ComponentConfiguration} [config]
      */
     constructor(repository, state, view, idRowCompFactoryFn, config) {

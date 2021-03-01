@@ -1,10 +1,14 @@
 class TaggingStateHolder extends StateHolder {
-
+    /**
+     * @param {*} [initialState]
+     * @param {TaggingStateChangeMapper} [stateChangeMapper]
+     * @param {StateChangesCollector} [changeManager]
+     */
     constructor({
-                    currentState,
+                    initialState,
                     stateChangeMapper = new TaggingStateChangeMapper(),
                     changeManager = new StateChangesCollector(stateChangeMapper)
                 }) {
-        super({currentState, stateChangeMapper, changeManager});
+        super({initialState, stateChangeMapper, changeManager});
     }
 }

@@ -1,6 +1,9 @@
 class SimpleListState extends TaggingStateHolder {
-    constructor(currentState = []) {
-        super({currentState});
+    /**
+     * @param {*} [initialState]
+     */
+    constructor(initialState = []) {
+        super({initialState});
     }
 
     /**

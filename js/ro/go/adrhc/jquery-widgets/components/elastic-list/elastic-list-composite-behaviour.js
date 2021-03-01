@@ -2,7 +2,7 @@ class ElasticListCompositeBehaviour extends CompositeBehaviour {
 
     /**
      * @param parentComp {ElasticListComponent}
-     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, afterItemId: number|string, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
+     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, afterRowId: number|string, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
      */
     constructor(parentComp, idRowCompFactoryFn) {
         super(parentComp);
@@ -21,7 +21,7 @@ class ElasticListCompositeBehaviour extends CompositeBehaviour {
     }
 
     /**
-     * Creates child components from items while computing the afterItemId based on items ordering.
+     * Creates child components from items while computing the afterRowId based on items ordering.
      *
      * @return {IdentifiableRowComponent[]}
      * @protected
@@ -29,8 +29,8 @@ class ElasticListCompositeBehaviour extends CompositeBehaviour {
     _createChildComponents() {
         const items = this.parentComp.state.currentState;
         return items.map((item, index) => {
-            const afterItemId = index === 0 ? undefined : items[index - 1].id;
-            return this.idRowCompFactoryFn(item, afterItemId, this.elasticListComponent);
+            const afterRowId = index === 0 ? undefined : items[index - 1].id;
+            return this.idRowCompFactoryFn(item, afterRowId, this.elasticListComponent);
         });
     }
 
@@ -40,7 +40,7 @@ class ElasticListCompositeBehaviour extends CompositeBehaviour {
      */
     createChildComponent(positionStateChange) {
         const kid = this.idRowCompFactoryFn(positionStateChange.data,
-            positionStateChange.afterItemId, this.elasticListComponent);
+            positionStateChange.afterRowId, this.elasticListComponent);
         this.addChildComponent(kid);
         return kid;
     }

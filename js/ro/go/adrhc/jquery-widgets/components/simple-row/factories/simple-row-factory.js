@@ -24,7 +24,7 @@ class SimpleRowFactory {
             neighbourRelativePosition,
             simpleRowView = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate, neighbourRelativePosition),
             initialState,
-            state = new TaggingStateHolder({currentState: initialState}),
+            state = new TaggingStateHolder({initialState}),
             simpleRowComponent = new SimpleRowComponent(state, simpleRowView),
             childCompFactories,
             childishBehaviour
@@ -66,7 +66,7 @@ class SimpleRowFactory {
             neighbourRelativePosition,
             simpleRowView = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate, neighbourRelativePosition),
             initialState,
-            state = new TaggingStateHolder({currentState: initialState}),
+            state = new TaggingStateHolder({initialState}),
             identifiableRowComponent = new IdentifiableRowComponent(state, simpleRowView),
             childCompFactories,
             childishBehaviour,

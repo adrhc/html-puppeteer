@@ -11,16 +11,16 @@ class StateHolder {
     _currentState;
 
     /**
-     * @param {*} [currentState]
+     * @param {*} [initialState]
      * @param {IdentityStateChangeMapper} [stateChangeMapper]
      * @param {StateChangesCollector} [changesCollector]
      */
     constructor({
-                    currentState,
+                    initialState,
                     stateChangeMapper = new IdentityStateChangeMapper(),
                     changesCollector = new StateChangesCollector(stateChangeMapper)
                 }) {
-        this._currentState = currentState;
+        this._currentState = initialState;
         this._stateChanges = changesCollector;
     }
 

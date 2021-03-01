@@ -11,7 +11,7 @@ class ElasticListFactory {
      * @param newEntityFactoryFn {function(): IdentifiableEntity}
      * @param rowChildCompFactories {ChildComponentFactory|ChildComponentFactory[]}
      * @param rowChildishBehaviourFactoryFn
-     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, afterItemId: number|string, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
+     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, afterRowId: number|string, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
      * @param childishBehaviour
      * @return {ElasticListComponent}
      */
@@ -25,7 +25,7 @@ class ElasticListFactory {
         simpleListView = new SimpleListView(mustacheTableElemAdapter),
         rowChildCompFactories,
         rowChildishBehaviourFactoryFn = (parentComp) => new DefaultChildishBehaviour(parentComp),
-        idRowCompFactoryFn = (item, afterItemId, elasticListComponent) => {
+        idRowCompFactoryFn = (item, afterRowId, elasticListComponent) => {
             const idRowComp = SimpleRowFactory.createIdentifiableRow({
                 mustacheTableElemAdapter: elasticListComponent.tableBasedView.tableAdapter,
                 childCompFactories: rowChildCompFactories,
@@ -36,7 +36,7 @@ class ElasticListFactory {
             if (rowChildishBehaviour) {
                 idRowComp.childishBehaviour = rowChildishBehaviour;
             }
-            idRowComp.simpleRowState.update(item, "CREATE", afterItemId);
+            idRowComp.state.replace(new RowValues(item, {afterRowId}), {});
             return idRowComp;
         },
         childishBehaviour

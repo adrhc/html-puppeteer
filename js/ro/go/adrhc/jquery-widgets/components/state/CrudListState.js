@@ -15,20 +15,22 @@ class CrudListState extends TaggingStateHolder {
     partName;
 
     /**
-     * @param {*} [currentState]
+     * @param {*} [initialState]
      * @param {function(): IdentifiableEntity} [newEntityFactoryFn]
      * @param {boolean} [newItemsGoToTheEndOfTheList]
      * @param {string} [partName]
+     * @param {TaggingStateChangeMapper} stateChangeMapper
      * @param {StateChangesCollector} [changeManager]
      */
     constructor({
-                    currentState,
+                    initialState,
                     newEntityFactoryFn = () => new IdentifiableEntity(IdentifiableEntity.TRANSIENT_ID),
                     newItemsGoToTheEndOfTheList,
                     partName = "ITEM",
+                    stateChangeMapper,
                     changeManager
                 }) {
-        super(currentState, {changeManager});
+        super({initialState, stateChangeMapper, changeManager});
         this.newEntityFactoryFn = newEntityFactoryFn;
         this.append = newItemsGoToTheEndOfTheList;
         this.partName = partName;
@@ -67,15 +69,15 @@ class CrudListState extends TaggingStateHolder {
      * @return {IdentifiableEntity}
      */
     insertItem(item, append = this.append) {
-        let afterItemId;
+        let afterRowId;
         if (append) {
-            afterItemId = this.items.length ? this.items[this.items.length - 1].id : undefined;
+            afterRowId = this.items.length ? this.items[this.items.length - 1].id : undefined;
             this.items.push(item);
         } else {
             this.items.unshift(item);
         }
         this.collectStateChange(new PositionStateChange("CREATE",
-            item, {afterItemId, partName: this.partName}), {});
+            item, {afterRowId, partName: this.partName}), {});
         return item;
     }
 
