@@ -12,38 +12,36 @@ class StateHolder {
 
     /**
      * @param {*} [currentState]
-     * @param {StateChangesCollector} [ChangeManager]
+     * @param {IdentityStateChangeMapper} [stateChangeMapper]
+     * @param {StateChangesCollector} [changesCollector]
      */
-    constructor({currentState, changeManager = new StateChangesCollector()}) {
+    constructor({
+                    currentState,
+                    stateChangeMapper = new IdentityStateChangeMapper(),
+                    changesCollector = new StateChangesCollector(stateChangeMapper)
+                }) {
         this._currentState = currentState;
-        this._stateChanges = changeManager;
+        this._stateChanges = changesCollector;
     }
 
     /**
-     * Completely replaces the state; it'll be a DELETE if state == null.
-     *
      * @param {*} state is the new state value to store
      * @param {boolean} [dontRecordStateEvents]
      * @return {StateChange}
      */
     replace(state, dontRecordStateEvents) {
-        if (this._isChangeTypeOfDelete(state)) {
-            return this.delete(dontRecordStateEvents);
-        }
         if (this._currentStateEquals(state)) {
             return undefined;
         }
 
-        const changeType = this.changeTypeOf(state);
         const previousState = this._replaceImpl(state);
 
         if (dontRecordStateEvents) {
             return undefined;
         }
 
-        const stateChange = new StateChange(changeType, previousState, state);
-        this._stateChanges.collect(stateChange);
-        return stateChange;
+        const stateChange = new StateChange(previousState, state);
+        return this._stateChanges.collect(stateChange);
     }
 
     /**
@@ -58,33 +56,7 @@ class StateHolder {
     }
 
     /**
-     * Removes the current state (i.e. sets it to undefined).
-     *
-     * @param {boolean} [dontRecordStateEvents]
-     * @return {StateChange}
-     */
-    delete(dontRecordStateEvents) {
-        if (this._isCurrentStatePristine()) {
-            return undefined;
-        }
-        const prevState = this._deleteImpl();
-        if (dontRecordStateEvents) {
-            return undefined;
-        }
-        const stateChange = new DeleteStateChange(prevState);
-        this._stateChanges.collect(stateChange);
-        return stateChange;
-    }
-
-    _deleteImpl() {
-        const prevState = this._currentState;
-        this._currentState = undefined;
-        return prevState;
-    }
-
-    /**
      * Partially changes the state (aka creates/deletes/replaces a state part/portion/section).
-     * It'll be a DELETE if state == null.
      *
      * @param {*} partialState
      * @param {string} partName specify the state's part/section to change/manipulate
@@ -92,23 +64,18 @@ class StateHolder {
      * @return {StateChange}
      */
     replacePart(partialState, partName, dontRecordStateEvents) {
-        if (this._isChangeTypeOfDelete(partName)) {
-            return this.deletePart(partName, dontRecordStateEvents);
-        }
         if (this._currentStatePartEquals(partialState, partName)) {
             return undefined;
         }
 
-        const changeType = this.changeTypeOf(partialState, partName);
         const previousStatePart = this._replacePartImpl(partialState, partName);
 
         if (dontRecordStateEvents) {
             return undefined;
         }
 
-        const stateChange = new StateChange(changeType, previousStatePart, partialState, partName);
-        this._stateChanges.collect(stateChange);
-        return stateChange;
+        const stateChange = new StateChange(previousStatePart, partialState, partName);
+        return this._stateChanges.collect(stateChange);
     }
 
     /**
@@ -121,53 +88,6 @@ class StateHolder {
         const previousStatePart = this.getStatePart(partName);
         this._currentState[partName] = partialState;
         return previousStatePart;
-    }
-
-    /**
-     * @param {string} [partName] specify the state's part/section to change/manipulate
-     * @param {boolean} [dontRecordStateEvents]
-     */
-    deletePart(partName, dontRecordStateEvents) {
-        if (this._isCurrentStatePartPristine(partName)) {
-            return undefined;
-        }
-
-        const prevStatePart = this._deletePartImpl(partName);
-
-        if (dontRecordStateEvents) {
-            return undefined;
-        }
-
-        const stateChange = new DeleteStateChange(prevStatePart, partName);
-        this._stateChanges.collect(stateChange);
-        return stateChange;
-    }
-
-    /**
-     * @param {string} [partName] specify the state's part/section to change/manipulate
-     * @private
-     */
-    _deletePartImpl(partName) {
-        console.debug(`${this.constructor.name}._deletePartImpl, ${partName}, currently:\n${JSON.stringify(this._currentState[partName])}`);
-        const prevStatePart = this.getStatePart(partName);
-        this._currentState[partName] = undefined;
-        return prevStatePart;
-    }
-
-    /**
-     * @param {*} state is the new state value to store
-     * @param {string} [partName] specify the state's part/section to change/manipulate
-     * @return {"CREATE"|"DELETE"|"REPLACE"} the change type
-     * @protected
-     */
-    changeTypeOf(state, partName) {
-        if (this._isChangeTypeOfDelete(state, partName)) {
-            return "DELETE";
-        } else if (this._isStatePristine()) {
-            return "CREATE";
-        } else {
-            return "REPLACE";
-        }
     }
 
     /**
@@ -190,43 +110,6 @@ class StateHolder {
         }, simpleError);
         // avoid storing state while collecting error-based state changes
         this._stateChanges.collect(new PositionStateChange("ERROR", data, {beforeItemId: failedId}));
-    }
-
-    /**
-     *
-     * @param {string} state
-     * @param {string} [partName] specify the state's part/section to change/manipulate
-     * @return {boolean}
-     * @private
-     */
-    _isChangeTypeOfDelete(state, partName) {
-        if (partName) {
-            return this._isStatePartPristine(state, partName);
-        } else {
-            return this._isStatePristine(state);
-        }
-    }
-
-    _isCurrentStatePristine() {
-        return this._currentState == null;
-    }
-
-    _isStatePristine(state) {
-        return state == null;
-    }
-
-    /**
-     * @param {*} part
-     * @param {string} partName specify the state's part/section to change/manipulate
-     * @return {boolean}
-     * @protected
-     */
-    _isStatePartPristine(part, partName) {
-        return part == null;
-    }
-
-    _isCurrentStatePartPristine(partName) {
-        return this.getStatePart(partName) == null;
     }
 
     /**

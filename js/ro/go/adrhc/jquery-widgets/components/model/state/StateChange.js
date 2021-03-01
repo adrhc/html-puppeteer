@@ -1,9 +1,5 @@
 class StateChange {
     /**
-     * @type {"CREATE"|"DELETE"|"REPLACE"}
-     */
-    changeType;
-    /**
      * @type {*}
      */
     stateOrPart;
@@ -17,13 +13,11 @@ class StateChange {
     previousStateOrPart
 
     /**
-     * @param {"CREATE"|"DELETE"|"REPLACE"} changeType specify the state change type
      * @param {*} previousStateOrPart
      * @param {*} stateOrPart
      * @param {string} [partName]
      */
-    constructor(changeType, previousStateOrPart, stateOrPart, partName) {
-        this.changeType = changeType;
+    constructor(previousStateOrPart, stateOrPart, partName) {
         this.stateOrPart = stateOrPart;
         this.previousStateOrPart = previousStateOrPart;
         this.partName = partName;

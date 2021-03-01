@@ -21,6 +21,9 @@ class Dequeue {
         }
     }
 
+    /**
+     * @param {*} element
+     */
     addBack(element) {
         this.items[this.count] = element;
         this.count++;

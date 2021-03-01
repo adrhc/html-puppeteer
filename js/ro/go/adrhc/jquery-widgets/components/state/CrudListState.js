@@ -1,4 +1,4 @@
-class CrudListState extends SimpleListState {
+class CrudListState extends TaggingStateHolder {
     /**
      * @type {function(): IdentifiableEntity}
      */

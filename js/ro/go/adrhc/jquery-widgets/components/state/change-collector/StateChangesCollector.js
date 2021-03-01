@@ -1,11 +1,30 @@
 class StateChangesCollector {
+    /**
+     * @type {Dequeue}
+     */
     changes = new Dequeue();
+    /**
+     * @type {IdentityStateChangeMapper}
+     */
+    stateChangeMapper;
+
+    /**
+     * @param {IdentityStateChangeMapper} stateChangeMapper
+     */
+    constructor(stateChangeMapper = new IdentityStateChangeMapper()) {
+        this.stateChangeMapper = stateChangeMapper;
+    }
 
     /**
      * @param stateChange {StateChange}
      */
     collect(stateChange) {
+        stateChange = this._transform(stateChange);
+        if (!stateChange) {
+            return undefined;
+        }
         this.changes.addBack(stateChange);
+        return stateChange;
     }
 
     /**
@@ -58,5 +77,14 @@ class StateChangesCollector {
 
     reset() {
         this.changes.clear();
+    }
+
+    /**
+     * @param {StateChange} stateChange
+     * @return {StateChange}
+     * @protected
+     */
+    _transform(stateChange) {
+        return this.stateChangeMapper.map(stateChange);
     }
 }

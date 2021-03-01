@@ -9,7 +9,7 @@ class SimpleRowComponent extends AbstractComponent {
     errorComponent;
 
     /**
-     * @param state {StateHolder}
+     * @param state {TaggingStateHolder}
      * @param view {SimpleRowView}
      * @param [errorComponent] {AbstractComponent}
      */
@@ -29,10 +29,8 @@ class SimpleRowComponent extends AbstractComponent {
      * @return {Promise<StateChange[]>}
      */
     update(item, afterRowId) {
-        if (typeof item === "object") {
-            if (!(item instanceof IdentifiableEntity)) {
-                item = Object.setPrototypeOf(item, new IdentifiableEntity());
-            }
+        if (item && !(item instanceof IdentifiableEntity)) {
+            item = Object.setPrototypeOf(item, new IdentifiableEntity());
         }
         return this.processStateChange(item ? new RowValues(item, {afterRowId}) : undefined, {});
     }

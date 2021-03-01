@@ -1,4 +1,4 @@
-class SimpleListState extends StateHolder {
+class SimpleListState extends TaggingStateHolder {
     constructor(currentState = []) {
         super({currentState});
     }
