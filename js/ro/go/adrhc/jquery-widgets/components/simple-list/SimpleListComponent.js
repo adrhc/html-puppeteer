@@ -29,11 +29,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
          * @type {SimpleListComponent}
          */
         const simpleListComponent = ev.data;
-        simpleListComponent._handleReload().then(simpleListComponent._handleReloadSuccessful);
-    }
-
-    _handleReloadSuccessful() {
-        alert(SimpleListComponent.MESSAGES.reloadSuccessful);
+        simpleListComponent._handleReload();
     }
 
     /**
@@ -44,7 +40,11 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      */
     _handleReload() {
         this.reset();
-        return this.init();
+        return this.init().then(this._handleReloadSuccessful);
+    }
+
+    _handleReloadSuccessful() {
+        alert(SimpleListComponent.MESSAGES.reloadSuccessful);
     }
 
     /**
