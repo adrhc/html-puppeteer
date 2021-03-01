@@ -57,21 +57,19 @@ class TableElementAdapter {
     }
 
     /**
-     * @param rowDataId {number|string}
-     * @param rowHtml {string}
-     * @param replaceExisting {boolean|undefined}
-     * @param neighbourRowDataId {number|string}
-     * @param neighbourRelativePosition {"before"|"after"}
-     * @param tableRelativePosition {"prepend"|"append"}
-     * @param createIfNotExists {boolean|undefined}
+     * @param {number|string} [rowDataId]
+     * @param {string} [rowHtml]
+     * @param {boolean} [replaceExisting]
+     * @param {"prepend"|"append"} [tableRelativePosition]
+     * @param {number} [index]
+     * @param {boolean} [createIfNotExists]
      */
     renderRow({
                   rowDataId,
                   rowHtml,
                   replaceExisting = true,
-                  neighbourRowDataId,
-                  neighbourRelativePosition = "before",
                   tableRelativePosition = "prepend",
+                  index,
                   createIfNotExists
               }) {
         rowHtml = rowHtml ? rowHtml : this.emptyRowHtmlOf(rowDataId);
@@ -82,11 +80,15 @@ class TableElementAdapter {
                 $existingRow.replaceWith(rowHtml);
             }
         } else if (createIfNotExists) {
-            if (neighbourRowDataId) {
-                const $neighbour = this.$getRowByDataId(neighbourRowDataId);
-                $neighbour[neighbourRelativePosition]($(rowHtml));
+            const $row = $(rowHtml);
+            if (index != null) {
+                if (index === 0) {
+                    this.$tbody.prepend($row);
+                } else {
+                    $(`tr:eq(${index - 1})`, this.$tbody).after($row);
+                }
             } else if (tableRelativePosition) {
-                this.$tbody[tableRelativePosition]($(rowHtml));
+                this.$tbody[tableRelativePosition]($row);
             }
         }
     }

@@ -58,23 +58,21 @@ class MustacheTableElemAdapter extends TableElementAdapter {
     }
 
     /**
-     * @param rowDataId {number|string}
-     * @param data
-     * @param rowTmplHtml {string}
-     * @param replaceExisting {boolean|undefined}
-     * @param neighbourRowDataId {number|string}
-     * @param neighbourRelativePosition {"before"|"after"}
-     * @param tableRelativePosition {"prepend"|"append"}
-     * @param createIfNotExists {boolean|undefined}
+     * @param {number|string} [rowDataId]
+     * @param {*} [data]
+     * @param {string} [rowTmplHtml]
+     * @param {boolean} [replaceExisting]
+     * @param {"prepend"|"append"} [tableRelativePosition]
+     * @param {number} [index]
+     * @param {boolean} createIfNotExists
      */
     renderRowWithTemplate({
                               rowDataId,
                               data,
                               rowTmplHtml,
                               replaceExisting,
-                              neighbourRowDataId,
-                              neighbourRelativePosition,
                               tableRelativePosition,
+                              index,
                               createIfNotExists
                           }) {
         const rowHtml = this._renderTemplate(data, rowTmplHtml);
@@ -82,9 +80,8 @@ class MustacheTableElemAdapter extends TableElementAdapter {
             rowDataId,
             rowHtml,
             replaceExisting,
-            neighbourRowDataId,
-            neighbourRelativePosition,
             tableRelativePosition,
+            index,
             createIfNotExists
         });
     }

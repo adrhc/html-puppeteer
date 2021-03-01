@@ -11,6 +11,10 @@ class StateChangesDispatcher {
      * @type {string[]}
      */
     knownPartChangeTypes = [];
+    /**
+     * @type {string}
+     */
+    fixedPartName;
 
     /**
      * @param component {AbstractComponent}
@@ -57,7 +61,8 @@ class StateChangesDispatcher {
             return Promise.resolve(stateChange);
         }
 
-        const partName = stateChange.partName == null ? "" : stateChange.partName;
+        const partName = stateChange.partName == null ? "" :
+            (this.fixedPartName == null ? stateChange.partName : this.fixedPartName);
         const fnName = `updateViewOn${stateChange.changeType}`;
 
         if (partName) {

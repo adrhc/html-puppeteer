@@ -20,8 +20,7 @@ if (Modernizr.template) {
         component
             .init()
             .then(() => component.doWithState((crudListState) => {
-                // creating a new item with a transient id
-                crudListState.createNewItem().name = "new dog";
+                crudListState.createNewItem({name: "new dog"}); // transient id
                 crudListState.updateItem({id: 3, name: "updated dog3"});
                 crudListState.removeById(2);
                 // creating a new item with a not transient id (here id=2)
@@ -30,8 +29,12 @@ if (Modernizr.template) {
                     name: `restored dog2 with ${newItemsGoToTheEndOfTheList ? "append" : "preppend"}`
                 });
             }))
-            .then(() => console.log("component.extractAllEntities:\n",
-                component.extractAllEntities(true)));
+            .then(() => {
+                const entities = component.extractAllEntities(true);
+                console.log("component.extractAllEntities:\n", entities);
+                AssertionUtils.isTrue(entities.length === 4);
+                AssertionUtils.isTrue(JSON.stringify(entities) === "[{\"id\":\"1\",\"name\":\"dog1\"},{\"id\":\"3\",\"name\":\"updated dog3\"},{\"name\":\"new dog\"},{\"id\":\"2\",\"name\":\"restored dog2 with append\"}]")
+            });
     });
 } else {
     // Find another way to add the rows to the table because

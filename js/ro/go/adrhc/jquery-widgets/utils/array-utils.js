@@ -46,12 +46,20 @@ class ArrayUtils {
         elements.forEach(el => array.splice(array.indexOf(el), 1))
     }
 
+    static removeByIndex(index, array) {
+        array.splice(index, 1);
+    }
+
     /**
      * @param item
      * @param index {number}
      * @param array {Array}
      */
     static insert(item, index, array) {
+        if (array.length === index) {
+            array.push(item);
+            return;
+        }
         array.splice(index, 0, item);
     }
 }

@@ -2,7 +2,7 @@ class ElasticListCompositeBehaviour extends CompositeBehaviour {
 
     /**
      * @param parentComp {ElasticListComponent}
-     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, afterRowId: number|string, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
+     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, index: number, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
      */
     constructor(parentComp, idRowCompFactoryFn) {
         super(parentComp);
@@ -15,7 +15,7 @@ class ElasticListCompositeBehaviour extends CompositeBehaviour {
      * @return {AbstractComponent}
      */
     findKidById(id) {
-        const kids = this.findKids((kid) => EntityUtils.idsAreEqual(kid.state.currentState.id, id));
+        const kids = this.findKids((kid) => EntityUtils.idsAreEqual(kid.state.currentState.values.id, id));
         AssertionUtils.isTrue(kids.length === 1);
         return kids[0];
     }
@@ -29,18 +29,17 @@ class ElasticListCompositeBehaviour extends CompositeBehaviour {
     _createChildComponents() {
         const items = this.parentComp.state.currentState;
         return items.map((item, index) => {
-            const afterRowId = index === 0 ? undefined : items[index - 1].id;
-            return this.idRowCompFactoryFn(item, afterRowId, this.elasticListComponent);
+            return this.idRowCompFactoryFn(item, index, this.elasticListComponent);
         });
     }
 
     /**
-     * @param positionStateChange {PositionStateChange}
+     * @param {TaggedStateChange} stateChange
      * @return {IdentifiableRowComponent}
      */
-    createChildComponent(positionStateChange) {
-        const kid = this.idRowCompFactoryFn(positionStateChange.data,
-            positionStateChange.afterRowId, this.elasticListComponent);
+    createChildComponent(stateChange) {
+        const kid = this.idRowCompFactoryFn(stateChange.stateOrPart.values,
+            stateChange.stateOrPart.index, this.elasticListComponent);
         this.addChildComponent(kid);
         return kid;
     }

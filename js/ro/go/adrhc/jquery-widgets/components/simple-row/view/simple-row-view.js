@@ -36,44 +36,26 @@ class SimpleRowView extends AbstractView {
     }
 
     /**
-     * @param stateChange {StateChange}
-     * @return {Promise<StateChange>}
+     * @param {TaggedStateChange} stateChange
+     * @return {Promise<TaggedStateChange>}
      */
     update(stateChange) {
         /**
          * @type {RowValues}
          */
-        const rowState = stateChange.stateOrPart;
+        const rowValues = stateChange.stateOrPart;
         const previousStateOrPart = stateChange.previousStateOrPart;
-        const rowIdToSearchFor = previousStateOrPart ? previousStateOrPart.values.id : rowState.values.id;
+        const rowIdToSearchFor = previousStateOrPart ? previousStateOrPart.values.id : rowValues.values.id;
         this.tableAdapter.renderRowWithTemplate({
             rowDataId: rowIdToSearchFor,
-            data: rowState.values,
+            data: rowValues.values,
             rowTmplHtml: this.tableAdapter.bodyRowTmplHtml,
             createIfNotExists: stateChange.changeType === "CREATE",
-            tableRelativePosition: this._tableRelativePositionOf(rowState),
-            neighbourRowDataId: this._neighbourRowDataIdOf(rowState),
-            neighbourRelativePosition: this._neighbourRelativePosition(rowState)
+            tableRelativePosition: this._tableRelativePositionOf(rowValues),
+            index: rowValues.index
         });
-        this.$elem = rowState ? this.tableAdapter.$getRowByDataId(rowState.values.id) : undefined;
+        this.$elem = rowValues ? this.tableAdapter.$getRowByDataId(rowValues.values.id) : undefined;
         return Promise.resolve(stateChange);
-    }
-
-    _neighbourRelativePosition(rowValues) {
-        if (!!this.neighbourRelativePosition) {
-            return this.neighbourRelativePosition;
-        }
-        if (!!rowValues.beforeRowId) {
-            return "before";
-        }
-        if (!!rowValues.afterRowId) {
-            return "after";
-        }
-        return undefined;
-    }
-
-    _neighbourRowDataIdOf(rowValues) {
-        return !!rowValues.beforeRowId ? rowValues.beforeRowId : rowValues.afterRowId;
     }
 
     /**
@@ -82,16 +64,10 @@ class SimpleRowView extends AbstractView {
      * @protected
      */
     _tableRelativePositionOf(rowValues) {
-        if (rowValues.afterRowId == null && rowValues.beforeRowId == null) {
+        if (rowValues.index == null) {
             return this.tableRelativePositionOnCreate;
         }
-        if (rowValues.afterRowId != null) {
-            return "append";
-        }
-        if (rowValues.beforeRowId != null) {
-            return "prepend";
-        }
-        return undefined;
+        return rowValues.index > 0 ? "append" : "prepend";
     }
 
     deleteRowByDataId(rowDataId) {

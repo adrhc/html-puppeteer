@@ -12,7 +12,7 @@ class ElasticListComponent extends SimpleListComponent {
      * @param repository {CrudRepository}
      * @param state {CrudListState}
      * @param view {SimpleListView}
-     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, afterRowId: number|string, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
+     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, index: number, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
      * @param {ComponentConfiguration} [config]
      */
     constructor(repository, state, view, idRowCompFactoryFn, config) {
@@ -20,6 +20,7 @@ class ElasticListComponent extends SimpleListComponent {
         this.compositeBehaviour = new ElasticListCompositeBehaviour(this, idRowCompFactoryFn);
         this.entityExtractor = new ElasticListEntityExtractor(this, {});
         this.crudListState = state;
+        this.stateChangesDispatcher.fixedPartName = "Item";
     }
 
     /**
@@ -28,7 +29,7 @@ class ElasticListComponent extends SimpleListComponent {
     _handleReload() {
         return this.doWithState(() => {
             this.compositeBehaviour.childComponents.forEach(kid => {
-                this.crudListState.removeById(kid.state.currentState.id);
+                this.crudListState.removeById(kid.state.currentState.values.id);
             });
         }).then(() => super._handleReload());
     }
@@ -43,10 +44,10 @@ class ElasticListComponent extends SimpleListComponent {
      *
      * see also SimpleListComponent.updateViewOnUPDATE_ALL
      *
-     * @param stateChange {PositionStateChange}
+     * @param stateChange {TaggedStateChange}
      * @return {Promise}
      */
-    updateViewOnCREATEITEM(stateChange) {
+    updateViewOnCREATEItem(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnCREATEITEM:\n${JSON.stringify(stateChange)}`);
         return this.elasticListComposite.createChildComponent(stateChange).init();
     }
@@ -58,10 +59,11 @@ class ElasticListComponent extends SimpleListComponent {
      * @param stateChange
      * @return {Promise}
      */
-    updateViewOnAnyITEM(stateChange) {
+    updateViewOnAnyItem(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnAnyITEM:\n${JSON.stringify(stateChange)}`);
-        const idRowComp = this.elasticListComposite.findKidById(stateChange.stateOrPart.id);
-        return idRowComp.processStateChange(stateChange, {});
+        const previousId = stateChange.previousStateOrPart.values.id;
+        const idRowComp = this.elasticListComposite.findKidById(previousId);
+        return idRowComp.processStateChange(stateChange.stateOrPart, {});
     }
 
     /**

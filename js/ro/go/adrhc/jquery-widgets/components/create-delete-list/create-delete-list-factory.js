@@ -12,7 +12,7 @@ class CreateDeleteListFactory {
      * @param bodyRowTmplHtml {string}
      * @param rowChildCompFactories {ChildComponentFactory|ChildComponentFactory[]} are components placed on a row
      * @param rowChildishBehaviourFactoryFn
-     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, afterRowId: number|string, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
+     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, index: number, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
      * @param childishBehaviour {ChildishBehaviour} permit CreateDeleteListComponent to update its parent
      * @return {ElasticListComponent}
      */
@@ -28,7 +28,7 @@ class CreateDeleteListFactory {
         simpleListView = new SimpleListView(mustacheTableElemAdapter),
         rowChildCompFactories,
         rowChildishBehaviourFactoryFn = (parentComp) => new DefaultChildishBehaviour(parentComp),
-        idRowCompFactoryFn = (item, afterRowId, elasticListComponent) => {
+        idRowCompFactoryFn = (item, index, elasticListComponent) => {
             const idRowComp = SimpleRowFactory.createIdentifiableRow({
                 mustacheTableElemAdapter: elasticListComponent.tableBasedView.tableAdapter,
                 childCompFactories: rowChildCompFactories,
@@ -38,7 +38,7 @@ class CreateDeleteListFactory {
             if (rowChildishBehaviour) {
                 idRowComp.childishBehaviour = rowChildishBehaviour;
             }
-            idRowComp.simpleRowState.update(item, "CREATE", afterRowId);
+            idRowComp.state.replace(new RowValues(item, index));
             return idRowComp;
         },
         childishBehaviour

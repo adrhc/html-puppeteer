@@ -1,11 +1,13 @@
 class RowValues {
     values;
-    afterRowId;
-    beforeRowId;
+    index;
 
-    constructor(values, {afterRowId, beforeRowId}) {
+    /**
+     * @param {*} values
+     * @param {number} index
+     */
+    constructor(values, index = 0) {
         this.values = values;
-        this.afterRowId = afterRowId;
-        this.beforeRowId = beforeRowId;
+        this.index = +index;
     }
 }
