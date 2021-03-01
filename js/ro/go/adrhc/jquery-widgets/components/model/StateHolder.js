@@ -1,6 +1,6 @@
 class StateHolder {
     /**
-     * @type {ChangeManager}
+     * @type {StateChangesCollector}
      * @protected
      */
     _stateChanges;
@@ -12,9 +12,9 @@ class StateHolder {
 
     /**
      * @param {*} [currentState]
-     * @param {ChangeManager} [ChangeManager]
+     * @param {StateChangesCollector} [ChangeManager]
      */
-    constructor({currentState, changeManager = new ChangeManager()}) {
+    constructor({currentState, changeManager = new StateChangesCollector()}) {
         this._currentState = currentState;
         this._stateChanges = changeManager;
     }

@@ -19,7 +19,7 @@ class CrudListState extends SimpleListState {
      * @param {function(): IdentifiableEntity} [newEntityFactoryFn]
      * @param {boolean} [newItemsGoToTheEndOfTheList]
      * @param {string} [partName]
-     * @param {ChangeManager} [changeManager]
+     * @param {StateChangesCollector} [changeManager]
      */
     constructor({
                     currentState,

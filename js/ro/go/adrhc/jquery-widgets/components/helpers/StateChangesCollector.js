@@ -1,4 +1,4 @@
-class ChangeManager {
+class StateChangesCollector {
     changes = new Dequeue();
 
     /**
@@ -9,7 +9,7 @@ class ChangeManager {
     }
 
     /**
-     * @param changeManager {ChangeManager}
+     * @param changeManager {StateChangesCollector}
      * @param fromNewest {boolean|undefined}
      */
     collectByConsumingChanges(changeManager, fromNewest = false) {
