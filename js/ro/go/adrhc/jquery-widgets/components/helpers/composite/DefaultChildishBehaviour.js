@@ -6,14 +6,46 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
      * @type {string}
      */
     childProperty;
+    /**
+     * used to convert the child's state into the parent's property
+     *
+     * @type {function(rawData: *): IdentifiableEntity}
+     */
+    childEntityConverter;
+    /**
+     * @type {function(childEntity: IdentifiableEntity, parentState: *): void} childSetter
+     */
+    childSetter;
+    /**
+     * @type {function(parentState: *): *}
+     */
+    childGetter;
+    /**
+     * @type {function(useOwnerOnFields: boolean): *}
+     */
+    childRawDataExtractor;
 
     /**
      * @param {AbstractComponent} parentComp
      * @param {string} [childProperty] is the parent state's property storing the child state
+     * @param {function(parentState: *): *} [childGetter]
+     * @param {function(childEntity: IdentifiableEntity, parentState: *): void} [childSetter]
+     * @param {function(useOwnerOnFields: boolean): *} [childRawDataExtractor] extracts raw data from the HTML component's representation
+     * @param {function(rawData: *): IdentifiableEntity} [childEntityConverter] converts extracted raw data to IdentifiableEntity
      */
-    constructor(parentComp, childProperty) {
+    constructor(parentComp, {
+        childProperty,
+        childGetter,
+        childSetter,
+        childRawDataExtractor,
+        childEntityConverter = (it) => it,
+    }) {
         super(parentComp);
         this.childProperty = childProperty;
+        this.childGetter = childGetter ? childGetter : this._childStateFrom.bind(this);
+        this.childSetter = childSetter ? childSetter : this._setChildIntoParent.bind(this);
+        this.childRawDataExtractor = childRawDataExtractor ? childRawDataExtractor : this._extractChildRawData.bind(this);
+        this.childEntityConverter = childEntityConverter;
     }
 
     /**
@@ -22,12 +54,28 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
      *
      * entityExtractor._extractInputValues -> compositeBehaviour.copyKidsState -> kid.copyMyState -> kid._childishBehaviour.copyChildState
      *
-     * @param parentState {*}
-     * @param [useOwnerOnFields] {boolean}
+     * @param {*} parentState
+     * @param {boolean} [useOwnerOnFields]
      */
     copyChildState(parentState, useOwnerOnFields) {
-        const childEntity = this._childComp.extractEntity(useOwnerOnFields);
-        this._setChildIntoParent(childEntity, parentState);
+        const rawChildData = this.childRawDataExtractor(useOwnerOnFields);
+        const childEntity = this.childEntityConverter(rawChildData);
+        this.childSetter(childEntity, parentState);
+    }
+
+    /**
+     * This is the flow for updating the children view from a parent-StateChange.
+     *
+     * see also CompositeBehaviour.processStateChangeWithKids
+     * todo: cope with @param parentState missing this child state
+     *
+     * updateViewOnAny -> compositeBehaviour.processStateChangeWithKids -> compositeBehaviour._extractChildState -> childishBehaviour.childStateFrom
+     *
+     * @param {*} parentState available from a parent-StateChange
+     * @return {*}
+     */
+    childStateFrom(parentState) {
+        return this.childGetter(parentState);
     }
 
     /**
@@ -60,22 +108,26 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
 
     /**
      * If not null, extract the child state from @param parentState, otherwise from parentComp.state.
-     * This is the flow for updating the children view from a parent-StateChange.
      *
-     * see also CompositeBehaviour.processStateChangeWithKids
-     * todo: cope with @param parentState missing this child state
-     *
-     * updateViewOnAny -> compositeBehaviour.processStateChangeWithKids -> compositeBehaviour._extractChildState -> childishBehaviour.childStateFrom
-     *
-     * @param parentState {*} available from a parent-StateChange
+     * @param {*} parentState available from a parent-StateChange
      * @return {*}
+     * @protected
      */
-    childStateFrom(parentState) {
+    _childStateFrom(parentState) {
         // parentState = parentState == null ? this.parentComp.state.currentState : parentState;
         if (this.childProperty != null) {
             return parentState[this.childProperty];
         } else {
             return $.extend(true, {}, parentState);
         }
+    }
+
+    /**
+     * @param {boolean} useOwnerOnFields
+     * @return {IdentifiableEntity}
+     * @protected
+     */
+    _extractChildRawData(useOwnerOnFields) {
+        return this._childComp.extractEntity(useOwnerOnFields);
     }
 }
