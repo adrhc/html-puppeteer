@@ -54,8 +54,8 @@ class DynamicSelectOneFactory {
                     `${childProperty} dynaSelOne child factory`);
                 return DynamicSelectOneFactory.create($(dynaSelOneSelector, $parentElem),
                     repository, {
-                        childishBehaviour: new DynaSelOneChildishBehaviour(
-                            parentComp, {childProperty, childEntityConverter})
+                        childishBehaviour: new DynaSelOneOnRowChildishBehaviour(
+                            parentComp, childProperty, childEntityConverter)
                     })
             }
         });
