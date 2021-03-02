@@ -3,6 +3,11 @@
  */
 class DefaultChildishBehaviour extends ChildishBehaviour {
     /**
+     * @type {string}
+     */
+    childProperty;
+
+    /**
      * @param parentComp {AbstractComponent}
      * @param [childProperty] {string} is the parent state's property storing the child state
      */
@@ -22,7 +27,16 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
      */
     copyChildState(parentState, useOwnerOnFields) {
         const childEntity = this._childComp.extractEntity(useOwnerOnFields);
-        if (!!childEntity && $.isArray(childEntity)) {
+        this._setChildIntoParent(childEntity, parentState);
+    }
+
+    /**
+     * @param {IdentifiableEntity} childEntity
+     * @param {*} parentState
+     * @protected
+     */
+    _setChildIntoParent(childEntity, parentState) {
+        if (childEntity != null && $.isArray(childEntity)) {
             console.error(`${this.constructor.name}.copyChildState: Array is unsupported for childEntity! use DefaultTableChildishBehaviour`);
             throw `${this.constructor.name}.copyChildState: Array is unsupported for childEntity!`;
         }
@@ -33,9 +47,9 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
             throw `${this.constructor.name}.copyChildState: parentState is null`;
         } else if ($.isArray(parentState)) {
             parentState.push(childEntity);
-        } else if (!!this.childProperty) {
+        } else if (this.childProperty != null) {
             parentState[this.childProperty] = childEntity;
-        } else if (!!childEntity && typeof childEntity === "object") {
+        } else if (childEntity != null && typeof childEntity === "object") {
             console.log(`${this.constructor.name}.copyChildState: childProperty is null`);
             $.extend(true, parentState, childEntity);
         } else {
@@ -51,14 +65,14 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
      * see also CompositeBehaviour.processStateChangeWithKids
      * todo: cope with @param parentState missing this child state
      *
-     * updateViewOnAny -> compositeBehaviour.processStateChangeWithKids -> compositeBehaviour._extractChildState -> childishBehaviour.extractChildState
+     * updateViewOnAny -> compositeBehaviour.processStateChangeWithKids -> compositeBehaviour._extractChildState -> childishBehaviour.childStateFrom
      *
      * @param parentState {*} available from a parent-StateChange
      * @return {*}
      */
-    extractChildState(parentState) {
+    childStateFrom(parentState) {
         // parentState = parentState == null ? this.parentComp.state.currentState : parentState;
-        if (!!this.childProperty) {
+        if (this.childProperty != null) {
             return parentState[this.childProperty];
         } else {
             return $.extend(true, {}, parentState);

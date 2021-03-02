@@ -58,7 +58,7 @@ class ChildishBehaviour {
      * @param [parentState]
      * @return {*} the child state extracted from the parent
      */
-    extractChildState(parentState) {
+    childStateFrom(parentState) {
         return undefined;
     }
 

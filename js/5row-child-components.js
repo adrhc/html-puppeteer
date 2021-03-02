@@ -20,13 +20,12 @@ if (Modernizr.template) {
         // DYNAMIC-SELECT-ONE
         DynamicSelectOneFactory.create("dyna-sel-one", DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {}).init();
 
-/*
         // see interface ChildComponentFactory
         const rowChildCompFactories = {
-            /!**
+            /**
              * @param idRowCompParent {IdentifiableRowComponent}
              * @return {DynamicSelectOneComponent}
-             *!/
+             */
             createChildComponent: (idRowCompParent) => {
                 const $parentElem = idRowCompParent.view.$elem;
                 AssertionUtils.isTrue($parentElem && $parentElem.length === 1, "rowChildCompFactories, DynamicSelectOneFactory");
@@ -45,9 +44,9 @@ if (Modernizr.template) {
         elasticList
             .init()
             .then(() => elasticList.doWithState((state) => {
-                /!**
+                /**
                  * @type {CrudListState}
-                 *!/
+                 */
                 const crudListState = state;
                 // elasticList.updateViewOnCREATE will init the child components
                 crudListState.createNewItem({name: "new dog"}); // transient id
@@ -63,12 +62,11 @@ if (Modernizr.template) {
             }))
             // showing the entire table extracted data
             .then(() => {
-                const entities = component.extractAllEntities(true);
+                const entities = elasticList.extractAllEntities(true);
                 console.log("ElasticListComponent.extractAllEntities:\n", entities);
                 AssertionUtils.isTrue(entities.length === 4);
                 AssertionUtils.isTrue(JSON.stringify(entities) === "[{\"id\":\"1\",\"name\":\"dog1\"},{\"id\":\"3\",\"name\":\"updated dog3\"},{\"name\":\"new dog\"},{\"id\":\"2\",\"name\":\"restored dog2 with append\"}]")
             });
-*/
 
     });
 } else {

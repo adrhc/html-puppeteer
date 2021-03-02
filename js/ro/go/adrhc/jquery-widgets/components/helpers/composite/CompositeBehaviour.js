@@ -104,7 +104,7 @@ class CompositeBehaviour {
      */
     _extractChildState(stateChange, kid) {
         if (kid.childishBehaviour) {
-            const kidState = kid.childishBehaviour.extractChildState(stateChange.stateOrPart);
+            const kidState = kid.childishBehaviour.childStateFrom(stateChange.stateOrPart);
             // ignore undefined kidState: means that the parent is missing the child, so probably doesn't intend to update it
             if (kidState === undefined) {
                 return undefined;
