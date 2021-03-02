@@ -2,12 +2,17 @@ class DynaSelOneChildishBehaviour extends ConfigurableChildishBehaviour {
     /**
      * @param {AbstractComponent} parentComp
      * @param {string} childProperty is the parentState property where to save the selectedItem
-     * @param {function(rawData: *): IdentifiableEntity} [childEntityConverter]
+     * @param {function(parentState: *): *} [childGetter]
+     * @param {function(childEntity: IdentifiableEntity, parentState: *): void} [childSetter]
+     * @param {function(rawData: *): IdentifiableEntity} [childEntityConverter] converts extracted raw data to IdentifiableEntity
      */
-    constructor(parentComp, childProperty, childEntityConverter) {
-        super(parentComp, childProperty, {
-            childEntityConverter,
-            childRawDataExtractor: () => this._childComp.state.currentState.selectedItem
+    constructor(parentComp, {childProperty, childGetter, childSetter, childEntityConverter}) {
+        super(parentComp, {
+            childProperty,
+            childGetter,
+            childSetter,
+            childRawDataExtractor: () => this._childComp.state.currentState.selectedItem,
+            childEntityConverter
         });
     }
 

@@ -20,22 +20,24 @@ class ConfigurableChildishBehaviour extends DefaultChildishBehaviour {
 
     /**
      * @param parentComp {AbstractComponent}
-     * @param [childProperty] {string} is the parent state's property storing the child state
-     * @param {function(rawData: *): IdentifiableEntity} [childEntityConverter]
-     * @param {function(childEntity: IdentifiableEntity, parentState: *): void} [childSetter]
+     * @param {string} [childProperty] is the parent state's property storing the child state
      * @param {function(parentState: *): *} [childGetter]
-     * @param {function(useOwnerOnFields: boolean): *} [childRawDataExtractor]
+     * @param {function(childEntity: IdentifiableEntity, parentState: *): void} [childSetter]
+     * @param {function(useOwnerOnFields: boolean): *} [childRawDataExtractor] extracts raw data from the HTML component's representation
+     * @param {function(rawData: *): IdentifiableEntity} [childEntityConverter] converts extracted raw data to IdentifiableEntity
      */
-    constructor(parentComp, childProperty, {
-        childEntityConverter = (it) => it,
-        childSetter,
+    constructor(parentComp, {
+        childProperty,
         childGetter,
-        childRawDataExtractor
+        childSetter,
+        childRawDataExtractor,
+        childEntityConverter = (it) => it,
     }) {
         super(parentComp, childProperty);
-        this.childSetter = childSetter ? childSetter : super._setChildIntoParent.bind(this);
         this.childGetter = childGetter ? childGetter : super.childStateFrom.bind(this);
+        this.childSetter = childSetter ? childSetter : super._setChildIntoParent.bind(this);
         this.childRawDataExtractor = childRawDataExtractor ? childRawDataExtractor : this._childComp.extractEntity.bind(this);
+        this.childEntityConverter = childEntityConverter;
     }
 
     copyChildState(parentState, useOwnerOnFields) {

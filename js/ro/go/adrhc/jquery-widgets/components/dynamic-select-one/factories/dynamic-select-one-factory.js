@@ -50,7 +50,7 @@ class DynamicSelectOneFactory {
      */
     static createChildComponentFactory(childProperty, newChildEntityFactoryFn, repository,
                                        dynaSelOneSelector = "[data-id='dyna-sel-one']") {
-        return $.extend(true, new ChildComponentFactory(), {
+        return $.extend(new ChildComponentFactory(), {
             createChildComponent: (parentComp) => {
                 const $parentElem = parentComp.view.$elem;
                 AssertionUtils.isTrue($parentElem && $parentElem.length === 1,

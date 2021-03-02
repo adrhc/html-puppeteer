@@ -8,8 +8,8 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
     childProperty;
 
     /**
-     * @param parentComp {AbstractComponent}
-     * @param [childProperty] {string} is the parent state's property storing the child state
+     * @param {AbstractComponent} parentComp
+     * @param {string} [childProperty] is the parent state's property storing the child state
      */
     constructor(parentComp, childProperty) {
         super(parentComp);

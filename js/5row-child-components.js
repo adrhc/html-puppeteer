@@ -10,11 +10,14 @@ if (Modernizr.template) {
     });
 
     $(() => {
-        const items = [
+        const JSON_RESULT = "[{\"id\":\"1\",\"name\":\"dog1\",\"person\":{\"id\":1,\"firstName\":\"gigi1\",\"lastName\":\"kent1\",\"friend\":{\"id\":2,\"firstName\":\"gigi2\",\"lastName\":\"kent2\",\"cats\":[]},\"cats\":[{\"id\":1,\"name\":\"cat1\",\"person\":{\"id\":1,\"firstName\":\"gigi1\",\"lastName\":\"kent1\",\"cats\":[]},\"friendId\":1},{\"id\":2,\"name\":\"cat2\",\"person\":{\"id\":1,\"firstName\":\"gigi1\",\"lastName\":\"kent1\",\"cats\":[]},\"friendId\":1},{\"id\":3,\"name\":\"cat3\",\"person\":{\"id\":1,\"firstName\":\"gigi1\",\"lastName\":\"kent1\",\"cats\":[]},\"friendId\":1}]}},{\"id\":\"3\",\"name\":\"updated dog3\"},{\"name\":\"new dog\"},{\"id\":\"2\",\"name\":\"restored dog2 with append\"}]";
+
+        const ITEMS = [
             {id: 1, name: "dog1", person: DbMock.PERSONS_REPOSITORY.getById(1, true)},
             {id: 2, name: "dog2"},
             {id: 3, name: "dog3"}
         ];
+
         const newItemsGoToTheEndOfTheList = true;
 
         // DYNAMIC-SELECT-ONE
@@ -30,15 +33,21 @@ if (Modernizr.template) {
                 const $parentElem = idRowCompParent.view.$elem;
                 AssertionUtils.isTrue($parentElem && $parentElem.length === 1, "rowChildCompFactories, DynamicSelectOneFactory");
 
-                return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", idRowCompParent.view.$elem), DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
-                    childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent, "person", Person.parse)
-                })
+                return DynamicSelectOneFactory.create(
+                    $("[data-id='dyna-sel-one']", idRowCompParent.view.$elem),
+                    DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
+                        childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent, {
+                            childGetter: (rowValues) => rowValues.values.person,
+                            childSetter: (person, identifiableEntity) => identifiableEntity.person = person,
+                            childEntityConverter: Person.parse
+                        })
+                    });
             }
         };
 
         // dogs table with read-only row (default: on creation prepend to table)
         const elasticList = ElasticListFactory.create("dogsTable", "dogsTableRowTmpl", {
-            items, newItemsGoToTheEndOfTheList, rowChildCompFactories
+            items: ITEMS, newItemsGoToTheEndOfTheList, rowChildCompFactories
         });
 
         elasticList
@@ -65,7 +74,7 @@ if (Modernizr.template) {
                 const entities = elasticList.extractAllEntities(true);
                 console.log("ElasticListComponent.extractAllEntities:\n", entities);
                 AssertionUtils.isTrue(entities.length === 4);
-                AssertionUtils.isTrue(JSON.stringify(entities) === "[{\"id\":\"1\",\"name\":\"dog1\"},{\"id\":\"3\",\"name\":\"updated dog3\"},{\"name\":\"new dog\"},{\"id\":\"2\",\"name\":\"restored dog2 with append\"}]")
+                AssertionUtils.isTrue(JSON.stringify(entities) === JSON_RESULT)
             });
 
     });

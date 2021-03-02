@@ -30,7 +30,7 @@ class SimpleRowComponent extends AbstractComponent {
      */
     update(item, index = this.simpleRowView.tableRelativePositionOnCreate === "prepend" ? 0 : TableElementAdapter.LAST_ROW_INDEX) {
         if (item && !(item instanceof IdentifiableEntity)) {
-            item = Object.setPrototypeOf(item, new IdentifiableEntity());
+            item = $.extend(new IdentifiableEntity(), item);
         }
         return this.processStateChange(item ? new RowValues(item, index) : undefined, {});
     }
