@@ -36,11 +36,7 @@ if (Modernizr.template) {
                 return DynamicSelectOneFactory.create(
                     $("[data-id='dyna-sel-one']", idRowCompParent.view.$elem),
                     DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
-                        childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent, {
-                            childGetter: (rowValues) => rowValues.values.person,
-                            childSetter: (person, identifiableEntity) => identifiableEntity.person = person,
-                            childEntityConverter: Person.parse
-                        })
+                        childishBehaviour: new DynaSelOneOnRowChildishBehaviour(idRowCompParent, "person", Person.parse)
                     });
             }
         };
