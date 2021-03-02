@@ -1,7 +1,7 @@
 /**
  * todo: adapt to StateHolder usage
  */
-class DynaSelOneState extends StateHolder {
+class DynaSelOneState extends TaggingStateHolder {
     /**
      * @type {string}
      */
@@ -36,21 +36,27 @@ class DynaSelOneState extends StateHolder {
     reloadOptionsOnInit;
 
     /**
-     * @param repository {DynaSelOneRepository}
-     * @param minCharsToSearch {number}
-     * @param [options] {DynaSelOneItem[]}
-     * @param [useCachedSearchResult] {boolean}
-     * @param [searchOnBlur] {boolean}
-     * @param [reloadOptionsOnInit] {boolean}
+     * @param {DynaSelOneRepository} repository
+     * @param {number} minCharsToSearch
+     * @param {DynaSelOneItem[]} [options]
+     * @param {boolean} [useCachedSearchResult]
+     * @param {boolean} [searchOnBlur]
+     * @param {boolean} [reloadOptionsOnInit]
+     * @param {*} [initialState]
+     * @param {IdentityStateChangeMapper} [stateChangeMapper]
+     * @param {StateChangesCollector} [changesCollector]
      */
     constructor(repository, {
         minCharsToSearch = 3,
         options,
         useCachedSearchResult,
         searchOnBlur = minCharsToSearch > 0,
-        reloadOptionsOnInit = minCharsToSearch === 0
+        reloadOptionsOnInit = minCharsToSearch === 0,
+        initialState,
+        stateChangeMapper,
+        changesCollector
     }) {
-        super();
+        super({initialState, stateChangeMapper, changesCollector});
         this.repository = repository;
         this.minCharsToSearch = minCharsToSearch;
         this.options = options;

@@ -10,16 +10,23 @@ if (Modernizr.template) {
     });
 
     $(() => {
-        const items = [{id: 1, name: "dog1", person: DbMock.PERSONS_REPOSITORY.getById(1, true)},
-            {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
+        const items = [
+            {id: 1, name: "dog1", person: DbMock.PERSONS_REPOSITORY.getById(1, true)},
+            {id: 2, name: "dog2"},
+            {id: 3, name: "dog3"}
+        ];
         const newItemsGoToTheEndOfTheList = true;
 
+        // DYNAMIC-SELECT-ONE
+        DynamicSelectOneFactory.create("dyna-sel-one", DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {}).init();
+
+/*
         // see interface ChildComponentFactory
         const rowChildCompFactories = {
-            /**
+            /!**
              * @param idRowCompParent {IdentifiableRowComponent}
              * @return {DynamicSelectOneComponent}
-             */
+             *!/
             createChildComponent: (idRowCompParent) => {
                 const $parentElem = idRowCompParent.view.$elem;
                 AssertionUtils.isTrue($parentElem && $parentElem.length === 1, "rowChildCompFactories, DynamicSelectOneFactory");
@@ -37,9 +44,13 @@ if (Modernizr.template) {
 
         elasticList
             .init()
-            .then(() => elasticList.doWithState((crudListState) => {
+            .then(() => elasticList.doWithState((state) => {
+                /!**
+                 * @type {CrudListState}
+                 *!/
+                const crudListState = state;
                 // elasticList.updateViewOnCREATE will init the child components
-                crudListState.createNewItem().name = "new dog";
+                crudListState.createNewItem({name: "new dog"}); // transient id
                 // elasticList.updateViewOnAny won't init the child components
                 crudListState.updateItem({id: 3, name: "updated dog3"});
                 // this will get to SimpleRowComponent.updateViewOnDELETE
@@ -51,7 +62,14 @@ if (Modernizr.template) {
                 });
             }))
             // showing the entire table extracted data
-            .then(() => console.log("ElasticListComponent.extractAllEntities:\n", elasticList.extractAllEntities()));
+            .then(() => {
+                const entities = component.extractAllEntities(true);
+                console.log("ElasticListComponent.extractAllEntities:\n", entities);
+                AssertionUtils.isTrue(entities.length === 4);
+                AssertionUtils.isTrue(JSON.stringify(entities) === "[{\"id\":\"1\",\"name\":\"dog1\"},{\"id\":\"3\",\"name\":\"updated dog3\"},{\"name\":\"new dog\"},{\"id\":\"2\",\"name\":\"restored dog2 with append\"}]")
+            });
+*/
+
     });
 } else {
     // Find another way to add the rows to the table because

@@ -19,7 +19,11 @@ if (Modernizr.template) {
 
         component
             .init()
-            .then(() => component.doWithState((crudListState) => {
+            .then(() => component.doWithState((state) => {
+                /**
+                 * @type {CrudListState}
+                 */
+                const crudListState = state;
                 crudListState.createNewItem({name: "new dog"}); // transient id
                 crudListState.updateItem({id: 3, name: "updated dog3"});
                 crudListState.removeById(2);
