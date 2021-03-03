@@ -1,7 +1,7 @@
 class SelectableListFactory {
     /**
-     * @param items {IdentifiableEntity[]}
      * @param tableIdOrJQuery {string|jQuery<HTMLTableElement>}
+     * @param items {IdentifiableEntity[]}
      * @param bodyRowTmplId {string}
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param repository {CrudRepository}
@@ -13,19 +13,18 @@ class SelectableListFactory {
      * @param view {SimpleListView}
      * @return {SelectableListComponent}
      */
-    static create({
-                      items = [],
-                      tableIdOrJQuery,
-                      bodyRowTmplId,
-                      mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId),
-                      repository = new InMemoryCrudRepository(items),
-                      newItemsGoToTheEndOfTheList,
-                      newEntityFactoryFn,
-                      state = new SelectableListState({newEntityFactoryFn, newItemsGoToTheEndOfTheList}),
-                      notSelectedRow,
-                      selectedRow,
-                      view = new SimpleListView(mustacheTableElemAdapter)
-                  }) {
+    static create(tableIdOrJQuery, {
+        items = [],
+        bodyRowTmplId,
+        mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId),
+        repository = new InMemoryCrudRepository(items),
+        newItemsGoToTheEndOfTheList,
+        newEntityFactoryFn,
+        state = new SelectableListState({newEntityFactoryFn, newItemsGoToTheEndOfTheList}),
+        notSelectedRow,
+        selectedRow,
+        view = new SimpleListView(mustacheTableElemAdapter)
+    }) {
         return new SelectableListComponent(repository, state, view, notSelectedRow, selectedRow);
     }
 }

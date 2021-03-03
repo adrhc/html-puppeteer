@@ -23,12 +23,20 @@ if (Modernizr.template) {
                 tableIdOrJQuery, rowTmplId: "dogsTableEditableRowTmpl"
             });
 
-        const component = SelectableListFactory.create({items: DbMock.DOGS, tableIdOrJQuery, notSelectedRow, selectedRow});
+        const component = SelectableListFactory.create(tableIdOrJQuery, {
+            items: DbMock.DOGS,
+            notSelectedRow,
+            selectedRow
+        });
 
         component
             .init()
-            .then(() => component.doWithState((selectableListState) => {
-                selectableListState.createNewItem().name = `new dog (with table ${tableRelativePositionOnCreate})`;
+            .then(() => component.doWithState((state) => {
+                /**
+                 * @type {SelectableListState}
+                 */
+                const selectableListState = state;
+                selectableListState.createNewItem({name: `new dog (with table ${tableRelativePositionOnCreate})`});
                 selectableListState.updateItem({id: 3, name: "updated dog3"});
                 selectableListState.removeById(2);
                 selectableListState.insertItem({

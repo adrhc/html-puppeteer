@@ -30,7 +30,7 @@ if (Modernizr.template) {
                 // creating a new item with a not transient id (here id=2)
                 crudListState.insertItem({
                     id: 2,
-                    name: `restored dog2 with ${newItemsGoToTheEndOfTheList ? "append" : "preppend"}`
+                    name: `restored dog2 with ${newItemsGoToTheEndOfTheList ? "append" : "prepend"}`
                 });
             }))
             .then(() => {

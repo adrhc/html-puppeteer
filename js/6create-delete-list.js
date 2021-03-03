@@ -10,8 +10,13 @@ if (Modernizr.template) {
     });
 
     $(() => {
-        const dogs = [{id: 1, name: "dog1", person: DbMock.PERSONS_REPOSITORY.getById(1, true)},
-            {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
+        const DOGS = [
+            {id: 1, name: "dog1", person: DbMock.PERSONS_REPOSITORY.getById(1, true)},
+            {id: 2, name: "dog2"}, {id: 3, name: "dog3"}
+        ];
+
+        // by default on creation the row is prepended to table
+        const newItemsGoToTheEndOfTheList = true;
 
         // DynamicSelectOneComponent child component factory (see ChildComponentFactory)
         const dynaSelOneCompFactory = {
@@ -23,18 +28,17 @@ if (Modernizr.template) {
                 const $parentElem = idRowCompParent.view.$elem;
                 AssertionUtils.isTrue($parentElem && $parentElem.length === 1, "dynaSelOneCompFactory, DynamicSelectOneFactory");
 
-                return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", idRowCompParent.view.$elem), DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
-                    childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent, "person", Person.parse)
-                })
+                return DynamicSelectOneFactory.create(
+                    $("[data-id='dyna-sel-one']", idRowCompParent.view.$elem),
+                    DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
+                        childishBehaviour: new DynaSelOneOnRowChildishBehaviour(idRowCompParent, "person", Person.parse)
+                    });
             }
         };
 
-        // by default on creation the row is prepended to table
-        const newItemsGoToTheEndOfTheList = true;
-
         // dogs table
         const createDeleteList = CreateDeleteListFactory.create("dogsTable", {
-            items: dogs,
+            items: DOGS,
             newItemsGoToTheEndOfTheList,
             bodyRowTmplId: "dogsTableRowTmpl",
             rowChildCompFactories: dynaSelOneCompFactory
@@ -43,7 +47,11 @@ if (Modernizr.template) {
         // some doWithState operations on createDeleteList
         createDeleteList
             .init()
-            .then(() => createDeleteList.doWithState((crudListState) => {
+            .then(() => createDeleteList.doWithState((state) => {
+                /**
+                 * @type {CrudListState}
+                 */
+                const crudListState = state;
                 crudListState.insertItem({
                     id: EntityUtils.generateId(),
                     name: "new dog"
@@ -52,7 +60,7 @@ if (Modernizr.template) {
                 crudListState.removeById(2);
                 crudListState.insertItem({
                     id: 2,
-                    name: `restored dog2 with ${newItemsGoToTheEndOfTheList ? "append" : "preppend"}`
+                    name: `restored dog2 with ${newItemsGoToTheEndOfTheList ? "append" : "prepend"}`
                 });
             }))
             // showing the entire table extracted data

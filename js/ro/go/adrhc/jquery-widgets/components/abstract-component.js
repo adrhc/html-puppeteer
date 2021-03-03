@@ -182,10 +182,10 @@ class AbstractComponent {
      */
     _safelyLogStateChange(stateChange, methodToLogFor = "_safelyLogStateChange") {
         try {
-            console.log(`${this.constructor.name}.${methodToLogFor}:\n${JSON.stringify(stateChange)}`);
+            console.log(`${this.constructor.name}.${methodToLogFor}, stateChange:\n${JSON.stringify(stateChange, null, 2)}`);
         } catch (e) {
             console.error(e);
-            console.error(`${this.constructor.name}.${methodToLogFor}:\n`, stateChange);
+            console.error(`${this.constructor.name}.${methodToLogFor}, stateChange:\n`, stateChange);
         }
     }
 

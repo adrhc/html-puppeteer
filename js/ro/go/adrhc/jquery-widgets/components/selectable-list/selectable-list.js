@@ -10,11 +10,19 @@ class SelectableListComponent extends SimpleListComponent {
      */
     selectableListState;
     /**
+     * @type {SimpleListView}
+     */
+    simpleListView;
+    /**
      * field having SelectableListEntityExtractor type instead of the generic EntityExtractor type
      *
      * @type {SelectableListEntityExtractor}
      */
     selectableListEntityExtractor;
+    /**
+     * @type {{}}
+     */
+    swappingRowSelector;
 
     /**
      * @param repository {CrudRepository}
@@ -27,7 +35,8 @@ class SelectableListComponent extends SimpleListComponent {
     constructor(repository, state, view,
                 notSelectedRow, selectedRow, config) {
         super(repository, state, view, config);
-        this.stateChangesDispatcher.prependKnownChangeTypess("CREATE", "REPLACE", "DELETE");
+        this.stateChangesDispatcher.prependPartKnownChangeTypes("CREATE", "REPLACE", "DELETE");
+        this.stateChangesDispatcher.usePartName("Item");
         this.selectableListState = state;
         this.simpleListView = view;
         this.entityExtractor = new SelectableListEntityExtractor(this, {});
@@ -38,18 +47,18 @@ class SelectableListComponent extends SimpleListComponent {
          * @type {{false: IdentifiableRowComponent, true: IdentifiableRowComponent}}
          */
         this.swappingRowSelector = {
-            false: selectedRow,
-            true: notSelectedRow
+            false: selectedRow, // e.g. editable-row, deletable-row
+            true: notSelectedRow // i.e. read-only row
         };
     }
 
     /**
-     * @param stateChange {PositionStateChange}
-     * @return {Promise<StateChange[]>}
+     * @param stateChange {TaggedStateChange}
+     * @return {Promise<TaggedStateChange[]>}
      * @protected
      */
-    updateViewOnKnownStateChange(stateChange) {
-        console.log(`${this.constructor.name}.updateViewOnKnownStateChange:\n${JSON.stringify(stateChange)}`);
+    updateViewOnKnownItemStateChange(stateChange) {
+        console.log(`${this.constructor.name}.updateViewOnKnownStateChange, stateChange:\n${JSON.stringify(stateChange, null, 2)}`);
         return this.swappingRowSelector[true].processStateChange(stateChange, {});
     }
 

@@ -4,6 +4,14 @@
  */
 class SimpleListComponent extends AbstractTableBasedComponent {
     static MESSAGES = {reloadSuccessful: "Datele au fost reîncărcate!"};
+    /**
+     * @type {SimpleListState}
+     */
+    simpleListState;
+    /**
+     * @type {CrudRepository}
+     */
+    repository;
 
     /**
      * @param {CrudRepository} repository
@@ -13,7 +21,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      */
     constructor(repository, state, view, config) {
         super(state, view, config);
-        this.stateChangesDispatcher.prependKnownChangeTypess("CREATE", "REPLACE", "DELETE");
+        this.stateChangesDispatcher.prependKnownChangeTypes("CREATE", "REPLACE", "DELETE");
         this.simpleListState = state;
         this.repository = repository;
     }
@@ -54,9 +62,17 @@ class SimpleListComponent extends AbstractTableBasedComponent {
         return this._handleRepoErrors(this.repository.findAll())
             .then((items) => {
                 console.log(`${this.constructor.name}._reloadState items:\n`, JSON.stringify(items));
-                this.simpleListState.updateAll(items);
+                this._updateState(items);
                 return items;
             });
+    }
+
+    /**
+     * @param {[]} items
+     * @protected
+     */
+    _updateState(items) {
+        this.simpleListState.updateAll(items);
     }
 
     /**

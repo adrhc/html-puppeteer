@@ -14,7 +14,7 @@ class StateChangesDispatcher {
     /**
      * @type {string}
      */
-    fixedPartName;
+    partName;
 
     /**
      * @param component {AbstractComponent}
@@ -62,7 +62,7 @@ class StateChangesDispatcher {
         }
 
         const partName = stateChange.partName == null ? "" :
-            (this.fixedPartName == null ? stateChange.partName : this.fixedPartName);
+            (this.partName == null ? stateChange.partName : this.partName);
         const fnName = `updateViewOn${stateChange.changeType}`;
 
         if (partName) {
@@ -92,14 +92,14 @@ class StateChangesDispatcher {
     /**
      * @param changeType {string}
      */
-    prependKnownChangeTypess(...changeType) {
+    prependKnownChangeTypes(...changeType) {
         changeType.forEach(it => this.knownChangeTypes.splice(0, 0, it));
     }
 
     /**
      * @param changeType {string}
      */
-    prependPartKnownChangeTypess(...changeType) {
+    prependPartKnownChangeTypes(...changeType) {
         changeType.forEach(it => this.knownPartChangeTypes.splice(0, 0, it));
     }
 
@@ -121,5 +121,16 @@ class StateChangesDispatcher {
      */
     isKnownPartChangeTypeOrNA(changeType) {
         return !this.knownPartChangeTypes || this.knownPartChangeTypes.length === 0 || this.knownPartChangeTypes.includes(changeType);
+    }
+
+    /**
+     * @param {boolean|string} [partName]
+     */
+    usePartName(partName) {
+        if (typeof partName === "boolean" && !partName) {
+            this.partName = undefined;
+        } else {
+            this.partName = partName;
+        }
     }
 }

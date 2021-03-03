@@ -62,7 +62,7 @@ if (Modernizr.template) {
                 // elasticList.updateViewOnCREATE will init the child components
                 crudListState.insertItem({
                     id: 2,
-                    name: `restored dog2 with ${newItemsGoToTheEndOfTheList ? "append" : "preppend"}`
+                    name: `restored dog2 with ${newItemsGoToTheEndOfTheList ? "append" : "prepend"}`
                 });
             }))
             // showing the entire table extracted data
