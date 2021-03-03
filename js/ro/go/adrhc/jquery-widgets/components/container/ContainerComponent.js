@@ -17,8 +17,8 @@ class ContainerComponent extends AbstractComponent {
         return super.init().then(() => this);
     }
 
-    processStateChange(stateChangeOrJustData, {dontRecordStateEvents, overwriteState = true}) {
-        return super.processStateChange(stateChangeOrJustData, {dontRecordStateEvents, overwriteState});
+    processStateChange(stateChangeOrJustData, {dontRecordStateEvents}) {
+        return super.processStateChange(stateChangeOrJustData, {dontRecordStateEvents});
     }
 
     _reloadState() {
