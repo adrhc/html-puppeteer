@@ -4,6 +4,11 @@
  */
 class ElasticListComponent extends SimpleListComponent {
     /**
+     * Q: what represents "state" for ElasticListComponent?
+     * A1: "state" could be the list of children identifiers while children too will store their state
+     * A2: "state" could be the list loaded from the repository; children just duplicate the state
+     * Note: having a list means we implicitly have the children positions
+     *
      * @type {CrudListState}
      */
     crudListState;
@@ -20,7 +25,7 @@ class ElasticListComponent extends SimpleListComponent {
         this.compositeBehaviour = new ElasticListCompositeBehaviour(this, idRowCompFactoryFn);
         this.entityExtractor = new ElasticListEntityExtractor(this, {});
         this.crudListState = state;
-        this.stateChangesDispatcher.fixedPartName = "Item";
+        this.stateChangesDispatcher.usePartName("Item");
     }
 
     /**

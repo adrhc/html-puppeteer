@@ -31,8 +31,8 @@ class StateChangesDispatcher {
      * @return {Promise<TaggedStateChange[]>}
      */
     updateViewOnStateChanges(stateChanges, applyChangesStartingFromNewest) {
-        stateChanges = stateChanges ? stateChanges :
-            this.component.state.stateChanges.consumeAll(applyChangesStartingFromNewest);
+        stateChanges = stateChanges ? stateChanges : (this.component.state ?
+            this.component.state.stateChanges.consumeAll(applyChangesStartingFromNewest) : undefined);
         if (!stateChanges || !stateChanges.length) {
             // can happen when switching to undefined multiple times (e.g. dblclick on header)
             // or clicking in an input box on an editable row
