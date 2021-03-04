@@ -67,7 +67,7 @@ class DefaultEntityExtractor extends EntityExtractor {
             useOwnerOnFields = this.component.compositeBehaviour.hasKids();
         }
         const inputValues = this.component.view.extractInputValues(useOwnerOnFields);
-        this.component.compositeBehaviour.updateParentFromKidsView(inputValues);
+        this.component.compositeBehaviour.updateFromKidsView(inputValues);
         return inputValues;
     }
 

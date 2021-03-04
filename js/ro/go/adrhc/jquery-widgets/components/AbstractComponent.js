@@ -65,9 +65,9 @@ class AbstractComponent {
     }
 
     /**
-     * copies child (this/mine/own-only) state (if any) into the parentState
-     * ignores the children state
-     * see also CompositeBehaviour.updateParentFromKidsView
+     * Copies child (me/this/own-only) state (if any) into the parentState
+     * Ignores the children state (but check CompositeBehaviour.updateFromKidsView).
+     * Overlaps with this.extract*Entity.
      *
      * @param parentState
      * @return {boolean}
@@ -76,6 +76,22 @@ class AbstractComponent {
         if (this._childishBehaviour) {
             this._childishBehaviour.updateParentFromChildView(parentState);
         }
+    }
+
+    /**
+     * @param [useOwnerOnFields] {boolean}
+     * @return {IdentifiableEntity} the entity managed by the component when managing only 1 entity
+     */
+    extractEntity(useOwnerOnFields) {
+        return this.entityExtractor.extractEntity(useOwnerOnFields)
+    }
+
+    /**
+     * @param [useOwnerOnFields] {boolean}
+     * @return {IdentifiableEntity[]} the entities managed by the component (could be only 1 entity)
+     */
+    extractAllEntities(useOwnerOnFields) {
+        return this.entityExtractor.extractAllEntities(useOwnerOnFields)
     }
 
     /**
@@ -119,22 +135,6 @@ class AbstractComponent {
             return Promise.resolve(this.state.stateChanges.peekAll());
         }
         return this.updateViewOnStateChanges();
-    }
-
-    /**
-     * @param [useOwnerOnFields] {boolean}
-     * @return {IdentifiableEntity} the entity managed by the component when managing only 1 entity
-     */
-    extractEntity(useOwnerOnFields) {
-        return this.entityExtractor.extractEntity(useOwnerOnFields)
-    }
-
-    /**
-     * @param [useOwnerOnFields] {boolean}
-     * @return {IdentifiableEntity[]} the entities managed by the component (could be only 1 entity)
-     */
-    extractAllEntities(useOwnerOnFields) {
-        return this.entityExtractor.extractAllEntities(useOwnerOnFields)
     }
 
     /**

@@ -49,11 +49,11 @@ class CompositeBehaviour {
     }
 
     /**
-     * entityExtractor._extractInputValues -> compositeBehaviour.updateParentFromKidsView -> kid.updateParentFromOwnedView -> kid._childishBehaviour.updateParentFromChildView
+     * entityExtractor._extractInputValues -> compositeBehaviour.updateFromKidsView -> kid.updateParentFromOwnedView -> kid._childishBehaviour.updateParentFromChildView
      *
      * @param parentState
      */
-    updateParentFromKidsView(parentState) {
+    updateFromKidsView(parentState) {
         this.childComponents.forEach(kid => kid.updateParentFromOwnedView(parentState));
     }
 

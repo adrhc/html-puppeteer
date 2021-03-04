@@ -31,6 +31,6 @@ class DefaultTableChildishBehaviour extends DefaultChildishBehaviour {
      * @return {AbstractTableBasedComponent}
      */
     get tableBasedComponent() {
-        return this._childComp;
+        return this.childComp;
     }
 }
