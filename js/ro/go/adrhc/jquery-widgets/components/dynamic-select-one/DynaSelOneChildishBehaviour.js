@@ -2,16 +2,16 @@ class DynaSelOneChildishBehaviour extends DefaultChildishBehaviour {
     /**
      * @param {AbstractComponent} parentComp
      * @param {string} childProperty is the parentState property where to save the selectedItem
-     * @param {function(parentState: *): *} [childGetter]
-     * @param {function(childEntity: IdentifiableEntity, parentState: *): void} [childSetter]
+     * @param {function(parentState: *): *} [childEntityGetter]
+     * @param {function(childEntity: IdentifiableEntity, parentState: *): void} [childEntitySetter]
      * @param {function(rawData: *): IdentifiableEntity} [childEntityConverter] converts extracted raw data to IdentifiableEntity
      */
-    constructor(parentComp, {childProperty, childGetter, childSetter, childEntityConverter}) {
+    constructor(parentComp, {childProperty, childEntityGetter, childEntitySetter, childEntityConverter}) {
         super(parentComp, {
             childProperty,
-            childGetter,
-            childSetter,
-            childRawDataExtractor: () => this._childComp.state.currentState.selectedItem,
+            childEntityGetter,
+            childEntitySetter,
+            childEntityExtractorFn: () => this._childComp.state.currentState.selectedItem,
             childEntityConverter
         });
     }
@@ -26,7 +26,7 @@ class DynaSelOneChildishBehaviour extends DefaultChildishBehaviour {
     set childComp(childComp) {
         this._childComp = childComp;
         const parentState = this.parentComp.state.currentState;
-        const dynaSelOneItem = this.childStateFrom(parentState);
+        const dynaSelOneItem = this.getChildEntityFrom(parentState);
         childComp.dynaSelOneState.updateWithDynaSelOneItem(dynaSelOneItem);
     }
 }

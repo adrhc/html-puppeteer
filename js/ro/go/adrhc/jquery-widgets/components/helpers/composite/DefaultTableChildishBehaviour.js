@@ -11,19 +11,19 @@ class DefaultTableChildishBehaviour extends DefaultChildishBehaviour {
      * @param [useOwnerOnFields] {boolean}
      * @return {boolean}
      */
-    copyChildState(parentState, useOwnerOnFields) {
+    updateParentFromChildView(parentState, useOwnerOnFields) {
         const childEntities = this.tableBasedComponent.extractAllEntities(useOwnerOnFields);
         if (!!this.childProperty) {
             parentState[this.childProperty] = childEntities;
         } else if (childEntities == null) {
-            console.log(`${this.constructor.name}.copyChildState: childProperty and childEntities are both null`);
+            console.log(`${this.constructor.name}.updateParentFromChildView: childProperty and childEntities are both null`);
         } else if ($.isArray(parentState)) {
-            console.log(`${this.constructor.name}.copyChildState: childProperty is null`);
+            console.log(`${this.constructor.name}.updateParentFromChildView: childProperty is null`);
             parentState.length = 0;
             parentState.push(...childEntity);
         } else {
-            console.error(`${this.constructor.name}.copyChildState: childEntities is Array while parentState is not and childProperty = null!`);
-            throw `${this.constructor.name}.copyChildState: childEntities is Array while parentState is not and childProperty = null!`;
+            console.error(`${this.constructor.name}.updateParentFromChildView: childEntities is Array while parentState is not and childProperty = null!`);
+            throw `${this.constructor.name}.updateParentFromChildView: childEntities is Array while parentState is not and childProperty = null!`;
         }
     }
 

@@ -49,12 +49,12 @@ class CompositeBehaviour {
     }
 
     /**
-     * entityExtractor._extractInputValues -> compositeBehaviour.copyKidsState -> kid.copyMyState -> kid._childishBehaviour.copyChildState
+     * entityExtractor._extractInputValues -> compositeBehaviour.updateParentFromKidsView -> kid.updateParentFromOwnedView -> kid._childishBehaviour.updateParentFromChildView
      *
      * @param parentState
      */
-    copyKidsState(parentState) {
-        this.childComponents.forEach(kid => kid.copyMyState(parentState));
+    updateParentFromKidsView(parentState) {
+        this.childComponents.forEach(kid => kid.updateParentFromOwnedView(parentState));
     }
 
     /**
@@ -104,7 +104,7 @@ class CompositeBehaviour {
      */
     _extractChildState(stateChange, kid) {
         if (kid.childishBehaviour) {
-            const kidState = kid.childishBehaviour.childStateFrom(stateChange.stateOrPart);
+            const kidState = kid.childishBehaviour.getChildEntityFrom(stateChange.stateOrPart);
             // ignore undefined kidState: means that the parent is missing the child, so probably doesn't intend to update it
             if (kidState === undefined) {
                 return undefined;

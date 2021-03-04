@@ -65,14 +65,16 @@ class AbstractComponent {
     }
 
     /**
-     * copies children state (if any) into the parentState
+     * copies child (this/mine/own-only) state (if any) into the parentState
+     * ignores the children state
+     * see also CompositeBehaviour.updateParentFromKidsView
      *
      * @param parentState
      * @return {boolean}
      */
-    copyMyState(parentState) {
+    updateParentFromOwnedView(parentState) {
         if (this._childishBehaviour) {
-            this._childishBehaviour.copyChildState(parentState);
+            this._childishBehaviour.updateParentFromChildView(parentState);
         }
     }
 

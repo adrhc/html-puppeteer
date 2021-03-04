@@ -43,7 +43,7 @@ class ChildishBehaviour {
      * @param parentState
      * @param [useOwnerOnFields] {boolean}
      */
-    copyChildState(parentState, useOwnerOnFields) {
+    updateParentFromChildView(parentState, useOwnerOnFields) {
         // do nothing
     }
 
@@ -58,7 +58,7 @@ class ChildishBehaviour {
      * @param [parentState]
      * @return {*} the child state extracted from the parent
      */
-    childStateFrom(parentState) {
+    getChildEntityFrom(parentState) {
         return undefined;
     }
 

@@ -66,9 +66,9 @@ class DefaultEntityExtractor extends EntityExtractor {
         if (useOwnerOnFields == null) {
             useOwnerOnFields = this.component.compositeBehaviour.hasKids();
         }
-        const item = this.component.view.extractInputValues(useOwnerOnFields);
-        this.component.compositeBehaviour.copyKidsState(item);
-        return item;
+        const inputValues = this.component.view.extractInputValues(useOwnerOnFields);
+        this.component.compositeBehaviour.updateParentFromKidsView(inputValues);
+        return inputValues;
     }
 
     _clearInvalidId(inputValues) {
