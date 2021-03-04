@@ -2,7 +2,7 @@ class ElasticListCompositeBehaviour extends CompositeBehaviour {
 
     /**
      * @param parentComp {ElasticListComponent}
-     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, index: number, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
+     * @param idRowCompFactoryFn {function(entity: IdentifiableEntity, index: number, parent: ElasticListComponent): IdentifiableRowComponent}
      */
     constructor(parentComp, idRowCompFactoryFn) {
         super(parentComp);
