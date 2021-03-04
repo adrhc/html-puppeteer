@@ -7,24 +7,12 @@
  */
 class DefaultTableChildishBehaviour extends DefaultChildishBehaviour {
     /**
-     * @param parentState {Person}
-     * @param [useOwnerOnFields] {boolean}
-     * @return {boolean}
+     * @param {boolean} useOwnerOnFields
+     * @return {IdentifiableEntity[]}
+     * @protected
      */
-    updateParentFromChildView(parentState, useOwnerOnFields) {
-        const childEntities = this.tableBasedComponent.extractAllEntities(useOwnerOnFields);
-        if (!!this.childProperty) {
-            parentState[this.childProperty] = childEntities;
-        } else if (childEntities == null) {
-            console.log(`${this.constructor.name}.updateParentFromChildView: childProperty and childEntities are both null`);
-        } else if ($.isArray(parentState)) {
-            console.log(`${this.constructor.name}.updateParentFromChildView: childProperty is null`);
-            parentState.length = 0;
-            parentState.push(...childEntity);
-        } else {
-            console.error(`${this.constructor.name}.updateParentFromChildView: childEntities is Array while parentState is not and childProperty = null!`);
-            throw `${this.constructor.name}.updateParentFromChildView: childEntities is Array while parentState is not and childProperty = null!`;
-        }
+    _extractChildEntity(useOwnerOnFields) {
+        return this.tableBasedComponent.extractAllEntities(useOwnerOnFields);
     }
 
     /**

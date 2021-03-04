@@ -64,8 +64,8 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
      * @param {boolean} [useOwnerOnFields]
      */
     updateParentFromChildView(parentState, useOwnerOnFields) {
-        const rawChildData = this.childEntityExtractorFn(useOwnerOnFields);
-        const childEntity = this.childEntityConverter(rawChildData);
+        const extractedChildEntity = this.childEntityExtractorFn(useOwnerOnFields);
+        const childEntity = this.childEntityConverter(extractedChildEntity);
         this.childEntitySetter(childEntity, parentState);
     }
 
@@ -73,7 +73,6 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
      * This is the flow for updating the children view from a parent-StateChange.
      *
      * see also CompositeBehaviour.processStateChangeWithKids
-     * todo: cope with @param parentState missing this child state
      *
      * updateViewOnAny -> compositeBehaviour.processStateChangeWithKids -> compositeBehaviour._extractChildState -> childishBehaviour.getChildEntityFrom
      *
@@ -90,25 +89,20 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
      * @protected
      */
     _setChildIntoParent(childEntity, parentState) {
-        if (childEntity != null && $.isArray(childEntity)) {
-            console.error(`${this.constructor.name}.updateParentFromChildView: Array is unsupported for childEntity! use DefaultTableChildishBehaviour`);
-            throw `${this.constructor.name}.updateParentFromChildView: Array is unsupported for childEntity!`;
-        }
         if (childEntity == null && parentState == null) {
-            console.log(`${this.constructor.name}.updateParentFromChildView: both childEntity and parentState are null`);
+            // both parent and child are null
+            console.log(`${this.constructor.name}._setChildIntoParent: both childEntity and parentState are null`);
         } else if (parentState == null) {
-            console.error(`${this.constructor.name}.updateParentFromChildView: parentState is null`);
-            throw `${this.constructor.name}.updateParentFromChildView: parentState is null`;
-        } else if ($.isArray(parentState)) {
-            parentState.push(childEntity);
-        } else if (this.childProperty != null) {
-            parentState[this.childProperty] = childEntity;
-        } else if (childEntity != null && typeof childEntity === "object") {
-            console.log(`${this.constructor.name}.updateParentFromChildView: childProperty is null`);
-            $.extend(true, parentState, childEntity);
+            // error: the parent is null
+            console.error(`${this.constructor.name}._setChildIntoParent: parentState is null`);
+            throw `${this.constructor.name}._setChildIntoParent: parentState is null`;
+        } else if (this.childProperty == null) {
+            // error: the property to set is missing
+            console.error(`${this.constructor.name}._setChildIntoParent: childProperty is null`);
+            throw `${this.constructor.name}._setChildIntoParent: childProperty is null`;
         } else {
-            console.error(`${this.constructor.name}.updateParentFromChildView: childEntity = ${childEntity}`);
-            throw `${this.constructor.name}.updateParentFromChildView: childEntity is not object! childEntity = ${childEntity}`;
+            // parentState could be either an Array or an object
+            parentState[this.childProperty] = childEntity;
         }
     }
 
@@ -116,15 +110,19 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
      * If not null, extract the child state from @param parentState, otherwise from parentComp.state.
      *
      * @param {*} parentState available from a parent-StateChange
-     * @return {*}
+     * @return {IdentifiableEntity | IdentifiableEntity[]}
      * @protected
      */
     _getChildEntityFrom(parentState) {
         // parentState = parentState == null ? this.parentComp.state.currentState : parentState;
-        if (this.childProperty != null) {
+        if (parentState == null) {
+            return undefined;
+        } else if (this.childProperty != null) {
             return parentState[this.childProperty];
+        } else if ($.isArray(parentState)) {
+            return [...parentState];
         } else {
-            return $.extend(true, {}, parentState);
+            return $.extend(new IdentifiableEntity(), parentState);
         }
     }
 
