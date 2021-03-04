@@ -1,5 +1,5 @@
-class DeleteStateChange extends StateChange {
+class DeleteStateChange extends TaggedStateChange {
     constructor(previousStateOrPart, partName) {
-        super("DELETE", previousStateOrPart, undefined, partName);
+        super(CUDTags.DELETE, previousStateOrPart, undefined, partName);
     }
 }

@@ -1,16 +1,18 @@
 class SimpleListState extends TaggingStateHolder {
     /**
      * @param {*} [initialState]
+     * @param {TaggingStateChangeMapper} [stateChangeMapper]
+     * @param {StateChangesCollector} [changeManager]
      */
-    constructor(initialState = []) {
-        super({initialState});
+    constructor({initialState = [], stateChangeMapper, changeManager}) {
+        super({initialState, stateChangeMapper, changeManager});
     }
 
     /**
      * @param [items=[]] {IdentifiableEntity[]}
      */
     updateAll(items = []) {
-        this.replace(items);
+        this.replaceEntirely(items);
     }
 
     get items() {

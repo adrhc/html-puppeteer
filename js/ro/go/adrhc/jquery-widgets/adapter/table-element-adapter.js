@@ -78,7 +78,7 @@ class TableElementAdapter {
         const $existingRow = rowDataId ? this.$getRowByDataId(rowDataId) : {};
         if ($existingRow.length) {
             if (replaceExisting) {
-                // replace existing
+                // replace existing row
                 $existingRow.replaceWith(rowHtml);
             }
         } else if (createIfNotExists) {

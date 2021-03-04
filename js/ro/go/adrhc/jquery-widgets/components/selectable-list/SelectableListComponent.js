@@ -53,13 +53,12 @@ class SelectableListComponent extends SimpleListComponent {
     }
 
     /**
-     * @param stateChange {TaggedStateChange}
+     * @param {TaggedStateChange} stateChange
      * @return {Promise<TaggedStateChange[]>}
-     * @protected
      */
     updateViewOnKnownItemStateChange(stateChange) {
-        console.log(`${this.constructor.name}.updateViewOnKnownStateChange, stateChange:\n${JSON.stringify(stateChange, null, 2)}`);
-        return this.swappingRowSelector[true].processStateChange(stateChange, {});
+        console.log(`${this.constructor.name}.updateViewOnCREATEITEM:\n${JSON.stringify(stateChange)}`);
+        return this.swappingRowSelector[true].reprocessStateChange(stateChange);
     }
 
     /**

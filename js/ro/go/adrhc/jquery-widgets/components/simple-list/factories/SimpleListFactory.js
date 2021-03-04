@@ -19,7 +19,7 @@ class SimpleListFactory {
                       bodyRowTmplHtml,
                       mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId, bodyRowTmplHtml),
                       repository = new InMemoryCrudRepository(items),
-                      state = new SimpleListState(),
+                      state = new SimpleListState({}),
                       view = new SimpleListView(mustacheTableElemAdapter),
                       childProperty,
                       childishBehaviour

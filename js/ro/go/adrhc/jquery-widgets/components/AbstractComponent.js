@@ -96,17 +96,13 @@ class AbstractComponent {
 
     /**
      * @param {*} stateOrPart
-     * @param {string} [partName]
+     * @param {string|number} [partName]
      * @param {boolean} [dontRecordStateEvents]
      * @return {Promise<StateChange[]>}
      */
-    processStateChange(stateOrPart, {partName, dontRecordStateEvents}) {
+    update(stateOrPart, {partName, dontRecordStateEvents}) {
         return this.doWithState((basicState) => {
-            if (partName) {
-                basicState.replacePart(stateOrPart, partName, dontRecordStateEvents);
-            } else {
-                basicState.replace(stateOrPart, dontRecordStateEvents);
-            }
+            basicState.replace(stateOrPart, {partName, dontRecordStateEvents})
         });
     }
 
@@ -114,7 +110,7 @@ class AbstractComponent {
      * @param {StateChange} oldStateChange
      * @return {Promise<StateChange[]>}
      */
-    reprocessStateChange(oldStateChange) {
+    processStateChange(oldStateChange) {
         return this.doWithState((basicState) => {
             // recording again the old state change event
             basicState.stateChanges.collect(oldStateChange);
@@ -160,7 +156,7 @@ class AbstractComponent {
      * @return {Promise}
      */
     updateViewOnAny(stateChange) {
-        this._safelyLogStateChange(stateChange, "updateViewOnRENDER");
+        this._safelyLogStateChange(stateChange, "updateViewOnAny");
         if (!this.stateChangesDispatcher.isKnownChangeTypesOrNA(stateChange.changeType)) {
             console.log(`${this.constructor.name}.updateViewOnAny skipped!`);
             return Promise.reject(stateChange);

@@ -23,15 +23,13 @@ if (Modernizr.template) {
                 tableIdOrJQuery, rowTmplId: "dogsTableEditableRowTmpl"
             });
 
-        const component = SelectableListFactory.create(tableIdOrJQuery, {
-            items: DbMock.DOGS,
-            notSelectedRow,
-            selectedRow
+        const selectableList = SelectableListFactory.create(tableIdOrJQuery, {
+            items: DbMock.DOGS, notSelectedRow, selectedRow
         });
 
-        component
+        selectableList
             .init()
-            .then(() => component.doWithState((state) => {
+            .then(() => selectableList.doWithState((state) => {
                 /**
                  * @type {SelectableListState}
                  */

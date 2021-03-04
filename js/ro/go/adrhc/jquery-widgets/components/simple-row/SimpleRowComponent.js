@@ -1,3 +1,6 @@
+/**
+ * "state" is a RowValues
+ */
 class SimpleRowComponent extends AbstractComponent {
     /**
      * @type {SimpleRowView}
@@ -20,19 +23,23 @@ class SimpleRowComponent extends AbstractComponent {
     }
 
     /**
-     * Updates the state and the view based on the provided parameters.
-     * For CREATE won't do what init() does: e.g. it won't compositeBehaviour.init
-     * or configure events, only init() should do that!
+     * Overloads super.update.
      *
-     * @param item
-     * @param {number} index
+     * @param {*} [columnValues]
+     * @param {number} [rowIndex]
      * @return {Promise<StateChange[]>}
      */
-    update(item, index = this.simpleRowView.tableRelativePositionOnCreate === "prepend" ? 0 : TableElementAdapter.LAST_ROW_INDEX) {
-        if (item && !(item instanceof IdentifiableEntity)) {
-            item = $.extend(new IdentifiableEntity(), item);
-        }
-        return this.processStateChange(item ? new RowValues(item, index) : undefined, {});
+    updateRow(columnValues, rowIndex = this._defaultRowPosition()) {
+        const rowValues = columnValues ? new RowValues(columnValues, rowIndex) : undefined;
+        return super.update(rowValues, {});
+    }
+
+    /**
+     * @return {number}
+     * @protected
+     */
+    _defaultRowPosition() {
+        return this.simpleRowView.tableRelativePositionOnCreate === "prepend" ? 0 : TableElementAdapter.LAST_ROW_INDEX;
     }
 
     /**
@@ -75,7 +82,7 @@ class SimpleRowComponent extends AbstractComponent {
         // why reset? because we have to detach the event handlers on previous row
         this.reset();
         // above reset will also apply to the state so we must restore it (the state)
-        this.state.replace(stateChange.stateOrPart, true);
+        this.state.replaceEntirely(stateChange.stateOrPart, true);
         // after recreating the view one has to again bind the event handlers,
         // call compositeBehaviour.init, etc (do something similar to an init)
         return this.view.update(stateChange)

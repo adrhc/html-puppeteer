@@ -1,4 +1,5 @@
 class TaggedStateChange extends StateChange {
+
     /**
      * @type {"CREATE"|"DELETE"|"REPLACE"}
      */
@@ -14,4 +15,10 @@ class TaggedStateChange extends StateChange {
         super(previousStateOrPart, stateOrPart, partName);
         this.changeType = changeType;
     }
+}
+
+class CUDTags {
+    static CREATE = "CREATE";
+    static DELETE = "DELETE";
+    static REPLACE = "REPLACE";
 }

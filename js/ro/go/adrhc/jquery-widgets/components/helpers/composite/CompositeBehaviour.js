@@ -79,19 +79,17 @@ class CompositeBehaviour {
      *
      * @param stateChange {StateChange}
      * @param [kidsFilter] {function(kid: AbstractComponent): boolean} filter the kids interested in the state change
-     * @param [stateChangeKidAdapter] {function(kid: AbstractComponent): StateChange}
      * @return {Promise<StateChange[]>}
      */
     processStateChangeWithKids(stateChange,
-                               kidsFilter = (kid) => !!kid.childishBehaviour,
-                               stateChangeKidAdapter = (kid) => this._extractChildState(stateChange, kid)) {
+                               kidsFilter = (kid) => !!kid.childishBehaviour) {
         const promises = this.childComponents.filter(kidsFilter).map(kidComp => {
-            const kidStateChange = stateChangeKidAdapter(kidComp);
+            const newKidState = this._extractChildState(stateChange, kidComp);
             // ignore undefined kidStateChange: means that the parent is missing the child, so probably doesn't intend to update it
-            if (kidStateChange === undefined) {
+            if (newKidState === undefined) {
                 return undefined;
             }
-            return kidComp.processStateChange(kidStateChange, {overwriteState: true});
+            return kidComp.update(newKidState, {});
         });
         return Promise.allSettled(promises.filter((it) => it !== undefined));
     }
@@ -104,12 +102,7 @@ class CompositeBehaviour {
      */
     _extractChildState(stateChange, kid) {
         if (kid.childishBehaviour) {
-            const kidState = kid.childishBehaviour.getChildEntityFrom(stateChange.stateOrPart);
-            // ignore undefined kidState: means that the parent is missing the child, so probably doesn't intend to update it
-            if (kidState === undefined) {
-                return undefined;
-            }
-            return $.extend(true, new StateChange(), stateChange, {data: kidState});
+            return kid.childishBehaviour.getChildEntityFrom(stateChange.stateOrPart);
         } else {
             return kid.state.currentState;
         }

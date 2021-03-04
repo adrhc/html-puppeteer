@@ -14,7 +14,7 @@ class CrudListState extends SimpleListState {
      * @param {*} [initialState]
      * @param {function(): IdentifiableEntity} [newEntityFactoryFn]
      * @param {boolean} [newItemsGoToTheEndOfTheList]
-     * @param {TaggingStateChangeMapper} stateChangeMapper
+     * @param {TaggingStateChangeMapper} [stateChangeMapper]
      * @param {StateChangesCollector} [changeManager]
      */
     constructor({
@@ -131,11 +131,8 @@ class CrudListState extends SimpleListState {
      */
     updateItem(item, newItemIndex) {
         const oldIndex = this.findIndexById(item.id);
-        if (newItemIndex == null) {
-            return this._replaceItem(new RowValues(item, oldIndex));
-        } else {
-            return this._replaceItem(new RowValues(item, newItemIndex), oldIndex);
-        }
+        return this._replaceItem(new RowValues(item,
+            newItemIndex == null ? oldIndex : newItemIndex), oldIndex);
     }
 
     /**

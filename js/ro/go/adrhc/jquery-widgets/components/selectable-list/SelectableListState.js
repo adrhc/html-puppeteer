@@ -14,13 +14,13 @@ class SelectableListState extends CrudListState {
     swappingState;
 
     /**
-     * @param {*} [currentState]
+     * @param {*} [initialState]
      * @param {function(): IdentifiableEntity} [newEntityFactoryFn]
      * @param {boolean} [newItemsGoToTheEndOfTheList]
      * @param {SwappingState} [swappingState]
      */
-    constructor({currentState, newEntityFactoryFn, newItemsGoToTheEndOfTheList, swappingState = new SwappingState()}) {
-        super({currentState, newEntityFactoryFn, newItemsGoToTheEndOfTheList});
+    constructor({initialState, newEntityFactoryFn, newItemsGoToTheEndOfTheList, swappingState = new SwappingState()}) {
+        super({initialState, newEntityFactoryFn, newItemsGoToTheEndOfTheList});
         this.swappingState = swappingState;
     }
 

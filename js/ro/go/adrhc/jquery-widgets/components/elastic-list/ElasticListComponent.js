@@ -1,14 +1,14 @@
 /**
  * A component acting as a container for its kids.
  * Its view is irrelevant because is composed by the kids views!
+ *
+ * Q: what represents "state" for ElasticListComponent?
+ * A1: "state" could be the list of children identifiers while children too will store their state
+ * A2: "state" could be the list loaded from the repository; children just duplicate the state
+ * Note: having a list means we implicitly have the children positions
  */
 class ElasticListComponent extends SimpleListComponent {
     /**
-     * Q: what represents "state" for ElasticListComponent?
-     * A1: "state" could be the list of children identifiers while children too will store their state
-     * A2: "state" could be the list loaded from the repository; children just duplicate the state
-     * Note: having a list means we implicitly have the children positions
-     *
      * @type {CrudListState}
      */
     crudListState;
@@ -68,7 +68,7 @@ class ElasticListComponent extends SimpleListComponent {
         console.log(`${this.constructor.name}.updateViewOnAnyITEM:\n${JSON.stringify(stateChange)}`);
         const previousId = stateChange.previousStateOrPart.values.id;
         const idRowComp = this.elasticListComposite.findKidById(previousId);
-        return idRowComp.processStateChange(stateChange.stateOrPart, {});
+        return idRowComp.update(stateChange.stateOrPart, {});
     }
 
     /**
