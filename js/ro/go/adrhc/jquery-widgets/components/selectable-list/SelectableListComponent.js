@@ -35,8 +35,7 @@ class SelectableListComponent extends SimpleListComponent {
     constructor(repository, state, view,
                 notSelectedRow, selectedRow, config) {
         super(repository, state, view, config);
-        this.stateChangesDispatcher.prependPartKnownChangeTypes("CREATE", "REPLACE", "DELETE");
-        this.stateChangesDispatcher.usePartName("Item");
+        this.stateChangesDispatcher.usePartName("Item", "CREATE", "REPLACE", "DELETE");
         this.selectableListState = state;
         this.simpleListView = view;
         this.entityExtractor = new SelectableListEntityExtractor(this, {});

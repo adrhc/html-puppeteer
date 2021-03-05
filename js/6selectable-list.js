@@ -13,6 +13,7 @@ if (Modernizr.template) {
         // dogs table with both read-only and editable row
         const tableIdOrJQuery = "dogsTable";
         const tableRelativePositionOnCreate = "append";
+        const append = tableRelativePositionOnCreate === "append";
 
         const notSelectedRow = SimpleRowFactory.createIdentifiableRow(
             {
@@ -34,13 +35,15 @@ if (Modernizr.template) {
                  * @type {SelectableListState}
                  */
                 const selectableListState = state;
-                selectableListState.createNewItem({name: `new dog (with table ${tableRelativePositionOnCreate})`});
+                selectableListState.createNewItem({
+                    name: `new dog (with table ${tableRelativePositionOnCreate})`
+                }, append);
                 selectableListState.updateItem({id: 3, name: "updated dog3"});
                 selectableListState.removeById(2);
                 selectableListState.insertItem({
                     id: 2,
                     name: `restored dog2 (with table ${tableRelativePositionOnCreate})`
-                }, tableRelativePositionOnCreate === "append");
+                }, append);
             }));
     })
 } else {

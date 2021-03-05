@@ -90,14 +90,14 @@ class StateChangesDispatcher {
     }
 
     /**
-     * @param changeType {string}
+     * @param {string} changeType
      */
     prependKnownChangeTypes(...changeType) {
         changeType.forEach(it => this.knownChangeTypes.splice(0, 0, it));
     }
 
     /**
-     * @param changeType {string}
+     * @param {string} changeType
      */
     prependPartKnownChangeTypes(...changeType) {
         changeType.forEach(it => this.knownPartChangeTypes.splice(0, 0, it));
@@ -125,12 +125,16 @@ class StateChangesDispatcher {
 
     /**
      * @param {boolean|string} [partName]
+     * @param {string} [partKnownChangeTypesToPrepend]
      */
-    usePartName(partName) {
+    usePartName(partName, ...partKnownChangeTypesToPrepend) {
         if (typeof partName === "boolean" && !partName) {
             this.partName = undefined;
         } else {
             this.partName = partName;
+        }
+        if (partKnownChangeTypesToPrepend) {
+            this.prependPartKnownChangeTypes(...partKnownChangeTypesToPrepend);
         }
     }
 }
