@@ -21,7 +21,7 @@ if (Modernizr.template) {
             tableIdOrJQuery: dogsTableWithEdit,
             rowTmplId: "dogsTableWithEditSelectedRowTmpl",
             tableRelativePositionOnCreate: "prepend",
-            initialState: initialData ? new RowValues(initialData) : undefined
+            initialState: initialData ? new EntityRow(initialData) : undefined
         });
     }
 
@@ -35,7 +35,7 @@ if (Modernizr.template) {
         return SimpleRowFactory.createIdentifiableRow({
             tableIdOrJQuery: dogsTableWithDelete,
             rowTmplId: "dogsTableWithDeleteDeletedRowTmpl",
-            initialState: initialData ? new RowValues(initialData) : undefined
+            initialState: initialData ? new EntityRow(initialData) : undefined
         });
     }
 

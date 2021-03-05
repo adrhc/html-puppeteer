@@ -35,25 +35,25 @@ class SimpleRowView extends AbstractView {
      */
     update(stateChange) {
         /**
-         * @type {RowValues}
+         * @type {EntityRow}
          */
         const rowValues = stateChange.stateOrPart;
         const previousStateOrPart = stateChange.previousStateOrPart;
-        const rowIdToSearchFor = previousStateOrPart ? previousStateOrPart.values.id : rowValues.values.id;
+        const rowIdToSearchFor = previousStateOrPart ? previousStateOrPart.entity.id : rowValues.entity.id;
         this.tableAdapter.renderRowWithTemplate({
             rowDataId: rowIdToSearchFor,
-            data: rowValues.values,
+            data: rowValues.entity,
             rowTmplHtml: this.tableAdapter.bodyRowTmplHtml,
             createIfNotExists: stateChange.changeType === "CREATE",
             tableRelativePosition: this._tableRelativePositionOf(rowValues),
             index: rowValues.index
         });
-        this.$elem = rowValues ? this.tableAdapter.$getRowByDataId(rowValues.values.id) : undefined;
+        this.$elem = rowValues ? this.tableAdapter.$getRowByDataId(rowValues.entity.id) : undefined;
         return Promise.resolve(stateChange);
     }
 
     /**
-     * @param rowValues {RowValues}
+     * @param rowValues {EntityRow}
      * @return {"prepend"|"append"|undefined|string}
      * @protected
      */

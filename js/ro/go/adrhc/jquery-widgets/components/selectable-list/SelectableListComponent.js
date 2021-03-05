@@ -81,8 +81,8 @@ class SelectableListComponent extends SimpleListComponent {
      * @return {Promise<StateChange[]>}
      */
     switchTo(rowDataId, context) {
-        return this.doWithState((selectableListState) => {
-            selectableListState.switchTo(rowDataId, context);
+        return this.doWithState((state) => {
+            this.myStateOf(state).switchTo(rowDataId, context);
         });
     }
 
@@ -135,7 +135,7 @@ class SelectableListComponent extends SimpleListComponent {
      * @protected
      */
     _resetPreviousRow(swappingDetails) {
-        // swappingDetails.data is {SelectableSwappingData}
+        // swappingDetails.data is {EntityRowSwap}
         const context = !!swappingDetails.data.context ? swappingDetails.data.context : false;
         /**
          * @type {IdentifiableRowComponent}
@@ -153,7 +153,7 @@ class SelectableListComponent extends SimpleListComponent {
      * @protected
      */
     _rowComponentFor(swappingDetails) {
-        // swappingDetails.data is {SelectableSwappingData}
+        // swappingDetails.data is {EntityRowSwap}
         const swappingContext = swappingDetails.data.context;
         if (!swappingDetails.isPrevious && !!swappingContext) {
             // this is the current/active selection; depending on "context" a row component or another would be used
@@ -167,7 +167,7 @@ class SelectableListComponent extends SimpleListComponent {
 
     /**
      * Returns the IdentifiableRowComponent dealing with an "active" selection.
-     * The specific row though depend on the SelectableSwappingData.context if
+     * The specific row though depend on the EntityRowSwap.context if
      * present otherwise is the this.swappingRowSelector[false].
      *
      * @return {IdentifiableRowComponent} responsible for the currently "selected" row
@@ -191,5 +191,13 @@ class SelectableListComponent extends SimpleListComponent {
         this.simpleListView.$elem
             .on(this._appendNamespaceTo("dblclick"),
                 `tr${this._ownerSelector}`, this, this.onSwapping);
+    }
+
+    /**
+     * @param {StateHolder} state
+     * @return {SelectableListState}
+     */
+    myStateOf(state) {
+        return state;
     }
 }

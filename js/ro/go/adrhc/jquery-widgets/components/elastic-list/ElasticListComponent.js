@@ -34,7 +34,7 @@ class ElasticListComponent extends SimpleListComponent {
     _handleReload() {
         return this.doWithState(() => {
             this.compositeBehaviour.childComponents.forEach(kid => {
-                this.crudListState.removeById(kid.state.currentState.values.id);
+                this.crudListState.removeById(kid.state.currentState.entity.id);
             });
         }).then(() => super._handleReload());
     }
@@ -66,7 +66,7 @@ class ElasticListComponent extends SimpleListComponent {
      */
     updateViewOnAnyItem(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnAnyITEM:\n${JSON.stringify(stateChange)}`);
-        const previousId = stateChange.previousStateOrPart.values.id;
+        const previousId = stateChange.previousStateOrPart.entity.id;
         const idRowComp = this.elasticListComposite.findKidById(previousId);
         return idRowComp.update(stateChange.stateOrPart, {});
     }

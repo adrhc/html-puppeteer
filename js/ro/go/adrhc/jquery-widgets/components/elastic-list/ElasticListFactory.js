@@ -36,7 +36,7 @@ class ElasticListFactory {
             if (rowChildishBehaviour) {
                 idRowComp.childishBehaviour = rowChildishBehaviour;
             }
-            idRowComp.state.replaceEntirely(new RowValues(item, index));
+            idRowComp.state.replaceEntirely(new EntityRow(item, index));
             return idRowComp;
         },
         childishBehaviour

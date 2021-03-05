@@ -1,6 +1,6 @@
 class SwappingDetails {
     /**
-     * @param data (e.g. SelectableSwappingData)
+     * @param data (e.g. EntityRowSwap)
      * @param isPrevious {boolean}
      */
     constructor(data, isPrevious = false) {

@@ -31,17 +31,17 @@ class CrudListState extends SimpleListState {
 
     /**
      * @param {number} index
-     * @return {RowValues|undefined}
+     * @return {EntityRow|undefined}
      */
     getStatePart(index) {
         if (this.items == null || index >= this.items.length) {
             return undefined;
         }
-        return new RowValues(this.items[index], index);
+        return new EntityRow(this.items[index], index);
     }
 
     /**
-     * @param {RowValues} newRowValues
+     * @param {EntityRow} newRowValues
      * @param {number} oldIndex
      * @return {boolean}
      * @protected
@@ -50,12 +50,12 @@ class CrudListState extends SimpleListState {
         return newRowValues == null && this.items.length <= oldIndex ||
             newRowValues != null && this.items.length > oldIndex &&
             this.items.length > newRowValues.index &&
-            this.items[oldIndex] === newRowValues.values &&
+            this.items[oldIndex] === newRowValues.entity &&
             newRowValues.index === oldIndex;
     }
 
     /**
-     * @param {RowValues} newRowValues
+     * @param {EntityRow} newRowValues
      * @param {number} oldIndex
      * @return {*} previous state part
      * @protected
@@ -68,17 +68,17 @@ class CrudListState extends SimpleListState {
                 return oldRowValues;
             }
             // old item doesn't exists, inserting the new one
-            ArrayUtils.insert(newRowValues.values, newRowValues.index, this.items);
+            ArrayUtils.insert(newRowValues.entity, newRowValues.index, this.items);
         } else if (newRowValues == null) {
             // old item exists but the new one is null (i.e. old is deleted)
             ArrayUtils.removeByIndex(oldIndex, this.items);
         } else if (newRowValues.index === oldIndex) {
             // the index is the same, only changing the value at that index
-            this.items[oldIndex] = newRowValues.values;
+            this.items[oldIndex] = newRowValues.entity;
         } else {
             // both item's value and index changed
             ArrayUtils.removeByIndex(oldIndex, this.items);
-            ArrayUtils.insert(newRowValues.values, newRowValues.index, this.items);
+            ArrayUtils.insert(newRowValues.entity, newRowValues.index, this.items);
         }
         return oldRowValues;
     }
@@ -121,7 +121,7 @@ class CrudListState extends SimpleListState {
      */
     insertItem(item, append = this.append) {
         const newItemIndex = append ? this.items.length : 0;
-        return this._replaceItem(new RowValues(item, newItemIndex));
+        return this._replaceItem(new EntityRow(item, newItemIndex));
     }
 
     /**
@@ -131,7 +131,7 @@ class CrudListState extends SimpleListState {
      */
     updateItem(item, newItemIndex) {
         const oldIndex = this.findIndexById(item.id);
-        return this._replaceItem(new RowValues(item,
+        return this._replaceItem(new EntityRow(item,
             newItemIndex == null ? oldIndex : newItemIndex), oldIndex);
     }
 
@@ -161,7 +161,7 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @param {RowValues} rowValues
+     * @param {EntityRow} rowValues
      * @param {number} [oldIndex]
      * @return {TaggedStateChange}
      * @protected

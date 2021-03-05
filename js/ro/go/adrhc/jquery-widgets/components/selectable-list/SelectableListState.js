@@ -1,15 +1,15 @@
 /**
- * SelectableListState extends CrudListState (which extends SimpleListState) and SwappingState
+ * SelectableListState extends CrudListState (which extends SimpleListState) and RowSwappingState
  *
- * SwappingState collects state changes as follows:
- *      StateChange.changeType = SwappingState.changeType (defaults to "SWAP")
+ * RowSwappingState collects state changes as follows:
+ *      StateChange.changeType = RowSwappingState.changeType (defaults to "SWAP")
  *      StateChange.data = SwappingDetails
  * SelectableListState.swappingState collects state changes as follows:
- *      StateChange.swappingDetails.data = SelectableSwappingData
+ *      StateChange.swappingDetails.data = EntityRowSwap
  */
 class SelectableListState extends CrudListState {
     /**
-     * @type {SwappingState}
+     * @type {RowSwappingState}
      */
     swappingState;
 
@@ -17,9 +17,14 @@ class SelectableListState extends CrudListState {
      * @param {*} [initialState]
      * @param {function(): IdentifiableEntity} [newEntityFactoryFn]
      * @param {boolean} [newItemsGoToTheEndOfTheList]
-     * @param {SwappingState} [swappingState]
+     * @param {TaggingStateHolder} [swappingState]
      */
-    constructor({initialState, newEntityFactoryFn, newItemsGoToTheEndOfTheList, swappingState = new SwappingState()}) {
+    constructor({
+                    initialState,
+                    newEntityFactoryFn,
+                    newItemsGoToTheEndOfTheList,
+                    swappingState = new RowSwappingState()
+                }) {
         super({initialState, newEntityFactoryFn, newItemsGoToTheEndOfTheList});
         this.swappingState = swappingState;
     }
@@ -34,20 +39,16 @@ class SelectableListState extends CrudListState {
             console.log(`${this.constructor.name}, context = ${context}, id is null! switching off`)
             return this.switchToOff();
         }
-        const previousSelectableSwappingData = this.currentSelectableSwappingData;
         const item = this.findById(id);
         if (!item) {
             console.log(`${this.constructor.name}, context = ${context}, no item found for id = ${id}! switching off`)
             return this.switchToOff();
         }
-        const newSelectableSwappingData = new SelectableSwappingData(item, context);
-        if (newSelectableSwappingData.similarTo(previousSelectableSwappingData)) {
-            console.log(`switch cancelled:\n${JSON.stringify(previousSelectableSwappingData)}\nis similar to\n${JSON.stringify(newSelectableSwappingData)}`)
-            return false;
-        }
-        const switched = this.swappingState.switchTo(newSelectableSwappingData);
+        const previousEntityRowSwap = this.swappingState.currentState;
+        const newEntityRowSwap = new EntityRowSwap(new EntityRow(item, this.items.indexOf(item)), context);
+        const switched = !!this.swappingState.switchTo(newEntityRowSwap);
         if (switched) {
-            this._doAfterSwitch(previousSelectableSwappingData, newSelectableSwappingData)
+            this._doAfterSwitch(previousEntityRowSwap, newEntityRowSwap)
         }
         return switched;
     }
@@ -56,10 +57,10 @@ class SelectableListState extends CrudListState {
      * @return {boolean} whether the switch off actually happened or not
      */
     switchToOff() {
-        const previousSelectableSwappingData = this.currentSelectableSwappingData;
-        const switched = this.swappingState.switchOff();
+        const previousEntityRowSwap = this.swappingState.currentState;
+        const switched = !!this.swappingState.switchOff();
         if (switched) {
-            this._doAfterSwitch(previousSelectableSwappingData, undefined)
+            this._doAfterSwitch(previousEntityRowSwap)
         }
         return switched;
     }
@@ -67,12 +68,12 @@ class SelectableListState extends CrudListState {
     /**
      * reload last swapped off item
      *
-     * @param previousSelectableSwappingData {SelectableSwappingData|undefined}
-     * @param newSelectableSwappingData {SelectableSwappingData|undefined}
+     * @param {EntityRowSwap} previousEntityRowSwap
+     * @param {EntityRowSwap|undefined} [newEntityRowSwap]
      * @protected
      */
-    _doAfterSwitch(previousSelectableSwappingData, newSelectableSwappingData) {
-        if (!!previousSelectableSwappingData) {
+    _doAfterSwitch(previousEntityRowSwap, newEntityRowSwap) {
+        if (previousEntityRowSwap != null) {
             this._reloadLastSwappedOffItem();
         }
         this.stateChanges.collectByConsumingChanges(this.swappingState.stateChanges)
@@ -95,7 +96,7 @@ class SelectableListState extends CrudListState {
         }
         /**
          * swappingStateChange.data is {SwappingDetails}
-         * @type {SelectableSwappingData}
+         * @type {EntityRowSwap}
          */
         const selectableSwappingData = swappingStateChange.data.data;
         if (selectableSwappingData.reloadedId != null) {
@@ -111,7 +112,7 @@ class SelectableListState extends CrudListState {
         selectableSwappingData.reloadedId = selectableSwappingData.itemId;
         // when reloading the "transient" id the result might be undefined when
         // the transient record was removed (after being persisted or discarded)
-        selectableSwappingData.item = this.findById(selectableSwappingData.reloadedId);
+        selectableSwappingData.entityRow = this.findById(selectableSwappingData.reloadedId);
     }
 
     reset() {
@@ -120,10 +121,9 @@ class SelectableListState extends CrudListState {
     }
 
     /**
-     * @return {SelectableSwappingData|undefined}
+     * @param {string|number} id
      */
-    get currentSelectableSwappingData() {
-        const swappingDetails = this.swappingState.swappingDetails;
-        return swappingDetails && swappingDetails.data ? swappingDetails.data : undefined;
+    findById(id) {
+        return EntityUtils.findById(id, this.items);
     }
 }

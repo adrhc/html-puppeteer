@@ -25,20 +25,20 @@ class StateHolder {
     }
 
     /**
-     * @param {*} stateOrPart
-     * @param {string|number} partName specify the state's part/section to change/manipulate
+     * @param {*} [stateOrPart]
+     * @param {string|number} [partName] specify the state's part/section to change/manipulate
      * @param {boolean} [dontRecordStateEvents]
      */
-    replace(stateOrPart, {partName, dontRecordStateEvents}) {
+    replace(stateOrPart, {partName, dontRecordStateEvents} = {}) {
         if (partName) {
-            this.replacePart(stateOrPart, partName, dontRecordStateEvents);
+            return this.replacePart(stateOrPart, partName, dontRecordStateEvents);
         } else {
-            this.replaceEntirely(stateOrPart, dontRecordStateEvents);
+            return this.replaceEntirely(stateOrPart, dontRecordStateEvents);
         }
     }
 
     /**
-     * @param {*} state is the new state value to store
+     * @param {*} [state] is the new state value to store
      * @param {boolean} [dontRecordStateEvents]
      * @return {StateChange}
      */
@@ -58,7 +58,7 @@ class StateHolder {
     }
 
     /**
-     * @param {*} state is the new state value to store
+     * @param {*} [state] is the new state value to store
      * @return {*} previous state
      * @protected
      */
@@ -127,12 +127,12 @@ class StateHolder {
     }
 
     /**
-     * @param anotherState
+     * @param [anotherState]
      * @return {boolean}
      * @protected
      */
     _currentStateEquals(anotherState) {
-        return this._currentState === anotherState;
+        return this._currentState == null && anotherState == null || this._currentState === anotherState;
     }
 
     /**

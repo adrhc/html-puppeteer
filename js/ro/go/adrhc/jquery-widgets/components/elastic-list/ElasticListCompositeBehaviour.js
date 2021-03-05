@@ -15,7 +15,7 @@ class ElasticListCompositeBehaviour extends CompositeBehaviour {
      * @return {AbstractComponent}
      */
     findKidById(id) {
-        const kids = this.findKids((kid) => EntityUtils.idsAreEqual(kid.state.currentState.values.id, id));
+        const kids = this.findKids((kid) => EntityUtils.idsAreEqual(kid.state.currentState.entity.id, id));
         AssertionUtils.isTrue(kids.length === 1);
         return kids[0];
     }
@@ -38,7 +38,7 @@ class ElasticListCompositeBehaviour extends CompositeBehaviour {
      * @return {IdentifiableRowComponent}
      */
     createChildComponent(stateChange) {
-        const kid = this.idRowCompFactoryFn(stateChange.stateOrPart.values,
+        const kid = this.idRowCompFactoryFn(stateChange.stateOrPart.entity,
             stateChange.stateOrPart.index, this.elasticListComponent);
         this.addChildComponent(kid);
         return kid;

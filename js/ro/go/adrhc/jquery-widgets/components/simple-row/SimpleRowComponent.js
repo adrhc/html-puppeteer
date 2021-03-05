@@ -1,5 +1,5 @@
 /**
- * "state" is a RowValues
+ * "state" is a EntityRow
  */
 class SimpleRowComponent extends AbstractComponent {
     /**
@@ -30,7 +30,7 @@ class SimpleRowComponent extends AbstractComponent {
      * @return {Promise<StateChange[]>}
      */
     updateRow(columnValues, rowIndex = this._defaultRowPosition()) {
-        const rowValues = columnValues ? new RowValues(columnValues, rowIndex) : undefined;
+        const rowValues = columnValues ? new EntityRow(columnValues, rowIndex) : undefined;
         return super.update(rowValues, {});
     }
 
@@ -47,7 +47,7 @@ class SimpleRowComponent extends AbstractComponent {
      * @return {Promise<StateChange>}
      */
     updateViewOnDELETE(stateChange) {
-        this.simpleRowView.deleteRowByDataId(stateChange.previousStateOrPart.values.id);
+        this.simpleRowView.deleteRowByDataId(stateChange.previousStateOrPart.entity.id);
         if (this.childishBehaviour) {
             this.childishBehaviour.detachChild();
         }

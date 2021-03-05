@@ -14,7 +14,7 @@ class StateChange {
 
     /**
      * @param {*} previousStateOrPart
-     * @param {*} stateOrPart
+     * @param {*} [stateOrPart]
      * @param {string} [partName]
      */
     constructor(previousStateOrPart, stateOrPart, partName) {
