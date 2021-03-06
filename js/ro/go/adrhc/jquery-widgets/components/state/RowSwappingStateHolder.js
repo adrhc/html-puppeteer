@@ -1,5 +1,5 @@
 /**
- * @extends {TaggingStateHolder<EntityRowSwap>}
+ * @extends {TaggingStateHolder<EntityRowSwap, *>}
  */
 class RowSwappingStateHolder extends TaggingStateHolder {
     /**

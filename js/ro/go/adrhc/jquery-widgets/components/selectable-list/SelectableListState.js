@@ -1,11 +1,5 @@
 /**
- * SelectableListState extends CrudListState (which extends SimpleListState) and RowSwappingStateHolder
- *
- * RowSwappingStateHolder collects state changes as follows:
- *      StateChange.changeType = RowSwappingStateHolder.changeType (defaults to "SWAP")
- *      StateChange.data = SwappingDetails
- * SelectableListState.swappingState collects state changes as follows:
- *      StateChange.swappingDetails.data = EntityRowSwap
+ * SelectableListState extends CrudListState extends SimpleListState extends TaggingStateHolder
  */
 class SelectableListState extends CrudListState {
     /**
@@ -14,10 +8,10 @@ class SelectableListState extends CrudListState {
     swappingState;
 
     /**
-     * @param {*} [initialState]
+     * @param {IdentifiableEntity[]} [initialState]
      * @param {function(): IdentifiableEntity} [newEntityFactoryFn]
      * @param {boolean} [newItemsGoToTheEndOfTheList]
-     * @param {TaggingStateHolder} [swappingState]
+     * @param {RowSwappingStateHolder} [swappingState]
      */
     constructor({
                     initialState,
@@ -45,10 +39,10 @@ class SelectableListState extends CrudListState {
             return this.switchToOff();
         }
         const previousEntityRowSwap = this.swappingState.currentState;
-        const newEntityRowSwap = new EntityRowSwap(context, item, this.items.indexOf(item));
+        const newEntityRowSwap = new EntityRowSwap(context, item, this.indexOf(item));
         const switched = !!this.swappingState.switchTo(newEntityRowSwap);
         if (switched) {
-            this._doAfterSwitch(previousEntityRowSwap, newEntityRowSwap)
+            this._removeIfTransient(previousEntityRowSwap);
         }
         return switched;
     }
@@ -60,73 +54,45 @@ class SelectableListState extends CrudListState {
         const previousEntityRowSwap = this.swappingState.currentState;
         const switched = !!this.swappingState.switchOff();
         if (switched) {
-            this._doAfterSwitch(previousEntityRowSwap)
+            this._removeIfTransient(previousEntityRowSwap);
         }
         return switched;
     }
 
     /**
-     * reload last swapped off item
-     *
-     * @param {EntityRowSwap} previous
-     * @param {EntityRowSwap|undefined} [newEntityRowSwap]
+     * @param {EntityRowSwap} entityRowSwap
+     * @return {TaggedStateChange<EntityRow>}
      * @protected
      */
-    _doAfterSwitch(previous, newEntityRowSwap) {
-        if (previous != null && EntityUtils.isTransientId(previous.entityId)) {
-            this.removeById(previous.entityId);
-            this._reloadLastSwappedOffItem();
+    _removeIfTransient(entityRowSwap) {
+        if (this.isTransient(entityRowSwap)) {
+            return this.removeTransient();
         }
-        this.stateChanges.collectByConsumingChanges(this.swappingState.stateChanges)
     }
 
     /**
-     * When switching after a save operation the current swappingStateChange might contain a stale item.
-     * The switch events consumer might need the updated item's value so we need to reload it.
-     * When the item is a transient one it make no sense to reload it.
-     *
+     * @param {EntityRowSwap} entityRowSwap
+     * @return {boolean}
      * @protected
      */
-    _reloadLastSwappedOffItem() {
-        /**
-         * @type {TaggedStateChange}
-         */
-        const swappingStateChange = this.swappingState.stateChanges.changes.peekFront();
-        if (!swappingStateChange) {
-            // error: no isPrevious (true) state change
-            console.error("found no state change!");
-            throw "found no state change!";
-        }
-        /**
-         * swappingStateChange.data is {SwappingDetails}
-         * @type {EntityRowSwap}
-         */
-        const selectableSwappingData = swappingStateChange.previousStateOrPart;
-        if (selectableSwappingData.reloadedId != null) {
-            // error: reloadedId != null
-            console.error(`reloadedId (${selectableSwappingData.reloadedId}) != null:\n${JSON.stringify(swappingStateChange)}`);
-            throw `reloadedId (${selectableSwappingData.reloadedId}) != null:\n${JSON.stringify(swappingStateChange)}`;
-        }
-        if (selectableSwappingData.itemId == null) {
-            // skip null itemId
-            return;
-        }
-        // remember the reloaded id
-        selectableSwappingData.reloadedId = selectableSwappingData.itemId;
-        // when reloading the "transient" id the result might be undefined when
-        // the transient record was removed (after being persisted or discarded)
-        selectableSwappingData.entityRow = this.findById(selectableSwappingData.reloadedId);
+    _isTransient(entityRowSwap) {
+        return entityRowSwap != null && EntityUtils.isTransientId(entityRowSwap.entityId);
+    }
+
+    /**
+     * @param {string|number} id
+     * @return {IdentifiableEntity}
+     */
+    findById(id) {
+        return EntityUtils.findById(id, this.items);
+    }
+
+    indexOf(item) {
+        return this.items.indexOf(item);
     }
 
     reset() {
         super.reset();
         this.swappingState.reset();
-    }
-
-    /**
-     * @param {string|number} id
-     */
-    findById(id) {
-        return EntityUtils.findById(id, this.items);
     }
 }
