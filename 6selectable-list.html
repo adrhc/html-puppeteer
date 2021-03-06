@@ -50,7 +50,11 @@
             <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
         </td>
     </tr>
-    <tr data-owner="dogsTable" data-secondary-row-part="{{id}}" class="row-part">
+    <!--
+        "data-id" is used by the "switch" feature
+        "data-secondary-row-part" is used to remove this row when the (edited) entity row is closing
+    -->
+    <tr data-owner="dogsTable" data-id="{{id}}" data-secondary-row-part="{{id}}" class="row-part">
         <td colspan="2">secondary-row-part {{id}}</td>
     </tr>
 </template>

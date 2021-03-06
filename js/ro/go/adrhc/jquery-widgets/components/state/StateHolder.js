@@ -117,7 +117,7 @@ class StateHolder {
      */
     collectFromSimpleError(simpleError, changeType, entity) {
         AssertionUtils.isTrue(!entity || entity === simpleError.data);
-        let failedId = !!entity.id ? entity.id : IdentifiableEntity.TRANSIENT_ID;
+        let failedId = entity.id != null ? entity.id : IdentifiableEntity.TRANSIENT_ID;
         const data = $.extend({
             // id is used to identify the row to update and for setting the "data-id" attribute
             id: `error-row-${failedId}`,
