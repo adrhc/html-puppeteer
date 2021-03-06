@@ -63,10 +63,9 @@ class StateChangesDispatcher {
 
         const partName = stateChange.partName == null ? "" :
             (this.partName == null ? stateChange.partName : this.partName);
-        const fnName = `updateViewOn${stateChange.changeType}`;
 
         if (partName) {
-            let partFnName = `${fnName}${partName}`;
+            let partFnName = `updateViewOn${partName}${stateChange.changeType}`;
             if (typeof this.component[partFnName] === "function") {
                 return this.component[partFnName](stateChange);
             }
@@ -80,6 +79,7 @@ class StateChangesDispatcher {
             }
         }
 
+        const fnName = `updateViewOn${stateChange.changeType}`;
         if (typeof this.component[fnName] === "function") {
             return this.component[fnName](stateChange);
         } else if (this.knownChangeTypes.includes(stateChange.changeType)) {

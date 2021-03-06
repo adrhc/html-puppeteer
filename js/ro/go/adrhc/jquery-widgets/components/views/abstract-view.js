@@ -43,7 +43,7 @@ class AbstractView {
     }
 
     /**
-     * @param stateChanges {StateChange|StateChange[]}
+     * @param {StateChange|StateChange[]} stateChanges
      * @return {Promise<StateChange|StateChange[]>}
      */
     update(stateChanges) {

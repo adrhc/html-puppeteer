@@ -37,8 +37,8 @@ class CreateDeleteListComponent extends ElasticListComponent {
      *
      * @private
      */
-    configureEvents() {
-        super.configureEvents();
+    _configureEvents() {
+        super._configureEvents();
         this.view.$elem
             .on(this._appendNamespaceTo("click"),
                 this._btnSelector("add"), this, this.onAdd)

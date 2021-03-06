@@ -1,10 +1,9 @@
 /**
  * @template T, P
- * @typedef {T|P} StateOrPart
  */
 class StateHolder {
     /**
-     * @type {StateChangesCollector<StateOrPart>}
+     * @type {StateChangesCollector<T|P>}
      * @protected
      */
     _stateChanges;
@@ -16,8 +15,8 @@ class StateHolder {
 
     /**
      * @param {T} [initialState]
-     * @param {IdentityStateChangeMapper<StateOrPart>} [stateChangeMapper]
-     * @param {StateChangesCollector<StateOrPart>} [changesCollector]
+     * @param {IdentityStateChangeMapper<T|P>} [stateChangeMapper]
+     * @param {StateChangesCollector<T|P>} [changesCollector]
      */
     constructor({
                     initialState,
@@ -29,10 +28,10 @@ class StateHolder {
     }
 
     /**
-     * @param {StateOrPart} [stateOrPart]
+     * @param {T|P} [stateOrPart]
      * @param {string|number} [partName] specify the state's part/section to change/manipulate
      * @param {boolean} [dontRecordStateEvents]
-     * @return {StateChange<StateOrPart>|undefined}
+     * @return {StateChange<T|P>|undefined}
      */
     replace(stateOrPart, {partName, dontRecordStateEvents} = {}) {
         if (partName) {
@@ -176,7 +175,7 @@ class StateHolder {
     }
 
     /**
-     * @return {StateChangesCollector<StateOrPart>}
+     * @return {StateChangesCollector<T|P>}
      */
     get stateChanges() {
         return this._stateChanges;

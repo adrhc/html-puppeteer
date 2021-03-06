@@ -62,7 +62,7 @@ class DynamicSelectOneComponent extends AbstractComponent {
         } else {
             promise = this.dynaSelOneView.update(this.dynaSelOneState, this.focusOnInit);
         }
-        return promise.then(() => this.configureEvents());
+        return promise.then(() => this._configureEvents());
     }
 
     updateView(state, focusOnSearchInput) {
@@ -75,7 +75,7 @@ class DynamicSelectOneComponent extends AbstractComponent {
     /**
      * linking "outside" (and/or default) triggers to component's handlers (aka capabilities)
      */
-    configureEvents() {
+    _configureEvents() {
         const view = this.dynaSelOneView;
         const $comp = view.$elem;
 

@@ -207,15 +207,15 @@ class AbstractComponent {
             })
             .then((stateChanges) => {
                 console.log(`${this.constructor.name}.init: compositeBehaviour.init`);
-                this.configureEvents();
+                this._configureEvents();
                 return this.compositeBehaviour.init().then(() => stateChanges);
             })
             .catch((err) => {
                 console.error(`${this.constructor.name}.init, dontConfigEventsOnError = ${this.config.dontConfigEventsOnError}, error:\n`, err);
                 if (!this.config.dontConfigEventsOnError) {
-                    // jqXHR is missing finally, so, if we would need to configureEvents
+                    // jqXHR is missing finally, so, if we would need to _configureEvents
                     // on errors too, we would have to use catch anyway
-                    this.configureEvents();
+                    this._configureEvents();
                 }
                 throw err;
             });
@@ -234,7 +234,7 @@ class AbstractComponent {
     /**
      * @protected
      */
-    configureEvents() {
+    _configureEvents() {
         // do nothing
     }
 

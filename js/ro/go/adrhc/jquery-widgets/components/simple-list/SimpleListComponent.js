@@ -80,8 +80,8 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      *
      * @protected
      */
-    configureEvents() {
-        console.log(`${this.constructor.name}.configureEvents`);
+    _configureEvents() {
+        console.log(`${this.constructor.name}._configureEvents`);
         this.view.$elem.on(this._appendNamespaceTo("click"),
             this._btnSelector("reload"), this, this.onReload);
     }

@@ -52,8 +52,8 @@ class ElasticListComponent extends SimpleListComponent {
      * @param stateChange {TaggedStateChange}
      * @return {Promise}
      */
-    updateViewOnCREATEItem(stateChange) {
-        console.log(`${this.constructor.name}.updateViewOnCREATEITEM:\n${JSON.stringify(stateChange)}`);
+    updateViewOnItemCREATE(stateChange) {
+        console.log(`${this.constructor.name}.updateViewOnItemCREATE:\n${JSON.stringify(stateChange)}`);
         return this.elasticListComposite.createChildComponent(stateChange).init();
     }
 

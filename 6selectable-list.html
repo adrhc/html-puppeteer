@@ -20,7 +20,7 @@
     <table id="dogsTable" class="responstable">
         <thead>
         <tr data-owner="dogsTable">
-            <th>
+            <th colspan="2">
                 <span data-owner="dogsTable" data-btn="reload" title="reload">Dogs</span>
             </th>
         </tr>
@@ -33,6 +33,10 @@
     <tr data-owner="dogsTable" data-id="{{id}}">
         <td>
             <input type="hidden" name="id" value="{{id}}">
+            {{id}}
+        </td>
+        <td>
+            <input type="hidden" name="name" value="{{name}}">
             {{name}}
         </td>
     </tr>
@@ -41,7 +45,7 @@
 <!-- dogs editable row template -->
 <template id="dogsTableEditableRowTmpl">
     <tr data-owner="dogsTable" data-id="{{id}}" class="row-editor">
-        <td>
+        <td colspan="2">
             <input type="hidden" name="id" value="{{id}}">
             <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
         </td>

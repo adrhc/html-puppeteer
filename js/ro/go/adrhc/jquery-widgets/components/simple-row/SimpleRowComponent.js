@@ -87,8 +87,8 @@ class SimpleRowComponent extends AbstractComponent {
         // call compositeBehaviour.init, etc (do something similar to an init)
         return this.view.update(stateChange)
             .then(() => {
-                // the this.view.$elem is set only after this.view.update so we have to configureEvents after it
-                this.configureEvents();
+                // the this.view.$elem is set only after this.view.update so we have to _configureEvents after it
+                this._configureEvents();
                 return this.compositeBehaviour.init();
             });
     }

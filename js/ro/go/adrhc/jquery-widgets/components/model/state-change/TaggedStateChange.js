@@ -12,7 +12,7 @@ class TaggedStateChange extends StateChange {
      * @param {string} changeType
      * @param {T} previousStateOrPart
      * @param {T} stateOrPart
-     * @param {string} [partName]
+     * @param {string|number} [partName]
      */
     constructor(changeType, previousStateOrPart, stateOrPart, partName) {
         super(previousStateOrPart, stateOrPart, partName);

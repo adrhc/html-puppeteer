@@ -42,7 +42,11 @@ class SelectableListState extends CrudListState {
         const newEntityRowSwap = new EntityRowSwap(context, item, this.indexOf(item));
         const switched = !!this.swappingState.switchTo(newEntityRowSwap);
         if (switched) {
-            this._removeIfTransient(previousEntityRowSwap);
+            AssertionUtils.isNotNull(newEntityRowSwap);
+            if (previousEntityRowSwap != null) {
+                this._processSwitchedOff(previousEntityRowSwap);
+            }
+            this._processSwitchedOn(newEntityRowSwap);
         }
         return switched;
     }
@@ -54,19 +58,29 @@ class SelectableListState extends CrudListState {
         const previousEntityRowSwap = this.swappingState.currentState;
         const switched = !!this.swappingState.switchOff();
         if (switched) {
-            this._removeIfTransient(previousEntityRowSwap);
+            AssertionUtils.isNotNull(previousEntityRowSwap);
+            this._processSwitchedOff(previousEntityRowSwap);
         }
         return switched;
     }
 
     /**
-     * @param {EntityRowSwap} entityRowSwap
-     * @return {TaggedStateChange<EntityRow>}
+     * @param {EntityRowSwap} newEntityRowSwap
      * @protected
      */
-    _removeIfTransient(entityRowSwap) {
-        if (this.isTransient(entityRowSwap)) {
+    _processSwitchedOn(newEntityRowSwap) {
+        return this._collectSwitch(newEntityRowSwap, SwitchType.ON);
+    }
+
+    /**
+     * @param {EntityRowSwap} previousEntityRowSwap
+     * @protected
+     */
+    _processSwitchedOff(previousEntityRowSwap) {
+        if (this._isTransient(previousEntityRowSwap)) {
             return this.removeTransient();
+        } else {
+            return this._collectSwitch(previousEntityRowSwap, SwitchType.OFF);
         }
     }
 
@@ -77,6 +91,23 @@ class SelectableListState extends CrudListState {
      */
     _isTransient(entityRowSwap) {
         return entityRowSwap != null && EntityUtils.isTransientId(entityRowSwap.entityId);
+    }
+
+    /**
+     * @param {EntityRowSwap} entityRowSwap
+     * @param {"ON"|"OFF"} switchType
+     * @return {TaggedStateChange<EntityRowSwap>}
+     * @private
+     */
+    _collectSwitch(entityRowSwap, switchType) {
+        const entity = this.findById(entityRowSwap.entityId);
+        if (entity == null) {
+            // removed entity meanwhile
+            return undefined;
+        }
+        entityRowSwap.entity = entity;
+        return this.stateChanges.collect(new TaggedStateChange(switchType,
+            undefined, entityRowSwap, this.indexOf(entityRowSwap.entity)));
     }
 
     /**
@@ -95,4 +126,9 @@ class SelectableListState extends CrudListState {
         super.reset();
         this.swappingState.reset();
     }
+}
+
+class SwitchType {
+    static ON = "ON";
+    static OFF = "OFF";
 }

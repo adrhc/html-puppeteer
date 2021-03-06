@@ -30,13 +30,10 @@ class SimpleRowView extends AbstractView {
     }
 
     /**
-     * @param {TaggedStateChange} stateChange
-     * @return {Promise<TaggedStateChange>}
+     * @param {TaggedStateChange<EntityRow>} stateChange
+     * @return {Promise<TaggedStateChange<EntityRow>>}
      */
     update(stateChange) {
-        /**
-         * @type {EntityRow}
-         */
         const rowValues = stateChange.stateOrPart;
         const previousStateOrPart = stateChange.previousStateOrPart;
         const rowIdToSearchFor = previousStateOrPart ? previousStateOrPart.entity.id : rowValues.entity.id;

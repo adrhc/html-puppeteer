@@ -1,13 +1,9 @@
 /**
- * @typedef {IdentifiableEntity} TItem
- * @typedef {TItem[]} T
- * @typedef {EntityRow<TItem>} P
- * @typedef {T|P} StateOrPart
- * @extends {SimpleListState<T, P>}
+ * @extends {SimpleListState<IdentifiableEntity[], EntityRow<IdentifiableEntity>>}
  */
 class CrudListState extends SimpleListState {
     /**
-     * @type {function(): TItem}
+     * @type {function(): IdentifiableEntity}
      */
     newEntityFactoryFn;
     /**
@@ -18,11 +14,11 @@ class CrudListState extends SimpleListState {
     append;
 
     /**
-     * @param {T} [initialState]
-     * @param {function(): TItem} [newEntityFactoryFn]
+     * @param {IdentifiableEntity[]} [initialState]
+     * @param {function(): IdentifiableEntity} [newEntityFactoryFn]
      * @param {boolean} [newItemsGoToTheEndOfTheList]
-     * @param {TaggingStateChangeMapper<T>} [stateChangeMapper]
-     * @param {StateChangesCollector<T>} [changeManager]
+     * @param {TaggingStateChangeMapper<IdentifiableEntity[]>} [stateChangeMapper]
+     * @param {StateChangesCollector<IdentifiableEntity[]>} [changeManager]
      */
     constructor({
                     initialState,
@@ -38,7 +34,7 @@ class CrudListState extends SimpleListState {
 
     /**
      * @param {number} index
-     * @return {P|undefined}
+     * @return {EntityRow<IdentifiableEntity>|undefined}
      */
     getStatePart(index) {
         if (this.items == null || index >= this.items.length) {
@@ -48,7 +44,7 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @param {P} newRowValues
+     * @param {EntityRow<IdentifiableEntity>} newRowValues
      * @param {number} oldIndex
      * @return {boolean}
      * @protected
@@ -62,9 +58,9 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @param {P} newRowValues
+     * @param {EntityRow<IdentifiableEntity>} newRowValues
      * @param {number} oldIndex
-     * @return {P} previous state part
+     * @return {EntityRow<IdentifiableEntity>} previous state part
      * @protected
      */
     _replacePartImpl(newRowValues, oldIndex) {
@@ -94,9 +90,9 @@ class CrudListState extends SimpleListState {
      * must return the original item (the one stored in this.items) for the receiver to be able to change its id
      * risk: the item is also used with the collectStateChange; a change by the final receiver will impact this.items!
      *
-     * @param {TItem} [initialValue]
+     * @param {IdentifiableEntity} [initialValue]
      * @param {boolean} [append]
-     * @return {TaggedStateChange<P>}
+     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
     createNewItem(initialValue, append = this.append) {
         const item = this.newEntityFactoryFn();
@@ -107,10 +103,10 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @param item {TItem} is to insert if itemIdToRemove exists otherwise update
+     * @param item {IdentifiableEntity} is to insert if itemIdToRemove exists otherwise update
      * @param itemIdToRemove {number|string} is to remove if exists
      * @param append {boolean|undefined}
-     * @return {TaggedStateChange<P>}
+     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
     save(item, itemIdToRemove, append = this.append) {
         if (itemIdToRemove != null && !EntityUtils.idsAreEqual(item.id, itemIdToRemove)) {
@@ -122,9 +118,9 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @param {TItem} item
+     * @param {IdentifiableEntity} item
      * @param {boolean} [append]
-     * @return {TaggedStateChange<P>}
+     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
     insertItem(item, append = this.append) {
         const newItemIndex = append ? this.items.length : 0;
@@ -132,9 +128,9 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @param {TItem} item
+     * @param {IdentifiableEntity} item
      * @param {number} [newItemIndex]
-     * @return {TaggedStateChange<P>}
+     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
     updateItem(item, newItemIndex) {
         const oldIndex = this.findIndexById(item.id);
@@ -143,7 +139,7 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @return {TaggedStateChange<P>}
+     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
     removeTransient() {
         return this.removeById(IdentifiableEntity.TRANSIENT_ID);
@@ -151,7 +147,7 @@ class CrudListState extends SimpleListState {
 
     /**
      * @param {number|string} id
-     * @return {TaggedStateChange<P>}
+     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
     removeById(id) {
         const indexToRemove = this.findIndexById(id);
@@ -160,7 +156,7 @@ class CrudListState extends SimpleListState {
 
     /**
      * @param {number} index
-     * @return {TaggedStateChange<P>}
+     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      * @protected
      */
     _removeItem(index) {
@@ -168,9 +164,9 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @param {P} rowValues
+     * @param {EntityRow<IdentifiableEntity>} rowValues
      * @param {number} [oldIndex]
-     * @return {TaggedStateChange<P>}
+     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      * @protected
      */
     _replaceItem(rowValues, oldIndex = rowValues == null ? undefined : rowValues.index) {

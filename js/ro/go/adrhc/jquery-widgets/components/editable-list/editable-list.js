@@ -143,8 +143,8 @@ class EditableListComponent extends SelectableListComponent {
      *
      * @protected
      */
-    configureEvents() {
-        super.configureEvents();
+    _configureEvents() {
+        super._configureEvents();
         this.simpleListView.$elem
             .on(this._appendNamespaceTo('click'),
                 `${this._btnSelector(['showDelete', 'showEdit'])}`, this, this.onShowDU)

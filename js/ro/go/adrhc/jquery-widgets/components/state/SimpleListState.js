@@ -1,35 +1,33 @@
 /**
  * @template TItem, P
- * @typedef {TItem[]} T
- * @typedef {T|P} StateOrPart
- * @extends {TaggingStateHolder<T, P>}
+ * @extends {TaggingStateHolder<TItem[], P>}
  */
 class SimpleListState extends TaggingStateHolder {
     /**
-     * @param {T} [initialState]
-     * @param {TaggingStateChangeMapper<T>} [stateChangeMapper]
-     * @param {StateChangesCollector<T>} [changeManager]
+     * @param {TItem[]} [initialState]
+     * @param {TaggingStateChangeMapper<TItem[]>} [stateChangeMapper]
+     * @param {StateChangesCollector<TItem[]>} [changeManager]
      */
     constructor({initialState = [], stateChangeMapper, changeManager}) {
         super({initialState, stateChangeMapper, changeManager});
     }
 
     /**
-     * @return {T}
+     * @return {TItem[]}
      */
     get items() {
         return this.currentState;
     }
 
     /**
-     * @param {T} items
+     * @param {TItem[]} items
      */
     set items(items) {
         this.currentState = items;
     }
 
     /**
-     * @param {T} [items=[]]
+     * @param {TItem[]} [items=[]]
      */
     updateAll(items = []) {
         this.replaceEntirely(items);
