@@ -84,20 +84,20 @@ class SelectableListComponent extends SimpleListComponent {
      */
     updateViewOnKnownItemStateChange(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnKnownItemStateChange:\n${JSON.stringify(stateChange)}`);
-        return this.notSelectedRow.processStateChange(stateChange);
+        return this.notSelectedRow.processStateChanges(stateChange);
     }
 
     updateViewOnItemOFF(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnKnownItemOFF:\n${JSON.stringify(stateChange)}`);
         const removeOnRow = new DeleteStateChange(stateChange.stateOrPart);
         const createOffRow = new CreateStateChange(stateChange.stateOrPart);
-        return this.swappingRowSelector[SwitchType.OFF].processStateChange(removeOnRow, createOffRow);
+        return this.swappingRowSelector[SwitchType.OFF].processStateChanges(removeOnRow, createOffRow);
     }
 
     updateViewOnItemON(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnKnownItemON:\n${JSON.stringify(stateChange)}`);
         stateChange = new CreateStateChange(stateChange.stateOrPart);
-        return this.swappingRowSelector[SwitchType.ON].processStateChange(stateChange);
+        return this.swappingRowSelector[SwitchType.ON].processStateChanges(stateChange);
     }
 
     /**

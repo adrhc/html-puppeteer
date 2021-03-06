@@ -8,7 +8,7 @@ function dogsSupplierFor(comp) {
         // dogs.push({id: dogs.length + 1, name: `dog${dogs.length + 1}`});
         const oldDogs = comp.findKidsByClass(SimpleListComponent).pop().state.currentState;
         const dogs = [...oldDogs, {id: oldDogs.length + 1, name: `dog${oldDogs.length + 1}`}];
-        return comp.processStateChange(new StateChange("UPDATE_ALL", {dogs}), {});
+        return comp.processStateChanges(new StateChange("UPDATE_ALL", {dogs}), {});
     };
 }
 
@@ -20,7 +20,7 @@ function personSupplierFor(comp) {
     return () => {
         const date = new Date().toLocaleTimeString();
         const person = {name: `Kent ${date}`, surname: `Gigi ${date}`};
-        return comp.processStateChange(new RenderStateChange({person}), {});
+        return comp.processStateChanges(new RenderStateChange({person}), {});
     };
 }
 

@@ -20,14 +20,14 @@ if (Modernizr.template) {
 
     $(() => {
         JQueryWidgetsUtil.autoCreate()
-            .then(comp => comp.processStateChange({
+            .then(comp => comp.processStateChanges({
                 seconds: comp.state.currentState.seconds,
                 name: "Gigi",
                 surname: "Kent"
             }, {}).then(() => comp))
             .then((comp) => {
                 const seconds = comp.state.currentState.seconds;
-                const procStateChgFn = () => comp.processStateChange(generateNewState(seconds), {});
+                const procStateChgFn = () => comp.processStateChanges(generateNewState(seconds), {});
                 setInterval(procStateChgFn, seconds * 1000);
             });
     });

@@ -12,8 +12,8 @@ class DrawingComponent extends ContainerComponent {
         super(elemIdOrJQuery, config);
     }
 
-    processStateChange(stateChangeOrJustData, {dontRecordStateEvents}) {
+    processStateChanges(stateChangeOrJustData, {dontRecordStateEvents}) {
         super.reset();
-        return super.processStateChange(stateChangeOrJustData, {dontRecordStateEvents});
+        return super.processStateChanges(stateChangeOrJustData, {dontRecordStateEvents});
     }
 }

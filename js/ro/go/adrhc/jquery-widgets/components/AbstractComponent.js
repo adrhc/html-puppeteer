@@ -110,7 +110,7 @@ class AbstractComponent {
      * @param {StateChange} oldStateChange
      * @return {Promise<StateChange[]>}
      */
-    processStateChange(...oldStateChange) {
+    processStateChanges(...oldStateChange) {
         return this.doWithState((basicState) => {
             // collecting again the old state change event
             oldStateChange.forEach(it => basicState.stateChanges.collect(it));
