@@ -1,15 +1,15 @@
 /**
- * SelectableListState extends CrudListState (which extends SimpleListState) and RowSwappingState
+ * SelectableListState extends CrudListState (which extends SimpleListState) and RowSwappingStateHolder
  *
- * RowSwappingState collects state changes as follows:
- *      StateChange.changeType = RowSwappingState.changeType (defaults to "SWAP")
+ * RowSwappingStateHolder collects state changes as follows:
+ *      StateChange.changeType = RowSwappingStateHolder.changeType (defaults to "SWAP")
  *      StateChange.data = SwappingDetails
  * SelectableListState.swappingState collects state changes as follows:
  *      StateChange.swappingDetails.data = EntityRowSwap
  */
 class SelectableListState extends CrudListState {
     /**
-     * @type {RowSwappingState}
+     * @type {RowSwappingStateHolder}
      */
     swappingState;
 
@@ -23,15 +23,15 @@ class SelectableListState extends CrudListState {
                     initialState,
                     newEntityFactoryFn,
                     newItemsGoToTheEndOfTheList,
-                    swappingState = new RowSwappingState()
+                    swappingState = new RowSwappingStateHolder()
                 }) {
         super({initialState, newEntityFactoryFn, newItemsGoToTheEndOfTheList});
         this.swappingState = swappingState;
     }
 
     /**
-     * @param id {numeric|string}
-     * @param context is some context data
+     * @param {numeric|string} id
+     * @param {string} context is some context data
      * @return {boolean} whether the switch actually happened or not
      */
     switchTo(id, context) {
@@ -45,7 +45,7 @@ class SelectableListState extends CrudListState {
             return this.switchToOff();
         }
         const previousEntityRowSwap = this.swappingState.currentState;
-        const newEntityRowSwap = new EntityRowSwap(new EntityRow(item, this.items.indexOf(item)), context);
+        const newEntityRowSwap = new EntityRowSwap(context, item, this.items.indexOf(item));
         const switched = !!this.swappingState.switchTo(newEntityRowSwap);
         if (switched) {
             this._doAfterSwitch(previousEntityRowSwap, newEntityRowSwap)
@@ -87,18 +87,20 @@ class SelectableListState extends CrudListState {
      * @protected
      */
     _reloadLastSwappedOffItem() {
-        const swappingStateChange = this.swappingState.stateChanges
-            .findFirstFromNewest((swappingStateChange) => swappingStateChange.data.isPrevious);
+        /**
+         * @type {TaggedStateChange}
+         */
+        const swappingStateChange = this.swappingState.stateChanges.changes.peekFront();
         if (!swappingStateChange) {
             // error: no isPrevious (true) state change
-            console.error("found no isPrevious = true state change!");
-            throw "found no isPrevious = true state change!";
+            console.error("found no state change!");
+            throw "found no state change!";
         }
         /**
          * swappingStateChange.data is {SwappingDetails}
          * @type {EntityRowSwap}
          */
-        const selectableSwappingData = swappingStateChange.data.data;
+        const selectableSwappingData = swappingStateChange.previousStateOrPart;
         if (selectableSwappingData.reloadedId != null) {
             // error: reloadedId != null
             console.error(`reloadedId (${selectableSwappingData.reloadedId}) != null:\n${JSON.stringify(swappingStateChange)}`);

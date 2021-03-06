@@ -1,6 +1,9 @@
+/**
+ * @template T
+ */
 class StateChange {
     /**
-     * @type {*}
+     * @type {T}
      */
     stateOrPart;
     /**
@@ -8,13 +11,13 @@ class StateChange {
      */
     partName;
     /**
-     * @type {*}
+     * @type {T}
      */
     previousStateOrPart
 
     /**
-     * @param {*} previousStateOrPart
-     * @param {*} [stateOrPart]
+     * @param {T|*} previousStateOrPart
+     * @param {T|*} [stateOrPart]
      * @param {string} [partName]
      */
     constructor(previousStateOrPart, stateOrPart, partName) {

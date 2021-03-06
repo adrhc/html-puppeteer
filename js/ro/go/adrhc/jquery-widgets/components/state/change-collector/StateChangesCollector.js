@@ -1,22 +1,25 @@
+/**
+ * @template T
+ */
 class StateChangesCollector {
     /**
-     * @type {Dequeue}
+     * @type {Dequeue<StateChange<T>>}
      */
     changes = new Dequeue();
     /**
-     * @type {IdentityStateChangeMapper}
+     * @type {IdentityStateChangeMapper<T>}
      */
     stateChangeMapper;
 
     /**
-     * @param {IdentityStateChangeMapper} stateChangeMapper
+     * @param {IdentityStateChangeMapper<T>} stateChangeMapper
      */
     constructor(stateChangeMapper = new IdentityStateChangeMapper()) {
         this.stateChangeMapper = stateChangeMapper;
     }
 
     /**
-     * @param stateChange {StateChange}
+     * @param {StateChange<T>} stateChange
      */
     collect(stateChange) {
         stateChange = this._transform(stateChange);
@@ -28,30 +31,30 @@ class StateChangesCollector {
     }
 
     /**
-     * @param changeManager {StateChangesCollector}
-     * @param fromNewest {boolean|undefined}
+     * @param {StateChangesCollector<T>} changeManager
+     * @param {boolean} [fromNewest]
      */
-    collectByConsumingChanges(changeManager, fromNewest = false) {
+    collectByConsumingChanges(changeManager, fromNewest) {
         changeManager.consumeAll(fromNewest).forEach(stateChange => this.collect(stateChange));
     }
 
     /**
      * Discards one previously recorded state change, the newest or earliest one, depending on @param fromNewest.
      *
-     * @param fromNewest {boolean} is the consumption starting point
-     * @return {StateChange}
+     * @param {boolean} [fromNewest] is the consumption starting point
+     * @return {StateChange<T>}
      */
-    consumeOne(fromNewest = false) {
+    consumeOne(fromNewest) {
         return fromNewest ? this.changes.removeBack() : this.changes.removeFront();
     }
 
     /**
      * Discards all previously recorded state changes, starting with the newest or earliest one, depending on @param fromNewest.
      *
-     * @param fromNewest {boolean|undefined} is the consumption starting point
-     * @return {StateChange[]}
+     * @param {boolean} [fromNewest] is the consumption starting point
+     * @return {StateChange<T>[]}
      */
-    consumeAll(fromNewest = false) {
+    consumeAll(fromNewest) {
         const changes = [];
         while (!this.changes.isEmpty()) {
             changes.push(this.consumeOne(fromNewest));
@@ -61,15 +64,15 @@ class StateChangesCollector {
 
     /**
      * @param {boolean} [fromNewestToOldest]
-     * @return {StateChange[]}
+     * @return {StateChange<T>[]}
      */
     peekAll(fromNewestToOldest) {
         return this.changes.peekAll(fromNewestToOldest);
     }
 
     /**
-     * @param {function(stateChange: StateChange): boolean} predicate
-     * @return {undefined|*}
+     * @param {function(stateChange: StateChange<T>): boolean} predicate
+     * @return {StateChange<T>|undefined}
      */
     findFirstFromNewest(predicate) {
         return this.changes.findFirstFromBack(predicate);
@@ -80,8 +83,8 @@ class StateChangesCollector {
     }
 
     /**
-     * @param {StateChange} stateChange
-     * @return {StateChange}
+     * @param {StateChange<T>} stateChange
+     * @return {StateChange<T>}
      * @protected
      */
     _transform(stateChange) {

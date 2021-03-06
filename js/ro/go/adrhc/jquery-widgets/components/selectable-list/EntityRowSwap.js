@@ -1,23 +1,22 @@
-class EntityRowSwap {
-    /**
-     * @type {number|string} is the id used to reload the item (see SelectableListState.reloadItemOnSwapping)
-     */
-    reloadedId;
-    /**
-     * @type {EntityRow}
-     */
-    entityRow;
+class EntityRowSwap extends EntityRow {
     /**
      * @type {string}
      */
     context
+    /**
+     * @type {number|string} is the id used to reload the item (see SelectableListState.reloadItemOnSwapping)
+     */
+    reloadedId;
 
     /**
-     * @param {EntityRow} entityRow
-     * @param {string} context
+     * @param {string} [context]
+     * @param {IdentifiableEntity} [entity]
+     * @param {number} [index]
+     * @param {number|string} [reloadedId]
      */
-    constructor(entityRow, context) {
-        this.entityRow = entityRow;
+    constructor(context, entity, index, reloadedId) {
+        super(entity, index);
+        this.reloadedId = reloadedId;
         this.context = context;
     }
 
@@ -26,19 +25,19 @@ class EntityRowSwap {
      *
      * @return {boolean}
      */
-    similarTo(selectableSwappingData) {
+    isSameContextAndEntity(selectableSwappingData) {
         return (
                 this.context == null && selectableSwappingData?.context == null
                 || this.context === selectableSwappingData?.context
             )
             &&
-            EntityUtils.idsAreEqual(this.itemId, selectableSwappingData?.itemId);
+            EntityUtils.idsAreEqual(this.entityId, selectableSwappingData?.entityId);
     }
 
     /**
      * @returns {number|string|undefined} could be undefined when "previously" switched to undefined (to switch off the "previous")
      */
-    get itemId() {
-        return this.entityRow?.entity.id;
+    get entityId() {
+        return this.entity?.id;
     }
 }

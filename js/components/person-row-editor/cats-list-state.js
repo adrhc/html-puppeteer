@@ -4,7 +4,7 @@ class CatsListState extends EditableListState {
      * @param {*} [currentState]
      * @param {function(): IdentifiableEntity} [newEntityFactoryFn]
      * @param {boolean} [newItemsGoToTheEndOfTheList]
-     * @param {RowSwappingState} [swappingState]
+     * @param {RowSwappingStateHolder} [swappingState]
      */
     constructor(repository, {currentState, newEntityFactoryFn, newItemsGoToTheEndOfTheList, swappingState}) {
         super({currentState, newEntityFactoryFn, newItemsGoToTheEndOfTheList, swappingState});

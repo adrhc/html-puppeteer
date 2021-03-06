@@ -1,7 +1,11 @@
+/**
+ * @template T
+ * @extends {IdentityStateChangeMapper<T>}
+ */
 class TaggingStateChangeMapper extends IdentityStateChangeMapper {
     /**
-     * @param {StateChange} stateChange
-     * @return {TaggedStateChange}
+     * @param {StateChange<T>} stateChange
+     * @return {TaggedStateChange<T>}
      */
     map(stateChange) {
         if (!stateChange) {
@@ -15,7 +19,7 @@ class TaggingStateChangeMapper extends IdentityStateChangeMapper {
     }
 
     /**
-     * @param {StateChange} change
+     * @param {StateChange<T>} change
      * @return {string}
      * @protected
      */
@@ -30,9 +34,9 @@ class TaggingStateChangeMapper extends IdentityStateChangeMapper {
     }
 
     /**
-     * @param {*} stateOrPart
+     * @param {T|*} stateOrPart
      * @param {string} partName
-     * @return {boolean|*}
+     * @return {boolean}
      * @protected
      */
     _isChangeTypeOfDelete(stateOrPart, partName) {
@@ -40,9 +44,9 @@ class TaggingStateChangeMapper extends IdentityStateChangeMapper {
     }
 
     /**
-     * @param {*} stateOrPart
+     * @param {T|*} stateOrPart
      * @param {string} [partName]
-     * @return {boolean|*}
+     * @return {boolean}
      * @protected
      */
     _isPristine(stateOrPart, partName) {
@@ -63,6 +67,11 @@ class TaggingStateChangeMapper extends IdentityStateChangeMapper {
         return part == null || $.isArray(part) && !part.length;
     }
 
+    /**
+     * @param state
+     * @return {boolean}
+     * @protected {boolean}
+     */
     _isStatePristine(state) {
         return state == null || $.isArray(state) && !state.length;
     }

@@ -1,8 +1,12 @@
+/**
+ * @template T
+ * @extends {StateHolder<T>}
+ */
 class TaggingStateHolder extends StateHolder {
     /**
-     * @param {*} [initialState]
-     * @param {TaggingStateChangeMapper} [stateChangeMapper]
-     * @param {StateChangesCollector} [changeManager]
+     * @param {T} [initialState]
+     * @param {TaggingStateChangeMapper<T>} [stateChangeMapper]
+     * @param {StateChangesCollector<T>} [changeManager]
      */
     constructor({
                     initialState,

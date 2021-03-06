@@ -1,19 +1,22 @@
+/**
+ * @template T
+ */
 class StateHolder {
     /**
-     * @type {StateChangesCollector}
+     * @type {StateChangesCollector<T>}
      * @protected
      */
     _stateChanges;
     /**
-     * @type {*}
+     * @type {T}
      * @protected
      */
     _currentState;
 
     /**
-     * @param {*} [initialState]
-     * @param {IdentityStateChangeMapper} [stateChangeMapper]
-     * @param {StateChangesCollector} [changesCollector]
+     * @param {T} [initialState]
+     * @param {IdentityStateChangeMapper<T>} [stateChangeMapper]
+     * @param {StateChangesCollector<T>} [changesCollector]
      */
     constructor({
                     initialState,
@@ -25,9 +28,10 @@ class StateHolder {
     }
 
     /**
-     * @param {*} [stateOrPart]
+     * @param {T|*} [stateOrPart]
      * @param {string|number} [partName] specify the state's part/section to change/manipulate
      * @param {boolean} [dontRecordStateEvents]
+     * @return {StateChange<T|*>|undefined}
      */
     replace(stateOrPart, {partName, dontRecordStateEvents} = {}) {
         if (partName) {
@@ -38,9 +42,9 @@ class StateHolder {
     }
 
     /**
-     * @param {*} [state] is the new state value to store
+     * @param {T} [state] is the new state value to store
      * @param {boolean} [dontRecordStateEvents]
-     * @return {StateChange}
+     * @return {StateChange<T>|undefined}
      */
     replaceEntirely(state, dontRecordStateEvents) {
         if (this._currentStateEquals(state)) {
@@ -58,8 +62,8 @@ class StateHolder {
     }
 
     /**
-     * @param {*} [state] is the new state value to store
-     * @return {*} previous state
+     * @param {T} [state] is the new state value to store
+     * @return {T} previous state
      * @protected
      */
     _replaceImpl(state) {
@@ -74,7 +78,7 @@ class StateHolder {
      * @param {*} partialState
      * @param {string|number} partName specify the state's part/section to change/manipulate
      * @param {boolean} [dontRecordStateEvents]
-     * @return {StateChange}
+     * @return {StateChange<*>|undefined}
      */
     replacePart(partialState, partName, dontRecordStateEvents) {
         if (this._currentStatePartEquals(partialState, partName)) {
@@ -156,14 +160,23 @@ class StateHolder {
         return this._currentState[partName];
     }
 
+    /**
+     * @return {T}
+     */
     get currentState() {
         return this._currentState;
     }
 
+    /**
+     * @param {T} currentState
+     */
     set currentState(currentState) {
         this._currentState = currentState;
     }
 
+    /**
+     * @return {StateChangesCollector<T>}
+     */
     get stateChanges() {
         return this._stateChanges;
     }

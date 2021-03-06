@@ -1,5 +1,8 @@
+/**
+ * @template T
+ * @extends {StateChange<T>}
+ */
 class TaggedStateChange extends StateChange {
-
     /**
      * @type {"CREATE"|"DELETE"|"REPLACE"}
      */
@@ -7,8 +10,8 @@ class TaggedStateChange extends StateChange {
 
     /**
      * @param {string} changeType
-     * @param {*} previousStateOrPart
-     * @param {*} stateOrPart
+     * @param {T} previousStateOrPart
+     * @param {T} stateOrPart
      * @param {string} [partName]
      */
     constructor(changeType, previousStateOrPart, stateOrPart, partName) {

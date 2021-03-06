@@ -1,7 +1,10 @@
+/**
+ * @template T
+ */
 class IdentityStateChangeMapper {
     /**
-     * @param {StateChange} stateChange
-     * @return {StateChange}
+     * @param {StateChange<T>} stateChange
+     * @return {StateChange<T>}
      */
     map(stateChange) {
         return stateChange;

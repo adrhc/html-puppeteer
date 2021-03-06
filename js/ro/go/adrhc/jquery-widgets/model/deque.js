@@ -1,11 +1,16 @@
 /**
  * https://github.com/swarup260/Learning_Algorithms/blob/master/data_structure/Dequeue.js
+ *
+ * @template T
  */
 class Dequeue {
     constructor() {
         this.clear();
     }
 
+    /**
+     * @param {T} element
+     */
     addFront(element) {
         if (this.isEmpty()) {
             this.addBack(element);
@@ -22,7 +27,7 @@ class Dequeue {
     }
 
     /**
-     * @param {*} element
+     * @param {T} element
      */
     addBack(element) {
         this.items[this.count] = element;
@@ -32,7 +37,7 @@ class Dequeue {
     /**
      * front = oldest
      *
-     * @return {undefined|*}
+     * @return {T|undefined}
      */
     removeFront() {
         if (this.isEmpty()) {
@@ -49,7 +54,7 @@ class Dequeue {
     /**
      * back = newest
      *
-     * @return {undefined|*}
+     * @return {T|undefined}
      */
     removeBack() {
         if (this.isEmpty()) {
@@ -65,7 +70,7 @@ class Dequeue {
      * aka peek from left (oldest)
      *
      * @param count {number} how muck further from left to pick; 0 means 1th from left
-     * @return {undefined|*}
+     * @return {T|undefined}
      */
     peekFront(count = 0) {
         if (this.isEmpty()) {
@@ -78,7 +83,7 @@ class Dequeue {
      * aka peek from right (newest)
      *
      * @param count {number} how muck back from right to pick; 0 means 1th from right
-     * @return {undefined|*}
+     * @return {T|undefined}
      */
     peekBack(count = 0) {
         if (this.isEmpty()) {
@@ -89,7 +94,7 @@ class Dequeue {
 
     /**
      * @param predicate {function(stateChange: StateChange): boolean}
-     * @return {undefined|*}
+     * @return {T|undefined}
      */
     findFirstFromBack(predicate) {
         let stateChange;
@@ -106,7 +111,7 @@ class Dequeue {
 
     /**
      * @param fromNewestToOldest {boolean|undefined}
-     * @return {[]}
+     * @return {T[]}
      */
     peekAll(fromNewestToOldest) {
         const items = [];
