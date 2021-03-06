@@ -35,7 +35,8 @@ class SelectableListComponent extends SimpleListComponent {
     constructor(repository, state, view,
                 notSelectedRow, selectedRow, config) {
         super(repository, state, view, config);
-        this.stateChangesDispatcher.usePartName("Item", "CREATE", "REPLACE", "DELETE");
+        this.stateChangesDispatcher.usePartName("Item");
+        this.stateChangesDispatcher.partChangeHandlers.setHandlerName("onItemChange", "CREATE", "REPLACE", "DELETE");
         this.selectableListState = state;
         this.simpleListView = view;
         this.entityExtractor = new SelectableListEntityExtractor(this, {});
@@ -82,20 +83,20 @@ class SelectableListComponent extends SimpleListComponent {
      * @param {TaggedStateChange<EntityRowSwap>} stateChange
      * @return {Promise<TaggedStateChange[]>}
      */
-    updateViewOnKnownItemStateChange(stateChange) {
-        console.log(`${this.constructor.name}.updateViewOnKnownItemStateChange:\n${JSON.stringify(stateChange)}`);
+    onItemChange(stateChange) {
+        console.log(`${this.constructor.name}.onItemChange:\n${JSON.stringify(stateChange)}`);
         return this.notSelectedRow.processStateChanges(stateChange);
     }
 
     updateViewOnItemOFF(stateChange) {
-        console.log(`${this.constructor.name}.updateViewOnKnownItemOFF:\n${JSON.stringify(stateChange)}`);
+        console.log(`${this.constructor.name}.updateViewOnItemOFF:\n${JSON.stringify(stateChange)}`);
         const removeOnRow = new DeleteStateChange(stateChange.stateOrPart);
         const createOffRow = new CreateStateChange(stateChange.stateOrPart);
         return this.swappingRowSelector[SwitchType.OFF].processStateChanges(removeOnRow, createOffRow);
     }
 
     updateViewOnItemON(stateChange) {
-        console.log(`${this.constructor.name}.updateViewOnKnownItemON:\n${JSON.stringify(stateChange)}`);
+        console.log(`${this.constructor.name}.updateViewOnItemON:\n${JSON.stringify(stateChange)}`);
         stateChange = new CreateStateChange(stateChange.stateOrPart);
         return this.swappingRowSelector[SwitchType.ON].processStateChanges(stateChange);
     }

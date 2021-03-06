@@ -4,17 +4,17 @@ class StateChangesDispatcher {
      */
     component;
     /**
-     * @type {string[]}
-     */
-    knownChangeTypes = [];
-    /**
-     * @type {string[]}
-     */
-    knownPartChangeTypes = [];
-    /**
      * @type {string}
      */
     partName;
+    /**
+     * @type {StateChangeHandlersManager}
+     */
+    stateChangeHandlers = new StateChangeHandlersManager();
+    /**
+     * @type {StateChangeHandlersManager}
+     */
+    partChangeHandlers = new StateChangeHandlersManager();
 
     /**
      * @param component {AbstractComponent}
@@ -65,76 +65,93 @@ class StateChangesDispatcher {
             (this.partName == null ? stateChange.partName : this.partName);
 
         if (partName) {
-            let partFnName = `updateViewOn${partName}${stateChange.changeType}`;
-            if (typeof this.component[partFnName] === "function") {
-                return this.component[partFnName](stateChange);
+            let partChangeHandlerName = this.partChangeHandlers.handlerNameOf(stateChange.changeType);
+            if (typeof this.component[partChangeHandlerName] === "function") {
+                return this.component[partChangeHandlerName](stateChange);
             }
-            partFnName = `updateViewOnKnown${partName}StateChange`;
-            if (this.component[partFnName] && this.knownPartChangeTypes.includes(stateChange.changeType)) {
-                return this.component[partFnName](stateChange);
+            partChangeHandlerName = `updateViewOn${partName}${stateChange.changeType}`;
+            if (typeof this.component[partChangeHandlerName] === "function") {
+                return this.component[partChangeHandlerName](stateChange);
             }
-            partFnName = `updateViewOnAny${partName}`;
-            if (this.component[partFnName]) {
-                return this.component[partFnName](stateChange);
+            partChangeHandlerName = `updateViewOnAny${partName}`;
+            if (this.component[partChangeHandlerName]) {
+                return this.component[partChangeHandlerName](stateChange);
             }
         }
 
-        const fnName = `updateViewOn${stateChange.changeType}`;
-        if (typeof this.component[fnName] === "function") {
-            return this.component[fnName](stateChange);
-        } else if (this.knownChangeTypes.includes(stateChange.changeType)) {
-            return this.component.updateViewOnKnownStateChange(stateChange);
+        let handlerName = this.stateChangeHandlers.handlerNameOf(stateChange.changeType);
+        if (typeof this.component[handlerName] === "function") {
+            return this.component[handlerName](stateChange);
+        }
+        handlerName = `updateViewOn${stateChange.changeType}`;
+        if (typeof this.component[handlerName] === "function") {
+            return this.component[handlerName](stateChange);
         } else {
             return this.component.updateViewOnAny(stateChange);
         }
     }
 
     /**
-     * @param {string} changeType
-     */
-    prependKnownChangeTypes(...changeType) {
-        changeType.forEach(it => this.knownChangeTypes.splice(0, 0, it));
-    }
-
-    /**
-     * @param {string} changeType
-     */
-    prependPartKnownChangeTypes(...changeType) {
-        changeType.forEach(it => this.knownPartChangeTypes.splice(0, 0, it));
-    }
-
-    /**
-     * "is know request type?" or "is not applicable (situation)?" (question)
-     *
-     * @param {string} changeType
-     * @return {boolean|boolean}
-     */
-    isKnownChangeTypesOrNA(changeType) {
-        return !this.knownChangeTypes || this.knownChangeTypes.length === 0 || this.knownChangeTypes.includes(changeType);
-    }
-
-    /**
-     * "is know request type?" or "is not applicable (situation)?" (question)
-     *
-     * @param {string} changeType
-     * @return {boolean|boolean}
-     */
-    isKnownPartChangeTypeOrNA(changeType) {
-        return !this.knownPartChangeTypes || this.knownPartChangeTypes.length === 0 || this.knownPartChangeTypes.includes(changeType);
-    }
-
-    /**
      * @param {boolean|string} [partName]
-     * @param {string} [partKnownChangeTypesToPrepend]
      */
-    usePartName(partName, ...partKnownChangeTypesToPrepend) {
+    usePartName(partName) {
         if (typeof partName === "boolean" && !partName) {
             this.partName = undefined;
         } else {
             this.partName = partName;
         }
-        if (partKnownChangeTypesToPrepend) {
-            this.prependPartKnownChangeTypes(...partKnownChangeTypesToPrepend);
+    }
+}
+
+class StateChangeHandlersManager {
+    static ALL = "ALL";
+
+    /**
+     * @type {{}}
+     */
+    stateChangeHandlers = {};
+
+    /**
+     * @param {string} handlerName
+     * @param {string|number} changeType
+     */
+    setHandlerName(handlerName, ...changeType) {
+        this.stateChangeHandlers[handlerName] = changeType;
+    }
+
+    /**
+     * @param {string|number} changeType
+     * @return {string|undefined}
+     */
+    handlerNameOf(changeType) {
+        if (!this.stateChangeHandlers) {
+            return undefined;
         }
+        for (let handlerName in this.stateChangeHandlers) {
+            if (this.stateChangeHandlers[handlerName].includes(changeType)) {
+                return handlerName;
+            }
+        }
+        return undefined;
+    }
+
+    /**
+     * @param {string} handlerName
+     * @param {string|number} changeTypes
+     */
+    isHandlerOf(handlerName, ...changeTypes) {
+        const handledChangeTypes = this.stateChangeHandlers[handlerName];
+        if (handledChangeTypes == null) {
+            return false;
+        }
+        if (handledChangeTypes[0] === StateChangeHandlersManager.ALL) {
+            return true;
+        }
+        for (let ct of changeTypes) {
+            if (handledChangeTypes.includes(ct)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -143,21 +143,13 @@ class AbstractComponent {
     }
 
     /**
-     * @param stateChange {StateChange|undefined}
-     * @return {Promise<StateChange>}
-     */
-    updateViewOnKnownStateChange(stateChange) {
-        console.log(`${this.constructor.name}.updateViewOnKnownStateChange: delegating to updateViewOnAny (default implementation)`);
-        return this.updateViewOnAny(stateChange);
-    }
-
-    /**
-     * @param {StateChange} stateChange
+     * @param {TaggedStateChange} stateChange
      * @return {Promise}
      */
     updateViewOnAny(stateChange) {
         this._safelyLogStateChange(stateChange, "updateViewOnAny");
-        if (!this.stateChangesDispatcher.isKnownChangeTypesOrNA(stateChange.changeType)) {
+        if (!this.stateChangesDispatcher.stateChangeHandlers
+            .isHandlerOf("updateViewOnAny", stateChange.changeType)) {
             console.log(`${this.constructor.name}.updateViewOnAny skipped!`);
             return Promise.reject(stateChange);
         }

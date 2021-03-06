@@ -21,7 +21,8 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      */
     constructor(repository, state, view, config) {
         super(state, view, config);
-        this.stateChangesDispatcher.prependKnownChangeTypes("CREATE", "REPLACE", "DELETE");
+        this.stateChangesDispatcher.stateChangeHandlers.setHandlerName(
+            "updateViewOnAny", "CREATE", "REPLACE", "DELETE");
         this.simpleListState = state;
         this.repository = repository;
     }
@@ -57,6 +58,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
 
     /**
      * @return {Promise<*>}
+     * @protected
      */
     _reloadState() {
         return this._handleRepoErrors(this.repository.findAll())
