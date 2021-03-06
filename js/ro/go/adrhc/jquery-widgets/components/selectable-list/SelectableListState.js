@@ -68,12 +68,13 @@ class SelectableListState extends CrudListState {
     /**
      * reload last swapped off item
      *
-     * @param {EntityRowSwap} previousEntityRowSwap
+     * @param {EntityRowSwap} previous
      * @param {EntityRowSwap|undefined} [newEntityRowSwap]
      * @protected
      */
-    _doAfterSwitch(previousEntityRowSwap, newEntityRowSwap) {
-        if (previousEntityRowSwap != null) {
+    _doAfterSwitch(previous, newEntityRowSwap) {
+        if (previous != null && EntityUtils.isTransientId(previous.entityId)) {
+            this.removeById(previous.entityId);
             this._reloadLastSwappedOffItem();
         }
         this.stateChanges.collectByConsumingChanges(this.swappingState.stateChanges)

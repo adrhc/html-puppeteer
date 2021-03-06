@@ -5,19 +5,19 @@ class StateChange {
     /**
      * @type {T}
      */
+    previousStateOrPart
+    /**
+     * @type {T}
+     */
     stateOrPart;
     /**
      * @type {string}
      */
     partName;
-    /**
-     * @type {T}
-     */
-    previousStateOrPart
 
     /**
-     * @param {T|*} previousStateOrPart
-     * @param {T|*} [stateOrPart]
+     * @param {T} previousStateOrPart
+     * @param {T} [stateOrPart]
      * @param {string} [partName]
      */
     constructor(previousStateOrPart, stateOrPart, partName) {
