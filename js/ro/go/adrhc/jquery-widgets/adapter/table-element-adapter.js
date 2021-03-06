@@ -106,8 +106,8 @@ class TableElementAdapter {
         const $elem = elem instanceof jQuery ? elem : $(elem);
         if ($elem.is(this.ownerSelector)) {
             const dataId = $elem.data("id");
-            if (dataId) {
-                return $elem.data("id");
+            if (dataId != null) {
+                return dataId;
             } else if (searchParentsForDataIdIfMissingOnElem) {
                 return this.rowDataIdOfParent($elem);
             }
