@@ -154,31 +154,23 @@ class StateChangeHandlersManager {
         if (!this.stateChangeHandlers) {
             return undefined;
         }
+        let handlerOfAny;
         for (let handlerName in this.stateChangeHandlers) {
             if (this.stateChangeHandlers[handlerName].includes(changeType)) {
                 return handlerName;
             }
+            if (this.stateChangeHandlers[handlerName].includes(StateChangeHandlersManager.ANY)) {
+                handlerOfAny = handlerName;
+            }
         }
-        return undefined;
+        return handlerOfAny;
     }
 
     /**
      * @param {string} handlerName
-     * @param {string|number} changeTypes
+     * @param {string|number} changeType
      */
-    isHandlerOf(handlerName, ...changeTypes) {
-        const handledChangeTypes = this.stateChangeHandlers[handlerName];
-        if (handledChangeTypes == null) {
-            return false;
-        }
-        if (handledChangeTypes[0] === StateChangeHandlersManager.ANY) {
-            return true;
-        }
-        for (let ct of changeTypes) {
-            if (handledChangeTypes.includes(ct)) {
-                return true;
-            }
-        }
-        return false;
+    isHandlerOf(handlerName, changeType) {
+        return handlerName === this.handlerNameOf(changeType);
     }
 }

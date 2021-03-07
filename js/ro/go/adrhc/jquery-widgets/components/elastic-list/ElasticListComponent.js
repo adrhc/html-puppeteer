@@ -25,7 +25,14 @@ class ElasticListComponent extends SimpleListComponent {
         this.compositeBehaviour = new ElasticListCompositeBehaviour(this, idRowCompFactoryFn);
         this.entityExtractor = new ElasticListEntityExtractor(this, {});
         this.crudListState = state;
-        this.stateChangesDispatcher.usePartName("Item");
+        this.configurePartChangeHandlers({handleItemCreation: ["CREATE"]}, "Item");
+    }
+
+    /**
+     * @return {ElasticListCompositeBehaviour}
+     */
+    get elasticListComposite() {
+        return this.compositeBehaviour;
     }
 
     /**
@@ -43,7 +50,7 @@ class ElasticListComponent extends SimpleListComponent {
      * @param stateChange {TaggedStateChange}
      * @return {Promise}
      */
-    updateViewOnItemCREATE(stateChange) {
+    handleItemCreation(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnItemCREATE:\n${JSON.stringify(stateChange)}`);
         return this.elasticListComposite.createChildComponent(stateChange).init();
     }
@@ -69,12 +76,5 @@ class ElasticListComponent extends SimpleListComponent {
     updateViewOnAny(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnAny: ignored\n${JSON.stringify(stateChange)}`);
         return Promise.resolve(stateChange);
-    }
-
-    /**
-     * @return {ElasticListCompositeBehaviour}
-     */
-    get elasticListComposite() {
-        return this.compositeBehaviour;
     }
 }
