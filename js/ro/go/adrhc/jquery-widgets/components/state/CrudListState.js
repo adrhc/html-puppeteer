@@ -37,7 +37,7 @@ class CrudListState extends SimpleListState {
      * @return {EntityRow<IdentifiableEntity>|undefined}
      */
     getStatePart(index) {
-        if (this.items == null || index >= this.items.length) {
+        if (this.items == null || index < 0 || index >= this.items.length) {
             return undefined;
         }
         return new EntityRow(this.items[index], index);
@@ -50,11 +50,13 @@ class CrudListState extends SimpleListState {
      * @protected
      */
     _currentStatePartEquals(newRowValues, oldIndex) {
-        return newRowValues == null && this.items.length <= oldIndex ||
-            newRowValues != null && this.items.length > oldIndex &&
-            this.items.length > newRowValues.index &&
-            this.items[oldIndex] === newRowValues.entity &&
-            newRowValues.index === oldIndex;
+        const isPrevNullOrMissing = oldIndex >= this.items.length ||
+            oldIndex < this.items.length && this.items[oldIndex] == null;
+        const bothNewAndPrevAreNull = newRowValues == null && isPrevNullOrMissing;
+        return bothNewAndPrevAreNull ||
+            !isPrevNullOrMissing && newRowValues != null &&
+            newRowValues.index === oldIndex &&
+            this.items[oldIndex] === newRowValues.entity;
     }
 
     /**
@@ -124,7 +126,7 @@ class CrudListState extends SimpleListState {
      */
     insertItem(item, append = this.append) {
         const newItemIndex = append ? this.items.length : 0;
-        return this._replaceItem(new EntityRow(item, newItemIndex));
+        return this._replaceItem(new EntityRow(item, newItemIndex), append ? newItemIndex : -1);
     }
 
     /**

@@ -1,5 +1,10 @@
 class EditableListComponent extends SelectableListComponent {
     /**
+     * @type {EditableListState}
+     */
+    editableListState;
+
+    /**
      * @param repository {CrudRepository}
      * @param state {SelectableListState}
      * @param view {SimpleListView}
@@ -14,6 +19,7 @@ class EditableListComponent extends SelectableListComponent {
                 deletableRow,
                 extractedEntityConverterFn, config) {
         super(repository, state, view, offRow, onRow, config);
+        this.editableListState = state;
         this.swappingRowSelector["showAdd"] = onRow;
         this.swappingRowSelector["showEdit"] = onRow; // is equal to super.swappingRowSelector[false]
         this.swappingRowSelector["showDelete"] = deletableRow;
@@ -54,17 +60,14 @@ class EditableListComponent extends SelectableListComponent {
          * @type {EditableListComponent}
          */
         const editableList = ev.data;
-        editableList.doWithState((state) => {
-            const selectableListState = editableList.castState(state);
-            if (selectableListState.findById(IdentifiableEntity.TRANSIENT_ID)) {
-                // new item already exists, do nothing
-                return;
-            }
-            // todo: correlate "append" createNewItem param with showAdd.tableRelativePositionOnCreate
-            // events: CREATE
-            const newId = selectableListState.createNewItem().id;
-            // events: SWAP (isPrevious=true, if any previous exists) + SWAP (isPrevious=false)
-            selectableListState.switchTo(newId, "showAdd");
+        const alreadyHasTransient = editableList.editableListState.hasTransient();
+        if (alreadyHasTransient) {
+            return Promise.reject();
+        }
+        return editableList.doWithState((state) => {
+            const editableListState = editableList.castState(state);
+            const taggedStateChange = editableListState.createNewItem();
+            editableListState.switchTo(taggedStateChange.stateOrPart.entity.id, "showAdd");
         });
     }
 
@@ -80,8 +83,8 @@ class EditableListComponent extends SelectableListComponent {
          */
         const editableList = ev.data;
         return editableList.doWithState(state => {
-            const selectableListState = editableList.castState(state);
-            selectableListState.switchToOff();
+            const editableListState = editableList.castState(state);
+            editableListState.switchToOff();
         });
     }
 
@@ -100,9 +103,9 @@ class EditableListComponent extends SelectableListComponent {
         editableList._handleRepoErrors(editableList.repository.delete(rowDataId)
             .then(() =>
                 editableList.doWithState((state) => {
-                    const selectableListState = editableList.castState(state);
-                    selectableListState.switchToOff();
-                    selectableListState.removeById(rowDataId);
+                    const editableListState = editableList.castState(state);
+                    editableListState.switchToOff();
+                    editableListState.removeById(rowDataId);
                 })));
     }
 
@@ -122,13 +125,13 @@ class EditableListComponent extends SelectableListComponent {
         editableList._handleRepoErrors(editableList.repository.save(entity)
             .then(savedEntity =>
                 editableList.doWithState((state) => {
-                    const selectableListState = editableList.castState(state);
+                    const editableListState = editableList.castState(state);
                     // events: SWAP (isPrevious=true, if any previous exists) + DELETE (transient, if any)
-                    selectableListState.switchToOff();
+                    editableListState.switchToOff();
                     // todo: sync "append" save param with offRow.tableRelativePositionOnCreate
                     // events: DELETE (transient, if any) + CREATE or just UPDATE
                     console.log(`${this.constructor.name}.onUpdate, savedEntity:\n${JSON.stringify(savedEntity)}`);
-                    selectableListState.save(savedEntity, rowDataId);
+                    editableListState.save(savedEntity, rowDataId);
                 }))
             .catch((simpleError) => {
                 return editableList.selectedRowComponent.doWithState((state) => {
@@ -169,5 +172,13 @@ class EditableListComponent extends SelectableListComponent {
         for (let key in this.swappingRowSelector) {
             this.swappingRowSelector[key].reset();
         }
+    }
+
+    /**
+     * @param {StateHolder} state
+     * @return {EditableListState}
+     */
+    castState(state) {
+        return state;
     }
 }
