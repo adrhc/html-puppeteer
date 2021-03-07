@@ -21,17 +21,17 @@ if (Modernizr.template) {
         const newItemsGoToTheEndOfTheList = true;
 
         // DYNAMIC-SELECT-ONE
-        DynamicSelectOneFactory.create("dyna-sel-one", DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {}).init();
+        DynamicSelectOneFactory.create("dyna-sel-one", DbMock.DYNA_SEL_ONE_PERS_REPOSITORY).init();
 
         // see interface ChildComponentFactory
-        const rowChildCompFactories = {
+        const dynaSelOneCompFactory = {
             /**
              * @param idRowCompParent {IdentifiableRowComponent}
              * @return {DynamicSelectOneComponent}
              */
             createChildComponent: (idRowCompParent) => {
                 const $parentElem = idRowCompParent.view.$elem;
-                AssertionUtils.isTrue($parentElem && $parentElem.length === 1, "rowChildCompFactories, DynamicSelectOneFactory");
+                AssertionUtils.isTrue($parentElem && $parentElem.length === 1, "dynaSelOneCompFactory, DynamicSelectOneFactory");
 
                 return DynamicSelectOneFactory.create(
                     $("[data-id='dyna-sel-one']", idRowCompParent.view.$elem),
@@ -43,7 +43,7 @@ if (Modernizr.template) {
 
         // dogs table with read-only row (default: on creation prepend to table)
         const elasticList = ElasticListFactory.create("dogsTable", "dogsTableRowTmpl", {
-            items: ITEMS, newItemsGoToTheEndOfTheList, rowChildCompFactories
+            items: ITEMS, newItemsGoToTheEndOfTheList, dynaSelOneCompFactory
         });
 
         elasticList

@@ -17,7 +17,7 @@ class DynamicSelectOneFactory {
         reloadOptionsOnInit,
         childProperty,
         childishBehaviour,
-    }) {
+    } = {}) {
         const props = DomUtils.jQueryOf(elemIdOrJQuery).data();
         const configFn = (config) => $.extend(new DynaSelOneConfig(), props, config);
         const config = configFn({

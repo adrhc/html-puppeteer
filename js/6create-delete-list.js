@@ -12,7 +12,8 @@ if (Modernizr.template) {
     $(() => {
         const DOGS = [
             {id: 1, name: "dog1", person: DbMock.PERSONS_REPOSITORY.getById(1, true)},
-            {id: 2, name: "dog2"}, {id: 3, name: "dog3"}
+            {id: 2, name: "dog2"},
+            {id: 3, name: "dog3"}
         ];
 
         // by default on creation the row is prepended to table
