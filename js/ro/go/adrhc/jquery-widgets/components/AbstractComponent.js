@@ -257,21 +257,6 @@ class AbstractComponent {
 
     /**
      * @param {{}} config containing {handlerName: [changeTypes]}
-     */
-    configureHandlerName(config) {
-        this.stateChangesDispatcher.stateChangeHandlers.configureHandlerName(config);
-    }
-
-    /**
-     * @param {string} handlerName
-     * @param {string|number} changeType
-     */
-    setPartChangeHandlerName(handlerName, ...changeType) {
-        this.stateChangesDispatcher.partChangeHandlers.setHandlerName(handlerName, ...changeType);
-    }
-
-    /**
-     * @param {{}} config containing {handlerName: [changeTypes]}
      * @param {string} [partName]
      */
     configurePartChangeHandlers(config, partName) {
