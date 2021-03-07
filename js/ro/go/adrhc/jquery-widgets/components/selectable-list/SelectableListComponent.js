@@ -36,7 +36,9 @@ class SelectableListComponent extends SimpleListComponent {
                 offRow, onRow, config) {
         super(repository, state, view, config);
         this.stateChangesDispatcher.usePartName("Item");
-        this.stateChangesDispatcher.partChangeHandlers.setHandlerName("onItemChange", "CREATE", "REPLACE", "DELETE");
+        this.setPartChangeHandlerName("handleItemChange", "CREATE", "REPLACE", "DELETE");
+        this.setPartChangeHandlerName("handleItemOff", "OFF");
+        this.setPartChangeHandlerName("handleItemOn", "ON");
         this.selectableListState = state;
         this.simpleListView = view;
         this.selectableListEntityExtractor = this.entityExtractor =
@@ -46,6 +48,23 @@ class SelectableListComponent extends SimpleListComponent {
             OFF: offRow // i.e. read-only row
         };
         this.offRow = offRow;
+    }
+
+    /**
+     * Returns the IdentifiableRowComponent dealing with an "active" selection.
+     * The specific row though depend on the EntityRowSwap.context if
+     * present otherwise is the this.swappingRowSelector[false].
+     *
+     * @return {IdentifiableRowComponent} responsible for the currently "selected" row
+     */
+    get selectedRowComponent() {
+        const selectableSwappingData = this.selectableListState.currentSelectableSwappingData;
+        if (!selectableSwappingData) {
+            return undefined;
+        }
+        // swappingRowSelector is true/false based where false means "active" (also means that isPrevious is false)
+        const context = !!selectableSwappingData.context ? selectableSwappingData.context : false;
+        return this.swappingRowSelector[context];
     }
 
     /**
@@ -78,19 +97,19 @@ class SelectableListComponent extends SimpleListComponent {
      * @param {TaggedStateChange<EntityRowSwap>} stateChange
      * @return {Promise<TaggedStateChange[]>}
      */
-    onItemChange(stateChange) {
-        console.log(`${this.constructor.name}.onItemChange:\n${JSON.stringify(stateChange)}`);
+    handleItemChange(stateChange) {
+        console.log(`${this.constructor.name}.handleItemChange:\n${JSON.stringify(stateChange)}`);
         return this.offRow.processStateChanges(stateChange);
     }
 
-    updateViewOnItemOFF(stateChange) {
+    handleItemOff(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnItemOFF:\n${JSON.stringify(stateChange)}`);
         const removeOnRow = new DeleteStateChange(stateChange.stateOrPart);
         const createOffRow = new CreateStateChange(stateChange.stateOrPart);
         return this.swappingRowSelector[SwitchType.OFF].processStateChanges(removeOnRow, createOffRow);
     }
 
-    updateViewOnItemON(stateChange) {
+    handleItemOn(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnItemON:\n${JSON.stringify(stateChange)}`);
         stateChange = new CreateStateChange(stateChange.stateOrPart);
         return this.swappingRowSelector[SwitchType.ON].processStateChanges(stateChange);
@@ -114,22 +133,5 @@ class SelectableListComponent extends SimpleListComponent {
      */
     castState(state) {
         return state;
-    }
-
-    /**
-     * Returns the IdentifiableRowComponent dealing with an "active" selection.
-     * The specific row though depend on the EntityRowSwap.context if
-     * present otherwise is the this.swappingRowSelector[false].
-     *
-     * @return {IdentifiableRowComponent} responsible for the currently "selected" row
-     */
-    get selectedRowComponent() {
-        const selectableSwappingData = this.selectableListState.currentSelectableSwappingData;
-        if (!selectableSwappingData) {
-            return undefined;
-        }
-        // swappingRowSelector is true/false based where false means "active" (also means that isPrevious is false)
-        const context = !!selectableSwappingData.context ? selectableSwappingData.context : false;
-        return this.swappingRowSelector[context];
     }
 }

@@ -231,6 +231,22 @@ class AbstractComponent {
     }
 
     /**
+     * @param {string} handlerName
+     * @param {string|number} changeType
+     */
+    setHandlerName(handlerName, ...changeType) {
+       this.stateChangesDispatcher.stateChangeHandlers.setHandlerName(handlerName, ...changeType);
+    }
+
+    /**
+     * @param {string} handlerName
+     * @param {string|number} changeType
+     */
+    setPartChangeHandlerName(handlerName, ...changeType) {
+       this.stateChangesDispatcher.partChangeHandlers.setHandlerName(handlerName, ...changeType);
+    }
+
+    /**
      * brings the component to the state existing at its creation
      */
     reset() {
