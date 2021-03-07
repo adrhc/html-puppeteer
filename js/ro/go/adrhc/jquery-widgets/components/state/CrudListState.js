@@ -90,7 +90,7 @@ class CrudListState extends SimpleListState {
      * must return the original item (the one stored in this.items) for the receiver to be able to change its id
      * risk: the item is also used with the collectStateChange; a change by the final receiver will impact this.items!
      *
-     * @param {IdentifiableEntity} [initialValue]
+     * @param {IdentifiableEntity|{}} [initialValue]
      * @param {boolean} [append]
      * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */

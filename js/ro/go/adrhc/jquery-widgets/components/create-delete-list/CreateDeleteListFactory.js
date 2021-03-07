@@ -43,7 +43,10 @@ class CreateDeleteListFactory {
         },
         childishBehaviour
     }) {
-        const createDeleteList = new CreateDeleteListComponent(repository, crudListState, simpleListView, idRowCompFactoryFn);
+        const props = DomUtils.jQueryOf(tableIdOrJQuery).data();
+        const configFn = (config) => $.extend(new ComponentConfiguration(), props, config);
+        const config = configFn({});
+        const createDeleteList = new CreateDeleteListComponent(repository, crudListState, simpleListView, idRowCompFactoryFn, config);
         if (childishBehaviour) {
             createDeleteList.childishBehaviour = childishBehaviour;
         }

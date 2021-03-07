@@ -9,9 +9,9 @@ class CreateDeleteListComponent extends ElasticListComponent {
         /**
          * @type {CreateDeleteListComponent}
          */
-        const createDeleteListComponent = ev.data;
-        createDeleteListComponent.doWithState((crudListState) => {
-            crudListState.createNewItem().id = EntityUtils.generateId();
+        const cdlComp = ev.data;
+        cdlComp.doWithState((state) => {
+            cdlComp.castState(state).createNewItem({id: EntityUtils.generateId()});
         });
     }
 
@@ -25,10 +25,10 @@ class CreateDeleteListComponent extends ElasticListComponent {
         /**
          * @type {CreateDeleteListComponent}
          */
-        const createDeleteListComponent = ev.data;
-        const rowDataId = createDeleteListComponent.tableBasedView.rowDataIdOf(this, true);
-        createDeleteListComponent.doWithState((crudListState) => {
-            crudListState.removeById(rowDataId);
+        const cdlComp = ev.data;
+        const rowDataId = cdlComp.tableBasedView.rowDataIdOf(this, true);
+        cdlComp.doWithState((state) => {
+            cdlComp.castState(state).removeById(rowDataId);
         });
     }
 
@@ -44,5 +44,13 @@ class CreateDeleteListComponent extends ElasticListComponent {
                 this._btnSelector("add"), this, this.onAdd)
             .on(this._appendNamespaceTo('click'),
                 this._btnSelector("delete"), this, this.onDelete);
+    }
+
+    /**
+     * @param {StateHolder} state
+     * @return {CrudListState}
+     */
+    castState(state) {
+        return state;
     }
 }

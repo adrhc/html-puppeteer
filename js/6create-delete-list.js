@@ -27,7 +27,7 @@ if (Modernizr.template) {
              */
             createChildComponent: (idRowCompParent) => {
                 const $parentElem = idRowCompParent.view.$elem;
-                AssertionUtils.isTrue($parentElem && $parentElem.length === 1, "dynaSelOneCompFactory, DynamicSelectOneFactory");
+                AssertionUtils.isTrue($parentElem.length === 1, "dynaSelOneCompFactory, DynamicSelectOneFactory");
 
                 return DynamicSelectOneFactory.create(
                     $("[data-id='dyna-sel-one']", idRowCompParent.view.$elem),
