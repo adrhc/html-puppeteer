@@ -6,6 +6,10 @@ class StateChangesDispatcher {
     /**
      * @type {string}
      */
+    handlerPrefix = "updateViewOn";
+    /**
+     * @type {string}
+     */
     partName;
     /**
      * @type {StateChangeHandlersManager}
@@ -61,33 +65,49 @@ class StateChangesDispatcher {
             return Promise.resolve(stateChange);
         }
 
-        const partName = stateChange.partName == null ? "" :
-            (this.partName == null ? stateChange.partName : this.partName);
-
-        if (partName) {
-            let partChangeHandlerName = this.partChangeHandlers.handlerNameOf(stateChange.changeType);
-            if (typeof this.component[partChangeHandlerName] === "function") {
-                return this.component[partChangeHandlerName](stateChange);
-            }
-            partChangeHandlerName = `updateViewOn${partName}${stateChange.changeType}`;
-            if (typeof this.component[partChangeHandlerName] === "function") {
-                return this.component[partChangeHandlerName](stateChange);
-            }
-            partChangeHandlerName = `updateViewOnAny${partName}`;
-            if (this.component[partChangeHandlerName]) {
-                return this.component[partChangeHandlerName](stateChange);
-            }
+        let partChangeHandlerName = this._partChangeHandlerNameOf(stateChange.changeType, stateChange.partName);
+        if (partChangeHandlerName) {
+            return this.component[partChangeHandlerName](stateChange);
         }
 
-        let handlerName = this.stateChangeHandlers.handlerNameOf(stateChange.changeType);
+        let handlerName = this._handlerNameOf(stateChange.changeType);
+        return this.component[handlerName](stateChange);
+    }
+
+    _handlerNameOf(changeType) {
+        let handlerName = this.stateChangeHandlers.handlerNameOf(changeType);
         if (typeof this.component[handlerName] === "function") {
-            return this.component[handlerName](stateChange);
+            return handlerName;
         }
-        handlerName = `updateViewOn${stateChange.changeType}`;
+        handlerName = `${this.handlerPrefix}${changeType}`;
         if (typeof this.component[handlerName] === "function") {
-            return this.component[handlerName](stateChange);
+            return handlerName;
         } else {
-            return this.component.updateViewOnAny(stateChange);
+            return `${this.handlerPrefix}Any`;
+        }
+    }
+
+    _partNameOf(stateChangePartName) {
+        return stateChangePartName == null ? undefined :
+            (this.partName == null ? stateChangePartName : this.partName);
+    }
+
+    _partChangeHandlerNameOf(changeType, stateChangePartName) {
+        const partName = this._partNameOf(stateChangePartName);
+        if (!partName) {
+            return undefined;
+        }
+        let partChangeHandlerName = this.partChangeHandlers.handlerNameOf(changeType);
+        if (typeof this.component[partChangeHandlerName] === "function") {
+            return partChangeHandlerName;
+        }
+        partChangeHandlerName = `${this.handlerPrefix}${partName}${changeType}`;
+        if (typeof this.component[partChangeHandlerName] === "function") {
+            return partChangeHandlerName;
+        }
+        partChangeHandlerName = `${this.handlerPrefix}Any${partName}`;
+        if (this.component[partChangeHandlerName]) {
+            return partChangeHandlerName;
         }
     }
 
@@ -104,7 +124,7 @@ class StateChangesDispatcher {
 }
 
 class StateChangeHandlersManager {
-    static ALL = "ALL";
+    static ANY = "ANY";
 
     /**
      * @type {{}}
@@ -151,7 +171,7 @@ class StateChangeHandlersManager {
         if (handledChangeTypes == null) {
             return false;
         }
-        if (handledChangeTypes[0] === StateChangeHandlersManager.ALL) {
+        if (handledChangeTypes[0] === StateChangeHandlersManager.ANY) {
             return true;
         }
         for (let ct of changeTypes) {

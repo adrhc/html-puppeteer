@@ -29,7 +29,7 @@ class ElasticListComponent extends SimpleListComponent {
     }
 
     /**
-     * remove the previous kids before reloading the table
+     * Removes its kids then calls super._handleReload().
      */
     _handleReload() {
         return this.doWithState(() => {
@@ -40,15 +40,6 @@ class ElasticListComponent extends SimpleListComponent {
     }
 
     /**
-     * This does what this.compositeBehaviour.init() does but for only 1 item.
-     *
-     * Reason: the whole purpose of this component is to allow one to manually manipulate the
-     * state (aka, by using doWithState) so one might simply add a new item in which case the
-     * associated view must be created completely (including calling compositeBehaviour.init);
-     * this is very similar to init() but for 1 row only.
-     *
-     * see also SimpleListComponent.updateViewOnUPDATE_ALL
-     *
      * @param stateChange {TaggedStateChange}
      * @return {Promise}
      */
