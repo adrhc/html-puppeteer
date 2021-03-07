@@ -120,6 +120,13 @@ class StateChangeHandlersManager {
     }
 
     /**
+     * @param {{}} config containing {handlerName: [changeTypes]}
+     */
+    configureHandlerName(config) {
+        $.extend(this.stateChangeHandlers, config);
+    }
+
+    /**
      * @param {string|number} changeType
      * @return {string|undefined}
      */

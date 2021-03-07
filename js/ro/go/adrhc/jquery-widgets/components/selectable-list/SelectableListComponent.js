@@ -36,9 +36,11 @@ class SelectableListComponent extends SimpleListComponent {
                 offRow, onRow, config) {
         super(repository, state, view, config);
         this.stateChangesDispatcher.usePartName("Item");
-        this.setPartChangeHandlerName("handleItemChange", "CREATE", "REPLACE", "DELETE");
-        this.setPartChangeHandlerName("handleItemOff", "OFF");
-        this.setPartChangeHandlerName("handleItemOn", "ON");
+        this.configurePartChangeHandlerName({
+            handleItemChange: ["CREATE", "REPLACE", "DELETE"],
+            handleItemOff: ["OFF"],
+            handleItemOn: ["ON"]
+        });
         this.selectableListState = state;
         this.simpleListView = view;
         this.selectableListEntityExtractor = this.entityExtractor =

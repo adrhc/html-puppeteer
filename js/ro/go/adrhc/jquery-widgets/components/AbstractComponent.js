@@ -28,12 +28,6 @@ class AbstractComponent {
      * @type {EntityExtractor}
      */
     entityExtractor;
-    /**
-     * see this as the "child component" capability of the current/this component
-     *
-     * @type {ChildishBehaviour}
-     */
-    _childishBehaviour;
 
     /**
      * @param state {StateHolder}
@@ -53,6 +47,17 @@ class AbstractComponent {
     }
 
     /**
+     * see this as the "child component" capability of the current/this component
+     *
+     * @type {ChildishBehaviour}
+     */
+    _childishBehaviour;
+
+    get childishBehaviour() {
+        return this._childishBehaviour;
+    }
+
+    /**
      * @param childishBehaviour {ChildishBehaviour}
      */
     set childishBehaviour(childishBehaviour) {
@@ -60,8 +65,20 @@ class AbstractComponent {
         this._childishBehaviour = childishBehaviour;
     }
 
-    get childishBehaviour() {
-        return this._childishBehaviour;
+    /**
+     * @returns {string}
+     * @protected
+     */
+    get _eventsNamespace() {
+        return `.${this.constructor.name}.${this.view.owner}`;
+    }
+
+    /**
+     * @returns {string}
+     * @protected
+     */
+    get _ownerSelector() {
+        return `[data-owner='${this.view.owner}']`;
     }
 
     /**
@@ -235,7 +252,14 @@ class AbstractComponent {
      * @param {string|number} changeType
      */
     setHandlerName(handlerName, ...changeType) {
-       this.stateChangesDispatcher.stateChangeHandlers.setHandlerName(handlerName, ...changeType);
+        this.stateChangesDispatcher.stateChangeHandlers.setHandlerName(handlerName, ...changeType);
+    }
+
+    /**
+     * @param {{}} config containing {handlerName: [changeTypes]}
+     */
+    configureHandlerName(config) {
+        this.stateChangesDispatcher.stateChangeHandlers.configureHandlerName(config);
     }
 
     /**
@@ -243,7 +267,14 @@ class AbstractComponent {
      * @param {string|number} changeType
      */
     setPartChangeHandlerName(handlerName, ...changeType) {
-       this.stateChangesDispatcher.partChangeHandlers.setHandlerName(handlerName, ...changeType);
+        this.stateChangesDispatcher.partChangeHandlers.setHandlerName(handlerName, ...changeType);
+    }
+
+    /**
+     * @param {{}} config containing {handlerName: [changeTypes]}
+     */
+    configurePartChangeHandlerName(config) {
+        this.stateChangesDispatcher.partChangeHandlers.configureHandlerName(config);
     }
 
     /**
@@ -315,21 +346,5 @@ class AbstractComponent {
      */
     findKidsByClass(clazz) {
         return this.compositeBehaviour.findKids((kid) => kid instanceof clazz);
-    }
-
-    /**
-     * @returns {string}
-     * @protected
-     */
-    get _eventsNamespace() {
-        return `.${this.constructor.name}.${this.view.owner}`;
-    }
-
-    /**
-     * @returns {string}
-     * @protected
-     */
-    get _ownerSelector() {
-        return `[data-owner='${this.view.owner}']`;
     }
 }
