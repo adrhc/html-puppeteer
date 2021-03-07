@@ -59,12 +59,11 @@ class SelectableListComponent extends SimpleListComponent {
      * @return {IdentifiableRowComponent} responsible for the currently "selected" row
      */
     get selectedRowComponent() {
-        const selectableSwappingData = this.selectableListState.currentSelectableSwappingData;
-        if (!selectableSwappingData) {
+        const entityRowSwap = this.selectableListState.currentEntityRowSwap;
+        if (!entityRowSwap) {
             return undefined;
         }
-        // swappingRowSelector is true/false based where false means "active" (also means that isPrevious is false)
-        const context = !!selectableSwappingData.context ? selectableSwappingData.context : false;
+        const context = entityRowSwap.context == null ? SwitchType.ON : entityRowSwap.context;
         return this.swappingRowSelector[context];
     }
 

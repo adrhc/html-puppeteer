@@ -24,6 +24,13 @@ class SelectableListState extends CrudListState {
     }
 
     /**
+     * @return {EntityRowSwap}
+     */
+    get currentEntityRowSwap() {
+        return this.swappingState.currentState;
+    }
+
+    /**
      * @param {numeric|string} id
      * @param {string} context is some context data
      * @return {boolean} whether the switch actually happened or not
