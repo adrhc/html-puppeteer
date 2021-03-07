@@ -48,14 +48,21 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      */
     _handleReload() {
         this.reset();
-        return this.init().then(this._handleReloadSuccessful);
+        return this.init().then(this._handleSuccessfulReload);
     }
 
-    _handleReloadSuccessful() {
+    /**
+     * Called after successfully reloading (i.e. after _handleReload call).
+     *
+     * @private
+     */
+    _handleSuccessfulReload() {
         alert(SimpleListComponent.MESSAGES.reloadSuccessful);
     }
 
     /**
+     * Replaces the state with the one loaded from repository.
+     *
      * @return {Promise<*>}
      * @protected
      */
@@ -63,16 +70,18 @@ class SimpleListComponent extends AbstractTableBasedComponent {
         return this._handleRepoErrors(this.repository.findAll())
             .then((items) => {
                 console.log(`${this.constructor.name}._reloadState items:\n`, JSON.stringify(items));
-                this._updateState(items);
+                this._replaceState(items);
                 return items;
             });
     }
 
     /**
+     * Dealing with the actual state replacement only.
+     *
      * @param {[]} items
      * @protected
      */
-    _updateState(items) {
+    _replaceState(items) {
         this.simpleListState.updateAll(items);
     }
 
