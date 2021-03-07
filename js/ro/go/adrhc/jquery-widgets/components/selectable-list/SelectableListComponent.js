@@ -42,8 +42,7 @@ class SelectableListComponent extends SimpleListComponent {
         }, "Item");
         this.selectableListState = state;
         this.simpleListView = view;
-        this.selectableListEntityExtractor = this.entityExtractor =
-            new SelectableListEntityExtractor(this, {});
+        this.selectableListEntityExtractor = this.entityExtractor = new SelectableListEntityExtractor(this);
         this.swappingRowSelector = {
             ON: onRow, // e.g. editable-row, deletable-row
             OFF: offRow // i.e. read-only row
