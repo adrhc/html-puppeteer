@@ -8,8 +8,8 @@ class SelectableListFactory {
      * @param newItemsGoToTheEndOfTheList {boolean} whether to append or prepend
      * @param newEntityFactoryFn {function(): IdentifiableEntity}
      * @param state {SelectableListState}
-     * @param notSelectedRow {IdentifiableRowComponent}
-     * @param selectedRow {IdentifiableRowComponent}
+     * @param offRow {IdentifiableRowComponent}
+     * @param onRow {IdentifiableRowComponent}
      * @param view {SimpleListView}
      * @return {SelectableListComponent}
      */
@@ -21,10 +21,10 @@ class SelectableListFactory {
         newItemsGoToTheEndOfTheList,
         newEntityFactoryFn,
         state = new SelectableListState({newEntityFactoryFn, newItemsGoToTheEndOfTheList}),
-        notSelectedRow,
-        selectedRow,
+        offRow,
+        onRow,
         view = new SimpleListView(mustacheTableElemAdapter)
     }) {
-        return new SelectableListComponent(repository, state, view, notSelectedRow, selectedRow);
+        return new SelectableListComponent(repository, state, view, offRow, onRow);
     }
 }

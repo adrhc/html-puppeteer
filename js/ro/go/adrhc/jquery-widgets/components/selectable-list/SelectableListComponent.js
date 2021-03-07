@@ -1,6 +1,6 @@
 /**
  * todo: should I reset the swappingState when receiving an UPDATE_ALL state change?
- * When receiving UPDATE_ALL and notSelectedRow is not automatically creating the related row,
+ * When receiving UPDATE_ALL and offRow is not automatically creating the related row,
  * than the next onSwitch will determine swappingState to render as "deselected" the previous
  * item but only if already exists (in table) otherwise nothing will be rendered for it.
  */
@@ -28,29 +28,24 @@ class SelectableListComponent extends SimpleListComponent {
      * @param repository {CrudRepository}
      * @param state {SelectableListState}
      * @param view {SimpleListView}
-     * @param notSelectedRow {IdentifiableRowComponent}
-     * @param selectedRow {IdentifiableRowComponent}
+     * @param offRow {IdentifiableRowComponent}
+     * @param onRow {IdentifiableRowComponent}
      * @param {ComponentConfiguration} [config]
      */
     constructor(repository, state, view,
-                notSelectedRow, selectedRow, config) {
+                offRow, onRow, config) {
         super(repository, state, view, config);
         this.stateChangesDispatcher.usePartName("Item");
         this.stateChangesDispatcher.partChangeHandlers.setHandlerName("onItemChange", "CREATE", "REPLACE", "DELETE");
         this.selectableListState = state;
         this.simpleListView = view;
-        this.entityExtractor = new SelectableListEntityExtractor(this, {});
-        this.selectableListEntityExtractor = this.entityExtractor;
-        /**
-         * true/false relates to swappingDetails.isPrevious
-         *
-         * @type {{false: IdentifiableRowComponent, true: IdentifiableRowComponent}}
-         */
+        this.selectableListEntityExtractor = this.entityExtractor =
+            new SelectableListEntityExtractor(this, {});
         this.swappingRowSelector = {
-            ON: selectedRow, // e.g. editable-row, deletable-row
-            OFF: notSelectedRow // i.e. read-only row
+            ON: onRow, // e.g. editable-row, deletable-row
+            OFF: offRow // i.e. read-only row
         };
-        this.notSelectedRow = notSelectedRow;
+        this.offRow = offRow;
     }
 
     /**
@@ -85,7 +80,7 @@ class SelectableListComponent extends SimpleListComponent {
      */
     onItemChange(stateChange) {
         console.log(`${this.constructor.name}.onItemChange:\n${JSON.stringify(stateChange)}`);
-        return this.notSelectedRow.processStateChanges(stateChange);
+        return this.offRow.processStateChanges(stateChange);
     }
 
     updateViewOnItemOFF(stateChange) {

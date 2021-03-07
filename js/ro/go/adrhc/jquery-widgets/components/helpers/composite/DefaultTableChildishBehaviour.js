@@ -1,5 +1,5 @@
 /**
- * EditableListComponent.extractEntity (aka SelectableListComponent.extractEntity) is using selectedRow
+ * EditableListComponent.extractEntity (aka SelectableListComponent.extractEntity) is using onRow
  * instead of AbstractTableBasedComponent to extract the entity while here we need to extract table's
  * entities (aka AbstractTableBasedComponent extractEntity/extractAllEntities behaviour).
  *

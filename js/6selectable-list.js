@@ -15,17 +15,17 @@ if (Modernizr.template) {
         const tableRelativePositionOnCreate = "append";
         const append = tableRelativePositionOnCreate === "append";
 
-        const notSelectedRow = SimpleRowFactory.createIdentifiableRow(
+        const offRow = SimpleRowFactory.createIdentifiableRow(
             {
                 tableIdOrJQuery, tableRelativePositionOnCreate
             });
-        const selectedRow = SimpleRowFactory.createIdentifiableRow(
+        const onRow = SimpleRowFactory.createIdentifiableRow(
             {
                 tableIdOrJQuery, rowTmplId: "dogsTableEditableRowTmpl"
             });
 
         const selectableList = SelectableListFactory.create(tableIdOrJQuery, {
-            items: DbMock.DOGS, notSelectedRow, selectedRow
+            items: DbMock.DOGS, offRow, onRow
         });
 
         selectableList

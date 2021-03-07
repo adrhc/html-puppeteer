@@ -17,8 +17,8 @@ class SelectableListEntityExtractor extends DefaultEntityExtractor {
      * @return {{}}
      */
     extractSelectedEntity(useOwnerOnFields) {
-        const selectedRow = this.selectableList.selectedRowComponent;
-        return selectedRow ? this.entityConverterFn(selectedRow.extractEntity(useOwnerOnFields)) : undefined;
+        const onRow = this.selectableList.selectedRowComponent;
+        return onRow ? this.entityConverterFn(onRow.extractEntity(useOwnerOnFields)) : undefined;
     }
 
     extractEntity(useOwnerOnFields) {

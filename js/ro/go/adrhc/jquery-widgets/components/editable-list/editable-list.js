@@ -8,20 +8,20 @@ class EditableListComponent extends SelectableListComponent {
      * @param repository {CrudRepository}
      * @param state {EditableListState}
      * @param view {SimpleListView}
-     * @param notSelectedRow {IdentifiableRowComponent}
-     * @param selectedRow {IdentifiableRowComponent}
+     * @param offRow {IdentifiableRowComponent}
+     * @param onRow {IdentifiableRowComponent}
      * @param deletableRow {IdentifiableRowComponent}
      * @param [extractedEntityConverterFn] {function(extractedEntity: {}): IdentifiableEntity}
      * @param {ComponentConfiguration} [config]
      */
     constructor(repository, state, view,
-                notSelectedRow, selectedRow,
+                offRow, onRow,
                 deletableRow,
                 extractedEntityConverterFn, config) {
-        super(repository, state, view, notSelectedRow, selectedRow, config);
+        super(repository, state, view, offRow, onRow, config);
         this.editableListState = state;
-        this.swappingRowSelector["showAdd"] = selectedRow;
-        this.swappingRowSelector["showEdit"] = selectedRow; // is equal to super.swappingRowSelector[false]
+        this.swappingRowSelector["showAdd"] = onRow;
+        this.swappingRowSelector["showEdit"] = onRow; // is equal to super.swappingRowSelector[false]
         this.swappingRowSelector["showDelete"] = deletableRow;
         if (extractedEntityConverterFn) {
             this.selectableListEntityExtractor.entityConverterFn = extractedEntityConverterFn;
@@ -126,7 +126,7 @@ class EditableListComponent extends SelectableListComponent {
                 editableList.doWithState((editableListState) => {
                     // events: SWAP (isPrevious=true, if any previous exists) + DELETE (transient, if any)
                     editableListState.switchToOff();
-                    // todo: sync "append" save param with notSelectedRow.tableRelativePositionOnCreate
+                    // todo: sync "append" save param with offRow.tableRelativePositionOnCreate
                     // events: DELETE (transient, if any) + CREATE or just UPDATE
                     console.log(`${this.constructor.name}.onUpdate, savedEntity:\n${JSON.stringify(savedEntity)}`);
                     editableListState.save(savedEntity, rowDataId);
