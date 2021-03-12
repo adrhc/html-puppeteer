@@ -43,7 +43,7 @@ if (Modernizr.template) {
 
         // dogs table with read-only row (default: on creation prepend to table)
         const elasticList = ElasticListFactory.create("dogsTable", "dogsTableRowTmpl", {
-            items: ITEMS, newItemsGoToTheEndOfTheList, dynaSelOneCompFactory
+            items: ITEMS, newItemsGoToTheEndOfTheList, rowChildCompFactories: dynaSelOneCompFactory
         });
 
         elasticList
