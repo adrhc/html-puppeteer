@@ -37,8 +37,11 @@ class EditableListFactory {
                       childishBehaviour,
                       extractedEntityConverterFn
                   }) {
+        const props = DomUtils.jQueryOf(tableIdOrJQuery).data();
+        const configFn = (config) => $.extend(new ComponentConfiguration(), props, config);
+        const config = configFn({});
         const editableListComponent = new EditableListComponent(repository, state, view,
-            readOnlyRow, editableRow, deletableRow, extractedEntityConverterFn);
+            readOnlyRow, editableRow, deletableRow, extractedEntityConverterFn, config);
         if (childishBehaviour) {
             editableListComponent.childishBehaviour = childishBehaviour;
         }
