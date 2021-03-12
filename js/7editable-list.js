@@ -37,7 +37,11 @@ if (Modernizr.template) {
 
         component
             .init()
-            .then(() => component.doWithState((crudListState) => {
+            .then(() => component.doWithState((state) => {
+                /**
+                 * @type {CrudListState}
+                 */
+                const crudListState = state;
                 crudListState.updateItem({id: 3, name: "component only (not repository) updated dog3"});
                 crudListState.removeById(2);
                 crudListState.insertItem({
