@@ -100,7 +100,7 @@ class EditableListComponent extends SelectableListComponent {
          */
         const editableList = ev.data;
         const rowDataId = editableList.simpleListView.rowDataIdOf(this, true);
-        editableList._handleRepoErrors(editableList.repository.delete(rowDataId)
+        return editableList._handleRepoErrors(editableList.repository.delete(rowDataId)
             .then(() =>
                 editableList.doWithState((state) => {
                     const editableListState = editableList.castState(state);
@@ -138,6 +138,13 @@ class EditableListComponent extends SelectableListComponent {
                     state.collectFromSimpleError(simpleError, "UPDATE_OR_CREATE", entity);
                 });
             }));
+    }
+
+    _swappingRowSelectorOf(switchType, context) {
+        if (switchType === SwitchType.OFF || !context) {
+            return super._swappingRowSelectorOf(switchType);
+        }
+        return this.swappingRowSelector[context];
     }
 
     /**

@@ -32,7 +32,7 @@ class SelectableListState extends CrudListState {
 
     /**
      * @param {numeric|string} id
-     * @param {string} context is some context data
+     * @param {*} context is some context data
      * @return {boolean} whether the switch actually happened or not
      */
     switchTo(id, context) {
@@ -46,7 +46,7 @@ class SelectableListState extends CrudListState {
             return this.switchToOff();
         }
         const previousEntityRowSwap = this.swappingState.currentState;
-        const newEntityRowSwap = new EntityRowSwap(context, item, this.indexOf(item));
+        const newEntityRowSwap = this._newEntityRowSwap(context, item, this.indexOf(item));
         const switched = !!this.swappingState.switchTo(newEntityRowSwap);
         if (switched) {
             AssertionUtils.isNotNull(newEntityRowSwap);
@@ -56,6 +56,17 @@ class SelectableListState extends CrudListState {
             this._processSwitchedOn(newEntityRowSwap);
         }
         return switched;
+    }
+
+    /**
+     * @param {*} context
+     * @param {IdentifiableEntity} item
+     * @param {number} index
+     * @return {EntityRowSwap}
+     * @protected
+     */
+    _newEntityRowSwap(context, item, index) {
+        return new EntityRowSwap(context, item, index);
     }
 
     /**

@@ -1,6 +1,6 @@
 class EntityRowSwap extends EntityRow {
     /**
-     * @type {string}
+     * @type {*}
      */
     context
     /**
@@ -9,7 +9,7 @@ class EntityRowSwap extends EntityRow {
     reloadedId;
 
     /**
-     * @param {string} [context]
+     * @param {*} [context]
      * @param {IdentifiableEntity} [entity]
      * @param {number} [index]
      * @param {number|string} [reloadedId]

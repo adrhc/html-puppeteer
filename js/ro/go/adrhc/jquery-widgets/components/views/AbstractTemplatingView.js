@@ -3,6 +3,7 @@ class AbstractTemplatingView extends AbstractView {
      * @param {string} [tmplUrl]
      * @param {string} [tmplId]
      * @param {string} [htmlTmpl]
+     * @param {jQuery<HTMLElement>} $el
      * @protected
      */
     _setupCachedHtmlTemplate({tmplUrl, tmplId, htmlTmpl, $el}) {

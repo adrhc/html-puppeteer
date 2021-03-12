@@ -26,7 +26,7 @@ class EditableListFactory {
                       bodyRowTmplId,
                       bodyRowTmplHtml,
                       readOnlyRow,
-                      mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId, !!bodyRowTmplHtml ? bodyRowTmplHtml : (!!bodyRowTmplId ? undefined : readOnlyRow.simpleRowView.tableAdapter.bodyRowTmplHtml)),
+                      mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId, _.defaultTo(bodyRowTmplHtml, bodyRowTmplId != null ? undefined : readOnlyRow.simpleRowView.tableAdapter.bodyRowTmplHtml)),
                       repository = new InMemoryCrudRepository(items),
                       newItemsGoToTheEndOfTheList,
                       newEntityFactoryFn,
@@ -37,11 +37,27 @@ class EditableListFactory {
                       childishBehaviour,
                       extractedEntityConverterFn
                   }) {
-        const props = DomUtils.jQueryOf(tableIdOrJQuery).data();
-        const configFn = (config) => $.extend(new ComponentConfiguration(), props, config);
-        const config = configFn({});
-        const editableListComponent = new EditableListComponent(repository, state, view,
-            readOnlyRow, editableRow, deletableRow, extractedEntityConverterFn, config);
+        /*
+                const props = DomUtils.dataOf(tableIdOrJQuery);
+                const configFn = (config) => $.extend(new ComponentConfiguration(), props, config);
+                const config = configFn({});
+        */
+
+        /*
+                const withDefaults = _.defaults(DomUtils.dataOf(tableIdOrJQuery));
+                const config = withDefaults(new ComponentConfiguration());
+        */
+
+        /*
+                const config = {};
+                // const config = new ComponentConfiguration();
+                _.extend(config, DomUtils.dataOf(tableIdOrJQuery));
+        */
+
+        // const config = ComponentUtil.configOf(tableIdOrJQuery);
+
+        const editableListComponent = new EditableListComponent(repository, state,
+            view, readOnlyRow, editableRow, deletableRow, extractedEntityConverterFn);
         if (childishBehaviour) {
             editableListComponent.childishBehaviour = childishBehaviour;
         }

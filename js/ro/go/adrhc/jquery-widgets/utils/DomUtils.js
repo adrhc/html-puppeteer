@@ -1,0 +1,21 @@
+class DomUtils {
+    /**
+     * @param {String|jQuery<HTMLElement>} elemIdOrJQuery
+     * @return {jQuery<HTMLElement>}
+     */
+    static jQueryOf(elemIdOrJQuery) {
+        if (elemIdOrJQuery instanceof jQuery) {
+            return elemIdOrJQuery;
+        } else {
+            return $(`#${elemIdOrJQuery}`);
+        }
+    }
+
+    /**
+     * @param {String|jQuery<HTMLElement>} elemIdOrJQuery
+     * @return {Object.<string, string>}
+     */
+    static dataOf(elemIdOrJQuery) {
+        return DomUtils.jQueryOf(elemIdOrJQuery).data();
+    }
+}

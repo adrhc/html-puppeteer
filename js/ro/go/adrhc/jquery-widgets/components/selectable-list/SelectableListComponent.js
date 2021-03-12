@@ -101,17 +101,38 @@ class SelectableListComponent extends SimpleListComponent {
         return this.offRow.processStateChanges(stateChange);
     }
 
+    /**
+     * @param {TaggedStateChange<EntityRowSwap>} stateChange
+     * @return {Promise<StateChange[]>}
+     */
     handleItemOff(stateChange) {
-        console.log(`${this.constructor.name}.updateViewOnItemOFF:\n${JSON.stringify(stateChange)}`);
-        const removeOnRow = new DeleteStateChange(stateChange.stateOrPart);
-        const createOffRow = new CreateStateChange(stateChange.stateOrPart);
-        return this.swappingRowSelector[SwitchType.OFF].processStateChanges(removeOnRow, createOffRow);
+        console.log(`${this.constructor.name}.handleItemOff:\n${JSON.stringify(stateChange)}`);
+        const entityRowSwap = stateChange.stateOrPart;
+        const removeOnRow = new DeleteStateChange(entityRowSwap);
+        const createOffRow = new CreateStateChange(entityRowSwap);
+        return this._swappingRowSelectorOf(SwitchType.OFF, entityRowSwap.context)
+            .processStateChanges(removeOnRow, createOffRow);
     }
 
+    /**
+     * @param {TaggedStateChange<EntityRowSwap>} stateChange
+     * @return {Promise<StateChange[]>}
+     */
     handleItemOn(stateChange) {
-        console.log(`${this.constructor.name}.updateViewOnItemON:\n${JSON.stringify(stateChange)}`);
-        stateChange = new CreateStateChange(stateChange.stateOrPart);
-        return this.swappingRowSelector[SwitchType.ON].processStateChanges(stateChange);
+        console.log(`${this.constructor.name}.handleItemOn:\n${JSON.stringify(stateChange)}`);
+        const entityRowSwap = stateChange.stateOrPart;
+        stateChange = new CreateStateChange(entityRowSwap);
+        return this._swappingRowSelectorOf(SwitchType.ON, entityRowSwap.context).processStateChanges(stateChange);
+    }
+
+    /**
+     * @param {"ON"|"OFF"} switchType
+     * @param {*=} context
+     * @return {IdentifiableRowComponent}
+     * @protected
+     */
+    _swappingRowSelectorOf(switchType, context) {
+        return this.swappingRowSelector[switchType];
     }
 
     /**
