@@ -28,7 +28,7 @@ class ComponentConfiguration {
      */
     childProperty;
 
-    static configOf(...sources) {
-        return _.defaults(new ComponentConfiguration(), ...sources);
+    static configOf(elemIdOrJQuery, ...sources) {
+        return _.defaults(new ComponentConfiguration(), ...sources, DomUtils.dataOf(elemIdOrJQuery));
     }
 }

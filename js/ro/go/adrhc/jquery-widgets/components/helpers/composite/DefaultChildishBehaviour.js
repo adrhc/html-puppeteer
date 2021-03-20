@@ -23,7 +23,7 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
      */
     childEntitySetter;
     /**
-     * @type {function(parentState: *): *}
+     * @type {function(parentState: *, partName: string): *}
      */
     childEntityGetter;
     /**
@@ -34,7 +34,7 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
     /**
      * @param {AbstractComponent} parentComp
      * @param {string} [childProperty] is the parent state's property storing the child state
-     * @param {function(parentState: *): *} [childEntityGetter]
+     * @param {function(parentState: *, partName: string): *} [childEntityGetter]
      * @param {function(childEntity: IdentifiableEntity, parentState: *): void} [childEntitySetter]
      * @param {function(useOwnerOnFields: boolean): *} [childEntityExtractorFn] extracts raw data from the HTML component's representation
      * @param {function(rawData: *): IdentifiableEntity} [childEntityConverter] converts extracted raw data to IdentifiableEntity
@@ -76,11 +76,12 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
      *
      * updateViewOnAny -> compositeBehaviour.processStateChangeWithKids -> compositeBehaviour._extractChildState -> childishBehaviour.getChildEntityFrom
      *
-     * @param {*} parentState available from a parent-StateChange
+     * @param {*} parentStateOrPart available from a parent-StateChange
+     * @param {string=} partName
      * @return {*}
      */
-    getChildEntityFrom(parentState) {
-        return this.childEntityGetter(parentState);
+    getChildEntityFrom(parentStateOrPart, partName) {
+        return this.childEntityGetter(parentStateOrPart, partName);
     }
 
     /**
@@ -110,15 +111,23 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
      * If not null, extract the child state from @param parentState, otherwise from parentComp.state.
      *
      * @param {*} parentState available from a parent-StateChange
+     * @param {string=} partName
      * @return {IdentifiableEntity | IdentifiableEntity[]}
      * @protected
      */
-    _getChildEntityFrom(parentState) {
+    _getChildEntityFrom(parentState, partName) {
         // parentState = parentState == null ? this.parentComp.state.currentState : parentState;
         if (parentState == null) {
             return undefined;
         } else if (this.childProperty != null) {
-            return parentState[this.childProperty];
+            if (!partName) {
+                return parentState[this.childProperty];
+            } else if (partName === this.childProperty) {
+                return parentState;
+            } else {
+                // todo: would it be better to throw some error?
+                return undefined;
+            }
         } else if ($.isArray(parentState)) {
             return [...parentState];
         } else {

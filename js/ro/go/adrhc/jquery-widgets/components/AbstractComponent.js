@@ -9,6 +9,10 @@ class AbstractComponent {
      */
     config;
     /**
+     * @type {{}}
+     */
+    runtimeConfig = {};
+    /**
      * @type {StateHolder}
      */
     state;
@@ -42,7 +46,7 @@ class AbstractComponent {
         this.compositeBehaviour = new CompositeBehaviour(this);
         this.entityExtractor = new DefaultEntityExtractor(this, {});
         if (config.childProperty) {
-            this.childishBehaviour = new DefaultChildishBehaviour(this, config.childProperty);
+            this.childishBehaviour = new DefaultChildishBehaviour(this, {childProperty: config.childProperty});
         }
     }
 
@@ -170,13 +174,13 @@ class AbstractComponent {
             console.log(`${this.constructor.name}.updateViewOnAny skipped!`);
             return Promise.reject(stateChange);
         }
-        if (this.config.skipOwnViewUpdates) {
+        if (this.runtimeConfig.skipOwnViewUpdates) {
             return this.compositeBehaviour.processStateChangeWithKids(stateChange);
         }
         return this.view.update(stateChange)
             .then(() => {
                 if (this.config.updateViewOnce) {
-                    this.config.skipOwnViewUpdates = true
+                    this.runtimeConfig.skipOwnViewUpdates = true
                 }
             })
             .then(() => this.compositeBehaviour.processStateChangeWithKids(stateChange));
@@ -269,10 +273,14 @@ class AbstractComponent {
     }
 
     /**
-     * @param {boolean} enable whether to handle or not with updateViewOnAny
+     * @param {boolean|string[]=} enableForAllChanges whether to handle or not with updateViewOnAny or a change type array
      */
-    handleWithAny(enable = true) {
-        this.setHandlerName("updateViewOnAny", enable ? StateChangeHandlersManager.ANY : undefined);
+    handleWithAny(enableForAllChanges = true) {
+        if (typeof enableForAllChanges === "boolean") {
+            this.setHandlerName("updateViewOnAny", enableForAllChanges ? StateChangeHandlersManager.ANY : undefined);
+        } else {
+            this.setHandlerName("updateViewOnAny", ...enableForAllChanges);
+        }
     }
 
     /**

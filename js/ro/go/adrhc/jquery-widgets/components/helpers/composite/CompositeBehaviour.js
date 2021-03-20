@@ -89,7 +89,7 @@ class CompositeBehaviour {
             if (newKidState === undefined) {
                 return undefined;
             }
-            return kidComp.update(newKidState, {});
+            return kidComp.update(newKidState);
         });
         return Promise.allSettled(promises.filter((it) => it !== undefined));
     }
@@ -102,7 +102,7 @@ class CompositeBehaviour {
      */
     _extractChildState(stateChange, kid) {
         if (kid.childishBehaviour) {
-            return kid.childishBehaviour.getChildEntityFrom(stateChange.stateOrPart);
+            return kid.childishBehaviour.getChildEntityFrom(stateChange.stateOrPart, stateChange.partName);
         } else {
             return kid.state.currentState;
         }

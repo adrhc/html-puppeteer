@@ -6,20 +6,13 @@ class DrawingComponent extends ContainerComponent {
      * @param {DefaultTemplatingView} [view]
      */
     constructor(elemIdOrJQuery,
-                config = $.extend(new ComponentConfiguration(),
-                    {clearChildrenOnReset: true}, DomUtils.jQueryOf(elemIdOrJQuery).data()),
+                config = ComponentConfiguration.configOf(elemIdOrJQuery),
                 state, view) {
         super(elemIdOrJQuery, config);
+        config.clearChildrenOnReset = _.defaultTo(config.clearChildrenOnReset, true)
     }
 
-    /**
-     * @param {*} stateOrPart
-     * @param {string|number} [partName]
-     * @param {boolean} [dontRecordStateEvents]
-     * @return {Promise<StateChange[]>}
-     */
-    resetThenUpdate(stateOrPart, {partName, dontRecordStateEvents} = {}) {
-        this.reset();
-        return super.update(stateOrPart, {partName, dontRecordStateEvents});
+    update(stateOrPart, {partName, dontRecordStateEvents} = {}) {
+        return this.resetThenUpdate(stateOrPart, {partName, dontRecordStateEvents});
     }
 }

@@ -55,10 +55,11 @@ class ChildishBehaviour {
      * Used by CompositeBehaviour.processStateChangeWithKids
      * where each kid extracts its part from the parent state.
      *
-     * @param [parentState]
+     * @param [parentStateOrPart]
+     * @param {string=} partName
      * @return {*} the child state extracted from the parent
      */
-    getChildEntityFrom(parentState) {
+    getChildEntityFrom(parentStateOrPart, partName) {
         return undefined;
     }
 

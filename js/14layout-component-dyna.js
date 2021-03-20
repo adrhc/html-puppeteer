@@ -20,6 +20,7 @@ if (Modernizr.template) {
 
     $(() => {
         // const comp = new DrawingComponent("drawing-comp");
+        // JQueryWidgetsUtil.autoCreate() does not create a Promise because of data-dont-auto-initialize="true" in 14...html
         const comp = JQueryWidgetsUtil.autoCreate();
         comp.compositeBehaviour.addChildComponentFactory([(parentComp) => {
             const tableIdOrJQuery = $("#dogsTable", parentComp.view.$elem);
