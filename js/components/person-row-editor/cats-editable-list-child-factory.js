@@ -1,18 +1,18 @@
 class CatsEditableListChildFactory extends ChildComponentFactory {
     /**
-     * @param parentComp {AbstractComponent}
+     * @param {IdentifiableRowComponent} idRowComp
      * @return {AbstractComponent}
      */
-    createChildComponent(parentComp) {
-        const $catsTable = $("[data-id='catsTable']", parentComp.view.$elem);
+    createChildComponent(idRowComp) {
+        const $catsTable = $("[data-id='catsTable']", idRowComp.view.$elem);
         const catRow = SimpleRowFactory.createIdentifiableRow({
             tableIdOrJQuery: $catsTable,
             rowTmplId: "editableCatsRowTmpl",
             tableRelativePositionOnCreate: "append"
         });
 
-        // parentComp.state is {SimpleRowState}
-        const repository = new InMemoryCrudRepository($.extend(true, [], parentComp.state.rowState.cats));
+        // @type {EntityRowSwap} idRowComp.state.currentState
+        const repository = new InMemoryCrudRepository($.extend(true, [], idRowComp.state.currentState.entity.cats));
 
         // cats table component
         return EditableListFactory.create({
@@ -25,7 +25,7 @@ class CatsEditableListChildFactory extends ChildComponentFactory {
             // EditableListComponent.extractEntity (aka SelectableListComponent.extractEntity)
             // is using onRow to extract the entity while we need to extract all of them
             // (i.e. AbstractTableBasedComponent extractEntity/extractAllEntities behaviour).
-            childishBehaviour: new DefaultTableChildishBehaviour(parentComp, "cats")
+            childishBehaviour: new DefaultTableChildishBehaviour(idRowComp, {childProperty: "cats"})
         });
     }
 }

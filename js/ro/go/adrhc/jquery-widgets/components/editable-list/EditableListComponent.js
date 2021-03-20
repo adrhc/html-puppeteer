@@ -121,7 +121,7 @@ class EditableListComponent extends SelectableListComponent {
          */
         const editableList = ev.data;
         const rowDataId = editableList.simpleListView.rowDataIdOf(this, true);
-        let entity = editableList.extractEntity();
+        const entity = editableList.extractEntity();
         editableList._handleRepoErrors(editableList.repository.save(entity)
             .then(savedEntity =>
                 editableList.doWithState((state) => {
@@ -177,7 +177,10 @@ class EditableListComponent extends SelectableListComponent {
      */
     _resetSwappingRowSelector() {
         for (let key in this.swappingRowSelector) {
-            this.swappingRowSelector[key].reset();
+            const row = this.swappingRowSelector[key];
+            if (row) {
+                row.reset();
+            }
         }
     }
 
