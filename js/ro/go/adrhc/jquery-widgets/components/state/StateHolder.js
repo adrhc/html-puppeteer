@@ -58,7 +58,7 @@ class StateHolder {
         }
 
         const stateChange = new StateChange(previousState, state);
-        return this._stateChanges.collect(stateChange);
+        return this.collectStateChange(stateChange);
     }
 
     /**
@@ -92,7 +92,7 @@ class StateHolder {
         }
 
         const stateChange = new StateChange(previousStatePart, partialState, partName);
-        return this._stateChanges.collect(stateChange);
+        return this.collectStateChange(stateChange);
     }
 
     /**
@@ -127,7 +127,7 @@ class StateHolder {
             failedRequestType: changeType
         }, simpleError);
         // avoid storing state while collecting error-based state changes
-        this._stateChanges.collect(new PositionStateChange("ERROR", data, {beforeItemId: failedId}));
+        this.collectStateChange(new PositionStateChange("ERROR", data, {beforeItemId: failedId}));
     }
 
     /**
@@ -158,6 +158,13 @@ class StateHolder {
             return undefined;
         }
         return this._currentState[partName];
+    }
+
+    /**
+     * @return {StateChange<T|P>|undefined}
+     */
+    collectStateChange(stateChange) {
+        return this._stateChanges.collect(stateChange);
     }
 
     /**

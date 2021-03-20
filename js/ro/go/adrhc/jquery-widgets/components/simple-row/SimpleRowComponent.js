@@ -12,9 +12,9 @@ class SimpleRowComponent extends AbstractComponent {
     errorComponent;
 
     /**
-     * @param state {TaggingStateHolder}
-     * @param view {SimpleRowView}
-     * @param [errorComponent] {AbstractComponent}
+     * @param {TaggingStateHolder} state
+     * @param {SimpleRowView} view
+     * @param {AbstractComponent=} errorComponent
      */
     constructor(state, view, errorComponent) {
         super(state, view);
@@ -62,8 +62,7 @@ class SimpleRowComponent extends AbstractComponent {
     updateViewOnERROR(stateChange) {
         if (this.errorComponent) {
             console.log(`${this.constructor.name}.updateViewOnERROR:\n${JSON.stringify(stateChange)}`);
-            stateChange.changeType = "CREATE"; // allows to create the row if doesn't exist
-            this.errorComponent.state.collectStateChange(stateChange, {});
+            this.errorComponent.state.replaceEntirely(stateChange.stateOrPart);
             return this.errorComponent.init();
         } else {
             alert(`${stateChange.stateOrPart.message}\n${JSON.stringify(stateChange, null, 2)}`);

@@ -132,6 +132,8 @@ class StateChangeHandlersManager {
     stateChangeHandlers = {};
 
     /**
+     * Assigns handlerName to change types.
+     *
      * @param {string} handlerName
      * @param {string|number} changeType
      */

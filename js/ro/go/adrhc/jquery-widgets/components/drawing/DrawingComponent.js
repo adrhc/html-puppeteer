@@ -2,7 +2,7 @@ class DrawingComponent extends ContainerComponent {
     /**
      * @param {string|jQuery<HTMLElement} elemIdOrJQuery
      * @param {ComponentConfiguration} [config]
-     * @param {ContainerState} [state]
+     * @param {ContainerStateHolder} [state]
      * @param {DefaultTemplatingView} [view]
      */
     constructor(elemIdOrJQuery,

@@ -1,16 +1,22 @@
 class ContainerComponent extends AbstractComponent {
     /**
+     * @type {ContainerStateHolder}
+     */
+    containerStateHolder;
+
+    /**
      * @param {string|jQuery<HTMLElement} elemIdOrJQuery
      * @param {ComponentConfiguration} [config]
-     * @param {ContainerState} [state]
+     * @param {ContainerStateHolder} [state]
      * @param {DefaultTemplatingView} [view]
      */
     constructor(elemIdOrJQuery,
-                config = $.extend(new ComponentConfiguration(),
-                    {updateViewOnce: true}, DomUtils.jQueryOf(elemIdOrJQuery).data()),
-                state = new ContainerState(config),
+                config = ComponentConfiguration.configOf(DomUtils.dataOf(elemIdOrJQuery), {updateViewOnce: true}),
+                state = new ContainerStateHolder({initialState: config}),
                 view = new DefaultTemplatingView(elemIdOrJQuery, config)) {
         super(state, view, config);
+        this.handleWithAny();
+        this.containerStateHolder = state;
         if (config.dontAutoInitialize) {
             return;
         }
@@ -37,8 +43,7 @@ class ContainerComponent extends AbstractComponent {
         return new Promise((resolve) => {
             console.debug(`${this.constructor.name}._stateChangePromiseFromState`);
             console.debug(JSON.stringify(this.state.currentState));
-            const stateChange = new StateChange(this.config.stateChangeRequest, this.state.currentState);
-            this.state.collectStateChange(stateChange, {});
+            const stateChange = this.containerStateHolder.collectStateChangeOfSelf();
             setTimeout(() => resolve(stateChange))
         })
     }

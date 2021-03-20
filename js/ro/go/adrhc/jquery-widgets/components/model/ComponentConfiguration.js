@@ -27,4 +27,8 @@ class ComponentConfiguration {
      * @type {string}
      */
     childProperty;
+
+    static configOf(...sources) {
+        return _.defaults(new ComponentConfiguration(), ...sources);
+    }
 }

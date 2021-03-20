@@ -248,6 +248,8 @@ class AbstractComponent {
     }
 
     /**
+     * Assigns handlerName to change types.
+     *
      * @param {string} handlerName
      * @param {string|number} changeType
      */
@@ -264,6 +266,13 @@ class AbstractComponent {
         if (partName != null) {
             this.stateChangesDispatcher.usePartName(partName);
         }
+    }
+
+    /**
+     * @param {boolean} enable whether to handle or not with updateViewOnAny
+     */
+    handleWithAny(enable = true) {
+        this.setHandlerName("updateViewOnAny", enable ? StateChangeHandlersManager.ANY : undefined);
     }
 
     /**
