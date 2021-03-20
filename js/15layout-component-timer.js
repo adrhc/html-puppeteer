@@ -18,6 +18,7 @@ if (Modernizr.template) {
         };
     }
 
+    // DrawingComponent demo
     $(() => {
         JQueryWidgetsUtil.autoCreate()
             .then(comp => comp.processStateChanges({
@@ -26,8 +27,12 @@ if (Modernizr.template) {
                 surname: "Kent"
             }, {}).then(() => comp))
             .then((comp) => {
-                const seconds = comp.state.currentState.seconds;
-                const procStateChgFn = () => comp.processStateChanges(generateNewState(seconds), {});
+                /**
+                 * @type {DrawingComponent}
+                 */
+                const drawComp = comp;
+                const seconds = drawComp.state.currentState.seconds;
+                const procStateChgFn = () => drawComp.resetThenUpdate(generateNewState(seconds));
                 setInterval(procStateChgFn, seconds * 1000);
             });
     });

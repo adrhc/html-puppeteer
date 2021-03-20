@@ -19,7 +19,7 @@ class DynamicSelectOneView extends AbstractView {
     }
 
     _setupCachedUrl(dynaSelOneHtml = "js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/templates/dyna-sel-one.html") {
-        this.tmpl = new CachedHtmlTemplate({url: JqueryWidgetsConfig.urlOf(dynaSelOneHtml)});
+        this.tmpl = new CachedHtmlTemplate({url: JQueryWidgetsConfig.urlOf(dynaSelOneHtml)});
     }
 
     /**

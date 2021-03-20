@@ -117,7 +117,7 @@ class AbstractComponent {
      * @param {boolean} [dontRecordStateEvents]
      * @return {Promise<StateChange[]>}
      */
-    update(stateOrPart, {partName, dontRecordStateEvents}) {
+    update(stateOrPart, {partName, dontRecordStateEvents} = {}) {
         return this.doWithState((basicState) => {
             basicState.replace(stateOrPart, {partName, dontRecordStateEvents})
         });
@@ -130,7 +130,7 @@ class AbstractComponent {
     processStateChanges(...oldStateChange) {
         return this.doWithState((basicState) => {
             // collecting again the old state change event
-            oldStateChange.forEach(it => basicState.stateChanges.collect(it));
+            oldStateChange.forEach(sc => basicState.collectStateChange(sc));
         });
     }
 

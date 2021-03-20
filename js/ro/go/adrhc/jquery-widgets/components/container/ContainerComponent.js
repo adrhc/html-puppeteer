@@ -23,15 +23,11 @@ class ContainerComponent extends AbstractComponent {
         return super.init().then(() => this);
     }
 
-    processStateChanges(stateChangeOrJustData, {dontRecordStateEvents}) {
-        return super.processStateChanges(stateChangeOrJustData, {dontRecordStateEvents});
-    }
-
     _reloadState() {
         if (this.config.dontReloadFromState) {
             return super._reloadState();
         } else {
-            return this._stateChangePromiseFromState();
+            return this._promiseStateChangeOfSelf();
         }
     }
 
@@ -39,7 +35,7 @@ class ContainerComponent extends AbstractComponent {
      * @return {Promise<StateChange>}
      * @protected
      */
-    _stateChangePromiseFromState() {
+    _promiseStateChangeOfSelf() {
         return new Promise((resolve) => {
             console.debug(`${this.constructor.name}._stateChangePromiseFromState`);
             console.debug(JSON.stringify(this.state.currentState));
