@@ -11,7 +11,7 @@ if (Modernizr.template) {
 
     $(() => {
         // DYNAMIC-SELECT-ONE
-        DynamicSelectOneFactory.create("dyna-sel-one", DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {}).init();
+        DynamicSelectOneFactory.create("dyna-sel-one", DbMock.DYNA_SEL_ONE_PERS_REPOSITORY).init();
 
         // EDITABLE-LIST
         // dogs table with both read-only and editable row

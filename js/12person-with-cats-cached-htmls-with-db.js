@@ -33,7 +33,7 @@ if (Modernizr.template) {
         const DYNA_SEL_ONE_PERS_REPOSITORY = new DbDynaSelOneRepository("person", Person.parse);
 
         // DYNAMIC-SELECT-ONE
-        DynamicSelectOneFactory.create("dyna-sel-one", DYNA_SEL_ONE_PERS_REPOSITORY, {}).init();
+        DynamicSelectOneFactory.create("dyna-sel-one", DYNA_SEL_ONE_PERS_REPOSITORY).init();
 
         // EDITABLE-LIST
         // dogs table with both read-only and editable row

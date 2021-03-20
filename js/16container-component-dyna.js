@@ -1,34 +1,34 @@
 /**
- * @param {ContainerComponent} comp
+ * @param {ContainerComponent} container
  * @return {function(): Promise<StateChange[]>}
  */
-function dogsSupplierFor(comp) {
+function dogsSupplierFor(container) {
     return () => {
-        // const dogs = findDogsListComp(comp).repository.items;
+        // const dogs = findDogsListComp(container).repository.items;
         // dogs.push({id: dogs.length + 1, name: `dog${dogs.length + 1}`});
-        const oldDogs = comp.findKidsByClass(SimpleListComponent).pop().state.currentState;
+        const oldDogs = container.findKidsByClass(SimpleListComponent).pop().state.currentState;
         const dogs = [...oldDogs, {id: oldDogs.length + 1, name: `dog${oldDogs.length + 1}`}];
-        return comp.processStateChanges(new StateChange("UPDATE_ALL", {dogs}), {});
+        return container.processStateChanges(new StateChange("UPDATE_ALL", {dogs}), {});
     };
 }
 
 /**
- * @param {ContainerComponent} comp
+ * @param {ContainerComponent} container
  * @return {function(): Promise<StateChange[]>}
  */
-function personSupplierFor(comp) {
+function personSupplierFor(container) {
     return () => {
         const date = new Date().toLocaleTimeString();
         const person = {name: `Kent ${date}`, surname: `Gigi ${date}`};
-        return comp.processStateChanges(new RenderStateChange({person}), {});
+        return container.processStateChanges(new RenderStateChange({person}), {});
     };
 }
 
 $(() => {
-    // const comp = new ContainerComponent($("[data-jqw-type='ContainerComponent']"));
-    const comp = JQueryWidgetsUtil.autoCreate();
+    // const container = new ContainerComponent($("[data-jqw-type='ContainerComponent']"));
+    const container = JQueryWidgetsUtil.autoCreate();
 
-    comp.compositeBehaviour.addChildComponentFactory([(parentComp) => {
+    container.compositeBehaviour.addChildComponentFactory([(parentComp) => {
         const elemIdOrJQuery = $("#person", parentComp.view.$elem);
         return new DrawingComponent(elemIdOrJQuery);
     }, (parentComp) => {
@@ -36,12 +36,12 @@ $(() => {
         return SimpleListFactory.create({items: DbMock.DOGS, tableIdOrJQuery});
     }, (parentComp) => {
         const elemIdOrJQuery = $("#dyna-sel-one", parentComp.view.$elem);
-        return DynamicSelectOneFactory.create(elemIdOrJQuery, DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {});
+        return DynamicSelectOneFactory.create(elemIdOrJQuery, DbMock.DYNA_SEL_ONE_PERS_REPOSITORY);
     }]);
 
-    comp.init()
-        .then(() => setInterval(dogsSupplierFor(comp), comp.config.seconds * 1000))
-        .then(() => setInterval(personSupplierFor(comp),
-            comp.findKidsByClass(DrawingComponent).pop().config.seconds * 1000))
+    container.init()
+        .then(() => setInterval(dogsSupplierFor(container), container.config.seconds * 1000))
+        .then(() => setInterval(personSupplierFor(container),
+            container.findKidsByClass(DrawingComponent).pop().config.seconds * 1000))
         .then(() => console.log("16container-component-dyna.js started"));
 });

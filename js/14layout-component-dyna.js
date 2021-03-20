@@ -26,7 +26,7 @@ if (Modernizr.template) {
             return SimpleListFactory.create({items: DbMock.DOGS, tableIdOrJQuery});
         }, (parentComp) => {
             const elemIdOrJQuery = $("#dyna-sel-one", parentComp.view.$elem);
-            return DynamicSelectOneFactory.create(elemIdOrJQuery, DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {});
+            return DynamicSelectOneFactory.create(elemIdOrJQuery, DbMock.DYNA_SEL_ONE_PERS_REPOSITORY);
         }]);
 
         const seconds = comp.state.currentState.seconds;
