@@ -26,11 +26,11 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
     }
 
     /**
-     * @param parentComp {IdentifiableRowComponent}
+     * @param parentIdRowComp {IdentifiableRowComponent}
      * @return {ElasticListComponent}
      */
-    createChildComponent(parentComp) {
-        const $catsTable = $("[data-id='catsTable']", parentComp.view.$elem);
+    createChildComponent(parentIdRowComp) {
+        const $catsTable = $("[data-id='catsTable']", parentIdRowComp.view.$elem);
 
         // see ChildComponentFactory
         const ownerDynaSelOneCompFactory = {
@@ -44,19 +44,19 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
 
                 return DynamicSelectOneFactory.create($("[data-id='dyna-sel-one']", $parentElem),
                     this.dynaSelOnePersRepo, {
-                        childishBehaviour: new DynaSelOneChildishBehaviour(idRowCompParent, "person", Person.parse)
+                        childishBehaviour: new DynaSelOneOnRowChildishBehaviour(idRowCompParent, "person", Person.parse)
                     })
             }
         };
 
         // create-delete cats list (aka table)
         return CreateDeleteListFactory.create($catsTable, {
-            items: parentComp.simpleRowState.rowState.cats,
+            items: parentIdRowComp.state.currentState.entity.cats,
             newItemsGoToTheEndOfTheList: true,
             bodyRowTmplId: this.bodyRowTmplId,
             bodyRowTmplHtml: this.bodyRowTmplHtml,
             rowChildCompFactories: ownerDynaSelOneCompFactory,
-            childishBehaviour: new DefaultTableChildishBehaviour(parentComp, {childProperty: "cats"})
+            childishBehaviour: new DefaultTableChildishBehaviour(parentIdRowComp, {childProperty: "cats"})
         });
     }
 }

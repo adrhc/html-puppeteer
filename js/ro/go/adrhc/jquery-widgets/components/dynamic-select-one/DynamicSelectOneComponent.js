@@ -10,7 +10,7 @@ class DynamicSelectOneComponent extends AbstractComponent {
         this.dynaSelOneState = state;
         this.dynaSelOneView = view;
         if (config.childProperty) {
-            this.childishBehaviour = new DynaSelOneChildishBehaviour(this,
+            this.childishBehaviour = new DynaSelOneOnRowChildishBehaviour(this,
                 config.childProperty, config.newChildEntityFactoryFn);
         }
     }
