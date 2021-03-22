@@ -19,8 +19,8 @@ class ContainerComponent extends AbstractComponent {
                 state = new TaggingStateHolder({initialState: config}),
                 view = new DefaultTemplatingView(elemIdOrJQuery, config)) {
         super(state, view, config);
-        config.updateViewOnce = _.defaultTo(config.updateViewOnce, true);
-        config.clearChildrenOnReset = _.defaultTo(config.clearChildrenOnReset, true);
+        config.updateViewOnce = _.defaultTo(true, config.updateViewOnce);
+        config.clearChildrenOnReset = _.defaultTo(true, config.clearChildrenOnReset);
         this.handleWithAny();
         this.containerStateHolder = state;
         if (config.dontAutoInitialize) {

@@ -9,7 +9,7 @@ class DrawingComponent extends ContainerComponent {
                 config = ComponentConfiguration.configOf(elemIdOrJQuery),
                 state, view) {
         super(elemIdOrJQuery, config);
-        config.clearChildrenOnReset = _.defaultTo(config.clearChildrenOnReset, true)
+        config.clearChildrenOnReset = _.defaultTo(true, config.clearChildrenOnReset)
     }
 
     update(stateOrPart, {partName, dontRecordStateEvents} = {}) {

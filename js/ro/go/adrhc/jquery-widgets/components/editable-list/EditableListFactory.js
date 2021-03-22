@@ -26,7 +26,7 @@ class EditableListFactory {
                       bodyRowTmplId,
                       bodyRowTmplHtml,
                       readOnlyRow,
-                      mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId, _.defaultTo(bodyRowTmplHtml, bodyRowTmplId != null ? undefined : readOnlyRow.simpleRowView.tableAdapter.bodyRowTmplHtml)),
+                      mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId, _.defaultTo(bodyRowTmplId != null ? undefined : readOnlyRow.simpleRowView.tableAdapter.bodyRowTmplHtml, bodyRowTmplHtml)),
                       repository = new InMemoryCrudRepository(items),
                       newItemsGoToTheEndOfTheList,
                       newEntityFactoryFn,
