@@ -38,7 +38,7 @@ class AbstractComponent {
      * @param view {AbstractView}
      * @param {ComponentConfiguration} [config]
      */
-    constructor(state = new StateHolder({}), view, config = ComponentUtil.configOf(view.$elem)) {
+    constructor(state = new StateHolder({}), view, config = ComponentConfiguration.configOf(view.$elem)) {
         this.state = state;
         this.view = view;
         this.config = config;
