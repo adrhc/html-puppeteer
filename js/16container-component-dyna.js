@@ -26,7 +26,7 @@ function personSupplierFor(container) {
 
 $(() => {
     // const container = new ContainerComponent($("[data-jqw-type='ContainerComponent']"));
-    const container = JQueryWidgetsUtil.autoCreate();
+    const container = JQWUtil.createComponents();
 
     container.compositeBehaviour.addChildComponentFactory([(parentComp) => {
         const elemIdOrJQuery = $("#person", parentComp.view.$elem);

@@ -21,12 +21,12 @@ if (Modernizr.template) {
     // DrawingComponent demo
     $(() => {
         /**
-         * JQueryWidgetsUtil.autoCreate() creates a Promise because data-dont-auto-initialize="true" is missing
+         * JQWUtil.createComponents() creates a Promise because data-dont-auto-initialize="true" is missing
          *
-         * JQueryWidgetsUtil.autoCreate() will process a StateChange (see its _reloadState), such that
+         * JQWUtil.createComponents() will process a StateChange (see its _reloadState), such that
          * updateViewOnce (see ContainerComponent) will be set (to true), so that's why resetThenUpdate() is used.
          */
-        JQueryWidgetsUtil.autoCreate()
+        JQWUtil.createComponents()
             .then(comp => comp.resetThenUpdate({
                 seconds: comp.state.currentState.seconds,
                 name: "Gigi",
