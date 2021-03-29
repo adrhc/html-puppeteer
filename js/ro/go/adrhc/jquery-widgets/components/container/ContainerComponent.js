@@ -29,37 +29,15 @@ class ContainerComponent extends AbstractComponent {
         return super.init().then(() => this);
     }
 
-    /**
-     * @param {*} stateOrPart
-     * @param {string|number} [partName]
-     * @param {boolean} [dontRecordStateEvents]
-     * @return {Promise<StateChange[]>}
-     */
-    resetThenUpdate(stateOrPart, {partName, dontRecordStateEvents} = {}) {
-        this.reset();
-        this.runtimeConfig.skipOwnViewUpdates = false;
-        return super.update(stateOrPart, {partName, dontRecordStateEvents});
-    }
-
     _reloadState() {
+        console.debug(`${this.constructor.name}._reloadState`);
+        console.debug(JSON.stringify(this.state.currentState));
         if (this.config.dontReloadFromState) {
             return super._reloadState();
         } else {
-            return this._promiseStateChangeOfSelf();
-        }
-    }
-
-    /**
-     * @return {Promise<StateChange>}
-     * @protected
-     */
-    _promiseStateChangeOfSelf() {
-        return new Promise((resolve) => {
-            console.debug(`${this.constructor.name}._stateChangePromiseFromState`);
-            console.debug(JSON.stringify(this.state.currentState));
             const stateChange = this._collectStateChangeOfSelf();
-            setTimeout(() => resolve(stateChange))
-        })
+            return Promise.resolve(stateChange);
+        }
     }
 
     _collectStateChangeOfSelf() {
