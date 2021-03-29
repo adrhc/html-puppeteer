@@ -30,6 +30,6 @@ class ComponentConfiguration {
 
     static configOf(elemIdOrJQuery, ...sources) {
         // return _.defaults(new ComponentConfiguration(), ...sources, DomUtils.dataOf(elemIdOrJQuery));
-        return _.defaultsAll([new ComponentConfiguration(), ...sources, DomUtils.dataOf(elemIdOrJQuery)]);
+        return Object.assign(new ComponentConfiguration(), _.defaultsAll([{}, ...sources, DomUtils.dataOf(elemIdOrJQuery)]));
     }
 }
