@@ -14,16 +14,42 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     repository;
 
     /**
-     * @param {CrudRepository} repository
-     * @param {SimpleListState} state
-     * @param {SimpleListView} view
-     * @param {ComponentConfiguration} [config]
+     * @param {string|jQuery<HTMLTableElement>} tableIdOrJQuery
+     * @param {IdentifiableEntity[]=} items
+     * @param {string=} bodyRowTmplId could be empty when not using a row template (but only the table)
+     * @param {string=} bodyRowTmplHtml
+     * @param {MustacheTableElemAdapter=} mustacheTableElemAdapter
+     * @param {CrudRepository=} repository
+     * @param {SimpleListView=} view
+     * @param {SimpleListState=} state
+     * @param {string=} childProperty
+     * @param {ChildishBehaviour=} childishBehaviour permit CreateDeleteListComponent to update its parent
+     * @param {ComponentConfiguration=} config
      */
-    constructor(repository, state, view, config) {
-        super(state, view, config);
+    constructor(tableIdOrJQuery, {
+        bodyRowTmplId,
+        bodyRowTmplHtml,
+        childProperty,
+        config = ComponentConfiguration.configWithOverrides(tableIdOrJQuery, {
+            bodyRowTmplId,
+            bodyRowTmplHtml,
+            childProperty
+        }),
+        items = [],
+        mustacheTableElemAdapter = new MustacheTableElemAdapter(
+            tableIdOrJQuery, config.bodyRowTmplId, config.bodyRowTmplHtml),
+        repository = new InMemoryCrudRepository(items),
+        state = new SimpleListState(),
+        view = new SimpleListView(mustacheTableElemAdapter),
+        childishBehaviour,
+    }) {
+        super({view, state, childishBehaviour, config: config.dontAutoInitializeOf()});
         this.setHandlerName("updateViewOnAny", "CREATE", "REPLACE", "DELETE");
         this.simpleListState = state;
         this.repository = repository;
+        if (!config.dontAutoInitialize) {
+            return this.init().then(() => this);
+        }
     }
 
     /**

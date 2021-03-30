@@ -9,7 +9,7 @@ class AbstractComponent {
      */
     config;
     /**
-     * @type {{}}
+     * @type {{skipOwnViewUpdates: boolean}}
      */
     runtimeConfig = {};
     /**
@@ -32,21 +32,36 @@ class AbstractComponent {
      * @type {EntityExtractor}
      */
     entityExtractor;
+    /**
+     * @type {ChildishBehaviour}
+     */
+    childishBehaviour;
 
     /**
-     * @param state {StateHolder}
-     * @param view {AbstractView}
-     * @param {ComponentConfiguration} [config]
+     * @param {AbstractView} view
+     * @param {StateHolder=} state
+     * @param {ChildishBehaviour=} childishBehaviour
+     * @param {ComponentConfiguration=} config
      */
-    constructor(state = new StateHolder({}), view, config = ComponentConfiguration.configOf(view.$elem)) {
+    constructor({
+                    view,
+                    state = new StateHolder({}),
+                    childishBehaviour,
+                    config = ComponentConfiguration.configOf(view?.$elem),
+                }) {
         this.state = state;
         this.view = view;
         this.config = config;
         this.stateChangesDispatcher = new StateChangesDispatcher(this);
         this.compositeBehaviour = new CompositeBehaviour(this);
         this.entityExtractor = new DefaultEntityExtractor(this, {});
-        if (config.childProperty) {
+        if (childishBehaviour) {
+            this.childishBehaviour = childishBehaviour;
+        } else if (config.childProperty) {
             this.childishBehaviour = new DefaultChildishBehaviour(this, {childProperty: config.childProperty});
+        }
+        if (!config.dontAutoInitialize) {
+            return this.init().then(() => this);
         }
     }
 

@@ -13,11 +13,17 @@ class SimpleRowComponent extends AbstractComponent {
 
     /**
      * @param {TaggingStateHolder} state
-     * @param {SimpleRowView} view
+     * @param {SimpleRowView=} view
+     * @param {ComponentConfiguration=} config
      * @param {AbstractComponent=} errorComponent
      */
-    constructor(state, view, errorComponent) {
-        super(state, view);
+    constructor({
+                    view,
+                    state,
+                    config,
+                    errorComponent
+                }) {
+        super({view, state, config});
         this.simpleRowView = view;
         this.errorComponent = errorComponent;
     }

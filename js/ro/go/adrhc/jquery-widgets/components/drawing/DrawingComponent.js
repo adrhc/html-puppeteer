@@ -6,10 +6,12 @@ class DrawingComponent extends ContainerComponent {
      * @param {DefaultTemplatingView} [view]
      */
     constructor(elemIdOrJQuery,
-                config = ComponentConfiguration.configOf(elemIdOrJQuery),
+                config = ComponentConfiguration.configOf(elemIdOrJQuery, {
+                    updateViewOnce: false,
+                    clearChildrenOnReset: true
+                }),
                 state, view) {
-        super(elemIdOrJQuery, config);
-        config.clearChildrenOnReset = _.defaultTo(true, config.clearChildrenOnReset)
+        super(elemIdOrJQuery, {config});
     }
 
     /**
@@ -20,7 +22,7 @@ class DrawingComponent extends ContainerComponent {
      */
     resetThenUpdate(stateOrPart, {partName, dontRecordStateEvents} = {}) {
         this.reset();
-        this.runtimeConfig.skipOwnViewUpdates = false;
+        // this.runtimeConfig.skipOwnViewUpdates = false;
         return super.update(stateOrPart, {partName, dontRecordStateEvents});
     }
 

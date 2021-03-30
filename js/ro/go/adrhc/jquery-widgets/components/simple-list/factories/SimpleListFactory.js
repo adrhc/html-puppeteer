@@ -12,25 +12,27 @@ class SimpleListFactory {
      * @param [childishBehaviour] {ChildishBehaviour} permit CreateDeleteListComponent to update its parent
      * @return {SimpleListComponent}
      */
-    static create({
-                      items = [],
-                      tableIdOrJQuery,
-                      bodyRowTmplId,
-                      bodyRowTmplHtml,
-                      mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId, bodyRowTmplHtml),
-                      repository = new InMemoryCrudRepository(items),
-                      state = new SimpleListState({}),
-                      view = new SimpleListView(mustacheTableElemAdapter),
-                      childProperty,
-                      childishBehaviour
-                  }) {
-        const props = DomUtils.jQueryOf(tableIdOrJQuery).data();
-        const configFn = (config) => $.extend(new ComponentConfiguration(), props, config);
-        const config = configFn({childProperty});
-        const comp = new SimpleListComponent(repository, state, view, config);
-        if (childishBehaviour) {
-            comp.childishBehaviour = childishBehaviour;
-        }
-        return comp;
+    static create(tableIdOrJQuery, {
+        items = [],
+        bodyRowTmplId,
+        bodyRowTmplHtml,
+        mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId, bodyRowTmplHtml),
+        repository = new InMemoryCrudRepository(items),
+        state = new SimpleListState({}),
+        view = new SimpleListView(mustacheTableElemAdapter),
+        childProperty,
+        childishBehaviour
+    }) {
+        return new SimpleListComponent(tableIdOrJQuery, {
+            items,
+            bodyRowTmplId,
+            bodyRowTmplHtml,
+            mustacheTableElemAdapter,
+            repository,
+            state,
+            view,
+            childProperty,
+            childishBehaviour
+        });
     }
 }

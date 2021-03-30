@@ -8,7 +8,7 @@ class SimpleListState extends TaggingStateHolder {
      * @param {TaggingStateChangeMapper<TItem[]>} [stateChangeMapper]
      * @param {StateChangesCollector<TItem[]>} [changeManager]
      */
-    constructor({initialState = [], stateChangeMapper, changeManager}) {
+    constructor({initialState = [], stateChangeMapper, changeManager} = {}) {
         super({initialState, stateChangeMapper, changeManager});
     }
 

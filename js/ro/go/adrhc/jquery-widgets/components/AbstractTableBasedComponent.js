@@ -5,12 +5,14 @@ class AbstractTableBasedComponent extends AbstractComponent {
     tableBasedView;
 
     /**
-     * @param state {StateHolder}
-     * @param view {AbstractTableBasedView}
-     * @param {ComponentConfiguration} [config]
+     * @param {AbstractTableBasedView} view
+     * @param {StateHolder=} state
+     * @param {ChildishBehaviour=} childishBehaviour
+     * @param {ComponentConfiguration=} config
      */
-    constructor(state, view, config) {
-        super(state, view, config);
+    constructor({view, state, childishBehaviour, config}) {
+        const _this = super({view, state, childishBehaviour, config});
         this.tableBasedView = view;
+        return _this;
     }
 }

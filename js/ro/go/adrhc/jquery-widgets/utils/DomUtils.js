@@ -16,6 +16,9 @@ class DomUtils {
      * @return {Object.<string, string>}
      */
     static dataOf(elemIdOrJQuery) {
+        if (elemIdOrJQuery == null) {
+            return undefined;
+        }
         return DomUtils.jQueryOf(elemIdOrJQuery).data();
     }
 }

@@ -15,18 +15,20 @@ class ContainerComponent extends AbstractComponent {
      * @param {DefaultTemplatingView} [view]
      */
     constructor(elemIdOrJQuery,
-                config = ComponentConfiguration.configOf(elemIdOrJQuery),
-                state = new TaggingStateHolder({initialState: config}),
-                view = new DefaultTemplatingView(elemIdOrJQuery, config)) {
-        super(state, view, config);
-        config.updateViewOnce = _.defaultTo(true, config.updateViewOnce);
-        config.clearChildrenOnReset = _.defaultTo(true, config.clearChildrenOnReset);
+                {
+                    config = ComponentConfiguration.configOf(elemIdOrJQuery, {
+                        updateViewOnce: true,
+                        clearChildrenOnReset: true
+                    }),
+                    state = new TaggingStateHolder({initialState: config}),
+                    view = new DefaultTemplatingView(elemIdOrJQuery, config)
+                } = {}) {
+        super({state, view, config: config.dontAutoInitializeOf()});
         this.handleWithAny();
         this.containerStateHolder = state;
-        if (config.dontAutoInitialize) {
-            return;
+        if (!config.dontAutoInitialize) {
+            return this.init().then(() => this);
         }
-        return super.init().then(() => this);
     }
 
     _reloadState() {

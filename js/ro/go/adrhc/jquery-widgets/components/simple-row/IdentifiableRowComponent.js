@@ -1,11 +1,12 @@
 class IdentifiableRowComponent extends SimpleRowComponent {
     /**
-     * @param {TaggingStateHolder} state
      * @param {SimpleRowView} view
+     * @param {TaggingStateHolder=} state
+     * @param {ComponentConfiguration=} config
      * @param {AbstractComponent=} errorComponent
      */
-    constructor(state, view, errorComponent) {
-        super(state, view, errorComponent);
+    constructor({view, state, config, errorComponent}) {
+        super({view, state, config, errorComponent});
     }
 
     updateViewOnDELETE(stateChange) {
