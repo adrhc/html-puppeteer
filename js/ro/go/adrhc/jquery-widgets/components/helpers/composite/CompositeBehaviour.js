@@ -147,7 +147,7 @@ class CompositeBehaviour {
     }
 
     /**
-     * create the child component then init it
+     * create the child components then init them
      *
      * @return {Promise<StateChange[]>}
      */
