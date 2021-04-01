@@ -26,8 +26,11 @@ class SimpleRowComponent extends AbstractComponent {
                     rowTmplId,
                     rowTmplHtml,
                     childProperty,
-                    config = ComponentConfiguration.configWithOverrides(
-                        tableIdOrJQuery, DomUtils.dataOf(rowTmplId), {
+                    config = ComponentConfiguration
+                        .configOf(tableIdOrJQuery, {
+                            clearChildrenOnReset: true
+                        })
+                        .overwriteWith(DomUtils.dataOf(rowTmplId), {
                             rowTmplId,
                             rowTmplHtml,
                             childProperty
