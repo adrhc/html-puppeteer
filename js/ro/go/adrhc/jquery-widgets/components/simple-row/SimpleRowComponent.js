@@ -46,18 +46,21 @@ class SimpleRowComponent extends AbstractComponent {
             this.compositeBehaviour.addChildComponentFactory(childCompFactories);
         }
         this.simpleRowView = view;
+        this.handleWithAny(true);
     }
 
     /**
-     * Overloads super.update.
+     * todo: a row update would destroy its children and row-events (because the row is deleted-then-created)
      *
      * @param {*} [columnValues]
      * @param {number} [rowIndex]
      * @return {Promise<StateChange[]>}
      */
     updateRow(columnValues, rowIndex = this._defaultRowPosition()) {
-        const rowValues = columnValues ? new EntityRow(columnValues, rowIndex) : undefined;
-        return super.update(rowValues, {});
+        const rowValues = columnValues ? new EntityRow(columnValues, {index: rowIndex}) : undefined;
+        this.reset();
+        this.state.collectStateChange(new CreateStateChange(rowValues))
+        return this.init();
     }
 
     /**
@@ -79,52 +82,5 @@ class SimpleRowComponent extends AbstractComponent {
         }
         this.reset(); // kids are also reset
         return Promise.resolve(stateChange);
-    }
-
-    /**
-     * @param stateChange {StateChange}
-     * @return {Promise<*>|Promise<StateChange[]>}
-     */
-    /*updateViewOnERROR(stateChange) {
-        if (this.errorComponent) {
-            console.log(`${this.constructor.name}.updateViewOnERROR:\n${JSON.stringify(stateChange)}`);
-            const errorRow = stateChange.stateOrPart;
-            const errorStateChange = new CreateStateChange(errorRow)
-            return this.errorComponent.processStateChanges(errorStateChange);
-        } else {
-            alert(`${stateChange.stateOrPart.message}\n${JSON.stringify(stateChange, null, 2)}`);
-        }
-        return Promise.resolve(stateChange);
-    }*/
-
-    /**
-     * Because the IdentifiableRowComponent is completely recreated on update I have to basically init it here.
-     *
-     * @param {StateChange} stateChange
-     * @return {Promise}
-     */
-    updateViewOnAny(stateChange) {
-        this._safelyLogStateChange(stateChange, "updateViewOnAny");
-        // why reset? because we have to detach the event handlers on previous row
-        this.reset();
-        // above reset will also apply to the state so we must restore it (the state)
-        this.state.currentState = stateChange.stateOrPart;
-        // after recreating the view one has to again bind the event handlers,
-        // call compositeBehaviour.init, etc (do something similar to an init)
-        return this.view.update(stateChange)
-            .then(() => {
-                // the this.view.$elem is set only after this.view.update so we have to _configureEvents after it
-                this._configureEvents();
-                return this.compositeBehaviour.init();
-            });
-    }
-
-    /**
-     * It's not necessary to call compositeBehaviour.init because it is called by this.updateViewOnAny.
-     *
-     * @return {Promise<StateChange[]>}
-     */
-    init() {
-        return this.updateViewOnStateChanges();
     }
 }

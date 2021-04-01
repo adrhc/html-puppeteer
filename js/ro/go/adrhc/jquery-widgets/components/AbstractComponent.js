@@ -291,7 +291,7 @@ class AbstractComponent {
     }
 
     /**
-     * @param {boolean|string[]=} enableForAllChanges whether to handle or not with updateViewOnAny or a change type array
+     * @param {boolean|string[]=} enableForAllChanges whether to use or not updateViewOnAny (for everything or for a specific change-type array)
      */
     handleWithAny(enableForAllChanges = true) {
         if (typeof enableForAllChanges === "boolean") {

@@ -24,9 +24,30 @@ class EditableListComponent extends SelectableListComponent {
         this.swappingRowSelector["showAdd"] = onRow;
         this.swappingRowSelector["showEdit"] = onRow; // is equal to super.swappingRowSelector[false]
         this.swappingRowSelector["showDelete"] = deletableRow;
-        this.errorRow = errorRow;
+        this._setupErrorRow(errorRow);
         if (extractedEntityConverterFn) {
             this.selectableListEntityExtractor.entityConverterFn = extractedEntityConverterFn;
+        }
+    }
+
+    /**
+     * @param errorRow
+     * @protected
+     */
+    _setupErrorRow(errorRow) {
+        const errorRowTmplId = this.config.errorRowTmplId;
+        const errorRowTmplHtml = this.config.errorRowTmplHtml;
+        if (errorRow) {
+            this.errorRow = errorRow;
+        } else if (!errorRowTmplId && !errorRowTmplHtml) {
+            this.errorRow = undefined;
+        } else {
+            this.errorRow = new IdentifiableRowComponent({
+                tableIdOrJQuery: this.tableBasedView.$elem,
+                childishBehaviour: new ChildishBehaviour(this),
+                rowTmplId: errorRowTmplId,
+                rowTmplHtml: errorRowTmplHtml
+            });
         }
     }
 

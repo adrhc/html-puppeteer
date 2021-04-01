@@ -1,10 +1,5 @@
 class IdentifiableRowComponent extends SimpleRowComponent {
     /**
-     * @type {AbstractComponent}
-     */
-    errorComponent;
-
-    /**
      * @param tableIdOrJQuery
      * @param rowTmplId
      * @param rowTmplHtml
@@ -19,7 +14,6 @@ class IdentifiableRowComponent extends SimpleRowComponent {
      * @param initialState
      * @param childCompFactories
      * @param childishBehaviour
-     * @param {AbstractComponent=} errorComponent
      */
     constructor({
                     tableIdOrJQuery,
@@ -42,34 +36,9 @@ class IdentifiableRowComponent extends SimpleRowComponent {
                     initialState,
                     state = new TaggingStateHolder({initialState}),
                     childCompFactories,
-                    childishBehaviour,
-                    errorComponent
+                    childishBehaviour
                 }) {
         super({view, state, config, childCompFactories, childishBehaviour});
-        this._setupErrorComponent(errorComponent);
-    }
-
-    /**
-     * todo: change this approach
-     *
-     * @param errorComponent
-     * @protected
-     */
-    _setupErrorComponent(errorComponent) {
-        const errorRowTmplId = this.config.errorRowTmplId;
-        const errorRowTmplHtml = this.config.errorRowTmplHtml;
-        if (errorComponent) {
-            this.errorComponent = errorComponent;
-        } else if (!errorRowTmplId && !errorRowTmplHtml) {
-            this.errorComponent = undefined;
-        } else {
-            this.errorComponent = new IdentifiableRowComponent({
-                tableIdOrJQuery: this.simpleRowView.tableAdapter.$table,
-                childishBehaviour: new ChildishBehaviour(this),
-                rowTmplId: errorRowTmplId,
-                rowTmplHtml: errorRowTmplHtml
-            });
-        }
     }
 
     updateViewOnDELETE(stateChange) {
