@@ -109,28 +109,6 @@ class StateHolder {
     }
 
     /**
-     * todo: move this error state to an error related StateHolder instance
-     *
-     * @param {SimpleError} simpleError
-     * @param {string} changeType
-     * @param {IdentifiableEntity} [entity]
-     */
-    collectFromSimpleError(simpleError, changeType, entity) {
-        AssertionUtils.isTrue(!entity || entity === simpleError.data);
-        let failedId = entity.id != null ? entity.id : IdentifiableEntity.TRANSIENT_ID;
-        const data = $.extend({
-            // id is used to identify the row to update and for setting the "data-id" attribute
-            id: `error-row-${failedId}`,
-            // failedId is used for setting "data-secondary-row-part" attribute
-            failedId,
-            entity: simpleError.data,
-            failedRequestType: changeType
-        }, simpleError);
-        // avoid storing state while collecting error-based state changes
-        this.collectStateChange(new PositionStateChange("ERROR", data, {beforeItemId: failedId}));
-    }
-
-    /**
      * @param [anotherState]
      * @return {boolean}
      * @protected

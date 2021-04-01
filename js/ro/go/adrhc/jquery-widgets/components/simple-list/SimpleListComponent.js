@@ -47,9 +47,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
         this.setHandlerName("updateViewOnAny", "CREATE", "REPLACE", "DELETE");
         this.simpleListState = state;
         this.repository = repository;
-        if (!config.dontAutoInitialize) {
-            return this.init().then(() => this);
-        }
+        return this._handleAutoInitialization();
     }
 
     /**

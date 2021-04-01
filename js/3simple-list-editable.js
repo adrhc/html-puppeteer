@@ -9,10 +9,9 @@ if (Modernizr.template) {
         }
     });
     $(() => {
-        SimpleListFactory.create({
+        new SimpleListComponent("dogsTable", {
             items: DbMock.DOGS,
-            tableIdOrJQuery: "dogsTable"
-        }).init();
+        });
     })
 } else {
     // Find another way to add the rows to the table because

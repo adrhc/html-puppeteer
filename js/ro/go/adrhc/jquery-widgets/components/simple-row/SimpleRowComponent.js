@@ -6,26 +6,46 @@ class SimpleRowComponent extends AbstractComponent {
      * @type {SimpleRowView}
      */
     simpleRowView;
-    /**
-     * @type {AbstractComponent}
-     */
-    errorComponent;
 
     /**
+     * @param tableIdOrJQuery
+     * @param rowTmplId
+     * @param rowTmplHtml
+     * @param childProperty
+     * @param mustacheTableElemAdapter
+     * @param tableRelativePositionOnCreate
+     * @param initialState
      * @param {TaggingStateHolder} state
      * @param {SimpleRowView=} view
+     * @param childCompFactories
+     * @param childishBehaviour
      * @param {ComponentConfiguration=} config
-     * @param {AbstractComponent=} errorComponent
      */
     constructor({
-                    view,
-                    state,
-                    config,
-                    errorComponent
+                    tableIdOrJQuery,
+                    rowTmplId,
+                    rowTmplHtml,
+                    childProperty,
+                    config = ComponentConfiguration.configWithOverrides(
+                        tableIdOrJQuery, DomUtils.dataOf(rowTmplId), {
+                            rowTmplId,
+                            rowTmplHtml,
+                            childProperty
+                        }),
+                    mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, rowTmplId, rowTmplHtml),
+                    tableRelativePositionOnCreate,
+                    view = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate),
+                    initialState,
+                    state = new TaggingStateHolder({initialState}),
+                    childCompFactories,
+                    childishBehaviour
                 }) {
-        super({view, state, config});
+        super({view, state, childishBehaviour, config: config.dontAutoInitializeOf()});
+        this.config = config;
+        if (childCompFactories) {
+            this.compositeBehaviour.addChildComponentFactory(childCompFactories);
+        }
         this.simpleRowView = view;
-        this.errorComponent = errorComponent;
     }
 
     /**
@@ -65,16 +85,17 @@ class SimpleRowComponent extends AbstractComponent {
      * @param stateChange {StateChange}
      * @return {Promise<*>|Promise<StateChange[]>}
      */
-    updateViewOnERROR(stateChange) {
+    /*updateViewOnERROR(stateChange) {
         if (this.errorComponent) {
             console.log(`${this.constructor.name}.updateViewOnERROR:\n${JSON.stringify(stateChange)}`);
-            this.errorComponent.state.replaceEntirely(stateChange.stateOrPart);
-            return this.errorComponent.init();
+            const errorRow = stateChange.stateOrPart;
+            const errorStateChange = new CreateStateChange(errorRow)
+            return this.errorComponent.processStateChanges(errorStateChange);
         } else {
             alert(`${stateChange.stateOrPart.message}\n${JSON.stringify(stateChange, null, 2)}`);
         }
-        return super.updateViewOnERROR(stateChange);
-    }
+        return Promise.resolve(stateChange);
+    }*/
 
     /**
      * Because the IdentifiableRowComponent is completely recreated on update I have to basically init it here.
@@ -87,7 +108,7 @@ class SimpleRowComponent extends AbstractComponent {
         // why reset? because we have to detach the event handlers on previous row
         this.reset();
         // above reset will also apply to the state so we must restore it (the state)
-        this.state.replaceEntirely(stateChange.stateOrPart, true);
+        this.state.currentState = stateChange.stateOrPart;
         // after recreating the view one has to again bind the event handlers,
         // call compositeBehaviour.init, etc (do something similar to an init)
         return this.view.update(stateChange)

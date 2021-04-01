@@ -40,11 +40,9 @@ if (Modernizr.template) {
     }
 
     $(() => {
-        const simpleListComponent = SimpleListFactory.create({
+        /*new SimpleListComponent(dogsTableWithEdit, {
             items: DbMock.DOGS,
-            tableIdOrJQuery: dogsTableWithEdit
-        });
-        simpleListComponent.init().then(updateAllStateChanges => {
+        }).then(updateAllStateChanges => {
             const items = updateAllStateChanges[0].stateOrPart;
             const item0 = items[0];
             const item1 = items[1];
@@ -89,14 +87,12 @@ if (Modernizr.template) {
                     name: `new dog (id = 999, added to end)`
                 }, TableElementAdapter.LAST_ROW_INDEX);
             });
-        });
+        });*/
 
         // dogs table with deleted row
-        SimpleListFactory.create({
-            items: DbMock.DOGS,
-            tableIdOrJQuery: dogsTableWithDelete,
-            bodyRowTmplId: "dogsTableWithDeleteReadOnlyRowTmpl"
-        }).init().then(updateAllStateChanges => {
+        new SimpleListComponent(dogsTableWithDelete, {
+            items: DbMock.DOGS
+        }).then(updateAllStateChanges => {
             const items = updateAllStateChanges[0].stateOrPart;
             const item0 = items[0];
             const item2 = items[2];

@@ -2,7 +2,7 @@
  * @extends {SimpleListState<IdentifiableEntity[], EntityRow<IdentifiableEntity>>}
  */
 class CrudListState extends SimpleListState {
-    static ROW_INDEX_BEFORE_PREPEND = -1;
+    static ROW_INDEX_BEFORE_FIRST = -1;
 
     /**
      * @type {function(): IdentifiableEntity}
@@ -129,7 +129,7 @@ class CrudListState extends SimpleListState {
     insertItem(item, append = this.append) {
         const newItemIndex = append ? this.items.length : 0;
         return this._replaceItem(new EntityRow(item, newItemIndex),
-            append ? newItemIndex : CrudListState.ROW_INDEX_BEFORE_PREPEND);
+            append ? newItemIndex : CrudListState.ROW_INDEX_BEFORE_FIRST);
     }
 
     /**
@@ -140,7 +140,7 @@ class CrudListState extends SimpleListState {
     updateItem(item, newItemIndex) {
         const oldIndex = this.findIndexById(item.id);
         return this._replaceItem(new EntityRow(item,
-            newItemIndex == null ? oldIndex : newItemIndex), oldIndex);
+            {index: newItemIndex == null ? oldIndex : newItemIndex}), oldIndex);
     }
 
     /**

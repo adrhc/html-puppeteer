@@ -19,11 +19,17 @@ class TableElementAdapter {
      * @private
      */
     _owner;
+    /**
+     * @type {string}
+     */
+    rowDataId;
 
     /**
-     * @param tableId {string|jQuery<HTMLTableRowElement>}
+     * @param {string|jQuery<HTMLTableRowElement>} tableId
+     * @param {string} rowDataId
      */
-    constructor(tableId) {
+    constructor(tableId, {rowDataId} = {rowDataId: "id"}) {
+        this.rowDataId = rowDataId;
         this._setupElem(tableId);
         this._setupTableId();
         this._setupOwner();
@@ -42,8 +48,8 @@ class TableElementAdapter {
     }
 
     _setupTableId() {
-        const dataId = this.$table.data("id");
-        this._tableId = dataId ? dataId : this.$table.attr("id");
+        const dataId = this.$table.data(this.rowDataId);
+        this._tableId = dataId ? dataId : this.$table.attr(this.rowDataId);
     }
 
     /**
@@ -63,7 +69,7 @@ class TableElementAdapter {
      * @param {string} [rowHtml]
      * @param {boolean} [replaceExisting]
      * @param {"prepend"|"append"} [tableRelativePosition]
-     * @param {number} [index]
+     * @param {EntityRow} [rowData]
      * @param {boolean} [createIfNotExists]
      */
     renderRow({
@@ -71,7 +77,7 @@ class TableElementAdapter {
                   rowHtml,
                   replaceExisting = true,
                   tableRelativePosition = "prepend",
-                  index,
+                  rowData,
                   createIfNotExists
               }) {
         rowHtml = rowHtml ? rowHtml : this.emptyRowHtmlOf(rowDataId);
@@ -83,14 +89,18 @@ class TableElementAdapter {
             }
         } else if (createIfNotExists) {
             const $row = $(rowHtml);
-            if (index != null) {
-                if (index === 0) {
+            if (rowData.index != null) {
+                if (rowData.index === 0) {
                     this.$tbody.prepend($row);
-                } else if (index === TableElementAdapter.LAST_ROW_INDEX) {
+                } else if (rowData.index === TableElementAdapter.LAST_ROW_INDEX) {
                     this.$tbody.append($row);
                 } else {
-                    $(`tr:eq(${index - 1})`, this.$tbody).after($row);
+                    $(`tr:eq(${rowData.index - 1})`, this.$tbody).after($row);
                 }
+            } else if (rowData.beforeRowId != null) {
+                this.$getRowByDataId(rowData.beforeRowId).before($row);
+            } else if (rowData.afterRowId != null) {
+                this.$getRowByDataId(rowData.beforeRowId).after($row);
             } else if (tableRelativePosition) {
                 this.$tbody[tableRelativePosition]($row);
             }
@@ -105,7 +115,7 @@ class TableElementAdapter {
     rowDataIdOf(elem, searchParentsForDataIdIfMissingOnElem) {
         const $elem = elem instanceof jQuery ? elem : $(elem);
         if ($elem.is(this.ownerSelector)) {
-            const dataId = $elem.data("id");
+            const dataId = $elem.data(this.rowDataId);
             if (dataId != null) {
                 return dataId;
             } else if (searchParentsForDataIdIfMissingOnElem) {
@@ -122,7 +132,7 @@ class TableElementAdapter {
      */
     rowDataIdOfParent(elem) {
         const $elem = elem instanceof jQuery ? elem : $(elem);
-        return $elem.parents(`tr${this.ownerSelector}`).data("id");
+        return $elem.parents(`tr${this.ownerSelector}`).data(this.rowDataId);
     }
 
     emptyRowHtmlOf(rowDataId) {
@@ -145,7 +155,7 @@ class TableElementAdapter {
      * @return {jQuery<HTMLTableRowElement>}
      */
     $getRowByDataId(rowDataId) {
-        return this.$getOwnedRowByData("id", rowDataId);
+        return this.$getOwnedRowByData(this.rowDataId, rowDataId);
     }
 
     /**
@@ -154,13 +164,15 @@ class TableElementAdapter {
      * @return {jQuery<HTMLTableRowElement>}
      */
     $getOwnedRowByData(dataKey, dataValue) {
-        return this.$tbody.children(this.getRowSelector(dataKey, dataValue));
+        return this.$tbody.children(this.rowSelectorOf(dataValue, dataKey));
     }
 
     /**
+     * @param {string|number|boolean} dataValue
+     * @param {string} dataKey
      * @returns {string}
      */
-    getRowSelector(dataKey, dataValue) {
+    rowSelectorOf(dataValue, dataKey = this.rowDataId) {
         return `tr${this.ownerSelector}[data-${dataKey}='${dataValue}']`;
     }
 

@@ -39,11 +39,10 @@ class SimpleRowView extends AbstractView {
         const rowIdToSearchFor = previousStateOrPart ? previousStateOrPart.entity.id : rowValues.entity.id;
         this.tableAdapter.renderRowWithTemplate({
             rowDataId: rowIdToSearchFor,
-            data: rowValues.entity,
+            rowData: rowValues,
             rowTmplHtml: this.tableAdapter.bodyRowTmplHtml,
             createIfNotExists: stateChange.changeType === "CREATE",
-            tableRelativePosition: this._tableRelativePositionOf(rowValues),
-            index: rowValues.index
+            tableRelativePosition: this._tableRelativePositionOf(rowValues)
         });
         this.$elem = rowValues ? this.tableAdapter.$getRowByDataId(rowValues.entity.id) : undefined;
         return Promise.resolve(stateChange);

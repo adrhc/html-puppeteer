@@ -87,8 +87,8 @@ class SelectableListComponent extends SimpleListComponent {
      * @return {Promise<StateChange[]>}
      */
     switchTo(rowDataId, context) {
-        return this.doWithState((state) => {
-            this.castState(state).switchTo(rowDataId, context);
+        return this.doWithState(() => {
+            this.selectableListState.switchTo(rowDataId, context);
         });
     }
 
@@ -110,7 +110,7 @@ class SelectableListComponent extends SimpleListComponent {
         const entityRowSwap = stateChange.stateOrPart;
         const removeOnRow = new DeleteStateChange(entityRowSwap);
         const createOffRow = new CreateStateChange(entityRowSwap);
-        return this._swappingRowSelectorOf(SwitchType.OFF, entityRowSwap.context)
+        return this._swappingRowSelectorOf(_.defaultTo(SwitchType.OFF, entityRowSwap.context))
             .processStateChanges(removeOnRow, createOffRow);
     }
 
@@ -122,16 +122,16 @@ class SelectableListComponent extends SimpleListComponent {
         console.log(`${this.constructor.name}.handleItemOn:\n${JSON.stringify(stateChange)}`);
         const entityRowSwap = stateChange.stateOrPart;
         stateChange = new CreateStateChange(entityRowSwap);
-        return this._swappingRowSelectorOf(SwitchType.ON, entityRowSwap.context).processStateChanges(stateChange);
+        return this._swappingRowSelectorOf(_.defaultTo(SwitchType.ON, entityRowSwap.context))
+            .processStateChanges(stateChange);
     }
 
     /**
-     * @param {"ON"|"OFF"} switchType
-     * @param {*=} context
+     * @param {string} switchType
      * @return {IdentifiableRowComponent}
      * @protected
      */
-    _swappingRowSelectorOf(switchType, context) {
+    _swappingRowSelectorOf(switchType) {
         return this.swappingRowSelector[switchType];
     }
 
@@ -145,13 +145,5 @@ class SelectableListComponent extends SimpleListComponent {
         this.simpleListView.$elem
             .on(this._appendNamespaceTo("dblclick"),
                 `tr${this._ownerSelector}`, this, this.onSwitch);
-    }
-
-    /**
-     * @param {StateHolder} state
-     * @return {SelectableListState}
-     */
-    castState(state) {
-        return state;
     }
 }

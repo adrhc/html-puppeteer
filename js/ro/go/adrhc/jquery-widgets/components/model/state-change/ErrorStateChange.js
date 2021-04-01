@@ -1,21 +1,11 @@
-class ErrorStateChange extends StateChange {
-    /**
-     * @type {string}
-     */
-    failedRequestType;
-    /**
-     * @type {SimpleError}
-     */
-    error;
+class ErrorStateChange extends CreateStateChange {
+    static TAG = "ERROR";
 
     /**
-     * @param failedRequestType {string}
-     * @param error {SimpleError}
-     * @param data {*}
+     * @param {*} errorData
+     * @param {string=} changeType
      */
-    constructor(failedRequestType, error, data) {
-        super("ERROR", data);
-        this.failedRequestType = failedRequestType;
-        this.error = error;
+    constructor(errorData, changeType = ErrorStateChange.TAG) {
+        super(changeType, undefined, errorData);
     }
 }

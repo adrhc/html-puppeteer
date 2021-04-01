@@ -60,8 +60,16 @@ class AbstractComponent {
         } else if (config.childProperty) {
             this.childishBehaviour = new DefaultChildishBehaviour(this, {childProperty: config.childProperty});
         }
-        if (!config.dontAutoInitialize) {
-            return this.init().then(() => this);
+        return this._handleAutoInitialization();
+    }
+
+    /**
+     * @return {Promise<StateChange[]>}
+     * @protected
+     */
+    _handleAutoInitialization() {
+        if (!this.config.dontAutoInitialize) {
+            return this.init();
         }
     }
 
@@ -213,11 +221,6 @@ class AbstractComponent {
             console.error(e);
             console.error(`${this.constructor.name}.${methodToLogFor}, stateChange:\n`, stateChange);
         }
-    }
-
-    updateViewOnERROR(stateChange) {
-        console.log(`${this.constructor.name}.updateViewOnERROR:\n${JSON.stringify(stateChange)}`);
-        return Promise.resolve(stateChange);
     }
 
     /**

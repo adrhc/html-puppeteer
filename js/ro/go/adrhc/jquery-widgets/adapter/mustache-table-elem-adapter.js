@@ -63,7 +63,7 @@ class MustacheTableElemAdapter extends TableElementAdapter {
      * @param {string} [rowTmplHtml]
      * @param {boolean} [replaceExisting]
      * @param {"prepend"|"append"} [tableRelativePosition]
-     * @param {number} [index]
+     * @param {EntityRow} [rowData]
      * @param {boolean} createIfNotExists
      */
     renderRowWithTemplate({
@@ -72,7 +72,7 @@ class MustacheTableElemAdapter extends TableElementAdapter {
                               rowTmplHtml,
                               replaceExisting,
                               tableRelativePosition,
-                              index,
+                              rowData,
                               createIfNotExists
                           }) {
         const rowHtml = this._renderTemplate(data, rowTmplHtml);
@@ -81,7 +81,7 @@ class MustacheTableElemAdapter extends TableElementAdapter {
             rowHtml,
             replaceExisting,
             tableRelativePosition,
-            index,
+            rowData,
             createIfNotExists
         });
     }
