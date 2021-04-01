@@ -2,8 +2,6 @@
  * @extends {SimpleListState<IdentifiableEntity[], EntityRow<IdentifiableEntity>>}
  */
 class CrudListState extends SimpleListState {
-    static ROW_INDEX_BEFORE_FIRST = -1;
-
     /**
      * @type {function(): IdentifiableEntity}
      */
@@ -123,13 +121,30 @@ class CrudListState extends SimpleListState {
 
     /**
      * @param {IdentifiableEntity} item
-     * @param {boolean} [append]
+     * @param {boolean|number|string} [append]
      * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
     insertItem(item, append = this.append) {
         const newItemIndex = append ? this.items.length : 0;
-        return this._replaceItem(new EntityRow(item, newItemIndex),
-            append ? newItemIndex : CrudListState.ROW_INDEX_BEFORE_FIRST);
+        if (newItemIndex === 0) {
+            ArrayUtils.insert(undefined, 0, this.items);
+        }
+        return this._replaceItem(new EntityRow(item, newItemIndex));
+    }
+
+    indexOf({item, index, beforeRowId, afterRowId, append}) {
+        if (beforeRowId != null) {
+            return this.findIndexById(beforeRowId);
+        } else if (afterRowId != null) {
+            return this.findIndexById(afterRowId);
+        } else if (typeof index === "number") {
+            return index;
+        } else if (typeof append === "number") {
+            return append;
+        } else if (item != null) {
+            return this.items.indexOf(item);
+        }
+        return append ? this.items.length : 0;
     }
 
     /**
@@ -174,7 +189,7 @@ class CrudListState extends SimpleListState {
      * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      * @protected
      */
-    _replaceItem(rowValues, oldIndex = rowValues == null ? undefined : rowValues.index) {
+    _replaceItem(rowValues, oldIndex = rowValues.index) {
         return this.replacePart(rowValues, oldIndex);
     }
 

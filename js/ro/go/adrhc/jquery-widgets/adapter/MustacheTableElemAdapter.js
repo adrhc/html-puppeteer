@@ -59,29 +59,24 @@ class MustacheTableElemAdapter extends TableElementAdapter {
 
     /**
      * @param {number|string} [rowDataId]
-     * @param {*} [data]
+     * @param {EntityRow} [rowValues]
      * @param {string} [rowTmplHtml]
      * @param {boolean} [replaceExisting]
-     * @param {"prepend"|"append"} [tableRelativePosition]
-     * @param {EntityRow} [rowData]
      * @param {boolean} createIfNotExists
      */
     renderRowWithTemplate({
                               rowDataId,
-                              data,
+                              rowValues,
                               rowTmplHtml,
                               replaceExisting,
-                              tableRelativePosition,
-                              rowData,
                               createIfNotExists
                           }) {
-        const rowHtml = this._renderTemplate(data, rowTmplHtml);
+        const rowHtml = this._renderTemplate(rowValues.entity, rowTmplHtml);
         super.renderRow({
             rowDataId,
             rowHtml,
             replaceExisting,
-            tableRelativePosition,
-            rowData,
+            rowValues,
             createIfNotExists
         });
     }

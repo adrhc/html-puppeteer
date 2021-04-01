@@ -9,13 +9,15 @@ class EntityRowSwap extends EntityRow {
     reloadedId;
 
     /**
-     * @param {*} [context]
      * @param {IdentifiableEntity} [entity]
-     * @param {number} [index]
-     * @param {number|string} [reloadedId]
+     * @param {*=} context
+     * @param {number=} index
+     * @param {number|string=} beforeRowId
+     * @param {number|string=} afterRowId
+     * @param {number|string=} reloadedId
      */
-    constructor(context, entity, index, reloadedId) {
-        super(entity, index);
+    constructor(entity, {context, index, beforeRowId, afterRowId, reloadedId}) {
+        super(entity, {index, beforeRowId, afterRowId});
         this.reloadedId = reloadedId;
         this.context = context;
     }

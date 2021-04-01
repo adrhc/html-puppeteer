@@ -19,7 +19,7 @@ class StateChangesCollector {
     }
 
     /**
-     * @param {StateChange<T>} stateChange
+     * @param {StateChange<T>|undefined} stateChange
      */
     collect(stateChange) {
         stateChange = this._transform(stateChange);

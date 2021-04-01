@@ -18,7 +18,7 @@ class EntityRow {
 
     /**
      * @param {IdentifiableEntity} entity
-     * @param {number=} [index]
+     * @param {number=} index at which to create the row (useful only when creating the row otherwise the row is matched by id)
      * @param {number|string=} beforeRowId
      * @param {number|string=} afterRowId
      */

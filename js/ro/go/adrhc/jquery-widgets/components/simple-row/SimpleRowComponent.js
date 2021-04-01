@@ -47,28 +47,24 @@ class SimpleRowComponent extends AbstractComponent {
         }
         this.simpleRowView = view;
         this.handleWithAny(true);
+        this.setHandlerName("updateViewOnDELETE", "DELETE")
     }
 
     /**
-     * todo: a row update would destroy its children and row-events (because the row is deleted-then-created)
-     *
-     * @param {*} [columnValues]
-     * @param {number} [rowIndex]
+     * @param {EntityRow} stateOrPart
      * @return {Promise<StateChange[]>}
      */
-    updateRow(columnValues, rowIndex = this._defaultRowPosition()) {
-        const rowValues = columnValues ? new EntityRow(columnValues, {index: rowIndex}) : undefined;
+    update(stateOrPart) {
+        const previousState = this.state.currentState;
         this.reset();
-        this.state.collectStateChange(new CreateStateChange(rowValues))
+        this.state.collectStateChange(new StateChange(previousState, stateOrPart));
         return this.init();
     }
 
-    /**
-     * @return {number}
-     * @protected
-     */
-    _defaultRowPosition() {
-        return this.simpleRowView.tableRelativePositionOnCreate === "prepend" ? 0 : TableElementAdapter.LAST_ROW_INDEX;
+    remove() {
+        return this.doWithState(state => {
+            state.replaceEntirely(undefined);
+        }).then(() => this.reset());
     }
 
     /**

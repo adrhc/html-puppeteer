@@ -45,7 +45,7 @@ class AbstractComponent {
      */
     constructor({
                     view,
-                    state = new StateHolder({}),
+                    state = new StateHolder(),
                     childishBehaviour,
                     config = ComponentConfiguration.configOf(view?.$elem),
                 }) {
@@ -67,8 +67,8 @@ class AbstractComponent {
      * @return {Promise<StateChange[]>}
      * @protected
      */
-    _handleAutoInitialization() {
-        if (!this.config.dontAutoInitialize) {
+    _handleAutoInitialization(config = this.config) {
+        if (!config.dontAutoInitialize) {
             return this.init();
         }
     }
@@ -273,10 +273,11 @@ class AbstractComponent {
      * Assigns handlerName to change types.
      *
      * @param {string} handlerName
-     * @param {string|number} changeType
+     * @param {string|number} changeType defaults to [handlerName]
      */
     setHandlerName(handlerName, ...changeType) {
-        this.stateChangesDispatcher.stateChangeHandlers.setHandlerName(handlerName, ...changeType);
+        const changeTypes = changeType.length ? changeType : [handlerName];
+        this.stateChangesDispatcher.stateChangeHandlers.setHandlerName(handlerName, ...changeTypes);
     }
 
     /**

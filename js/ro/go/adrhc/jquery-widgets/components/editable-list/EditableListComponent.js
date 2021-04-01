@@ -145,7 +145,7 @@ class EditableListComponent extends SelectableListComponent {
         const entity = editableList.extractEntity();
         return editableList._handleRepoErrors(editableList.repository.save(entity)
             .then(savedEntity => editableList._handleUpdateSuccessful(savedEntity, rowDataId))
-            .catch((simpleError) => editableList._handleUpdateError(simpleError, rowDataId)));
+            .catch(simpleError => editableList._handleUpdateError(simpleError, rowDataId)));
     }
 
     /**
@@ -169,36 +169,24 @@ class EditableListComponent extends SelectableListComponent {
      */
     _handleUpdateError(simpleError, rowDataId) {
         console.log(`${this.constructor.name}._handleUpdateError, savedEntity:\n${JSON.stringify(simpleError)}`);
-        const errorRow = this._errorRowOf(simpleError, rowDataId);
-        const errorStateChange = new CreateStateChange(errorRow);
-        return this.errorRow.processStateChanges(errorStateChange);
+        const errorRow = this.editableListState.createErrorItem(simpleError, rowDataId);
+        return this.errorRow.update(errorRow);
     }
 
     /**
-     * @param {SimpleError} simpleError
-     * @param {number|string} rowDataId is the id before getting an error (e.g. IdentifiableEntity.TRANSIENT_ID)
+     * @param {TaggedStateChange<EntityRowSwap>} stateChange
+     * @return {Promise<StateChange[]>}
      * @protected
      */
-    _errorRowOf(simpleError, rowDataId) {
-        const errorData = this._errorDataOf(simpleError, rowDataId);
-        return new EntityRow(errorData, {beforeRowId: errorData.failedId});
-    }
-
-    /**
-     * @param {SimpleError} simpleError
-     * @param {number|string} rowDataId is the id before getting an error (e.g. IdentifiableEntity.TRANSIENT_ID)
-     * @protected
-     */
-    _errorDataOf(simpleError, rowDataId) {
-        const entity = simpleError.data;
-        let failedId = entity.id != null ? entity.id : rowDataId;
-        return $.extend({
-            // id is used to identify the row to update and for setting the "data-id" attribute
-            id: `error-row-${failedId}`,
-            // failedId is used for setting "data-secondary-row-part" attribute
-            failedId,
-            entity,
-        }, simpleError);
+    handleItemOff(stateChange) {
+        const errorRowId = this.errorRow.state.currentState?.id;
+        if (errorRowId == null) {
+            return super.handleItemOff(stateChange);
+        }
+        this.errorRow.reset();
+        return this.doWithState(() => {
+            this.editableListState.removeById(errorRowId);
+        }).then(() => super.handleItemOff(stateChange));
     }
 
     /**

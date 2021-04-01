@@ -22,7 +22,7 @@ class StateHolder {
                     initialState,
                     stateChangeMapper = new IdentityStateChangeMapper(),
                     changesCollector = new StateChangesCollector(stateChangeMapper)
-                }) {
+                } = {}) {
         this._currentState = initialState;
         this._stateChanges = changesCollector;
     }
@@ -103,6 +103,9 @@ class StateHolder {
      */
     _replacePartImpl(partialState, partName) {
         console.debug(`${this.constructor.name}._replacePartImpl, ${partName}, new part:\n${JSON.stringify(partialState)}`);
+        if (partName == null) {
+            return undefined;
+        }
         const previousStatePart = this.getStatePart(partName);
         this._currentState[partName] = partialState;
         return previousStatePart;
@@ -132,7 +135,7 @@ class StateHolder {
      * @return {P}
      */
     getStatePart(partName) {
-        if (this._currentState == null) {
+        if (this._currentState == null || partName == null) {
             return undefined;
         }
         return this._currentState[partName];

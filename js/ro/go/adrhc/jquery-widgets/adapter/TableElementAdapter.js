@@ -23,13 +23,22 @@ class TableElementAdapter {
      * @type {string}
      */
     rowDataId;
+    /**
+     * @type {string}
+     */
+    rowDefaultPositionOnCreate;
 
     /**
      * @param {string|jQuery<HTMLTableRowElement>} tableId
      * @param {string} rowDataId
+     * @param {string} rowDefaultPositionOnCreate
      */
-    constructor(tableId, {rowDataId} = {rowDataId: "id"}) {
+    constructor(tableId, {rowDataId, rowDefaultPositionOnCreate} = {
+        rowDataId: "id",
+        rowDefaultPositionOnCreate: "prepend"
+    }) {
         this.rowDataId = rowDataId;
+        this.rowDefaultPositionOnCreate = rowDefaultPositionOnCreate;
         this._setupElem(tableId);
         this._setupTableId();
         this._setupOwner();
@@ -68,16 +77,14 @@ class TableElementAdapter {
      * @param {number|string} [rowDataId]
      * @param {string} [rowHtml]
      * @param {boolean} [replaceExisting]
-     * @param {"prepend"|"append"} [tableRelativePosition]
-     * @param {EntityRow} [rowData]
+     * @param {EntityRow} [rowValues]
      * @param {boolean} [createIfNotExists]
      */
     renderRow({
                   rowDataId,
                   rowHtml,
                   replaceExisting = true,
-                  tableRelativePosition = "prepend",
-                  rowData,
+                  rowValues,
                   createIfNotExists
               }) {
         rowHtml = rowHtml ? rowHtml : this.emptyRowHtmlOf(rowDataId);
@@ -89,20 +96,20 @@ class TableElementAdapter {
             }
         } else if (createIfNotExists) {
             const $row = $(rowHtml);
-            if (rowData.index != null) {
-                if (rowData.index === 0) {
+            if (rowValues.index != null) {
+                if (rowValues.index === 0) {
                     this.$tbody.prepend($row);
-                } else if (rowData.index === TableElementAdapter.LAST_ROW_INDEX) {
+                } else if (rowValues.index === TableElementAdapter.LAST_ROW_INDEX) {
                     this.$tbody.append($row);
                 } else {
-                    $(`tr:eq(${rowData.index - 1})`, this.$tbody).after($row);
+                    $(`tr:eq(${rowValues.index - 1})`, this.$tbody).after($row);
                 }
-            } else if (rowData.beforeRowId != null) {
-                this.$getRowByDataId(rowData.beforeRowId).before($row);
-            } else if (rowData.afterRowId != null) {
-                this.$getRowByDataId(rowData.beforeRowId).after($row);
-            } else if (tableRelativePosition) {
-                this.$tbody[tableRelativePosition]($row);
+            } else if (rowValues.beforeRowId != null) {
+                this.$getRowByDataId(rowValues.beforeRowId).before($row);
+            } else if (rowValues.afterRowId != null) {
+                this.$getRowByDataId(rowValues.beforeRowId).after($row);
+            } else {
+                this.$tbody[this.rowDefaultPositionOnCreate]($row);
             }
         }
     }
