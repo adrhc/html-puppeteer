@@ -19,7 +19,7 @@ if (Modernizr.template) {
     function createDogsWithEditRow(initialData) {
         return new IdentifiableRowComponent({
             tableIdOrJQuery: dogsTableWithEdit,
-            rowTmplId: `${dogsTableWithEdit}SelectedRowTmpl`,
+            bodyRowTmplId: `${dogsTableWithEdit}SelectedRowTmpl`,
             initialState: initialData ? new EntityRow(initialData) : undefined
         });
     }
@@ -33,13 +33,14 @@ if (Modernizr.template) {
     function createDogsWithDeleteRow(initialData) {
         return new IdentifiableRowComponent({
             tableIdOrJQuery: dogsTableWithDelete,
-            rowTmplId: `${dogsTableWithDelete}DeletedRowTmpl`,
+            bodyRowTmplId: `${dogsTableWithDelete}DeletedRowTmpl`,
             initialState: initialData ? new EntityRow(initialData) : undefined
         });
     }
 
     $(() => {
-        const simpleListComponent = new SimpleListComponent(dogsTableWithEdit, {
+        const simpleListComponent = new SimpleListComponent({
+            tableIdOrJQuery: dogsTableWithEdit,
             items: DbMock.DOGS,
         });
         simpleListComponent.init().then(updateAllStateChanges => {
@@ -78,23 +79,28 @@ if (Modernizr.template) {
             }).then(() => {
                 const rowId1 = createDogsWithEditRow(item1);
                 return rowId1
-                    .update(new EntityRow({id: 888, name: `${item1.name} id changed to 888`}))
+                    .update(new EntityRow({id: 888, name: `${item1.name} id (${item1.id}) changed to 888`}))
                     .then(() => rowId1);
             }).then((row1) => {
                 const extractedEntity = row1.extractEntity();
-                AssertionUtils.isNotNull(extractedEntity.id === 888);
+                AssertionUtils.isTrue(extractedEntity.id === "888" && extractedEntity.name !== item1.name);
             }).then(() => {
                 // creating a new row
                 const newRow = createDogsWithEditRow();
                 return newRow.update(new EntityRow(
                     {id: 999, name: `new dog (id = 999, added to end)`},
                     {index: TableElementAdapter.LAST_ROW_INDEX}
-                ));
+                )).then(() => newRow);
+            }).then((newRow) => {
+                const extractedEntity = newRow.extractEntity();
+                const lastRowData = simpleListComponent.tableBasedView.tableAdapter.$getAllRows().last().data();
+                AssertionUtils.isTrue(extractedEntity.id === "999" && lastRowData.id === 999);
             });
         });
 
         // dogs table with deleted row
-        new SimpleListComponent(dogsTableWithDelete, {
+        new SimpleListComponent({
+            tableIdOrJQuery: dogsTableWithDelete,
             items: DbMock.DOGS
         }).then(updateAllStateChanges => {
             const items = updateAllStateChanges[0].stateOrPart;

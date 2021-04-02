@@ -9,7 +9,8 @@ if (Modernizr.template) {
         }
     });
     $(() => {
-        new SimpleListComponent("dogsTable", {
+        new SimpleListComponent( {
+            tableIdOrJQuery: "dogsTable",
             items: DbMock.DOGS,
         }).then(() => "2simple-list-read-only.js done");
     })

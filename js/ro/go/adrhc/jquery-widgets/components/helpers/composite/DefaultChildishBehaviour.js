@@ -45,7 +45,11 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
         childEntitySetter,
         childEntityExtractorFn,
         childEntityConverter = (it) => it,
-    } = {}) {
+    } = {
+        childEntityConverter(it) {
+            return it;
+        }
+    }) {
         super(parentComp);
         this.childProperty = childProperty;
         this.childEntityGetter = childEntityGetter ? childEntityGetter : this._getChildEntityFrom.bind(this);

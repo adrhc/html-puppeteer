@@ -4,7 +4,14 @@ class SelectableListEntityExtractor extends DefaultEntityExtractor {
      */
     selectableList;
 
-    constructor(component, {dontRemoveGeneratedId, entityConverterFn = (it) => it} = {}) {
+    constructor(component, {
+        dontRemoveGeneratedId,
+        entityConverterFn = (it) => it
+    } = {
+        entityConverterFn(it) {
+            return it;
+        }
+    }) {
         super(component, {dontRemoveGeneratedId, entityConverterFn});
         this.selectableList = component;
     }

@@ -15,6 +15,10 @@ class SimpleListComponent extends AbstractTableBasedComponent {
 
     /**
      * @param {string|jQuery<HTMLTableElement>} tableIdOrJQuery
+     * @param {string} rowDefaultPositionOnCreate
+     * @param bodyTmplHtml
+     * @param rowDataId
+     * @param dontAutoInitialize
      * @param {IdentifiableEntity[]=} items
      * @param {string=} bodyRowTmplId could be empty when not using a row template (but only the table)
      * @param {string=} bodyRowTmplHtml
@@ -25,29 +29,54 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @param {string=} childProperty
      * @param {ChildishBehaviour=} childishBehaviour permit CreateDeleteListComponent to update its parent
      * @param {ComponentConfiguration=} config
+     * @param compositeBehaviour
+     * @param childCompFactories
+     * @param parentComponent
      */
-    constructor(tableIdOrJQuery, {
-        bodyRowTmplId,
-        bodyRowTmplHtml,
-        childProperty,
-        config = ComponentConfiguration.configWithOverrides(tableIdOrJQuery, {
-            bodyRowTmplId,
-            bodyRowTmplHtml,
-            childProperty
-        }),
-        items = [],
-        mustacheTableElemAdapter = new MustacheTableElemAdapter(
-            tableIdOrJQuery, config.bodyRowTmplId, config.bodyRowTmplHtml),
-        repository = new InMemoryCrudRepository(items),
-        state = new SimpleListState(),
-        view = new SimpleListView(mustacheTableElemAdapter),
-        childishBehaviour,
-    }) {
-        super({view, state, childishBehaviour, config: config.dontAutoInitializeOf()});
+    constructor({
+                    tableIdOrJQuery,
+                    bodyRowTmplId,
+                    bodyRowTmplHtml,
+                    bodyTmplHtml,
+                    rowDataId,
+                    rowDefaultPositionOnCreate,
+                    childProperty,
+                    dontAutoInitialize,
+                    config = ComponentConfiguration.configWithOverrides(tableIdOrJQuery, {
+                        bodyRowTmplId,
+                        bodyRowTmplHtml,
+                        bodyTmplHtml,
+                        rowDataId,
+                        rowDefaultPositionOnCreate,
+                        childProperty,
+                        dontAutoInitialize
+                    }),
+                    items = [],
+                    mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, config),
+                    repository = new InMemoryCrudRepository(items),
+                    state = new SimpleListState(),
+                    view = new SimpleListView(mustacheTableElemAdapter),
+                    compositeBehaviour,
+                    childCompFactories,
+                    childishBehaviour,
+                    parentComponent
+                }) {
+        // the "super" missing parameters (e.g. bodyRowTmplId) are included in "config" or they are
+        // simply intermediate values (e.g. tableIdOrJQuery is used to compute mustacheTableElemAdapter)
+        super({
+            view,
+            state,
+            compositeBehaviour,
+            childCompFactories,
+            childishBehaviour,
+            parentComponent,
+            config: config.dontAutoInitializeOf()
+        });
+        this.config = config; // the "config" set by "super" is different (see line above)
         this.setHandlerName("updateViewOnAny", "CREATE", "REPLACE", "DELETE");
         this.simpleListState = state;
         this.repository = repository;
-        return this._handleAutoInitialization(config);
+        return this._handleAutoInitialization();
     }
 
     /**

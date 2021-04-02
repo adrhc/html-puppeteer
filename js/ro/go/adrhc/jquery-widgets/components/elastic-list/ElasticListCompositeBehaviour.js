@@ -12,7 +12,7 @@ class ElasticListCompositeBehaviour extends CompositeBehaviour {
 
     /**
      * @param id {number|string}
-     * @return {AbstractComponent}
+     * @return {IdentifiableRowComponent}
      */
     findKidById(id) {
         const kids = this.findKids((kid) => EntityUtils.idsAreEqual(kid.state.currentState.entity.id, id));

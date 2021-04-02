@@ -110,7 +110,7 @@ class SelectableListComponent extends SimpleListComponent {
         const entityRowSwap = stateChange.stateOrPart;
         const removeOnRow = new DeleteStateChange(entityRowSwap);
         const createOffRow = new CreateStateChange(entityRowSwap);
-        return this._swappingRowSelectorOf(_.defaultTo(SwitchType.OFF, entityRowSwap.context))
+        return this._swappingRowSelectorOf(fp.defaultTo(SwitchType.OFF, entityRowSwap.context))
             .processStateChanges(removeOnRow, createOffRow);
     }
 
@@ -122,7 +122,7 @@ class SelectableListComponent extends SimpleListComponent {
         console.log(`${this.constructor.name}.handleItemOn:\n${JSON.stringify(stateChange)}`);
         const entityRowSwap = stateChange.stateOrPart;
         stateChange = new CreateStateChange(entityRowSwap);
-        return this._swappingRowSelectorOf(_.defaultTo(SwitchType.ON, entityRowSwap.context))
+        return this._swappingRowSelectorOf(fp.defaultTo(SwitchType.ON, entityRowSwap.context))
             .processStateChanges(stateChange);
     }
 

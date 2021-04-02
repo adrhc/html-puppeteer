@@ -38,7 +38,7 @@ class CreateDeleteListFactory {
             if (rowChildishBehaviour) {
                 idRowComp.childishBehaviour = rowChildishBehaviour;
             }
-            idRowComp.state.replaceEntirely(new EntityRow(item, index));
+            idRowComp.state.replaceEntirely(new EntityRow(item, {index}));
             return idRowComp;
         },
         childishBehaviour

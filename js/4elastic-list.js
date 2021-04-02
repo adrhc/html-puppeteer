@@ -10,11 +10,15 @@ if (Modernizr.template) {
     });
 
     $(() => {
-        const newItemsGoToTheEndOfTheList = true;
+        const rowDefaultPositionOnCreate = "append";
 
         // dogs table with read-only row (default: on creation prepend to table)
-        const component = ElasticListFactory.create("dogsTable", "dogsTableRowTmpl", {
-            items: DbMock.DOGS, newItemsGoToTheEndOfTheList
+        const component = new ElasticListComponent({
+            tableIdOrJQuery: "dogsTable",
+            bodyRowTmplId: "dogsTableRowTmpl",
+            items: DbMock.DOGS,
+            rowDefaultPositionOnCreate,
+            dontAutoInitialize: true
         });
 
         component
@@ -30,7 +34,7 @@ if (Modernizr.template) {
                 // creating a new item with a not transient id (here id=2)
                 crudListState.insertItem({
                     id: 2,
-                    name: `restored dog2 with ${newItemsGoToTheEndOfTheList ? "append" : "prepend"}`
+                    name: `restored dog2 with ${rowDefaultPositionOnCreate}`
                 });
             }))
             .then(() => {

@@ -40,7 +40,7 @@ class CrudListState extends SimpleListState {
         if (this.items == null || index < 0 || index >= this.items.length) {
             return undefined;
         }
-        return new EntityRow(this.items[index], index);
+        return new EntityRow(this.items[index], {index});
     }
 
     /**
@@ -126,10 +126,10 @@ class CrudListState extends SimpleListState {
      */
     insertItem(item, append = this.append) {
         const newItemIndex = append ? this.items.length : 0;
-        if (newItemIndex === 0) {
-            ArrayUtils.insert(undefined, 0, this.items);
+        if (newItemIndex < this.items.length) {
+            ArrayUtils.insert(undefined, newItemIndex, this.items);
         }
-        return this._replaceItem(new EntityRow(item, newItemIndex));
+        return this._replaceItem(new EntityRow(item, {index: newItemIndex}));
     }
 
     indexOf({item, index, beforeRowId, afterRowId, append}) {

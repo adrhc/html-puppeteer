@@ -26,7 +26,12 @@ class EditableListFactory {
                       bodyRowTmplId,
                       bodyRowTmplHtml,
                       readOnlyRow,
-                      mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId, _.defaultTo(bodyRowTmplId != null ? undefined : readOnlyRow.simpleRowView.tableAdapter.bodyRowTmplHtml, bodyRowTmplHtml)),
+                      mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, {
+                          bodyRowTmplId,
+                          bodyRowTmplHtml:
+                              fp.defaultTo(bodyRowTmplId != null ? undefined :
+                                  readOnlyRow.simpleRowView.tableAdapter.bodyRowTmplHtml, bodyRowTmplHtml)
+                      }),
                       repository = new InMemoryCrudRepository(items),
                       newItemsGoToTheEndOfTheList,
                       newEntityFactoryFn,
@@ -44,14 +49,14 @@ class EditableListFactory {
         */
 
         /*
-                const withDefaults = _.defaults(DomUtils.dataOf(tableIdOrJQuery));
-                const config = withDefaults(new ComponentConfiguration());
+                const withDataDefaults = fp.defaults(DomUtils.dataOf(tableIdOrJQuery));
+                const config = withDataDefaults(new ComponentConfiguration());
         */
 
         /*
                 const config = {};
                 // const config = new ComponentConfiguration();
-                _.extend(config, DomUtils.dataOf(tableIdOrJQuery));
+                fp.extend(config, DomUtils.dataOf(tableIdOrJQuery));
         */
 
         // const config = ComponentUtil.configOf(tableIdOrJQuery);

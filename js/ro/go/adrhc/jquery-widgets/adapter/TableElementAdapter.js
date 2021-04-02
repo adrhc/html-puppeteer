@@ -30,13 +30,17 @@ class TableElementAdapter {
 
     /**
      * @param {string|jQuery<HTMLTableRowElement>} tableId
-     * @param {string} rowDataId
-     * @param {string} rowDefaultPositionOnCreate
+     * @param {string=} rowDataId
+     * @param {string=} rowDefaultPositionOnCreate
      */
-    constructor(tableId, {rowDataId, rowDefaultPositionOnCreate} = {
-        rowDataId: "id",
-        rowDefaultPositionOnCreate: "prepend"
-    }) {
+    constructor(tableId,
+                {
+                    rowDataId = "id",
+                    rowDefaultPositionOnCreate = "prepend"
+                } = {
+                    rowDataId: "id",
+                    rowDefaultPositionOnCreate: "prepend"
+                }) {
         this.rowDataId = rowDataId;
         this.rowDefaultPositionOnCreate = rowDefaultPositionOnCreate;
         this._setupElem(tableId);

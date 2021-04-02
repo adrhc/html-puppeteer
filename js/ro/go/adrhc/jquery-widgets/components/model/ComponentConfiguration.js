@@ -52,9 +52,9 @@ class ComponentConfiguration {
      * @return {ComponentConfiguration}
      */
     static configOf(elemIdOrJQuery, ...defaults) {
-        // return _.defaults(new ComponentConfiguration(), ...sources, DomUtils.dataOf(elemIdOrJQuery));
-        // return Object.assign(new ComponentConfiguration(), _.defaultsAll([{}, ...sources, DomUtils.dataOf(elemIdOrJQuery)]));
-        return $.extend(new ComponentConfiguration(), ...defaults, DomUtils.dataOf(elemIdOrJQuery));
+        // return fp.defaults(new ComponentConfiguration(), ...sources, DomUtils.dataOf(elemIdOrJQuery));
+        // return Object.assign(new ComponentConfiguration(), fp.defaultsAll([{}, ...sources, DomUtils.dataOf(elemIdOrJQuery)]));
+        return $.extend(new ComponentConfiguration(), {elemIdOrJQuery}, ...defaults, DomUtils.dataOf(elemIdOrJQuery));
     }
 
     static configWithOverrides(elemIdOrJQuery, ...overrides) {

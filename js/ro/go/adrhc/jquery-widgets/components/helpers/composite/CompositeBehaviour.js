@@ -23,7 +23,8 @@ class CompositeBehaviour {
     }
 
     /**
-     * @param {function(parentComp: AbstractComponent): AbstractComponent|Array<function(parentComp: AbstractComponent): AbstractComponent>|ChildComponentFactory|ChildComponentFactory[]} childCompFactory
+     * @typedef {function(parentComp: AbstractComponent): AbstractComponent} childCompFactoryFn
+     * @param {childCompFactoryFn|Array<childCompFactoryFn>|ChildComponentFactory|ChildComponentFactory[]} childCompFactory
      */
     addChildComponentFactory(childCompFactory) {
         if ($.isArray(childCompFactory)) {

@@ -6,16 +6,24 @@
  */
 class MustacheTableElemAdapter extends TableElementAdapter {
     /**
-     * @param tableId {string|jQuery<HTMLTableRowElement>}
-     * @param bodyRowTmplId {string}
-     * @param [bodyRowTmplHtml] {string}
-     * @param [bodyTmplHtml] {string}
+     * @param {string|jQuery<HTMLTableRowElement>} tableId
+     * @param {string} bodyRowTmplId
+     * @param {string} [bodyRowTmplHtml]
+     * @param {string} [bodyTmplHtml]
+     * @param {string} rowDataId
+     * @param [rowDefaultPositionOnCreate]
      */
-    constructor(tableId,
-                bodyRowTmplId,
-                bodyRowTmplHtml,
-                bodyTmplHtml) {
-        super(tableId);
+    constructor(tableId, {
+        bodyRowTmplId,
+        bodyRowTmplHtml,
+        bodyTmplHtml,
+        rowDataId,
+        rowDefaultPositionOnCreate
+    } = {}) {
+        super(tableId, {
+            rowDataId,
+            rowDefaultPositionOnCreate
+        });
         this._setupBodyRowTmplHtml(bodyRowTmplId, bodyRowTmplHtml);
         this._setupBodyTmplHtml(bodyTmplHtml);
     }

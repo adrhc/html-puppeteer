@@ -40,27 +40,58 @@ class AbstractComponent {
     /**
      * @param {AbstractView} view
      * @param {StateHolder=} state
+     * @param compositeBehaviour
+     * @param childCompFactories
      * @param {ChildishBehaviour=} childishBehaviour
+     * @param {AbstractComponent} parentComponent
      * @param {ComponentConfiguration=} config
      */
     constructor({
                     view,
                     state = new StateHolder(),
+                    compositeBehaviour,
+                    childCompFactories,
                     childishBehaviour,
+                    parentComponent,
                     config = ComponentConfiguration.configOf(view?.$elem),
                 }) {
         this.state = state;
         this.view = view;
         this.config = config;
         this.stateChangesDispatcher = new StateChangesDispatcher(this);
-        this.compositeBehaviour = new CompositeBehaviour(this);
-        this.entityExtractor = new DefaultEntityExtractor(this, {});
-        if (childishBehaviour) {
-            this.childishBehaviour = childishBehaviour;
-        } else if (config.childProperty) {
-            this.childishBehaviour = new DefaultChildishBehaviour(this, {childProperty: config.childProperty});
-        }
+        this.entityExtractor = new DefaultEntityExtractor(this);
+        this._setupCompositeBehaviour(compositeBehaviour, childCompFactories);
+        this._setupChildishBehaviour({childishBehaviour, parentComponent});
         return this._handleAutoInitialization();
+    }
+
+    /**
+     * @param {ChildishBehaviour=} childishBehaviour
+     * @param {AbstractComponent} parentComponent
+     * @param {string|number} childProperty
+     * @protected
+     */
+    _setupChildishBehaviour({
+                                childishBehaviour,
+                                parentComponent,
+                                childProperty = this.config.childProperty
+                            }) {
+        childishBehaviour = childishBehaviour ?? new DefaultChildishBehaviour(parentComponent, {childProperty})
+        childishBehaviour.childComp = this;
+        this.childishBehaviour = childishBehaviour;
+    }
+
+    /**
+     * @typedef {function(parentComp: AbstractComponent): AbstractComponent} childCompFactoryFn
+     * @param {CompositeBehaviour} compositeBehaviour
+     * @param {childCompFactoryFn|Array<childCompFactoryFn>|ChildComponentFactory|ChildComponentFactory[]} [childCompFactories]
+     * @protected
+     */
+    _setupCompositeBehaviour(compositeBehaviour, childCompFactories) {
+        this.compositeBehaviour = fp.defaultTo(new CompositeBehaviour(this), compositeBehaviour);
+        if (childCompFactories) {
+            this.compositeBehaviour.addChildComponentFactory(childCompFactories);
+        }
     }
 
     /**
@@ -180,7 +211,7 @@ class AbstractComponent {
     /**
      * @param [stateChanges] {StateChange[]}
      * @param [applyChangesStartingFromNewest] {boolean}
-     * @return {Promise<StateChange[]>}
+     * @return {Promise<StateChange>|Promise<StateChange>[]}
      */
     updateViewOnStateChanges(stateChanges, applyChangesStartingFromNewest) {
         return this.stateChangesDispatcher.updateViewOnStateChanges(stateChanges, applyChangesStartingFromNewest);

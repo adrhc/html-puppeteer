@@ -17,7 +17,12 @@ class DefaultEntityExtractor extends EntityExtractor {
      * @param [dontRemoveGeneratedId] {boolean}
      * @param [entityConverterFn] {function({}): IdentifiableEntity}
      */
-    constructor(component, {dontRemoveGeneratedId, entityConverterFn = IdentifiableEntity.entityConverter}) {
+    constructor(component, {
+        dontRemoveGeneratedId,
+        entityConverterFn = IdentifiableEntity.entityConverter
+    } = {
+        entityConverterFn: IdentifiableEntity.entityConverter
+    }) {
         super();
         this.component = component;
         this.dontRemoveGeneratedId = dontRemoveGeneratedId;

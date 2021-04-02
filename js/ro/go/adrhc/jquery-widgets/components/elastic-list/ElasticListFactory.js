@@ -24,7 +24,7 @@ class ElasticListFactory {
         mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId),
         simpleListView = new SimpleListView(mustacheTableElemAdapter),
         rowChildCompFactories,
-        rowChildishBehaviourFactoryFn = (parentComp) => new DefaultChildishBehaviour(parentComp, {}),
+        rowChildishBehaviourFactoryFn = (parentComp) => new DefaultChildishBehaviour(parentComp),
         idRowCompFactoryFn = (item, index, elasticListComponent) => {
             const idRowComp = SimpleRowFactory.createIdentifiableRow({
                 mustacheTableElemAdapter: elasticListComponent.tableBasedView.tableAdapter,
@@ -36,7 +36,7 @@ class ElasticListFactory {
             if (rowChildishBehaviour) {
                 idRowComp.childishBehaviour = rowChildishBehaviour;
             }
-            idRowComp.state.replaceEntirely(new EntityRow(item, index));
+            idRowComp.state.replaceEntirely(new EntityRow(item, {index}));
             return idRowComp;
         },
         childishBehaviour

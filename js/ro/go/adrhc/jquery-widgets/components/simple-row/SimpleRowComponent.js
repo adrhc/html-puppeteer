@@ -9,61 +9,91 @@ class SimpleRowComponent extends AbstractComponent {
 
     /**
      * @param tableIdOrJQuery
-     * @param rowTmplId
-     * @param rowTmplHtml
+     * @param bodyRowTmplId
+     * @param bodyRowTmplHtml
+     * @param bodyTmplHtml
+     * @param rowDataId
+     * @param rowDefaultPositionOnCreate
      * @param childProperty
+     * @param clearChildrenOnReset
      * @param mustacheTableElemAdapter
-     * @param tableRelativePositionOnCreate
      * @param initialState
      * @param {TaggingStateHolder} state
      * @param {SimpleRowView=} view
      * @param childCompFactories
      * @param childishBehaviour
      * @param {ComponentConfiguration=} config
+     * @param compositeBehaviour
+     * @param parentComponent
      */
     constructor({
                     tableIdOrJQuery,
-                    rowTmplId,
-                    rowTmplHtml,
+                    bodyRowTmplId,
+                    bodyRowTmplHtml,
+                    bodyTmplHtml,
+                    rowDataId,
+                    rowDefaultPositionOnCreate,
                     childProperty,
+                    clearChildrenOnReset,
                     config = ComponentConfiguration
                         .configOf(tableIdOrJQuery, {
                             clearChildrenOnReset: true
                         })
-                        .overwriteWith(DomUtils.dataOf(rowTmplId), {
-                            rowTmplId,
-                            rowTmplHtml,
-                            childProperty
+                        .overwriteWith(DomUtils.dataOf(bodyRowTmplId), {
+                            bodyRowTmplId,
+                            bodyRowTmplHtml,
+                            bodyTmplHtml,
+                            rowDataId,
+                            rowDefaultPositionOnCreate,
+                            childProperty,
+                            clearChildrenOnReset
                         }),
-                    mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, rowTmplId, rowTmplHtml),
-                    tableRelativePositionOnCreate,
-                    view = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate),
+                    mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, config),
+                    view = new SimpleRowView(mustacheTableElemAdapter),
                     initialState,
                     state = new TaggingStateHolder({initialState}),
+                    compositeBehaviour,
                     childCompFactories,
-                    childishBehaviour
+                    childishBehaviour,
+                    parentComponent
                 }) {
-        super({view, state, childishBehaviour, config: config.dontAutoInitializeOf()});
-        this.config = config;
-        if (childCompFactories) {
-            this.compositeBehaviour.addChildComponentFactory(childCompFactories);
-        }
+        // the "super" missing parameters (e.g. bodyRowTmplId) are included in "config" or they are
+        // simply intermediate values (e.g. tableIdOrJQuery is used to compute mustacheTableElemAdapter)
+        super({
+            view,
+            state,
+            compositeBehaviour,
+            childCompFactories,
+            childishBehaviour,
+            parentComponent,
+            config: config.dontAutoInitializeOf()
+        });
+        this.config = config; // the "config" set by "super" is different (see line above)
         this.simpleRowView = view;
         this.handleWithAny(true);
         this.setHandlerName("updateViewOnDELETE", "DELETE")
     }
 
     /**
+     * If previous state would be equal to stateOrPart than state.replaceEntirely would yield no state change
+     * so init() will do nothing and _configureEvents() won't be called. This though can't happen because on
+     * reset() the previous state would be undefined so state.replaceEntirely will yield a state change.
+     *
      * @param {EntityRow} stateOrPart
-     * @return {Promise<StateChange[]>}
+     * @return {Promise<StateChange>|Promise<StateChange>[]}
      */
     update(stateOrPart) {
-        const previousState = this.state.currentState;
+        if (stateOrPart == null) {
+            return this.remove();
+        }
         this.reset();
-        this.state.collectStateChange(new StateChange(previousState, stateOrPart));
+        this.state.replaceEntirely(stateOrPart);
         return this.init();
     }
 
+    /**
+     * @return {Promise<StateChange>}
+     */
     remove() {
         return this.doWithState(state => {
             state.replaceEntirely(undefined);
