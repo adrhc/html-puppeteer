@@ -10,16 +10,8 @@ if (Modernizr.template) {
     });
 
     $(() => {
-        const rowDefaultPositionOnCreate = "append";
-
         // dogs table with read-only row (default: on creation prepend to table)
-        const component = new ElasticListComponent({
-            tableIdOrJQuery: "dogsTable",
-            bodyRowTmplId: "dogsTableRowTmpl",
-            items: DbMock.DOGS,
-            rowDefaultPositionOnCreate,
-            dontAutoInitialize: true
-        });
+        const component = JQWUtil.createComponents({dontAutoInitialize: true});
 
         component
             .init()
@@ -34,7 +26,7 @@ if (Modernizr.template) {
                 // creating a new item with a not transient id (here id=2)
                 crudListState.insertItem({
                     id: 2,
-                    name: `restored dog2 with ${rowDefaultPositionOnCreate}`
+                    name: `restored dog2 with ${component.config.rowPositionOnCreate}`
                 });
             }))
             .then(() => {

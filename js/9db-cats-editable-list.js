@@ -20,19 +20,19 @@ if (Modernizr.template) {
 
         // EDITABLE-LIST
         // dogs table with both read-only and editable row
-        const tableIdOrJQuery = "personsTable";
+        const elemIdOrJQuery = "personsTable";
         const tableRelativePositionOnCreate = "prepend";
 
         // READ-ONLY ROW
         const readOnlyRow = SimpleRowFactory.createIdentifiableRow({
-            tableIdOrJQuery,
+            elemIdOrJQuery,
             tableRelativePositionOnCreate
         });
 
         // EDITABLE ROW (using child component from CatsEditableListChildFactory)
         const editableRow = SimpleRowFactory.createIdentifiableRow(
             {
-                tableIdOrJQuery,
+                elemIdOrJQuery,
                 rowTmplId: "personsTableEditableRowTmpl",
                 childCompFactories: [new CatsEditableListChildFactory()]
             });
@@ -42,12 +42,12 @@ if (Modernizr.template) {
         // because the row to delete always have to already exist
         const deletableRow = SimpleRowFactory.createIdentifiableRow(
             {
-                tableIdOrJQuery, rowTmplId: "personsTableDeletableRowTmpl"
+                elemIdOrJQuery, rowTmplId: "personsTableDeletableRowTmpl"
             });
 
         // EDITABLE LIST
         const editableList = EditableListFactory.create({
-            tableIdOrJQuery,
+            elemIdOrJQuery,
             repository: personsRepository,
             readOnlyRow,
             editableRow,

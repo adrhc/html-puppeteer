@@ -23,8 +23,8 @@ if (Modernizr.template) {
         // JQWUtil.createComponents() does not create a Promise because of data-dont-auto-initialize="true" in 14...html
         const comp = JQWUtil.createComponents();
         comp.compositeBehaviour.addChildComponentFactory([(parentComp) => {
-            const tableIdOrJQuery = $("#dogsTable", parentComp.view.$elem);
-            return SimpleListFactory.create({items: DbMock.DOGS, tableIdOrJQuery});
+            const elemIdOrJQuery = $("#dogsTable", parentComp.view.$elem);
+            return SimpleListFactory.create({items: DbMock.DOGS, elemIdOrJQuery});
         }, (parentComp) => {
             const elemIdOrJQuery = $("#dyna-sel-one", parentComp.view.$elem);
             return DynamicSelectOneFactory.create(elemIdOrJQuery, DbMock.DYNA_SEL_ONE_PERS_REPOSITORY);

@@ -11,20 +11,20 @@ if (Modernizr.template) {
 
     $(() => {
         // dogs table with both read-only and editable row
-        const tableIdOrJQuery = "dogsTable";
+        const elemIdOrJQuery = "dogsTable";
         const tableRelativePositionOnCreate = "append";
         const append = tableRelativePositionOnCreate === "append";
 
         const offRow = SimpleRowFactory.createIdentifiableRow(
             {
-                tableIdOrJQuery, tableRelativePositionOnCreate
+                elemIdOrJQuery, tableRelativePositionOnCreate
             });
         const onRow = SimpleRowFactory.createIdentifiableRow(
             {
-                tableIdOrJQuery, rowTmplId: "dogsTableEditableRowTmpl"
+                elemIdOrJQuery, rowTmplId: "dogsTableEditableRowTmpl"
             });
 
-        const selectableList = SelectableListFactory.create(tableIdOrJQuery, {
+        const selectableList = SelectableListFactory.create(elemIdOrJQuery, {
             items: DbMock.DOGS, offRow, onRow
         });
 

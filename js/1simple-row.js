@@ -18,7 +18,7 @@ if (Modernizr.template) {
      */
     function createDogsWithEditRow(initialData) {
         return new IdentifiableRowComponent({
-            tableIdOrJQuery: dogsTableWithEdit,
+            elemIdOrJQuery: dogsTableWithEdit,
             bodyRowTmplId: `${dogsTableWithEdit}SelectedRowTmpl`,
             initialState: initialData ? new EntityRow(initialData) : undefined
         });
@@ -32,7 +32,7 @@ if (Modernizr.template) {
      */
     function createDogsWithDeleteRow(initialData) {
         return new IdentifiableRowComponent({
-            tableIdOrJQuery: dogsTableWithDelete,
+            elemIdOrJQuery: dogsTableWithDelete,
             bodyRowTmplId: `${dogsTableWithDelete}DeletedRowTmpl`,
             initialState: initialData ? new EntityRow(initialData) : undefined
         });
@@ -40,7 +40,7 @@ if (Modernizr.template) {
 
     $(() => {
         const simpleListComponent = new SimpleListComponent({
-            tableIdOrJQuery: dogsTableWithEdit,
+            elemIdOrJQuery: dogsTableWithEdit,
             items: DbMock.DOGS,
         });
         simpleListComponent.init().then(updateAllStateChanges => {
@@ -72,7 +72,7 @@ if (Modernizr.template) {
                 return newRow.update({
                     entity: {
                         id: 777,
-                        name: `new dog (id = 777, table's default positioning: ${newRow.simpleRowView.tableAdapter.rowDefaultPositionOnCreate})`
+                        name: `new dog (id = 777, table's default positioning: ${newRow.simpleRowView.tableAdapter.rowPositionOnCreate})`
                     },
                     index: undefined
                 });
@@ -100,7 +100,7 @@ if (Modernizr.template) {
 
         // dogs table with deleted row
         new SimpleListComponent({
-            tableIdOrJQuery: dogsTableWithDelete,
+            elemIdOrJQuery: dogsTableWithDelete,
             items: DbMock.DOGS
         }).then(updateAllStateChanges => {
             const items = updateAllStateChanges[0].stateOrPart;

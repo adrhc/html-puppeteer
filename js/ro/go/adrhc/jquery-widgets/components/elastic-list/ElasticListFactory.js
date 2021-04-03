@@ -1,13 +1,13 @@
 class ElasticListFactory {
     /**
-     * @param tableIdOrJQuery {string|jQuery<HTMLTableElement>}
+     * @param elemIdOrJQuery {string|jQuery<HTMLTableElement>}
      * @param bodyRowTmplId {string}
      * @param items {IdentifiableEntity[]}
      * @param repository {CrudRepository}
      * @param crudListState {CrudListState}
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param simpleListView {SimpleListView}
-     * @param newItemsGoToTheEndOfTheList {boolean} whether to append or prepend
+     * @param newItemsGoLast {boolean} whether to append or prepend
      * @param newEntityFactoryFn {function(): IdentifiableEntity}
      * @param rowChildCompFactories {ChildComponentFactory|ChildComponentFactory[]}
      * @param rowChildishBehaviourFactoryFn
@@ -15,13 +15,13 @@ class ElasticListFactory {
      * @param childishBehaviour
      * @return {ElasticListComponent}
      */
-    static create(tableIdOrJQuery, bodyRowTmplId, {
+    static create(elemIdOrJQuery, bodyRowTmplId, {
         items = [],
         repository = new InMemoryCrudRepository(items),
-        newItemsGoToTheEndOfTheList,
+        newItemsGoLast,
         newEntityFactoryFn,
-        crudListState = new CrudListState({newEntityFactoryFn, newItemsGoToTheEndOfTheList}),
-        mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId),
+        crudListState = new CrudListState({newEntityFactoryFn, newItemsGoLast}),
+        mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, bodyRowTmplId),
         simpleListView = new SimpleListView(mustacheTableElemAdapter),
         rowChildCompFactories,
         rowChildishBehaviourFactoryFn = (parentComp) => new DefaultChildishBehaviour(parentComp),
@@ -30,7 +30,7 @@ class ElasticListFactory {
                 mustacheTableElemAdapter: elasticListComponent.tableBasedView.tableAdapter,
                 childCompFactories: rowChildCompFactories,
                 childishBehaviour,
-                tableRelativePositionOnCreate: newItemsGoToTheEndOfTheList ? "append" : "prepend"
+                tableRelativePositionOnCreate: newItemsGoLast ? "append" : "prepend"
             });
             const rowChildishBehaviour = rowChildishBehaviourFactoryFn(elasticListComponent);
             if (rowChildishBehaviour) {

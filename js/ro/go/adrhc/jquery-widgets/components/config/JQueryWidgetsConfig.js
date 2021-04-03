@@ -1,5 +1,6 @@
 class JQueryWidgetsConfig {
     static SERVER_ROOT = "";
+    static ALERT_ON_FAILED_ASSERTION = false;
 
     /**
      * @param path {string}

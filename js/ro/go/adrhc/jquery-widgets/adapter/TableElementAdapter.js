@@ -26,23 +26,23 @@ class TableElementAdapter {
     /**
      * @type {string}
      */
-    rowDefaultPositionOnCreate;
+    rowPositionOnCreate;
 
     /**
      * @param {string|jQuery<HTMLTableRowElement>} tableId
      * @param {string=} rowDataId
-     * @param {string=} rowDefaultPositionOnCreate
+     * @param {string=} rowPositionOnCreate
      */
     constructor(tableId,
                 {
                     rowDataId = "id",
-                    rowDefaultPositionOnCreate = "prepend"
+                    rowPositionOnCreate = "prepend"
                 } = {
                     rowDataId: "id",
-                    rowDefaultPositionOnCreate: "prepend"
+                    rowPositionOnCreate: "prepend"
                 }) {
         this.rowDataId = rowDataId;
-        this.rowDefaultPositionOnCreate = rowDefaultPositionOnCreate;
+        this.rowPositionOnCreate = rowPositionOnCreate;
         this._setupElem(tableId);
         this._setupTableId();
         this._setupOwner();
@@ -113,7 +113,7 @@ class TableElementAdapter {
             } else if (rowValues.afterRowId != null) {
                 this.$getRowByDataId(rowValues.beforeRowId).after($row);
             } else {
-                this.$tbody[this.rowDefaultPositionOnCreate]($row);
+                this.$tbody[this.rowPositionOnCreate]($row);
             }
         }
     }

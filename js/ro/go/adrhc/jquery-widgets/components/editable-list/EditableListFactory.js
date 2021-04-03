@@ -4,12 +4,12 @@ class EditableListFactory {
      * defaults (i.e. bodyRowTmplId = ${tableId}RowTmpl) but will use readOnlyRow's bodyRowTmplHtml.
      *
      * @param [items] {IdentifiableEntity[]}
-     * @param [tableIdOrJQuery] {string|jQuery<HTMLTableElement>}
+     * @param [elemIdOrJQuery] {string|jQuery<HTMLTableElement>}
      * @param [bodyRowTmplId] {string}
      * @param [bodyRowTmplHtml] {string}
      * @param [mustacheTableElemAdapter] {MustacheTableElemAdapter}
      * @param [repository] {CrudRepository}
-     * @param [newItemsGoToTheEndOfTheList] {boolean} whether to append or prepend
+     * @param [newItemsGoLast] {boolean} whether to append or prepend
      * @param [newEntityFactoryFn] {function(): IdentifiableEntity} used by CrudListState.createNewItem
      * @param [state] {EditableListState}
      * @param [view] {SimpleListView}
@@ -22,20 +22,20 @@ class EditableListFactory {
      */
     static create({
                       items = [],
-                      tableIdOrJQuery,
+                      elemIdOrJQuery,
                       bodyRowTmplId,
                       bodyRowTmplHtml,
                       readOnlyRow,
-                      mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, {
+                      mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, {
                           bodyRowTmplId,
                           bodyRowTmplHtml:
                               fp.defaultTo(bodyRowTmplId != null ? undefined :
                                   readOnlyRow.simpleRowView.tableAdapter.bodyRowTmplHtml, bodyRowTmplHtml)
                       }),
                       repository = new InMemoryCrudRepository(items),
-                      newItemsGoToTheEndOfTheList,
+                      newItemsGoLast,
                       newEntityFactoryFn,
-                      state = new EditableListState({newEntityFactoryFn, newItemsGoToTheEndOfTheList}),
+                      state = new EditableListState({newEntityFactoryFn, newItemsGoLast}),
                       view = new SimpleListView(mustacheTableElemAdapter),
                       editableRow,
                       deletableRow,
@@ -43,23 +43,23 @@ class EditableListFactory {
                       extractedEntityConverterFn
                   }) {
         /*
-                const props = DomUtils.dataOf(tableIdOrJQuery);
+                const props = DomUtils.dataOf(elemIdOrJQuery);
                 const configFn = (config) => $.extend(new ComponentConfiguration(), props, config);
                 const config = configFn({});
         */
 
         /*
-                const withDataDefaults = fp.defaults(DomUtils.dataOf(tableIdOrJQuery));
+                const withDataDefaults = fp.defaults(DomUtils.dataOf(elemIdOrJQuery));
                 const config = withDataDefaults(new ComponentConfiguration());
         */
 
         /*
                 const config = {};
                 // const config = new ComponentConfiguration();
-                fp.extend(config, DomUtils.dataOf(tableIdOrJQuery));
+                fp.extend(config, DomUtils.dataOf(elemIdOrJQuery));
         */
 
-        // const config = ComponentUtil.configOf(tableIdOrJQuery);
+        // const config = ComponentUtil.configOf(elemIdOrJQuery);
 
         const editableListComponent = new EditableListComponent(repository, state,
             view, readOnlyRow, editableRow, deletableRow, extractedEntityConverterFn);

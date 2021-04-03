@@ -1,13 +1,13 @@
 class CreateDeleteListFactory {
     /**
-     * @param tableIdOrJQuery {string|jQuery<HTMLTableElement>}
+     * @param elemIdOrJQuery {string|jQuery<HTMLTableElement>}
      * @param items {IdentifiableEntity[]}
      * @param repository {CrudRepository}
      * @param crudListState {CrudListState}
      * @param bodyRowTmplId {string}
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param simpleListView {SimpleListView}
-     * @param newItemsGoToTheEndOfTheList {boolean} whether to append or prepend
+     * @param newItemsGoLast {boolean} whether to append or prepend
      * @param newEntityFactoryFn {function(): IdentifiableEntity}
      * @param bodyRowTmplHtml {string}
      * @param rowChildCompFactories {ChildComponentFactory|ChildComponentFactory[]} are components placed on a row
@@ -16,15 +16,15 @@ class CreateDeleteListFactory {
      * @param childishBehaviour {ChildishBehaviour} permit CreateDeleteListComponent to update its parent
      * @return {ElasticListComponent}
      */
-    static create(tableIdOrJQuery, {
+    static create(elemIdOrJQuery, {
         items = [],
         repository = new InMemoryCrudRepository(items),
-        newItemsGoToTheEndOfTheList,
+        newItemsGoLast,
         newEntityFactoryFn,
-        crudListState = new CrudListState({newEntityFactoryFn, newItemsGoToTheEndOfTheList}),
+        crudListState = new CrudListState({newEntityFactoryFn, newItemsGoLast}),
         bodyRowTmplId,
         bodyRowTmplHtml,
-        mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId, bodyRowTmplHtml),
+        mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, bodyRowTmplId, bodyRowTmplHtml),
         simpleListView = new SimpleListView(mustacheTableElemAdapter),
         rowChildCompFactories,
         rowChildishBehaviourFactoryFn = (parentComp) => new DefaultChildishBehaviour(parentComp),
@@ -32,7 +32,7 @@ class CreateDeleteListFactory {
             const idRowComp = SimpleRowFactory.createIdentifiableRow({
                 mustacheTableElemAdapter: elasticListComponent.tableBasedView.tableAdapter,
                 childCompFactories: rowChildCompFactories,
-                tableRelativePositionOnCreate: newItemsGoToTheEndOfTheList ? "append" : "prepend"
+                tableRelativePositionOnCreate: newItemsGoLast ? "append" : "prepend"
             });
             const rowChildishBehaviour = rowChildishBehaviourFactoryFn(elasticListComponent);
             if (rowChildishBehaviour) {
@@ -43,7 +43,7 @@ class CreateDeleteListFactory {
         },
         childishBehaviour
     }) {
-        const props = DomUtils.jQueryOf(tableIdOrJQuery).data();
+        const props = DomUtils.jQueryOf(elemIdOrJQuery).data();
         const configFn = (config) => $.extend(new ComponentConfiguration(), props, config);
         const config = configFn({});
         const createDeleteList = new CreateDeleteListComponent(repository, crudListState, simpleListView, idRowCompFactoryFn, config);

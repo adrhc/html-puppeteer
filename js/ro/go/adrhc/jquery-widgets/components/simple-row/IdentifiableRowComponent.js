@@ -1,11 +1,11 @@
 class IdentifiableRowComponent extends SimpleRowComponent {
     /**
-     * @param tableIdOrJQuery
+     * @param elemIdOrJQuery
      * @param bodyRowTmplId
      * @param bodyRowTmplHtml
      * @param bodyTmplHtml
      * @param rowDataId
-     * @param rowDefaultPositionOnCreate
+     * @param rowPositionOnCreate
      * @param errorRowTmplId
      * @param errorRowTmplHtml
      * @param childProperty
@@ -21,29 +21,29 @@ class IdentifiableRowComponent extends SimpleRowComponent {
      * @param parentComponent
      */
     constructor({
-                    tableIdOrJQuery,
+                    elemIdOrJQuery,
                     bodyRowTmplId,
                     bodyRowTmplHtml,
                     bodyTmplHtml,
                     rowDataId,
-                    rowDefaultPositionOnCreate,
+                    rowPositionOnCreate,
                     childProperty,
                     clearChildrenOnReset,
                     errorRowTmplId,
                     errorRowTmplHtml,
                     config = ComponentConfiguration.configWithOverrides(
-                        tableIdOrJQuery, DomUtils.dataOf(bodyRowTmplId), {
+                        elemIdOrJQuery, DomUtils.dataOf(bodyRowTmplId), {
                             bodyRowTmplId,
                             bodyRowTmplHtml,
                             bodyTmplHtml,
                             rowDataId,
-                            rowDefaultPositionOnCreate,
+                            rowPositionOnCreate,
                             childProperty,
                             clearChildrenOnReset,
                             errorRowTmplId,
                             errorRowTmplHtml
                         }),
-                    mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, config),
+                    mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, config),
                     view = new SimpleRowView(mustacheTableElemAdapter),
                     initialState,
                     state = new TaggingStateHolder({initialState}),
@@ -53,7 +53,7 @@ class IdentifiableRowComponent extends SimpleRowComponent {
                     parentComponent
                 }) {
         // the "super" missing parameters (e.g. bodyRowTmplId) are included in "config" or they are
-        // simply intermediate values (e.g. tableIdOrJQuery is used to compute mustacheTableElemAdapter)
+        // simply intermediate values (e.g. elemIdOrJQuery is used to compute mustacheTableElemAdapter)
         super({
             config,
             view,

@@ -17,7 +17,7 @@
 </head>
 
 <body>
-<!-- dogs table -->
+
 <div class="dogsTable">
     <table id="dogsTable" class="responstable"
            data-jqw-type="ElasticList"
@@ -31,8 +31,6 @@
         </thead>
     </table>
 </div>
-
-<!-- dogs row template -->
 <template id="dogsTableRowTmpl">
     <tr data-owner="dogsTable" data-id="{{id}}">
         <td>
@@ -42,6 +40,7 @@
         </td>
     </tr>
 </template>
+<script>$(() => JQWUtil.createComponents())</script>
 
 <!-- utils -->
 <script src="js/ro/go/adrhc/jquery-widgets/utils/AjaxUtils.js"></script>
@@ -143,7 +142,7 @@
 <script src="js/mock/db-mock.js"></script>
 <!-- index -->
 <script>JQueryWidgetsConfig.ALERT_ON_FAILED_ASSERTION = true</script>
-<script src="js/4elastic-list.js"></script>
+<script src="js/41elastic-list.js"></script>
 </body>
 
 </html>

@@ -52,7 +52,7 @@ class CatsCreateDeleteListChildFactory extends ChildComponentFactory {
         // create-delete cats list (aka table)
         return CreateDeleteListFactory.create($catsTable, {
             items: parentIdRowComp.state.currentState.entity.cats,
-            newItemsGoToTheEndOfTheList: true,
+            newItemsGoLast: true,
             bodyRowTmplId: this.bodyRowTmplId,
             bodyRowTmplHtml: this.bodyRowTmplHtml,
             rowChildCompFactories: ownerDynaSelOneCompFactory,

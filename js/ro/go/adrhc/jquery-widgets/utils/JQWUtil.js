@@ -1,17 +1,26 @@
 class JQWUtil {
-    static TYPE = "jqw-type";
+    static COMPONENT_TYPE = "jqw-type";
     static COMPONENT_NAME_SUFIX = "Component";
 
     /**
-     * @param {jQuery|HTMLElement=} context
+     * @typedef {jQuery<HTMLElement>|HTMLElement} jQueryOrHtmlElem
+     */
+
+    /**
+     * @typedef {Object} OptionsType
+     * @property {jQueryOrHtmlElem} parentComponentElem
+     * @property {boolean} dontAutoInitialize
+     */
+
+    /** @param {OptionsType} options
      * @return {AbstractComponent|Promise<AbstractComponent>|Array<AbstractComponent|Promise<AbstractComponent>>}
      */
-    static createComponents(context) {
-        const components = JQWUtil.componentsOf(context)
+    static createComponents(options = {}) {
+        const components = JQWUtil.componentsOf(options.parentComponentElem)
             .map((index, el) => {
                 const $el = $(el);
                 const type = JQWUtil.componentTypeOf($el);
-                return JQWUtil.componentInstanceFor(type, $el);
+                return JQWUtil.componentInstanceFor(type, $el, options);
             });
         if (components.length === 1) {
             return components[0];
@@ -20,30 +29,34 @@ class JQWUtil {
     }
 
     /**
-     * @param {jQuery|HTMLElement=} context
+     * @param {jQueryOrHtmlElem=} parentComponentElem
      * @return {jQuery}
      */
-    static componentsOf(context) {
-        return $(`[data-${JQWUtil.TYPE}]`, context);
+    static componentsOf(parentComponentElem) {
+        return $(`[data-${JQWUtil.COMPONENT_TYPE}]`, parentComponentElem);
     }
 
     /**
      * @param {string} type
-     * @param {jQuery<HTMLElement>} $el
+     * @param {jQueryOrHtmlElem} $el
+     * @param {OptionsType} options
      * @return {DrawingComponent}
      */
-    static componentInstanceFor(type, $el) {
+    static componentInstanceFor(type, $el, options) {
         const dynamicClass = eval(type);
-        const args = Array.prototype.slice.call(arguments, 1);
-        return new dynamicClass(...args);
+        return new dynamicClass(_.defaults({elemIdOrJQuery: $el}, options));
     }
 
+    /**
+     * @param {jQueryOrHtmlElem} $el
+     * @return {string}
+     */
     static componentTypeOf($el) {
-        const type = $el.data(JQWUtil.TYPE);
+        const type = $el.data(JQWUtil.COMPONENT_TYPE);
         if (type.endsWith(JQWUtil.COMPONENT_NAME_SUFIX)) {
             return type;
         } else {
-            return `${_.capitalize(type)}${JQWUtil.COMPONENT_NAME_SUFIX}`;
+            return `${_.upperFirst(type)}${JQWUtil.COMPONENT_NAME_SUFIX}`;
         }
     }
 }

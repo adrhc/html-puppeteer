@@ -37,11 +37,11 @@ if (Modernizr.template) {
 
         // EDITABLE-LIST
         // dogs table with both read-only and editable row
-        const tableIdOrJQuery = "personsTable";
+        const elemIdOrJQuery = "personsTable";
 
         // READ-ONLY ROW
         const readOnlyRow = SimpleRowFactory.createIdentifiableRow({
-            tableIdOrJQuery,
+            elemIdOrJQuery,
             rowTmplHtml: namedUrls["personsReadOnlyRow"]
         });
 
@@ -52,7 +52,7 @@ if (Modernizr.template) {
         // EDITABLE ROW
         const editableRow = SimpleRowFactory.createIdentifiableRow(
             {
-                tableIdOrJQuery,
+                elemIdOrJQuery,
                 rowTmplHtml: namedUrls["personsEditableRow"],
                 errorRowTmplHtml: namedUrls["personsErrorRow"],
                 childCompFactories: [friendDynaSelOneCompFactory,
@@ -64,12 +64,12 @@ if (Modernizr.template) {
         // DELETABLE ROW
         const deletableRow = SimpleRowFactory.createIdentifiableRow(
             {
-                tableIdOrJQuery, rowTmplHtml: namedUrls["personsDeletableRow"]
+                elemIdOrJQuery, rowTmplHtml: namedUrls["personsDeletableRow"]
             });
 
         // EDITABLE LIST
         const editableList = EditableListFactory.create({
-            tableIdOrJQuery,
+            elemIdOrJQuery,
             repository: new DbCrudRepository("persons", Person.parse),
             readOnlyRow,
             editableRow,

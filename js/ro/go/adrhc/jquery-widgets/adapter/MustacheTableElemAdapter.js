@@ -11,18 +11,18 @@ class MustacheTableElemAdapter extends TableElementAdapter {
      * @param {string} [bodyRowTmplHtml]
      * @param {string} [bodyTmplHtml]
      * @param {string} rowDataId
-     * @param [rowDefaultPositionOnCreate]
+     * @param [rowPositionOnCreate]
      */
     constructor(tableId, {
         bodyRowTmplId,
         bodyRowTmplHtml,
         bodyTmplHtml,
         rowDataId,
-        rowDefaultPositionOnCreate
+        rowPositionOnCreate
     } = {}) {
         super(tableId, {
             rowDataId,
-            rowDefaultPositionOnCreate
+            rowPositionOnCreate
         });
         this._setupBodyRowTmplHtml(bodyRowTmplId, bodyRowTmplHtml);
         this._setupBodyTmplHtml(bodyTmplHtml);

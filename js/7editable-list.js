@@ -11,29 +11,29 @@ if (Modernizr.template) {
 
     $(() => {
         // dogs table with both read-only and editable row
-        const tableIdOrJQuery = "dogsTable";
+        const elemIdOrJQuery = "dogsTable";
         const tableRelativePositionOnCreate = "prepend";
 
         const readOnlyRow = SimpleRowFactory.createIdentifiableRow(
             {
-                tableIdOrJQuery, tableRelativePositionOnCreate
+                elemIdOrJQuery, tableRelativePositionOnCreate
             });
         const editableRow = SimpleRowFactory.createIdentifiableRow(
             {
-                tableIdOrJQuery, rowTmplId: "dogsTableEditableRowTmpl"
+                elemIdOrJQuery, rowTmplId: "dogsTableEditableRowTmpl"
             });
         // doesn't make sense to use tableRelativePositionOnCreate
         // because the row to delete always have to already exist
         const deletableRow = SimpleRowFactory.createIdentifiableRow(
             {
-                tableIdOrJQuery, rowTmplId: "dogsTableDeletableRowTmpl"
+                elemIdOrJQuery, rowTmplId: "dogsTableDeletableRowTmpl"
             });
 
         const repository = new InMemoryCrudRepository(DbMock.DOGS, undefined, (it) => {
             it.id = Math.abs(it.id);
             return it;
         });
-        const component = EditableListFactory.create({repository, tableIdOrJQuery, readOnlyRow, editableRow, deletableRow});
+        const component = EditableListFactory.create({repository, elemIdOrJQuery, readOnlyRow, editableRow, deletableRow});
 
         component
             .init()

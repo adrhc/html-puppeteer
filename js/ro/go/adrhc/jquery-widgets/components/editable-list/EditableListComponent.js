@@ -43,7 +43,7 @@ class EditableListComponent extends SelectableListComponent {
             this.errorRow = undefined;
         } else {
             this.errorRow = new IdentifiableRowComponent({
-                tableIdOrJQuery: this.tableBasedView.$elem,
+                elemIdOrJQuery: this.tableBasedView.$elem,
                 childishBehaviour: new ChildishBehaviour(this),
                 rowTmplId: errorRowTmplId,
                 rowTmplHtml: errorRowTmplHtml

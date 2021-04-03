@@ -1,11 +1,11 @@
 class SelectableListFactory {
     /**
-     * @param tableIdOrJQuery {string|jQuery<HTMLTableElement>}
+     * @param elemIdOrJQuery {string|jQuery<HTMLTableElement>}
      * @param items {IdentifiableEntity[]}
      * @param bodyRowTmplId {string}
      * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
      * @param repository {CrudRepository}
-     * @param newItemsGoToTheEndOfTheList {boolean} whether to append or prepend
+     * @param newItemsGoLast {boolean} whether to append or prepend
      * @param newEntityFactoryFn {function(): IdentifiableEntity}
      * @param state {SelectableListState}
      * @param offRow {IdentifiableRowComponent}
@@ -13,14 +13,14 @@ class SelectableListFactory {
      * @param view {SimpleListView}
      * @return {SelectableListComponent}
      */
-    static create(tableIdOrJQuery, {
+    static create(elemIdOrJQuery, {
         items = [],
         bodyRowTmplId,
-        mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, bodyRowTmplId),
+        mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, bodyRowTmplId),
         repository = new InMemoryCrudRepository(items),
-        newItemsGoToTheEndOfTheList,
+        newItemsGoLast,
         newEntityFactoryFn,
-        state = new SelectableListState({newEntityFactoryFn, newItemsGoToTheEndOfTheList}),
+        state = new SelectableListState({newEntityFactoryFn, newItemsGoLast}),
         offRow,
         onRow,
         view = new SimpleListView(mustacheTableElemAdapter)

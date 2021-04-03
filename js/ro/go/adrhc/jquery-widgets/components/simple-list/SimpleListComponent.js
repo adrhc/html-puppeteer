@@ -14,8 +14,8 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     repository;
 
     /**
-     * @param {string|jQuery<HTMLTableElement>} tableIdOrJQuery
-     * @param {string} rowDefaultPositionOnCreate
+     * @param {string|jQuery<HTMLTableElement>} elemIdOrJQuery
+     * @param {string} rowPositionOnCreate
      * @param bodyTmplHtml
      * @param rowDataId
      * @param dontAutoInitialize
@@ -34,25 +34,25 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @param parentComponent
      */
     constructor({
-                    tableIdOrJQuery,
+                    elemIdOrJQuery,
                     bodyRowTmplId,
                     bodyRowTmplHtml,
                     bodyTmplHtml,
                     rowDataId,
-                    rowDefaultPositionOnCreate,
+                    rowPositionOnCreate,
                     childProperty,
                     dontAutoInitialize,
-                    config = ComponentConfiguration.configWithOverrides(tableIdOrJQuery, {
+                    config = ComponentConfiguration.configWithOverrides(elemIdOrJQuery, {
                         bodyRowTmplId,
                         bodyRowTmplHtml,
                         bodyTmplHtml,
                         rowDataId,
-                        rowDefaultPositionOnCreate,
+                        rowPositionOnCreate,
                         childProperty,
                         dontAutoInitialize
                     }),
                     items = [],
-                    mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, config),
+                    mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, config),
                     repository = new InMemoryCrudRepository(items),
                     state = new SimpleListState(),
                     view = new SimpleListView(mustacheTableElemAdapter),
@@ -62,7 +62,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
                     parentComponent
                 }) {
         // the "super" missing parameters (e.g. bodyRowTmplId) are included in "config" or they are
-        // simply intermediate values (e.g. tableIdOrJQuery is used to compute mustacheTableElemAdapter)
+        // simply intermediate values (e.g. elemIdOrJQuery is used to compute mustacheTableElemAdapter)
         super({
             view,
             state,

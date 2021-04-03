@@ -1,6 +1,6 @@
 class SimpleRowFactory {
     /**
-     * @param [tableIdOrJQuery]
+     * @param [elemIdOrJQuery]
      * @param [rowTmplId]
      * @param [rowTmplHtml]
      * @param [mustacheTableElemAdapter]
@@ -15,10 +15,10 @@ class SimpleRowFactory {
      */
     static createSimpleRow(
         {
-            tableIdOrJQuery,
+            elemIdOrJQuery,
             rowTmplId,
             rowTmplHtml,
-            mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, rowTmplId, rowTmplHtml),
+            mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, rowTmplId, rowTmplHtml),
             tableRelativePositionOnCreate,
             simpleRowView = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate),
             initialState,
@@ -38,7 +38,7 @@ class SimpleRowFactory {
     }
 
     /**
-     * @param [tableIdOrJQuery]
+     * @param [elemIdOrJQuery]
      * @param [rowTmplId]
      * @param [rowTmplHtml]
      * @param [mustacheTableElemAdapter]
@@ -55,10 +55,10 @@ class SimpleRowFactory {
      */
     static createIdentifiableRow(
         {
-            tableIdOrJQuery,
+            elemIdOrJQuery,
             rowTmplId,
             rowTmplHtml,
-            mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, rowTmplId, rowTmplHtml),
+            mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, rowTmplId, rowTmplHtml),
             tableRelativePositionOnCreate,
             simpleRowView = new SimpleRowView(mustacheTableElemAdapter, tableRelativePositionOnCreate),
             initialState,
@@ -93,7 +93,7 @@ class SimpleRowFactory {
      */
     static createErrorRow(parentRow, {rowTmplId, rowTmplHtml}) {
         return SimpleRowFactory.createIdentifiableRow({
-            tableIdOrJQuery: parentRow.simpleRowView.tableAdapter.$table,
+            elemIdOrJQuery: parentRow.simpleRowView.tableAdapter.$table,
             childishBehaviour: new ChildishBehaviour(parentRow),
             rowTmplId, rowTmplHtml
         });

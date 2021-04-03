@@ -32,8 +32,8 @@ $(() => {
         const elemIdOrJQuery = $("#person", parentComp.view.$elem);
         return new DrawingComponent(elemIdOrJQuery, ComponentConfiguration.configOf(elemIdOrJQuery, {childProperty: "person"}));
     }, (parentComp) => {
-        const tableIdOrJQuery = $("#dogsTable", parentComp.view.$elem);
-        return SimpleListFactory.create({items: DbMock.DOGS, tableIdOrJQuery, childProperty: "dogs"});
+        const elemIdOrJQuery = $("#dogsTable", parentComp.view.$elem);
+        return SimpleListFactory.create({items: DbMock.DOGS, elemIdOrJQuery, childProperty: "dogs"});
     }, (parentComp) => {
         const elemIdOrJQuery = $("#dyna-sel-one", parentComp.view.$elem);
         return DynamicSelectOneFactory.create(elemIdOrJQuery, DbMock.DYNA_SEL_ONE_PERS_REPOSITORY);

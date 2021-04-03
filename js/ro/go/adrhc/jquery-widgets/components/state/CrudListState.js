@@ -16,20 +16,20 @@ class CrudListState extends SimpleListState {
     /**
      * @param {IdentifiableEntity[]} [initialState]
      * @param {function(): IdentifiableEntity} [newEntityFactoryFn]
-     * @param {boolean} [newItemsGoToTheEndOfTheList]
+     * @param {boolean} [newItemsGoLast]
      * @param {TaggingStateChangeMapper<IdentifiableEntity[]>} [stateChangeMapper]
      * @param {StateChangesCollector<IdentifiableEntity[]>} [changeManager]
      */
     constructor({
                     initialState,
                     newEntityFactoryFn = () => new IdentifiableEntity(IdentifiableEntity.TRANSIENT_ID),
-                    newItemsGoToTheEndOfTheList,
+                    newItemsGoLast,
                     stateChangeMapper,
                     changeManager
                 }) {
         super({initialState, stateChangeMapper, changeManager});
         this.newEntityFactoryFn = newEntityFactoryFn;
-        this.append = newItemsGoToTheEndOfTheList;
+        this.append = newItemsGoLast;
     }
 
     /**

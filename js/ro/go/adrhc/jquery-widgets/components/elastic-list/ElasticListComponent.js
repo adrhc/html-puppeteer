@@ -14,12 +14,12 @@ class ElasticListComponent extends SimpleListComponent {
     crudListState;
 
     /**
-     * @param tableIdOrJQuery {string|jQuery<HTMLTableElement>}
+     * @param elemIdOrJQuery {string|jQuery<HTMLTableElement>}
      * @param bodyRowTmplId
      * @param bodyRowTmplHtml
      * @param bodyTmplHtml
      * @param rowDataId
-     * @param rowDefaultPositionOnCreate
+     * @param rowPositionOnCreate
      * @param childProperty
      * @param dontAutoInitialize
      * @param {ComponentConfiguration} [config]
@@ -28,7 +28,7 @@ class ElasticListComponent extends SimpleListComponent {
      * @param view {SimpleListView}
      * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, index: number, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
      * @param items
-     * @param newItemsGoToTheEndOfTheList
+     * @param newItemsGoLast
      * @param newEntityFactoryFn
      * @param mustacheTableElemAdapter
      * @param rowChildCompFactories
@@ -37,30 +37,30 @@ class ElasticListComponent extends SimpleListComponent {
      * @param parentComponent
      */
     constructor({
-                    tableIdOrJQuery,
+                    elemIdOrJQuery,
                     bodyRowTmplId,
                     bodyRowTmplHtml,
                     bodyTmplHtml,
                     rowDataId,
-                    rowDefaultPositionOnCreate,
+                    rowPositionOnCreate,
                     childProperty,
                     dontAutoInitialize,
-                    config = ComponentConfiguration.configWithOverrides(tableIdOrJQuery, {
+                    config = ComponentConfiguration.configWithOverrides(elemIdOrJQuery, {
                         bodyRowTmplId,
                         bodyRowTmplHtml,
                         bodyTmplHtml,
                         rowDataId,
-                        rowDefaultPositionOnCreate,
+                        rowPositionOnCreate,
                         childProperty,
                         dontAutoInitialize
                     }),
-                    items = [],
+                    items = config.items ?? [],
                     repository = new InMemoryCrudRepository(items),
-                    mustacheTableElemAdapter = new MustacheTableElemAdapter(tableIdOrJQuery, config),
+                    mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, config),
                     newEntityFactoryFn,
                     state = new CrudListState({
                         newEntityFactoryFn,
-                        newItemsGoToTheEndOfTheList: mustacheTableElemAdapter.rowDefaultPositionOnCreate !== "prepend"
+                        newItemsGoLast: mustacheTableElemAdapter.rowPositionOnCreate !== "prepend"
                     }),
                     view = new SimpleListView(mustacheTableElemAdapter),
                     rowChildCompFactories,
@@ -78,9 +78,10 @@ class ElasticListComponent extends SimpleListComponent {
                     childCompFactories,
                     childishBehaviour,
                     parentComponent
-                }) {
+                }
+    ) {
         // the "super" missing parameters (e.g. bodyRowTmplId) are included in "config" or they are
-        // simply intermediate values (e.g. tableIdOrJQuery is used to compute mustacheTableElemAdapter)
+        // simply intermediate values (e.g. elemIdOrJQuery is used to compute mustacheTableElemAdapter)
         super({
             config: config.dontAutoInitializeOf(),
             repository,

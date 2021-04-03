@@ -17,26 +17,26 @@ if (Modernizr.template) {
 
         // EDITABLE-LIST
         // dogs table with both read-only and editable row
-        const tableIdOrJQuery = "personsTable";
+        const elemIdOrJQuery = "personsTable";
         const tableRelativePositionOnCreate = "prepend";
 
         const readOnlyRow = SimpleRowFactory.createIdentifiableRow(
             {
-                tableIdOrJQuery, tableRelativePositionOnCreate
+                elemIdOrJQuery, tableRelativePositionOnCreate
             });
         const editableRow = SimpleRowFactory.createIdentifiableRow(
             {
-                tableIdOrJQuery, rowTmplId: "personsTableEditableRowTmpl"
+                elemIdOrJQuery, rowTmplId: "personsTableEditableRowTmpl"
             });
         // doesn't make sense to use tableRelativePositionOnCreate
         // because the row to delete always have to already exist
         const deletableRow = SimpleRowFactory.createIdentifiableRow(
             {
-                tableIdOrJQuery, rowTmplId: "personsTableDeletableRowTmpl"
+                elemIdOrJQuery, rowTmplId: "personsTableDeletableRowTmpl"
             });
 
         const component = EditableListFactory.create({
-            tableIdOrJQuery,
+            elemIdOrJQuery,
             repository: DbMock.PERSONS_REPOSITORY,
             readOnlyRow,
             editableRow,

@@ -1,0 +1,1 @@
+$(() => JQWUtil.createComponents());

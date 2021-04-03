@@ -10,7 +10,7 @@ if (Modernizr.template) {
     });
     $(() => {
         new SimpleListComponent({
-            tableIdOrJQuery: "dogsTable",
+            elemIdOrJQuery: "dogsTable",
             items: DbMock.DOGS,
         });
     })

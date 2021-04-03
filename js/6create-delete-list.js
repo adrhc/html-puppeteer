@@ -17,7 +17,7 @@ if (Modernizr.template) {
         ];
 
         // by default on creation the row is prepended to table
-        const newItemsGoToTheEndOfTheList = true;
+        const newItemsGoLast = true;
 
         // DynamicSelectOneComponent child component factory (see ChildComponentFactory)
         const dynaSelOneCompFactory = {
@@ -40,7 +40,7 @@ if (Modernizr.template) {
         // dogs table
         const createDeleteList = CreateDeleteListFactory.create("dogsTable", {
             items: DOGS,
-            newItemsGoToTheEndOfTheList,
+            newItemsGoLast,
             bodyRowTmplId: "dogsTableRowTmpl",
             rowChildCompFactories: dynaSelOneCompFactory
         });
@@ -61,7 +61,7 @@ if (Modernizr.template) {
                 crudListState.removeById(2);
                 crudListState.insertItem({
                     id: 2,
-                    name: `restored dog2 with ${newItemsGoToTheEndOfTheList ? "append" : "prepend"}`
+                    name: `restored dog2 with ${newItemsGoLast ? "append" : "prepend"}`
                 });
             }))
             // showing the entire table extracted data

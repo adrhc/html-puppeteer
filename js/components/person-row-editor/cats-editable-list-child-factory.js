@@ -6,7 +6,7 @@ class CatsEditableListChildFactory extends ChildComponentFactory {
     createChildComponent(idRowComp) {
         const $catsTable = $("[data-id='catsTable']", idRowComp.view.$elem);
         const catRow = SimpleRowFactory.createIdentifiableRow({
-            tableIdOrJQuery: $catsTable,
+            elemIdOrJQuery: $catsTable,
             rowTmplId: "editableCatsRowTmpl",
             tableRelativePositionOnCreate: "append"
         });
@@ -18,8 +18,8 @@ class CatsEditableListChildFactory extends ChildComponentFactory {
         return EditableListFactory.create({
             repository,
             // CatsListState cancels swapping events so there's no need for editableRow and deletableRow
-            state: new CatsListState(repository, {newItemsGoToTheEndOfTheList: true}),
-            tableIdOrJQuery: $catsTable,
+            state: new CatsListState(repository, {newItemsGoLast: true}),
+            elemIdOrJQuery: $catsTable,
             bodyRowTmplId: "editableCatsRowTmpl",
             readOnlyRow: catRow,
             // EditableListComponent.extractEntity (aka SelectableListComponent.extractEntity)

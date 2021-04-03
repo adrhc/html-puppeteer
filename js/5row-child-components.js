@@ -18,7 +18,7 @@ if (Modernizr.template) {
             {id: 3, name: "dog3"}
         ];
 
-        const newItemsGoToTheEndOfTheList = true;
+        const newItemsGoLast = true;
 
         // DYNAMIC-SELECT-ONE
         DynamicSelectOneFactory.create("dyna-sel-one", DbMock.DYNA_SEL_ONE_PERS_REPOSITORY).init();
@@ -43,7 +43,7 @@ if (Modernizr.template) {
 
         // dogs table with read-only row (default: on creation prepend to table)
         const elasticList = ElasticListFactory.create("dogsTable", "dogsTableRowTmpl", {
-            items: ITEMS, newItemsGoToTheEndOfTheList, rowChildCompFactories: dynaSelOneCompFactory
+            items: ITEMS, newItemsGoLast, rowChildCompFactories: dynaSelOneCompFactory
         });
 
         elasticList
@@ -62,7 +62,7 @@ if (Modernizr.template) {
                 // elasticList.updateViewOnCREATE will init the child components
                 crudListState.insertItem({
                     id: 2,
-                    name: `restored dog2 with ${newItemsGoToTheEndOfTheList ? "append" : "prepend"}`
+                    name: `restored dog2 with ${newItemsGoLast ? "append" : "prepend"}`
                 });
             }))
             // showing the entire table extracted data
