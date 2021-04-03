@@ -76,8 +76,10 @@ class SimpleRowComponent extends AbstractComponent {
 
     /**
      * If previous state would be equal to stateOrPart than state.replaceEntirely would yield no state change
-     * so init() will do nothing and _configureEvents() won't be called. This though can't happen because on
-     * reset() the previous state would be undefined so state.replaceEntirely will yield a state change.
+     * so init() will do nothing (_configureEvents(), compositeBehaviour.init() won't be called). This though
+     * won't happen for stateOrPart != null because after reset() the previous state would be undefined so
+     * state.replaceEntirely will yield a state change after all. The stateOrPart = null clearly means
+     * row-remove so it's safe to directly call this.remove().
      *
      * @param {EntityRow} stateOrPart
      * @return {Promise<StateChange>|Promise<StateChange>[]}
