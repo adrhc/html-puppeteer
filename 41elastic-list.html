@@ -31,8 +31,9 @@
         </thead>
     </table>
 </div>
+
 <template id="dogsTableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}">
+    <tr data-owner="{{owner}}" data-id="{{id}}">
         <td>
             <input data-owner="dogsTable" type="hidden" name="id" value="{{id}}">
             <input data-owner="dogsTable" type="hidden" name="name" value="{{name}}">

@@ -7,7 +7,8 @@ class SimpleListView extends AbstractTableBasedView {
      */
     update(stateChange) {
         AssertionUtils.isTrue($.isArray(stateChange.stateOrPart), "SimpleListView.update accepts only Array!");
-        this.tableAdapter.renderBodyWithTemplate({items: stateChange.stateOrPart});
+        const items = stateChange.stateOrPart.map(it => _.defaults({}, it, {owner: this.owner}));
+        this.tableAdapter.renderBodyWithTemplate({items});
         return Promise.resolve(stateChange);
     }
 }

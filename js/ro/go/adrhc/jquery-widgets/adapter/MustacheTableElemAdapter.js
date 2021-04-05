@@ -79,7 +79,8 @@ class MustacheTableElemAdapter extends TableElementAdapter {
                               replaceExisting,
                               createIfNotExists
                           }) {
-        const rowHtml = this._renderTemplate(rowValues.entity, rowTmplHtml);
+        const dataToRender = _.defaults({}, rowValues.entity, {owner: this.owner});
+        const rowHtml = this._renderTemplate(dataToRender, rowTmplHtml);
         super.renderRow({
             rowDataId,
             rowHtml,
@@ -90,7 +91,7 @@ class MustacheTableElemAdapter extends TableElementAdapter {
     }
 
     /**
-     * @param data
+     * @param {{}} data
      * @param rowTmplHtml {string}
      * @return {string}
      * @private
