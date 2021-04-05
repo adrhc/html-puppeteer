@@ -140,7 +140,7 @@ class AbstractComponent {
      * @protected
      */
     get _ownerSelector() {
-        return `[data-owner='${this.view.owner}']`;
+        return `[data-${JQueryWidgetsConfig.OWNER_ATTRIBUTE}='${this.view.owner}']`;
     }
 
     /**

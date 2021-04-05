@@ -123,7 +123,7 @@ if (Modernizr.template) {
             // switching to "simpleRow" display type (i.e. line-through text style)
             return rowId0.remove()
                 .then(() => {
-                    const $tr1 = $(`#${dogsTableWithDelete} tr[data-owner='${dogsTableWithDelete}'][data-id='${item0.id}']`);
+                    const $tr1 = $(`#${dogsTableWithDelete} tr[data-${JQueryWidgetsConfig.OWNER_ATTRIBUTE}='${dogsTableWithDelete}'][data-id='${item0.id}']`);
                     AssertionUtils.isFalse(!!$tr1.length);
                 })
                 // rendering the "delete" representation

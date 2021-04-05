@@ -147,7 +147,7 @@ class TableElementAdapter {
     }
 
     emptyRowHtmlOf(rowDataId) {
-        return `<tr data-owner='${this.owner}' data-id='${rowDataId}'></tr>`;
+        return `<tr data-${JQueryWidgetsConfig.OWNER_ATTRIBUTE}='${this.owner}' data-id='${rowDataId}'></tr>`;
     }
 
     deleteRowByDataId(rowDataId) {
@@ -191,7 +191,7 @@ class TableElementAdapter {
      * @returns {string}
      */
     get ownerSelector() {
-        return `[data-owner='${this.owner}']`;
+        return `[data-${JQueryWidgetsConfig.OWNER_ATTRIBUTE}='${this.owner}']`;
     }
 
     get columnsCount() {

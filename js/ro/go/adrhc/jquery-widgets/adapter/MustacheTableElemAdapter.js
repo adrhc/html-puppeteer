@@ -79,7 +79,7 @@ class MustacheTableElemAdapter extends TableElementAdapter {
                               replaceExisting,
                               createIfNotExists
                           }) {
-        const dataToRender = _.defaults({}, rowValues.entity, {owner: this.owner});
+        const dataToRender = _.defaults({}, rowValues.entity, {[`${JQueryWidgetsConfig.OWNER_ATTRIBUTE}`]: this.owner});
         const rowHtml = this._renderTemplate(dataToRender, rowTmplHtml);
         super.renderRow({
             rowDataId,

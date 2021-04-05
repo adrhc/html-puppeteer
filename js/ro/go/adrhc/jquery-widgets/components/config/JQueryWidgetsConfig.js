@@ -1,6 +1,7 @@
 class JQueryWidgetsConfig {
     static SERVER_ROOT = "";
     static ALERT_ON_FAILED_ASSERTION = false;
+    static OWNER_ATTRIBUTE = "owner";
 
     /**
      * @param path {string}

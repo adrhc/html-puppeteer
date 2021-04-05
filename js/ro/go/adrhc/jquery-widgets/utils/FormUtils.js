@@ -10,7 +10,7 @@ class FormUtils {
     objectifyInputsOf($element, owner) {
         let inputs;
         if (!!owner) {
-            inputs = $element.find(`:input[name][data-owner='${owner}']`).serializeArray();
+            inputs = $element.find(`:input[name][data-${JQueryWidgetsConfig.OWNER_ATTRIBUTE}='${owner}']`).serializeArray();
         } else if ($element.is("form")) {
             inputs = $element.serializeArray();
         } else {
