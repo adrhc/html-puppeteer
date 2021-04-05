@@ -13,8 +13,8 @@ table td input {
     width: fill-available;
 }
 
-.simple-deletable-row {
-    text-decoration: line-through;
+.special-row {
+    background-color: darkorange;
 }
 
 /* editable table */

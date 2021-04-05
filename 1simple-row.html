@@ -21,7 +21,8 @@
 <body>
 <!-- dogs table with editable row -->
 <div class="dogsTable">
-    <table id="dogsTableWithEdit" class="responstable" data-dont-auto-initialize="true">
+    <table id="dogsTableWithEdit" class="responstable" data-dont-auto-initialize="true"
+           data-body-row-tmpl-id="dogsTableWithEditRowTmpl">
         <thead>
         <tr data-owner="dogsTableWithEdit">
             <th data-owner="dogsTableWithEdit" data-btn="reload" title="reload">
@@ -32,14 +33,12 @@
     </table>
 </div>
 
-<!-- dogs table with editable row (default) row template (used by SimpleListFactory.bodyRowTmplId) -->
 <template id="dogsTableWithEditRowTmpl">
     <tr data-owner="dogsTableWithEdit" data-id="{{id}}">
         <td id="{{id}}">{{name}}</td>
     </tr>
 </template>
 
-<!-- dogs table with editable row "selected" row template -->
 <template id="dogsTableWithEditSelectedRowTmpl">
     <tr data-owner="dogsTableWithEdit" data-id="{{id}}">
         <td>
@@ -51,10 +50,10 @@
 
 <BR>
 
-<!-- dogs table with deleted row -->
+<!-- dogsTableWithDelete -->
 <div class="dogsTable">
     <table id="dogsTableWithDelete" class="responstable"
-           data-body-row-tmpl-id="dogsTableWithDeleteReadOnlyRowTmpl">
+        data-body-row-tmpl-id="dogsTableWithDeleteRowTmpl">
         <thead>
         <tr>
             <th data-owner="dogsTableWithDelete" data-btn="reload" title="reload">
@@ -65,9 +64,8 @@
     </table>
 </div>
 
-<!-- dogs table with deleted row (default) row template (used by SimpleListFactory.bodyRowTmplId) -->
-<template id="dogsTableWithDeleteReadOnlyRowTmpl">
-    <tr data-owner="dogsTableWithDelete" data-id="{{id}}">
+<template id="dogsTableWithDeleteSpecialRowTmpl">
+    <tr data-owner="dogsTableWithDelete" data-id="{{id}}" class="special-row">
         <td>
             <input type="hidden" name="id" value="{{id}}">
             {{name}}
@@ -75,17 +73,6 @@
     </tr>
 </template>
 
-<!-- dogs table with deleted row (default) row template (used by SimpleListFactory.bodyRowTmplId) -->
-<template id="dogsTableWithDeleteDeletedRowTmpl">
-    <tr data-owner="dogsTableWithDelete" data-id="{{id}}" class="simple-deletable-row">
-        <td>
-            <input type="hidden" name="id" value="{{id}}">
-            {{name}}
-        </td>
-    </tr>
-</template>
-
-<!-- dogs table with deleted row (default) row template (used by SimpleListFactory.bodyRowTmplId) -->
 <template id="dogsTableWithDeleteRowTmpl">
     <tr data-owner="dogsTableWithDelete" data-id="{{id}}" class="simple-deletable-row">
         <td>

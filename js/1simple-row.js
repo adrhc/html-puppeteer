@@ -33,7 +33,7 @@ if (Modernizr.template) {
     function createDogsWithDeleteRow(initialData) {
         return new IdentifiableRowComponent({
             elemIdOrJQuery: dogsTableWithDelete,
-            bodyRowTmplId: `${dogsTableWithDelete}DeletedRowTmpl`,
+            bodyRowTmplId: `${dogsTableWithDelete}SpecialRowTmpl`,
             initialState: initialData ? new EntityRow(initialData) : undefined
         });
     }
