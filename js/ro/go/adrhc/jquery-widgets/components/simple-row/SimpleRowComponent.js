@@ -108,6 +108,8 @@ class SimpleRowComponent extends AbstractComponent {
      * The fact that _handleInitErrors part will in the end be called twice is not
      * an issue; 2nd catch will basically do nothing.
      *
+     * ASSUMPTION: init() will call _handleInitErrors() after calling _handleEventsConfigurationOnInit()
+     *
      * @param {StateChange[]} stateChanges
      * @return {Promise<StateChange[]>}
      * @protected
