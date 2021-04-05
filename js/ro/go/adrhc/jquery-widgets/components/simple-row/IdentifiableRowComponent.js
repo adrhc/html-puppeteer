@@ -1,4 +1,6 @@
 class IdentifiableRowComponent extends SimpleRowComponent {
+    static SECONDARY_ROW_PART = "secondary-row-part";
+
     /**
      * @param elemIdOrJQuery
      * @param bodyRowTmplId
@@ -71,7 +73,7 @@ class IdentifiableRowComponent extends SimpleRowComponent {
     }
 
     removeSecondaryRowParts(rowId) {
-        console.log(`removing rows with owner = ${this.simpleRowView.owner} and secondary-row-part = ${rowId}`);
-        this.simpleRowView.$getOwnedRowByData("secondary-row-part", rowId).remove();
+        console.log(`removing rows with owner = ${this.simpleRowView.owner} and ${IdentifiableRowComponent.SECONDARY_ROW_PART} = ${rowId}`);
+        this.simpleRowView.$getOwnedRowByData(IdentifiableRowComponent.SECONDARY_ROW_PART, rowId).remove();
     }
 }
