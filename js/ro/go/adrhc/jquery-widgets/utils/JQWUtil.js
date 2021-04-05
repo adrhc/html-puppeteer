@@ -10,6 +10,7 @@ class JQWUtil {
      * @typedef {Object} OptionsType
      * @property {jQueryOrHtmlElem} parentComponentElem
      * @property {boolean} dontAutoInitialize
+     * @property {boolean} alwaysReturnArray
      */
 
     /** @param {OptionsType} options
@@ -22,7 +23,7 @@ class JQWUtil {
                 const type = JQWUtil.componentTypeOf($el);
                 return JQWUtil.componentInstanceFor(type, $el, options);
             });
-        if (components.length === 1) {
+        if (components.length === 1 && !options.alwaysReturnArray) {
             return components[0];
         }
         return components;

@@ -17,16 +17,32 @@
 </head>
 
 <body>
-<!-- dogs table -->
+
+<!-- dogs table with append -->
 <div class="dogsTable">
-    <table id="dogsTable" class="responstable"
+    <table id="dogsTableWithAppend" class="responstable"
            data-jqw-type="ElasticList"
            data-body-row-tmpl-id="dogsTableRowTmpl"
            data-row-position-on-create="append"
            data-items='[{"id": 1, "name": "dog1"}, {"id": 2, "name": "dog2"}, {"id": 3, "name": "dog3"}]'>
         <thead>
         <tr>
-            <th data-owner="dogsTable" data-btn="reload" title="reload">Dogs</th>
+            <th data-owner="dogsTableWithAppend" data-btn="reload" title="reload">Dogs with append</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+<!-- dogs table with prepend -->
+<div class="dogsTable">
+    <table id="dogsTableWithPrepend" class="responstable"
+           data-jqw-type="ElasticList"
+           data-body-row-tmpl-id="dogsTableRowTmpl"
+           data-row-position-on-create="prepend"
+           data-items='[{"id": 1, "name": "dog1"}, {"id": 2, "name": "dog2"}, {"id": 3, "name": "dog3"}]'>
+        <thead>
+        <tr>
+            <th data-owner="dogsTableWithPrepend" data-btn="reload" title="reload">Dogs with prepend</th>
         </tr>
         </thead>
     </table>
@@ -34,10 +50,10 @@
 
 <!-- dogs row template -->
 <template id="dogsTableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}">
+    <tr data-owner="{{owner}}" data-id="{{id}}">
         <td>
-            <input data-owner="dogsTable" type="hidden" name="id" value="{{id}}">
-            <input data-owner="dogsTable" type="hidden" name="name" value="{{name}}">
+            <input data-owner="{{owner}}" type="hidden" name="id" value="{{id}}">
+            <input data-owner="{{owner}}" type="hidden" name="name" value="{{name}}">
             {{{name}}}
         </td>
     </tr>

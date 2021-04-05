@@ -1,4 +1,5 @@
 /**
+ * @typedef {EntityRow<IdentifiableEntity>} P
  * @extends {SimpleListState<IdentifiableEntity[], EntityRow<IdentifiableEntity>>}
  */
 class CrudListState extends SimpleListState {
@@ -40,7 +41,8 @@ class CrudListState extends SimpleListState {
         if (this.items == null || index < 0 || index >= this.items.length) {
             return undefined;
         }
-        return new EntityRow(this.items[index], {index});
+        const item = this.items[index];
+        return item == null ? undefined : new EntityRow(item, {index});
     }
 
     /**
@@ -88,6 +90,10 @@ class CrudListState extends SimpleListState {
         return oldRowValues;
     }
 
+    _stateChangeOf(previousStatePart, partialState, oldPartName) {
+        return super._stateChangeOf(previousStatePart, partialState, partialState?.index ?? oldPartName);
+    }
+
     /**
      * must return the original item (the one stored in this.items) for the receiver to be able to change its id
      * risk: the item is also used with the collectStateChange; a change by the final receiver will impact this.items!
@@ -125,11 +131,8 @@ class CrudListState extends SimpleListState {
      * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
     insertItem(item, append = this.append) {
-        const newItemIndex = append ? this.items.length : 0;
-        if (newItemIndex < this.items.length) {
-            ArrayUtils.insert(undefined, newItemIndex, this.items);
-        }
-        return this._replaceItem(new EntityRow(item, {index: newItemIndex}));
+        const newItemIndex = append ? this.items.length : null;
+        return this._replaceItem(new EntityRow(item, {index: newItemIndex ?? 0}), null);
     }
 
     indexOf({item, index, beforeRowId, afterRowId, append}) {
