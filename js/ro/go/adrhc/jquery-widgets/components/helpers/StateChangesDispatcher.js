@@ -124,7 +124,7 @@ class StateChangesDispatcher {
 }
 
 class StateChangeHandlersManager {
-    static ANY = "ANY";
+    static ALL_CHANGE_TYPES = "ALL_CHANGE_TYPES";
 
     /**
      * @type {{}}
@@ -161,7 +161,7 @@ class StateChangeHandlersManager {
             if (this.stateChangeHandlers[handlerName].includes(changeType)) {
                 return handlerName;
             }
-            if (this.stateChangeHandlers[handlerName].includes(StateChangeHandlersManager.ANY)) {
+            if (this.stateChangeHandlers[handlerName].includes(StateChangeHandlersManager.ALL_CHANGE_TYPES)) {
                 handlerOfAny = handlerName;
             }
         }
@@ -172,7 +172,7 @@ class StateChangeHandlersManager {
      * @param {string} handlerName
      * @param {string|number} changeType
      */
-    isHandlerOf(handlerName, changeType) {
+    shouldHandleWith(handlerName, changeType) {
         return handlerName === this.handlerNameOf(changeType);
     }
 }

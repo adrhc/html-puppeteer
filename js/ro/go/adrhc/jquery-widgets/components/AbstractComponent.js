@@ -76,6 +76,10 @@ class AbstractComponent {
                                 parentComponent,
                                 childProperty = this.config.childProperty
                             }) {
+        if (!childishBehaviour && !parentComponent) {
+            console.log(`${this.constructor.name} no childish behaviour`);
+            return;
+        }
         childishBehaviour = childishBehaviour ?? new DefaultChildishBehaviour(parentComponent, {childProperty})
         childishBehaviour.childComp = this;
         this.childishBehaviour = childishBehaviour;
@@ -174,6 +178,7 @@ class AbstractComponent {
      * @param {string|number} [partName]
      * @param {boolean} [dontRecordStateEvents]
      * @return {Promise<StateChange[]>}
+     * @final
      */
     update(stateOrPart, {partName, dontRecordStateEvents} = {}) {
         return this.doWithState((basicState) => {
@@ -223,21 +228,21 @@ class AbstractComponent {
      */
     updateViewOnAny(stateChange) {
         this._safelyLogStateChange(stateChange, "updateViewOnAny");
-        if (!this.stateChangesDispatcher.stateChangeHandlers
-            .isHandlerOf("updateViewOnAny", stateChange.changeType)) {
+        if (!this.shouldHandleWithAny(stateChange.changeType)) {
             console.log(`${this.constructor.name}.updateViewOnAny skipped!`);
             return Promise.reject(stateChange);
         }
         if (this.runtimeConfig.skipOwnViewUpdates) {
             return this.compositeBehaviour.processStateChangeWithKids(stateChange);
         }
-        return this.view.update(stateChange)
+        return this.view
+            .update(stateChange)
             .then(() => {
                 if (this.config.updateViewOnce) {
-                    this.runtimeConfig.skipOwnViewUpdates = true
+                    this.runtimeConfig.skipOwnViewUpdates = true;
                 }
-            })
-            .then(() => this.compositeBehaviour.processStateChangeWithKids(stateChange));
+                return this.compositeBehaviour.processStateChangeWithKids(stateChange);
+            });
     }
 
     /**
@@ -261,26 +266,32 @@ class AbstractComponent {
      */
     init() {
         return this._reloadState()
-            .then(() => {
-                console.log(`${this.constructor.name}.init: updateViewOnStateChanges`);
-                AssertionUtils.isNullOrEmpty(this.compositeBehaviour.childComponents,
-                    `${this.constructor.name}.init: childComponents should be empty!`);
-                return this.updateViewOnStateChanges();
-            })
-            .then((stateChanges) => {
-                console.log(`${this.constructor.name}.init: compositeBehaviour.init`);
-                this._configureEvents();
-                return this.compositeBehaviour.init().then(() => stateChanges);
-            })
-            .catch((err) => {
-                console.error(`${this.constructor.name}.init, dontConfigEventsOnError = ${this.config.dontConfigEventsOnError}, error:\n`, err);
-                if (!this.config.dontConfigEventsOnError) {
-                    // jqXHR is missing finally, so, if we would need to _configureEvents
-                    // on errors too, we would have to use catch anyway
-                    this._configureEvents();
-                }
-                throw err;
-            });
+            .then(this._handleViewUpdateOnInit.bind(this))
+            .then(this._handleEventsConfigurationOnInit.bind(this))
+            .catch(this._handleInitErrors.bind(this));
+    }
+
+    _handleViewUpdateOnInit() {
+        console.log(`${this.constructor.name}.init: updateViewOnStateChanges`);
+        AssertionUtils.isNullOrEmpty(this.compositeBehaviour.childComponents,
+            `${this.constructor.name}.init: childComponents should be empty!`);
+        return this.updateViewOnStateChanges();
+    }
+
+    _handleEventsConfigurationOnInit(stateChanges) {
+        console.log(`${this.constructor.name}.init: compositeBehaviour.init`);
+        this._configureEvents();
+        return this.compositeBehaviour.init().then(() => stateChanges);
+    }
+
+    _handleInitErrors(err) {
+        console.error(`${this.constructor.name}.init, dontConfigEventsOnError = ${this.config.dontConfigEventsOnError}, error:\n`, err);
+        if (!this.config.dontConfigEventsOnError) {
+            // jqXHR is missing finally, so, if we would need to _configureEvents
+            // on errors too, we would have to use catch anyway
+            this._configureEvents();
+        }
+        throw err;
     }
 
     /**
@@ -323,14 +334,23 @@ class AbstractComponent {
     }
 
     /**
-     * @param {boolean|string[]=} enableForAllChanges whether to use or not updateViewOnAny (for everything or for a specific change-type array)
+     * @param {boolean|string[]=} enableForAllOrSpecificChangeTypes whether to use or not updateViewOnAny (for everything or for a specific change-type array)
      */
-    handleWithAny(enableForAllChanges = true) {
-        if (typeof enableForAllChanges === "boolean") {
-            this.setHandlerName("updateViewOnAny", enableForAllChanges ? StateChangeHandlersManager.ANY : undefined);
+    handleWithAny(enableForAllOrSpecificChangeTypes = true) {
+        if (typeof enableForAllOrSpecificChangeTypes === "boolean") {
+            this.setHandlerName("updateViewOnAny", enableForAllOrSpecificChangeTypes ? StateChangeHandlersManager.ALL_CHANGE_TYPES : undefined);
         } else {
-            this.setHandlerName("updateViewOnAny", ...enableForAllChanges);
+            this.setHandlerName("updateViewOnAny", ...enableForAllOrSpecificChangeTypes);
         }
+    }
+
+    /**
+     * @param {string} changeType
+     * @return {boolean}
+     */
+    shouldHandleWithAny(changeType) {
+        return this.stateChangesDispatcher.stateChangeHandlers
+            .shouldHandleWith("updateViewOnAny", changeType);
     }
 
     /**

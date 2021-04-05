@@ -99,8 +99,12 @@ class SimpleRowComponent extends AbstractComponent {
     remove() {
         return this.doWithState(state => {
             state.replaceEntirely(undefined);
-        }).then(() => this.reset());
+        });
     }
+
+    /*updateViewOnAny(stateChange) {
+
+    }*/
 
     /**
      * @param stateChange {StateChange}
