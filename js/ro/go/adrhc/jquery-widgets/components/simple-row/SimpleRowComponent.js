@@ -82,15 +82,15 @@ class SimpleRowComponent extends AbstractComponent {
      * row-remove so it's safe to directly call this.remove().
      *
      * @param {EntityRow} stateOrPart
+     * @param {string|number} [partName]
+     * @param {boolean} [dontRecordStateEvents]
      * @return {Promise<StateChange>|Promise<StateChange>[]}
      */
-    update(stateOrPart) {
+    update(stateOrPart, {partName, dontRecordStateEvents} = {}) {
         if (stateOrPart == null) {
             return this.remove();
         }
-        this.reset();
-        this.state.replaceEntirely(stateOrPart);
-        return this.init();
+        return super.update(stateOrPart, {partName, dontRecordStateEvents});
     }
 
     /**
