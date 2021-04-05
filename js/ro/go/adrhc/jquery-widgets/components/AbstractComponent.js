@@ -182,7 +182,7 @@ class AbstractComponent {
      */
     update(stateOrPart, {partName, dontRecordStateEvents} = {}) {
         return this.doWithState((basicState) => {
-            basicState.replace(stateOrPart, {partName, dontRecordStateEvents})
+            basicState.replace(stateOrPart, {partName, dontRecordStateEvents});
         });
     }
 

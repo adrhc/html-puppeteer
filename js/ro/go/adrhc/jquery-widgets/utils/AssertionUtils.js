@@ -5,8 +5,8 @@ class AssertionUtils {
      */
     static isNull(object, message) {
         if (object != null) {
-            console.error(`AssertionUtils.isNull failed: ${message}`);
-            AssertionUtils._alertOrThrow(!!message ? `${message}: null object!` : "null object!");
+            console.error(`isNull failed: ${message}`);
+            AssertionUtils._alertOrThrow(message ? `${message}: null object!` : "null object!");
         }
     }
 
@@ -16,8 +16,8 @@ class AssertionUtils {
      */
     static isNotNull(object, message) {
         if (object == null) {
-            console.error(`AssertionUtils.isNotNull failed: ${message}`);
-            AssertionUtils._alertOrThrow(!!message ? `${message}: null object!` : "null object!");
+            console.error(`isNotNull failed: ${message}`);
+            AssertionUtils._alertOrThrow(message ? `${message}: null object!` : "null object!");
         }
     }
 
@@ -29,8 +29,8 @@ class AssertionUtils {
      */
     static isTrue(expression, message) {
         if (expression !== true) {
-            console.error(`AssertionUtils.isTrue failed: ${message}`);
-            AssertionUtils._alertOrThrow(!!message ? message : `${this.constructor.name}.isTrue failed`);
+            console.error(`isTrue failed: ${message}`);
+            AssertionUtils._alertOrThrow(message ? message : `${this.constructor.name}.isTrue failed`);
         }
     }
 
@@ -42,8 +42,8 @@ class AssertionUtils {
      */
     static isFalse(expression, message) {
         if (expression !== false) {
-            console.error(`AssertionUtils.isFalse failed: ${message}`);
-            AssertionUtils._alertOrThrow(!!message ? message : `${this.constructor.name}.isFalse failed`);
+            console.error(`isFalse failed: ${message}`);
+            AssertionUtils._alertOrThrow(message ? message : `${this.constructor.name}.isFalse failed`);
         }
     }
 
@@ -53,11 +53,11 @@ class AssertionUtils {
      */
     static isNullOrEmpty(array, message) {
         if (array && !$.isArray(array)) {
-            console.error(`AssertionUtils.isNullOrEmpty failed: ${message}`);
+            console.error(`isNullOrEmpty failed: ${message}`);
             AssertionUtils._alertOrThrow(`this is not an array:\n${JSON.stringify(array)}`);
         } else if (array && array.length !== 0) {
-            console.error(`AssertionUtils.isNullOrEmpty failed: ${message}`);
-            AssertionUtils._alertOrThrow(!!message ? message : `${this.constructor.name}.isNullOrEmpty failed`);
+            console.error(`isNullOrEmpty failed: ${message}`);
+            AssertionUtils._alertOrThrow(message ? message : `${this.constructor.name}.isNullOrEmpty failed`);
         }
     }
 
