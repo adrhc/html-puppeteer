@@ -102,9 +102,40 @@ class SimpleRowComponent extends AbstractComponent {
         });
     }
 
-    /*updateViewOnAny(stateChange) {
+    /**
+     * The intention is to skip the calls that updateViewOnAny() will make anyway but
+     * only when _handleViewUpdateOnInit will determine the call of updateViewOnAny().
+     * The fact that _handleInitErrors part is caught twice is not an issue; 2nd catch will basically do nothing.
+     *
+     * @param {StateChange[]} stateChanges
+     * @return {Promise<StateChange[]>}
+     * @protected
+     */
+    _handleEventsConfigurationOnInit(stateChanges) {
+        const hasStateChanges = stateChanges && stateChanges.length > 0;
+        const lastChangeType = hasStateChanges ? stateChanges[stateChanges.length - 1].changeType : undefined;
+        const shouldSkipEventsConfiguration = this.isAllowedToHandleWithAny(lastChangeType);
+        return shouldSkipEventsConfiguration ? stateChanges :
+            super._handleEventsConfigurationOnInit(stateChanges);
+    }
 
-    }*/
+    /**
+     * When redrawing a row it means internally to recreate it so to loose all existing handlers
+     * set by the row component or its children; this implies that a full re-init is required but
+     * that's not easy because _handleViewUpdateOnInit() cals updateViewOnAny() so a circular
+     * calling could happen. The solution is to do a init()-like inside updateViewOnAny() while
+     * also to skip _handleEventsConfigurationOnInit() when updateViewOnAny() already called.
+     *
+     * @param {TaggedStateChange} stateChange
+     * @return {Promise}
+     */
+    updateViewOnAny(stateChange) {
+        this.reset();
+        this.state.replaceEntirely(stateChange.stateOrPart, true);
+        return super.updateViewOnAny(stateChange)
+            .then(this._handleEventsConfigurationOnInit.bind(this))
+            .catch(this._handleInitErrors.bind(this));
+    }
 
     /**
      * @param stateChange {StateChange}

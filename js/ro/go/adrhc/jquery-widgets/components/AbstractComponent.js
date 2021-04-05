@@ -228,7 +228,7 @@ class AbstractComponent {
      */
     updateViewOnAny(stateChange) {
         this._safelyLogStateChange(stateChange, "updateViewOnAny");
-        if (!this.shouldHandleWithAny(stateChange.changeType)) {
+        if (!this.isAllowedToHandleWithAny(stateChange.changeType)) {
             console.log(`${this.constructor.name}.updateViewOnAny skipped!`);
             return Promise.reject(stateChange);
         }
@@ -271,13 +271,23 @@ class AbstractComponent {
             .catch(this._handleInitErrors.bind(this));
     }
 
-    _handleViewUpdateOnInit() {
+    /**
+     * @param {*} loadedState
+     * @return {Promise<StateChange>|Promise<StateChange>[]}
+     * @protected
+     */
+    _handleViewUpdateOnInit(loadedState) {
         console.log(`${this.constructor.name}.init: updateViewOnStateChanges`);
         AssertionUtils.isNullOrEmpty(this.compositeBehaviour.childComponents,
             `${this.constructor.name}.init: childComponents should be empty!`);
         return this.updateViewOnStateChanges();
     }
 
+    /**
+     * @param {StateChange[]} stateChanges
+     * @return {Promise<StateChange[]>}
+     * @protected
+     */
     _handleEventsConfigurationOnInit(stateChanges) {
         console.log(`${this.constructor.name}.init: compositeBehaviour.init`);
         this._configureEvents();
@@ -348,7 +358,7 @@ class AbstractComponent {
      * @param {string} changeType
      * @return {boolean}
      */
-    shouldHandleWithAny(changeType) {
+    isAllowedToHandleWithAny(changeType) {
         return this.stateChangesDispatcher.stateChangeHandlers
             .shouldHandleWith("updateViewOnAny", changeType);
     }

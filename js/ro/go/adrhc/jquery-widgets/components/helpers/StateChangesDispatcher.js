@@ -38,8 +38,7 @@ class StateChangesDispatcher {
         stateChanges = stateChanges ? stateChanges : (this.component.state ?
             this.component.state.stateChanges.consumeAll(applyChangesStartingFromNewest) : undefined);
         if (!stateChanges || !stateChanges.length) {
-            // can happen when switching to undefined multiple times (e.g. dblclick on header)
-            // or clicking in an input box on an editable row
+            // might happen on init() when having no loaded state
             console.warn(`${this.component.constructor.name}: no state changes!`);
             return Promise.resolve(stateChanges);
         }
