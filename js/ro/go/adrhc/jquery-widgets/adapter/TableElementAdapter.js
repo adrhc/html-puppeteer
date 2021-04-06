@@ -161,6 +161,10 @@ class TableElementAdapter {
         return this.$tbody.children(`tr${this.ownerSelector}`);
     }
 
+    removeAllRows() {
+        this.$tbody.children("tr").remove();
+    }
+
     /**
      * @param rowDataId
      * @return {jQuery<HTMLTableRowElement>}

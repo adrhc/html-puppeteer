@@ -140,6 +140,7 @@ class ElasticListComponent extends SimpleListComponent {
      */
     updateViewOnAny(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnAny: ignored\n${JSON.stringify(stateChange)}`);
+        this.tableBasedView.tableAdapter.removeAllRows();
         return Promise.resolve(stateChange);
     }
 
