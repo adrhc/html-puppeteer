@@ -21,4 +21,8 @@ class DomUtils {
         }
         return DomUtils.jQueryOf(elemIdOrJQuery).data();
     }
+
+    static htmlIncludingSelfOf($elem) {
+        return $elem.prop('outerHTML');
+    }
 }

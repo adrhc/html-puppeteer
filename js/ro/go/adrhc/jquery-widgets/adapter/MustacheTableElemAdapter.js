@@ -42,7 +42,7 @@ class MustacheTableElemAdapter extends TableElementAdapter {
         } else if ($(`#${bodyRowTmplId}`).length) {
             this.bodyRowTmplHtml = HtmlUtils.templateTextOf(bodyRowTmplId);
         } else {
-            this.bodyRowTmplHtml = super.$tbody.html();
+            this.bodyRowTmplHtml = DomUtils.htmlIncludingSelfOf(super.$firstRow);
         }
     }
 
