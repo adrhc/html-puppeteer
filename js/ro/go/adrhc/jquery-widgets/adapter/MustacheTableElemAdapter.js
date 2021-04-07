@@ -37,10 +37,12 @@ class MustacheTableElemAdapter extends TableElementAdapter {
      */
     _setupBodyRowTmplHtml(bodyRowTmplId, bodyRowTmplHtml) {
         bodyRowTmplId = !!bodyRowTmplId ? bodyRowTmplId : `${this.tableId}RowTmpl`;
-        if (!!bodyRowTmplHtml) {
+        if (bodyRowTmplHtml) {
             this.bodyRowTmplHtml = bodyRowTmplHtml;
         } else if ($(`#${bodyRowTmplId}`).length) {
             this.bodyRowTmplHtml = HtmlUtils.templateTextOf(bodyRowTmplId);
+        } else {
+            this.bodyRowTmplHtml = super.$tbody.html();
         }
     }
 

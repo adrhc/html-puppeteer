@@ -51,9 +51,9 @@ class SimpleListComponent extends AbstractTableBasedComponent {
                         childProperty,
                         dontAutoInitialize
                     }),
-                    items = [],
-                    mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, config),
+                    items = typeof config.items === "string" ? JSON.parse(config.items) : config.items ?? [],
                     repository = new InMemoryCrudRepository(items),
+                    mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, config),
                     state = new SimpleListState(),
                     view = new SimpleListView(mustacheTableElemAdapter),
                     compositeBehaviour,
