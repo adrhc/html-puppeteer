@@ -21,7 +21,6 @@
 <div class="dogsTable">
     <table id="dogsTable" class="responstable"
            data-jqw-type="ElasticList"
-           data-body-row-tmpl-id="dogsTableRowTmpl"
            data-row-position-on-create="append"
            data-items='[{"id": 1, "name": "dog1"}, {"id": 2, "name": "dog2"}, {"id": 3, "name": "dog3"}]'>
         <thead>
@@ -29,18 +28,15 @@
             <th data-owner="dogsTable" data-btn="reload" title="reload">Dogs</th>
         </tr>
         </thead>
+        <tr data-owner="{{owner}}" data-id="{{id}}">
+            <td>
+                <input data-owner="dogsTable" type="hidden" name="id" value="{{id}}">
+                <input data-owner="dogsTable" type="hidden" name="name" value="{{name}}">
+                {{{name}}}
+            </td>
+        </tr>
     </table>
 </div>
-
-<template id="dogsTableRowTmpl">
-    <tr data-owner="{{owner}}" data-id="{{id}}">
-        <td>
-            <input data-owner="dogsTable" type="hidden" name="id" value="{{id}}">
-            <input data-owner="dogsTable" type="hidden" name="name" value="{{name}}">
-            {{{name}}}
-        </td>
-    </tr>
-</template>
 
 <!-- utils -->
 <script src="js/ro/go/adrhc/jquery-widgets/utils/AjaxUtils.js"></script>
