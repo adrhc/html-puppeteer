@@ -18,25 +18,18 @@ class DynamicSelectOneFactory {
         childProperty,
         childishBehaviour,
     } = {}) {
-        const props = DomUtils.jQueryOf(elemIdOrJQuery).data();
-        const configFn = (config) => $.extend(new DynaSelOneConfig(), props, config);
-        const config = configFn({
+        const props = DomUtils.dataOf(elemIdOrJQuery);
+        const config = _.defaults(new DynaSelOneConfig(), {
             minCharsToSearch,
             useCachedSearchResult,
             searchOnBlur,
             reloadOptionsOnInit,
             childProperty,
-        });
+        }, props);
 
         const dynaSelOneView = new DynamicSelectOneView(elemIdOrJQuery, config);
         const dynaSelOneState = new DynaSelOneState(repository, config);
-        const dynaSelOneComp = new DynamicSelectOneComponent(dynaSelOneView, dynaSelOneState, config);
-
-        if (childishBehaviour) {
-            dynaSelOneComp.childishBehaviour = childishBehaviour;
-        }
-
-        return dynaSelOneComp;
+        return new DynamicSelectOneComponent(dynaSelOneView, dynaSelOneState, config, {childishBehaviour});
     }
 
     /**
