@@ -89,18 +89,18 @@ class SimpleRowComponent extends AbstractComponent {
      * The fact that _handleInitErrors part will in the end be called twice is not
      * an issue; 2nd catch will basically do nothing.
      *
-     * ASSUMPTION: init() will call _handleInitErrors() after calling _handleEventsConfigurationOnInit()
+     * ASSUMPTION: init() will call _handleInitErrors() after calling _configureEventsAndInitKidsOnInit()
      *
      * @param {StateChange[]} stateChanges
      * @return {Promise<StateChange[]>}
      * @protected
      */
-    _handleEventsConfigurationOnInit(stateChanges) {
+    _configureEventsAndInitKidsOnInit(stateChanges) {
         const hasStateChanges = stateChanges && stateChanges.length > 0;
         const lastChangeType = hasStateChanges ? stateChanges[stateChanges.length - 1].changeType : undefined;
         const shouldSkipEventsConfiguration = this.isAllowedToHandleWithAny(lastChangeType);
         return shouldSkipEventsConfiguration ? stateChanges :
-            super._handleEventsConfigurationOnInit(stateChanges);
+            super._configureEventsAndInitKidsOnInit(stateChanges);
     }
 
     /**
@@ -108,7 +108,7 @@ class SimpleRowComponent extends AbstractComponent {
      * set by the row component or its children; this implies that a full re-init is required but
      * that's not easy because _handleViewUpdateOnInit() cals updateViewOnAny() so a circular
      * calling could happen. The solution is to do a init()-like inside updateViewOnAny() while
-     * also to skip _handleEventsConfigurationOnInit() when updateViewOnAny() already called.
+     * also to skip _configureEventsAndInitKidsOnInit() when updateViewOnAny() already called.
      *
      * reminder: _handleViewUpdateOnInit() calls updateViewOnAny()
      *
@@ -119,7 +119,7 @@ class SimpleRowComponent extends AbstractComponent {
         this.reset();
         this.state.replaceEntirely(stateChange.stateOrPart, true);
         return super.updateViewOnAny(stateChange)
-            .then(this._handleEventsConfigurationOnInit.bind(this))
+            .then(this._configureEventsAndInitKidsOnInit.bind(this))
             .catch(this._handleInitErrors.bind(this));
     }
 

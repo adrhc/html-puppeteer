@@ -267,7 +267,7 @@ class AbstractComponent {
     init() {
         return this._reloadState()
             .then(this._handleViewUpdateOnInit.bind(this))
-            .then(this._handleEventsConfigurationOnInit.bind(this))
+            .then(this._configureEventsAndInitKidsOnInit.bind(this))
             .catch(this._handleInitErrors.bind(this));
     }
 
@@ -288,7 +288,7 @@ class AbstractComponent {
      * @return {Promise<StateChange[]>}
      * @protected
      */
-    _handleEventsConfigurationOnInit(stateChanges) {
+    _configureEventsAndInitKidsOnInit(stateChanges) {
         console.log(`${this.constructor.name}.init: compositeBehaviour.init`);
         this._configureEvents();
         return this.compositeBehaviour.init().then(() => stateChanges);
