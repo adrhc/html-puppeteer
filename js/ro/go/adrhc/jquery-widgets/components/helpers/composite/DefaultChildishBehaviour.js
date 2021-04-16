@@ -9,7 +9,7 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
     /**
      * Used to convert the child's state into the parent's property.
      *
-     * todo: remove childEntityConverter
+     * todo: remove toEntityConverter
      *
      * This capability overlaps with DefaultEntityExtractor.entityConverterFn
      * but is needed by DynamicSelectOneComponent which is not completely
@@ -17,7 +17,7 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
      *
      * @type {function(rawData: *): IdentifiableEntity}
      */
-    childEntityConverter;
+    toEntityConverter;
     /**
      * @type {function(childEntity: IdentifiableEntity, parentState: *): void} childEntitySetter
      */
@@ -37,16 +37,16 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
      * @param {function(parentState: *, partName: string): *} [childEntityGetter]
      * @param {function(childEntity: IdentifiableEntity, parentState: *): void} [childEntitySetter]
      * @param {function(useOwnerOnFields: boolean): *} [childEntityExtractorFn] extracts raw data from the HTML component's representation
-     * @param {function(rawData: *): IdentifiableEntity} [childEntityConverter] converts extracted raw data to IdentifiableEntity
+     * @param {function(rawData: *): IdentifiableEntity} [toEntityConverter] converts extracted raw data to IdentifiableEntity
      */
     constructor(parentComp, {
         childProperty,
         childEntityGetter,
         childEntitySetter,
         childEntityExtractorFn,
-        childEntityConverter = (it) => it,
+        toEntityConverter = (it) => it,
     } = {
-        childEntityConverter(it) {
+        toEntityConverter(it) {
             return it;
         }
     }) {
@@ -55,7 +55,7 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
         this.childEntityGetter = childEntityGetter ? childEntityGetter : this._getChildEntityFrom.bind(this);
         this.childEntitySetter = childEntitySetter ? childEntitySetter : this._setChildIntoParent.bind(this);
         this.childEntityExtractorFn = childEntityExtractorFn ? childEntityExtractorFn : this._extractChildEntity.bind(this);
-        this.childEntityConverter = childEntityConverter;
+        this.toEntityConverter = toEntityConverter;
     }
 
     /**
@@ -69,7 +69,7 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
      */
     updateParentFromChildView(parentState, useOwnerOnFields) {
         const extractedChildEntity = this.childEntityExtractorFn(useOwnerOnFields);
-        const childEntity = this.childEntityConverter(extractedChildEntity);
+        const childEntity = this.toEntityConverter(extractedChildEntity);
         this.childEntitySetter(childEntity, parentState);
     }
 

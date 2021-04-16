@@ -23,7 +23,7 @@ class DynaSelOneState extends TaggingStateHolder {
      *
      * @type {boolean}
      */
-    useCachedSearchResult;
+    cacheSearchResults;
     /**
      * this is configuration
      *
@@ -39,7 +39,7 @@ class DynaSelOneState extends TaggingStateHolder {
      * @param {DynaSelOneRepository} repository
      * @param {number} minCharsToSearch
      * @param {DynaSelOneItem[]} [options]
-     * @param {boolean} [useCachedSearchResult]
+     * @param {boolean} [cacheSearchResults]
      * @param {boolean} [searchOnBlur]
      * @param {boolean} [reloadOptionsOnInit]
      * @param {*} [initialState]
@@ -49,7 +49,7 @@ class DynaSelOneState extends TaggingStateHolder {
     constructor(repository, {
         minCharsToSearch = 3,
         options,
-        useCachedSearchResult,
+        cacheSearchResults,
         searchOnBlur = minCharsToSearch > 0,
         reloadOptionsOnInit = minCharsToSearch === 0,
         initialState,
@@ -60,7 +60,7 @@ class DynaSelOneState extends TaggingStateHolder {
         this.repository = repository;
         this.minCharsToSearch = minCharsToSearch;
         this.options = options;
-        this.useCachedSearchResult = useCachedSearchResult;
+        this.cacheSearchResults = cacheSearchResults;
         this.searchOnBlur = searchOnBlur;
         this.reloadOptionsOnInit = reloadOptionsOnInit;
     }
@@ -90,7 +90,7 @@ class DynaSelOneState extends TaggingStateHolder {
      */
     updateByTitle(title = "", isOnBlur) {
         console.log("DynaSelOneState.updateByTitle title =", title);
-        if ((this.useCachedSearchResult || isOnBlur) && this.title === title) {
+        if ((this.cacheSearchResults || isOnBlur) && this.title === title) {
             // updating with same title
             console.warn(`${this.constructor.name}.updateByTitle, rejecting update with same title: ${title ? title : "nothing"}`);
             return Promise.reject(this);
@@ -101,7 +101,7 @@ class DynaSelOneState extends TaggingStateHolder {
             return Promise.resolve(this);
         }
         let optionsPromise;
-        if (this.useCachedSearchResult && this.currentOptionsAreResultOfSearch && title.startsWith(this.title)) {
+        if (this.cacheSearchResults && this.currentOptionsAreResultOfSearch && title.startsWith(this.title)) {
             // new title contains the current title: searching existing options
             optionsPromise = Promise.resolve(this._findOptionsByTitlePrefix(title));
         } else {

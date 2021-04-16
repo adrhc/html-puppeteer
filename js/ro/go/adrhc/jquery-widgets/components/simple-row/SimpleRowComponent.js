@@ -119,7 +119,7 @@ class SimpleRowComponent extends AbstractComponent {
         this.reset();
         this.state.replaceEntirely(stateChange.stateOrPart, true);
         return super.updateViewOnAny(stateChange)
-            .then(this._configureEventsAndInitKidsOnInit.bind(this))
+            .then(super._configureEventsAndInitKidsOnInit.bind(this))
             .catch(this._handleInitErrors.bind(this));
     }
 

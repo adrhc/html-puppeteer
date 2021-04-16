@@ -5,16 +5,25 @@ class DynamicSelectOneComponent extends AbstractComponent {
      * @param {DynamicSelectOneView} view
      * @param {DynaSelOneState} state
      * @param {DynaSelOneConfig} [config]
-     * @param childishBehaviour
+     * @param {DynaSelOneChildishBehaviour} childishBehaviour
      */
     constructor(view, state, config, {childishBehaviour} = {}) {
         super({view, state, childishBehaviour, config});
-        this.dynaSelOneState = state;
-        this.dynaSelOneView = view;
-        if (config.childProperty) {
-            this.childishBehaviour = new DynaSelOneOnRowChildishBehaviour(this,
-                config.childProperty, config.newChildEntityFactoryFn);
+    }
+
+    _setupChildishBehaviour({
+                                childishBehaviour,
+                                parentComponent,
+                                childProperty = this.config.childProperty
+                            }) {
+        if (!childishBehaviour && !parentComponent) {
+            console.log(`${this.constructor.name} no childish behaviour`);
+            return;
         }
+        childishBehaviour = childishBehaviour ?? new DynaSelOneOnRowChildishBehaviour(
+            parentComponent, childProperty, this.config.toEntityConverter);
+        childishBehaviour.childComp = this;
+        this.childishBehaviour = childishBehaviour;
     }
 
     onOptionClick(ev) {
@@ -120,5 +129,19 @@ class DynamicSelectOneComponent extends AbstractComponent {
 
     get focusOnInit() {
         return this.view.$elem.data("focus") === true;
+    }
+
+    /**
+     * @return {DynaSelOneState}
+     */
+    get dynaSelOneState() {
+        return this.state;
+    }
+
+    /**
+     * @return {DynamicSelectOneView}
+     */
+    get dynaSelOneView() {
+        return this.view;
     }
 }

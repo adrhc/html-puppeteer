@@ -3,7 +3,7 @@ class DynamicSelectOneFactory {
      * @param elemIdOrJQuery {string|jQuery<HTMLTableRowElement>}
      * @param repository {DynaSelOneRepository}
      * @param [minCharsToSearch] {number}
-     * @param [useCachedSearchResult] {boolean}
+     * @param [cacheSearchResults] {boolean}
      * @param [searchOnBlur] {boolean}
      * @param [reloadOptionsOnInit] {boolean}
      * @param [childProperty] {string}
@@ -12,7 +12,7 @@ class DynamicSelectOneFactory {
      */
     static create(elemIdOrJQuery, repository, {
         minCharsToSearch,
-        useCachedSearchResult,
+        cacheSearchResults,
         searchOnBlur,
         reloadOptionsOnInit,
         childProperty,
@@ -21,12 +21,11 @@ class DynamicSelectOneFactory {
         const props = DomUtils.dataOf(elemIdOrJQuery);
         const config = _.defaults(new DynaSelOneConfig(), {
             minCharsToSearch,
-            useCachedSearchResult,
+            cacheSearchResults,
             searchOnBlur,
             reloadOptionsOnInit,
             childProperty,
         }, props);
-
         const dynaSelOneView = new DynamicSelectOneView(elemIdOrJQuery, config);
         const dynaSelOneState = new DynaSelOneState(repository, config);
         return new DynamicSelectOneComponent(dynaSelOneView, dynaSelOneState, config, {childishBehaviour});
@@ -34,11 +33,11 @@ class DynamicSelectOneFactory {
 
     /**
      * @param childProperty {string}
-     * @param childEntityConverter {function(): IdentifiableEntity}
+     * @param toEntityConverter {function(): IdentifiableEntity}
      * @param repository {DynaSelOneRepository}
      * @param [dynaSelOneSelector=[data-id='dyna-sel-one']] {string}
      */
-    static createChildComponentFactory(childProperty, childEntityConverter, repository,
+    static createChildComponentFactory(childProperty, toEntityConverter, repository,
                                        dynaSelOneSelector = "[data-id='dyna-sel-one']") {
         return $.extend(new ChildComponentFactory(), {
             createChildComponent: (parentComp) => {
@@ -48,7 +47,7 @@ class DynamicSelectOneFactory {
                 return DynamicSelectOneFactory.create($(dynaSelOneSelector, $parentElem),
                     repository, {
                         childishBehaviour: new DynaSelOneOnRowChildishBehaviour(
-                            parentComp, childProperty, childEntityConverter)
+                            parentComp, childProperty, toEntityConverter)
                     })
             }
         });
