@@ -33,6 +33,8 @@ class AbstractComponent {
      */
     entityExtractor;
     /**
+     * capability of acting as a child
+     *
      * @type {ChildishBehaviour}
      */
     childishBehaviour;
@@ -109,25 +111,6 @@ class AbstractComponent {
     }
 
     /**
-     * see this as the "child component" capability of the current/this component
-     *
-     * @type {ChildishBehaviour}
-     */
-    _childishBehaviour;
-
-    get childishBehaviour() {
-        return this._childishBehaviour;
-    }
-
-    /**
-     * @param childishBehaviour {ChildishBehaviour}
-     */
-    set childishBehaviour(childishBehaviour) {
-        childishBehaviour.childComp = this;
-        this._childishBehaviour = childishBehaviour;
-    }
-
-    /**
      * @returns {string}
      * @protected
      */
@@ -152,8 +135,8 @@ class AbstractComponent {
      * @return {boolean}
      */
     updateParentFromOwnedView(parentState) {
-        if (this._childishBehaviour) {
-            this._childishBehaviour.updateParentFromChildView(parentState);
+        if (this.childishBehaviour) {
+            this.childishBehaviour.updateParentFromChildView(parentState);
         }
     }
 

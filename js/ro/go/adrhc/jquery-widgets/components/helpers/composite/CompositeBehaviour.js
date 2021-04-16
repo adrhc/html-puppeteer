@@ -50,7 +50,7 @@ class CompositeBehaviour {
     }
 
     /**
-     * entityExtractor._extractInputValues -> compositeBehaviour.updateFromKidsView -> kid.updateParentFromOwnedView -> kid._childishBehaviour.updateParentFromChildView
+     * entityExtractor._extractInputValues -> compositeBehaviour.updateFromKidsView -> kid.updateParentFromOwnedView -> kid.childishBehaviour.updateParentFromChildView
      *
      * @param parentState
      */
@@ -159,6 +159,8 @@ class CompositeBehaviour {
     }
 
     /**
+     * kids should have dontAutoInitialize = true
+     *
      * @return {Promise<StateChange[]>[]}
      * @protected
      */
