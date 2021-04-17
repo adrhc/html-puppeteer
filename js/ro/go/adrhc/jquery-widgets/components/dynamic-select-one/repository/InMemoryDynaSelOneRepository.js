@@ -10,10 +10,8 @@ class InMemoryDynaSelOneRepository extends DynaSelOneRepository {
     }
 
     /**
-     * see DynaSelOneRepository.findByTitle
-     *
      * @param title {string}
-     * @return {Promise<Person[]>}
+     * @return {Promise<DynaSelOneItem[]>}
      */
     findByTitle(title) {
         const searchFor = title.toLowerCase();

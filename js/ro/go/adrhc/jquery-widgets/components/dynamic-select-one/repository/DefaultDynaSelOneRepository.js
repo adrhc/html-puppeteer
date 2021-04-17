@@ -26,7 +26,7 @@ class DefaultDynaSelOneRepository extends DynaSelOneRepository {
 
     /**
      * @param title {String}
-     * @returns {PromiseLike<DynaSelOneItem[]> | Promise<DynaSelOneItem[]>}
+     * @returns {Promise<DynaSelOneItem[]>}
      */
     findByTitle(title) {
         return $.ajax({

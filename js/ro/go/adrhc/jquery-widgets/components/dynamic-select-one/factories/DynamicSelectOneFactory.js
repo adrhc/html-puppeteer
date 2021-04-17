@@ -5,7 +5,7 @@ class DynamicSelectOneFactory {
      * @param [minCharsToSearch] {number}
      * @param [cacheSearchResults] {boolean}
      * @param [searchOnBlur] {boolean}
-     * @param [reloadOptionsOnInit] {boolean}
+     * @param [loadOptionsOnInit] {boolean}
      * @param [childProperty] {string}
      * @param [childishBehaviour] {ChildishBehaviour}
      * @return {DynamicSelectOneComponent}
@@ -14,7 +14,7 @@ class DynamicSelectOneFactory {
         minCharsToSearch,
         cacheSearchResults,
         searchOnBlur,
-        reloadOptionsOnInit,
+        loadOptionsOnInit,
         childProperty,
         childishBehaviour,
     } = {}) {
@@ -22,11 +22,11 @@ class DynamicSelectOneFactory {
             minCharsToSearch,
             cacheSearchResults,
             searchOnBlur,
-            reloadOptionsOnInit,
+            loadOptionsOnInit,
             childProperty,
         });
         const view = new DynamicSelectOneView(elemIdOrJQuery, config);
-        const state = new DynaSelOneState(repository, config);
+        const state = new DynaSelOneStateHolder(repository, config);
         return new DynamicSelectOneComponent({view, state, config, childishBehaviour});
     }
 

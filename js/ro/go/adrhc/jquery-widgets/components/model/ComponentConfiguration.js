@@ -27,6 +27,10 @@ class ComponentConfiguration {
      * @type {string}
      */
     childProperty;
+    /**
+     * @type {string}
+     */
+    elemIdOrJQuery;
 
     constructor({
                     dontConfigEventsOnError,
@@ -35,7 +39,8 @@ class ComponentConfiguration {
                     clearChildrenOnReset,
                     updateViewOnce,
                     skipOwnViewUpdates,
-                    childProperty
+                    childProperty,
+                    elemIdOrJQuery
                 } = {}) {
         this.dontConfigEventsOnError = dontConfigEventsOnError;
         this.dontAutoInitialize = dontAutoInitialize;
@@ -44,6 +49,7 @@ class ComponentConfiguration {
         this.updateViewOnce = updateViewOnce;
         this.skipOwnViewUpdates = skipOwnViewUpdates;
         this.childProperty = childProperty;
+        this.elemIdOrJQuery = elemIdOrJQuery;
     }
 
     /**

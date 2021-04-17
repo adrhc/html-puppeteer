@@ -1,6 +1,6 @@
 /**
  * @requires {DynamicSelectOneView} view
- * @requires {DynaSelOneState} state
+ * @requires {DynaSelOneStateHolder} state
  * @requires {DynaSelOneConfig} config
  * @requires {DynaSelOneChildishBehaviour} childishBehaviour
  */
@@ -22,24 +22,35 @@ class DynamicSelectOneComponent extends AbstractComponent {
                     toEntityConverter,
                     config = DynaSelOneConfig.configOf(elemIdOrJQuery, {toEntityConverter}),
                     view = new DynamicSelectOneView(elemIdOrJQuery, config),
-                    repository,
-                    state = new DynaSelOneState(repository, config),
+                    state = new DynaSelOneStateHolder(config),
                     compositeBehaviour,
                     childCompFactories,
                     childishBehaviour,
                     parentComponent,
+                    repository,
                 }) {
-        super({view, state, compositeBehaviour, childCompFactories, childishBehaviour, parentComponent, config});
+        super({
+            view,
+            state,
+            compositeBehaviour,
+            childCompFactories,
+            childishBehaviour,
+            parentComponent,
+            config: config.dontAutoInitializeOf()
+        });
+        this.repository = repository;
+        this.handleWithAny(true);
+        return this._handleAutoInitialization(config);
     }
 
     _setupChildishBehaviour({
                                 childishBehaviour,
                                 parentComponent,
                                 childProperty = this.config.childProperty,
-                                toEntityConverter = this.config.toEntityConverter
+                                toEntityConverter = this.dynaSelOneConfig.toEntityConverter
                             }) {
         if (!childishBehaviour && !parentComponent) {
-            console.log(`${this.constructor.name} no childish behaviour`);
+            console.log(`[${this.constructor.name}._setupChildishBehaviour] no childish behaviour`);
             return;
         }
         childishBehaviour = childishBehaviour ?? new DynaSelOneChildishBehaviour(
@@ -54,8 +65,10 @@ class DynamicSelectOneComponent extends AbstractComponent {
             return true;
         }
         const _this = ev.data;
-        _this.dynaSelOneState.updateById($(this).val())
-            .then(state => _this.updateView(state));
+        const selectedId = $(this).val();
+
+        console.log(`[${this.constructor.name}.onOptionClick] selectedId = ${selectedId}`);
+        return _this.doWithState(() => _this.dynaSelOneState.updateById(selectedId));
     }
 
     onKeyup(ev) {
@@ -67,94 +80,194 @@ class DynamicSelectOneComponent extends AbstractComponent {
         }
         const _this = ev.data;
         const command = ev.type !== "blur" ? ev.key : "Blur";
-        return _this[`_on${command}`]($(this).val());
+        const text = $(this).val();
+        return _this[`_on${command}`](text);
     }
 
     _onEscape() {
-        this.dynaSelOneState.reset();
-        return this.updateView(this.state, true);
+        console.log(`[${this.constructor.name}._onEscape]`);
+        $(this).val("");
+        return this._updateByTitle().then(() => {
+            this.dynaSelOneView.focusMe()
+        });
     }
 
     _onEnter(text) {
-        return this.dynaSelOneState.updateByTitle(text).then(state => this.updateView(state, true));
+        console.log(`[${this.constructor.name}._onEnter] text = ${text}`);
+        return this._updateByTitle(text).then(() => {
+            if (!this.dynaSelOneState.currentState.selectedItem) {
+                this.dynaSelOneView.focusMe()
+            }
+        });
     }
 
     _onBlur(text) {
-        return this.dynaSelOneState.updateByTitle(text, true).then(state => this.updateView(state));
+        console.log(`[${this.constructor.name}._onBlur] text = ${text}`);
+        return this._updateByTitle(text, true);
+    }
+
+    onSearchInputBlur(ev) {
+        const _this = ev.data;
+        const text = $(this).val();
+        console.log(`[${this.constructor.name}.onSearchInputBlur] text = ${text}`);
+        return _this._updateByTitle(text, true);
     }
 
     /**
-     * @return {Promise<void>}
+     * @param {string} [title]
+     * @param {boolean} [isOnBlur] for true reject update with same title
+     * @returns {Promise<StateChange[]>|Promise}
      */
-    init() {
-        this._clearOnBlurHandlers();
-        let promise;
-        if (this.dynaSelOneState.reloadOptionsOnInit) {
-            promise = this.dynaSelOneState.updateByTitle(this.dynaSelOneState.title)
-                .then(state => this.dynaSelOneView.update(state, this.focusOnInit));
-        } else {
-            promise = this.dynaSelOneView.update(this.dynaSelOneState, this.focusOnInit);
+    _updateByTitle(title = "", isOnBlur) {
+        if ((this.dynaSelOneConfig.cacheSearchResults || isOnBlur) && this.dynaSelOneState.currentState.title === title) {
+            // updating with same title
+            console.warn(`[${this.constructor.name}._updateByTitle] rejecting update with same title: ${title ?? "nothing"}`);
+            return Promise.resolve();
         }
-        return promise.then(() => this._configureEvents());
+        if (!this.dynaSelOneConfig.isEnoughTextToSearch(title)) {
+            // new title is too short
+            console.log(`[${this.constructor.name}._updateByTitle] too short title = ${title}`);
+            return this.doWithState(() => this.dynaSelOneState.replaceEntirely(
+                new DynaSelOneState(title, undefined, undefined, false)));
+        }
+        if (this.dynaSelOneConfig.cacheSearchResults &&
+            this.currentOptionsAreResultOfSearch &&
+            DynaSelOneStateHolder.startsWith(title, this.dynaSelOneState.currentState.title)) {
+            // new title contains the current title: searching existing options
+            return this._updateUsingPreviouslyFoundOptions(title);
+        } else {
+            // new title doesn't contain the current title: searching the DB
+            return this._updateBySearchingTheRepository(title);
+        }
     }
 
-    updateView(state, focusOnSearchInput) {
-        this._clearOnBlurHandlers();
-        return this.dynaSelOneView
-            .update(state, focusOnSearchInput)
-            .then(() => this._configureOnBlur());
+    _reloadState() {
+        const title = this.dynaSelOneState.currentState.title;
+        if (!this.dynaSelOneConfig.loadOptionsOnInit || !this.dynaSelOneConfig.isEnoughTextToSearch(title)) {
+            return super._reloadState();
+        }
+        return this.repository.findByTitle(title).then(options => {
+            const selectedItem = this._findOptionByExactTitle(title, options);
+            if (selectedItem) {
+                return this.dynaSelOneState.updateUsingDynaSelOneItem(selectedItem);
+            }
+            return this.dynaSelOneState.replaceEntirely(new DynaSelOneState(title, options));
+        });
+    }
+
+    /**
+     * @param {string} title
+     * @return {Promise<StateChange[]>}
+     * @protected
+     */
+    _updateBySearchingTheRepository(title) {
+        console.log(`[${this.constructor.name}._updateBySearchingTheRepository] title = ${title}`);
+        return this.repository.findByTitle(title).then(options => {
+            const selectedItem = this._findOptionByExactTitle(title, options);
+            if (selectedItem) {
+                return this.doWithState(() => this.dynaSelOneState.updateUsingDynaSelOneItem(selectedItem));
+            }
+            return this.doWithState(() => this.dynaSelOneState.replaceEntirely(new DynaSelOneState(title, options)));
+        });
+    }
+
+    /**
+     * @param {string} title
+     * @return {Promise<StateChange[]>|Promise}
+     * @protected
+     */
+    _updateUsingPreviouslyFoundOptions(title) {
+        console.log(`[${this.constructor.name}._updateByUsingPreviouslyFoundOptions] title = ${title}`);
+        const options = this._findOptionsByTitlePrefix(title);
+        if (!options || !options.length) {
+            return Promise.resolve();
+        }
+        if (options.length === 1) {
+            return this.doWithState(() => this.updateUsingDynaSelOneItem(options[0]));
+        } else {
+            return this.doWithState(() => this.dynaSelOneState.replaceEntirely(new DynaSelOneState(title, options)));
+        }
+    }
+
+    /**
+     * @param text {string}
+     * @returns {DynaSelOneItem[]|undefined}
+     */
+    _findOptionsByTitlePrefix(text) {
+        if (!this.currentState.options) {
+            return undefined;
+        }
+        return this.currentState.options.filter(opt => DynaSelOneStateHolder.startsWith(opt.title, text));
+    }
+
+    /**
+     * @param {string} title
+     * @param {DynaSelOneItem[]} options
+     * @returns {DynaSelOneItem|undefined}
+     * @protected
+     */
+    _findOptionByExactTitle(title = "", options) {
+        if (!options) {
+            return undefined;
+        }
+        return options.find(opt => opt.title.toLowerCase() === title.toLowerCase());
     }
 
     /**
      * linking "outside" (and/or default) triggers to component's handlers (aka capabilities)
      */
     _configureEvents() {
-        const view = this.dynaSelOneView;
-        const $comp = view.$elem;
+        const $comp = this.view.$elem;
 
         $comp.on(this._appendNamespaceTo('keyup'),
-            `[name='${view.titleInputName}']`, this, this.onKeyup);
-        // comp.on('keyup blur mouseleave', "[name='title']", this, this.onKeyup);
-        // comp.find("[name='title']").on("keyup blur mouseleave", this, this.onKeyup);
-        this._configureOnBlur();
+            `[name='${this.dynaSelOneView.titleInputName}']`, this, this.onKeyup);
 
         $comp.on(this._appendNamespaceTo(['click', 'keyup']),
             'option', this, this.onOptionClick);
+
+        // comp.on('keyup blur mouseleave', "[name='title']", this, this.onKeyup);
+        // comp.find("[name='title']").on("keyup blur mouseleave", this, this.onKeyup);
+        // this._configureOnBlur();
+
+        if (this.dynaSelOneConfig.searchOnBlur) {
+            $comp.on(this._appendNamespaceTo('blur'),
+                `[name='${this.dynaSelOneConfig.name}']`, this, this.onSearchInputBlur);
+        }
         // comp.on('change.dyna-sel-one keyup.dyna-sel-one', "[name='options']", this, this.onOptionClick);
     }
 
     _configureOnBlur() {
-        if (!this.dynaSelOneState.searchOnBlur) {
-            return;
-        }
-        // from jquery docs: blur does not propagate
-        this.dynaSelOneView.$titleElem[0].onblur = (ev) => {
-            ev.data = this;
-            this.onKeyup.bind(ev.target)(ev, true);
-        };
-        // console.log(`DynamicSelectOneComponent._configureOnBlur:\n${JSON.stringify(this.extractEntity())}`);
-        // console.log("DynamicSelectOneComponent selectedItem:\n", this.dynaSelOneState.selectedItem);
-    }
-
-    _clearOnBlurHandlers() {
-        this.view.$elem.off(this._appendNamespaceTo("blur"));
-        const $searchInputElem = this.dynaSelOneView.$titleElem;
-        if ($searchInputElem.length) {
-            $searchInputElem[0].onblur = null;
+        if (this.dynaSelOneConfig.searchOnBlur) {
+            this.view.$elem.on(this._appendNamespaceTo('blur'),
+                `[name='${this.dynaSelOneConfig.name}']`, this, this.onSearchInputBlur);
         }
     }
 
-    reset() {
-        this._clearOnBlurHandlers();
-        super.reset();
+    _removeOnBlurHandler() {
+        this.view.$elem.off("blur", `[name='${this.dynaSelOneConfig.name}']`);
     }
 
-    get focusOnInit() {
-        return this.view.$elem.data("focus") === true;
+    updateViewOnAny(stateChange) {
+        this._removeOnBlurHandler();
+        return super.updateViewOnAny(stateChange).then(() => this._configureOnBlur());
     }
 
     /**
-     * @return {DynaSelOneState}
+     * @returns {boolean}
+     */
+    get currentOptionsAreResultOfSearch() {
+        return this.dynaSelOneConfig.isEnoughTextToSearch(this.dynaSelOneState.currentState.title);
+    }
+
+    /**
+     * @return {DynaSelOneConfig}
+     */
+    get dynaSelOneConfig() {
+        return this.config;
+    }
+
+    /**
+     * @return {DynaSelOneStateHolder}
      */
     get dynaSelOneState() {
         return this.state;

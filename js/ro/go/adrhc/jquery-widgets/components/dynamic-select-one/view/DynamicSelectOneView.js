@@ -6,40 +6,50 @@ class DynamicSelectOneView extends AbstractView {
      * @type {CachedHtmlTemplate}
      */
     tmpl;
+    /**
+     * @type {DynaSelOneConfig}
+     */
+    config;
 
     /**
-     * @param elemIdOrJQuery {string|jQuery<HTMLTableRowElement>}
-     * @param tmplUrl {string}
+     * @param {string|jQuery<HTMLTableRowElement>} elemIdOrJQuery
+     * @param {DynaSelOneConfig} config
      */
-    constructor(elemIdOrJQuery, {tmplUrl}) {
+    constructor(elemIdOrJQuery, config) {
         super();
+        this.config = config;
         this._setupElem(elemIdOrJQuery);
         this._setupOwner();
-        this._setupCachedUrl(tmplUrl);
+        this._setupCachedUrl(config.tmplUrl);
     }
 
-    _setupCachedUrl(dynaSelOneHtml = "js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/templates/dyna-sel-one.html") {
+    _setupCachedUrl(dynaSelOneHtml) {
         this.tmpl = new CachedHtmlTemplate({url: JQueryWidgetsConfig.urlOf(dynaSelOneHtml)});
     }
 
     /**
-     * @param data {DynaSelOneState}
-     * @param [focusOnSearchInput] {boolean}
-     * @return {Promise<jQuery>}
+     * @param {TaggedStateChange<DynaSelOneState>} stateChange
+     * @return {Promise<TaggedStateChange>}
      */
-    update(data, focusOnSearchInput) {
-        if (typeof data === "object" && data instanceof StateChange) {
-            data = data.data;
-        }
-        const viewModel = this._viewModelOf(data);
+    update(stateChange) {
+        const viewModel = this._viewModelOf(stateChange.stateOrPart);
         return this._renderView(viewModel)
             .then(() => {
                 this._applyCss(viewModel);
-                if (focusOnSearchInput) {
-                    HtmlUtils.focus(this.$titleElem);
-                }
+                console.log(`[${this.constructor.name}.update] title = ${stateChange.stateOrPart.title}`);
+                // this.focusMe();
+                /*
+                    if (this.config.focus) {
+                        this.focusMe();
+                        this.config.focus = false;
+                    }
+                */
                 return viewModel;
             });
+    }
+
+    focusMe() {
+        HtmlUtils.focus(this.$titleElem);
     }
 
     /**
@@ -88,7 +98,7 @@ class DynamicSelectOneView extends AbstractView {
             viewModel.description = state.selectedItem.description;
             viewModel.id = state.selectedItem.id;
             viewModel.found = true;
-        } else if (state.repositoryWasSearched && state.isEnoughTextToSearch(state.title)) {
+        } else if (state.repositoryWasSearched && this.config.isEnoughTextToSearch(state.title)) {
             viewModel.searchedDetails = state.title ? `s-a căutat <i>${state.title}</i>` : "s-a căutat întreg setul de date";
             if (state.optionsLength > 1) {
                 // too many results

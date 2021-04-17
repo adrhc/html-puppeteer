@@ -188,7 +188,7 @@ class AbstractComponent {
      * @return {Promise<StateChange[]>}
      */
     doWithState(stateUpdaterFn, delayViewUpdate = false) {
-        console.log(`${this.constructor.name}.doWithState: delayViewUpdate = ${delayViewUpdate}`);
+        // console.log(`[${this.constructor.name}.doWithState] delayViewUpdate = ${delayViewUpdate}`);
         stateUpdaterFn(this.state);
         if (delayViewUpdate) {
             return Promise.resolve(this.state.stateChanges.peekAll());
@@ -210,7 +210,7 @@ class AbstractComponent {
      * @return {Promise}
      */
     updateViewOnAny(stateChange) {
-        this._safelyLogStateChange(stateChange, "updateViewOnAny");
+        // this._safelyLogStateChange(stateChange, "updateViewOnAny");
         if (!this.isAllowedToHandleWithAny(stateChange.changeType)) {
             console.log(`${this.constructor.name}.updateViewOnAny skipped!`);
             return Promise.reject(stateChange);
