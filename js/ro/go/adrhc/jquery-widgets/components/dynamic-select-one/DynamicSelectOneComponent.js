@@ -67,20 +67,20 @@ class DynamicSelectOneComponent extends AbstractComponent {
         }
         const _this = ev.data;
         const command = ev.type !== "blur" ? ev.key : "Blur";
-        _this[`_on${command}`]($(this).val());
+        return _this[`_on${command}`]($(this).val());
     }
 
     _onEscape() {
         this.dynaSelOneState.reset();
-        this.updateView(this.state, true);
+        return this.updateView(this.state, true);
     }
 
     _onEnter(text) {
-        this.dynaSelOneState.updateByTitle(text).then(state => this.updateView(state, true));
+        return this.dynaSelOneState.updateByTitle(text).then(state => this.updateView(state, true));
     }
 
     _onBlur(text) {
-        this.dynaSelOneState.updateByTitle(text, true).then(state => this.updateView(state));
+        return this.dynaSelOneState.updateByTitle(text, true).then(state => this.updateView(state));
     }
 
     /**
