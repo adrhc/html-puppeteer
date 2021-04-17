@@ -114,7 +114,7 @@ class AbstractComponent {
      * @returns {string}
      * @protected
      */
-    get _eventsNamespace() {
+    get eventsNamespace() {
         return `.${this.constructor.name}.${this.view.owner}`;
     }
 
@@ -352,7 +352,7 @@ class AbstractComponent {
     reset() {
         this.compositeBehaviour.reset(this.config.clearChildrenOnReset);
         if (this.view.$elem) {
-            this.view.$elem.off(this._eventsNamespace);
+            this.view.$elem.off();
         }
         this.view.reset();
         this.state.reset();
@@ -391,7 +391,7 @@ class AbstractComponent {
         if ($.isArray(events)) {
             return events.map(ev => this._appendNamespaceTo(ev)).join(" ");
         } else {
-            return `${events}${this._eventsNamespace}`;
+            return `${events}${this.eventsNamespace}`;
         }
     }
 

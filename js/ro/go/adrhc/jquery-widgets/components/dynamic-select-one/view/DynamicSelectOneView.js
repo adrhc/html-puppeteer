@@ -10,6 +10,10 @@ class DynamicSelectOneView extends AbstractView {
      * @type {DynaSelOneConfig}
      */
     config;
+    /**
+     * @type {DynamicSelectOneComponent}
+     */
+    component;
 
     /**
      * @param {string|jQuery<HTMLTableRowElement>} elemIdOrJQuery
@@ -50,6 +54,25 @@ class DynamicSelectOneView extends AbstractView {
 
     focusMe() {
         HtmlUtils.focus(this.$titleElem);
+    }
+
+    attachSearchKeyupHandler(handler) {
+        const event = DomUtils.appendNamespaceTo('keyup', this.eventsNamespace);
+        this.$elem.on(event, `[name='${this.titleInputName}']`, this.component, handler);
+    }
+
+    attachOptionClickHandler(handler) {
+        const event = DomUtils.appendNamespaceTo(['click', 'keyup'], this.eventsNamespace);
+        this.$elem.on(event, "option", this.component, handler);
+    }
+
+    attachOnBlurHandler(handler) {
+        const event = DomUtils.appendNamespaceTo('blur', this.eventsNamespace);
+        this.$elem.on(event, `[name='${this.config.name}']`, this.component, handler);
+    }
+
+    removeOnBlurHandlers() {
+        this.$elem.off("blur", `[name='${this.config.name}']`);
     }
 
     /**

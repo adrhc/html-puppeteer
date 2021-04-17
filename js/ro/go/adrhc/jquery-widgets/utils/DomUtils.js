@@ -25,4 +25,17 @@ class DomUtils {
     static htmlIncludingSelfOf($elem) {
         return $elem.prop('outerHTML');
     }
+
+    /**
+     * @param {string,string[]} events
+     * @param {string} namespace
+     * @return {string}
+     */
+    static appendNamespaceTo(events, namespace) {
+        if ($.isArray(events)) {
+            return events.map(ev => DomUtils.appendNamespaceTo(ev, namespace)).join(" ");
+        } else {
+            return `${events}${namespace}`;
+        }
+    }
 }

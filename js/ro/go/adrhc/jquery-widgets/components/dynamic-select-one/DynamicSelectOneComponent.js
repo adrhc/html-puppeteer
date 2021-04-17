@@ -39,6 +39,7 @@ class DynamicSelectOneComponent extends AbstractComponent {
             config: config.dontAutoInitializeOf()
         });
         this.repository = repository;
+        view.component = this;
         this.handleWithAny(true);
         return this._handleAutoInitialization(config);
     }
@@ -217,38 +218,19 @@ class DynamicSelectOneComponent extends AbstractComponent {
      * linking "outside" (and/or default) triggers to component's handlers (aka capabilities)
      */
     _configureEvents() {
-        const $comp = this.view.$elem;
-
-        $comp.on(this._appendNamespaceTo('keyup'),
-            `[name='${this.dynaSelOneView.titleInputName}']`, this, this.onKeyup);
-
-        $comp.on(this._appendNamespaceTo(['click', 'keyup']),
-            'option', this, this.onOptionClick);
-
-        // comp.on('keyup blur mouseleave', "[name='title']", this, this.onKeyup);
-        // comp.find("[name='title']").on("keyup blur mouseleave", this, this.onKeyup);
-        // this._configureOnBlur();
-
-        if (this.dynaSelOneConfig.searchOnBlur) {
-            $comp.on(this._appendNamespaceTo('blur'),
-                `[name='${this.dynaSelOneConfig.name}']`, this, this.onSearchInputBlur);
-        }
-        // comp.on('change.dyna-sel-one keyup.dyna-sel-one', "[name='options']", this, this.onOptionClick);
+        this.dynaSelOneView.attachSearchKeyupHandler(this.onKeyup);
+        this.dynaSelOneView.attachOptionClickHandler(this.onOptionClick);
+        this._configureOnBlur();
     }
 
     _configureOnBlur() {
         if (this.dynaSelOneConfig.searchOnBlur) {
-            this.view.$elem.on(this._appendNamespaceTo('blur'),
-                `[name='${this.dynaSelOneConfig.name}']`, this, this.onSearchInputBlur);
+            this.dynaSelOneView.attachOnBlurHandler(this.onSearchInputBlur);
         }
     }
 
-    _removeOnBlurHandler() {
-        this.view.$elem.off("blur", `[name='${this.dynaSelOneConfig.name}']`);
-    }
-
     updateViewOnAny(stateChange) {
-        this._removeOnBlurHandler();
+        this.dynaSelOneView.removeOnBlurHandlers();
         return super.updateViewOnAny(stateChange).then(() => this._configureOnBlur());
     }
 

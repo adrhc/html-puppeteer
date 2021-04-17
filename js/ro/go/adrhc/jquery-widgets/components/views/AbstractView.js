@@ -91,6 +91,14 @@ class AbstractView {
     }
 
     /**
+     * @returns {string}
+     * @protected
+     */
+    get eventsNamespace() {
+        return `.${this.constructor.name}.${this.owner}`;
+    }
+
+    /**
      * owner and $elem are something like a configuration so should not be reset
      *
      * owner and $elem: if any would be changed then the new value would be
