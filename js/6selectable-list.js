@@ -25,7 +25,7 @@ if (Modernizr.template) {
             });
 
         const selectableList = SelectableListFactory.create(elemIdOrJQuery, {
-            items: DbMock.DOGS, offRow, onRow
+            items: DbMocks.DOGS, offRow, onRow
         });
 
         selectableList

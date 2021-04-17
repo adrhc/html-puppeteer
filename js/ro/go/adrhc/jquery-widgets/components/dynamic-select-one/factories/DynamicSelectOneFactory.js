@@ -18,17 +18,16 @@ class DynamicSelectOneFactory {
         childProperty,
         childishBehaviour,
     } = {}) {
-        const props = DomUtils.dataOf(elemIdOrJQuery);
-        const config = _.defaults(new DynaSelOneConfig(), {
+        const config = DynaSelOneConfig.configOf(elemIdOrJQuery, {
             minCharsToSearch,
             cacheSearchResults,
             searchOnBlur,
             reloadOptionsOnInit,
             childProperty,
-        }, props);
-        const dynaSelOneView = new DynamicSelectOneView(elemIdOrJQuery, config);
-        const dynaSelOneState = new DynaSelOneState(repository, config);
-        return new DynamicSelectOneComponent(dynaSelOneView, dynaSelOneState, config, {childishBehaviour});
+        });
+        const view = new DynamicSelectOneView(elemIdOrJQuery, config);
+        const state = new DynaSelOneState(repository, config);
+        return new DynamicSelectOneComponent({view, state, config, childishBehaviour});
     }
 
     /**
@@ -37,17 +36,15 @@ class DynamicSelectOneFactory {
      * @param repository {DynaSelOneRepository}
      * @param [dynaSelOneSelector=[data-id='dyna-sel-one']] {string}
      */
-    static createChildComponentFactory(childProperty, toEntityConverter, repository,
+    static createDynaSelOneRowChildCompFactory(childProperty, toEntityConverter, repository,
                                        dynaSelOneSelector = "[data-id='dyna-sel-one']") {
         return $.extend(new ChildComponentFactory(), {
-            createChildComponent: (parentComp) => {
-                const $parentElem = parentComp.view.$elem;
-                AssertionUtils.isTrue($parentElem && $parentElem.length === 1,
-                    `${childProperty} dynaSelOne child factory`);
+            createChildComponent: (identifiableRowParentComponent) => {
+                const $parentElem = identifiableRowParentComponent.view.$elem;
                 return DynamicSelectOneFactory.create($(dynaSelOneSelector, $parentElem),
                     repository, {
                         childishBehaviour: new DynaSelOneOnRowChildishBehaviour(
-                            parentComp, childProperty, toEntityConverter)
+                            identifiableRowParentComponent, childProperty, toEntityConverter)
                     })
             }
         });

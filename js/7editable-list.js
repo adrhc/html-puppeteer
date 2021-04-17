@@ -29,7 +29,7 @@ if (Modernizr.template) {
                 elemIdOrJQuery, rowTmplId: "dogsTableDeletableRowTmpl"
             });
 
-        const repository = new InMemoryCrudRepository(DbMock.DOGS, undefined, (it) => {
+        const repository = new InMemoryCrudRepository(DbMocks.DOGS, undefined, (it) => {
             it.id = Math.abs(it.id);
             return it;
         });

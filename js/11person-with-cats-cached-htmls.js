@@ -31,7 +31,7 @@ if (Modernizr.template) {
     // main
     $(() => cachedUrls.namedUrls.then((namedUrls) => {
         // DYNAMIC-SELECT-ONE
-        DynamicSelectOneFactory.create("dyna-sel-one", DbMock.DYNA_SEL_ONE_PERS_REPOSITORY).init();
+        DynamicSelectOneFactory.create("dyna-sel-one", DbMocks.DYNA_SEL_ONE_PERS_REPOSITORY).init();
 
         // EDITABLE-LIST
         // dogs table with both read-only and editable row
@@ -44,8 +44,8 @@ if (Modernizr.template) {
         });
 
         // friend (Person) dyna select one child component
-        const friendDynaSelOneCompFactory = DynamicSelectOneFactory.createChildComponentFactory(
-            "friend", Person.parse, DbMock.DYNA_SEL_ONE_PERS_REPOSITORY);
+        const friendDynaSelOneCompFactory = DynamicSelectOneFactory.createDynaSelOneRowChildCompFactory(
+            "friend", Person.parse, DbMocks.DYNA_SEL_ONE_PERS_REPOSITORY);
 
         // EDITABLE ROW
         const editableRow = SimpleRowFactory.createIdentifiableRow(
@@ -54,7 +54,7 @@ if (Modernizr.template) {
                 rowTmplHtml: namedUrls["personsEditableRow"],
                 errorRowTmplHtml: namedUrls["personsErrorRow"],
                 childCompFactories: [friendDynaSelOneCompFactory,
-                    new CatsCreateDeleteListChildFactory(DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
+                    new CatsCreateDeleteListChildFactory(DbMocks.DYNA_SEL_ONE_PERS_REPOSITORY, {
                         bodyRowTmplHtml: namedUrls["catsEditableRow"]
                     })]
             });
@@ -68,7 +68,7 @@ if (Modernizr.template) {
         // EDITABLE LIST
         const editableList = EditableListFactory.create({
             elemIdOrJQuery,
-            repository: DbMock.PERSONS_REPOSITORY,
+            repository: DbMocks.PERSONS_REPOSITORY,
             readOnlyRow,
             editableRow,
             deletableRow,

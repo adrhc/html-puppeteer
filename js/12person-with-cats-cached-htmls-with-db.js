@@ -46,7 +46,7 @@ if (Modernizr.template) {
         });
 
         // friend (Person) dyna select one child component
-        const friendDynaSelOneCompFactory = DynamicSelectOneFactory.createChildComponentFactory(
+        const friendDynaSelOneCompFactory = DynamicSelectOneFactory.createDynaSelOneRowChildCompFactory(
             "friend", Person.parse, DYNA_SEL_ONE_PERS_REPOSITORY);
 
         // EDITABLE ROW

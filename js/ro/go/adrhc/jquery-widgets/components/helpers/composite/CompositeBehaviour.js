@@ -173,7 +173,11 @@ class CompositeBehaviour {
      * @protected
      */
     _createChildComponents() {
-        return this.childComponentFactories.map(compFactory => compFactory.createChildComponent(this.parentComp));
+        return this.childComponentFactories.map(compFactory => {
+            const kid = compFactory.createChildComponent(this.parentComp);
+            AssertionUtils.isFalse(kid instanceof Promise, "kids should never be auto-initialized!");
+            return kid;
+        });
     }
 
     /**

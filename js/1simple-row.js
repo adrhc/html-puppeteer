@@ -41,10 +41,10 @@ if (Modernizr.template) {
     $(() => {
         const simpleListComponent = new SimpleListComponent({
             elemIdOrJQuery: dogsTableWithEdit,
-            items: DbMock.DOGS,
+            items: DbMocks.DOGS,
         });
-        simpleListComponent.init().then(updateAllStateChanges => {
-            const items = updateAllStateChanges[0].stateOrPart;
+        simpleListComponent.init().then(stateChanges => {
+            const items = stateChanges[0].stateOrPart;
             const item0 = items[0];
             const item1 = items[1];
             const rowId0 = createDogsWithEditRow(item0);
@@ -114,11 +114,10 @@ if (Modernizr.template) {
         // dogs table with deleted row
         new SimpleListComponent({
             elemIdOrJQuery: dogsTableWithDelete,
-            items: DbMock.DOGS
-        }).then(updateAllStateChanges => {
-            const items = updateAllStateChanges[0].stateOrPart;
+            items: DbMocks.DOGS
+        }).then(stateChanges => {
+            const items = stateChanges[0].stateOrPart;
             const item0 = items[0];
-            const item2 = items[2];
             const rowId0 = createDogsWithDeleteRow(item0);
             // switching to "simpleRow" display type (i.e. line-through text style)
             return rowId0.remove()

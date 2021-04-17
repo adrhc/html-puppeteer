@@ -1,27 +1,49 @@
+/**
+ * @requires {DynamicSelectOneView} view
+ * @requires {DynaSelOneState} state
+ * @requires {DynaSelOneConfig} config
+ * @requires {DynaSelOneChildishBehaviour} childishBehaviour
+ */
 class DynamicSelectOneComponent extends AbstractComponent {
     /**
-     * todo: adapt DynamicSelectOneView to StateHolder
-     *
-     * @param {DynamicSelectOneView} view
-     * @param {DynaSelOneState} state
-     * @param {DynaSelOneConfig} [config]
-     * @param {DynaSelOneChildishBehaviour} childishBehaviour
+     * @param {string} elemIdOrJQuery
+     * @param {function(): IdentifiableEntity} toEntityConverter
+     * @param {DynaSelOneConfig} config
+     * @param view
+     * @param repository
+     * @param state
+     * @param compositeBehaviour
+     * @param childCompFactories
+     * @param childishBehaviour
+     * @param parentComponent
      */
-    constructor(view, state, config, {childishBehaviour} = {}) {
-        super({view, state, childishBehaviour, config});
+    constructor({
+                    elemIdOrJQuery,
+                    toEntityConverter,
+                    config = DynaSelOneConfig.configOf(elemIdOrJQuery, {toEntityConverter}),
+                    view = new DynamicSelectOneView(elemIdOrJQuery, config),
+                    repository,
+                    state = new DynaSelOneState(repository, config),
+                    compositeBehaviour,
+                    childCompFactories,
+                    childishBehaviour,
+                    parentComponent,
+                }) {
+        super({view, state, compositeBehaviour, childCompFactories, childishBehaviour, parentComponent, config});
     }
 
     _setupChildishBehaviour({
                                 childishBehaviour,
                                 parentComponent,
-                                childProperty = this.config.childProperty
+                                childProperty = this.config.childProperty,
+                                toEntityConverter = this.config.toEntityConverter
                             }) {
         if (!childishBehaviour && !parentComponent) {
             console.log(`${this.constructor.name} no childish behaviour`);
             return;
         }
-        childishBehaviour = childishBehaviour ?? new DynaSelOneOnRowChildishBehaviour(
-            parentComponent, childProperty, this.config.toEntityConverter);
+        childishBehaviour = childishBehaviour ?? new DynaSelOneChildishBehaviour(
+            parentComponent, {childProperty, toEntityConverter});
         childishBehaviour.childComp = this;
         this.childishBehaviour = childishBehaviour;
     }

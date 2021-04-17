@@ -11,7 +11,7 @@ if (Modernizr.template) {
 
     $(() => {
         const DOGS = [
-            {id: 1, name: "dog1", person: DbMock.PERSONS_REPOSITORY.getById(1, true)},
+            {id: 1, name: "dog1", person: DbMocks.PERSONS_REPOSITORY.getById(1, true)},
             {id: 2, name: "dog2"},
             {id: 3, name: "dog3"}
         ];
@@ -31,7 +31,7 @@ if (Modernizr.template) {
 
                 return DynamicSelectOneFactory.create(
                     $("[data-id='dyna-sel-one']", idRowCompParent.view.$elem),
-                    DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
+                    DbMocks.DYNA_SEL_ONE_PERS_REPOSITORY, {
                         childishBehaviour: new DynaSelOneOnRowChildishBehaviour(idRowCompParent, "person", Person.parse)
                     });
             }

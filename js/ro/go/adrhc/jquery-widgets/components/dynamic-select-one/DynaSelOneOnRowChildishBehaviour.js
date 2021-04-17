@@ -8,7 +8,6 @@ class DynaSelOneOnRowChildishBehaviour extends DynaSelOneChildishBehaviour {
         super(parentComp, {
             childProperty,
             childEntityGetter: (rowValues) => rowValues.entity[childProperty],
-            childEntitySetter: (childEntity, parentState) => parentState[childProperty] = childEntity,
             toEntityConverter
         });
     }

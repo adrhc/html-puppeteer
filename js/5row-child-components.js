@@ -2,38 +2,22 @@ $(() => {
     const JSON_RESULT = "[{\"id\":\"1\",\"name\":\"dog1\",\"person\":{\"id\":1,\"firstName\":\"gigi1\",\"lastName\":\"kent1\",\"friend\":{\"id\":2,\"firstName\":\"gigi2\",\"lastName\":\"kent2\",\"cats\":[]},\"cats\":[{\"id\":1,\"name\":\"cat1\",\"person\":{\"id\":1,\"firstName\":\"gigi1\",\"lastName\":\"kent1\",\"cats\":[]},\"friendId\":1},{\"id\":2,\"name\":\"cat2\",\"person\":{\"id\":1,\"firstName\":\"gigi1\",\"lastName\":\"kent1\",\"cats\":[]},\"friendId\":1},{\"id\":3,\"name\":\"cat3\",\"person\":{\"id\":1,\"firstName\":\"gigi1\",\"lastName\":\"kent1\",\"cats\":[]},\"friendId\":1}]}},{\"id\":\"3\",\"name\":\"updated dog3\"},{\"name\":\"new dog with append\"},{\"id\":\"2\",\"name\":\"restored dog2 with append\"}]";
 
     // DYNAMIC-SELECT-ONE
-    DynamicSelectOneFactory.create("dyna-sel-one", DbMock.DYNA_SEL_ONE_PERS_REPOSITORY);
-
-    // see interface ChildComponentFactory
-    const dynaSelOneCompFactory = {
-        /**
-         * @param idRowCompParent {IdentifiableRowComponent}
-         * @return {DynamicSelectOneComponent}
-         */
-        createChildComponent: (idRowCompParent) => {
-            const $parentElem = idRowCompParent.view.$elem;
-            AssertionUtils.isTrue($parentElem && $parentElem.length === 1, "dynaSelOneCompFactory, DynamicSelectOneFactory");
-
-            return DynamicSelectOneFactory.create(
-                $("[data-id='dyna-sel-one']", idRowCompParent.view.$elem),
-                DbMock.DYNA_SEL_ONE_PERS_REPOSITORY, {
-                    childishBehaviour: new DynaSelOneOnRowChildishBehaviour(idRowCompParent, "person", Person.parse)
-                });
-        }
-    };
-
-    const ITEMS = [
-        {id: 1, name: "dog1", person: DbMock.PERSONS_REPOSITORY.getById(1, true)},
-        {id: 2, name: "dog2"},
-        {id: 3, name: "dog3"}
-    ];
+    new DynamicSelectOneComponent({
+        elemIdOrJQuery: "dyna-sel-one",
+        repository: DbMocks.DYNA_SEL_ONE_PERS_REPOSITORY
+    });
 
     // dogs table with read-only row (default: on creation prepend to table)
     const elasticList = new ElasticListComponent({
         elemIdOrJQuery: "dogsTable",
         dontAutoInitialize: true,
-        items: ITEMS,
-        rowChildCompFactories: dynaSelOneCompFactory
+        items: [
+            {id: 1, name: "dog1", person: DbMocks.PERSONS_REPOSITORY.getById(1, true)},
+            {id: 2, name: "dog2"},
+            {id: 3, name: "dog3"}
+        ],
+        rowChildCompFactories: new DynaSelOneRowChildCompFactory(
+            "person", Person.parse, DbMocks.DYNA_SEL_ONE_PERS_REPOSITORY)
     });
 
     const rowPositionOnCreate = elasticList.tableBasedView.tableAdapter.rowPositionOnCreate;

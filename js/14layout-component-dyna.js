@@ -24,10 +24,10 @@ if (Modernizr.template) {
         const comp = JQWUtil.createComponents();
         comp.compositeBehaviour.addChildComponentFactory([(parentComp) => {
             const elemIdOrJQuery = $("#dogsTable", parentComp.view.$elem);
-            return SimpleListFactory.create({items: DbMock.DOGS, elemIdOrJQuery});
+            return SimpleListFactory.create({items: DbMocks.DOGS, elemIdOrJQuery});
         }, (parentComp) => {
             const elemIdOrJQuery = $("#dyna-sel-one", parentComp.view.$elem);
-            return DynamicSelectOneFactory.create(elemIdOrJQuery, DbMock.DYNA_SEL_ONE_PERS_REPOSITORY);
+            return DynamicSelectOneFactory.create(elemIdOrJQuery, DbMocks.DYNA_SEL_ONE_PERS_REPOSITORY);
         }]);
 
         const seconds = comp.state.currentState.seconds;
