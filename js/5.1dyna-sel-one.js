@@ -25,6 +25,6 @@ $(() => {
         .then(() => setTimeout(updateUsingSpecificItem, 1000));
     const searchByGigi = () => dyna3._onEnter("gigi")
         .then(() => setTimeout(changeToId5, 1000));
-    dyna3.init().then(() => setTimeout(searchByGigi, 1000));
+    dyna3.init().then(() => setTimeout(searchByGigi, 1500));
 
 });
