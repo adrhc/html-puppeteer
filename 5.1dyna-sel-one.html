@@ -18,12 +18,17 @@
 
 <body>
 
-<div id="dyna-sel-one1" class="dyna-sel-one-comp" data-owner="personSearch1" data-placeholder="first name"
+<div id="dyna-sel-one1" class="dyna-sel-one-comp" data-owner="personSearch1" data-placeholder="first name 1"
      data-focus="true" data-min-chars-to-search="0" data-cache-search-results="false" data-search-on-blur="true"
-     data-name="firstName1" data-value="personId1" data-description="person-description1" data-options-to-show="10"></div>
-<br>
-<div id="dyna-sel-one2" class="dyna-sel-one-comp" data-placeholder="first name"
+     data-name="firstName1" data-value="personId1" data-description="person-description1"
+     data-options-to-show="10"></div>
+<hr>
+<div id="dyna-sel-one2" class="dyna-sel-one-comp" data-placeholder="first name 2"
      data-name="firstName2" data-value="personId2" data-description="person-description2"></div>
+<hr>
+<div id="dyna-sel-one3" class="dyna-sel-one-comp" data-placeholder="first name 3"
+     data-name="firstName3" data-value="personId3" data-description="person-description3"
+     data-dont-auto-initialize="true"></div>
 
 <!-- utils -->
 <script src="js/ro/go/adrhc/jquery-widgets/utils/AjaxUtils.js"></script>
@@ -123,7 +128,7 @@
 <script src="js/model/person.js"></script>
 <script src="js/repositories/remote/DbDynaSelOneRepository.js"></script>
 <script src="js/repositories/remote/DbCrudRepository.js"></script>
-<script src="js/repositories/in-memory/in-memory-persons-repository.js"></script>
+<script src="js/repositories/in-memory/InMemoryPersonsRepository.js"></script>
 <script src="js/mock/DbMocks.js"></script>
 <!-- index -->
 <script>JQueryWidgetsConfig.ALERT_ON_FAILED_ASSERTION = true</script>

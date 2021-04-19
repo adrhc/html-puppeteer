@@ -73,7 +73,7 @@ class DynaSelOneConfig extends ComponentConfiguration {
 
     /**
      * @param {Object} overwrites
-     * @return {ComponentConfiguration}
+     * @return {DynaSelOneConfig}
      */
     overwriteWith(...overwrites) {
         return $.extend(new DynaSelOneConfig(), this, ...overwrites);
@@ -81,7 +81,7 @@ class DynaSelOneConfig extends ComponentConfiguration {
 
     /**
      * @param {boolean=} dontAutoInitialize
-     * @return {ComponentConfiguration}
+     * @return {DynaSelOneConfig}
      */
     dontAutoInitializeOf(dontAutoInitialize = true) {
         return this.overwriteWith({dontAutoInitialize});

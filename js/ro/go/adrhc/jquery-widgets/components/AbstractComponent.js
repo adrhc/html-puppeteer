@@ -42,9 +42,9 @@ class AbstractComponent {
     /**
      * @param {AbstractView} view
      * @param {StateHolder=} state
-     * @param compositeBehaviour
-     * @param childCompFactories
-     * @param {ChildishBehaviour=} childishBehaviour
+     * @param {CompositeBehaviour} compositeBehaviour
+     * @param {childCompFactoryFn|childCompFactoryFn[]|ChildComponentFactory|ChildComponentFactory[]} [childCompFactories]
+     * @param {ChildishBehaviour} [childishBehaviour]
      * @param {AbstractComponent} parentComponent
      * @param {ComponentConfiguration=} config
      */

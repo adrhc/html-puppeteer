@@ -6,23 +6,39 @@
  */
 class DynamicSelectOneComponent extends AbstractComponent {
     /**
+     * @type {DynaSelOneRepository}
+     */
+    repository;
+
+    /**
      * @param {string} elemIdOrJQuery
      * @param {function(): IdentifiableEntity} toEntityConverter
+     * @param {boolean} dontAutoInitialize
+     * @param {boolean} loadOptionsOnInit
      * @param {DynaSelOneConfig} config
-     * @param view
-     * @param repository
-     * @param state
-     * @param compositeBehaviour
-     * @param childCompFactories
-     * @param childishBehaviour
-     * @param parentComponent
+     * @param {DynamicSelectOneView} view
+     * @param {DynaSelOneState} initialState
+     * @param {DynaSelOneRepository} repository
+     * @param {DynaSelOneStateHolder} state
+     * @param {CompositeBehaviour} compositeBehaviour
+     * @param {childCompFactoryFn|childCompFactoryFn[]|ChildComponentFactory|ChildComponentFactory[]} childCompFactories
+     * @param {ChildishBehaviour} childishBehaviour
+     * @param {AbstractComponent} parentComponent
      */
     constructor({
                     elemIdOrJQuery,
                     toEntityConverter,
-                    config = DynaSelOneConfig.configOf(elemIdOrJQuery, {toEntityConverter}),
+                    dontAutoInitialize,
+                    loadOptionsOnInit,
+                    config = DynaSelOneConfig
+                        .configOf(elemIdOrJQuery, {toEntityConverter})
+                        .overwriteWith({
+                            dontAutoInitialize,
+                            loadOptionsOnInit
+                        }),
                     view = new DynamicSelectOneView(elemIdOrJQuery, config),
-                    state = new DynaSelOneStateHolder(config),
+                    initialState,
+                    state = new DynaSelOneStateHolder(config, {initialState}),
                     compositeBehaviour,
                     childCompFactories,
                     childishBehaviour,
@@ -45,7 +61,7 @@ class DynamicSelectOneComponent extends AbstractComponent {
     }
 
     init() {
-        super.init().then(() => {
+        return super.init().then(() => {
             if (this.dynaSelOneConfig.focus) {
                 this.dynaSelOneView.focusMe();
             }

@@ -52,8 +52,8 @@ class InMemoryCrudRepository extends CrudRepository {
     }
 
     /**
-     * @param id {number|string}
-     * @param [dontUsePromise] {boolean}
+     * @param {number|string} id
+     * @param {boolean} [dontUsePromise]
      * @return {Promise<IdentifiableEntity>|IdentifiableEntity}
      */
     getById(id, dontUsePromise) {

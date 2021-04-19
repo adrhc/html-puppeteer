@@ -12,7 +12,7 @@ class DynaSelOneStateHolder extends TaggingStateHolder {
      * @param {StateChangesCollector} [changesCollector]
      */
     constructor(config, {
-        initialState = new DynaSelOneState(),
+        initialState = DynaSelOneStateHolder.NOT_YET_SEARCHED,
         stateChangeMapper,
         changesCollector
     } = {
