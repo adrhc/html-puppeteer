@@ -41,13 +41,6 @@ class DynamicSelectOneView extends AbstractView {
             .then(() => {
                 this._applyCss(viewModel);
                 console.log(`[${this.constructor.name}.update] title = ${stateChange.stateOrPart.title}`);
-                // this.focusMe();
-                /*
-                    if (this.config.focus) {
-                        this.focusMe();
-                        this.config.focus = false;
-                    }
-                */
                 return viewModel;
             });
     }
@@ -58,7 +51,7 @@ class DynamicSelectOneView extends AbstractView {
 
     attachSearchKeyupHandler(handler) {
         const event = DomUtils.appendNamespaceTo('keyup', this.eventsNamespace);
-        this.$elem.on(event, `[name='${this.titleInputName}']`, this.component, handler);
+        this.$elem.on(event, `[name='${this.config.name}']`, this.component, handler);
     }
 
     attachOptionClickHandler(handler) {
@@ -82,7 +75,7 @@ class DynamicSelectOneView extends AbstractView {
     _renderView(viewModel) {
         return this.tmpl.cached
             .then(html => Mustache.render(html, viewModel))
-            .then(html => this.$elem.html(html.trim()));
+            .then(html => this.$elem.html(html));
     }
 
     /**
@@ -108,13 +101,13 @@ class DynamicSelectOneView extends AbstractView {
     _viewModelOf(state) {
         const viewModel = {
             owner: this.owner,
-            titleInputName: this.titleInputName,
+            titleInputName: this.config.name,
             valueInputName: this.valueInputName,
             descriptionInputName: this.descriptionInputName,
             title: state.title,
-            placeholder: this.placeholder,
+            placeholder: this.config.placeholder,
             // 2: used to have the multiple select which know to handle click event on options
-            optionsToShow: Math.min(Math.max(state.optionsLength, 2), this.optionsToShow)
+            optionsToShow: Math.min(Math.max(state.optionsLength, 2), this.config.optionsToShow)
         };
         if (state.selectedItem) {
             // search success: selected/found exactly 1 item
@@ -132,7 +125,7 @@ class DynamicSelectOneView extends AbstractView {
             }
         } else {
             // search with too less characters
-            viewModel.minCharsToSearch = state.minCharsToSearch;
+            viewModel.minCharsToSearch = this.config.minCharsToSearch;
         }
         if (state.optionsLength > 1 || state.optionsLength === 1 && !state.selectedItem) {
             // rendering options
@@ -192,29 +185,16 @@ class DynamicSelectOneView extends AbstractView {
      * @return {jQuery<HTMLInputElement>}
      */
     get $titleElem() {
-        return this.$elem.find(`[name='${this.titleInputName}']`);
-    }
-
-    get titleInputName() {
-        return this.$elem.data("name");
-    }
-
-    get placeholder() {
-        return this.$elem.data("placeholder");
-    }
-
-    get optionsToShow() {
-        const optionsToShow = this.$elem.data("options-to-show");
-        return optionsToShow ? +optionsToShow : 5;
+        return this.$elem.find(`[name='${this.config.name}']`);
     }
 
     get valueInputName() {
-        const inputName = this.$elem.data("value");
-        return inputName ? inputName : `${this.titleInputName}-value`;
+        const inputName = this.config.value;
+        return inputName ? inputName : `${this.config.name}-value`;
     }
 
     get descriptionInputName() {
-        const inputName = this.$elem.data("description");
-        return inputName ? inputName : `${this.titleInputName}-description`;
+        const inputName = this.config.description;
+        return inputName ? inputName : `${this.config.name}-description`;
     }
 }

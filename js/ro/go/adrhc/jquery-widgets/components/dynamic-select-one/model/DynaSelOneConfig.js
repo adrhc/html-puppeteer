@@ -50,7 +50,7 @@ class DynaSelOneConfig extends ComponentConfiguration {
     /**
      * @type {number}
      */
-    optionsToShow;
+    optionsToShow = 5;
     /**
      * @type {string}
      */

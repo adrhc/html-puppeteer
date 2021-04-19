@@ -37,17 +37,18 @@ class StateHolder {
         if (partName) {
             return this.replacePart(stateOrPart, partName, dontRecordStateEvents);
         } else {
-            return this.replaceEntirely(stateOrPart, dontRecordStateEvents);
+            return this.replaceEntirely(stateOrPart, {dontRecordStateEvents});
         }
     }
 
     /**
      * @param {T} [state] is the new state value to store
      * @param {boolean} [dontRecordStateEvents]
+     * @param {boolean} [forceUpdate]
      * @return {StateChange<T>|undefined}
      */
-    replaceEntirely(state, dontRecordStateEvents) {
-        if (this._currentStateEquals(state)) {
+    replaceEntirely(state, {dontRecordStateEvents, forceUpdate} = {}) {
+        if (!forceUpdate && this._currentStateEquals(state)) {
             return undefined;
         }
 

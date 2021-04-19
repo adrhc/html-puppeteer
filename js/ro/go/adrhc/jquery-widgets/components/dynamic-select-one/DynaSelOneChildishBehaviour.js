@@ -27,6 +27,6 @@ class DynaSelOneChildishBehaviour extends DefaultChildishBehaviour {
         this._childComp = childComp;
         const parentState = this.parentComp.state.currentState;
         const dynaSelOneItem = this.getChildEntityFrom(parentState);
-        childComp.dynaSelOneState.updateUsingDynaSelOneItem(dynaSelOneItem, true);
+        childComp.dynaSelOneState.updateUsingDynaSelOneItem(dynaSelOneItem);
     }
 }

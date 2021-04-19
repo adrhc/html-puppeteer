@@ -44,20 +44,12 @@ class DynamicSelectOneComponent extends AbstractComponent {
         return this._handleAutoInitialization(config);
     }
 
-    _setupChildishBehaviour({
-                                childishBehaviour,
-                                parentComponent,
-                                childProperty = this.config.childProperty,
-                                toEntityConverter = this.dynaSelOneConfig.toEntityConverter
-                            }) {
-        if (!childishBehaviour && !parentComponent) {
-            console.log(`[${this.constructor.name}._setupChildishBehaviour] no childish behaviour`);
-            return;
-        }
-        childishBehaviour = childishBehaviour ?? new DynaSelOneChildishBehaviour(
-            parentComponent, {childProperty, toEntityConverter});
-        childishBehaviour.childComp = this;
-        this.childishBehaviour = childishBehaviour;
+    init() {
+        super.init().then(() => {
+            if (this.dynaSelOneConfig.focus) {
+                this.dynaSelOneView.focusMe();
+            }
+        })
     }
 
     onOptionClick(ev) {
@@ -88,18 +80,12 @@ class DynamicSelectOneComponent extends AbstractComponent {
     _onEscape() {
         console.log(`[${this.constructor.name}._onEscape]`);
         $(this).val("");
-        return this._updateByTitle().then(() => {
-            this.dynaSelOneView.focusMe()
-        });
+        return this._updateByTitle().then(() => this.dynaSelOneView.focusMe());
     }
 
     _onEnter(text) {
         console.log(`[${this.constructor.name}._onEnter] text = ${text}`);
-        return this._updateByTitle(text).then(() => {
-            if (!this.dynaSelOneState.currentState.selectedItem) {
-                this.dynaSelOneView.focusMe()
-            }
-        });
+        return this._updateByTitle(text).then(() => this.dynaSelOneView.focusMe());
     }
 
     _onBlur(text) {
@@ -107,10 +93,10 @@ class DynamicSelectOneComponent extends AbstractComponent {
         return this._updateByTitle(text, true);
     }
 
-    onSearchInputBlur(ev) {
+    _searchWhenLostFocus(ev) {
         const _this = ev.data;
         const text = $(this).val();
-        console.log(`[${this.constructor.name}.onSearchInputBlur] text = ${text}`);
+        console.log(`[${this.constructor.name}._searchWhenLostFocus] text = ${text}`);
         return _this._updateByTitle(text, true);
     }
 
@@ -144,15 +130,20 @@ class DynamicSelectOneComponent extends AbstractComponent {
 
     _reloadState() {
         const title = this.dynaSelOneState.currentState.title;
-        if (!this.dynaSelOneConfig.loadOptionsOnInit || !this.dynaSelOneConfig.isEnoughTextToSearch(title)) {
-            return super._reloadState();
+        if (!this.dynaSelOneConfig.loadOptionsOnInit) {
+            if (this.dynaSelOneState.isPristine()) {
+                return this.doWithState(() => this.dynaSelOneState.replaceEntirely(
+                    this.dynaSelOneState.currentState, {forceUpdate: true}));
+            } else {
+                return super._reloadState();
+            }
         }
         return this.repository.findByTitle(title).then(options => {
             const selectedItem = this._findOptionByExactTitle(title, options);
             if (selectedItem) {
-                return this.dynaSelOneState.updateUsingDynaSelOneItem(selectedItem);
+                return this.doWithState(() => this.dynaSelOneState.updateUsingDynaSelOneItem(selectedItem));
             }
-            return this.dynaSelOneState.replaceEntirely(new DynaSelOneState(title, options));
+            return this.doWithState(() => this.dynaSelOneState.replaceEntirely(new DynaSelOneState(title, options)));
         });
     }
 
@@ -225,13 +216,29 @@ class DynamicSelectOneComponent extends AbstractComponent {
 
     _configureOnBlur() {
         if (this.dynaSelOneConfig.searchOnBlur) {
-            this.dynaSelOneView.attachOnBlurHandler(this.onSearchInputBlur);
+            this.dynaSelOneView.attachOnBlurHandler(this._searchWhenLostFocus);
         }
     }
 
     updateViewOnAny(stateChange) {
         this.dynaSelOneView.removeOnBlurHandlers();
         return super.updateViewOnAny(stateChange).then(() => this._configureOnBlur());
+    }
+
+    _setupChildishBehaviour({
+                                childishBehaviour,
+                                parentComponent,
+                                childProperty = this.config.childProperty,
+                                toEntityConverter = this.dynaSelOneConfig.toEntityConverter
+                            }) {
+        if (!childishBehaviour && !parentComponent) {
+            console.log(`[${this.constructor.name}._setupChildishBehaviour] no childish behaviour`);
+            return;
+        }
+        childishBehaviour = childishBehaviour ?? new DynaSelOneChildishBehaviour(
+            parentComponent, {childProperty, toEntityConverter});
+        childishBehaviour.childComp = this;
+        this.childishBehaviour = childishBehaviour;
     }
 
     /**

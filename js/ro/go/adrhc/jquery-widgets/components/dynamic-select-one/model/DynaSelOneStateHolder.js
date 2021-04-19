@@ -23,18 +23,25 @@ class DynaSelOneStateHolder extends TaggingStateHolder {
     }
 
     /**
+     * @return {boolean}
+     */
+    isPristine() {
+        return this.currentState === DynaSelOneStateHolder.NOT_YET_SEARCHED;
+    }
+
+    /**
      * Used to initialize the state when DynamicSelectOneComponent acts as a child.
      *
-     * @param {DynaSelOneItem} selectedItem
+     * @param {DynaSelOneItem} [selectedItem]
      * @param {boolean} [dontRecordStateEvents]
      * @return {StateChange<T>|undefined}
      */
     updateUsingDynaSelOneItem(selectedItem, dontRecordStateEvents) {
         if (selectedItem) {
             return this.replaceEntirely(new DynaSelOneState(selectedItem.title,
-                [selectedItem], selectedItem), dontRecordStateEvents);
+                [selectedItem], selectedItem), {dontRecordStateEvents});
         } else {
-            return this.replaceEntirely(DynaSelOneStateHolder.NOT_YET_SEARCHED, dontRecordStateEvents);
+            return this.replaceEntirely(DynaSelOneStateHolder.NOT_YET_SEARCHED, {dontRecordStateEvents});
         }
     }
 
@@ -76,6 +83,6 @@ class DynaSelOneStateHolder extends TaggingStateHolder {
 
     reset() {
         super.reset();
-        this.currentState = new DynaSelOneState();
+        this.currentState = DynaSelOneStateHolder.NOT_YET_SEARCHED;
     }
 }
