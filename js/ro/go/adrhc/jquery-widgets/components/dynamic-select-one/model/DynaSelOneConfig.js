@@ -14,7 +14,7 @@ class DynaSelOneConfig extends ComponentConfiguration {
     /**
      * @type {boolean}
      */
-    searchOnBlur;
+    searchOnBlur = true;
     /**
      * whether to focus the search input on init
      *

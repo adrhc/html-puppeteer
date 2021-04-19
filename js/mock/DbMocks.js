@@ -10,12 +10,16 @@ class DbMocks {
                 {id: 23, name: "cat23", person: new Person(2, "gigi2", "kent2")}]),
         new Person(4, "gigi4", "kent4", undefined,
             [{id: 41, name: "cat41"},
-                {id: 22, name: "cat42", person: new Person(4, "gigi4", "kent4")},
+                {id: 42, name: "cat42", person: new Person(4, "gigi4", "kent4")},
                 {id: 43, name: "cat43"}]),
         new Person(3, "gigi3", "kent3", new Person(4, "gigi4", "kent4"),
             [{id: 31, name: "cat31"},
                 {id: 32, name: "cat32"},
-                {id: 33, name: "cat33"}])
+                {id: 33, name: "cat33"}]),
+            new Person(5, "gigi5", "kent5", undefined,
+                [{id: 51, name: "cat51"},
+                    {id: 52, name: "cat52", person: new Person(3, "gigi3", "kent3")},
+                    {id: 53, name: "cat53"}]),
     ], Person.parse, DbMocks.parsePersonBeforeUpsert);
 
     static DOGS = [{id: 1, name: "dog1"}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
