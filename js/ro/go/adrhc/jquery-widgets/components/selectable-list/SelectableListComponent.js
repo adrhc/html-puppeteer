@@ -5,6 +5,8 @@
  * item but only if already exists (in table) otherwise nothing will be rendered for it.
  */
 class SelectableListComponent extends SimpleListComponent {
+    static OFF_ROW_TYPE = "off";
+    static ON_ROW_TYPE = "on";
     /**
      * @type {SelectableListState}
      */
@@ -39,8 +41,8 @@ class SelectableListComponent extends SimpleListComponent {
      * @param {MustacheTableElemAdapter=} mustacheTableElemAdapter
      * @param {function(): IdentifiableEntity} newEntityFactoryFn
      * @param {SimpleListState=} state
-     * @param offRow
-     * @param onRow
+     * @param {IdentifiableRowComponent} offRow
+     * @param {IdentifiableRowComponent} onRow
      * @param {SimpleListView=} view
      * @param compositeBehaviour
      * @param childCompFactories
@@ -73,12 +75,8 @@ class SelectableListComponent extends SimpleListComponent {
                         newEntityFactoryFn,
                         newItemsGoLast: mustacheTableElemAdapter.rowPositionOnCreate === "append"
                     }),
-                    offRow = new IdentifiableRowComponent({
-                        elemIdOrJQuery,
-                        config: RowConfiguration.configOf(mustacheTableElemAdapter.$bodyRowTmpl, config),
-                        bodyRowTmplHtml: mustacheTableElemAdapter.bodyRowTmplHtml
-                    }),
-                    onRow,
+                    offRow = SelectableListComponent.$offRowTmpl(elemIdOrJQuery, mustacheTableElemAdapter, config),
+                    onRow = SelectableListComponent.$onRowTmpl(elemIdOrJQuery, mustacheTableElemAdapter, config),
                     view = new SimpleListView(mustacheTableElemAdapter),
                     compositeBehaviour,
                     childCompFactories,
@@ -109,6 +107,28 @@ class SelectableListComponent extends SimpleListComponent {
         };
         this.offRow = offRow;
         return this._handleAutoInitialization();
+    }
+
+    static $offRowTmpl(elemIdOrJQuery, mustacheTableElemAdapter, config) {
+        return SelectableListComponent._$rowTmplOf(elemIdOrJQuery, mustacheTableElemAdapter, config, SelectableListComponent.OFF_ROW_TYPE);
+    }
+
+    static $onRowTmpl(elemIdOrJQuery, mustacheTableElemAdapter, config) {
+        return SelectableListComponent._$rowTmplOf(elemIdOrJQuery, mustacheTableElemAdapter, config, SelectableListComponent.ON_ROW_TYPE);
+    }
+
+    static _$rowTmplOf(elemIdOrJQuery, mustacheTableElemAdapter, config, type) {
+        let $rowTmplElem = mustacheTableElemAdapter.$rowByDataType(type);
+        const index = type === SelectableListComponent.OFF_ROW_TYPE ? 1 : 2;
+        $rowTmplElem = $rowTmplElem ?? mustacheTableElemAdapter.$rowByIndex(index);
+        if (!$rowTmplElem) {
+            return undefined;
+        }
+        return new IdentifiableRowComponent({
+            elemIdOrJQuery,
+            config: RowConfiguration.configOf($rowTmplElem, config),
+            bodyRowTmplHtml: DomUtils.htmlIncludingSelfOf($rowTmplElem)
+        });
     }
 
     /**

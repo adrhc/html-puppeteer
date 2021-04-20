@@ -201,7 +201,7 @@ class TableElementAdapter {
     get columnsCount() {
         let columnsCount = 0;
         const firstRow = this.$firstRow;
-        if (!firstRow.length) {
+        if (!firstRow) {
             const tableColumnsCount = this.$table.data("columns-count");
             return tableColumnsCount ? +tableColumnsCount : 1; // default to 1 column
         }
@@ -252,7 +252,17 @@ class TableElementAdapter {
      * @returns {jQuery<HTMLTableRowElement>}
      */
     get $firstRow() {
-        return this.$tbody.children("tr:nth-child(1)");
+        return this.$rowByIndex(1);
+    }
+
+    $rowByIndex(index) {
+        const $row = this.$tbody.children(`tr:nth-child(${index})`);
+        return $row.length ? $row : undefined;
+    }
+
+    $rowByDataType(rowType) {
+        const $row = this.$tbody.children(`tr[data-type=${rowType}]`);
+        return $row.length ? $row : undefined;
     }
 
     /**

@@ -23,6 +23,9 @@ class DomUtils {
     }
 
     static htmlIncludingSelfOf($elem) {
+        if (!$elem || !$elem.length) {
+            return undefined;
+        }
         return $elem.prop('outerHTML');
     }
 

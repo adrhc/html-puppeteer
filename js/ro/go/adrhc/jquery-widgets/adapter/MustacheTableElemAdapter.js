@@ -53,6 +53,10 @@ class MustacheTableElemAdapter extends TableElementAdapter {
         return super.$firstRow;
     }
 
+    $htmlOfRowDataType(rowType) {
+        return DomUtils.htmlIncludingSelfOf(this.$rowByDataType(rowType));
+    }
+
     /**
      * This is the table body.
      *

@@ -9,7 +9,10 @@ $(() => {
     const selectableList = new SelectableListComponent({
         elemIdOrJQuery,
         items: DbMocks.DOGS,
-        onRow: new IdentifiableRowComponent({elemIdOrJQuery, bodyRowTmplId: "dogsTableEditableRowTmpl"}),
+        onRow: new IdentifiableRowComponent({
+            elemIdOrJQuery,
+            bodyRowTmplId: "dogsTableEditableRowTmpl"
+        }),
         dontAutoInitialize: true
     });
 
