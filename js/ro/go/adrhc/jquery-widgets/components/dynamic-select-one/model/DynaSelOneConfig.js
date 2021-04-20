@@ -57,15 +57,12 @@ class DynaSelOneConfig extends ComponentConfiguration {
     tmplUrl = "js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/templates/dyna-sel-one.html";
 
     /**
-     *
      * @param {string|jQuery<HTMLElement>|function(): jQuery<HTMLElement>} elemIdOrJQuery
-     * @param {Object=} defaults are applied from left to right (last applied wins)
+     * @param {Object=} defaults are applied from left to right (first applied wins)
      * @return {DynaSelOneConfig}
      */
     static configOf(elemIdOrJQuery, ...defaults) {
-        // return fp.defaults(new ComponentConfiguration(), ...sources, DomUtils.dataOf(elemIdOrJQuery));
-        // return Object.assign(new ComponentConfiguration(), fp.defaultsAll([{}, ...sources, DomUtils.dataOf(elemIdOrJQuery)]));
-        const config = $.extend(new DynaSelOneConfig(), {elemIdOrJQuery}, ...defaults, DomUtils.dataOf(elemIdOrJQuery));
+        const config = ComponentConfiguration._configOf(new DynaSelOneConfig(), elemIdOrJQuery, ...defaults);
         config.searchOnBlur = config.searchOnBlur ?? config.minCharsToSearch > 0;
         config.loadOptionsOnInit = config.loadOptionsOnInit ?? config.minCharsToSearch === 0;
         return config;
