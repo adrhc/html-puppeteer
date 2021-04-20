@@ -19,7 +19,8 @@
 
 <body>
 <div class="dogsTable">
-    <table id="dogsTable" class="responstable" data-row-position-on-create="append">
+    <table id="dogsTable" class="responstable" data-row-position-on-create="append" data-jqw-type="SelectableList"
+           data-items='[{"id": 1, "name": "dog1"}, {"id": 2, "name": "dog2"}, {"id": 3, "name": "dog3"}]'>
         <thead>
         <tr data-owner="dogsTable">
             <th colspan="2">
@@ -57,6 +58,7 @@
 <script src="js/ro/go/adrhc/jquery-widgets/utils/FormUtils.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/utils/HtmlUtils.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/utils/RestUtils.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/utils/JQWUtil.js"></script>
 <!-- helpers -->
 <script src="js/ro/go/adrhc/jquery-widgets/helper/cached-html-template.js"></script>
 <!-- adapters -->

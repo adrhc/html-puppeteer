@@ -71,8 +71,6 @@ class ComponentConfiguration {
     }
 
     static _configOf(instance, elemIdOrJQuery, ...defaults) {
-        // return fp.defaults(new ComponentConfiguration(), ...sources, DomUtils.dataOf(elemIdOrJQuery));
-        // return Object.assign(new ComponentConfiguration(), fp.defaultsAll([{}, ...sources, DomUtils.dataOf(elemIdOrJQuery)]));
         return _.defaults(instance, DomUtils.dataOf(elemIdOrJQuery), {elemIdOrJQuery}, ...defaults);
     }
 
@@ -85,7 +83,7 @@ class ComponentConfiguration {
      * @return {ComponentConfiguration}
      */
     overwriteWith(...overwrites) {
-        return _.defaults(new ComponentConfiguration(), ...overwrites, this);
+        return _.defaults(this._new(), ...overwrites, this);
     }
 
     /**
@@ -94,5 +92,10 @@ class ComponentConfiguration {
      */
     dontAutoInitializeOf(dontAutoInitialize = true) {
         return this.overwriteWith({dontAutoInitialize});
+    }
+
+    _new() {
+        const configClass = eval(this.constructor.name);
+        return new configClass();
     }
 }

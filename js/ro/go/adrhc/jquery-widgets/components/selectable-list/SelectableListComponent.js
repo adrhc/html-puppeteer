@@ -93,6 +93,7 @@ class SelectableListComponent extends SimpleListComponent {
             parentComponent,
             config: config.dontAutoInitializeOf()
         });
+        this.config = config;
         this.configurePartChangeHandlers({
             handleItemChange: ["CREATE", "REPLACE", "DELETE"],
             handleItemOff: ["OFF"],
