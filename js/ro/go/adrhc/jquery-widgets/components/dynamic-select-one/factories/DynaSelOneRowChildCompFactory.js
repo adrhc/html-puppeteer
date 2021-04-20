@@ -17,6 +17,7 @@ class DynaSelOneRowChildCompFactory extends ChildComponentFactory {
         const $parentElem = identifiableRowParentComponent.view.$elem;
         return new DynamicSelectOneComponent({
             elemIdOrJQuery: $(this.dynaSelOneSelector, $parentElem),
+            dontAutoInitialize: true,
             repository: this.repository,
             childishBehaviour: new DynaSelOneOnRowChildishBehaviour(
                 identifiableRowParentComponent, this.childProperty, this.toEntityConverter)

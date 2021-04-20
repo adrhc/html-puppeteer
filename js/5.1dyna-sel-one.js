@@ -14,6 +14,7 @@ $(() => {
     const dyna3 = new DynamicSelectOneComponent({
         elemIdOrJQuery: "dyna-sel-one3",
         repository: DbMocks.DYNA_SEL_ONE_PERS_REPOSITORY,
+        dontAutoInitialize: true,
         loadOptionsOnInit: true,
         initialState: new DynaSelOneState("gigi3", undefined, undefined, false)
     });

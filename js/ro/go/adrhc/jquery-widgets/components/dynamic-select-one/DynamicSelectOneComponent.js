@@ -30,8 +30,13 @@ class DynamicSelectOneComponent extends AbstractComponent {
                     toEntityConverter,
                     dontAutoInitialize,
                     loadOptionsOnInit,
+                    childishBehaviour,
+                    parentComponent,
                     config = DynaSelOneConfig
-                        .configOf(elemIdOrJQuery, {toEntityConverter})
+                        .configOf(elemIdOrJQuery, {
+                            toEntityConverter,
+                            dontAutoInitialize: childishBehaviour != null || parentComponent != null
+                        })
                         .overwriteWith({
                             dontAutoInitialize,
                             loadOptionsOnInit
@@ -41,8 +46,6 @@ class DynamicSelectOneComponent extends AbstractComponent {
                     state = new DynaSelOneStateHolder(config, {initialState}),
                     compositeBehaviour,
                     childCompFactories,
-                    childishBehaviour,
-                    parentComponent,
                     repository,
                 }) {
         super({
