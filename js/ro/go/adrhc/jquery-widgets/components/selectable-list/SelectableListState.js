@@ -48,7 +48,7 @@ class SelectableListState extends CrudListState {
         const previousEntityRowSwap = this.swappingState.currentState;
         const newEntityRowSwap = this._newEntityRowSwap(context, item, this.indexOf({item}));
         const switched = !!this.swappingState.switchTo(newEntityRowSwap);
-        if (!switched) {
+        if (switched) {
             AssertionUtils.isNotNull(newEntityRowSwap);
             if (previousEntityRowSwap != null) {
                 this._processSwitchedOff(previousEntityRowSwap);
