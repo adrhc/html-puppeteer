@@ -24,7 +24,7 @@ class TableElementAdapter {
      */
     rowDataId;
     /**
-     * @type {string}
+     * @type {"prepend"|"append"}
      */
     rowPositionOnCreate;
 

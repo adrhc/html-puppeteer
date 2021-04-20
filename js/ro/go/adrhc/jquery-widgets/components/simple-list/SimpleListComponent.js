@@ -15,22 +15,22 @@ class SimpleListComponent extends AbstractTableBasedComponent {
 
     /**
      * @param {string|jQuery<HTMLTableElement>} elemIdOrJQuery
-     * @param {string} rowPositionOnCreate
-     * @param bodyTmplHtml
-     * @param rowDataId
-     * @param dontAutoInitialize
-     * @param {IdentifiableEntity[]=} items
      * @param {string=} bodyRowTmplId could be empty when not using a row template (but only the table)
      * @param {string=} bodyRowTmplHtml
-     * @param {MustacheTableElemAdapter=} mustacheTableElemAdapter
-     * @param {CrudRepository=} repository
-     * @param {SimpleListView=} view
-     * @param {SimpleListState=} state
+     * @param bodyTmplHtml
+     * @param rowDataId
+     * @param {string} rowPositionOnCreate
      * @param {string=} childProperty
-     * @param {ChildishBehaviour=} childishBehaviour permit CreateDeleteListComponent to update its parent
+     * @param dontAutoInitialize
      * @param {ComponentConfiguration=} config
+     * @param {IdentifiableEntity[]=} items
+     * @param {CrudRepository=} repository
+     * @param {MustacheTableElemAdapter=} mustacheTableElemAdapter
+     * @param {SimpleListState=} state
+     * @param {SimpleListView=} view
      * @param compositeBehaviour
      * @param childCompFactories
+     * @param {ChildishBehaviour=} childishBehaviour permit CreateDeleteListComponent to update its parent
      * @param parentComponent
      */
     constructor({

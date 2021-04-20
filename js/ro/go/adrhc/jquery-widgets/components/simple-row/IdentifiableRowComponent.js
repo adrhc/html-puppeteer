@@ -7,7 +7,7 @@ class IdentifiableRowComponent extends SimpleRowComponent {
      * @param bodyRowTmplHtml
      * @param bodyTmplHtml
      * @param rowDataId
-     * @param rowPositionOnCreate
+     * @param {"prepend"|"append"} rowPositionOnCreate
      * @param errorRowTmplId
      * @param errorRowTmplHtml
      * @param childProperty
