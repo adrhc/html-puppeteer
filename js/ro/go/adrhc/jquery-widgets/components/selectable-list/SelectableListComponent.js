@@ -117,17 +117,18 @@ class SelectableListComponent extends SimpleListComponent {
         return SelectableListComponent._$rowTmplOf(elemIdOrJQuery, mustacheTableElemAdapter, config, SelectableListComponent.ON_ROW_TYPE);
     }
 
-    static _$rowTmplOf(elemIdOrJQuery, mustacheTableElemAdapter, config, type) {
+    static _$rowTmplOf(elemIdOrJQuery, mustacheTableElemAdapter, tableConfig, type) {
         let $rowTmplElem = mustacheTableElemAdapter.$rowByDataType(type);
         const index = type === SelectableListComponent.OFF_ROW_TYPE ? 1 : 2;
         $rowTmplElem = $rowTmplElem ?? mustacheTableElemAdapter.$rowByIndex(index);
         if (!$rowTmplElem) {
             return undefined;
         }
+        const bodyRowTmplHtml = DomUtils.htmlIncludingSelfOf($rowTmplElem);
+        const config = RowConfiguration.configOf($rowTmplElem, tableConfig.overwriteWith({bodyRowTmplHtml}));
         return new IdentifiableRowComponent({
             elemIdOrJQuery,
-            config: RowConfiguration.configOf($rowTmplElem, config),
-            bodyRowTmplHtml: DomUtils.htmlIncludingSelfOf($rowTmplElem)
+            config
         });
     }
 

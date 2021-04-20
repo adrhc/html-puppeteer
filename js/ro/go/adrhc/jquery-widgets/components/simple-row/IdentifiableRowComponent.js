@@ -30,7 +30,7 @@ class IdentifiableRowComponent extends SimpleRowComponent {
                     childProperty,
                     clearChildrenOnReset,
                     config = RowConfiguration.configWithOverrides(
-                        elemIdOrJQuery, DomUtils.dataOf(bodyRowTmplId ? bodyRowTmplId : bodyRowTmplHtml ? $(bodyRowTmplHtml) : undefined), {
+                        elemIdOrJQuery, {
                             bodyRowTmplId,
                             bodyRowTmplHtml,
                             bodyTmplHtml,
@@ -38,7 +38,7 @@ class IdentifiableRowComponent extends SimpleRowComponent {
                             rowPositionOnCreate,
                             childProperty,
                             clearChildrenOnReset,
-                        }),
+                        }, DomUtils.dataOf(bodyRowTmplId ? $(`#${bodyRowTmplId}`) : bodyRowTmplHtml ? $(bodyRowTmplHtml) : undefined)),
                     mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, config),
                     view = new SimpleRowView(mustacheTableElemAdapter),
                     initialState,

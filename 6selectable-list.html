@@ -18,7 +18,6 @@
 </head>
 
 <body>
-<!-- dogs table -->
 <div class="dogsTable">
     <table id="dogsTable" class="responstable" data-row-position-on-create="append">
         <thead>
@@ -28,7 +27,7 @@
             </th>
         </tr>
         </thead>
-        <tr data-owner="dogsTable" data-id="{{id}}">
+        <tr data-owner="dogsTable" data-id="{{id}}" data-row-type="off">
             <td>
                 <input type="hidden" name="id" value="{{id}}">
                 {{id}}
@@ -38,25 +37,14 @@
                 {{name}}
             </td>
         </tr>
+        <tr data-owner="dogsTable" data-id="{{id}}" data-row-type="on" class="row-editor">
+            <td colspan="2">
+                <input type="hidden" name="id" value="{{id}}">
+                <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
+            </td>
+        </tr>
     </table>
 </div>
-
-<!-- dogs editable row template -->
-<template id="dogsTableEditableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}" class="row-editor">
-        <td colspan="2">
-            <input type="hidden" name="id" value="{{id}}">
-            <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
-        </td>
-    </tr>
-    <!--
-        "data-id" is used by the "switch" feature
-        "data-secondary-row-part" is used to remove this row when the (edited) entity row is closing
-    -->
-    <tr data-owner="dogsTable" data-id="{{id}}" data-secondary-row-part="{{id}}" class="row-part">
-        <td colspan="2">secondary-row-part {{id}}</td>
-    </tr>
-</template>
 
 <!-- utils -->
 <script src="js/ro/go/adrhc/jquery-widgets/utils/AjaxUtils.js"></script>

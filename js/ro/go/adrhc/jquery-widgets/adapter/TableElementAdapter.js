@@ -261,7 +261,7 @@ class TableElementAdapter {
     }
 
     $rowByDataType(rowType) {
-        const $row = this.$tbody.children(`tr[data-type=${rowType}]`);
+        const $row = this.$tbody.children(`tr[data-row-type=${rowType}]`);
         return $row.length ? $row : undefined;
     }
 

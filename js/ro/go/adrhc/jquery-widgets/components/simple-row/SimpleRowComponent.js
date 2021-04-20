@@ -39,7 +39,7 @@ class SimpleRowComponent extends AbstractComponent {
                         .configOf(elemIdOrJQuery, {
                             clearChildrenOnReset: true
                         })
-                        .overwriteWith(DomUtils.dataOf(bodyRowTmplId ? bodyRowTmplId : bodyRowTmplHtml ? $(bodyRowTmplHtml) : undefined), {
+                        .overwriteWith({
                             bodyRowTmplId,
                             bodyRowTmplHtml,
                             bodyTmplHtml,
@@ -47,7 +47,7 @@ class SimpleRowComponent extends AbstractComponent {
                             rowPositionOnCreate,
                             childProperty,
                             clearChildrenOnReset
-                        }),
+                        }, DomUtils.dataOf(bodyRowTmplId ? $(`#${bodyRowTmplId}`) : bodyRowTmplHtml ? $(bodyRowTmplHtml) : undefined)),
                     mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, config),
                     view = new SimpleRowView(mustacheTableElemAdapter),
                     initialState,

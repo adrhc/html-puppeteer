@@ -76,7 +76,7 @@ class DynaSelOneConfig extends ComponentConfiguration {
      * @return {DynaSelOneConfig}
      */
     overwriteWith(...overwrites) {
-        return $.extend(new DynaSelOneConfig(), this, ...overwrites);
+        return _.defaults(new DynaSelOneConfig(), ...overwrites, this);
     }
 
     /**

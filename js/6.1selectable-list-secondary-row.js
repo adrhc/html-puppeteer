@@ -4,9 +4,15 @@ const JSONs = {
 
 $(() => {
     // dogs table with both read-only and editable row
+    const elemIdOrJQuery = "dogsTable";
+
     const selectableList = new SelectableListComponent({
-        elemIdOrJQuery: "dogsTable",
+        elemIdOrJQuery,
         items: DbMocks.DOGS,
+        onRow: new IdentifiableRowComponent({
+            elemIdOrJQuery,
+            bodyRowTmplId: "dogsTableEditableRowTmpl"
+        }),
         dontAutoInitialize: true
     });
 
