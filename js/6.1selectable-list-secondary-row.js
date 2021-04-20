@@ -8,7 +8,6 @@ $(() => {
 
     const selectableList = new SelectableListComponent({
         elemIdOrJQuery,
-        items: DbMocks.DOGS,
         onRow: new IdentifiableRowComponent({
             elemIdOrJQuery,
             bodyRowTmplId: "dogsTableEditableRowTmpl"
