@@ -25,16 +25,72 @@ class SelectableListComponent extends SimpleListComponent {
     swappingRowSelector;
 
     /**
-     * @param repository {CrudRepository}
-     * @param state {SelectableListState}
-     * @param view {SimpleListView}
-     * @param offRow {IdentifiableRowComponent}
-     * @param onRow {IdentifiableRowComponent}
-     * @param {ComponentConfiguration} [config]
+     * @param {string|jQuery<HTMLTableElement>} elemIdOrJQuery
+     * @param {string=} bodyRowTmplId could be empty when not using a row template (but only the table)
+     * @param {string=} bodyRowTmplHtml
+     * @param bodyTmplHtml
+     * @param rowDataId
+     * @param {string} rowPositionOnCreate
+     * @param {string=} childProperty
+     * @param dontAutoInitialize
+     * @param {ComponentConfiguration=} config
+     * @param {IdentifiableEntity[]=} items
+     * @param {CrudRepository=} repository
+     * @param {MustacheTableElemAdapter=} mustacheTableElemAdapter
+     * @param {function(): IdentifiableEntity} newEntityFactoryFn
+     * @param {SimpleListState=} state
+     * @param offRow
+     * @param onRow
+     * @param {SimpleListView=} view
+     * @param compositeBehaviour
+     * @param childCompFactories
+     * @param {ChildishBehaviour=} childishBehaviour permit CreateDeleteListComponent to update its parent
+     * @param parentComponent
      */
-    constructor(repository, state, view,
-                offRow, onRow, config) {
-        super(repository, state, view, config);
+    constructor({
+                    elemIdOrJQuery,
+                    bodyRowTmplId,
+                    bodyRowTmplHtml,
+                    bodyTmplHtml,
+                    rowDataId,
+                    rowPositionOnCreate,
+                    childProperty,
+                    dontAutoInitialize,
+                    config = ComponentConfiguration.configWithOverrides(elemIdOrJQuery, {
+                        bodyRowTmplId,
+                        bodyRowTmplHtml,
+                        bodyTmplHtml,
+                        rowDataId,
+                        rowPositionOnCreate,
+                        childProperty,
+                        dontAutoInitialize
+                    }),
+                    items = typeof config.items === "string" ? JSON.parse(config.items) : config.items ?? [],
+                    repository = new InMemoryCrudRepository(items),
+                    mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, config),
+                    newEntityFactoryFn,
+                    state = new SelectableListState({
+                        newEntityFactoryFn,
+                        newItemsGoLast: mustacheTableElemAdapter.rowPositionOnCreate === "append"
+                    }),
+                    offRow,
+                    onRow,
+                    view = new SimpleListView(mustacheTableElemAdapter),
+                    compositeBehaviour,
+                    childCompFactories,
+                    childishBehaviour,
+                    parentComponent
+                }) {
+        super({
+            repository,
+            view,
+            state,
+            compositeBehaviour,
+            childCompFactories,
+            childishBehaviour,
+            parentComponent,
+            config: config.dontAutoInitializeOf()
+        });
         this.configurePartChangeHandlers({
             handleItemChange: ["CREATE", "REPLACE", "DELETE"],
             handleItemOff: ["OFF"],
@@ -48,6 +104,7 @@ class SelectableListComponent extends SimpleListComponent {
             OFF: offRow // i.e. read-only row
         };
         this.offRow = offRow;
+        return this._handleAutoInitialization();
     }
 
     /**
