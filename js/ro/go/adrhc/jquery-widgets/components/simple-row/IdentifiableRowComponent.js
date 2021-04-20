@@ -8,13 +8,11 @@ class IdentifiableRowComponent extends SimpleRowComponent {
      * @param bodyTmplHtml
      * @param rowDataId
      * @param {"prepend"|"append"} rowPositionOnCreate
-     * @param errorRowTmplId
-     * @param errorRowTmplHtml
      * @param childProperty
      * @param clearChildrenOnReset
      * @param {SimpleRowView} view
      * @param {TaggingStateHolder=} state
-     * @param {ComponentConfiguration=} config
+     * @param {RowConfiguration=} config
      * @param mustacheTableElemAdapter
      * @param initialState
      * @param compositeBehaviour
@@ -31,10 +29,8 @@ class IdentifiableRowComponent extends SimpleRowComponent {
                     rowPositionOnCreate,
                     childProperty,
                     clearChildrenOnReset,
-                    errorRowTmplId,
-                    errorRowTmplHtml,
-                    config = ComponentConfiguration.configWithOverrides(
-                        elemIdOrJQuery, DomUtils.dataOf(bodyRowTmplId), {
+                    config = RowConfiguration.configWithOverrides(
+                        elemIdOrJQuery, DomUtils.dataOf(bodyRowTmplId ? bodyRowTmplId : bodyRowTmplHtml ? $(bodyRowTmplHtml) : undefined), {
                             bodyRowTmplId,
                             bodyRowTmplHtml,
                             bodyTmplHtml,
@@ -42,8 +38,6 @@ class IdentifiableRowComponent extends SimpleRowComponent {
                             rowPositionOnCreate,
                             childProperty,
                             clearChildrenOnReset,
-                            errorRowTmplId,
-                            errorRowTmplHtml
                         }),
                     mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, config),
                     view = new SimpleRowView(mustacheTableElemAdapter),

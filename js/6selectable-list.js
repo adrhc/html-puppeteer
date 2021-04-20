@@ -4,16 +4,16 @@ const JSONs = {
 
 $(() => {
     // dogs table with both read-only and editable row
-    const rowPositionOnCreate = "append";
     const elemIdOrJQuery = "dogsTable";
 
     const selectableList = new SelectableListComponent({
         elemIdOrJQuery,
         items: DbMocks.DOGS,
-        offRow: new IdentifiableRowComponent({elemIdOrJQuery, rowPositionOnCreate}),
         onRow: new IdentifiableRowComponent({elemIdOrJQuery, bodyRowTmplId: "dogsTableEditableRowTmpl"}),
         dontAutoInitialize: true
     });
+
+    const rowPositionOnCreate = selectableList.simpleListConfiguration.rowPositionOnCreate;
 
     selectableList
         .init()

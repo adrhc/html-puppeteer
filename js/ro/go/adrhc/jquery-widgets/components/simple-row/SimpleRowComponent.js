@@ -35,11 +35,11 @@ class SimpleRowComponent extends AbstractComponent {
                     rowPositionOnCreate,
                     childProperty,
                     clearChildrenOnReset,
-                    config = ComponentConfiguration
+                    config = RowConfiguration
                         .configOf(elemIdOrJQuery, {
                             clearChildrenOnReset: true
                         })
-                        .overwriteWith(DomUtils.dataOf(bodyRowTmplId), {
+                        .overwriteWith(DomUtils.dataOf(bodyRowTmplId ? bodyRowTmplId : bodyRowTmplHtml ? $(bodyRowTmplHtml) : undefined), {
                             bodyRowTmplId,
                             bodyRowTmplHtml,
                             bodyTmplHtml,

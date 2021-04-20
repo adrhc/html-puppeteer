@@ -22,7 +22,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @param {string} rowPositionOnCreate
      * @param {string=} childProperty
      * @param dontAutoInitialize
-     * @param {ComponentConfiguration=} config
+     * @param {SimpleListConfiguration=} config
      * @param {IdentifiableEntity[]=} items
      * @param {CrudRepository=} repository
      * @param {MustacheTableElemAdapter=} mustacheTableElemAdapter
@@ -42,7 +42,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
                     rowPositionOnCreate,
                     childProperty,
                     dontAutoInitialize,
-                    config = ComponentConfiguration.configWithOverrides(elemIdOrJQuery, {
+                    config = SimpleListConfiguration.configWithOverrides(elemIdOrJQuery, {
                         bodyRowTmplId,
                         bodyRowTmplHtml,
                         bodyTmplHtml,
@@ -137,5 +137,12 @@ class SimpleListComponent extends AbstractTableBasedComponent {
         console.log(`${this.constructor.name}._configureEvents`);
         this.view.$elem.on(this._appendNamespaceTo("click"),
             this._btnSelector("reload"), this, this.onReload);
+    }
+
+    /**
+     * @return {SimpleListConfiguration}
+     */
+    get simpleListConfiguration() {
+        return this.config
     }
 }

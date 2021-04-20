@@ -20,7 +20,7 @@
 <body>
 <!-- dogs table -->
 <div class="dogsTable">
-    <table id="dogsTable" class="responstable">
+    <table id="dogsTable" class="responstable" data-row-position-on-create="append">
         <thead>
         <tr data-owner="dogsTable">
             <th colspan="2">
@@ -28,22 +28,18 @@
             </th>
         </tr>
         </thead>
+        <tr data-owner="dogsTable" data-id="{{id}}">
+            <td>
+                <input type="hidden" name="id" value="{{id}}">
+                {{id}}
+            </td>
+            <td>
+                <input type="hidden" name="name" value="{{name}}">
+                {{name}}
+            </td>
+        </tr>
     </table>
 </div>
-
-<!-- dogs row template -->
-<template id="dogsTableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}">
-        <td>
-            <input type="hidden" name="id" value="{{id}}">
-            {{id}}
-        </td>
-        <td>
-            <input type="hidden" name="name" value="{{name}}">
-            {{name}}
-        </td>
-    </tr>
-</template>
 
 <!-- dogs editable row template -->
 <template id="dogsTableEditableRowTmpl">
@@ -136,11 +132,13 @@
 <script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/DynamicSelectOneComponent.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/factories/DynamicSelectOneFactory.js"></script>
 <!-- components/simple-list -->
+<script src="js/ro/go/adrhc/jquery-widgets/components/simple-list/model/SimpleListConfiguration.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-list/view/SimpleListView.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-list/SimpleListComponent.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-list/factories/SimpleListFactory.js"></script>
 <!-- components/simple-row -->
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-row/model/EntityRow.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/simple-row/model/RowConfiguration.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-row/view/SimpleRowView.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-row/SimpleRowComponent.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-row/IdentifiableRowComponent.js"></script>

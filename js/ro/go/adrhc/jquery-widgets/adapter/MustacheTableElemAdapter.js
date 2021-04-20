@@ -42,8 +42,15 @@ class MustacheTableElemAdapter extends TableElementAdapter {
         } else if ($(`#${bodyRowTmplId}`).length) {
             this.bodyRowTmplHtml = HtmlUtils.templateTextOf(bodyRowTmplId);
         } else {
-            this.bodyRowTmplHtml = DomUtils.htmlIncludingSelfOf(super.$firstRow);
+            this.bodyRowTmplHtml = DomUtils.htmlIncludingSelfOf(this.$bodyRowTmpl);
         }
+    }
+
+    /**
+     * @return {jQuery<HTMLTableRowElement>} the row template for this table
+     */
+    get $bodyRowTmpl() {
+        return super.$firstRow;
     }
 
     /**

@@ -54,17 +54,30 @@ class ComponentConfiguration {
 
     /**
      * @param {string|jQuery<HTMLElement>|function(): jQuery<HTMLElement>} elemIdOrJQuery
-     * @param {Object=} defaults are applied from left to right (last applied wins)
+     * @param {Object=} defaults are applied from left to right (first applied wins)
      * @return {ComponentConfiguration}
      */
     static configOf(elemIdOrJQuery, ...defaults) {
-        // return fp.defaults(new ComponentConfiguration(), ...sources, DomUtils.dataOf(elemIdOrJQuery));
-        // return Object.assign(new ComponentConfiguration(), fp.defaultsAll([{}, ...sources, DomUtils.dataOf(elemIdOrJQuery)]));
-        return $.extend(new ComponentConfiguration(), {elemIdOrJQuery}, ...defaults, DomUtils.dataOf(elemIdOrJQuery));
+        return ComponentConfiguration._configOf(new ComponentConfiguration(), elemIdOrJQuery, ...defaults);
     }
 
+    /**
+     * @param {string|jQuery<HTMLElement>|function(): jQuery<HTMLElement>} elemIdOrJQuery
+     * @param {Object=} overrides are applied from left to right (first applied wins)
+     * @return {ComponentConfiguration}
+     */
     static configWithOverrides(elemIdOrJQuery, ...overrides) {
-        return ComponentConfiguration.configOf(elemIdOrJQuery).overwriteWith(...overrides);
+        return ComponentConfiguration._configWithOverrides(new ComponentConfiguration(), elemIdOrJQuery, ...overrides);
+    }
+
+    static _configOf(instance, elemIdOrJQuery, ...defaults) {
+        // return fp.defaults(new ComponentConfiguration(), ...sources, DomUtils.dataOf(elemIdOrJQuery));
+        // return Object.assign(new ComponentConfiguration(), fp.defaultsAll([{}, ...sources, DomUtils.dataOf(elemIdOrJQuery)]));
+        return _.defaults(instance, DomUtils.dataOf(elemIdOrJQuery), {elemIdOrJQuery}, ...defaults);
+    }
+
+    static _configWithOverrides(instance, elemIdOrJQuery, ...overrides) {
+        return _.defaults(instance, ...overrides, DomUtils.dataOf(elemIdOrJQuery), {elemIdOrJQuery});
     }
 
     /**
@@ -72,7 +85,7 @@ class ComponentConfiguration {
      * @return {ComponentConfiguration}
      */
     overwriteWith(...overwrites) {
-        return $.extend(new ComponentConfiguration(), this, ...overwrites);
+        return _.defaults(new ComponentConfiguration(), ...overwrites, this);
     }
 
     /**

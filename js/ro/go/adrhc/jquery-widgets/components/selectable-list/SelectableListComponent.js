@@ -33,7 +33,7 @@ class SelectableListComponent extends SimpleListComponent {
      * @param {string} rowPositionOnCreate
      * @param {string=} childProperty
      * @param dontAutoInitialize
-     * @param {ComponentConfiguration=} config
+     * @param {SimpleListConfiguration=} config
      * @param {IdentifiableEntity[]=} items
      * @param {CrudRepository=} repository
      * @param {MustacheTableElemAdapter=} mustacheTableElemAdapter
@@ -56,7 +56,7 @@ class SelectableListComponent extends SimpleListComponent {
                     rowPositionOnCreate,
                     childProperty,
                     dontAutoInitialize,
-                    config = ComponentConfiguration.configWithOverrides(elemIdOrJQuery, {
+                    config = SimpleListConfiguration.configWithOverrides(elemIdOrJQuery, {
                         bodyRowTmplId,
                         bodyRowTmplHtml,
                         bodyTmplHtml,
@@ -73,7 +73,11 @@ class SelectableListComponent extends SimpleListComponent {
                         newEntityFactoryFn,
                         newItemsGoLast: mustacheTableElemAdapter.rowPositionOnCreate === "append"
                     }),
-                    offRow,
+                    offRow = new IdentifiableRowComponent({
+                        elemIdOrJQuery,
+                        config: RowConfiguration.configOf(mustacheTableElemAdapter.$bodyRowTmpl, config),
+                        bodyRowTmplHtml: mustacheTableElemAdapter.bodyRowTmplHtml
+                    }),
                     onRow,
                     view = new SimpleListView(mustacheTableElemAdapter),
                     compositeBehaviour,
