@@ -1,6 +1,6 @@
-$(() => {
-    const JSON_RESULT = "[{\"id\":\"1\",\"name\":\"dog1\",\"person\":{\"id\":1,\"firstName\":\"gigi1\",\"lastName\":\"kent1\",\"friend\":{\"id\":2,\"firstName\":\"gigi2\",\"lastName\":\"kent2\",\"cats\":[]},\"cats\":[{\"id\":1,\"name\":\"cat1\",\"person\":{\"id\":1,\"firstName\":\"gigi1\",\"lastName\":\"kent1\",\"cats\":[]},\"friendId\":1},{\"id\":2,\"name\":\"cat2\",\"person\":{\"id\":1,\"firstName\":\"gigi1\",\"lastName\":\"kent1\",\"cats\":[]},\"friendId\":1},{\"id\":3,\"name\":\"cat3\",\"person\":{\"id\":1,\"firstName\":\"gigi1\",\"lastName\":\"kent1\",\"cats\":[]},\"friendId\":1}]}},{\"id\":\"3\",\"name\":\"updated dog3\"},{\"name\":\"new dog with append\"},{\"id\":\"2\",\"name\":\"restored dog2 with append\"}]";
+const JSON_RESULT = "[{\"id\":\"1\",\"name\":\"dog1\",\"person\":{\"id\":1,\"firstName\":\"gigi1\",\"lastName\":\"kent1\",\"friend\":{\"id\":2,\"firstName\":\"gigi2\",\"lastName\":\"kent2\",\"cats\":[]},\"cats\":[{\"id\":1,\"name\":\"cat1\",\"person\":{\"id\":1,\"firstName\":\"gigi1\",\"lastName\":\"kent1\",\"cats\":[]},\"friendId\":1},{\"id\":2,\"name\":\"cat2\",\"person\":{\"id\":1,\"firstName\":\"gigi1\",\"lastName\":\"kent1\",\"cats\":[]},\"friendId\":1},{\"id\":3,\"name\":\"cat3\",\"person\":{\"id\":1,\"firstName\":\"gigi1\",\"lastName\":\"kent1\",\"cats\":[]},\"friendId\":1}]}},{\"id\":\"3\",\"name\":\"updated dog3\"},{\"name\":\"new dog with append\"},{\"id\":\"2\",\"name\":\"restored dog2 with append\"}]";
 
+$(() => {
     // DYNAMIC-SELECT-ONE
     new DynamicSelectOneComponent({
         elemIdOrJQuery: "dyna-sel-one",
@@ -47,5 +47,4 @@ $(() => {
             AssertionUtils.isTrue(entities.length === 4, "entities.length === 4");
             AssertionUtils.isTrue(JSON.stringify(entities) === JSON_RESULT, "JSON doesn't match!")
         });
-
 });
