@@ -35,7 +35,7 @@ class DynamicSelectOneComponent extends AbstractComponent {
                     config = DynaSelOneConfig
                         .configOf(elemIdOrJQuery, {
                             toEntityConverter,
-                            dontAutoInitialize: childishBehaviour != null || parentComponent != null
+                            dontAutoInitialize: AbstractComponent._canConstructChildishBehaviour(childishBehaviour, parentComponent)
                         })
                         .overwriteWith({
                             dontAutoInitialize,

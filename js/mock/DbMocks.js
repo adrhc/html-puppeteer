@@ -22,7 +22,11 @@ class DbMocks {
                 {id: 53, name: "cat53"}]),
     ], Person.parse, DbMocks.parsePersonBeforeUpsert);
 
-    static DOGS = _.times(10).map((val) => ({id: val, name: `dog ${val}`}));
+    static DOGS = DbMocks.dogsOf(10);
+
+    static dogsOf(count) {
+        return _.times(count).map((val) => ({id: val, name: `dog ${val}`}));
+    }
 
     static parsePersonBeforeUpsert(object) {
         // changing generated cat ids to valid, not generated ids

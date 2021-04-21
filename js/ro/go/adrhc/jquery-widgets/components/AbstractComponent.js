@@ -67,6 +67,10 @@ class AbstractComponent {
         return this._handleAutoInitialization();
     }
 
+    static _canConstructChildishBehaviour(childishBehaviour, parentComponent) {
+        return childishBehaviour != null || parentComponent != null;
+    }
+
     /**
      * @param {ChildishBehaviour=} childishBehaviour
      * @param {AbstractComponent} parentComponent

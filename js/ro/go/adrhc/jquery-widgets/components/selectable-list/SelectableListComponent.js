@@ -58,7 +58,11 @@ class SelectableListComponent extends SimpleListComponent {
                     rowPositionOnCreate,
                     childProperty,
                     dontAutoInitialize,
-                    config = SimpleListConfiguration.configWithOverrides(elemIdOrJQuery, {
+                    childishBehaviour,
+                    parentComponent,
+                    config = SimpleListConfiguration.configOf(elemIdOrJQuery, {
+                        dontAutoInitialize: AbstractComponent._canConstructChildishBehaviour(childishBehaviour, parentComponent)
+                    }).overwriteWith({
                         bodyRowTmplId,
                         bodyRowTmplHtml,
                         bodyTmplHtml,
@@ -79,9 +83,7 @@ class SelectableListComponent extends SimpleListComponent {
                     onRow = SelectableListComponent.$onRowTmpl(elemIdOrJQuery, mustacheTableElemAdapter, config),
                     view = new SimpleListView(mustacheTableElemAdapter),
                     compositeBehaviour,
-                    childCompFactories,
-                    childishBehaviour,
-                    parentComponent
+                    childCompFactories
                 }) {
         super({
             repository,

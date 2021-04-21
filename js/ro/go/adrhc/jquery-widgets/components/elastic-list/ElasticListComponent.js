@@ -45,7 +45,11 @@ class ElasticListComponent extends SimpleListComponent {
                     rowPositionOnCreate,
                     childProperty,
                     dontAutoInitialize,
-                    config = ComponentConfiguration.configWithOverrides(elemIdOrJQuery, {
+                    childishBehaviour,
+                    parentComponent,
+                    config = SimpleListConfiguration.configOf(elemIdOrJQuery, {
+                        dontAutoInitialize: AbstractComponent._canConstructChildishBehaviour(childishBehaviour, parentComponent)
+                    }).overwriteWith({
                         bodyRowTmplId,
                         bodyRowTmplHtml,
                         bodyTmplHtml,
@@ -60,7 +64,7 @@ class ElasticListComponent extends SimpleListComponent {
                     newEntityFactoryFn,
                     state = new CrudListState({
                         newEntityFactoryFn,
-                        newItemsGoLast: mustacheTableElemAdapter.rowPositionOnCreate !== "prepend"
+                        newItemsGoLast: mustacheTableElemAdapter.rowPositionOnCreate === "append"
                     }),
                     view = new SimpleListView(mustacheTableElemAdapter),
                     rowChildCompFactories,
@@ -75,9 +79,7 @@ class ElasticListComponent extends SimpleListComponent {
                         return idRowComp;
                     },
                     compositeBehaviour,
-                    childCompFactories,
-                    childishBehaviour,
-                    parentComponent
+                    childCompFactories
                 }
     ) {
         // the "super" missing parameters (e.g. bodyRowTmplId) are included in "config" or they are

@@ -6,7 +6,6 @@
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <link rel="stylesheet" href="css/ro/go/adrhc/responstable-table.css">
     <link rel="stylesheet" href="css/ro/go/adrhc/util.css">
-    <link rel="stylesheet" href="css/ro/go/adrhc/dyna-sel-one.css">
     <link rel="stylesheet" href="css/app.css">
     <script src="libraries/modernizr-custom.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -18,13 +17,12 @@
 </head>
 
 <body>
-<!-- dogs table -->
+
 <div class="dogsTable">
     <table id="dogsTable" class="responstable">
         <thead>
         <tr data-owner="dogsTable">
-            <th>Dog</th>
-            <th>Person</th>
+            <th colspan="2">Dogs</th>
             <th>
                 <div class="buttons">
                     <img data-owner="dogsTable" data-btn="reload" alt="reload"
@@ -35,28 +33,22 @@
             </th>
         </tr>
         </thead>
+        <tr data-owner="dogsTable" data-id="{{id}}">
+            <td>{{id}}</td>
+            <td>
+                <input data-owner="dogsTable" type="hidden" name="id" value="{{id}}">
+                <input data-owner="dogsTable" type="text" autocomplete="off" placeholder="name" name="name"
+                       value="{{name}}">
+            </td>
+            <td>
+                <div class="buttons">
+                    <img data-owner="dogsTable" data-btn="delete" alt="delete"
+                         src="images/ro/go/adrhc/delete-button-32.png" title="șterge"/>
+                </div>
+            </td>
+        </tr>
     </table>
 </div>
-
-<!-- dogs row template -->
-<template id="dogsTableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}">
-        <td>
-            <input data-owner="dogsTable" type="hidden" name="id" value="{{id}}">
-            <input data-owner="dogsTable" type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
-        </td>
-        <td>
-            <div data-owner="dyna-sel-one" data-id="dyna-sel-one" class="dyna-sel-one-comp" data-placeholder="first name"
-                 data-name="firstName" data-value="personId" data-description="person-description"></div>
-        </td>
-        <td>
-            <div class="buttons">
-                <img data-owner="dogsTable" data-btn="delete" alt="delete"
-                     src="images/ro/go/adrhc/delete-button-32.png" title="șterge"/>
-            </div>
-        </td>
-    </tr>
-</template>
 
 <!-- utils -->
 <script src="js/ro/go/adrhc/jquery-widgets/utils/AjaxUtils.js"></script>

@@ -42,7 +42,11 @@ class SimpleListComponent extends AbstractTableBasedComponent {
                     rowPositionOnCreate,
                     childProperty,
                     dontAutoInitialize,
-                    config = SimpleListConfiguration.configWithOverrides(elemIdOrJQuery, {
+                    childishBehaviour,
+                    parentComponent,
+                    config = SimpleListConfiguration.configOf(elemIdOrJQuery, {
+                        dontAutoInitialize: AbstractComponent._canConstructChildishBehaviour(childishBehaviour, parentComponent)
+                    }).overwriteWith({
                         bodyRowTmplId,
                         bodyRowTmplHtml,
                         bodyTmplHtml,
@@ -57,9 +61,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
                     state = new SimpleListState(),
                     view = new SimpleListView(mustacheTableElemAdapter),
                     compositeBehaviour,
-                    childCompFactories,
-                    childishBehaviour,
-                    parentComponent
+                    childCompFactories
                 }) {
         // the "super" missing parameters (e.g. bodyRowTmplId) are included in "config" or they are
         // simply intermediate values (e.g. elemIdOrJQuery is used to compute mustacheTableElemAdapter)
