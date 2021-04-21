@@ -1,6 +1,6 @@
 $(() => {
     const DOGS = DbMocks.DOGS;
-    DOGS[0] = {id: 1, name: "dog1", person: DbMocks.PERSONS_REPOSITORY.getById(1, true)};
+    _.defaults(DOGS[0], {person: DbMocks.PERSONS_REPOSITORY.getById(1, true)});
 
     // by default on creation the row is prepended to table
     const newItemsGoLast = true;

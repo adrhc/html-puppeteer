@@ -3,6 +3,6 @@ class DefaultTemplatingView extends AbstractTemplatingView {
         super();
         this._setupElem(elemIdOrJQuery);
         this._setupOwner();
-        this._setupCachedHtmlTemplate({$el: this.$elem, ...config});
+        this._setupCachedHtmlTemplate(config);
     }
 }

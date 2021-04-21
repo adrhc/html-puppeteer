@@ -1,12 +1,16 @@
 class AbstractTemplatingView extends AbstractView {
     /**
+     * @type {CachedHtmlTemplate}
+     */
+    template;
+
+    /**
      * @param {string} [tmplUrl]
      * @param {string} [tmplId]
      * @param {string} [htmlTmpl]
-     * @param {jQuery<HTMLElement>} $el
      * @protected
      */
-    _setupCachedHtmlTemplate({tmplUrl, tmplId, htmlTmpl, $el}) {
+    _setupCachedHtmlTemplate({tmplUrl, tmplId, htmlTmpl}) {
         if (tmplUrl) {
             this.template = new CachedHtmlTemplate({url: tmplUrl});
         } else if (htmlTmpl) {
@@ -15,7 +19,7 @@ class AbstractTemplatingView extends AbstractView {
             htmlTmpl = HtmlUtils.templateTextOf(tmplId);
             this.template = new CachedHtmlTemplate({htmlTmpl});
         } else {
-            htmlTmpl = $el.html();
+            htmlTmpl = this.$elem.html();
             this.template = new CachedHtmlTemplate({htmlTmpl});
         }
     }
@@ -25,14 +29,22 @@ class AbstractTemplatingView extends AbstractView {
      * @return {Promise<StateChange>}
      */
     update(stateChange) {
-        return this._generateHtml(stateChange.stateOrPart)
-            .then(html => this.$elem.html(html))
-            .then(() => stateChange);
+        return this._updateImpl(stateChange.stateOrPart).then(() => stateChange);
     }
 
     /**
-     * @param {{}} data
-     * @return {Promise<void>}
+     * @param {Object} stateOrPart
+     * @return {Promise<jQuery>}
+     * @protected
+     */
+    _updateImpl(stateOrPart) {
+        return this._generateHtml(stateOrPart)
+            .then(html => this.$elem.html(html));
+    }
+
+    /**
+     * @param {Object} data
+     * @return {Promise<string>}
      * @protected
      */
     _generateHtml(data) {

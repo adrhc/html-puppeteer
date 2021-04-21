@@ -24,6 +24,18 @@ class DbMocks {
 
     static DOGS = DbMocks.dogsOf(10);
 
+    static personsOf(count) {
+        return _.times(count).map((val) => new Person(val, `gigi${val}`, `kent${val}`, undefined, [{
+            id: `${val}1`,
+            name: `cat${val}1`,
+            person: new Person(val, `gigi${val}`, `kent${val}`)
+        }, {
+            id: `${val}2`,
+            name: `cat${val}2`,
+            person: new Person(val, `gigi${val}`, `kent${val}`)
+        }]));
+    }
+
     static dogsOf(count) {
         return _.times(count).map((val) => ({id: val, name: `dog ${val}`}));
     }

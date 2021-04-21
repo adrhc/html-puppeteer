@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="css/app.css">
     <script src="libraries/modernizr-custom.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://unpkg.com/mustache@latest"></script>
-    <script src="libraries/handlebars-1.0.rc.1.min.js"></script>
+    <!--<script src="https://unpkg.com/mustache@latest"></script>-->
+    <script src="libraries/handlebars.min-v4.7.7.js"></script>
     <script src="libraries/lodash4_lodash.min.js_lodash.fp.min.js"></script>
     <script>const fp = _.noConflict()</script>
     <!--script src="libraries/lodash-4.17.21.min.js"></script-->
@@ -18,37 +18,45 @@
 
 <body>
 
-<div class="dogsTable">
-    <table id="dogsTable" class="responstable">
-        <thead>
-        <tr data-owner="dogsTable">
-            <th colspan="2">Dogs</th>
-            <th>
-                <div class="buttons">
-                    <img data-owner="dogsTable" data-btn="reload" alt="reload"
-                         src="images/ro/go/adrhc/reload-button-32.png"/>
-                    <img data-owner="dogsTable" data-btn="add" alt="add"
-                         src="images/ro/go/adrhc/add-button-32.png" title="adaugă"/>
-                </div>
-            </th>
-        </tr>
-        </thead>
-        <tr data-owner="dogsTable" data-id="{{id}}">
-            <td>{{id}}</td>
-            <td>
-                <input data-owner="dogsTable" type="hidden" name="id" value="{{id}}">
-                <input data-owner="dogsTable" type="text" autocomplete="off" placeholder="name" name="name"
-                       value="{{name}}">
-            </td>
-            <td>
-                <div class="buttons">
-                    <img data-owner="dogsTable" data-btn="delete" alt="delete"
-                         src="images/ro/go/adrhc/delete-button-32.png" title="șterge"/>
-                </div>
-            </td>
-        </tr>
-    </table>
-</div>
+<table id="itemsTable" class="responstable" data-jqw-type="CreateDeleteList"
+       data-items='[{"id":0,"firstName":"gigi0","lastName":"kent0","cats":[{"id":"01","name":"cat01","person":{"id":0,"firstName":"gigi0","lastName":"kent0","cats":[]}},{"id":"02","name":"cat02","person":{"id":0,"firstName":"gigi0","lastName":"kent0","cats":[]}}]},{"id":1,"firstName":"gigi1","lastName":"kent1","cats":[{"id":"11","name":"cat11","person":{"id":1,"firstName":"gigi1","lastName":"kent1","cats":[]}},{"id":"12","name":"cat12","person":{"id":1,"firstName":"gigi1","lastName":"kent1","cats":[]}}]},{"id":2,"firstName":"gigi2","lastName":"kent2","cats":[{"id":"21","name":"cat21","person":{"id":2,"firstName":"gigi2","lastName":"kent2","cats":[]}},{"id":"22","name":"cat22","person":{"id":2,"firstName":"gigi2","lastName":"kent2","cats":[]}}]},{"id":3,"firstName":"gigi3","lastName":"kent3","cats":[{"id":"31","name":"cat31","person":{"id":3,"firstName":"gigi3","lastName":"kent3","cats":[]}},{"id":"32","name":"cat32","person":{"id":3,"firstName":"gigi3","lastName":"kent3","cats":[]}}]},{"id":4,"firstName":"gigi4","lastName":"kent4","cats":[{"id":"41","name":"cat41","person":{"id":4,"firstName":"gigi4","lastName":"kent4","cats":[]}},{"id":"42","name":"cat42","person":{"id":4,"firstName":"gigi4","lastName":"kent4","cats":[]}}]}]'>
+    <!--data-items='[{"id":0,"name":"dog 0"},{"id":1,"name":"dog 1"},{"id":2,"name":"dog 2"},{"id":3,"name":"dog 3"},{"id":4,"name":"dog 4"}]'>-->
+    <thead>
+    <tr data-owner="itemsTable">
+        <th colspan="4">Persons</th>
+        <th>
+            <div class="buttons">
+                <img data-owner="itemsTable" data-btn="reload" alt="reload"
+                     src="images/ro/go/adrhc/reload-button-32.png"/>
+                <img data-owner="itemsTable" data-btn="add" alt="add"
+                     src="images/ro/go/adrhc/add-button-32.png" title="adaugă"/>
+            </div>
+        </th>
+    </tr>
+    </thead>
+    <tr data-owner="itemsTable" data-id="{{id}}">
+        <td>{{id}}</td>
+        <td>
+            <input data-owner="itemsTable" type="hidden" name="id" value="{{id}}">
+            <input data-owner="itemsTable" type="text" autocomplete="off"
+                   placeholder="firstName" name="firstName" value="{{firstName}}">
+        </td>
+        <td>
+            <input data-owner="itemsTable" type="text" autocomplete="off"
+                   placeholder="lastName" name="lastName" value="{{lastName}}">
+        </td>
+        <td>
+            <input data-owner="itemsTable" type="text" autocomplete="off"
+                   placeholder="cats" name="cats" value="{{#each cats}}{{name}}{{#unless @last}},{{/unless}}{{/each}}">
+        </td>
+        <td>
+            <div class="buttons">
+                <img data-owner="itemsTable" data-btn="delete" alt="delete"
+                     src="images/ro/go/adrhc/delete-button-32.png" title="șterge"/>
+            </div>
+        </td>
+    </tr>
+</table>
 
 <!-- utils -->
 <script src="js/ro/go/adrhc/jquery-widgets/utils/AjaxUtils.js"></script>
@@ -60,9 +68,10 @@
 <script src="js/ro/go/adrhc/jquery-widgets/utils/EntityUtils.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/utils/FormUtils.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/utils/HtmlUtils.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/utils/JQWUtil.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/utils/RestUtils.js"></script>
 <!-- helpers -->
-<script src="js/ro/go/adrhc/jquery-widgets/helper/cached-html-template.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/helper/CachedHtmlTemplate.js"></script>
 <!-- adapters -->
 <script src="js/ro/go/adrhc/jquery-widgets/adapter/TableElementAdapter.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/adapter/MustacheTableElemAdapter.js"></script>

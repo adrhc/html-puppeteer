@@ -1,6 +1,6 @@
 $(() => {
     new SimpleListComponent({
         elemIdOrJQuery: "dogsTable",
-        items: DbMocks.DOGS,
+        items: DbMocks.dogsOf(10),
     }).then(() => "2simple-list-read-only.js done");
 })

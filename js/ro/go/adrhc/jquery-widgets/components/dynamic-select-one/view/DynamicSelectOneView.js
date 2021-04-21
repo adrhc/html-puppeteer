@@ -1,11 +1,7 @@
 /**
  * todo: adapt to AbstractView usage
  */
-class DynamicSelectOneView extends AbstractView {
-    /**
-     * @type {CachedHtmlTemplate}
-     */
-    tmpl;
+class DynamicSelectOneView extends DefaultTemplatingView {
     /**
      * @type {DynaSelOneConfig}
      */
@@ -20,27 +16,16 @@ class DynamicSelectOneView extends AbstractView {
      * @param {DynaSelOneConfig} config
      */
     constructor(elemIdOrJQuery, config) {
-        super();
+        super(elemIdOrJQuery, config);
         this.config = config;
-        this._setupElem(elemIdOrJQuery);
-        this._setupOwner();
-        this._setupCachedUrl(config.tmplUrl);
     }
 
-    _setupCachedUrl(dynaSelOneHtml) {
-        this.tmpl = new CachedHtmlTemplate({url: JQueryWidgetsConfig.urlOf(dynaSelOneHtml)});
-    }
-
-    /**
-     * @param {TaggedStateChange<DynaSelOneState>} stateChange
-     * @return {Promise<TaggedStateChange>}
-     */
-    update(stateChange) {
-        const viewModel = this._viewModelOf(stateChange.stateOrPart);
-        return this._renderView(viewModel)
+    _updateImpl(stateOrPart) {
+        const viewModel = this._viewModelOf(stateOrPart);
+        return super._updateImpl(viewModel)
             .then(() => {
                 this._applyCss(viewModel);
-                console.log(`[${this.constructor.name}.update] title = ${stateChange.stateOrPart.title}`);
+                console.log(`[${this.constructor.name}.update] title = ${stateOrPart.title}`);
                 return viewModel;
             });
     }
@@ -73,8 +58,7 @@ class DynamicSelectOneView extends AbstractView {
      * @return {Promise<jQuery>}
      */
     _renderView(viewModel) {
-        return this.tmpl.cached
-            .then(html => Mustache.render(html, viewModel))
+        return this._generateHtml(viewModel)
             .then(html => this.$elem.html(html));
     }
 
