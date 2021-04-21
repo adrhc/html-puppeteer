@@ -1,36 +1,37 @@
 $(() => {
-    const DOGS = DbMocks.DOGS;
-    DOGS[0] = {id: 1, name: "dog1", person: DbMocks.PERSONS_REPOSITORY.getById(1, true)};
+    const DOGS = DbMocks.dogsOf(5);
+    _.defaults(DOGS[0], {person: DbMocks.PERSONS_REPOSITORY.getById(1, true)});
 
     // by default on creation the row is prepended to table
-    const newItemsGoLast = true;
+    const rowPositionOnCreate = "append";
 
     // dogs table
-    const createDeleteList = CreateDeleteListFactory.create("dogsTable", {
+    const createDeleteList = new CreateDeleteListComponent({
+        elemIdOrJQuery: "dogsTable",
         items: DOGS,
-        newItemsGoLast,
-        bodyRowTmplId: "dogsTableRowTmpl",
+        rowPositionOnCreate,
+        dontAutoInitialize: true
     });
 
     // some doWithState operations on createDeleteList
     createDeleteList
         .init()
-        .then(() => createDeleteList.doWithState((state) => {
-            /**
-             * @type {CrudListState}
-             */
-            const crudListState = state;
-            crudListState.insertItem({
-                id: EntityUtils.generateId(),
-                name: "new dog"
-            });
-            crudListState.updateItem({id: 3, name: `updated dog3`});
-            crudListState.removeById(2);
-            crudListState.insertItem({
-                id: 2,
-                name: `restored dog2 with ${newItemsGoLast ? "append" : "prepend"}`
-            });
-        }))
+        // .then(() => createDeleteList.doWithState((state) => {
+        //     /**
+        //      * @type {CrudListState}
+        //      */
+        //     const crudListState = state;
+        //     crudListState.insertItem({
+        //         id: EntityUtils.generateId(),
+        //         name: "new dog"
+        //     });
+        //     crudListState.updateItem({id: 3, name: `updated dog3`});
+        //     crudListState.removeById(2);
+        //     crudListState.insertItem({
+        //         id: 2,
+        //         name: `restored dog2 with ${rowPositionOnCreate}`
+        //     });
+        // }))
         // showing the entire table extracted data
         .then(() => console.log("ElasticListComponent.extractAllEntities:\n",
             createDeleteList.extractAllEntities()));

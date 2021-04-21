@@ -1,7 +1,5 @@
 class CreateDeleteListComponent extends ElasticListComponent {
     /**
-     * ADD
-     *
      * @param ev {Event}
      */
     onAdd(ev) {
@@ -10,14 +8,12 @@ class CreateDeleteListComponent extends ElasticListComponent {
          * @type {CreateDeleteListComponent}
          */
         const cdlComp = ev.data;
-        cdlComp.doWithState((state) => {
-            cdlComp.castState(state).createNewItem({id: EntityUtils.generateId()});
+        return cdlComp.doWithState(() => {
+            cdlComp.crudListState.createNewItem(new IdentifiableEntity(EntityUtils.generateId()));
         });
     }
 
     /**
-     * DELETE
-     *
      * @param ev {Event}
      */
     onDelete(ev) {
@@ -27,15 +23,13 @@ class CreateDeleteListComponent extends ElasticListComponent {
          */
         const cdlComp = ev.data;
         const rowDataId = cdlComp.tableBasedView.rowDataIdOf(this, true);
-        cdlComp.doWithState((state) => {
-            cdlComp.castState(state).removeById(rowDataId);
+        return cdlComp.doWithState(() => {
+            cdlComp.crudListState.removeById(rowDataId);
         });
     }
 
     /**
-     * linking triggers to component's handlers (aka capabilities)
-     *
-     * @private
+     * @protected
      */
     _configureEvents() {
         super._configureEvents();
@@ -44,13 +38,5 @@ class CreateDeleteListComponent extends ElasticListComponent {
                 this._btnSelector("add"), this, this.onAdd)
             .on(this._appendNamespaceTo('click'),
                 this._btnSelector("delete"), this, this.onDelete);
-    }
-
-    /**
-     * @param {StateHolder} state
-     * @return {CrudListState}
-     */
-    castState(state) {
-        return state;
     }
 }
