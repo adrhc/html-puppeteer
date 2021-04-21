@@ -18,35 +18,31 @@
 </head>
 
 <body>
-<!-- dogs table -->
-<div class="dogsTable">
-    <table id="dogsTable" class="responstable">
-        <thead>
-        <tr data-owner="dogsTable">
-            <th>Dog</th>
-            <th>Person</th>
-            <th>
-                <div class="buttons">
-                    <img data-owner="dogsTable" data-btn="reload" alt="reload"
-                         src="images/ro/go/adrhc/reload-button-32.png"/>
-                    <img data-owner="dogsTable" data-btn="add" alt="add"
-                         src="images/ro/go/adrhc/add-button-32.png" title="adaugă"/>
-                </div>
-            </th>
-        </tr>
-        </thead>
-    </table>
-</div>
 
-<!-- dogs row template -->
-<template id="dogsTableRowTmpl">
+<table id="dogsTable" class="responstable">
+    <thead>
+    <tr data-owner="dogsTable">
+        <th>Dog</th>
+        <th>Person</th>
+        <th>
+            <div class="buttons">
+                <img data-owner="dogsTable" data-btn="reload" alt="reload"
+                     src="images/ro/go/adrhc/reload-button-32.png"/>
+                <img data-owner="dogsTable" data-btn="add" alt="add"
+                     src="images/ro/go/adrhc/add-button-32.png" title="adaugă"/>
+            </div>
+        </th>
+    </tr>
+    </thead>
     <tr data-owner="dogsTable" data-id="{{id}}">
         <td>
             <input data-owner="dogsTable" type="hidden" name="id" value="{{id}}">
-            <input data-owner="dogsTable" type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
+            <input data-owner="dogsTable" type="text" autocomplete="off" placeholder="name" name="name"
+                   value="{{name}}">
         </td>
         <td>
-            <div data-owner="dyna-sel-one" data-id="dyna-sel-one" class="dyna-sel-one-comp" data-placeholder="first name"
+            <div data-owner="dyna-sel-one" data-id="dyna-sel-one" class="dyna-sel-one-comp"
+                 data-placeholder="first name"
                  data-name="firstName" data-value="personId" data-description="person-description"></div>
         </td>
         <td>
@@ -56,7 +52,7 @@
             </div>
         </td>
     </tr>
-</template>
+</table>
 
 <!-- utils -->
 <script src="js/ro/go/adrhc/jquery-widgets/utils/AjaxUtils.js"></script>
@@ -132,7 +128,7 @@
 <script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/DynaSelOneChildishBehaviour.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/DynaSelOneOnRowChildishBehaviour.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/DynamicSelectOneComponent.js"></script>
-<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/factories/DynamicSelectOneFactory.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/factories/DynaSelOneRowChildCompFactory.js"></script>
 <!-- components/simple-list -->
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-list/model/SimpleListConfiguration.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/simple-list/view/SimpleListView.js"></script>
