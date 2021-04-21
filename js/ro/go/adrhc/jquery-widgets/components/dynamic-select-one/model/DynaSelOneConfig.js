@@ -1,4 +1,8 @@
 class DynaSelOneConfig extends ComponentConfiguration {
+    static DEFAULTS = {
+        minCharsToSearch: 3,
+        optionsToShow: 5,
+    };
     /**
      * @type {function(): IdentifiableEntity}
      */
@@ -6,7 +10,7 @@ class DynaSelOneConfig extends ComponentConfiguration {
     /**
      * @type {number}
      */
-    minCharsToSearch = 3;
+    minCharsToSearch;
     /**
      * @type {boolean}
      */
@@ -14,7 +18,7 @@ class DynaSelOneConfig extends ComponentConfiguration {
     /**
      * @type {boolean}
      */
-    searchOnBlur = true;
+    searchOnBlur;
     /**
      * whether to focus the search input on init
      *
@@ -50,7 +54,7 @@ class DynaSelOneConfig extends ComponentConfiguration {
     /**
      * @type {number}
      */
-    optionsToShow = 5;
+    optionsToShow;
     /**
      * @type {string}
      */
@@ -62,7 +66,7 @@ class DynaSelOneConfig extends ComponentConfiguration {
      * @return {DynaSelOneConfig}
      */
     static configOf(elemIdOrJQuery, ...defaults) {
-        const config = ComponentConfiguration._configOf(new DynaSelOneConfig(), elemIdOrJQuery, ...defaults);
+        const config = ComponentConfiguration._configOf(new DynaSelOneConfig(), elemIdOrJQuery, ...defaults, DynaSelOneConfig.DEFAULTS);
         config.searchOnBlur = config.searchOnBlur ?? config.minCharsToSearch > 0;
         config.loadOptionsOnInit = config.loadOptionsOnInit ?? config.minCharsToSearch === 0;
         return config;

@@ -125,7 +125,9 @@ class DynamicSelectOneComponent extends AbstractComponent {
      * @returns {Promise<StateChange[]>|Promise}
      */
     _updateByTitle(title = "", isOnBlur) {
-        if ((this.dynaSelOneConfig.cacheSearchResults || isOnBlur) && this.dynaSelOneState.currentState.title === title) {
+        const currentState = this.dynaSelOneState.currentState;
+        if ((this.dynaSelOneConfig.cacheSearchResults || isOnBlur) &&
+            currentState.repositoryWasSearched && currentState.title === title) {
             // updating with same title
             console.warn(`[${this.constructor.name}._updateByTitle] rejecting update with same title: ${title ?? "nothing"}`);
             return Promise.resolve();
@@ -138,7 +140,7 @@ class DynamicSelectOneComponent extends AbstractComponent {
         }
         if (this.dynaSelOneConfig.cacheSearchResults &&
             this.currentOptionsAreResultOfSearch &&
-            DynaSelOneStateHolder.startsWith(title, this.dynaSelOneState.currentState.title)) {
+            DynaSelOneStateHolder.startsWith(title, currentState.title)) {
             // new title contains the current title: searching existing options
             return this._updateUsingPreviouslyFoundOptions(title);
         } else {
