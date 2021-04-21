@@ -16,13 +16,13 @@ class DbMocks {
             [{id: 31, name: "cat31"},
                 {id: 32, name: "cat32"},
                 {id: 33, name: "cat33"}]),
-            new Person(5, "gigi5", "kent5", undefined,
-                [{id: 51, name: "cat51"},
-                    {id: 52, name: "cat52", person: new Person(3, "gigi3", "kent3")},
-                    {id: 53, name: "cat53"}]),
+        new Person(5, "gigi5", "kent5", undefined,
+            [{id: 51, name: "cat51"},
+                {id: 52, name: "cat52", person: new Person(3, "gigi3", "kent3")},
+                {id: 53, name: "cat53"}]),
     ], Person.parse, DbMocks.parsePersonBeforeUpsert);
 
-    static DOGS = [{id: 1, name: "dog1"}, {id: 2, name: "dog2"}, {id: 3, name: "dog3"}];
+    static DOGS = _.times(10).map((val) => ({id: val, name: `dog ${val}`}));
 
     static parsePersonBeforeUpsert(object) {
         // changing generated cat ids to valid, not generated ids
