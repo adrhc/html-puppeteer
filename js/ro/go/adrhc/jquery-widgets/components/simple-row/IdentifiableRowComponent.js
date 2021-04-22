@@ -62,12 +62,20 @@ class IdentifiableRowComponent extends SimpleRowComponent {
     }
 
     updateViewOnDELETE(stateChange) {
-        this.removeSecondaryRowParts(stateChange.previousStateOrPart.entity.id);
+        this._removeSecondaryRowParts(stateChange.previousStateOrPart.entity.id);
         return super.updateViewOnDELETE(stateChange);
     }
 
-    removeSecondaryRowParts(rowId) {
+    updateViewOnAny(stateChange) {
+        this._removeSecondaryRowParts(stateChange.previousStateOrPart?.entity.id);
+        return super.updateViewOnAny(stateChange);
+    }
+
+    _removeSecondaryRowParts(rowId) {
         console.log(`removing rows with owner = ${this.simpleRowView.owner} and ${IdentifiableRowComponent.SECONDARY_ROW_PART} = ${rowId}`);
+        if (rowId == null) {
+            return;
+        }
         this.simpleRowView.$getOwnedRowByData(IdentifiableRowComponent.SECONDARY_ROW_PART, rowId).remove();
     }
 }

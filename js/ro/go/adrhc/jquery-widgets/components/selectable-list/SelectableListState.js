@@ -2,6 +2,8 @@
  * SelectableListState extends CrudListState extends SimpleListState extends TaggingStateHolder
  */
 class SelectableListState extends CrudListState {
+    static DONT_RECORD_EVENTS = {dontRecordStateEvents: true};
+
     /**
      * @type {RowSwappingStateHolder}
      */
@@ -47,7 +49,7 @@ class SelectableListState extends CrudListState {
         }
         const previousEntityRowSwap = this.swappingState.currentState;
         const newEntityRowSwap = this._newEntityRowSwap(context, item, this.indexOf({item}));
-        const switched = !!this.swappingState.switchTo(newEntityRowSwap);
+        const switched = !!this.swappingState.switchTo(newEntityRowSwap, SelectableListState.DONT_RECORD_EVENTS);
         if (switched) {
             AssertionUtils.isNotNull(newEntityRowSwap);
             if (previousEntityRowSwap != null) {
@@ -74,7 +76,7 @@ class SelectableListState extends CrudListState {
      */
     switchToOff() {
         const previousEntityRowSwap = this.swappingState.currentState;
-        const switched = !!this.swappingState.switchOff();
+        const switched = !!this.swappingState.switchOff(SelectableListState.DONT_RECORD_EVENTS);
         if (switched) {
             AssertionUtils.isNotNull(previousEntityRowSwap);
             this._processSwitchedOff(previousEntityRowSwap);

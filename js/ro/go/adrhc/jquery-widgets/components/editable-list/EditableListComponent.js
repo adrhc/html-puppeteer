@@ -191,14 +191,19 @@ class EditableListComponent extends SelectableListComponent {
      * @protected
      */
     handleItemOff(stateChange) {
+        return this._removeErrorRow()
+            .then(() => super.handleItemOff(stateChange));
+    }
+
+    _removeErrorRow() {
         const errorRowId = this.errorRow.state.currentState?.id;
         if (errorRowId == null) {
-            return super.handleItemOff(stateChange);
+            return Promise.resolve();
         }
         this.errorRow.reset();
         return this.doWithState(() => {
             this.editableListState.removeById(errorRowId);
-        }).then(() => super.handleItemOff(stateChange));
+        });
     }
 
     /**

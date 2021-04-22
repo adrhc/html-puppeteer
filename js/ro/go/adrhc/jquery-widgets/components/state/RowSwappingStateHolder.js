@@ -16,16 +16,20 @@ class RowSwappingStateHolder extends TaggingStateHolder {
 
     /**
      * @param {EntityRowSwap} otherEntityRowSwap
+     * @param {string|number} [partName] specify the state's part/section to change/manipulate
+     * @param {boolean} [dontRecordStateEvents]
      * @return {TaggedStateChange<EntityRowSwap>|undefined}
      */
-    switchTo(otherEntityRowSwap) {
+    switchTo(otherEntityRowSwap, {partName, dontRecordStateEvents} = {}) {
         return this.replace(otherEntityRowSwap);
     }
 
     /**
+     * @param {string|number} [partName] specify the state's part/section to change/manipulate
+     * @param {boolean} [dontRecordStateEvents]
      * @return {TaggedStateChange<EntityRowSwap>|undefined}
      */
-    switchOff() {
+    switchOff({partName, dontRecordStateEvents} = {}) {
         return this.replace();
     }
 }

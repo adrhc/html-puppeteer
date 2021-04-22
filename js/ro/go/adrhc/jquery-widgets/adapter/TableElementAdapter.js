@@ -188,7 +188,11 @@ class TableElementAdapter {
      * @returns {string}
      */
     rowSelectorOf(dataValue, dataKey = this.rowDataId) {
-        return `tr${this.ownerSelector}[data-${dataKey}='${dataValue}']`;
+        if (dataValue == null) {
+            return `tr${this.ownerSelector}[data-${dataKey}]`;
+        } else {
+            return `tr${this.ownerSelector}[data-${dataKey}='${dataValue}']`;
+        }
     }
 
     /**
