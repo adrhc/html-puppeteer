@@ -7,6 +7,7 @@
 class SelectableListComponent extends SimpleListComponent {
     static OFF_ROW_TYPE = "off";
     static ON_ROW_TYPE = "on";
+    static ROW_TYPE_DATA_NAME = "data-row-type";
     /**
      * @type {SelectableListState}
      */
@@ -30,11 +31,11 @@ class SelectableListComponent extends SimpleListComponent {
      * @param {string|jQuery<HTMLTableElement>} elemIdOrJQuery
      * @param {string=} bodyRowTmplId could be empty when not using a row template (but only the table)
      * @param {string=} bodyRowTmplHtml
-     * @param bodyTmplHtml
-     * @param rowDataId
+     * @param {string=} bodyTmplHtml
+     * @param {string=} rowDataId
      * @param {string} rowPositionOnCreate
      * @param {string=} childProperty
-     * @param dontAutoInitialize
+     * @param {boolean=} dontAutoInitialize
      * @param {SimpleListConfiguration=} config
      * @param {IdentifiableEntity[]=} items
      * @param {CrudRepository=} repository
@@ -44,10 +45,10 @@ class SelectableListComponent extends SimpleListComponent {
      * @param {IdentifiableRowComponent} offRow
      * @param {IdentifiableRowComponent} onRow
      * @param {SimpleListView=} view
-     * @param compositeBehaviour
-     * @param childCompFactories
+     * @param {CompositeBehaviour=} compositeBehaviour
+     * @param {childCompFactoryFn|childCompFactoryFn[]|ChildComponentFactory|ChildComponentFactory[]} [childCompFactories]
      * @param {ChildishBehaviour=} childishBehaviour permit CreateDeleteListComponent to update its parent
-     * @param parentComponent
+     * @param {AbstractComponent=} parentComponent
      */
     constructor({
                     elemIdOrJQuery,
@@ -121,7 +122,7 @@ class SelectableListComponent extends SimpleListComponent {
     }
 
     static _$rowTmplOf(elemIdOrJQuery, mustacheTableElemAdapter, tableConfig, type) {
-        let $rowTmplElem = mustacheTableElemAdapter.$rowByDataType(type);
+        let $rowTmplElem = mustacheTableElemAdapter.$rowByData(SelectableListComponent.ROW_TYPE_DATA_NAME, type);
         const index = type === SelectableListComponent.OFF_ROW_TYPE ? 1 : 2;
         $rowTmplElem = $rowTmplElem ?? mustacheTableElemAdapter.$rowByIndex(index);
         if (!$rowTmplElem) {

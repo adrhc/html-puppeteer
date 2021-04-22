@@ -4,7 +4,9 @@ class SimpleListConfiguration extends ComponentConfiguration {
      */
     rowPositionOnCreate;
     /**
-     * @type {Array}
+     * items formatted as JSON
+     *
+     * @type {string}
      */
     items;
 

@@ -1,4 +1,6 @@
 class EditableListComponent extends SelectableListComponent {
+    static DELETE_ROW_TYPE = "delete";
+
     /**
      * @type {EditableListState}
      */
@@ -28,6 +30,10 @@ class EditableListComponent extends SelectableListComponent {
         if (extractedEntityConverterFn) {
             this.selectableListEntityExtractor.entityConverterFn = extractedEntityConverterFn;
         }
+    }
+
+    static $offRowTmpl(elemIdOrJQuery, mustacheTableElemAdapter, config) {
+        return SelectableListComponent._$rowTmplOf(elemIdOrJQuery, mustacheTableElemAdapter, config, SelectableListComponent.DELETE_ROW_TYPE);
     }
 
     /**

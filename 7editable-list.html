@@ -33,58 +33,40 @@
             </th>
         </tr>
         </thead>
+        <tr data-owner="dogsTable" data-id="{{id}}" data-row-type="off">
+            <td>
+                <input type="hidden" name="id" value="{{id}}">{{{name}}}
+            </td>
+            <td>
+                <div class="buttons">
+                    <img data-owner="dogsTable" data-btn="showDelete" alt="show delete" src="images/ro/go/adrhc/delete-button-32.png"/>
+                    <img data-owner="dogsTable" data-btn="showEdit" alt="show edit" src="images/ro/go/adrhc/edit-button-32.png"/>
+                </div>
+            </td>
+        </tr>
+        <tr data-owner="dogsTable" data-id="{{id}}" data-row-type="on" class="row-editor">
+            <td>
+                <input type="hidden" name="id" value="{{id}}">
+                <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
+            </td>
+            <td>
+                <div class="buttons">
+                    <img data-owner="dogsTable" data-btn="cancel" alt="cancel" src="images/ro/go/adrhc/cancel-button-32.png"/>
+                    <img data-owner="dogsTable" data-btn="update" alt="update" src="images/ro/go/adrhc/save-button-32.png"/>
+                </div>
+            </td>
+        </tr>
+        <tr data-owner="dogsTable" data-id="{{id}}" data-row-type="delete" class="deletable-row">
+            <td>{{{name}}}</td>
+            <td>
+                <div class="buttons">
+                    <img data-owner="dogsTable" data-btn="cancel" alt="cancel" src="images/ro/go/adrhc/cancel-button-32.png"/>
+                    <img data-owner="dogsTable" data-btn="delete" alt="delete" src="images/ro/go/adrhc/delete-button-32.png"/>
+                </div>
+            </td>
+        </tr>
     </table>
 </div>
-
-<!-- READ-ONLY row template -->
-<template id="dogsTableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}">
-        <td>
-            <input type="hidden" name="id" value="{{id}}">{{{name}}}
-        </td>
-        <td>
-            <div class="buttons">
-                <img data-owner="dogsTable" data-btn="showDelete" alt="show delete" src="images/ro/go/adrhc/delete-button-32.png"/>
-                <img data-owner="dogsTable" data-btn="showEdit" alt="show edit" src="images/ro/go/adrhc/edit-button-32.png"/>
-            </div>
-        </td>
-    </tr>
-</template>
-
-<!-- DELETE row template -->
-<template id="dogsTableDeletableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}" class="deletable-row">
-        <td>{{{name}}}</td>
-        <td>
-            <div class="buttons">
-                <img data-owner="dogsTable" data-btn="cancel" alt="cancel" src="images/ro/go/adrhc/cancel-button-32.png"/>
-                <img data-owner="dogsTable" data-btn="delete" alt="delete" src="images/ro/go/adrhc/delete-button-32.png"/>
-            </div>
-        </td>
-    </tr>
-    <tr data-owner="dogsTable" data-secondary-row-part="{{id}}" class="row-part">
-        <td colspan="2">DELETE secondary-row-part {{id}}</td>
-    </tr>
-</template>
-
-<!-- EDIT row template -->
-<template id="dogsTableEditableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}" class="row-editor">
-        <td>
-            <input type="hidden" name="id" value="{{id}}">
-            <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
-        </td>
-        <td>
-            <div class="buttons">
-                <img data-owner="dogsTable" data-btn="cancel" alt="cancel" src="images/ro/go/adrhc/cancel-button-32.png"/>
-                <img data-owner="dogsTable" data-btn="update" alt="update" src="images/ro/go/adrhc/save-button-32.png"/>
-            </div>
-        </td>
-    </tr>
-    <tr data-owner="dogsTable" data-secondary-row-part="{{id}}" class="row-part">
-        <td colspan="2">EDIT secondary-row-part {{id}}</td>
-    </tr>
-</template>
 
 <!-- utils -->
 <script src="js/ro/go/adrhc/jquery-widgets/utils/AjaxUtils.js"></script>

@@ -6,11 +6,11 @@ class AbstractTableBasedComponent extends AbstractComponent {
 
     /**
      * @param {AbstractTableBasedView} view
-     * @param {StateHolder=} state
-     * @param compositeBehaviour
-     * @param childCompFactories
+     * @param {StateHolder} state
+     * @param {CompositeBehaviour=} compositeBehaviour
+     * @param {childCompFactoryFn|childCompFactoryFn[]|ChildComponentFactory|ChildComponentFactory[]} [childCompFactories]
      * @param {ChildishBehaviour=} childishBehaviour
-     * @param parentComponent
+     * @param {AbstractComponent=} parentComponent
      * @param {ComponentConfiguration=} config
      */
     constructor({
