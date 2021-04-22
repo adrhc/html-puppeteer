@@ -27,8 +27,10 @@
             <th>Dogs</th>
             <th>
                 <div class="buttons">
-                    <img data-owner="dogsTable" data-btn="reload" alt="reload" src="images/ro/go/adrhc/reload-button-32.png"/>
-                    <img data-owner="dogsTable" data-btn="showAdd" alt="show add" src="images/ro/go/adrhc/add-button-32.png"/>
+                    <img data-owner="dogsTable" data-btn="reload" alt="reload"
+                         src="images/ro/go/adrhc/reload-button-32.png"/>
+                    <img data-owner="dogsTable" data-btn="showAdd" alt="show add"
+                         src="images/ro/go/adrhc/add-button-32.png"/>
                 </div>
             </th>
         </tr>
@@ -39,8 +41,10 @@
             </td>
             <td>
                 <div class="buttons">
-                    <img data-owner="dogsTable" data-btn="showDelete" alt="show delete" src="images/ro/go/adrhc/delete-button-32.png"/>
-                    <img data-owner="dogsTable" data-btn="showEdit" alt="show edit" src="images/ro/go/adrhc/edit-button-32.png"/>
+                    <img data-owner="dogsTable" data-btn="showDelete" alt="show delete"
+                         src="images/ro/go/adrhc/delete-button-32.png"/>
+                    <img data-owner="dogsTable" data-btn="showEdit" alt="show edit"
+                         src="images/ro/go/adrhc/edit-button-32.png"/>
                 </div>
             </td>
         </tr>
@@ -51,8 +55,10 @@
             </td>
             <td>
                 <div class="buttons">
-                    <img data-owner="dogsTable" data-btn="cancel" alt="cancel" src="images/ro/go/adrhc/cancel-button-32.png"/>
-                    <img data-owner="dogsTable" data-btn="update" alt="update" src="images/ro/go/adrhc/save-button-32.png"/>
+                    <img data-owner="dogsTable" data-btn="cancel" alt="cancel"
+                         src="images/ro/go/adrhc/cancel-button-32.png"/>
+                    <img data-owner="dogsTable" data-btn="update" alt="update"
+                         src="images/ro/go/adrhc/save-button-32.png"/>
                 </div>
             </td>
         </tr>
@@ -60,9 +66,28 @@
             <td>{{{name}}}</td>
             <td>
                 <div class="buttons">
-                    <img data-owner="dogsTable" data-btn="cancel" alt="cancel" src="images/ro/go/adrhc/cancel-button-32.png"/>
-                    <img data-owner="dogsTable" data-btn="delete" alt="delete" src="images/ro/go/adrhc/delete-button-32.png"/>
+                    <img data-owner="dogsTable" data-btn="cancel" alt="cancel"
+                         src="images/ro/go/adrhc/cancel-button-32.png"/>
+                    <img data-owner="dogsTable" data-btn="delete" alt="delete"
+                         src="images/ro/go/adrhc/delete-button-32.png"/>
                 </div>
+            </td>
+        </tr>
+        <tr data-owner="personsTable" data-id="{{id}}" data-row-type="error" data-secondary-row-part="{{failedId}}">
+            <td colspan="2">
+                <table class="errors-table">
+                    <tr>
+                        <th>
+                            <div class="title">{{{title}}}</div>
+                            <div class="time">{{time}}</div>
+                        </th>
+                    </tr>
+                    {{#each messages}}
+                    <tr class="{{type}}">
+                        <td class="error-message">{{this}}</td>
+                    </tr>
+                    {{/each}}
+                </table>
             </td>
         </tr>
     </table>
@@ -78,6 +103,7 @@
 <script src="js/ro/go/adrhc/jquery-widgets/utils/EntityUtils.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/utils/FormUtils.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/utils/HtmlUtils.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/utils/ObjectUtils.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/utils/RestUtils.js"></script>
 <!-- helpers -->
 <script src="js/ro/go/adrhc/jquery-widgets/helper/CachedHtmlTemplate.js"></script>

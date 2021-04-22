@@ -12,6 +12,7 @@ class AbstractTableBasedComponent extends AbstractComponent {
      * @param {ChildishBehaviour=} childishBehaviour
      * @param {AbstractComponent=} parentComponent
      * @param {ComponentConfiguration=} config
+     * @param {boolean=} forceDontAutoInitialize
      */
     constructor({
                     view,
@@ -20,7 +21,8 @@ class AbstractTableBasedComponent extends AbstractComponent {
                     childCompFactories,
                     childishBehaviour,
                     parentComponent,
-                    config
+                    config,
+                    forceDontAutoInitialize
                 }) {
         const _this = super({
             view,
@@ -29,7 +31,8 @@ class AbstractTableBasedComponent extends AbstractComponent {
             childCompFactories,
             childishBehaviour,
             parentComponent,
-            config
+            config,
+            forceDontAutoInitialize
         });
         this.tableBasedView = view;
         return _this;

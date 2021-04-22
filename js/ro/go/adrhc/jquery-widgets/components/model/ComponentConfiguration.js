@@ -1,3 +1,6 @@
+/**
+ * @typedef {ComponentConfiguration} C
+ */
 class ComponentConfiguration {
     /**
      * @type {boolean}
@@ -55,7 +58,7 @@ class ComponentConfiguration {
     /**
      * @param {string|jQuery<HTMLElement>|function(): jQuery<HTMLElement>} elemIdOrJQuery
      * @param {Object=} defaults are applied from left to right (first applied wins)
-     * @return {ComponentConfiguration}
+     * @return {C}
      */
     static configOf(elemIdOrJQuery, ...defaults) {
         return ComponentConfiguration._configOf(new ComponentConfiguration(), elemIdOrJQuery, ...defaults);
@@ -64,7 +67,7 @@ class ComponentConfiguration {
     /**
      * @param {string|jQuery<HTMLElement>|function(): jQuery<HTMLElement>} elemIdOrJQuery
      * @param {Object=} overrides are applied from left to right (first applied wins)
-     * @return {ComponentConfiguration}
+     * @return {C}
      */
     static configWithOverrides(elemIdOrJQuery, ...overrides) {
         return ComponentConfiguration._configWithOverrides(new ComponentConfiguration(), elemIdOrJQuery, ...overrides);
@@ -80,7 +83,7 @@ class ComponentConfiguration {
 
     /**
      * @param {Object} overwrites
-     * @return {ComponentConfiguration}
+     * @return {C}
      */
     overwriteWith(...overwrites) {
         return _.defaults(this._new(), ...overwrites, this);
@@ -88,12 +91,16 @@ class ComponentConfiguration {
 
     /**
      * @param {boolean=} dontAutoInitialize
-     * @return {ComponentConfiguration}
+     * @return {C}
      */
     dontAutoInitializeOf(dontAutoInitialize = true) {
         return this.overwriteWith({dontAutoInitialize});
     }
 
+    /**
+     * @return {C}
+     * @protected
+     */
     _new() {
         const configClass = eval(this.constructor.name);
         return new configClass();

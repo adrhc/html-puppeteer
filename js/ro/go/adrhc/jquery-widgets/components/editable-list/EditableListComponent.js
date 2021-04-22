@@ -1,5 +1,6 @@
 class EditableListComponent extends SelectableListComponent {
     static DELETE_ROW_TYPE = "delete";
+    static ERROR_ROW_TYPE = "error";
 
     /**
      * @type {EditableListState}

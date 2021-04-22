@@ -5,80 +5,55 @@
 class SimpleListComponent extends AbstractTableBasedComponent {
     static MESSAGES = {reloadSuccessful: "Datele au fost reîncărcate!"};
     /**
-     * @type {SimpleListState}
-     */
-    simpleListState;
-    /**
      * @type {CrudRepository}
      */
     repository;
 
     /**
-     * @param {string|jQuery<HTMLTableElement>} elemIdOrJQuery
-     * @param {string=} bodyRowTmplId could be empty when not using a row template (but only the table)
-     * @param {string=} bodyRowTmplHtml
-     * @param {string=} bodyTmplHtml
-     * @param {string=} rowDataId
-     * @param {string=} rowPositionOnCreate
-     * @param {string=} childProperty
-     * @param {boolean=} dontAutoInitialize
-     * @param {SimpleListConfiguration=} config
-     * @param {IdentifiableEntity[]=} items
-     * @param {CrudRepository=} repository
-     * @param {MustacheTableElemAdapter=} mustacheTableElemAdapter
-     * @param {SimpleListState=} state
-     * @param {SimpleListView=} view
-     * @param {CompositeBehaviour=} compositeBehaviour
-     * @param {childCompFactoryFn|childCompFactoryFn[]|ChildComponentFactory|ChildComponentFactory[]} [childCompFactories]
-     * @param {ChildishBehaviour=} childishBehaviour permit CreateDeleteListComponent to update its parent
-     * @param {AbstractComponent=} parentComponent
+     * @param {SimpleListOptions} options
      */
-    constructor({
-                    elemIdOrJQuery,
-                    bodyRowTmplId,
-                    bodyRowTmplHtml,
-                    bodyTmplHtml,
-                    rowDataId,
-                    rowPositionOnCreate,
-                    childProperty,
-                    dontAutoInitialize,
-                    childishBehaviour,
-                    parentComponent,
-                    config = SimpleListConfiguration.configOf(elemIdOrJQuery, {
-                        dontAutoInitialize: AbstractComponent._canConstructChildishBehaviour(childishBehaviour, parentComponent)
-                    }).overwriteWith({
-                        bodyRowTmplId,
-                        bodyRowTmplHtml,
-                        bodyTmplHtml,
-                        rowDataId,
-                        rowPositionOnCreate,
-                        childProperty,
-                        dontAutoInitialize
-                    }),
-                    items = typeof config.items === "string" ? JSON.parse(config.items) : config.items ?? [],
-                    repository = new InMemoryCrudRepository(items),
-                    mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, config),
-                    state = new SimpleListState(),
-                    view = new SimpleListView(mustacheTableElemAdapter),
-                    compositeBehaviour,
-                    childCompFactories
-                }) {
-        // the "super" missing parameters (e.g. bodyRowTmplId) are included in "config" or they are
-        // simply intermediate values (e.g. elemIdOrJQuery is used to compute mustacheTableElemAdapter)
-        super({
-            view,
-            state,
-            compositeBehaviour,
-            childCompFactories,
-            childishBehaviour,
-            parentComponent,
-            config: config.dontAutoInitializeOf()
-        });
-        this.config = config; // the "config" set by "super" is different (see line above)
+    constructor(options) {
+        super(SimpleListComponent._optionsWithDefaults(options, true));
         this.handleWithAny(["CREATE", "REPLACE", "DELETE"])
-        this.simpleListState = state;
-        this.repository = repository;
+        this.repository = options.repository ?? new InMemoryCrudRepository(this._configItemsOf(options));
         return this._handleAutoInitialization();
+    }
+
+    /**
+     * @param {SimpleListOptions} options
+     * @param {boolean} forceDontAutoInitialize
+     * @return {SimpleListOptions}
+     * @protected
+     */
+    static _optionsWithDefaults(options, forceDontAutoInitialize) {
+        const defaultDontAutoInitialize = AbstractComponent._canConstructChildishBehaviour(options.childishBehaviour, options.parentComponent);
+        const config = options.config ?? SimpleListConfiguration
+            .configOf(options.elemIdOrJQuery, {dontAutoInitialize: defaultDontAutoInitialize})
+            .overwriteWith(ObjectUtils.objectWithPropertiesOf(options, ["bodyRowTmplId", "bodyRowTmplHtml",
+                "bodyTmplHtml", "rowDataId", "rowPositionOnCreate", "childProperty", "dontAutoInitialize"]));
+        const mustacheTableElemAdapter = options.mustacheTableElemAdapter ?? new MustacheTableElemAdapter(options.elemIdOrJQuery, config);
+        return _.defaults({
+            config,
+            state: options.state ?? new SimpleListState(),
+            view: options.view ?? new SimpleListView(mustacheTableElemAdapter),
+            forceDontAutoInitialize
+        }, options);
+    }
+
+    /**
+     * @param {SimpleListOptions} options
+     * @return {IdentifiableEntity[]|Array}
+     * @protected
+     */
+    _configItemsOf(options) {
+        if (options.items) {
+            return options.items;
+        } else if (typeof this.simpleListConfiguration.items === "string") {
+            return JSON.parse(this.simpleListConfiguration.items);
+        } else {
+            // SimpleListConfiguration.configOf already parse items JSON (jquery default behaviour for $.data())
+            return this.simpleListConfiguration.items ?? [];
+        }
     }
 
     /**
@@ -146,5 +121,12 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      */
     get simpleListConfiguration() {
         return this.config
+    }
+
+    /**
+     * @return {SimpleListState}
+     */
+    get simpleListState() {
+        return this.state;
     }
 }

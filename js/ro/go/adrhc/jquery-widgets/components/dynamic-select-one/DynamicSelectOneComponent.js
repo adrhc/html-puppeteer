@@ -55,12 +55,13 @@ class DynamicSelectOneComponent extends AbstractComponent {
             childCompFactories,
             childishBehaviour,
             parentComponent,
-            config: config.dontAutoInitializeOf()
+            config,
+            forceDontAutoInitialize: true
         });
         this.repository = repository;
         view.component = this;
         this.handleWithAny(true);
-        return this._handleAutoInitialization(config);
+        return this._handleAutoInitialization();
     }
 
     init() {

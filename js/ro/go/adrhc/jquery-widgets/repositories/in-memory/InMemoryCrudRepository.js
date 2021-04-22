@@ -1,5 +1,9 @@
 class InMemoryCrudRepository extends CrudRepository {
     /**
+     * @type {IdentifiableEntity[]|Array}
+     */
+    items;
+    /**
      * @type {function({}): {}}
      */
     requestConverter;
@@ -11,11 +15,13 @@ class InMemoryCrudRepository extends CrudRepository {
     responseConverter;
 
     /**
-     * @param [items] {Array<IdentifiableEntity>}
-     * @param [responseConverter] {function({}): IdentifiableEntity}
-     * @param [requestConverter] {function({}): IdentifiableEntity}
+     * @param {IdentifiableEntity[]|Array} [items]
+     * @param {function({}): IdentifiableEntity} [responseConverter]
+     * @param {function({}): IdentifiableEntity} [requestConverter]
      */
-    constructor(items = [], responseConverter = IdentifiableEntity.entityConverter, requestConverter = IdentifiableEntity.entityConverter) {
+    constructor(items = [],
+                responseConverter = IdentifiableEntity.entityConverter,
+                requestConverter = IdentifiableEntity.entityConverter) {
         super();
         this.items = items;
         this.requestConverter = requestConverter;

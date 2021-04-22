@@ -1,3 +1,6 @@
+/**
+ * @typedef {SimpleListConfiguration} C
+ */
 class SimpleListConfiguration extends ComponentConfiguration {
     /**
      * @type {"prepend"|"append"}

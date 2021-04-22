@@ -47,24 +47,40 @@ class AbstractComponent {
      * @param {ChildishBehaviour=} childishBehaviour
      * @param {AbstractComponent=} parentComponent
      * @param {ComponentConfiguration=} config
+     * @param {boolean=} forceDontAutoInitialize is used but not added to config
      */
     constructor({
                     view,
-                    state = new StateHolder(),
+                    state,
                     compositeBehaviour,
                     childCompFactories,
                     childishBehaviour,
                     parentComponent,
-                    config = ComponentConfiguration.configOf(view?.$elem),
+                    config,
+                    forceDontAutoInitialize
                 }) {
-        this.state = state;
-        this.view = view;
-        this.config = config;
+        const options = AbstractComponent._optionsWithDefaults({
+            view, state, compositeBehaviour, childCompFactories, childishBehaviour, parentComponent, config
+        });
+        this.state = options.state;
+        this.view = options.view;
+        this.config = options.config;
         this.stateChangesDispatcher = new StateChangesDispatcher(this);
         this.entityExtractor = new DefaultEntityExtractor(this);
-        this._setupCompositeBehaviour(compositeBehaviour, childCompFactories);
-        this._setupChildishBehaviour({childishBehaviour, parentComponent});
-        return this._handleAutoInitialization();
+        this._setupCompositeBehaviour(options.compositeBehaviour, options.childCompFactories);
+        this._setupChildishBehaviour(options);
+        return this._handleAutoInitialization(forceDontAutoInitialize);
+    }
+
+    /**
+     * @return {Object}
+     * @protected
+     */
+    static _optionsWithDefaults(options) {
+        return _.defaults({
+            state: options.state ?? new StateHolder(),
+            config: options.config ?? ComponentConfiguration.configOf(options.view?.$elem)
+        }, options);
     }
 
     static _canConstructChildishBehaviour(childishBehaviour, parentComponent) {
@@ -73,8 +89,8 @@ class AbstractComponent {
 
     /**
      * @param {ChildishBehaviour=} childishBehaviour
-     * @param {AbstractComponent} parentComponent
-     * @param {string|number} childProperty
+     * @param {AbstractComponent=} parentComponent
+     * @param {string|number} [childProperty]
      * @protected
      */
     _setupChildishBehaviour({
@@ -98,18 +114,19 @@ class AbstractComponent {
      * @protected
      */
     _setupCompositeBehaviour(compositeBehaviour, childCompFactories) {
-        this.compositeBehaviour = fp.defaultTo(new CompositeBehaviour(this), compositeBehaviour);
+        this.compositeBehaviour = compositeBehaviour ?? new CompositeBehaviour(this);
         if (childCompFactories) {
             this.compositeBehaviour.addChildComponentFactory(childCompFactories);
         }
     }
 
     /**
-     * @return {Promise<StateChange[]>}
+     * @param {boolean=} dontAutoInitialize
+     * @return {Promise<StateChange[]>|undefined}
      * @protected
      */
-    _handleAutoInitialization(config = this.config) {
-        if (!config.dontAutoInitialize) {
+    _handleAutoInitialization(dontAutoInitialize = this.config.dontAutoInitialize) {
+        if (!dontAutoInitialize) {
             return this.init();
         }
     }
