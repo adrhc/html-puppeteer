@@ -1,61 +1,39 @@
 class EditableListComponent extends SelectableListComponent {
     static DELETE_ROW_TYPE = "delete";
     static ERROR_ROW_TYPE = "error";
+    /**
+     * @type {IdentifiableRowComponent}
+     */
+    errorRow;
 
     /**
-     * @type {EditableListState}
+     * @param {EditableListOptions=} options
      */
-    editableListState;
-
-    /**
-     * @param {CrudRepository} repository
-     * @param {SelectableListState} state
-     * @param {SimpleListView} view
-     * @param {IdentifiableRowComponent} offRow
-     * @param {IdentifiableRowComponent} onRow
-     * @param {IdentifiableRowComponent} deletableRow
-     * @param {IdentifiableRowComponent} errorRow
-     * @param {function(extractedEntity: {}): IdentifiableEntity} [extractedEntityConverterFn]
-     * @param {ComponentConfiguration} [config]
-     */
-    constructor(repository, state, view,
-                offRow, onRow,
-                deletableRow, errorRow,
-                extractedEntityConverterFn, config) {
-        super(repository, state, view, offRow, onRow, config);
-        this.editableListState = state;
-        this.swappingRowSelector["showAdd"] = onRow;
-        this.swappingRowSelector["showEdit"] = onRow; // is equal to super.swappingRowSelector[false]
-        this.swappingRowSelector["showDelete"] = deletableRow;
-        this._setupErrorRow(errorRow);
-        if (extractedEntityConverterFn) {
-            this.selectableListEntityExtractor.entityConverterFn = extractedEntityConverterFn;
+    constructor(options = new EditableListOptions()) {
+        super(_.defaults(new EditableListOptions(), {forceDontAutoInitialize: true}, options));
+        if (options.extractedEntityConverterFn) {
+            this.selectableListEntityExtractor.entityConverterFn = options.extractedEntityConverterFn;
         }
+        return this._handleAutoInitialization();
     }
 
-    static $offRowTmpl(elemIdOrJQuery, mustacheTableElemAdapter, config) {
-        return SelectableListComponent._$rowTmplOf(elemIdOrJQuery, mustacheTableElemAdapter, config, SelectableListComponent.DELETE_ROW_TYPE);
+    _setupSwappingRowSelectorOf(options) {
+        super._setupSwappingRowSelectorOf(options);
+        this.swappingRowSelector["showAdd"] = this.onRow;
+        this.swappingRowSelector["showEdit"] = this.onRow; // is equal to super.swappingRowSelector[false]
+        const mustacheTableElemAdapter = this.simpleListView.mustacheTableElemAdapter;
+        this.swappingRowSelector["showDelete"] = EditableListComponent.$deletableRowTmpl(mustacheTableElemAdapter, this.config);
+        this.errorRow = EditableListComponent.$errorRowTmpl(mustacheTableElemAdapter, this.config);
     }
 
-    /**
-     * @param errorRow
-     * @protected
-     */
-    _setupErrorRow(errorRow) {
-        const errorRowTmplId = this.config.errorRowTmplId;
-        const errorRowTmplHtml = this.config.errorRowTmplHtml;
-        if (errorRow) {
-            this.errorRow = errorRow;
-        } else if (!errorRowTmplId && !errorRowTmplHtml) {
-            this.errorRow = undefined;
-        } else {
-            this.errorRow = new IdentifiableRowComponent({
-                elemIdOrJQuery: this.tableBasedView.$elem,
-                childishBehaviour: new ChildishBehaviour(this),
-                rowTmplId: errorRowTmplId,
-                rowTmplHtml: errorRowTmplHtml
-            });
-        }
+    static $errorRowTmpl(mustacheTableElemAdapter, config) {
+        return SelectableListComponent._$rowTmplOf(
+            SelectableListComponent.ERROR_ROW_TYPE, mustacheTableElemAdapter, config);
+    }
+
+    static $deletableRowTmpl(mustacheTableElemAdapter, config) {
+        return SelectableListComponent._$rowTmplOf(
+            SelectableListComponent.DELETE_ROW_TYPE, mustacheTableElemAdapter, config);
     }
 
     /**
@@ -231,5 +209,16 @@ class EditableListComponent extends SelectableListComponent {
                 row.reset();
             }
         }
+    }
+
+    /**
+     * @return {EditableListState}
+     */
+    get editableListState() {
+        return this.state;
+    }
+
+    get onRow() {
+        return this.swappingRowSelector[SwitchType.ON];
     }
 }

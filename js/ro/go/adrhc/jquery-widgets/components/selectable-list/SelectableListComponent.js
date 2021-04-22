@@ -9,119 +9,74 @@ class SelectableListComponent extends SimpleListComponent {
     static ON_ROW_TYPE = "on";
     static ROW_TYPE_DATA_NAME = "data-row-type";
     /**
-     * @type {SelectableListState}
-     */
-    selectableListState;
-    /**
-     * @type {SimpleListView}
-     */
-    simpleListView;
-    /**
-     * field having SelectableListEntityExtractor type instead of the generic EntityExtractor type
-     *
-     * @type {SelectableListEntityExtractor}
-     */
-    selectableListEntityExtractor;
-    /**
-     * @type {{}}
+     * @type {Object}
      */
     swappingRowSelector;
 
     /**
-     * @param {string|jQuery<HTMLTableElement>} elemIdOrJQuery
-     * @param {string=} bodyRowTmplId could be empty when not using a row template (but only the table)
-     * @param {string=} bodyRowTmplHtml
-     * @param {string=} bodyTmplHtml
-     * @param {string=} rowDataId
-     * @param {string} rowPositionOnCreate
-     * @param {string=} childProperty
-     * @param {boolean=} dontAutoInitialize
-     * @param {SimpleListConfiguration=} config
-     * @param {IdentifiableEntity[]=} items
-     * @param {CrudRepository=} repository
-     * @param {MustacheTableElemAdapter=} mustacheTableElemAdapter
-     * @param {function(): IdentifiableEntity} newEntityFactoryFn
-     * @param {SimpleListState=} state
-     * @param {IdentifiableRowComponent} offRow
-     * @param {IdentifiableRowComponent} onRow
-     * @param {SimpleListView=} view
-     * @param {CompositeBehaviour=} compositeBehaviour
-     * @param {childCompFactoryFn|childCompFactoryFn[]|ChildComponentFactory|ChildComponentFactory[]} [childCompFactories]
-     * @param {ChildishBehaviour=} childishBehaviour permit CreateDeleteListComponent to update its parent
-     * @param {AbstractComponent=} parentComponent
+     * @param {SelectableListOptions=} options
      */
-    constructor({
-                    elemIdOrJQuery,
-                    bodyRowTmplId,
-                    bodyRowTmplHtml,
-                    bodyTmplHtml,
-                    rowDataId,
-                    rowPositionOnCreate,
-                    childProperty,
-                    dontAutoInitialize,
-                    childishBehaviour,
-                    parentComponent,
-                    config = SimpleListConfiguration.configOf(elemIdOrJQuery, {
-                        dontAutoInitialize: AbstractComponent._canConstructChildishBehaviour(childishBehaviour, parentComponent)
-                    }).overwriteWith({
-                        bodyRowTmplId,
-                        bodyRowTmplHtml,
-                        bodyTmplHtml,
-                        rowDataId,
-                        rowPositionOnCreate,
-                        childProperty,
-                        dontAutoInitialize
-                    }),
-                    items = typeof config.items === "string" ? JSON.parse(config.items) : config.items ?? [],
-                    repository = new InMemoryCrudRepository(items),
-                    mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, config),
-                    newEntityFactoryFn,
-                    state = new SelectableListState({
-                        newEntityFactoryFn,
-                        newItemsGoLast: mustacheTableElemAdapter.rowPositionOnCreate === "append"
-                    }),
-                    offRow = SelectableListComponent.$offRowTmpl(elemIdOrJQuery, mustacheTableElemAdapter, config),
-                    onRow = SelectableListComponent.$onRowTmpl(elemIdOrJQuery, mustacheTableElemAdapter, config),
-                    view = new SimpleListView(mustacheTableElemAdapter),
-                    compositeBehaviour,
-                    childCompFactories
-                }) {
-        super({
-            repository,
-            view,
-            state,
-            compositeBehaviour,
-            childCompFactories,
-            childishBehaviour,
-            parentComponent,
-            config: config.dontAutoInitializeOf()
-        });
-        this.config = config;
+    constructor(options = new SelectableListOptions()) {
+        super(SelectableListComponent._optionsWithDefaults(options, true));
         this.configurePartChangeHandlers({
             handleItemChange: ["CREATE", "REPLACE", "DELETE"],
             handleItemOff: ["OFF"],
             handleItemOn: ["ON"]
         }, "Item");
-        this.selectableListState = state;
-        this.simpleListView = view;
-        this.selectableListEntityExtractor = this.entityExtractor = new SelectableListEntityExtractor(this);
-        this.swappingRowSelector = {
-            ON: onRow, // e.g. editable-row, deletable-row
-            OFF: offRow // i.e. read-only row
-        };
-        this.offRow = offRow;
+        this.entityExtractor = new SelectableListEntityExtractor(this);
+        this.swappingRowSelector = this._setupSwappingRowSelectorOf(options);
         return this._handleAutoInitialization();
     }
 
-    static $offRowTmpl(elemIdOrJQuery, mustacheTableElemAdapter, config) {
-        return SelectableListComponent._$rowTmplOf(elemIdOrJQuery, mustacheTableElemAdapter, config, SelectableListComponent.OFF_ROW_TYPE);
+    /**
+     * @param {SelectableListOptions} options
+     * @param {boolean=} forceDontAutoInitialize
+     * @return {SelectableListOptions}
+     * @protected
+     */
+    static _optionsWithDefaults(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
+        const selectableListOptions = _.defaults(new SelectableListOptions(),
+            SimpleListComponent._optionsWithDefaults(options, forceDontAutoInitialize));
+        selectableListOptions.state = options.state ?? SelectableListComponent._selectableListStateOf(selectableListOptions);
+        return selectableListOptions;
     }
 
-    static $onRowTmpl(elemIdOrJQuery, mustacheTableElemAdapter, config) {
-        return SelectableListComponent._$rowTmplOf(elemIdOrJQuery, mustacheTableElemAdapter, config, SelectableListComponent.ON_ROW_TYPE);
+    /**
+     * @param {SelectableListOptions} selectableListOptions
+     * @return {SelectableListState}
+     * @protected
+     */
+    static _selectableListStateOf(selectableListOptions) {
+        const rowPositionOnCreate = selectableListOptions.rowPositionOnCreate;
+        return new SelectableListState({
+            newEntityFactoryFn: selectableListOptions.newEntityFactoryFn,
+            newItemsGoLast: rowPositionOnCreate === "append"
+        })
     }
 
-    static _$rowTmplOf(elemIdOrJQuery, mustacheTableElemAdapter, tableConfig, type) {
+    /**
+     * @param {SelectableListOptions} options
+     * @protected
+     */
+    _setupSwappingRowSelectorOf(options) {
+        const mustacheTableElemAdapter = this.simpleListView.mustacheTableElemAdapter;
+        return {
+            [SwitchType.OFF]: options.offRow ?? SelectableListComponent.$offRowTmpl(mustacheTableElemAdapter, this.config),
+            [SwitchType.ON]: options.onRow ?? SelectableListComponent.$onRowTmpl(mustacheTableElemAdapter, this.config)
+        };
+    }
+
+    static $offRowTmpl(mustacheTableElemAdapter, config) {
+        return SelectableListComponent._$rowTmplOf(
+            SelectableListComponent.OFF_ROW_TYPE, mustacheTableElemAdapter, config);
+    }
+
+    static $onRowTmpl(mustacheTableElemAdapter, config) {
+        return SelectableListComponent._$rowTmplOf(
+            SelectableListComponent.ON_ROW_TYPE, mustacheTableElemAdapter, config);
+    }
+
+    static _$rowTmplOf(type, mustacheTableElemAdapter, tableConfig) {
         let $rowTmplElem = mustacheTableElemAdapter.$rowByData(SelectableListComponent.ROW_TYPE_DATA_NAME, type);
         const index = type === SelectableListComponent.OFF_ROW_TYPE ? 1 : 2;
         $rowTmplElem = $rowTmplElem ?? mustacheTableElemAdapter.$rowByIndex(index);
@@ -131,7 +86,7 @@ class SelectableListComponent extends SimpleListComponent {
         const bodyRowTmplHtml = DomUtils.htmlIncludingSelfOf($rowTmplElem);
         const config = RowConfiguration.configOf($rowTmplElem, tableConfig.overwriteWith({bodyRowTmplHtml}));
         return new IdentifiableRowComponent({
-            elemIdOrJQuery,
+            elemIdOrJQuery: tableConfig.elemIdOrJQuery,
             config
         });
     }
@@ -231,5 +186,30 @@ class SelectableListComponent extends SimpleListComponent {
         this.simpleListView.$elem
             .on(this._appendNamespaceTo("dblclick"),
                 `tr${this._ownerSelector}`, this, this.onSwitch);
+    }
+
+    /**
+     * @return {SimpleListView}
+     */
+    get simpleListView() {
+        return this.view;
+    }
+
+    /**
+     * @return {SelectableListState}
+     */
+    get selectableListState() {
+        return this.state;
+    }
+
+    /**
+     * @return {SelectableListEntityExtractor}
+     */
+    get selectableListEntityExtractor() {
+        return this.entityExtractor;
+    }
+
+    get offRow() {
+        return this.swappingRowSelector[SwitchType.OFF];
     }
 }

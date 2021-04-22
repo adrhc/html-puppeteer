@@ -5,16 +5,16 @@
  */
 class AbstractTableBasedView extends AbstractView {
     /**
-     * @type {MustacheTableElemAdapter}
+     * @type {TableElementAdapter}
      */
     tableAdapter;
 
     /**
-     * @param mustacheTableElemAdapter {MustacheTableElemAdapter}
+     * @param {TableElementAdapter} tableElementAdapter
      */
-    constructor(mustacheTableElemAdapter) {
+    constructor(tableElementAdapter) {
         super();
-        this.tableAdapter = mustacheTableElemAdapter;
+        this.tableAdapter = tableElementAdapter;
         this.$elem = this.tableAdapter.$table;
         this.owner = this.tableAdapter.owner;
     }

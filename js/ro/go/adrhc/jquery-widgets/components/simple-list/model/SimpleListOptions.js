@@ -1,4 +1,7 @@
-class SimpleListOptions {
+/**
+ * @see also MustacheTableElemAdapterOptions
+ */
+class SimpleListOptions extends AbstractComponentOptions {
     /**
      * @type {string|jQuery<HTMLTableElement>}
      */
@@ -32,18 +35,6 @@ class SimpleListOptions {
      */
     dontAutoInitialize;
     /**
-     * @type {ChildishBehaviour}
-     */
-    childishBehaviour;
-    /**
-     * @type {AbstractComponent}
-     */
-    parentComponent;
-    /**
-     * @type {SimpleListConfiguration}
-     */
-    config;
-    /**
      * @type {string|IdentifiableEntity[]}
      */
     items;
@@ -52,24 +43,35 @@ class SimpleListOptions {
      */
     repository;
     /**
-     * @type {SimpleListState}
-     */
-    state;
-    /**
      * @type {MustacheTableElemAdapter}
      */
     mustacheTableElemAdapter;
+
     /**
-     * @type {SimpleListView}
+     * @return {SimpleListView}
      */
-    view;
+    get simpleListView() {
+        return this.view;
+    }
+
     /**
-     * @type {CompositeBehaviour}
+     * @return {SimpleListConfiguration}
      */
-    compositeBehaviour;
+    get simpleListConfiguration() {
+        return this.config;
+    }
+
     /**
-     * @typedef {function(parentComp: AbstractComponent): AbstractComponent} childCompFactoryFn
-     * @type {childCompFactoryFn|childCompFactoryFn[]|ChildComponentFactory|ChildComponentFactory[]}
+     * @return {TableElementAdapter}
      */
-    childCompFactories;
+    get tableElementAdapter() {
+        return this.simpleListView.tableAdapter;
+    }
+
+    /**
+     * @return {"prepend"|"append"}
+     */
+    get rowPositionOnCreate() {
+        return this.tableElementAdapter.rowPositionOnCreate
+    }
 }

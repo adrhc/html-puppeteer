@@ -40,28 +40,10 @@ class AbstractComponent {
     childishBehaviour;
 
     /**
-     * @param {AbstractView} view
-     * @param {StateHolder} state
-     * @param {CompositeBehaviour=} compositeBehaviour
-     * @param {childCompFactoryFn|childCompFactoryFn[]|ChildComponentFactory|ChildComponentFactory[]} [childCompFactories]
-     * @param {ChildishBehaviour=} childishBehaviour
-     * @param {AbstractComponent=} parentComponent
-     * @param {ComponentConfiguration=} config
-     * @param {boolean=} forceDontAutoInitialize is used but not added to config
+     * @param {AbstractComponentOptions} options
      */
-    constructor({
-                    view,
-                    state,
-                    compositeBehaviour,
-                    childCompFactories,
-                    childishBehaviour,
-                    parentComponent,
-                    config,
-                    forceDontAutoInitialize
-                }) {
-        const options = AbstractComponent._optionsWithDefaults({
-            view, state, compositeBehaviour, childCompFactories, childishBehaviour, parentComponent, config
-        });
+    constructor(options) {
+        options = AbstractComponent._optionsWithDefaults(options);
         this.state = options.state;
         this.view = options.view;
         this.config = options.config;
@@ -69,17 +51,20 @@ class AbstractComponent {
         this.entityExtractor = new DefaultEntityExtractor(this);
         this._setupCompositeBehaviour(options.compositeBehaviour, options.childCompFactories);
         this._setupChildishBehaviour(options);
-        return this._handleAutoInitialization(forceDontAutoInitialize);
+        return this._handleAutoInitialization(options.forceDontAutoInitialize);
     }
 
     /**
-     * @return {Object}
+     * @param {AbstractComponentOptions} options
+     * @param {boolean=} forceDontAutoInitialize
+     * @return {AbstractComponentOptions}
      * @protected
      */
-    static _optionsWithDefaults(options) {
-        return _.defaults({
+    static _optionsWithDefaults(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
+        return _.defaults(new AbstractComponentOptions(), {
             state: options.state ?? new StateHolder(),
-            config: options.config ?? ComponentConfiguration.configOf(options.view?.$elem)
+            config: options.config ?? ComponentConfiguration.configOf(options.view?.$elem),
+            forceDontAutoInitialize
         }, options);
     }
 
