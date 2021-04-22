@@ -24,7 +24,7 @@ class SelectableListComponent extends SimpleListComponent {
             handleItemOn: ["ON"]
         }, "Item");
         this.entityExtractor = new SelectableListEntityExtractor(this);
-        this.swappingRowSelector = this._setupSwappingRowSelectorOf(options);
+        this.swappingRowSelector = this._createSwappingRowSelector(options);
         return this._handleAutoInitialization();
     }
 
@@ -47,10 +47,9 @@ class SelectableListComponent extends SimpleListComponent {
      * @protected
      */
     static _selectableListStateOf(selectableListOptions) {
-        const rowPositionOnCreate = selectableListOptions.rowPositionOnCreate;
         return new SelectableListState({
             newEntityFactoryFn: selectableListOptions.newEntityFactoryFn,
-            newItemsGoLast: rowPositionOnCreate === "append"
+            newItemsGoLast: selectableListOptions.rowPositionOnCreate === "append"
         })
     }
 
@@ -58,7 +57,7 @@ class SelectableListComponent extends SimpleListComponent {
      * @param {SelectableListOptions} options
      * @protected
      */
-    _setupSwappingRowSelectorOf(options) {
+    _createSwappingRowSelector(options) {
         const mustacheTableElemAdapter = this.simpleListView.mustacheTableElemAdapter;
         return {
             [SwitchType.OFF]: options.offRow ?? SelectableListComponent.$offRowTmpl(mustacheTableElemAdapter, this.config),
@@ -151,8 +150,7 @@ class SelectableListComponent extends SimpleListComponent {
         const entityRowSwap = stateChange.stateOrPart;
         const removeOnRow = new DeleteStateChange(entityRowSwap);
         const createOffRow = new CreateStateChange(entityRowSwap);
-        return this._swappingRowSelectorOf(entityRowSwap.context ?? SwitchType.OFF)
-            .processStateChanges(removeOnRow, createOffRow);
+        return this.offRow.processStateChanges(removeOnRow, createOffRow);
     }
 
     /**

@@ -10,30 +10,57 @@ class EditableListComponent extends SelectableListComponent {
      * @param {EditableListOptions=} options
      */
     constructor(options = new EditableListOptions()) {
-        super(_.defaults(new EditableListOptions(), {forceDontAutoInitialize: true}, options));
+        super(EditableListComponent._optionsWithDefaults(options, true));
         if (options.extractedEntityConverterFn) {
             this.selectableListEntityExtractor.entityConverterFn = options.extractedEntityConverterFn;
         }
+        this.errorRow = EditableListComponent.$errorRowTmpl(this.simpleListView.mustacheTableElemAdapter, this.config);
         return this._handleAutoInitialization();
     }
 
-    _setupSwappingRowSelectorOf(options) {
-        super._setupSwappingRowSelectorOf(options);
-        this.swappingRowSelector["showAdd"] = this.onRow;
-        this.swappingRowSelector["showEdit"] = this.onRow; // is equal to super.swappingRowSelector[false]
-        const mustacheTableElemAdapter = this.simpleListView.mustacheTableElemAdapter;
-        this.swappingRowSelector["showDelete"] = EditableListComponent.$deletableRowTmpl(mustacheTableElemAdapter, this.config);
-        this.errorRow = EditableListComponent.$errorRowTmpl(mustacheTableElemAdapter, this.config);
+    /**
+     * @param {EditableListOptions} options
+     * @param {boolean=} forceDontAutoInitialize
+     * @return {EditableListOptions}
+     * @protected
+     */
+    static _optionsWithDefaults(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
+        const editableListOptions = _.defaults(new EditableListOptions(),
+            SelectableListComponent._optionsWithDefaults(options, forceDontAutoInitialize));
+        editableListOptions.state = options.state ?? EditableListComponent._editableListStateOf(editableListOptions);
+        return editableListOptions;
+    }
+
+    /**
+     * @param {EditableListOptions} editableListOptions
+     * @return {EditableListState}
+     * @protected
+     */
+    static _editableListStateOf(editableListOptions) {
+        return new EditableListState({
+            newEntityFactoryFn: editableListOptions.newEntityFactoryFn,
+            newItemsGoLast: editableListOptions.rowPositionOnCreate === "append"
+        })
+    }
+
+    _createSwappingRowSelector(options) {
+        const swappingRowSelector = super._createSwappingRowSelector(options);
+        const onRow = swappingRowSelector[SwitchType.ON];
+        swappingRowSelector["showAdd"] = onRow;
+        swappingRowSelector["showEdit"] = onRow;
+        swappingRowSelector["showDelete"] = EditableListComponent.$deletableRowTmpl(
+            this.simpleListView.mustacheTableElemAdapter, this.config);
+        return swappingRowSelector;
     }
 
     static $errorRowTmpl(mustacheTableElemAdapter, config) {
         return SelectableListComponent._$rowTmplOf(
-            SelectableListComponent.ERROR_ROW_TYPE, mustacheTableElemAdapter, config);
+            EditableListComponent.ERROR_ROW_TYPE, mustacheTableElemAdapter, config);
     }
 
     static $deletableRowTmpl(mustacheTableElemAdapter, config) {
         return SelectableListComponent._$rowTmplOf(
-            SelectableListComponent.DELETE_ROW_TYPE, mustacheTableElemAdapter, config);
+            EditableListComponent.DELETE_ROW_TYPE, mustacheTableElemAdapter, config);
     }
 
     /**
@@ -48,13 +75,13 @@ class EditableListComponent extends SelectableListComponent {
         const editableList = ev.data;
         const rowDataId = editableList.simpleListView.rowDataIdOf(this, true);
         const context = $(this).data("btn");
-        if (!rowDataId || !context) {
+        if (rowDataId == null || rowDataId === "" || context == null || context === "") {
             return;
         }
         ev.stopPropagation();
         // "showEdit" row component should be the same used for row double-click in SelectableListComponent (i.e. undefined)
         // context could be "showEdit" or "showDelete"
-        editableList.switchTo(rowDataId, context);
+        return editableList.switchTo(rowDataId, context);
     }
 
     /**
