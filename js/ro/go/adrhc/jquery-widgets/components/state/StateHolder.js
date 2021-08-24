@@ -3,17 +3,6 @@
  */
 class StateHolder {
     /**
-     * @type {StateChangesCollector<T|P>}
-     * @protected
-     */
-    _stateChanges;
-    /**
-     * @type {T}
-     * @protected
-     */
-    _currentState;
-
-    /**
      * @param {T} [initialState]
      * @param {IdentityStateChangeMapper<T|P>} [stateChangeMapper]
      * @param {StateChangesCollector<T|P>} [changesCollector]
@@ -28,10 +17,43 @@ class StateHolder {
     }
 
     /**
+     * @type {StateChangesCollector<T|P>}
+     * @protected
+     */
+    _stateChanges;
+
+    /**
+     * @return {StateChangesCollector<T|P>}
+     */
+    get stateChanges() {
+        return this._stateChanges;
+    }
+
+    /**
+     * @type {T}
+     * @protected
+     */
+    _currentState;
+
+    /**
+     * @return {T}
+     */
+    get currentState() {
+        return this._currentState;
+    }
+
+    /**
+     * @param {T} currentState
+     */
+    set currentState(currentState) {
+        this._currentState = currentState;
+    }
+
+    /**
      * @param {T|P} [stateOrPart]
      * @param {string|number} [partName] specify the state's part/section to change/manipulate
      * @param {boolean} [dontRecordStateEvents]
-     * @return {StateChange<T|P>|undefined}
+     * @return {StateChange<T|P>|boolean} the newly created StateChange or, if dontRecordStateEvents = true, whether a state change occurred
      */
     replace(stateOrPart, {partName, dontRecordStateEvents} = {}) {
         if (partName) {
@@ -45,20 +67,43 @@ class StateHolder {
      * @param {T} [state] is the new state value to store
      * @param {boolean} [dontRecordStateEvents]
      * @param {boolean} [forceUpdate]
-     * @return {StateChange<T>|undefined}
+     * @return {StateChange<T>|boolean} the newly created StateChange or, if dontRecordStateEvents = true, whether a state change occurred
      */
     replaceEntirely(state, {dontRecordStateEvents, forceUpdate} = {}) {
         if (!forceUpdate && this._currentStateEquals(state)) {
-            return undefined;
+            return false;
         }
 
         const previousState = this._replaceImpl(state);
 
         if (dontRecordStateEvents) {
-            return undefined;
+            return true;
         }
 
         const stateChange = new StateChange(previousState, state);
+        return this.collectStateChange(stateChange);
+    }
+
+    /**
+     * Partially changes the state (aka creates/deletes/replaces a state part/portion/section).
+     *
+     * @param {P} partialState
+     * @param {string|number} oldPartName specify the state's part/section to change/manipulate
+     * @param {boolean} [dontRecordStateEvents]
+     * @return {StateChange<P>|boolean} the newly created StateChange or, if dontRecordStateEvents = true, whether a state change occurred
+     */
+    replacePart(partialState, oldPartName, dontRecordStateEvents) {
+        if (this._currentStatePartEquals(partialState, oldPartName)) {
+            return false;
+        }
+
+        const previousStatePart = this._replacePartImpl(partialState, oldPartName);
+
+        if (dontRecordStateEvents) {
+            return true;
+        }
+
+        const stateChange = this._stateChangeOf(previousStatePart, partialState, oldPartName);
         return this.collectStateChange(stateChange);
     }
 
@@ -71,29 +116,6 @@ class StateHolder {
         const previousState = this._currentState;
         this._currentState = state;
         return previousState;
-    }
-
-    /**
-     * Partially changes the state (aka creates/deletes/replaces a state part/portion/section).
-     *
-     * @param {P} partialState
-     * @param {string|number} oldPartName specify the state's part/section to change/manipulate
-     * @param {boolean} [dontRecordStateEvents]
-     * @return {StateChange<P>|undefined}
-     */
-    replacePart(partialState, oldPartName, dontRecordStateEvents) {
-        if (this._currentStatePartEquals(partialState, oldPartName)) {
-            return undefined;
-        }
-
-        const previousStatePart = this._replacePartImpl(partialState, oldPartName);
-
-        if (dontRecordStateEvents) {
-            return undefined;
-        }
-
-        const stateChange = this._stateChangeOf(previousStatePart, partialState, oldPartName);
-        return this.collectStateChange(stateChange);
     }
 
     /**
@@ -158,27 +180,6 @@ class StateHolder {
      */
     collectStateChange(stateChange) {
         return this._stateChanges.collect(stateChange);
-    }
-
-    /**
-     * @return {T}
-     */
-    get currentState() {
-        return this._currentState;
-    }
-
-    /**
-     * @param {T} currentState
-     */
-    set currentState(currentState) {
-        this._currentState = currentState;
-    }
-
-    /**
-     * @return {StateChangesCollector<T|P>}
-     */
-    get stateChanges() {
-        return this._stateChanges;
     }
 
     reset() {
