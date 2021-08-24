@@ -26,6 +26,13 @@ class SelectableListState extends CrudListState {
     }
 
     /**
+     * @return {EntityRowSwap}
+     */
+    get currentEntityRowSwap() {
+        return this.swappingState.currentState;
+    }
+
+    /**
      * @param {SelectableListOptions} selectableListOptions
      * @return {SelectableListState}
      */
@@ -34,13 +41,6 @@ class SelectableListState extends CrudListState {
             newEntityFactoryFn: selectableListOptions.newEntityFactoryFn,
             newItemsGoLast: selectableListOptions.rowPositionOnCreate === "append"
         })
-    }
-
-    /**
-     * @return {EntityRowSwap}
-     */
-    get currentEntityRowSwap() {
-        return this.swappingState.currentState;
     }
 
     /**

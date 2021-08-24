@@ -21,7 +21,7 @@ class RowSwappingStateHolder extends TaggingStateHolder {
      * @return {TaggedStateChange<EntityRowSwap>|undefined}
      */
     switchTo(otherEntityRowSwap, {partName, dontRecordStateEvents} = {}) {
-        return this.replace(otherEntityRowSwap);
+        return this.replace(otherEntityRowSwap, {partName, dontRecordStateEvents});
     }
 
     /**
@@ -30,6 +30,6 @@ class RowSwappingStateHolder extends TaggingStateHolder {
      * @return {TaggedStateChange<EntityRowSwap>|undefined}
      */
     switchOff({partName, dontRecordStateEvents} = {}) {
-        return this.replace();
+        return this.replace(undefined, {partName, dontRecordStateEvents});
     }
 }
