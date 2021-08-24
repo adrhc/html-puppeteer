@@ -34,7 +34,7 @@ class DynaSelOneStateHolder extends TaggingStateHolder {
      *
      * @param {DynaSelOneItem} [selectedItem]
      * @param {boolean} [dontRecordStateEvents]
-     * @return {StateChange<T>|undefined}
+     * @return {StateChange<T>|boolean} the newly created StateChange or, if dontRecordStateEvents = true, whether a state change occurred
      */
     updateUsingDynaSelOneItem(selectedItem, dontRecordStateEvents) {
         if (selectedItem) {
@@ -47,7 +47,7 @@ class DynaSelOneStateHolder extends TaggingStateHolder {
 
     /**
      * @param {number} id is the <option> value
-     * @return {StateChange<T>}
+     * @return {StateChange<T>|boolean} the newly created StateChange or, if dontRecordStateEvents = true, whether a state change occurred
      */
     updateById(id) {
         console.log(`[${this.constructor.name}.updateById] id = ${id}`);
