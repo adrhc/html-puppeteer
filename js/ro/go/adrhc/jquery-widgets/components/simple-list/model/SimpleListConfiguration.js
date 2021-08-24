@@ -1,4 +1,7 @@
 /**
+ * This is the component's configuration which could be constructed
+ * from e.g. programmatically (javascript) passed options and/or HTML.
+ *
  * @typedef {SimpleListConfiguration} C
  */
 class SimpleListConfiguration extends ComponentConfiguration {

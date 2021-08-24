@@ -10,7 +10,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     repository;
 
     /**
-     * @param {SimpleListOptions=} options
+     * @param {SimpleListOptions=} options are the programmatically (javascript) passed options
      */
     constructor(options= new SimpleListOptions()) {
         super(SimpleListComponent._optionsWithDefaults(options, true));
@@ -20,9 +20,9 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     }
 
     /**
-     * @param {SimpleListOptions} options
+     * @param {SimpleListOptions} options are the programmatically (javascript) passed options
      * @param {boolean=} forceDontAutoInitialize
-     * @return {SimpleListOptions}
+     * @return {SimpleListOptions} is the options with the defaults applied
      * @protected
      */
     static _optionsWithDefaults(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
@@ -36,8 +36,8 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     }
 
     /**
-     * @param {SimpleListOptions} options
-     * @return {SimpleListConfiguration}
+     * @param {SimpleListOptions} options are the programmatically (javascript) passed options
+     * @return {SimpleListConfiguration} which is the component's configuration
      * @protected
      */
     static _simpleListConfigurationOf(options) {
@@ -49,8 +49,8 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     }
 
     /**
-     * @param {SimpleListOptions} options
-     * @param {SimpleListConfiguration} config
+     * @param {SimpleListOptions} options are the programmatically (javascript) passed options
+     * @param {SimpleListConfiguration} config is the component's configuration
      * @return {SimpleListView}
      * @protected
      */
@@ -61,8 +61,8 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     }
 
     /**
-     * @param {SimpleListOptions} options
-     * @return {IdentifiableEntity[]|Array}
+     * @param {SimpleListOptions} options are the programmatically (javascript) passed options
+     * @return {IdentifiableEntity[]|Array} is options.items or (if empty) the items specified e.g. in HTML with "data-items"
      * @protected
      */
     _configItemsOf(options) {
