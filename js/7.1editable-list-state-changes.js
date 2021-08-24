@@ -14,26 +14,31 @@ if (Modernizr.template) {
         const elemIdOrJQuery = "dogsTable";
         const tableRelativePositionOnCreate = "prepend";
 
-        const readOnlyRow = SimpleRowFactory.createIdentifiableRow(
-            {
-                elemIdOrJQuery, tableRelativePositionOnCreate
-            });
-        const editableRow = SimpleRowFactory.createIdentifiableRow(
-            {
-                elemIdOrJQuery, rowTmplId: "dogsTableEditableRowTmpl"
-            });
-        // doesn't make sense to use tableRelativePositionOnCreate
-        // because the row to delete always have to already exist
-        const deletableRow = SimpleRowFactory.createIdentifiableRow(
-            {
-                elemIdOrJQuery, rowTmplId: "dogsTableDeletableRowTmpl"
-            });
-
         const repository = new InMemoryCrudRepository(DbMocks.DOGS, undefined, (it) => {
             it.id = Math.abs(it.id);
             return it;
         });
-        const component = EditableListFactory.create({repository, elemIdOrJQuery, readOnlyRow, editableRow, deletableRow});
+
+        const component = new EditableListComponent({
+            elemIdOrJQuery,
+            items: DbMocks.DOGS,
+            repository,
+            bodyRowTmplId: "dogsTableRowTmpl",
+            offRow: new IdentifiableRowComponent({
+                elemIdOrJQuery,
+                tableRelativePositionOnCreate,
+                bodyRowTmplId: "dogsTableRowTmpl"
+            }),
+            onRow: new IdentifiableRowComponent({
+                elemIdOrJQuery,
+                bodyRowTmplId: "dogsTableEditableRowTmpl"
+            }),
+            deletableRow: new IdentifiableRowComponent({
+                elemIdOrJQuery,
+                bodyRowTmplId: "dogsTableDeletableRowTmpl"
+            }),
+            dontAutoInitialize: true
+        });
 
         component
             .init()

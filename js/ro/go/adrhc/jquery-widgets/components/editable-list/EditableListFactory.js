@@ -60,11 +60,10 @@ class EditableListFactory {
 
         // const config = ComponentUtil.configOf(elemIdOrJQuery);
 
-        const editableListComponent = new EditableListComponent(repository, state,
-            view, readOnlyRow, editableRow, deletableRow, extractedEntityConverterFn);
-        if (childishBehaviour) {
-            editableListComponent.childishBehaviour = childishBehaviour;
-        }
-        return editableListComponent;
+        return new EditableListComponent({
+            repository, state, view, offRow: readOnlyRow,
+            onRow: editableRow, deletableRow,
+            extractedEntityConverterFn, childishBehaviour
+        });
     }
 }
