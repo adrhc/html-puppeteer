@@ -26,6 +26,17 @@ class SelectableListState extends CrudListState {
     }
 
     /**
+     * @param {SelectableListOptions} selectableListOptions
+     * @return {SelectableListState}
+     */
+    static of(selectableListOptions) {
+        return new SelectableListState({
+            newEntityFactoryFn: selectableListOptions.newEntityFactoryFn,
+            newItemsGoLast: selectableListOptions.rowPositionOnCreate === "append"
+        })
+    }
+
+    /**
      * @return {EntityRowSwap}
      */
     get currentEntityRowSwap() {

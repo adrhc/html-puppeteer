@@ -37,20 +37,8 @@ class SelectableListComponent extends SimpleListComponent {
     static _optionsWithDefaultsOf(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
         const selectableListOptions = _.defaults(new SelectableListOptions(),
             SimpleListComponent._optionsWithDefaultsOf(options, forceDontAutoInitialize));
-        selectableListOptions.state = options.state ?? SelectableListComponent._selectableListStateOf(selectableListOptions);
+        selectableListOptions.state = options.state ?? SelectableListState.of(selectableListOptions);
         return selectableListOptions;
-    }
-
-    /**
-     * @param {SelectableListOptions} selectableListOptions
-     * @return {SelectableListState}
-     * @protected
-     */
-    static _selectableListStateOf(selectableListOptions) {
-        return new SelectableListState({
-            newEntityFactoryFn: selectableListOptions.newEntityFactoryFn,
-            newItemsGoLast: selectableListOptions.rowPositionOnCreate === "append"
-        })
     }
 
     /**
