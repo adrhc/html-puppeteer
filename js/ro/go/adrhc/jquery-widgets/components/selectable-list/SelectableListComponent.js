@@ -17,7 +17,7 @@ class SelectableListComponent extends SimpleListComponent {
      * @param {SelectableListOptions=} options
      */
     constructor(options = new SelectableListOptions()) {
-        super(SelectableListComponent._optionsWithDefaults(options, true));
+        super(SelectableListComponent._optionsWithDefaultsOf(options, true));
         this.configurePartChangeHandlers({
             handleItemChange: ["CREATE", "REPLACE", "DELETE"],
             handleItemOff: ["OFF"],
@@ -34,9 +34,9 @@ class SelectableListComponent extends SimpleListComponent {
      * @return {SelectableListOptions}
      * @protected
      */
-    static _optionsWithDefaults(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
+    static _optionsWithDefaultsOf(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
         const selectableListOptions = _.defaults(new SelectableListOptions(),
-            SimpleListComponent._optionsWithDefaults(options, forceDontAutoInitialize));
+            SimpleListComponent._optionsWithDefaultsOf(options, forceDontAutoInitialize));
         selectableListOptions.state = options.state ?? SelectableListComponent._selectableListStateOf(selectableListOptions);
         return selectableListOptions;
     }

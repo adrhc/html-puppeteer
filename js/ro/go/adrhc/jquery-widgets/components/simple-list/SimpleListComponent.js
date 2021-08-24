@@ -13,7 +13,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @param {SimpleListOptions=} options are the programmatically (javascript) passed options
      */
     constructor(options= new SimpleListOptions()) {
-        super(SimpleListComponent._optionsWithDefaults(options, true));
+        super(SimpleListComponent._optionsWithDefaultsOf(options, true));
         this.handleWithAny(["CREATE", "REPLACE", "DELETE"])
         this.repository = options.repository ?? new InMemoryCrudRepository(this._configItemsOf(options));
         return this._handleAutoInitialization(options.forceDontAutoInitialize);
@@ -25,12 +25,12 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @return {SimpleListOptions} is the options with the defaults applied
      * @protected
      */
-    static _optionsWithDefaults(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
+    static _optionsWithDefaultsOf(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
         let config = options.config ?? SimpleListComponent._simpleListConfigurationOf(options);
         return _.defaults(new SimpleListOptions(), {
             config,
             state: options.state ?? new SimpleListState(),
-            view: options.view ?? SimpleListComponent._simpleListView(options, config),
+            view: options.view ?? SimpleListComponent._simpleListViewOf(options, config),
             forceDontAutoInitialize
         }, options);
     }
@@ -54,7 +54,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @return {SimpleListView}
      * @protected
      */
-    static _simpleListView(options, config) {
+    static _simpleListViewOf(options, config) {
         const mustacheTableElemAdapter = options.mustacheTableElemAdapter ??
             new MustacheTableElemAdapter(options.elemIdOrJQuery, config);
         return new SimpleListView(mustacheTableElemAdapter);

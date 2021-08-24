@@ -10,7 +10,7 @@ class EditableListComponent extends SelectableListComponent {
      * @param {EditableListOptions=} options
      */
     constructor(options = new EditableListOptions()) {
-        super(EditableListComponent._optionsWithDefaults(options, true));
+        super(EditableListComponent._optionsWithDefaultsOf(options, true));
         if (options.extractedEntityConverterFn) {
             this.selectableListEntityExtractor.entityConverterFn = options.extractedEntityConverterFn;
         }
@@ -24,9 +24,9 @@ class EditableListComponent extends SelectableListComponent {
      * @return {EditableListOptions}
      * @protected
      */
-    static _optionsWithDefaults(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
+    static _optionsWithDefaultsOf(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
         const editableListOptions = _.defaults(new EditableListOptions(),
-            SelectableListComponent._optionsWithDefaults(options, forceDontAutoInitialize));
+            SelectableListComponent._optionsWithDefaultsOf(options, forceDontAutoInitialize));
         editableListOptions.state = options.state ?? EditableListComponent._editableListStateOf(editableListOptions);
         return editableListOptions;
     }

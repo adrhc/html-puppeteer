@@ -43,7 +43,7 @@ class AbstractComponent {
      * @param {AbstractComponentOptions} options
      */
     constructor(options) {
-        options = AbstractComponent._optionsWithDefaults(options);
+        options = AbstractComponent._optionsWithDefaultsOf(options);
         this.state = options.state;
         this.view = options.view;
         this.config = options.config;
@@ -60,7 +60,7 @@ class AbstractComponent {
      * @return {AbstractComponentOptions}
      * @protected
      */
-    static _optionsWithDefaults(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
+    static _optionsWithDefaultsOf(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
         return _.defaults(new AbstractComponentOptions(), {
             state: options.state ?? new StateHolder(),
             config: options.config ?? ComponentConfiguration.configOf(options.view?.$elem),
