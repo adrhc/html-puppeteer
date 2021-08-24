@@ -90,7 +90,7 @@ class SelectableListComponent extends SimpleListComponent {
         if (!entityRowSwap) {
             return undefined;
         }
-        const context = entityRowSwap.context == null ? SwitchType.ON : entityRowSwap.context;
+        const context = entityRowSwap.context ?? SwitchType.ON;
         return this.swappingRowSelector[context];
     }
 
@@ -145,17 +145,8 @@ class SelectableListComponent extends SimpleListComponent {
     handleItemOn(stateChange) {
         console.log(`${this.constructor.name}.handleItemOn:\n${JSON.stringify(stateChange)}`);
         const context = stateChange.stateOrPart.context ?? SwitchType.ON;
-        const rowComp = this._swappingRowSelectorOf(context);
+        const rowComp = this.swappingRowSelector[context];
         return rowComp.processStateChanges(new CreateStateChange(stateChange.stateOrPart));
-    }
-
-    /**
-     * @param {string} switchType
-     * @return {IdentifiableRowComponent}
-     * @protected
-     */
-    _swappingRowSelectorOf(switchType) {
-        return this.swappingRowSelector[switchType];
     }
 
     /**

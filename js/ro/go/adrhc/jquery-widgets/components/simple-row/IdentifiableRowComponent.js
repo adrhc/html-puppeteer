@@ -62,12 +62,12 @@ class IdentifiableRowComponent extends SimpleRowComponent {
     }
 
     updateViewOnDELETE(stateChange) {
-        this._removeSecondaryRowParts(stateChange.previousStateOrPart.entity.id);
+        this._removeSecondaryRowParts(stateChange.previousStateOrPart?.entity.id);
         return super.updateViewOnDELETE(stateChange);
     }
 
     updateViewOnAny(stateChange) {
-        this._removeSecondaryRowParts(stateChange.previousStateOrPart?.entity.id);
+        this._removeSecondaryRowParts(stateChange.stateOrPart.entity.id);
         return super.updateViewOnAny(stateChange);
     }
 
