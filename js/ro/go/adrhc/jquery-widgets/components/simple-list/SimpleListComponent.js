@@ -26,38 +26,13 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @protected
      */
     static _optionsWithDefaultsOf(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
-        let config = options.config ?? SimpleListComponent._simpleListConfigurationOf(options);
+        let config = options.config ?? SimpleListConfiguration.of(options);
         return _.defaults(new SimpleListOptions(), {
             config,
             state: options.state ?? new SimpleListState(),
-            view: options.view ?? SimpleListComponent._simpleListViewOf(options, config),
+            view: options.view ?? SimpleListView.of(options, config),
             forceDontAutoInitialize
         }, options);
-    }
-
-    /**
-     * @param {SimpleListOptions} options are the programmatically (javascript) passed options
-     * @return {SimpleListConfiguration} which is the component's configuration
-     * @protected
-     */
-    static _simpleListConfigurationOf(options) {
-        const defaultDontAutoInitialize = AbstractComponent._canConstructChildishBehaviour(options.childishBehaviour, options.parentComponent);
-        return SimpleListConfiguration.configOf(options.elemIdOrJQuery,
-            {dontAutoInitialize: defaultDontAutoInitialize})
-            .overwriteWith(ObjectUtils.propertiesOf(options, "bodyRowTmplId", "bodyRowTmplHtml",
-                "bodyTmplHtml", "rowDataId", "rowPositionOnCreate", "childProperty", "dontAutoInitialize"));
-    }
-
-    /**
-     * @param {SimpleListOptions} options are the programmatically (javascript) passed options
-     * @param {SimpleListConfiguration} config is the component's configuration
-     * @return {SimpleListView}
-     * @protected
-     */
-    static _simpleListViewOf(options, config) {
-        const mustacheTableElemAdapter = options.mustacheTableElemAdapter ??
-            new MustacheTableElemAdapter(options.elemIdOrJQuery, config);
-        return new SimpleListView(mustacheTableElemAdapter);
     }
 
     /**

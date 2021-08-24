@@ -11,4 +11,15 @@ class SimpleListView extends MustacheTableBasedView {
         this.mustacheTableElemAdapter.renderBodyWithTemplate({items});
         return Promise.resolve(stateChange);
     }
+
+    /**
+     * @param {SimpleListOptions} options are the programmatically (javascript) passed options
+     * @param {SimpleListConfiguration} config is the component's configuration
+     * @return {SimpleListView}
+     */
+    static of(options, config) {
+        const mustacheTableElemAdapter = options.mustacheTableElemAdapter ??
+            new MustacheTableElemAdapter(options.elemIdOrJQuery, config);
+        return new SimpleListView(mustacheTableElemAdapter);
+    }
 }

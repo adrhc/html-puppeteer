@@ -33,4 +33,16 @@ class SimpleListConfiguration extends ComponentConfiguration {
     static configWithOverrides(elemIdOrJQuery, ...overrides) {
         return ComponentConfiguration._configWithOverrides(new SimpleListConfiguration(), elemIdOrJQuery, ...overrides);
     }
+
+    /**
+     * @param {SimpleListOptions} options are the programmatically (javascript) passed options
+     * @return {SimpleListConfiguration} which is the component's configuration
+     */
+    static of(options) {
+        const defaultDontAutoInitialize = AbstractComponent._canConstructChildishBehaviour(options.childishBehaviour, options.parentComponent);
+        return SimpleListConfiguration.configOf(options.elemIdOrJQuery,
+            {dontAutoInitialize: defaultDontAutoInitialize})
+            .overwriteWith(ObjectUtils.propertiesOf(options, "bodyRowTmplId", "bodyRowTmplHtml",
+                "bodyTmplHtml", "rowDataId", "rowPositionOnCreate", "childProperty", "dontAutoInitialize"));
+    }
 }
