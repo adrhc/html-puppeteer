@@ -72,10 +72,10 @@ class IdentifiableRowComponent extends SimpleRowComponent {
     }
 
     _removeSecondaryRowParts(rowId) {
-        console.log(`removing rows with owner = ${this.simpleRowView.owner} and ${IdentifiableRowComponent.SECONDARY_ROW_PART} = ${rowId}`);
         if (rowId == null) {
             return;
         }
+        console.log(`removing rows with owner = ${this.simpleRowView.owner} and ${IdentifiableRowComponent.SECONDARY_ROW_PART} = ${rowId}`);
         this.simpleRowView.$getOwnedRowByData(IdentifiableRowComponent.SECONDARY_ROW_PART, rowId).remove();
     }
 }
