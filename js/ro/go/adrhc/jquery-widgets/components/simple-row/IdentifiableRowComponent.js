@@ -5,7 +5,7 @@ class IdentifiableRowComponent extends SimpleRowComponent {
      * @param elemIdOrJQuery
      * @param bodyRowTmplId
      * @param bodyRowTmplHtml
-     * @param bodyTmplHtml
+     * @param bodyTmplHtml is used for creating mustacheTableElemAdapter's default value
      * @param rowDataId
      * @param {"prepend"|"append"} rowPositionOnCreate
      * @param childProperty
