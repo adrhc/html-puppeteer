@@ -48,17 +48,17 @@ class SelectableListComponent extends SimpleListComponent {
     _createSwappingRowSelector(options) {
         const mustacheTableElemAdapter = this.simpleListView.mustacheTableElemAdapter;
         return {
-            [SwitchType.OFF]: options.offRow ?? SelectableListComponent.$offRowTmpl(mustacheTableElemAdapter, this.config),
-            [SwitchType.ON]: options.onRow ?? SelectableListComponent.$onRowTmpl(mustacheTableElemAdapter, this.config)
+            [SwitchType.OFF]: options.offRow ?? SelectableListComponent.$offRowTmplOf(mustacheTableElemAdapter, this.config),
+            [SwitchType.ON]: options.onRow ?? SelectableListComponent.$onRowTmplOf(mustacheTableElemAdapter, this.config)
         };
     }
 
-    static $offRowTmpl(mustacheTableElemAdapter, config) {
+    static $offRowTmplOf(mustacheTableElemAdapter, config) {
         return SelectableListComponent._$rowTmplOf(
             SelectableListComponent.OFF_ROW_TYPE, mustacheTableElemAdapter, config);
     }
 
-    static $onRowTmpl(mustacheTableElemAdapter, config) {
+    static $onRowTmplOf(mustacheTableElemAdapter, config) {
         return SelectableListComponent._$rowTmplOf(
             SelectableListComponent.ON_ROW_TYPE, mustacheTableElemAdapter, config);
     }
