@@ -74,4 +74,17 @@ class SimpleListOptions extends AbstractComponentOptions {
     get rowPositionOnCreate() {
         return this.tableElementAdapter.rowPositionOnCreate
     }
+
+    /**
+     * @param {SimpleListOptions} options are the programmatically (javascript) passed options
+     * @param {boolean=} forceDontAutoInitialize
+     * @return {SimpleListOptions} is the options with the defaults applied
+     */
+    static of(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
+        const simpleListOptions = _.defaults(new SimpleListOptions(), {forceDontAutoInitialize}, options);
+        simpleListOptions.config = options.config ?? SimpleListConfiguration.of(options);
+        simpleListOptions.state = options.state ?? new SimpleListState();
+        simpleListOptions.view = options.view ?? SimpleListView.of(options, simpleListOptions.config);
+        return simpleListOptions;
+    }
 }

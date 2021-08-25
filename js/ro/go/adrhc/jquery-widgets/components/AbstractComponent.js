@@ -43,7 +43,7 @@ class AbstractComponent {
      * @param {AbstractComponentOptions} options
      */
     constructor(options) {
-        options = AbstractComponent._optionsWithDefaultsOf(options);
+        options = AbstractComponentOptions.of(options);
         this.state = options.state;
         this.view = options.view;
         this.config = options.config;
@@ -55,20 +55,11 @@ class AbstractComponent {
     }
 
     /**
-     * @param {AbstractComponentOptions} options
-     * @param {boolean=} forceDontAutoInitialize
-     * @return {AbstractComponentOptions}
-     * @protected
+     * @param {ChildishBehaviour} childishBehaviour
+     * @param {AbstractComponent} parentComponent
+     * @return {boolean}
      */
-    static _optionsWithDefaultsOf(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
-        return _.defaults(new AbstractComponentOptions(), {
-            state: options.state ?? new StateHolder(),
-            config: options.config ?? ComponentConfiguration.configOf(options.view?.$elem),
-            forceDontAutoInitialize
-        }, options);
-    }
-
-    static _canConstructChildishBehaviour(childishBehaviour, parentComponent) {
+    static canConstructChildishBehaviour(childishBehaviour, parentComponent) {
         return childishBehaviour != null || parentComponent != null;
     }
 
@@ -83,7 +74,7 @@ class AbstractComponent {
                                 parentComponent,
                                 childProperty = this.config.childProperty
                             }) {
-        if (!childishBehaviour && !parentComponent) {
+        if (!AbstractComponent.canConstructChildishBehaviour(childishBehaviour, parentComponent)) {
             console.log(`${this.constructor.name} no childish behaviour`);
             return;
         }
@@ -140,9 +131,9 @@ class AbstractComponent {
      * @param parentState
      * @return {boolean}
      */
-    updateParentFromOwnedView(parentState) {
+    updateStateFromKidsViews(parentState) {
         if (this.childishBehaviour) {
-            this.childishBehaviour.updateParentFromChildView(parentState);
+            this.childishBehaviour.updateParentStateFromKidView(parentState);
         }
     }
 

@@ -12,27 +12,25 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     /**
      * @param {SimpleListOptions=} options are the programmatically (javascript) passed options
      */
-    constructor(options= new SimpleListOptions()) {
-        super(SimpleListComponent._optionsWithDefaultsOf(options, true));
+    constructor(options) {
+        super(SimpleListOptions.of(options, true));
         this.handleWithAny(["CREATE", "REPLACE", "DELETE"])
         this.repository = options.repository ?? new InMemoryCrudRepository(this._configItemsOf(options));
         return this._handleAutoInitialization(options.forceDontAutoInitialize);
     }
 
     /**
-     * @param {SimpleListOptions} options are the programmatically (javascript) passed options
-     * @param {boolean=} forceDontAutoInitialize
-     * @return {SimpleListOptions} is the options with the defaults applied
-     * @protected
+     * @return {SimpleListConfiguration}
      */
-    static _optionsWithDefaultsOf(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
-        let config = options.config ?? SimpleListConfiguration.of(options);
-        return _.defaults(new SimpleListOptions(), {
-            config,
-            state: options.state ?? new SimpleListState(),
-            view: options.view ?? SimpleListView.of(options, config),
-            forceDontAutoInitialize
-        }, options);
+    get simpleListConfiguration() {
+        return this.config
+    }
+
+    /**
+     * @return {SimpleListState}
+     */
+    get simpleListState() {
+        return this.state;
     }
 
     /**
@@ -109,19 +107,5 @@ class SimpleListComponent extends AbstractTableBasedComponent {
         console.log(`${this.constructor.name}._configureEvents`);
         this.view.$elem.on(this._appendNamespaceTo("click"),
             this._btnSelector("reload"), this, this.onReload);
-    }
-
-    /**
-     * @return {SimpleListConfiguration}
-     */
-    get simpleListConfiguration() {
-        return this.config
-    }
-
-    /**
-     * @return {SimpleListState}
-     */
-    get simpleListState() {
-        return this.state;
     }
 }

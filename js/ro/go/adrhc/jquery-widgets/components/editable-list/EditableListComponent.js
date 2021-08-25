@@ -10,37 +10,45 @@ class EditableListComponent extends SelectableListComponent {
      * @param {EditableListOptions=} options
      */
     constructor(options = new EditableListOptions()) {
-        super(EditableListComponent._optionsWithDefaultsOf(options, true));
+        super(EditableListOptions.of(options, true));
         if (options.extractedEntityConverterFn) {
             this.selectableListEntityExtractor.entityConverterFn = options.extractedEntityConverterFn;
         }
-        this.errorRow = EditableListComponent.$errorRowTmpl(this.simpleListView.mustacheTableElemAdapter, this.config);
+        this.errorRow = this._$errorRowTmplOf(this.simpleListView.mustacheTableElemAdapter, this.config);
         return this._handleAutoInitialization();
     }
 
     /**
-     * @param {EditableListOptions} options
-     * @param {boolean=} forceDontAutoInitialize
-     * @return {EditableListOptions}
-     * @protected
+     * @return {EditableListState}
      */
-    static _optionsWithDefaultsOf(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
-        const editableListOptions = _.defaults(new EditableListOptions(),
-            SelectableListComponent._optionsWithDefaultsOf(options, forceDontAutoInitialize));
-        editableListOptions.state = options.state ?? EditableListComponent._editableListStateOf(editableListOptions);
-        return editableListOptions;
+    get editableListState() {
+        return this.state;
+    }
+
+    get onRow() {
+        return this.swappingRowSelector[SwitchType.ON];
     }
 
     /**
-     * @param {EditableListOptions} editableListOptions
-     * @return {EditableListState}
+     * @param mustacheTableElemAdapter
+     * @param config
+     * @return {IdentifiableRowComponent}
      * @protected
      */
-    static _editableListStateOf(editableListOptions) {
-        return new EditableListState({
-            newEntityFactoryFn: editableListOptions.newEntityFactoryFn,
-            newItemsGoLast: editableListOptions.rowPositionOnCreate === "append"
-        })
+    _$errorRowTmplOf(mustacheTableElemAdapter, config) {
+        return this._$rowTmplOf(
+            EditableListComponent.ERROR_ROW_TYPE, mustacheTableElemAdapter, config);
+    }
+
+    /**
+     * @param mustacheTableElemAdapter
+     * @param config
+     * @return {IdentifiableRowComponent}
+     * @protected
+     */
+    _$deletableRowTmplOf(mustacheTableElemAdapter, config) {
+        return this._$rowTmplOf(
+            EditableListComponent.DELETE_ROW_TYPE, mustacheTableElemAdapter, config);
     }
 
     _createSwappingRowSelector(options) {
@@ -48,19 +56,9 @@ class EditableListComponent extends SelectableListComponent {
         const onRow = swappingRowSelector[SwitchType.ON];
         swappingRowSelector["showAdd"] = onRow;
         swappingRowSelector["showEdit"] = onRow;
-        swappingRowSelector["showDelete"] = EditableListComponent.$deletableRowTmpl(
+        swappingRowSelector["showDelete"] = this._$deletableRowTmplOf(
             this.simpleListView.mustacheTableElemAdapter, this.config);
         return swappingRowSelector;
-    }
-
-    static $errorRowTmpl(mustacheTableElemAdapter, config) {
-        return SelectableListComponent._$rowTmplOf(
-            EditableListComponent.ERROR_ROW_TYPE, mustacheTableElemAdapter, config);
-    }
-
-    static $deletableRowTmpl(mustacheTableElemAdapter, config) {
-        return SelectableListComponent._$rowTmplOf(
-            EditableListComponent.DELETE_ROW_TYPE, mustacheTableElemAdapter, config);
     }
 
     /**
@@ -241,16 +239,5 @@ class EditableListComponent extends SelectableListComponent {
                 row.reset();
             }
         }
-    }
-
-    /**
-     * @return {EditableListState}
-     */
-    get editableListState() {
-        return this.state;
-    }
-
-    get onRow() {
-        return this.swappingRowSelector[SwitchType.ON];
     }
 }

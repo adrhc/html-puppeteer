@@ -12,7 +12,6 @@ if (Modernizr.template) {
     $(() => {
         // dogs table with both read-only and editable row
         const elemIdOrJQuery = "dogsTable";
-        const tableRelativePositionOnCreate = "prepend";
 
         const repository = new InMemoryCrudRepository(DbMocks.DOGS, undefined, (it) => {
             it.id = Math.abs(it.id);
@@ -26,7 +25,6 @@ if (Modernizr.template) {
             bodyRowTmplId: "dogsTableRowTmpl",
             offRow: new IdentifiableRowComponent({
                 elemIdOrJQuery,
-                tableRelativePositionOnCreate,
                 bodyRowTmplId: "dogsTableRowTmpl"
             }),
             onRow: new IdentifiableRowComponent({

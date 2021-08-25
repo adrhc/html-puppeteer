@@ -16,7 +16,14 @@ class MustacheTableElemAdapter extends TableElementAdapter {
     }
 
     /**
-     * This is the table row.
+     * @return {jQuery<HTMLTableRowElement>} the row template for this table
+     */
+    get $bodyRowTmpl() {
+        return super.$firstRow;
+    }
+
+    /**
+     * This is the table row; evaluation order: bodyRowTmplHtml then bodyRowTmplId
      *
      * @param bodyRowTmplId {string}
      * @param bodyRowTmplHtml {string}
@@ -31,13 +38,6 @@ class MustacheTableElemAdapter extends TableElementAdapter {
         } else {
             this.bodyRowTmplHtml = DomUtils.htmlIncludingSelfOf(this.$bodyRowTmpl);
         }
-    }
-
-    /**
-     * @return {jQuery<HTMLTableRowElement>} the row template for this table
-     */
-    get $bodyRowTmpl() {
-        return super.$firstRow;
     }
 
     /**

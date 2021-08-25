@@ -1,4 +1,6 @@
 /**
+ * This is the component's configuration which could be constructed from HTML data-* values.
+ *
  * @typedef {ComponentConfiguration} C
  */
 class ComponentConfiguration {
@@ -57,36 +59,19 @@ class ComponentConfiguration {
 
     /**
      * @param {string|jQuery<HTMLElement>|function(): jQuery<HTMLElement>} elemIdOrJQuery
-     * @param {Object=} defaults are applied from left to right (first applied wins)
+     * @param {Object=} firstWinDefaults are applied from left to right (first applied wins)
      * @return {C}
      */
-    static configOf(elemIdOrJQuery, ...defaults) {
-        return ComponentConfiguration._configOf(new ComponentConfiguration(), elemIdOrJQuery, ...defaults);
+    static configWithDefaults(elemIdOrJQuery, ...firstWinDefaults) {
+        return _.defaults(new ComponentConfiguration(), DomUtils.dataOf(elemIdOrJQuery), {elemIdOrJQuery}, ...firstWinDefaults);
     }
 
     /**
-     * @param {string|jQuery<HTMLElement>|function(): jQuery<HTMLElement>} elemIdOrJQuery
-     * @param {Object=} overrides are applied from left to right (first applied wins)
+     * @param {Object} firstWinOverwrites
      * @return {C}
      */
-    static configWithOverrides(elemIdOrJQuery, ...overrides) {
-        return ComponentConfiguration._configWithOverrides(new ComponentConfiguration(), elemIdOrJQuery, ...overrides);
-    }
-
-    static _configOf(instance, elemIdOrJQuery, ...defaults) {
-        return _.defaults(instance, DomUtils.dataOf(elemIdOrJQuery), {elemIdOrJQuery}, ...defaults);
-    }
-
-    static _configWithOverrides(instance, elemIdOrJQuery, ...overrides) {
-        return _.defaults(instance, ...overrides, DomUtils.dataOf(elemIdOrJQuery), {elemIdOrJQuery});
-    }
-
-    /**
-     * @param {Object} overwrites
-     * @return {C}
-     */
-    overwriteWith(...overwrites) {
-        return _.defaults(this._new(), ...overwrites, this);
+    overwriteWith(...firstWinOverwrites) {
+        return _.defaults(this._new(), ...firstWinOverwrites, this);
     }
 
     /**

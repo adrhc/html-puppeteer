@@ -47,9 +47,8 @@ class ElasticListComponent extends SimpleListComponent {
                     dontAutoInitialize,
                     childishBehaviour,
                     parentComponent,
-                    config = SimpleListConfiguration.configOf(elemIdOrJQuery, {
-                        dontAutoInitialize: AbstractComponent._canConstructChildishBehaviour(childishBehaviour, parentComponent)
-                    }).overwriteWith({
+                    config = SimpleListConfiguration.of({
+                        elemIdOrJQuery,
                         bodyRowTmplId,
                         bodyRowTmplHtml,
                         bodyTmplHtml,

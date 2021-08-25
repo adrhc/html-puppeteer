@@ -4,6 +4,9 @@ class HtmlUtils {
      * @return {string} the template's html extracted from template html-element id (i.e. tmplId)
      */
     static templateTextOf(tmplId) {
+        if (!tmplId) {
+            return undefined;
+        }
         const $tmpl = $(`#${tmplId}`);
         if (!$tmpl.length) {
             return undefined;

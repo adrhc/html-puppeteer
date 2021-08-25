@@ -23,7 +23,8 @@ class SimpleListFactory {
         childProperty,
         childishBehaviour
     }) {
-        return new SimpleListComponent(elemIdOrJQuery, {
+        return new SimpleListComponent({
+            elemIdOrJQuery,
             items,
             bodyRowTmplId,
             bodyRowTmplHtml,

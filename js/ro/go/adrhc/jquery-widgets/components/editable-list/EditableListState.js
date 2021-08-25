@@ -42,4 +42,15 @@ class EditableListState extends SelectableListState {
             entity,
         }, simpleError);
     }
+
+    /**
+     * @param {EditableListOptions} editableListOptions
+     * @return {EditableListState}
+     */
+    static of(editableListOptions) {
+        return new EditableListState({
+            newEntityFactoryFn: editableListOptions.newEntityFactoryFn,
+            newItemsGoLast: editableListOptions.rowPositionOnCreate === "append"
+        })
+    }
 }

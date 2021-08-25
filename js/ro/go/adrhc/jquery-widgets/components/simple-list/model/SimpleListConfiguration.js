@@ -1,8 +1,5 @@
 /**
- * This is the component's configuration which could be constructed
- * from e.g. programmatically (javascript) passed options and/or HTML.
- *
- * @typedef {SimpleListConfiguration} C
+ * This is the component's configuration which could be constructed from HTML data-* values.
  */
 class SimpleListConfiguration extends ComponentConfiguration {
     /**
@@ -17,32 +14,15 @@ class SimpleListConfiguration extends ComponentConfiguration {
     items;
 
     /**
-     * @param {string|jQuery<HTMLElement>|function(): jQuery<HTMLElement>} elemIdOrJQuery
-     * @param {Object=} defaults are applied from left to right (first applied wins)
-     * @return {SimpleListConfiguration}
-     */
-    static configOf(elemIdOrJQuery, ...defaults) {
-        return ComponentConfiguration._configOf(new SimpleListConfiguration(), elemIdOrJQuery, ...defaults);
-    }
-
-    /**
-     * @param {string|jQuery<HTMLElement>|function(): jQuery<HTMLElement>} elemIdOrJQuery
-     * @param {Object=} overrides are applied from left to right (first applied wins)
-     * @return {SimpleListConfiguration}
-     */
-    static configWithOverrides(elemIdOrJQuery, ...overrides) {
-        return ComponentConfiguration._configWithOverrides(new SimpleListConfiguration(), elemIdOrJQuery, ...overrides);
-    }
-
-    /**
-     * @param {SimpleListOptions} options are the programmatically (javascript) passed options
+     * Evaluation order: props, data-* of props?.elemIdOrJQuery, computed dontAutoInitialize
+     *
+     * @param {Object=} props are the programmatically (javascript) passed configuration options
      * @return {SimpleListConfiguration} which is the component's configuration
      */
-    static of(options) {
-        const defaultDontAutoInitialize = AbstractComponent._canConstructChildishBehaviour(options.childishBehaviour, options.parentComponent);
-        return SimpleListConfiguration.configOf(options.elemIdOrJQuery,
-            {dontAutoInitialize: defaultDontAutoInitialize})
-            .overwriteWith(ObjectUtils.propertiesOf(options, "bodyRowTmplId", "bodyRowTmplHtml",
-                "bodyTmplHtml", "rowDataId", "rowPositionOnCreate", "childProperty", "dontAutoInitialize"));
+    static of(props) {
+        const dontAutoInitialize = AbstractComponent
+            .canConstructChildishBehaviour(props?.childishBehaviour, props?.parentComponent);
+        return _.defaults(new SimpleListConfiguration(), props,
+            DomUtils.dataOf(props?.elemIdOrJQuery), {dontAutoInitialize});
     }
 }

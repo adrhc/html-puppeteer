@@ -63,12 +63,12 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
      *
      * Extracts the child state from its view then copy it into the parent state.
      *
-     * entityExtractor._extractInputValues -> compositeBehaviour.updateFromKidsView -> kid.updateParentFromOwnedView -> kid.childishBehaviour.updateParentFromChildView
+     * entityExtractor._extractInputValues -> compositeBehaviour.updateFromKidsView -> kid.updateStateFromKidsViews -> kid.childishBehaviour.updateParentStateFromKidView
      *
      * @param {*} parentState
      * @param {boolean} [useOwnerOnFields]
      */
-    updateParentFromChildView(parentState, useOwnerOnFields) {
+    updateParentStateFromKidView(parentState, useOwnerOnFields) {
         const extractedChildEntity = this.childEntityExtractorFn(useOwnerOnFields);
         const childEntity = this.toEntityConverter(extractedChildEntity);
         this.childEntitySetter(childEntity, parentState);

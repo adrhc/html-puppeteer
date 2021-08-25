@@ -43,7 +43,7 @@ class ChildishBehaviour {
      * @param parentState
      * @param [useOwnerOnFields] {boolean}
      */
-    updateParentFromChildView(parentState, useOwnerOnFields) {
+    updateParentStateFromKidView(parentState, useOwnerOnFields) {
         // do nothing
     }
 

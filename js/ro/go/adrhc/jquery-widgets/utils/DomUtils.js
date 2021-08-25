@@ -22,6 +22,18 @@ class DomUtils {
         return DomUtils.jQueryOf(elemIdOrJQuery).data();
     }
 
+    /**
+     * Evaluation order: tmplHtml then tmplId.
+     *
+     * @param {string} tmplId
+     * @param {string} tmplHtml
+     * @return {Object<string, string>}
+     */
+    static dataOfTemplateOrHtml(tmplId, tmplHtml) {
+        const html = tmplHtml ?? HtmlUtils.templateTextOf(tmplId);
+        return html ? DomUtils.dataOf($(html)) : undefined;
+    }
+
     static htmlIncludingSelfOf($elem) {
         if (!$elem || !$elem.length) {
             return undefined;

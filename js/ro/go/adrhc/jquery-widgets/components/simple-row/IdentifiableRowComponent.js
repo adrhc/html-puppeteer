@@ -2,7 +2,7 @@ class IdentifiableRowComponent extends SimpleRowComponent {
     static SECONDARY_ROW_PART = "secondary-row-part";
 
     /**
-     * @param elemIdOrJQuery
+     * @param elemIdOrJQuery is the table
      * @param bodyRowTmplId
      * @param bodyRowTmplHtml
      * @param bodyTmplHtml is used for creating mustacheTableElemAdapter's default value
@@ -29,7 +29,7 @@ class IdentifiableRowComponent extends SimpleRowComponent {
                     rowPositionOnCreate,
                     childProperty,
                     clearChildrenOnReset,
-                    config = RowConfiguration.configWithOverrides(
+                    config = RowConfiguration.of(
                         elemIdOrJQuery, {
                             bodyRowTmplId,
                             bodyRowTmplHtml,
@@ -38,7 +38,7 @@ class IdentifiableRowComponent extends SimpleRowComponent {
                             rowPositionOnCreate,
                             childProperty,
                             clearChildrenOnReset,
-                        }, DomUtils.dataOf(bodyRowTmplId ? $(`#${bodyRowTmplId}`) : bodyRowTmplHtml ? $(bodyRowTmplHtml) : undefined)),
+                        }),
                     mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, config),
                     view = new SimpleRowView(mustacheTableElemAdapter),
                     initialState,

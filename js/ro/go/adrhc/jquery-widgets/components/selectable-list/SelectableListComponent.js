@@ -17,7 +17,7 @@ class SelectableListComponent extends SimpleListComponent {
      * @param {SelectableListOptions=} options
      */
     constructor(options = new SelectableListOptions()) {
-        super(SelectableListComponent._optionsWithDefaultsOf(options, true));
+        super(SelectableListOptions.of(options, true));
         this.configurePartChangeHandlers({
             handleItemChange: ["CREATE", "REPLACE", "DELETE"],
             handleItemOff: ["OFF"],
@@ -26,56 +26,6 @@ class SelectableListComponent extends SimpleListComponent {
         this.entityExtractor = new SelectableListEntityExtractor(this);
         this.swappingRowSelector = this._createSwappingRowSelector(options);
         return this._handleAutoInitialization();
-    }
-
-    /**
-     * @param {SelectableListOptions} options
-     * @param {boolean=} forceDontAutoInitialize
-     * @return {SelectableListOptions}
-     * @protected
-     */
-    static _optionsWithDefaultsOf(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
-        const selectableListOptions = _.defaults(new SelectableListOptions(),
-            SimpleListComponent._optionsWithDefaultsOf(options, forceDontAutoInitialize));
-        selectableListOptions.state = options.state ?? SelectableListState.of(selectableListOptions);
-        return selectableListOptions;
-    }
-
-    /**
-     * @param {SelectableListOptions} options
-     * @protected
-     */
-    _createSwappingRowSelector(options) {
-        const mustacheTableElemAdapter = this.simpleListView.mustacheTableElemAdapter;
-        return {
-            [SwitchType.OFF]: options.offRow ?? SelectableListComponent.$offRowTmplOf(mustacheTableElemAdapter, this.config),
-            [SwitchType.ON]: options.onRow ?? SelectableListComponent.$onRowTmplOf(mustacheTableElemAdapter, this.config)
-        };
-    }
-
-    static $offRowTmplOf(mustacheTableElemAdapter, config) {
-        return SelectableListComponent._$rowTmplOf(
-            SelectableListComponent.OFF_ROW_TYPE, mustacheTableElemAdapter, config);
-    }
-
-    static $onRowTmplOf(mustacheTableElemAdapter, config) {
-        return SelectableListComponent._$rowTmplOf(
-            SelectableListComponent.ON_ROW_TYPE, mustacheTableElemAdapter, config);
-    }
-
-    static _$rowTmplOf(type, mustacheTableElemAdapter, tableConfig) {
-        let $rowTmplElem = mustacheTableElemAdapter.$rowByData(SelectableListComponent.ROW_TYPE_DATA_NAME, type);
-        const index = type === SelectableListComponent.OFF_ROW_TYPE ? 1 : 2;
-        $rowTmplElem = $rowTmplElem ?? mustacheTableElemAdapter.$rowByIndex(index);
-        if (!$rowTmplElem) {
-            return undefined;
-        }
-        const bodyRowTmplHtml = DomUtils.htmlIncludingSelfOf($rowTmplElem);
-        const config = RowConfiguration.configOf($rowTmplElem, tableConfig.overwriteWith({bodyRowTmplHtml}));
-        return new IdentifiableRowComponent({
-            elemIdOrJQuery: tableConfig.elemIdOrJQuery,
-            config
-        });
     }
 
     /**
@@ -92,6 +42,68 @@ class SelectableListComponent extends SimpleListComponent {
         }
         const context = entityRowSwap.context ?? SwitchType.ON;
         return this.swappingRowSelector[context];
+    }
+
+    /**
+     * @return {SimpleListView}
+     */
+    get simpleListView() {
+        return this.view;
+    }
+
+    /**
+     * @return {SelectableListState}
+     */
+    get selectableListState() {
+        return this.state;
+    }
+
+    /**
+     * @return {SelectableListEntityExtractor}
+     */
+    get selectableListEntityExtractor() {
+        return this.entityExtractor;
+    }
+
+    get offRow() {
+        return this.swappingRowSelector[SwitchType.OFF];
+    }
+
+    _$rowTmplOf(type, mustacheTableElemAdapter, tableConfig) {
+        let $rowTmplElem = mustacheTableElemAdapter.$rowByData(SelectableListComponent.ROW_TYPE_DATA_NAME, type);
+        const index = type === SelectableListComponent.OFF_ROW_TYPE ? 1 : 2;
+        $rowTmplElem = $rowTmplElem ?? mustacheTableElemAdapter.$rowByIndex(index);
+        if (!$rowTmplElem) {
+            return undefined;
+        }
+        const bodyRowTmplHtml = DomUtils.htmlIncludingSelfOf($rowTmplElem);
+        const config = RowConfiguration.of(tableConfig.elemIdOrJQuery, {bodyRowTmplHtml});
+        return new IdentifiableRowComponent({
+            elemIdOrJQuery: tableConfig.elemIdOrJQuery,
+            config
+        });
+    }
+
+    /**
+     * @param {SelectableListOptions} options
+     * @protected
+     */
+    _createSwappingRowSelector(options) {
+        const mustacheTableElemAdapter = this.simpleListView.mustacheTableElemAdapter;
+        return {
+            [SwitchType.OFF]: options.offRow ?? this.$offRowTmplOf(mustacheTableElemAdapter, this.config),
+            [SwitchType.ON]: options.onRow ?? this.$onRowTmplOf(mustacheTableElemAdapter, this.config)
+        };
+    }
+
+    $offRowTmplOf(mustacheTableElemAdapter, config) {
+        return this._$rowTmplOf(
+            SelectableListComponent.OFF_ROW_TYPE, mustacheTableElemAdapter, config);
+    }
+
+    $onRowTmplOf(mustacheTableElemAdapter, config) {
+        return this._$rowTmplOf(
+            SelectableListComponent.ON_ROW_TYPE, mustacheTableElemAdapter, config);
     }
 
     /**
@@ -159,30 +171,5 @@ class SelectableListComponent extends SimpleListComponent {
         this.simpleListView.$elem
             .on(this._appendNamespaceTo("dblclick"),
                 `tr${this._ownerSelector}`, this, this.onSwitch);
-    }
-
-    /**
-     * @return {SimpleListView}
-     */
-    get simpleListView() {
-        return this.view;
-    }
-
-    /**
-     * @return {SelectableListState}
-     */
-    get selectableListState() {
-        return this.state;
-    }
-
-    /**
-     * @return {SelectableListEntityExtractor}
-     */
-    get selectableListEntityExtractor() {
-        return this.entityExtractor;
-    }
-
-    get offRow() {
-        return this.swappingRowSelector[SwitchType.OFF];
     }
 }

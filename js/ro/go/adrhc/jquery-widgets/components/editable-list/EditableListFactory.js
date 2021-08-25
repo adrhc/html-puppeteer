@@ -58,7 +58,7 @@ class EditableListFactory {
                 fp.extend(config, DomUtils.dataOf(elemIdOrJQuery));
         */
 
-        // const config = ComponentUtil.configOf(elemIdOrJQuery);
+        // const config = ComponentUtil.configWithDefaults(elemIdOrJQuery);
 
         return new EditableListComponent({
             repository, state, view, offRow: readOnlyRow,

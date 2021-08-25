@@ -35,19 +35,15 @@ class SimpleRowComponent extends AbstractComponent {
                     rowPositionOnCreate,
                     childProperty,
                     clearChildrenOnReset,
-                    config = RowConfiguration
-                        .configOf(elemIdOrJQuery, {
-                            clearChildrenOnReset: true
-                        })
-                        .overwriteWith({
-                            bodyRowTmplId,
-                            bodyRowTmplHtml,
-                            bodyTmplHtml,
-                            rowDataId,
-                            rowPositionOnCreate,
-                            childProperty,
-                            clearChildrenOnReset
-                        }, DomUtils.dataOf(bodyRowTmplId ? $(`#${bodyRowTmplId}`) : bodyRowTmplHtml ? $(bodyRowTmplHtml) : undefined)),
+                    config = RowConfiguration.of(elemIdOrJQuery, {
+                        bodyRowTmplId,
+                        bodyRowTmplHtml,
+                        bodyTmplHtml,
+                        rowDataId,
+                        rowPositionOnCreate,
+                        childProperty,
+                        clearChildrenOnReset: clearChildrenOnReset == null ? true : clearChildrenOnReset
+                    }),
                     mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, config),
                     view = new SimpleRowView(mustacheTableElemAdapter),
                     initialState,

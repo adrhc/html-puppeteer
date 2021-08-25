@@ -1,3 +1,6 @@
+/**
+ * This is the entire AbstractComponent's state (meaning all its internal properties).
+ */
 class AbstractComponentOptions {
     /**
      * @type {AbstractView}
@@ -32,4 +35,17 @@ class AbstractComponentOptions {
      * @type {boolean}
      */
     forceDontAutoInitialize;
+
+    /**
+     * @param {AbstractComponentOptions} options
+     * @param {boolean=} forceDontAutoInitialize
+     * @return {AbstractComponentOptions}
+     */
+    static of(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
+        return _.defaults(new AbstractComponentOptions(), options, {
+            state: options.state ?? new StateHolder(),
+            config: options.config ?? ComponentConfiguration.configWithDefaults(options.view?.$elem),
+            forceDontAutoInitialize
+        });
+    }
 }

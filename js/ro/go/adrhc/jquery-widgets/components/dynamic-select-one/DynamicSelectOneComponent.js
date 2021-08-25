@@ -32,15 +32,13 @@ class DynamicSelectOneComponent extends AbstractComponent {
                     loadOptionsOnInit,
                     childishBehaviour,
                     parentComponent,
-                    config = DynaSelOneConfig
-                        .configOf(elemIdOrJQuery, {
-                            toEntityConverter,
-                            dontAutoInitialize: AbstractComponent._canConstructChildishBehaviour(childishBehaviour, parentComponent)
-                        })
-                        .overwriteWith({
-                            dontAutoInitialize,
-                            loadOptionsOnInit
-                        }),
+                    config = DynaSelOneConfig.of({
+                        elemIdOrJQuery,
+                        toEntityConverter,
+                        loadOptionsOnInit,
+                        dontAutoInitialize: dontAutoInitialize ?? AbstractComponent
+                            .canConstructChildishBehaviour(childishBehaviour, parentComponent)
+                    }),
                     view = new DynamicSelectOneView(elemIdOrJQuery, config),
                     initialState,
                     state = new DynaSelOneStateHolder(config, {initialState}),
@@ -62,6 +60,34 @@ class DynamicSelectOneComponent extends AbstractComponent {
         view.component = this;
         this.handleWithAny(true);
         return this._handleAutoInitialization();
+    }
+
+    /**
+     * @returns {boolean}
+     */
+    get currentOptionsAreResultOfSearch() {
+        return this.dynaSelOneConfig.isEnoughTextToSearch(this.dynaSelOneState.currentState.title);
+    }
+
+    /**
+     * @return {DynaSelOneConfig}
+     */
+    get dynaSelOneConfig() {
+        return this.config;
+    }
+
+    /**
+     * @return {DynaSelOneStateHolder}
+     */
+    get dynaSelOneState() {
+        return this.state;
+    }
+
+    /**
+     * @return {DynamicSelectOneView}
+     */
+    get dynaSelOneView() {
+        return this.view;
     }
 
     init() {
@@ -261,33 +287,5 @@ class DynamicSelectOneComponent extends AbstractComponent {
             parentComponent, {childProperty, toEntityConverter});
         childishBehaviour.childComp = this;
         this.childishBehaviour = childishBehaviour;
-    }
-
-    /**
-     * @returns {boolean}
-     */
-    get currentOptionsAreResultOfSearch() {
-        return this.dynaSelOneConfig.isEnoughTextToSearch(this.dynaSelOneState.currentState.title);
-    }
-
-    /**
-     * @return {DynaSelOneConfig}
-     */
-    get dynaSelOneConfig() {
-        return this.config;
-    }
-
-    /**
-     * @return {DynaSelOneStateHolder}
-     */
-    get dynaSelOneState() {
-        return this.state;
-    }
-
-    /**
-     * @return {DynamicSelectOneView}
-     */
-    get dynaSelOneView() {
-        return this.view;
     }
 }

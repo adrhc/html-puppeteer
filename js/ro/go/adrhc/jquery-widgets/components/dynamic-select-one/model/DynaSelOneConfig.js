@@ -2,6 +2,7 @@ class DynaSelOneConfig extends ComponentConfiguration {
     static DEFAULTS = {
         minCharsToSearch: 3,
         optionsToShow: 5,
+        tmplUrl: "js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/templates/dyna-sel-one.html"
     };
     /**
      * @type {function(): IdentifiableEntity}
@@ -58,34 +59,20 @@ class DynaSelOneConfig extends ComponentConfiguration {
     /**
      * @type {string}
      */
-    tmplUrl = "js/ro/go/adrhc/jquery-widgets/components/dynamic-select-one/templates/dyna-sel-one.html";
+    tmplUrl = DynaSelOneConfig.DEFAULTS.tmplUrl;
 
     /**
-     * @param {string|jQuery<HTMLElement>|function(): jQuery<HTMLElement>} elemIdOrJQuery
-     * @param {Object=} defaults are applied from left to right (first applied wins)
+     * Evaluation order: props, data-* of props.elemIdOrJQuery, DynaSelOneConfig.DEFAULTS
+     *
+     * @param {Object=} props are the programmatically (javascript) passed configuration options
      * @return {DynaSelOneConfig}
      */
-    static configOf(elemIdOrJQuery, ...defaults) {
-        const config = ComponentConfiguration._configOf(new DynaSelOneConfig(), elemIdOrJQuery, ...defaults, DynaSelOneConfig.DEFAULTS);
+    static of(props) {
+        const config = _.defaults(new DynaSelOneConfig(), props,
+            DomUtils.dataOf(props.elemIdOrJQuery), DynaSelOneConfig.DEFAULTS);
         config.searchOnBlur = config.searchOnBlur ?? config.minCharsToSearch > 0;
         config.loadOptionsOnInit = config.loadOptionsOnInit ?? config.minCharsToSearch === 0;
         return config;
-    }
-
-    /**
-     * @param {Object} overwrites
-     * @return {DynaSelOneConfig}
-     */
-    overwriteWith(...overwrites) {
-        return _.defaults(new DynaSelOneConfig(), ...overwrites, this);
-    }
-
-    /**
-     * @param {boolean=} dontAutoInitialize
-     * @return {DynaSelOneConfig}
-     */
-    dontAutoInitializeOf(dontAutoInitialize = true) {
-        return this.overwriteWith({dontAutoInitialize});
     }
 
     /**
