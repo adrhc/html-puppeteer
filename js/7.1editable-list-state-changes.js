@@ -13,15 +13,9 @@ if (Modernizr.template) {
         // dogs table with both read-only and editable row
         const elemIdOrJQuery = "dogsTable";
 
-        const repository = new InMemoryCrudRepository(DbMocks.DOGS, undefined, (it) => {
-            it.id = Math.abs(it.id);
-            return it;
-        });
-
         const component = new EditableListComponent({
             elemIdOrJQuery,
             items: DbMocks.DOGS,
-            repository,
             bodyRowTmplId: "dogsTableRowTmpl",
             offRow: new IdentifiableRowComponent({
                 elemIdOrJQuery,
