@@ -29,6 +29,10 @@ if (Modernizr.template) {
                 elemIdOrJQuery,
                 bodyRowTmplId: "dogsTableDeletableRowTmpl"
             }),
+            errorRow: new IdentifiableRowComponent({
+                elemIdOrJQuery,
+                bodyRowTmplId: "dogsTableErrorRowTmpl"
+            }),
             dontAutoInitialize: true
         });
 

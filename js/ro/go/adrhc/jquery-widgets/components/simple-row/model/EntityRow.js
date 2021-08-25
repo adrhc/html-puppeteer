@@ -22,9 +22,9 @@ class EntityRow {
      * @param {number|string=} beforeRowId
      * @param {number|string=} afterRowId
      */
-    constructor(entity, {index = 0, beforeRowId, afterRowId} = {}) {
+    constructor(entity, {index, beforeRowId, afterRowId} = {}) {
         this.entity = entity;
-        this.index = index;
+        this.index = index == null && beforeRowId == null && afterRowId == null ? 0 : index;
         this.beforeRowId = beforeRowId;
         this.afterRowId = afterRowId;
     }

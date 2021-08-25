@@ -86,6 +86,26 @@
     </tr>
 </template>
 
+<script id="dogsTableErrorRowTmpl" type="x-tmpl-mustache">
+    <tr data-owner="dogsTable" data-id="{{id}}" data-row-type="error">
+        <td colspan="2">
+            <table class="errors-table">
+                <tr>
+                    <th>
+                        <div class="title">{{{message}}}</div>
+                        <div class="time">{{time}}</div>
+                    </th>
+                </tr>
+                {{#each problems}}
+                <tr class="{{type}}">
+                    <td class="error-message">{{this}}</td>
+                </tr>
+                {{/each}}
+            </table>
+        </td>
+    </tr>
+</script>
+
 <!-- utils -->
 <script src="js/ro/go/adrhc/jquery-widgets/utils/AjaxUtils.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/utils/ArrayUtils.js"></script>

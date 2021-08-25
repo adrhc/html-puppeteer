@@ -111,9 +111,9 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @param item {IdentifiableEntity} is to insert if itemIdToRemove exists otherwise update
+     * @param item {IdentifiableEntity} is to insert if itemIdToRemove exists (=newId) otherwise update
      * @param itemIdToRemove {number|string} is to remove if exists
-     * @param append {boolean|undefined}
+     * @param append {boolean=}
      * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
     save(item, itemIdToRemove, append = this.append) {
@@ -127,7 +127,7 @@ class CrudListState extends SimpleListState {
 
     /**
      * @param {IdentifiableEntity} item
-     * @param {boolean|number|string} [append]
+     * @param {boolean=} append
      * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
     insertItem(item, append = this.append) {
@@ -139,7 +139,7 @@ class CrudListState extends SimpleListState {
         if (beforeRowId != null) {
             return this.findIndexById(beforeRowId);
         } else if (afterRowId != null) {
-            return this.findIndexById(afterRowId);
+            return this.findIndexById(afterRowId) + 1;
         } else if (typeof index === "number") {
             return index;
         } else if (typeof append === "number") {
@@ -152,7 +152,7 @@ class CrudListState extends SimpleListState {
 
     /**
      * @param {IdentifiableEntity} item
-     * @param {number} [newItemIndex]
+     * @param {number=} newItemIndex
      * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
     updateItem(item, newItemIndex) {

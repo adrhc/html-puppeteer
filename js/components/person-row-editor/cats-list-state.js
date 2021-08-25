@@ -11,6 +11,10 @@ class CatsListState extends EditableListState {
         this.repository = repository;
     }
 
+    /**
+     * @param {boolean=} append
+     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
+     */
     createNewItem(append) {
         const repoItem = this.repository.createNewItem();
         return this.insertItem(repoItem, append);

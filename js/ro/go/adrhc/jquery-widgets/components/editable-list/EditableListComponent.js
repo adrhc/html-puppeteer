@@ -24,6 +24,10 @@ class EditableListComponent extends SelectableListComponent {
         return this.state;
     }
 
+    get errorRow() {
+        return this.swappingRowSelector["showError"];
+    }
+
     /**
      * @return {IdentifiableRowComponent}
      * @protected
@@ -158,8 +162,16 @@ class EditableListComponent extends SelectableListComponent {
         const rowDataId = editableList.simpleListView.rowDataIdOf(this, true);
         const entity = editableList.extractEntity();
         return editableList._handleRepoErrors(editableList.repository.save(entity)
-            .then(savedEntity => editableList._handleUpdateSuccessful(savedEntity, rowDataId))
+            // .then(savedEntity => editableList._handleUpdateSuccessful(savedEntity, rowDataId))
+            .then(savedEntity => editableList._handleUpdateError(
+                new SimpleError("ERROR", undefined, savedEntity, ["problem1"]), rowDataId))
             .catch(simpleError => editableList._handleUpdateError(simpleError, rowDataId)));
+    }
+
+    shouldIgnoreOnSwitch(ev) {
+        const selectableList = ev.data;
+        const rowDataId = selectableList.simpleListView.rowDataIdOf(ev.currentTarget);
+        return !selectableList.editableListState.isErrorItemId(rowDataId) ? super.shouldIgnoreOnSwitch(ev) : true;
     }
 
     /**
@@ -182,7 +194,7 @@ class EditableListComponent extends SelectableListComponent {
      * @protected
      */
     _handleUpdateError(simpleError, rowDataId) {
-        console.log(`${this.constructor.name}._handleUpdateError, savedEntity:\n${JSON.stringify(simpleError)}`);
+        console.error(`${this.constructor.name}._handleUpdateError, savedEntity:\n${JSON.stringify(simpleError)}`);
         const errorEntityRow = this.editableListState.createErrorItem(simpleError, rowDataId);
         return this.errorRow.update(errorEntityRow);
     }
@@ -198,7 +210,7 @@ class EditableListComponent extends SelectableListComponent {
     }
 
     _removeErrorRow() {
-        const errorRowId = this.errorRow?.state.currentState?.id;
+        const errorRowId = this.errorRow?.state.currentState?.entity.id;
         if (errorRowId == null) {
             return Promise.resolve();
         }
@@ -206,10 +218,6 @@ class EditableListComponent extends SelectableListComponent {
         return this.doWithState(() => {
             this.editableListState.removeById(errorRowId);
         });
-    }
-
-    get errorRow() {
-        return this.swappingRowSelector["showError"];
     }
 
     /**

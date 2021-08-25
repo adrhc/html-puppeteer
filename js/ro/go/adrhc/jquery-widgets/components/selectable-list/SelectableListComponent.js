@@ -146,12 +146,16 @@ class SelectableListComponent extends SimpleListComponent {
      */
     onSwitch(ev) {
         const selectableList = ev.data;
-        if (!$(this).is("tr,td,th")) {
+        if (selectableList.shouldIgnoreOnSwitch(ev)) {
             return;
         }
         ev.stopPropagation();
         const rowDataId = selectableList.simpleListView.rowDataIdOf(this);
         selectableList.switchTo(rowDataId);
+    }
+
+    shouldIgnoreOnSwitch(ev) {
+        return !$(ev.currentTarget).is("tr,td,th");
     }
 
     /**

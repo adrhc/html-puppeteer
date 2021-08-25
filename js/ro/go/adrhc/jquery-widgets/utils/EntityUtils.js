@@ -8,7 +8,7 @@ class EntityUtils {
         if (EntityUtils.isTransientId(id1) && EntityUtils.isTransientId(id2)) {
             return true;
         }
-        return +id1 === +id2;
+        return `${id1}` === `${id2}`;
     }
 
     static haveSameId(item1, item2) {
