@@ -1,10 +1,10 @@
 class EditableListComponent extends SelectableListComponent {
     static DELETE_ROW_TYPE = "delete";
     static ERROR_ROW_TYPE = "error";
-    /**
-     * @type {IdentifiableRowComponent}
-     */
-    errorRow;
+    static ROW_TEMPLATE_INDEXES = {
+        "delete": 3,
+        "error": 4,
+    }
 
     /**
      * @param {EditableListOptions=} options
@@ -14,7 +14,6 @@ class EditableListComponent extends SelectableListComponent {
         if (options.extractedEntityConverterFn) {
             this.selectableListEntityExtractor.entityConverterFn = options.extractedEntityConverterFn;
         }
-        this.errorRow = this._$errorRowTmplOf(this.simpleListView.mustacheTableElemAdapter, this.config);
         return this._handleAutoInitialization();
     }
 
@@ -25,39 +24,44 @@ class EditableListComponent extends SelectableListComponent {
         return this.state;
     }
 
-    get onRow() {
-        return this.swappingRowSelector[SwitchType.ON];
-    }
-
     /**
-     * @param mustacheTableElemAdapter
-     * @param config
      * @return {IdentifiableRowComponent}
      * @protected
      */
-    _$errorRowTmplOf(mustacheTableElemAdapter, config) {
-        return this._$rowTmplOf(
-            EditableListComponent.ERROR_ROW_TYPE, mustacheTableElemAdapter, config);
+    _createErrorRow() {
+        return this._identifiableRowComponentForType(EditableListComponent.ERROR_ROW_TYPE);
     }
 
     /**
-     * @param mustacheTableElemAdapter
-     * @param config
      * @return {IdentifiableRowComponent}
      * @protected
      */
-    _$deletableRowTmplOf(mustacheTableElemAdapter, config) {
-        return this._$rowTmplOf(
-            EditableListComponent.DELETE_ROW_TYPE, mustacheTableElemAdapter, config);
+    _createDeletableRow() {
+        return this._identifiableRowComponentForType(EditableListComponent.DELETE_ROW_TYPE);
     }
 
+    /**
+     * @param {string} type
+     * @return {number}
+     * @protected
+     */
+    _rowTemplateIndexOf(type) {
+        const index = EditableListComponent.ROW_TEMPLATE_INDEXES[type];
+        return index != null ? index : super._rowTemplateIndexOf(type);
+    }
+
+    /**
+     * @param {EditableListOptions} options
+     * @return {{}}
+     * @protected
+     */
     _createSwappingRowSelector(options) {
         const swappingRowSelector = super._createSwappingRowSelector(options);
         const onRow = swappingRowSelector[SwitchType.ON];
         swappingRowSelector["showAdd"] = onRow;
         swappingRowSelector["showEdit"] = onRow;
-        swappingRowSelector["showDelete"] = this._$deletableRowTmplOf(
-            this.simpleListView.mustacheTableElemAdapter, this.config);
+        swappingRowSelector["showDelete"] = options.deletableRow ?? this._createDeletableRow();
+        swappingRowSelector["showError"] = options.errorRow ?? this._createErrorRow();
         return swappingRowSelector;
     }
 
@@ -179,8 +183,8 @@ class EditableListComponent extends SelectableListComponent {
      */
     _handleUpdateError(simpleError, rowDataId) {
         console.log(`${this.constructor.name}._handleUpdateError, savedEntity:\n${JSON.stringify(simpleError)}`);
-        const errorRow = this.editableListState.createErrorItem(simpleError, rowDataId);
-        return this.errorRow.update(errorRow);
+        const errorEntityRow = this.editableListState.createErrorItem(simpleError, rowDataId);
+        return this.errorRow.update(errorEntityRow);
     }
 
     /**
@@ -194,7 +198,7 @@ class EditableListComponent extends SelectableListComponent {
     }
 
     _removeErrorRow() {
-        const errorRowId = this.errorRow.state.currentState?.id;
+        const errorRowId = this.errorRow?.state.currentState?.id;
         if (errorRowId == null) {
             return Promise.resolve();
         }
@@ -202,6 +206,10 @@ class EditableListComponent extends SelectableListComponent {
         return this.doWithState(() => {
             this.editableListState.removeById(errorRowId);
         });
+    }
+
+    get errorRow() {
+        return this.swappingRowSelector["showError"];
     }
 
     /**

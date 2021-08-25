@@ -5,9 +5,14 @@
  * item but only if already exists (in table) otherwise nothing will be rendered for it.
  */
 class SelectableListComponent extends SimpleListComponent {
+    static ROW_TYPE_DATA_NAME = "data-row-type";
     static OFF_ROW_TYPE = "off";
     static ON_ROW_TYPE = "on";
-    static ROW_TYPE_DATA_NAME = "data-row-type";
+    static ROW_TEMPLATE_INDEXES = {
+        "off": 1,
+        "on": 2,
+    }
+
     /**
      * @type {Object}
      */
@@ -69,41 +74,69 @@ class SelectableListComponent extends SimpleListComponent {
         return this.swappingRowSelector[SwitchType.OFF];
     }
 
-    _$rowTmplOf(type, mustacheTableElemAdapter, tableConfig) {
-        let $rowTmplElem = mustacheTableElemAdapter.$rowByData(SelectableListComponent.ROW_TYPE_DATA_NAME, type);
-        const index = type === SelectableListComponent.OFF_ROW_TYPE ? 1 : 2;
-        $rowTmplElem = $rowTmplElem ?? mustacheTableElemAdapter.$rowByIndex(index);
-        if (!$rowTmplElem) {
-            return undefined;
-        }
+    /**
+     * @param {SelectableListOptions} options
+     * @return {{}}
+     * @protected
+     */
+    _createSwappingRowSelector(options) {
+        return {
+            [SwitchType.OFF]: options.offRow ?? this._createOffRow(),
+            [SwitchType.ON]: options.onRow ?? this._createOnRow()
+        };
+    }
+
+    _createOffRow() {
+        return this._identifiableRowComponentForType(SelectableListComponent.OFF_ROW_TYPE);
+    }
+
+    _createOnRow() {
+        return this._identifiableRowComponentForType(SelectableListComponent.ON_ROW_TYPE);
+    }
+
+    /**
+     * @param {string} type
+     * @return {IdentifiableRowComponent|undefined}
+     * @protected
+     */
+    _identifiableRowComponentForType(type) {
+        const $rowTmplElem = this._$rowTemplateOf(type);
+        return $rowTmplElem ? this._identifiableRowComponentFromRowElem($rowTmplElem) : undefined;
+    }
+
+    /**
+     * @param {jQuery<HTMLTableRowElement>} $rowTmplElem
+     * @return {IdentifiableRowComponent}
+     * @protected
+     */
+    _identifiableRowComponentFromRowElem($rowTmplElem) {
         const bodyRowTmplHtml = DomUtils.htmlIncludingSelfOf($rowTmplElem);
-        const config = RowConfiguration.of(tableConfig.elemIdOrJQuery, {bodyRowTmplHtml});
+        const config = RowConfiguration.of(this.config.elemIdOrJQuery, {bodyRowTmplHtml});
         return new IdentifiableRowComponent({
-            elemIdOrJQuery: tableConfig.elemIdOrJQuery,
+            elemIdOrJQuery: this.config.elemIdOrJQuery,
             config
         });
     }
 
     /**
-     * @param {SelectableListOptions} options
+     * @param {string} type
+     * @return {jQuery<HTMLTableRowElement>}
      * @protected
      */
-    _createSwappingRowSelector(options) {
+    _$rowTemplateOf(type) {
         const mustacheTableElemAdapter = this.simpleListView.mustacheTableElemAdapter;
-        return {
-            [SwitchType.OFF]: options.offRow ?? this.$offRowTmplOf(mustacheTableElemAdapter, this.config),
-            [SwitchType.ON]: options.onRow ?? this.$onRowTmplOf(mustacheTableElemAdapter, this.config)
-        };
+        const $rowTmplElem = mustacheTableElemAdapter.$rowByData(SelectableListComponent.ROW_TYPE_DATA_NAME, type);
+        const rowTemplateIndex = this._rowTemplateIndexOf(type);
+        return $rowTmplElem ?? mustacheTableElemAdapter.$rowByIndex(rowTemplateIndex);
     }
 
-    $offRowTmplOf(mustacheTableElemAdapter, config) {
-        return this._$rowTmplOf(
-            SelectableListComponent.OFF_ROW_TYPE, mustacheTableElemAdapter, config);
-    }
-
-    $onRowTmplOf(mustacheTableElemAdapter, config) {
-        return this._$rowTmplOf(
-            SelectableListComponent.ON_ROW_TYPE, mustacheTableElemAdapter, config);
+    /**
+     * @param {string} type
+     * @return {number}
+     * @protected
+     */
+    _rowTemplateIndexOf(type) {
+        return SelectableListComponent.ROW_TEMPLATE_INDEXES[type];
     }
 
     /**

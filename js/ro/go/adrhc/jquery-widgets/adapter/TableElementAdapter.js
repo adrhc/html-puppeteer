@@ -259,11 +259,17 @@ class TableElementAdapter {
         return this.$rowByIndex(1);
     }
 
+    /**
+     * @returns {jQuery<HTMLTableRowElement>}
+     */
     $rowByIndex(index) {
         const $row = this.$tbody.children(`tr:nth-child(${index})`);
         return $row.length ? $row : undefined;
     }
 
+    /**
+     * @returns {jQuery<HTMLTableRowElement>}
+     */
     $rowByData(dataName, rowType) {
         const $row = this.$tbody.children(`tr[${dataName}=${rowType}]`);
         return $row.length ? $row : undefined;
