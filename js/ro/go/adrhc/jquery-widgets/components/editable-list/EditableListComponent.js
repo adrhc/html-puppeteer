@@ -61,7 +61,8 @@ class EditableListComponent extends SelectableListComponent {
         const entityRow = stateChange.stateOrPart;
         if (ErrorEntity.isErrorItemId(entityRow?.entity?.id)) {
             // ignoring any previous state held by errorRow
-            return this.errorRow.processStateChanges(new CreateStateChange(entityRow));
+            return this.errorRow.processStateChanges(
+                new CreateStateChange(entityRow, stateChange.partName));
         }
         return super.handleItemChange(stateChange);
     }

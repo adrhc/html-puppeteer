@@ -38,6 +38,14 @@ class EntityRow {
      * @param {{}} source
      * @return {{}}
      */
+    static areAllButIndexPositioningPropertiesEmpty(source = {}) {
+        return !EntityRow.POSITIONING_PROPERTIES.find(p => p !== "index" && source[p] != null);
+    }
+
+    /**
+     * @param {{}} source
+     * @return {{}}
+     */
     static areAllPositioningPropertiesEmpty(source = {}) {
         return !EntityRow.POSITIONING_PROPERTIES.find(p => source[p] != null);
     }

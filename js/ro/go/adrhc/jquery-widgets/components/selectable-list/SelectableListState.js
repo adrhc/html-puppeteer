@@ -26,13 +26,6 @@ class SelectableListState extends CrudListState {
     }
 
     /**
-     * @return {EntityRowSwap}
-     */
-    get currentEntityRowSwap() {
-        return this.swappingState.currentState;
-    }
-
-    /**
      * @param {SelectableListOptions} selectableListOptions
      * @return {SelectableListState}
      */
@@ -101,7 +94,7 @@ class SelectableListState extends CrudListState {
      * @protected
      */
     _processSwitchedOn(newEntityRowSwap) {
-        return this._collectSwitch(newEntityRowSwap, SwitchType.ON);
+        this._collectSwitch(newEntityRowSwap, SwitchType.ON);
     }
 
     /**
@@ -109,10 +102,9 @@ class SelectableListState extends CrudListState {
      * @protected
      */
     _processSwitchedOff(previousEntityRowSwap) {
+        this._collectSwitch(previousEntityRowSwap, SwitchType.OFF);
         if (this._isTransient(previousEntityRowSwap)) {
-            return this.removeTransient();
-        } else {
-            return this._collectSwitch(previousEntityRowSwap, SwitchType.OFF);
+            this.removeTransient();
         }
     }
 
@@ -148,6 +140,13 @@ class SelectableListState extends CrudListState {
     reset() {
         super.reset();
         this.swappingState.reset();
+    }
+
+    /**
+     * @return {EntityRowSwap}
+     */
+    get currentEntityRowSwap() {
+        return this.swappingState.currentState;
     }
 }
 

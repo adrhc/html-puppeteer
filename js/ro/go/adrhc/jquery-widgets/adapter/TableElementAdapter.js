@@ -104,9 +104,10 @@ class TableElementAdapter {
         } else if (rowValues.append != null) {
             this.$tbody[rowValues.append ? "append" : "prepend"]($row);
         } else if (rowValues.index != null) {
+            console.warn("index is not reliable, don't use it!\n", rowValues);
             $(`tr:eq(${rowValues.index - 1})`, this.$tbody).after($row);
         } else {
-            console.error(`using "rowPositionOnCreate" (${this.rowPositionOnCreate}) for:\n`, rowValues);
+            console.error(`don't use "rowPositionOnCreate" (${this.rowPositionOnCreate})!\n`, rowValues);
             this.$tbody[this.rowPositionOnCreate]($row);
         }
     }

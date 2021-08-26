@@ -57,6 +57,9 @@ class CrudListState extends SimpleListState {
      * @protected
      */
     _replacePartImpl(newRowValues, previousIndex) {
+        AssertionUtils.isTrue(newRowValues?.index == null
+            || EntityRow.areAllButIndexPositioningPropertiesEmpty(newRowValues),
+            `Not allowed to have both index and positioning properties set! ${JSON.stringify(newRowValues)}`);
         const oldRowValues = this.getStatePart(previousIndex);
         if (oldRowValues == null) {
             if (newRowValues == null) {
@@ -174,19 +177,23 @@ class CrudListState extends SimpleListState {
      * it into this.items or, if the item.id already exists, update the item.
      * If previousItemId is provided and differs than item.id than remove the previousItemId-item.
      *
+     * Provide updateOptions only if wanting to change item's position.
+     * Provide createOptions if wanting to change item's position or wanting to provide previousItemId.
+     *
      * @param {IdentifiableEntity} item
-     * @param {{previousItemId?: number|string, index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}} options
+     * @param {{previousItemId?: number|string, index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}=} createOptions
+     * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}=} updateOptions
      * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
-    createOrUpdate(item, options = {}) {
-        if (options.previousItemId != null && !EntityUtils.idsAreEqual(item.id, options.previousItemId)) {
+    createOrUpdate(item, createOptions = {}, updateOptions) {
+        if (createOptions.previousItemId != null && !EntityUtils.idsAreEqual(item.id, createOptions.previousItemId)) {
             // item acquired a new id, removing the previous version having options.previousItemId
-            this.removeById(options.previousItemId);
+            this.removeById(createOptions.previousItemId);
         }
         if (this.findById(item.id)) {
-            return this.updateItem(item, options);
+            return this.updateItem(item, updateOptions);
         } else {
-            return this.createNewItem(item, options)
+            return this.createNewItem(item, createOptions)
         }
     }
 
