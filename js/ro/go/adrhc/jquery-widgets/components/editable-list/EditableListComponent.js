@@ -192,9 +192,9 @@ class EditableListComponent extends SelectableListComponent {
         const rowDataId = editableList.simpleListView.rowDataIdOf(this, true);
         const entity = editableList.extractEntity();
         return editableList._handleRepoErrors(editableList.repository.save(entity)
-            // .then(savedEntity => editableList._handleUpdateSuccessful(savedEntity, rowDataId))
-            .then(savedEntity => editableList._handleUpdateError(
-                new SimpleError("ERROR", undefined, savedEntity, ["problem1"]), rowDataId))
+            .then(savedEntity => editableList._handleUpdateSuccessful(savedEntity, rowDataId))
+            // .then(savedEntity => editableList._handleUpdateError(
+            //     new SimpleError("ERROR", undefined, savedEntity, ["problem1"]), rowDataId))
             .catch(simpleError => editableList._handleUpdateError(simpleError, rowDataId)));
     }
 
