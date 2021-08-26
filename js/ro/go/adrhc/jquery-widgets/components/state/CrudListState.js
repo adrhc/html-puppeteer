@@ -107,7 +107,7 @@ class CrudListState extends SimpleListState {
         } else if (entityRow.afterRowId != null) {
             const index = this.findIndexById(entityRow.afterRowId);
             ArrayUtils.insert(entityRow.entity, index + 1, this.items);
-        } else if (entityRow.append) {
+        } else if (entityRow.append === true) {
             this.items.push(entityRow.entity);
         } else {
             ArrayUtils.insert(entityRow.entity, 0, this.items);
@@ -145,32 +145,6 @@ class CrudListState extends SimpleListState {
         }
         return this.insertItem(item, options);
     }
-
-    /**
-     * see also IdentifiableEntity.TRANSIENT_ID
-     *
-     * If item was just made persistent (its "id" is not transient and itemIdToRemove != "id")
-     * than remove the transient entity and insert the item otherwise just update the item.
-     *
-     * @param item {IdentifiableEntity} is to insert if itemIdToRemove exists (=newId) otherwise update
-     * @param previousItemId {number|string} is to remove if exists
-     * @param append {boolean=}
-     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
-     */
-
-    /*persistTransientOrUpdateExisting(item, previousItemId, append = this.append) {
-        if (!EntityUtils.idsAreEqual(item.id, previousItemId)) {
-            // item acquired a new, not-transient id, while previously had a transient one (i.e. previousItemId)
-            AssertionUtils.isTrue(previousItemId != null, "previousItemId shouldn't be NULL!");
-            AssertionUtils.isFalse(EntityUtils.isTransientId(item.id), `item.id shouldn't be transient! item.id = ${item.id}`);
-            this.removeById(previousItemId);
-            return this.insertItem(item, {append});
-        } else {
-            // item's id didn't change
-            AssertionUtils.isTrue(!!this.findById(item.id));
-            return this.updateItem(item);
-        }
-    }*/
 
     /**
      * @param {IdentifiableEntity} item

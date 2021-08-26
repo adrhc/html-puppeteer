@@ -8,7 +8,8 @@ class EditableListState extends SelectableListState {
     static of(editableListOptions) {
         return new EditableListState({
             newEntityFactoryFn: editableListOptions.newEntityFactoryFn,
-            newItemsGoLast: editableListOptions.rowPositionOnCreate === "append"
+            newItemsGoLast: editableListOptions.rowPositionOnCreate != null ?
+                editableListOptions.rowPositionOnCreate === "append" : undefined
         })
     }
 

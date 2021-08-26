@@ -4,19 +4,19 @@ class EntityRow {
      */
     entity;
     /**
-     * @type {number} where to put the new entity or to move the previous, existing, one
+     * @type {number|undefined} where to put the new entity or to move the previous, existing, one
      */
     index;
     /**
-     * @type {number|string}
+     * @type {number|string|undefined}
      */
     beforeRowId;
     /**
-     * @type {number|string}
+     * @type {number|string|undefined}
      */
     afterRowId;
     /**
-     * @type {boolean}
+     * @type {boolean|undefined}
      */
     append;
 
