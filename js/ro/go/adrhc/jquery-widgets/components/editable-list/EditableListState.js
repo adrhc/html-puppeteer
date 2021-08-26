@@ -30,13 +30,11 @@ class EditableListState extends SelectableListState {
 
     /**
      * @param {ErrorEntity=} errorEntity
-     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>> | boolean} false if the entity is missing or the implied state change
      */
-    removeErrorItem(errorEntity) {
-        let id = errorEntity?.id ?? this.items.find(it => ErrorEntity.isErrorItemId(it.id))?.id;
-        if (id == null || !ErrorEntity.isErrorItemId(id)) {
-            return false;
-        }
-        return this.removeById(id);
+    removeErrorItems(...errorEntity) {
+        const items = errorEntity.length ? errorEntity : this.items;
+        items
+            .filter(it => ErrorEntity.isErrorItemId(it.id))
+            .forEach(errorEntity => this.removeById(errorEntity.id));
     }
 }

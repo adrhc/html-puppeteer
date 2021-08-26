@@ -73,7 +73,7 @@ class EditableListComponent extends SelectableListComponent {
      */
     handleItemOff(stateChange) {
         return this.doWithState((editableListState) => {
-            editableListState.removeErrorItem();
+            editableListState.removeErrorItems();
         }).then(() => super.handleItemOff(stateChange));
     }
 
