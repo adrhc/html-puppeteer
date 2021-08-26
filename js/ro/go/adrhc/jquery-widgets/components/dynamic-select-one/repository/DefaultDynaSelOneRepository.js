@@ -17,7 +17,7 @@ class DefaultDynaSelOneRepository extends DynaSelOneRepository {
      * @param entity {string}
      * @param responseConverter {function({}): IdentifiableEntity}
      */
-    constructor(url, entity, responseConverter = IdentifiableEntity.entityConverter) {
+    constructor(url, entity, responseConverter = IdentifiableEntity.of) {
         super();
         this.url = url;
         this.entity = entity;

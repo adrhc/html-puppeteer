@@ -22,7 +22,7 @@ class DefaultCrudRepository extends CrudRepository {
      * @param [requestConverter] {function({}): IdentifiableEntity}
      * @param [errorHandler] {RepoErrorHandler}
      */
-    constructor(url, responseConverter = IdentifiableEntity.entityConverter,
+    constructor(url, responseConverter = IdentifiableEntity.of,
                 requestConverter = (reqData) => reqData,
                 errorHandler = new DefaultRepoErrorHandler()) {
         super();

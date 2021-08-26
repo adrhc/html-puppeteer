@@ -20,8 +20,8 @@ class InMemoryCrudRepository extends CrudRepository {
      * @param {function({}): IdentifiableEntity} [requestConverter]
      */
     constructor(items = [],
-                responseConverter = IdentifiableEntity.entityConverter,
-                requestConverter = IdentifiableEntity.entityConverter) {
+                responseConverter = IdentifiableEntity.of,
+                requestConverter = IdentifiableEntity.of) {
         super();
         this.items = items;
         this.requestConverter = requestConverter;

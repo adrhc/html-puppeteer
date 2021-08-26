@@ -170,8 +170,8 @@ class SelectableListComponent extends SimpleListComponent {
     }
 
     /**
-     * @param {TaggedStateChange<EntityRowSwap>} stateChange
-     * @return {Promise<TaggedStateChange[]>}
+     * @param {TaggedStateChange<EntityRow>} stateChange
+     * @return {Promise<TaggedStateChange<EntityRow>[]>}
      */
     handleItemChange(stateChange) {
         console.log(`${this.constructor.name}.handleItemChange:\n${JSON.stringify(stateChange)}`);

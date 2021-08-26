@@ -8,10 +8,10 @@ class IdentifiableEntity {
         this.id = id;
     }
 
-    static entityConverter(data) {
+    static of(data) {
         if (data == null) {
             return undefined;
         }
-        return $.extend(true, new IdentifiableEntity(), data);
+        return _.defaults(new IdentifiableEntity(), data);
     }
 }

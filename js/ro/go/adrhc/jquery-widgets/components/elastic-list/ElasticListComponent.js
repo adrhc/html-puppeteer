@@ -63,7 +63,8 @@ class ElasticListComponent extends SimpleListComponent {
                     newEntityFactoryFn,
                     state = new CrudListState({
                         newEntityFactoryFn,
-                        newItemsGoLast: mustacheTableElemAdapter.rowPositionOnCreate === "append"
+                        newItemsGoLast: mustacheTableElemAdapter.rowPositionOnCreate != null ?
+                            mustacheTableElemAdapter.rowPositionOnCreate === "append" : undefined
                     }),
                     view = new SimpleListView(mustacheTableElemAdapter),
                     rowChildCompFactories,

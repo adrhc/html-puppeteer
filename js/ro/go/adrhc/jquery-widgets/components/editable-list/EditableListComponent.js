@@ -7,64 +7,23 @@ class EditableListComponent extends SelectableListComponent {
     }
 
     /**
-     * @param {EditableListOptions=} options
-     */
-    constructor(options = new EditableListOptions()) {
-        super(EditableListOptions.of(options, true));
-        if (options.extractedEntityConverterFn) {
-            this.selectableListEntityExtractor.entityConverterFn = options.extractedEntityConverterFn;
-        }
-        return this._handleAutoInitialization();
-    }
-
-    /**
-     * @return {EditableListState}
-     */
-    get editableListState() {
-        return this.state;
-    }
-
-    get errorRow() {
-        return this.swappingRowSelector["showError"];
-    }
-
-    /**
-     * @param {TaggedStateChange<EntityRowSwap>} stateChange
-     * @return {Promise<TaggedStateChange[]>}
-     */
-    handleItemChange(stateChange) {
-        console.log(`${this.constructor.name}.handleItemChange:\n${JSON.stringify(stateChange)}`);
-        const entityRow = stateChange.stateOrPart;
-        if (this.editableListState.isErrorItemId(entityRow?.entity?.id)) {
-            return this.errorRow.update(entityRow);
-        }
-        return super.handleItemChange(stateChange);
-    }
-
-    /**
-     * @return {IdentifiableRowComponent}
+     * linking triggers to component's handlers (aka capabilities)
+     *
      * @protected
      */
-    _createErrorRow() {
-        return this._identifiableRowComponentForType(EditableListComponent.ERROR_ROW_TYPE);
-    }
-
-    /**
-     * @return {IdentifiableRowComponent}
-     * @protected
-     */
-    _createDeletableRow() {
-        return this._identifiableRowComponentForType(EditableListComponent.DELETE_ROW_TYPE);
-    }
-
-    /**
-     * @param {string} type
-     * @return {number}
-     * @protected
-     */
-    _rowTemplateIndexOf(type) {
-        const index = EditableListComponent.ROW_TEMPLATE_INDEXES[type];
-        return index != null ? index : super._rowTemplateIndexOf(type);
+    _configureEvents() {
+        super._configureEvents();
+        this.simpleListView.$elem
+            .on(this._appendNamespaceTo('click'),
+                `${this._btnSelector(['showDelete', 'showEdit'])}`, this, this.onShowDU)
+            .on(this._appendNamespaceTo('click'),
+                `${this._ownerSelector}[data-btn='showAdd']`, this, this.onShowAdd)
+            .on(this._appendNamespaceTo('click'),
+                `${this._ownerSelector}[data-btn='cancel']`, this, this.onCancel)
+            .on(this._appendNamespaceTo('click'),
+                `${this._ownerSelector}[data-btn='delete']`, this, this.onDelete)
+            .on(this._appendNamespaceTo('click'),
+                `${this._ownerSelector}[data-btn='update']`, this, this.onUpdate);
     }
 
     /**
@@ -77,9 +36,67 @@ class EditableListComponent extends SelectableListComponent {
         const onRow = swappingRowSelector[SwitchType.ON];
         swappingRowSelector["showAdd"] = onRow;
         swappingRowSelector["showEdit"] = onRow;
-        swappingRowSelector["showDelete"] = options.deletableRow ?? this._createDeletableRow();
-        swappingRowSelector["showError"] = options.errorRow ?? this._createErrorRow();
+        swappingRowSelector["showDelete"] = options.deletableRow ?? this
+            ._identifiableRowComponentForType(EditableListComponent.DELETE_ROW_TYPE);
+        swappingRowSelector["showError"] = options.errorRow ?? this
+            ._identifiableRowComponentForType(EditableListComponent.ERROR_ROW_TYPE);
         return swappingRowSelector;
+    }
+
+    /**
+     * @param {string} type
+     * @return {number}
+     * @protected
+     */
+    _rowTemplateIndexOf(type) {
+        return EditableListComponent.ROW_TEMPLATE_INDEXES[type] ?? super._rowTemplateIndexOf(type);
+    }
+
+    /**
+     * @param {TaggedStateChange<EntityRow>} stateChange
+     * @return {Promise<TaggedStateChange<EntityRow>[]>}
+     */
+    handleItemChange(stateChange) {
+        console.log(`${this.constructor.name}.handleItemChange:\n${JSON.stringify(stateChange)}`);
+        const entityRow = stateChange.stateOrPart;
+        if (ErrorEntity.isErrorItemId(entityRow?.entity?.id)) {
+            // ignoring any previous state held by errorRow
+            return this.errorRow.processStateChanges(new CreateStateChange(entityRow));
+        }
+        return super.handleItemChange(stateChange);
+    }
+
+    /**
+     * @param {TaggedStateChange<EntityRowSwap>} stateChange
+     * @return {Promise<StateChange[]>}
+     * @protected
+     */
+    handleItemOff(stateChange) {
+        return this.doWithState((editableListState) => {
+            editableListState.removeErrorItem();
+        }).then(() => super.handleItemOff(stateChange));
+    }
+
+    shouldIgnoreOnSwitch(ev) {
+        const selectableList = ev.data;
+        const rowDataId = selectableList.simpleListView.rowDataIdOf(ev.currentTarget);
+        return ErrorEntity.isErrorItemId(rowDataId) || super.shouldIgnoreOnSwitch(ev);
+    }
+
+    reset() {
+        super.reset();
+        this._resetSwappingRowSelector();
+    }
+
+    /**
+     * @param {EditableListOptions=} options
+     */
+    constructor(options = new EditableListOptions()) {
+        super(EditableListOptions.of(options, true));
+        if (options.extractedEntityConverterFn) {
+            this.selectableListEntityExtractor.entityConverterFn = options.extractedEntityConverterFn;
+        }
+        return this._handleAutoInitialization();
     }
 
     /**
@@ -175,21 +192,15 @@ class EditableListComponent extends SelectableListComponent {
         const rowDataId = editableList.simpleListView.rowDataIdOf(this, true);
         const entity = editableList.extractEntity();
         return editableList._handleRepoErrors(editableList.repository.save(entity)
-            .then(savedEntity => editableList._handleUpdateSuccessful(savedEntity, rowDataId))
-            // .then(savedEntity => editableList._handleUpdateError(
-            //     new SimpleError("ERROR", undefined, savedEntity, ["problem1"]), rowDataId))
+            // .then(savedEntity => editableList._handleUpdateSuccessful(savedEntity, rowDataId))
+            .then(savedEntity => editableList._handleUpdateError(
+                new SimpleError("ERROR", undefined, savedEntity, ["problem1"]), rowDataId))
             .catch(simpleError => editableList._handleUpdateError(simpleError, rowDataId)));
-    }
-
-    shouldIgnoreOnSwitch(ev) {
-        const selectableList = ev.data;
-        const rowDataId = selectableList.simpleListView.rowDataIdOf(ev.currentTarget);
-        return !selectableList.editableListState.isErrorItemId(rowDataId) ? super.shouldIgnoreOnSwitch(ev) : true;
     }
 
     /**
      * @param {IdentifiableEntity} savedEntity
-     * @param {number|string} previousItemId
+     * @param {number|string} previousItemId the item's id before persisting
      * @return {Promise<StateChange[]>}
      * @protected
      */
@@ -203,71 +214,34 @@ class EditableListComponent extends SelectableListComponent {
 
     /**
      * @param {SimpleError} simpleError
-     * @param {number|string} rowDataId is the id before getting an error (e.g. IdentifiableEntity.TRANSIENT_ID)
+     * @param {number|string} failedId is the id before getting an error (e.g. IdentifiableEntity.TRANSIENT_ID)
      * @protected
      */
-    _handleUpdateError(simpleError, rowDataId) {
+    _handleUpdateError(simpleError, failedId) {
         console.error(`${this.constructor.name}._handleUpdateError, savedEntity:\n${JSON.stringify(simpleError)}`);
         return this.doWithState((editableListState) => {
-            editableListState.createErrorItem(simpleError, rowDataId);
+            editableListState.createErrorItem(simpleError, failedId);
         })
-    }
-
-    /**
-     * @param {TaggedStateChange<EntityRowSwap>} stateChange
-     * @return {Promise<StateChange[]>}
-     * @protected
-     */
-    handleItemOff(stateChange) {
-        return this._removeErrorRow()
-            .then(() => super.handleItemOff(stateChange));
-    }
-
-    _removeErrorRow() {
-        const errorRowId = this.errorRow?.state.currentState?.entity.id;
-        if (errorRowId == null) {
-            return Promise.resolve();
-        }
-        this.errorRow.reset();
-        return this.doWithState((editableListState) => {
-            editableListState.removeById(errorRowId);
-        });
-    }
-
-    /**
-     * linking triggers to component's handlers (aka capabilities)
-     *
-     * @protected
-     */
-    _configureEvents() {
-        super._configureEvents();
-        this.simpleListView.$elem
-            .on(this._appendNamespaceTo('click'),
-                `${this._btnSelector(['showDelete', 'showEdit'])}`, this, this.onShowDU)
-            .on(this._appendNamespaceTo('click'),
-                `${this._ownerSelector}[data-btn='showAdd']`, this, this.onShowAdd)
-            .on(this._appendNamespaceTo('click'),
-                `${this._ownerSelector}[data-btn='cancel']`, this, this.onCancel)
-            .on(this._appendNamespaceTo('click'),
-                `${this._ownerSelector}[data-btn='delete']`, this, this.onDelete)
-            .on(this._appendNamespaceTo('click'),
-                `${this._ownerSelector}[data-btn='update']`, this, this.onUpdate);
-    }
-
-    reset() {
-        super.reset();
-        this._resetSwappingRowSelector();
     }
 
     /**
      * @protected
      */
     _resetSwappingRowSelector() {
-        for (let key in this.swappingRowSelector) {
-            const row = this.swappingRowSelector[key];
-            if (row) {
-                row.reset();
-            }
-        }
+        Object.values(this.swappingRowSelector).forEach(row => row.reset())
+    }
+
+    /**
+     * @return {EditableListState}
+     */
+    get editableListState() {
+        return this.state;
+    }
+
+    /**
+     * @return {IdentifiableRowComponent}
+     */
+    get errorRow() {
+        return this.swappingRowSelector["showError"];
     }
 }

@@ -89,7 +89,7 @@ class StateHolder {
      *
      * @param {P} partialState
      * @param {string|number} oldPartName specify the state's part/section to change/manipulate
-     * @param {boolean} [dontRecordStateEvents]
+     * @param {boolean=} dontRecordStateEvents
      * @return {StateChange<P>|boolean} the newly created StateChange or, if dontRecordStateEvents = true, whether a state change occurred
      */
     replacePart(partialState, oldPartName, dontRecordStateEvents) {

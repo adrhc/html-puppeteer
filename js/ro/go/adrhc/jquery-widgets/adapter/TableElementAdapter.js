@@ -174,21 +174,20 @@ class TableElementAdapter {
             }
         } else if (createIfNotExists) {
             const $row = $(rowHtml);
-            if (rowValues.index != null) {
-                if (rowValues.index === 0) {
-                    this.$tbody.prepend($row);
-                } else if (rowValues.index === TableElementAdapter.LAST_ROW_INDEX) {
-                    this.$tbody.append($row);
-                } else {
-                    $(`tr:eq(${rowValues.index - 1})`, this.$tbody).after($row);
-                }
+            if (rowValues.index === 0) {
+                this.$tbody.prepend($row);
+            } else if (rowValues.index === TableElementAdapter.LAST_ROW_INDEX) {
+                this.$tbody.append($row);
             } else if (rowValues.beforeRowId != null) {
                 this.$getRowByDataId(rowValues.beforeRowId).before($row);
             } else if (rowValues.afterRowId != null) {
                 this.$getRowByDataId(rowValues.afterRowId).after($row);
             } else if (rowValues.append != null) {
                 this.$tbody[rowValues.append ? "append" : "prepend"]($row);
+            } else if (rowValues.index != null) {
+                $(`tr:eq(${rowValues.index - 1})`, this.$tbody).after($row);
             } else {
+                console.error(`using "rowPositionOnCreate" (${this.rowPositionOnCreate}) for:\n`, rowValues);
                 this.$tbody[this.rowPositionOnCreate]($row);
             }
         }

@@ -39,7 +39,8 @@ class SelectableListState extends CrudListState {
     static of(selectableListOptions) {
         return new SelectableListState({
             newEntityFactoryFn: selectableListOptions.newEntityFactoryFn,
-            newItemsGoLast: selectableListOptions.rowPositionOnCreate === "append"
+            newItemsGoLast: selectableListOptions.rowPositionOnCreate != null ?
+                selectableListOptions.rowPositionOnCreate === "append" : undefined
         })
     }
 

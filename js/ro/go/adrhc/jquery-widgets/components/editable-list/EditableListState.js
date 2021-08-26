@@ -1,6 +1,7 @@
+/**
+ *
+ */
 class EditableListState extends SelectableListState {
-    static ERROR_ID_PREFIX = "error-row-";
-
     /**
      * @param {EditableListOptions} editableListOptions
      * @return {EditableListState}
@@ -18,34 +19,24 @@ class EditableListState extends SelectableListState {
     }
 
     /**
-     * @param {string|number} id
-     * @return {boolean}
-     */
-    isErrorItemId(id) {
-        return typeof id === "string" && id.startsWith(EditableListState.ERROR_ID_PREFIX);
-    }
-
-    /**
      * @param {SimpleError} simpleError
-     * @param {number|string} rowDataId is the id before getting an error (e.g. IdentifiableEntity.TRANSIENT_ID)
+     * @param {number|string} failedId is the id before getting an error (e.g. IdentifiableEntity.TRANSIENT_ID)
      * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
-    createErrorItem(simpleError, rowDataId) {
-        const errorData = this._errorDataOf(simpleError, rowDataId);
-        return this.createOrUpdate(errorData, {beforeRowId: errorData.failedId});
+    createErrorItem(simpleError, failedId) {
+        const errorEntity = ErrorEntity.of(simpleError, failedId);
+        return this.createOrUpdate(errorEntity, {beforeRowId: errorEntity.failedId});
     }
 
     /**
-     * @param {SimpleError} simpleError
-     * @param {number|string} rowDataId is the id before getting an error (e.g. IdentifiableEntity.TRANSIENT_ID)
-     * @return {{id, failedId, entity}} contains simpleError fields too
-     * @protected
+     * @param {ErrorEntity=} errorEntity
+     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>> | boolean} false if the entity is missing or the implied state change
      */
-    _errorDataOf(simpleError, rowDataId) {
-        const entity = simpleError.data;
-        let failedId = entity.id != null ? entity.id : rowDataId;
-        // id is used to identify the row to update and for setting the "data-id" attribute
-        // failedId is used for setting "data-secondary-row-part" attribute
-        return {id: `${EditableListState.ERROR_ID_PREFIX}${failedId}`, failedId, entity, ...simpleError};
+    removeErrorItem(errorEntity) {
+        let id = errorEntity?.id ?? this.items.find(it => ErrorEntity.isErrorItemId(it.id))?.id;
+        if (id == null || !ErrorEntity.isErrorItemId(id)) {
+            return false;
+        }
+        return this.removeById(id);
     }
 }

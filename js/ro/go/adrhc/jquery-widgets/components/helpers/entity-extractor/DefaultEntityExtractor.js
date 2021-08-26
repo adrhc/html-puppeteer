@@ -19,9 +19,9 @@ class DefaultEntityExtractor extends EntityExtractor {
      */
     constructor(component, {
         dontRemoveGeneratedId,
-        entityConverterFn = IdentifiableEntity.entityConverter
+        entityConverterFn = IdentifiableEntity.of
     } = {
-        entityConverterFn: IdentifiableEntity.entityConverter
+        entityConverterFn: IdentifiableEntity.of
     }) {
         super();
         this.component = component;
