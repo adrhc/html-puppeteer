@@ -88,22 +88,22 @@ class StateHolder {
      * Partially changes the state (aka creates/deletes/replaces a state part/portion/section).
      *
      * @param {P} partialState
-     * @param {string|number} oldPartName specify the state's part/section to change/manipulate
+     * @param {string|number} dueToChangePartName specify the state's part/section to change/manipulate
      * @param {boolean=} dontRecordStateEvents
      * @return {StateChange<P>|boolean} the newly created StateChange or, if dontRecordStateEvents = true, whether a state change occurred
      */
-    replacePart(partialState, oldPartName, dontRecordStateEvents) {
-        if (this._currentStatePartEquals(partialState, oldPartName)) {
+    replacePart(partialState, dueToChangePartName, dontRecordStateEvents) {
+        if (this._currentStatePartEquals(partialState, dueToChangePartName)) {
             return false;
         }
 
-        const previousStatePart = this._replacePartImpl(partialState, oldPartName);
+        const previousStatePart = this._replacePartImpl(partialState, dueToChangePartName);
 
         if (dontRecordStateEvents) {
             return true;
         }
 
-        const stateChange = this._stateChangeOf(previousStatePart, partialState, oldPartName);
+        const stateChange = this._stateChangeOf(previousStatePart, partialState, dueToChangePartName);
         return this.collectStateChange(stateChange);
     }
 
@@ -121,27 +121,27 @@ class StateHolder {
     /**
      * @param {P=} previousStatePart
      * @param {P=} partialState
-     * @param {string|number=} oldPartName
+     * @param {string|number=} dueToChangePartName
      * @return {StateChange<P>|undefined}
      * @protected
      */
-    _stateChangeOf(previousStatePart, partialState, oldPartName) {
-        return new StateChange(previousStatePart, partialState, oldPartName)
+    _stateChangeOf(previousStatePart, partialState, dueToChangePartName) {
+        return new StateChange(previousStatePart, partialState, dueToChangePartName)
     }
 
     /**
      * @param {P} partialState
-     * @param {string|number} oldPartName specify the state's part/section to change/manipulate
+     * @param {string|number} dueToChangePartName specify the state's part/section to change/manipulate
      * @return {P} previous state part
      * @protected
      */
-    _replacePartImpl(partialState, oldPartName) {
-        console.debug(`${this.constructor.name}._replacePartImpl, ${oldPartName}, new part:\n${JSON.stringify(partialState)}`);
-        if (oldPartName == null) {
+    _replacePartImpl(partialState, dueToChangePartName) {
+        console.debug(`${this.constructor.name}._replacePartImpl, ${dueToChangePartName}, new part:\n${JSON.stringify(partialState)}`);
+        if (dueToChangePartName == null) {
             return undefined;
         }
-        const previousStatePart = this.getStatePart(oldPartName);
-        this._currentState[oldPartName] = partialState;
+        const previousStatePart = this.getStatePart(dueToChangePartName);
+        this._currentState[dueToChangePartName] = partialState;
         return previousStatePart;
     }
 
@@ -156,12 +156,12 @@ class StateHolder {
 
     /**
      * @param {P} part
-     * @param {string|number} oldPartName specify the state's part/section to change/manipulate
+     * @param {string|number} dueToChangePartName specify the state's part/section to change/manipulate
      * @return {boolean}
      * @protected
      */
-    _currentStatePartEquals(part, oldPartName) {
-        return this.getStatePart(oldPartName) === part;
+    _currentStatePartEquals(part, dueToChangePartName) {
+        return this.getStatePart(dueToChangePartName) === part;
     }
 
     /**

@@ -14,16 +14,6 @@ class ArrayUtils {
     }
 
     /**
-     * @param keyName {string}
-     * @param keyValue {number|string}
-     * @param array {Array<{}>}
-     * @return {{}}
-     */
-    static findFirstByKeyAndNumberValue(keyName, keyValue, array) {
-        return array.find(it => it[keyName] == keyValue);
-    }
-
-    /**
      * @param array {Array<{}>}
      * @param filter {function(value: *, index: number, obj: []): boolean}
      * @return removed item

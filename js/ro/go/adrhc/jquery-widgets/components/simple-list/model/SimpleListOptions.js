@@ -25,19 +25,11 @@ class SimpleListOptions extends AbstractComponentOptions {
     /**
      * @type {string}
      */
-    rowPositionOnCreate;
-    /**
-     * @type {string}
-     */
     childProperty;
     /**
      * @type {boolean}
      */
     dontAutoInitialize;
-    /**
-     * @type {string|IdentifiableEntity[]}
-     */
-    items;
     /**
      * @type {CrudRepository}
      */
@@ -46,6 +38,19 @@ class SimpleListOptions extends AbstractComponentOptions {
      * @type {MustacheTableElemAdapter}
      */
     mustacheTableElemAdapter;
+
+    /**
+     * @param {SimpleListOptions} options are the programmatically (javascript) passed options
+     * @param {boolean=} forceDontAutoInitialize
+     * @return {SimpleListOptions} is the options with the defaults applied
+     */
+    static of(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
+        const simpleListOptions = _.defaults(new SimpleListOptions(), {forceDontAutoInitialize}, options);
+        simpleListOptions.config = options.config ?? SimpleListConfiguration.of(options);
+        simpleListOptions.state = options.state ?? new SimpleListState();
+        simpleListOptions.view = options.view ?? SimpleListView.of(options, simpleListOptions.config);
+        return simpleListOptions;
+    }
 
     /**
      * @return {SimpleListView}
@@ -69,6 +74,10 @@ class SimpleListOptions extends AbstractComponentOptions {
     }
 
     /**
+     * This is the computed/runtime value of rowPositionOnCreate.
+     *
+     * see also this.config.rowPositionOnCreate
+     *
      * @return {"prepend"|"append"}
      */
     get rowPositionOnCreate() {
@@ -76,15 +85,12 @@ class SimpleListOptions extends AbstractComponentOptions {
     }
 
     /**
-     * @param {SimpleListOptions} options are the programmatically (javascript) passed options
-     * @param {boolean=} forceDontAutoInitialize
-     * @return {SimpleListOptions} is the options with the defaults applied
+     * This is the computed/runtime value of items.
+     *
+     * @return {[]}
      */
-    static of(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
-        const simpleListOptions = _.defaults(new SimpleListOptions(), {forceDontAutoInitialize}, options);
-        simpleListOptions.config = options.config ?? SimpleListConfiguration.of(options);
-        simpleListOptions.state = options.state ?? new SimpleListState();
-        simpleListOptions.view = options.view ?? SimpleListView.of(options, simpleListOptions.config);
-        return simpleListOptions;
+    get items() {
+        const configItems = this.simpleListConfiguration?.items ?? [];
+        return typeof configItems === "string" ? JSON.parse(configItems) : configItems;
     }
 }

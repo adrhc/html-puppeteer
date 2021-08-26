@@ -9,7 +9,7 @@ class SimpleListConfiguration extends ComponentConfiguration {
     /**
      * items formatted as JSON
      *
-     * @type {string}
+     * @type {string|string[]|undefined}
      */
     items;
 

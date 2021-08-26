@@ -16,13 +16,6 @@ class MustacheTableElemAdapter extends TableElementAdapter {
     }
 
     /**
-     * @return {jQuery<HTMLTableRowElement>} the row template for this table
-     */
-    get $bodyRowTmpl() {
-        return super.$firstRow;
-    }
-
-    /**
      * This is the table row; evaluation order: bodyRowTmplHtml then bodyRowTmplId
      *
      * @param bodyRowTmplId {string}
@@ -62,10 +55,11 @@ class MustacheTableElemAdapter extends TableElementAdapter {
     }
 
     /**
-     * @param {number|string} [rowDataId]
-     * @param {EntityRow} [rowValues]
-     * @param {string} [rowTmplHtml]
-     * @param {boolean} [replaceExisting]
+     * @param {number|string=} rowDataId
+     * @param {EntityRow=} rowValues
+     * @param {string=} rowTmplHtml
+     * @param {boolean=} replaceExisting
+     * @param {boolean=} removeThenCreate
      * @param {boolean} createIfNotExists
      */
     renderRowWithTemplate({
@@ -73,6 +67,7 @@ class MustacheTableElemAdapter extends TableElementAdapter {
                               rowValues,
                               rowTmplHtml,
                               replaceExisting,
+                              removeThenCreate,
                               createIfNotExists
                           }) {
         const dataToRender = _.defaults({}, rowValues.entity, {[`${JQueryWidgetsConfig.OWNER_ATTRIBUTE}`]: this.owner});
@@ -81,6 +76,7 @@ class MustacheTableElemAdapter extends TableElementAdapter {
             rowDataId,
             rowHtml,
             replaceExisting,
+            removeThenCreate,
             rowValues,
             createIfNotExists
         });
@@ -100,5 +96,12 @@ class MustacheTableElemAdapter extends TableElementAdapter {
         } else {
             return rowTmplHtml;
         }
+    }
+
+    /**
+     * @return {jQuery<HTMLTableRowElement>} the row template for this table
+     */
+    get $bodyRowTmpl() {
+        return super.$firstRow;
     }
 }

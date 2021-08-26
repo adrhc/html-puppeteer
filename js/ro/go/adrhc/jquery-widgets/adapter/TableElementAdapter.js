@@ -34,95 +34,6 @@ class TableElementAdapter {
     }
 
     /**
-     * @type {jQuery<HTMLTableElement>}
-     * @private
-     */
-    _$table;
-
-    /**
-     * @returns {jQuery<HTMLTableElement>}
-     */
-    get $table() {
-        return this._$table;
-    }
-
-    /**
-     * @type {string}
-     * @private
-     */
-    _tableId;
-
-    get tableId() {
-        return this._tableId;
-    }
-
-    /**
-     * @type {string}
-     * @private
-     */
-    _owner;
-
-    /**
-     * @returns {string}
-     */
-    get owner() {
-        return this._owner;
-    }
-
-    /**
-     * @returns {string}
-     */
-    get ownerSelector() {
-        return `[data-${JQueryWidgetsConfig.OWNER_ATTRIBUTE}='${this.owner}']`;
-    }
-
-    get columnsCount() {
-        let columnsCount = 0;
-        const firstRow = this.$firstRow;
-        if (!firstRow) {
-            const tableColumnsCount = this.$table.data("columns-count");
-            return tableColumnsCount ? +tableColumnsCount : 1; // default to 1 column
-        }
-        let tds = firstRow.children("th");
-        if (!tds.length) {
-            tds = firstRow.children("td");
-        }
-        for (let td of tds) {
-            const colspan = $(td).attr('colspan');
-            if (colspan) {
-                columnsCount += +colspan;
-            } else {
-                columnsCount++;
-            }
-        }
-        return columnsCount;
-    }
-
-    /**
-     * @returns {jQuery<HTMLBodyElement>}
-     */
-    get $tbody() {
-        if (!this._$tbody.length) {
-            this.$table.append("<tbody></tbody>");
-        }
-        return this._$tbody;
-    }
-
-    /**
-     * @returns {jQuery<HTMLBodyElement>}
-     */
-    get _$tbody() {
-        return this.$table.children("tbody");
-    }
-
-    /**
-     * @returns {jQuery<HTMLTableRowElement>}
-     */
-    get $firstRow() {
-        return this.$rowByIndex(1);
-    }
-
-    /**
      * @param tableId {string|jQuery<HTMLTableRowElement>}
      * @protected
      */
@@ -152,44 +63,51 @@ class TableElementAdapter {
     }
 
     /**
-     * @param {number|string} [rowDataId]
-     * @param {string} [rowHtml]
-     * @param {boolean} [replaceExisting]
-     * @param {EntityRow} [rowValues]
-     * @param {boolean} [createIfNotExists]
+     * @param {number|string=} rowDataId
+     * @param {string=} rowHtml
+     * @param {boolean=true} replaceExisting
+     * @param {boolean=} removeThenCreate
+     * @param {EntityRow=} rowValues
+     * @param {boolean=} createIfNotExists
      */
     renderRow({
                   rowDataId,
                   rowHtml,
                   replaceExisting = true,
+                  removeThenCreate,
                   rowValues,
                   createIfNotExists
               }) {
         rowHtml = rowHtml ? rowHtml : this.emptyRowHtmlOf(rowDataId);
         const $existingRow = rowDataId != null ? this.$getRowByDataId(rowDataId) : {};
         if ($existingRow.length) {
-            if (replaceExisting) {
-                // replace existing row
-                $existingRow.replaceWith(rowHtml);
-            }
-        } else if (createIfNotExists) {
-            const $row = $(rowHtml);
-            if (rowValues.index === 0) {
-                this.$tbody.prepend($row);
-            } else if (rowValues.index === TableElementAdapter.LAST_ROW_INDEX) {
-                this.$tbody.append($row);
-            } else if (rowValues.beforeRowId != null) {
-                this.$getRowByDataId(rowValues.beforeRowId).before($row);
-            } else if (rowValues.afterRowId != null) {
-                this.$getRowByDataId(rowValues.afterRowId).after($row);
-            } else if (rowValues.append != null) {
-                this.$tbody[rowValues.append ? "append" : "prepend"]($row);
-            } else if (rowValues.index != null) {
-                $(`tr:eq(${rowValues.index - 1})`, this.$tbody).after($row);
+            if (removeThenCreate) {
+                $existingRow.remove();
             } else {
-                console.error(`using "rowPositionOnCreate" (${this.rowPositionOnCreate}) for:\n`, rowValues);
-                this.$tbody[this.rowPositionOnCreate]($row);
+                if (replaceExisting) {
+                    $existingRow.replaceWith(rowHtml);
+                }
+                return;
             }
+        } else if (!createIfNotExists) {
+            return;
+        }
+        const $row = $(rowHtml);
+        if (rowValues.index === 0) {
+            this.$tbody.prepend($row);
+        } else if (rowValues.index === TableElementAdapter.LAST_ROW_INDEX) {
+            this.$tbody.append($row);
+        } else if (rowValues.beforeRowId != null) {
+            this.$getRowByDataId(rowValues.beforeRowId).before($row);
+        } else if (rowValues.afterRowId != null) {
+            this.$getRowByDataId(rowValues.afterRowId).after($row);
+        } else if (rowValues.append != null) {
+            this.$tbody[rowValues.append ? "append" : "prepend"]($row);
+        } else if (rowValues.index != null) {
+            $(`tr:eq(${rowValues.index - 1})`, this.$tbody).after($row);
+        } else {
+            console.error(`using "rowPositionOnCreate" (${this.rowPositionOnCreate}) for:\n`, rowValues);
+            this.$tbody[this.rowPositionOnCreate]($row);
         }
     }
 
@@ -284,5 +202,94 @@ class TableElementAdapter {
     $rowByData(dataName, rowType) {
         const $row = this.$tbody.children(`tr[${dataName}=${rowType}]`);
         return $row.length ? $row : undefined;
+    }
+
+    /**
+     * @type {jQuery<HTMLTableElement>}
+     * @private
+     */
+    _$table;
+
+    /**
+     * @returns {jQuery<HTMLTableElement>}
+     */
+    get $table() {
+        return this._$table;
+    }
+
+    /**
+     * @type {string}
+     * @private
+     */
+    _tableId;
+
+    get tableId() {
+        return this._tableId;
+    }
+
+    /**
+     * @type {string}
+     * @private
+     */
+    _owner;
+
+    /**
+     * @returns {string}
+     */
+    get owner() {
+        return this._owner;
+    }
+
+    /**
+     * @returns {string}
+     */
+    get ownerSelector() {
+        return `[data-${JQueryWidgetsConfig.OWNER_ATTRIBUTE}='${this.owner}']`;
+    }
+
+    get columnsCount() {
+        let columnsCount = 0;
+        const firstRow = this.$firstRow;
+        if (!firstRow) {
+            const tableColumnsCount = this.$table.data("columns-count");
+            return tableColumnsCount ? +tableColumnsCount : 1; // default to 1 column
+        }
+        let tds = firstRow.children("th");
+        if (!tds.length) {
+            tds = firstRow.children("td");
+        }
+        for (let td of tds) {
+            const colspan = $(td).attr('colspan');
+            if (colspan) {
+                columnsCount += +colspan;
+            } else {
+                columnsCount++;
+            }
+        }
+        return columnsCount;
+    }
+
+    /**
+     * @returns {jQuery<HTMLBodyElement>}
+     */
+    get $tbody() {
+        if (!this._$tbody.length) {
+            this.$table.append("<tbody></tbody>");
+        }
+        return this._$tbody;
+    }
+
+    /**
+     * @returns {jQuery<HTMLBodyElement>}
+     */
+    get _$tbody() {
+        return this.$table.children("tbody");
+    }
+
+    /**
+     * @returns {jQuery<HTMLTableRowElement>}
+     */
+    get $firstRow() {
+        return this.$rowByIndex(1);
     }
 }

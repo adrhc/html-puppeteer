@@ -12,7 +12,7 @@ class EntityUtils {
     }
 
     static haveSameId(item1, item2) {
-        if (item1?.id == null || item2?.id == null) {
+        if (item1 == null || item2 == null) {
             return false;
         }
         return EntityUtils.idsAreEqual(item1.id, item2.id);
@@ -29,20 +29,6 @@ class EntityUtils {
         return !EntityUtils.isInvalidId(id) && +id < 0;
     }
 
-    static removeGeneratedIds(array) {
-        array.forEach(it => EntityUtils.removeGeneratedId(it));
-        return array;
-    }
-
-    static removeGeneratedId(object) {
-        if (EntityUtils.isIdGenerated(object.id)) {
-            if (object.id != null) {
-                object.id = undefined;
-            }
-        }
-        return object;
-    }
-
     static removeInvalidId(object) {
         if (EntityUtils.isInvalidId(object.id)) {
             if (object.id != null) {
@@ -52,37 +38,9 @@ class EntityUtils {
         return object;
     }
 
-    /**
-     * @param items {Array<IdentifiableEntity>}
-     * @return {IdentifiableEntity|IdentifiableEntity[]} removed entities
-     */
-    static removeTransient(items) {
-        let removedEntities = [];
-        if (!items || !items.length) {
-            return removedEntities;
-        }
-        let lastRemovedEntity;
-        do {
-            lastRemovedEntity = EntityUtils.removeById(IdentifiableEntity.TRANSIENT_ID, items);
-            if (lastRemovedEntity) {
-                removedEntities.push(lastRemovedEntity);
-            }
-        } while (lastRemovedEntity)
-        return removedEntities.length === 1 ? removedEntities[0] : removedEntities;
-    }
-
     static removeGeneratedOrInvalidId(object) {
         if (EntityUtils.isIdGenerated(object.id) || EntityUtils.isInvalidId(object.id)) {
             object.id = undefined;
-        }
-        return object;
-    }
-
-    static removeTransientId(object) {
-        if (EntityUtils.isTransient(object)) {
-            if (object.id != null) {
-                object.id = undefined;
-            }
         }
         return object;
     }
@@ -103,10 +61,6 @@ class EntityUtils {
 
     static isTransientId(id) {
         return id === IdentifiableEntity.TRANSIENT_ID;
-    }
-
-    static isTransient(item) {
-        return item.id === IdentifiableEntity.TRANSIENT_ID;
     }
 
     /**
@@ -138,7 +92,7 @@ class EntityUtils {
      * @return {IdentifiableEntity}
      */
     static findById(id, items) {
-        return ArrayUtils.findFirstByKeyAndNumberValue("id", id, items);
+        return items.find((it) => EntityUtils.idsAreEqual(it.id, id));
     }
 
     /**

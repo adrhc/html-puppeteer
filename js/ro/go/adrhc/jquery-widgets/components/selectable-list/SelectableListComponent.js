@@ -34,47 +34,6 @@ class SelectableListComponent extends SimpleListComponent {
     }
 
     /**
-     * Returns the IdentifiableRowComponent dealing with an "active" selection.
-     * The specific row though depend on the EntityRowSwap.context if
-     * present otherwise is the this.swappingRowSelector[false].
-     *
-     * @return {IdentifiableRowComponent} responsible for the currently "selected" row
-     */
-    get selectedRowComponent() {
-        const entityRowSwap = this.selectableListState.currentEntityRowSwap;
-        if (!entityRowSwap) {
-            return undefined;
-        }
-        const context = entityRowSwap.context ?? SwitchType.ON;
-        return this.swappingRowSelector[context];
-    }
-
-    /**
-     * @return {SimpleListView}
-     */
-    get simpleListView() {
-        return this.view;
-    }
-
-    /**
-     * @return {SelectableListState}
-     */
-    get selectableListState() {
-        return this.state;
-    }
-
-    /**
-     * @return {SelectableListEntityExtractor}
-     */
-    get selectableListEntityExtractor() {
-        return this.entityExtractor;
-    }
-
-    get offRow() {
-        return this.swappingRowSelector[SwitchType.OFF];
-    }
-
-    /**
      * @param {SelectableListOptions} options
      * @return {{}}
      * @protected
@@ -208,5 +167,46 @@ class SelectableListComponent extends SimpleListComponent {
         this.simpleListView.$elem
             .on(this._appendNamespaceTo("dblclick"),
                 `tr${this._ownerSelector}`, this, this.onSwitch);
+    }
+
+    /**
+     * Returns the IdentifiableRowComponent dealing with an "active" selection.
+     * The specific row though depend on the EntityRowSwap.context if
+     * present otherwise is the this.swappingRowSelector[false].
+     *
+     * @return {IdentifiableRowComponent} responsible for the currently "selected" row
+     */
+    get selectedRowComponent() {
+        const entityRowSwap = this.selectableListState.currentEntityRowSwap;
+        if (!entityRowSwap) {
+            return undefined;
+        }
+        const context = entityRowSwap.context ?? SwitchType.ON;
+        return this.swappingRowSelector[context];
+    }
+
+    /**
+     * @return {SimpleListView}
+     */
+    get simpleListView() {
+        return this.view;
+    }
+
+    /**
+     * @return {SelectableListState}
+     */
+    get selectableListState() {
+        return this.state;
+    }
+
+    /**
+     * @return {SelectableListEntityExtractor}
+     */
+    get selectableListEntityExtractor() {
+        return this.entityExtractor;
+    }
+
+    get offRow() {
+        return this.swappingRowSelector[SwitchType.OFF];
     }
 }

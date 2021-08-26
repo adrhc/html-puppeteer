@@ -90,7 +90,7 @@ $(() => {
             const newRow = createDogsWithEditRow();
             return newRow.update(new EntityRow(
                 {id: 999, name: `new dog (id = 999, added to end)`},
-                {index: TableElementAdapter.LAST_ROW_INDEX}
+                {append: true}
             )).then(() => newRow);
         }).then((rowId999) => {
             const extractedEntity = rowId999.extractEntity();

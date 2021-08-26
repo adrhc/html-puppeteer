@@ -21,7 +21,7 @@
 <body>
 <!-- dogs table -->
 <div class="dogsTable">
-    <table id="dogsTable" class="responstable">
+    <table id="dogsTable" class="responstable" data-row-position-on-create="append">
         <thead>
         <tr data-owner="dogsTable">
             <th>Dogs</th>
@@ -38,7 +38,7 @@
 
 <!-- READ-ONLY row template -->
 <template id="dogsTableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}" data-row-position-on-create="append">
+    <tr data-owner="dogsTable" data-id="{{id}}">
         <td>
             <input type="hidden" name="id" value="{{id}}">{{{name}}}
         </td>

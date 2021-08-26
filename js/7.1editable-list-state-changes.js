@@ -43,19 +43,19 @@ if (Modernizr.template) {
                  * @type {EditableListState}
                  */
                 const editableListState = state;
-                editableListState.updateItem({id: 3, name: "component only (not repository) updated dog3"});
                 editableListState.removeById(2);
                 editableListState.insertItem({
                     id: 2,
-                    name: `component only (not repository) restored dog2 (using append)`
+                    name: `restored dog2 with position/index changed using append`
                 }, {append: true});
-                editableListState.insertItem({
+                editableListState.updateItem({id: 3, name: "updated dog3 (position/index not changed)"});
+                editableListState.updateItem({
                     id: 4,
-                    name: `component only (not repository) added dog4 (using prepend)`
+                    name: `changed dog4 position/index using prepend`
                 }, {append: false});
-                editableListState.insertItem({
+                editableListState.updateItem({
                     id: 5,
-                    name: `component only (not repository) added dog5 (using append)`
+                    name: `changed dog5 position/index using append`
                 }, {append: true});
             }));
     })

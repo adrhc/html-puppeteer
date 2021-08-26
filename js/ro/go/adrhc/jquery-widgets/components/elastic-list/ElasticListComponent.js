@@ -27,7 +27,7 @@ class ElasticListComponent extends SimpleListComponent {
      * @param state {CrudListState}
      * @param view {SimpleListView}
      * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, index: number, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
-     * @param items
+     * @param items {[]=} is the equivalent of the parsed config-items
      * @param newItemsGoLast
      * @param newEntityFactoryFn
      * @param mustacheTableElemAdapter

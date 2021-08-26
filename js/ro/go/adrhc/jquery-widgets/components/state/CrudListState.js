@@ -35,18 +35,6 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @param {number} index
-     * @return {EntityRow<IdentifiableEntity>|undefined}
-     */
-    getStatePart(index) {
-        if (this.items == null || index < 0 || index >= this.items.length) {
-            return undefined;
-        }
-        const item = this.items[index];
-        return item == null ? undefined : new EntityRow(item, {index});
-    }
-
-    /**
      * @param {EntityRow<IdentifiableEntity>} newRowValues
      * @param {number} oldIndex
      * @return {boolean}
@@ -64,12 +52,12 @@ class CrudListState extends SimpleListState {
 
     /**
      * @param {EntityRow<IdentifiableEntity>} newRowValues
-     * @param {number} oldIndex
+     * @param {number} previousIndex
      * @return {EntityRow<IdentifiableEntity>} previous state part
      * @protected
      */
-    _replacePartImpl(newRowValues, oldIndex) {
-        const oldRowValues = this.getStatePart(oldIndex);
+    _replacePartImpl(newRowValues, previousIndex) {
+        const oldRowValues = this.getStatePart(previousIndex);
         if (oldRowValues == null) {
             if (newRowValues == null) {
                 console.warn("both old and new items are null, nothing else to do");
@@ -79,16 +67,58 @@ class CrudListState extends SimpleListState {
             this._insertEntityRow(newRowValues);
         } else if (newRowValues == null) {
             // old item exists but the new one is null (i.e. old is deleted)
-            ArrayUtils.removeByIndex(oldIndex, this.items);
-        } else if (newRowValues.index === oldIndex) {
+            ArrayUtils.removeByIndex(previousIndex, this.items);
+        } else if (newRowValues.index === previousIndex) {
             // the index is the same, only changing the value at that index
-            this.items[oldIndex] = newRowValues.entity;
+            this.items[previousIndex] = newRowValues.entity;
         } else {
             // both item's value and index changed
-            ArrayUtils.removeByIndex(oldIndex, this.items);
+            ArrayUtils.removeByIndex(previousIndex, this.items);
             this._insertEntityRow(newRowValues);
         }
         return oldRowValues;
+    }
+
+    /**
+     * @param {EntityRow<IdentifiableEntity>=} previousStatePart
+     * @param {EntityRow<IdentifiableEntity>=} partialState
+     * @param {string|number=} dueToChangePartName
+     * @return {StateChange<EntityRow<IdentifiableEntity>>|undefined}
+     * @protected
+     */
+    _stateChangeOf(previousStatePart, partialState, dueToChangePartName) {
+        AssertionUtils.isTrue(previousStatePart != null || partialState != null);
+        const previousIndex = previousStatePart?.entity != null ? this.findIndexById(previousStatePart?.entity?.id) : undefined;
+        const newIndex = partialState?.entity != null ? this.findIndexById(partialState?.entity?.id) : undefined;
+        // dueToChangePartName would depend on previousStatePart if not empty and fallback to partialState
+        // When partialState is empty than previousStatePart should not be empty.
+        dueToChangePartName = dueToChangePartName ?? previousStatePart?.index ?? partialState?.index ?? previousIndex ?? newIndex;
+        AssertionUtils.isNotNull(dueToChangePartName);
+        return super._stateChangeOf(previousStatePart, partialState, dueToChangePartName);
+    }
+
+    /**
+     * @param {number} index
+     * @return {EntityRow<IdentifiableEntity>|undefined}
+     */
+    getStatePart(index) {
+        if (this.items == null || index < 0 || index >= this.items.length) {
+            return undefined;
+        }
+        const item = this.items[index];
+        return item == null ? undefined : new EntityRow(item, {index});
+    }
+
+    /**
+     * The purpose of this method is to provide type checking and a default for oldIndex parameter.
+     *
+     * @param {EntityRow<IdentifiableEntity>} rowValues
+     * @param {number=} previousIndex
+     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>> | boolean}
+     * @protected
+     */
+    replacePart(rowValues, previousIndex = rowValues.index) {
+        return super.replacePart(rowValues, previousIndex);
     }
 
     /**
@@ -140,24 +170,41 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @param {EntityRow<IdentifiableEntity>=} previousStatePart
-     * @param {EntityRow<IdentifiableEntity>=} partialState
-     * @param {string|number=} oldPartName
-     * @return {StateChange<EntityRow<IdentifiableEntity>>|undefined}
-     * @protected
+     * Instantiate a new item initialized with "item" properties and insert
+     * it into this.items or, if the item.id already exists, update the item.
+     * If previousItemId is provided and differs than item.id than remove the previousItemId-item.
+     *
+     * @param {IdentifiableEntity} item
+     * @param {{previousItemId?: number|string, index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}} options
+     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
-    _stateChangeOf(previousStatePart, partialState, oldPartName) {
-        AssertionUtils.isTrue(previousStatePart != null || partialState != null);
-        // when partialState is empty than previousStatePart should not be empty
-        const newPosition = partialState?.entity != null ? this.indexOf(partialState?.entity) : undefined;
-        // oldPartName would depend on previousStatePart if not empty and fallback to partialState
-        return super._stateChangeOf(previousStatePart, partialState,
-            oldPartName ?? previousStatePart?.index ?? partialState?.index ?? newPosition);
+    createOrUpdate(item, options = {}) {
+        if (options.previousItemId != null && !EntityUtils.idsAreEqual(item.id, options.previousItemId)) {
+            // item acquired a new id, removing the previous version having options.previousItemId
+            this.removeById(options.previousItemId);
+        }
+        if (this.findById(item.id)) {
+            return this.updateItem(item, options);
+        } else {
+            return this.createNewItem(item, options)
+        }
     }
 
     /**
-     * must return the original item (the one stored in this.items) for the receiver to be able to change its id
-     * risk: the item is also used with the collectStateChange; a change by the final receiver will impact this.items!
+     * Insert the provided item (unique by id) into this.items.
+     *
+     * @param {IdentifiableEntity} item
+     * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}} options
+     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
+     */
+    insertItem(item, options = {}) {
+        AssertionUtils.isFalse(item.id != null && !!this.findById(item.id), `Can't insert duplicated item (id = ${item.id})!`);
+        options.append = options.append ?? this.append;
+        return this.replacePart(new EntityRow(item, options));
+    }
+
+    /**
+     * Instantiate a new item and insert it into this.items (by calling insertItem).
      *
      * @param {IdentifiableEntity|{}} [initialValue]
      * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}} options
@@ -172,46 +219,21 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @param {IdentifiableEntity} item
-     * @param {{previousItemId?: number|string, index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}} options
-     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
-     */
-    createOrUpdate(item, options = {}) {
-        if (options.previousItemId != null && item.id != null
-            && !EntityUtils.idsAreEqual(item.id, options.previousItemId)) {
-            // item acquired a new id, removing the previous version having options.previousItemId
-            this.removeById(options.previousItemId);
-        }
-        if (this.findById(item.id)) {
-            return this.updateItem(item, options);
-        } else {
-            return this.createNewItem(item, options)
-        }
-    }
-
-    /**
+     * Update the item having item.id changing its position with options.
+     *
      * @param {IdentifiableEntity} item
      * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}} options
      * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
-    insertItem(item, options = {}) {
-        options.append = options.append ?? this.append;
-        return this.replacePart(new EntityRow(item, options));
+    updateItem(item, options = {}) {
+        const currentIndex = this.findIndexById(item.id);
+        AssertionUtils.isTrue(currentIndex !== -1, `Can't update missing item (id = ${item.id})!`);
+        options.index = EntityRow.areAllPositioningPropertiesEmpty(options) ? currentIndex : options.index;
+        return this.replacePart(new EntityRow(item, options), currentIndex);
     }
 
     indexOf(item) {
         return this.items.indexOf(item);
-    }
-
-    /**
-     * @param {IdentifiableEntity} item
-     * @param {{previousIndex?: number, index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}} options
-     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
-     */
-    updateItem(item, options = {}) {
-        const previousIndex = options.previousIndex ?? this.findIndexById(item.id);
-        options.index = options.index ?? previousIndex;
-        return this.replacePart(new EntityRow(item, options), previousIndex);
     }
 
     /**
@@ -253,17 +275,5 @@ class CrudListState extends SimpleListState {
      */
     findById(id) {
         return EntityUtils.findById(id, this.items);
-    }
-
-    /**
-     * The purpose of this method is to provide type checking and a default for oldIndex parameter.
-     *
-     * @param {EntityRow<IdentifiableEntity>} rowValues
-     * @param {number=} previousIndex
-     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>> | boolean}
-     * @protected
-     */
-    replacePart(rowValues, previousIndex = rowValues.index) {
-        return super.replacePart(rowValues, previousIndex);
     }
 }

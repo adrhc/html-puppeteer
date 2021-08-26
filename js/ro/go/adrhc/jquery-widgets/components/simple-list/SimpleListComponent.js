@@ -20,33 +20,13 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     }
 
     /**
-     * @return {SimpleListConfiguration}
-     */
-    get simpleListConfiguration() {
-        return this.config
-    }
-
-    /**
-     * @return {SimpleListState}
-     */
-    get simpleListState() {
-        return this.state;
-    }
-
-    /**
      * @param {SimpleListOptions} options are the programmatically (javascript) passed options
      * @return {IdentifiableEntity[]|Array} is options.items or (if empty) the items specified e.g. in HTML with "data-items"
      * @protected
      */
     _configItemsOf(options) {
-        if (options.items) {
-            return options.items;
-        } else if (typeof this.simpleListConfiguration.items === "string") {
-            return JSON.parse(this.simpleListConfiguration.items);
-        } else {
-            // SimpleListConfiguration.configOf already parse items JSON (jquery default behaviour for $.data())
-            return this.simpleListConfiguration.items ?? [];
-        }
+        const configItems = this.simpleListConfiguration?.items ?? [];
+        return options.items ?? (typeof configItems === "string" ? JSON.parse(configItems) : configItems);
     }
 
     /**
@@ -84,6 +64,17 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     }
 
     /**
+     * linking triggers to component's handlers (aka capabilities)
+     *
+     * @protected
+     */
+    _configureEvents() {
+        console.log(`${this.constructor.name}._configureEvents`);
+        this.view.$elem.on(this._appendNamespaceTo("click"),
+            this._btnSelector("reload"), this, this.onReload);
+    }
+
+    /**
      * Replaces the state with the one loaded from repository.
      *
      * @return {Promise<*>}
@@ -99,13 +90,16 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     }
 
     /**
-     * linking triggers to component's handlers (aka capabilities)
-     *
-     * @protected
+     * @return {SimpleListConfiguration}
      */
-    _configureEvents() {
-        console.log(`${this.constructor.name}._configureEvents`);
-        this.view.$elem.on(this._appendNamespaceTo("click"),
-            this._btnSelector("reload"), this, this.onReload);
+    get simpleListConfiguration() {
+        return this.config
+    }
+
+    /**
+     * @return {SimpleListState}
+     */
+    get simpleListState() {
+        return this.state;
     }
 }
