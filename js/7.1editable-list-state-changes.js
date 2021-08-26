@@ -40,23 +40,23 @@ if (Modernizr.template) {
             .init()
             .then(() => component.doWithState((state) => {
                 /**
-                 * @type {CrudListState}
+                 * @type {EditableListState}
                  */
-                const crudListState = state;
-                crudListState.updateItem({id: 3, name: "component only (not repository) updated dog3"});
-                crudListState.removeById(2);
-                crudListState.insertItem({
+                const editableListState = state;
+                editableListState.updateItem({id: 3, name: "component only (not repository) updated dog3"});
+                editableListState.removeById(2);
+                editableListState.insertItem({
                     id: 2,
                     name: `component only (not repository) restored dog2 (using append)`
-                }, true);
-                crudListState.insertItem({
+                }, {append: true});
+                editableListState.insertItem({
                     id: 4,
                     name: `component only (not repository) added dog4 (using prepend)`
-                }, false);
-                crudListState.insertItem({
+                }, {append: false});
+                editableListState.insertItem({
                     id: 5,
                     name: `component only (not repository) added dog5 (using append)`
-                }, true);
+                }, {append: true});
             }));
     })
 } else {

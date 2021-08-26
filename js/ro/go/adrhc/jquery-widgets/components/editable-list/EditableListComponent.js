@@ -29,6 +29,19 @@ class EditableListComponent extends SelectableListComponent {
     }
 
     /**
+     * @param {TaggedStateChange<EntityRowSwap>} stateChange
+     * @return {Promise<TaggedStateChange[]>}
+     */
+    handleItemChange(stateChange) {
+        console.log(`${this.constructor.name}.handleItemChange:\n${JSON.stringify(stateChange)}`);
+        const entityRow = stateChange.stateOrPart;
+        if (this.editableListState.isErrorItemId(entityRow?.entity?.id)) {
+            return this.errorRow.update(entityRow);
+        }
+        return super.handleItemChange(stateChange);
+    }
+
+    /**
      * @return {IdentifiableRowComponent}
      * @protected
      */
@@ -162,9 +175,9 @@ class EditableListComponent extends SelectableListComponent {
         const rowDataId = editableList.simpleListView.rowDataIdOf(this, true);
         const entity = editableList.extractEntity();
         return editableList._handleRepoErrors(editableList.repository.save(entity)
-            // .then(savedEntity => editableList._handleUpdateSuccessful(savedEntity, rowDataId))
-            .then(savedEntity => editableList._handleUpdateError(
-                new SimpleError("ERROR", undefined, savedEntity, ["problem1"]), rowDataId))
+            .then(savedEntity => editableList._handleUpdateSuccessful(savedEntity, rowDataId))
+            // .then(savedEntity => editableList._handleUpdateError(
+            //     new SimpleError("ERROR", undefined, savedEntity, ["problem1"]), rowDataId))
             .catch(simpleError => editableList._handleUpdateError(simpleError, rowDataId)));
     }
 
@@ -176,15 +189,15 @@ class EditableListComponent extends SelectableListComponent {
 
     /**
      * @param {IdentifiableEntity} savedEntity
-     * @param {number|string} rowDataId
+     * @param {number|string} previousItemId
      * @return {Promise<StateChange[]>}
      * @protected
      */
-    _handleUpdateSuccessful(savedEntity, rowDataId) {
+    _handleUpdateSuccessful(savedEntity, previousItemId) {
         console.log(`${this.constructor.name}._handleUpdateSuccessful, savedEntity:\n${JSON.stringify(savedEntity)}`);
         return this.doWithState(() => {
             this.editableListState.switchToOff();
-            this.editableListState.save(savedEntity, rowDataId);
+            this.editableListState.createOrUpdate(savedEntity, {previousItemId});
         });
     }
 
@@ -195,8 +208,9 @@ class EditableListComponent extends SelectableListComponent {
      */
     _handleUpdateError(simpleError, rowDataId) {
         console.error(`${this.constructor.name}._handleUpdateError, savedEntity:\n${JSON.stringify(simpleError)}`);
-        const errorEntityRow = this.editableListState.createErrorItem(simpleError, rowDataId);
-        return this.errorRow.update(errorEntityRow);
+        return this.doWithState((editableListState) => {
+            editableListState.createErrorItem(simpleError, rowDataId);
+        })
     }
 
     /**
@@ -215,8 +229,8 @@ class EditableListComponent extends SelectableListComponent {
             return Promise.resolve();
         }
         this.errorRow.reset();
-        return this.doWithState(() => {
-            this.editableListState.removeById(errorRowId);
+        return this.doWithState((editableListState) => {
+            editableListState.removeById(errorRowId);
         });
     }
 

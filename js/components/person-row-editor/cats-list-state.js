@@ -17,7 +17,7 @@ class CatsListState extends EditableListState {
      */
     createNewItem(append) {
         const repoItem = this.repository.createNewItem();
-        return this.insertItem(repoItem, append);
+        return this.insertItem(repoItem, {append});
     }
 
     switchTo(id, context) {

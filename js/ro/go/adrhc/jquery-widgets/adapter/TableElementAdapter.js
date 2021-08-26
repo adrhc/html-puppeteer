@@ -3,6 +3,7 @@
  */
 class TableElementAdapter {
     static LAST_ROW_INDEX = -1;
+    static LAST_ROW_INDEX = -1;
 
     /**
      * @type {jQuery<HTMLTableElement>}

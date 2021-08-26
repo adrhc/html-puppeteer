@@ -27,33 +27,11 @@ class EditableListState extends SelectableListState {
     /**
      * @param {SimpleError} simpleError
      * @param {number|string} rowDataId is the id before getting an error (e.g. IdentifiableEntity.TRANSIENT_ID)
-     * @return {EntityRow}
+     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
     createErrorItem(simpleError, rowDataId) {
-        const errorEntityRow = this._errorEntityRowOf(simpleError, rowDataId);
-        if (this.findById(errorEntityRow.entity.id)) {
-            this.updateItem(errorEntityRow.entity);
-        } else {
-            let index = this.indexOf({beforeRowId: errorEntityRow.entity.failedId});
-            ArrayUtils.insert(errorEntityRow.entity, index, this.items);
-            this.createNewItem(errorEntityRow.entity)
-
-            const stateChange = this._stateChangeOf(undefined, errorEntityRow.entity, index);
-            return this.collectStateChange(stateChange);
-            this._replaceItem(errorEntityRow);
-        }
-        return errorEntityRow;
-    }
-
-    /**
-     * @param {SimpleError} simpleError
-     * @param {number|string} rowDataId is the id before getting an error (e.g. IdentifiableEntity.TRANSIENT_ID)
-     * @return {EntityRow}
-     * @protected
-     */
-    _errorEntityRowOf(simpleError, rowDataId) {
         const errorData = this._errorDataOf(simpleError, rowDataId);
-        return new EntityRow(errorData, {beforeRowId: errorData.failedId});
+        return this.createOrUpdate(errorData, {beforeRowId: errorData.failedId});
     }
 
     /**

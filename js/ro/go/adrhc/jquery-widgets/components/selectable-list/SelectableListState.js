@@ -59,7 +59,7 @@ class SelectableListState extends CrudListState {
             return this.switchToOff();
         }
         const previousEntityRowSwap = this.swappingState.currentState;
-        const newEntityRowSwap = this._newEntityRowSwap(context, item, this.indexOf({item}));
+        const newEntityRowSwap = this._newEntityRowSwap(context, item, this.indexOf(item));
         const switched = !!this.swappingState.switchTo(newEntityRowSwap, SelectableListState.DONT_RECORD_EVENTS);
         if (switched) {
             AssertionUtils.isNotNull(newEntityRowSwap);
@@ -139,17 +139,9 @@ class SelectableListState extends CrudListState {
         // entity might change after an editable or transient one is saved
         entityRowSwap.entity = entity;
         // index might change after removing a transient
-        entityRowSwap.index = this.indexOf({item: entityRowSwap.entity});
+        entityRowSwap.index = this.indexOf(entityRowSwap.entity);
         return this.stateChanges.collect(new TaggedStateChange(switchType,
             undefined, entityRowSwap, entityRowSwap.index));
-    }
-
-    /**
-     * @param {string|number} id
-     * @return {IdentifiableEntity}
-     */
-    findById(id) {
-        return EntityUtils.findById(id, this.items);
     }
 
     reset() {

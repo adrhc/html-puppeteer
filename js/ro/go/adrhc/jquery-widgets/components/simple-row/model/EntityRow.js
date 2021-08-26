@@ -4,7 +4,7 @@ class EntityRow {
      */
     entity;
     /**
-     * @type {number}
+     * @type {number} where to put the new entity or to move the previous, existing, one
      */
     index;
     /**
@@ -15,17 +15,23 @@ class EntityRow {
      * @type {number|string}
      */
     afterRowId;
+    /**
+     * @type {boolean}
+     */
+    append;
 
     /**
+     * "index" is the position at which to create the row; useful
+     * only when creating a row otherwise the row is matched by id.
+     *
      * @param {IdentifiableEntity} entity
-     * @param {number=} index at which to create the row (useful only when creating the row otherwise the row is matched by id)
-     * @param {number|string=} beforeRowId
-     * @param {number|string=} afterRowId
+     * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}} options
      */
-    constructor(entity, {index, beforeRowId, afterRowId} = {}) {
+    constructor(entity, {index, beforeRowId, afterRowId, append} = {}) {
         this.entity = entity;
-        this.index = index == null && beforeRowId == null && afterRowId == null ? 0 : index;
+        this.index = index;
         this.beforeRowId = beforeRowId;
         this.afterRowId = afterRowId;
+        this.append = append;
     }
 }

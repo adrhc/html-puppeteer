@@ -119,9 +119,9 @@ class StateHolder {
     }
 
     /**
-     * @param {P} previousStatePart
-     * @param {P} partialState
-     * @param {string|number} oldPartName
+     * @param {P=} previousStatePart
+     * @param {P=} partialState
+     * @param {string|number=} oldPartName
      * @return {StateChange<P>|undefined}
      * @protected
      */

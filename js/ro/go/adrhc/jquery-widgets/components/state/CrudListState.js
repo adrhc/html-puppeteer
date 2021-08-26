@@ -75,7 +75,7 @@ class CrudListState extends SimpleListState {
                 return oldRowValues;
             }
             // old item doesn't exists, inserting the new one
-            ArrayUtils.insert(newRowValues.entity, newRowValues.index, this.items);
+            this._insertEntityRow(newRowValues);
         } else if (newRowValues == null) {
             // old item exists but the new one is null (i.e. old is deleted)
             ArrayUtils.removeByIndex(oldIndex, this.items);
@@ -85,13 +85,49 @@ class CrudListState extends SimpleListState {
         } else {
             // both item's value and index changed
             ArrayUtils.removeByIndex(oldIndex, this.items);
-            ArrayUtils.insert(newRowValues.entity, newRowValues.index, this.items);
+            this._insertEntityRow(newRowValues);
         }
         return oldRowValues;
     }
 
+    /**
+     * @param {EntityRow<IdentifiableEntity>} entityRow
+     * @protected
+     */
+    _insertEntityRow(entityRow) {
+        if (entityRow.index != null) {
+            if (entityRow.index === TableElementAdapter.LAST_ROW_INDEX) {
+                this.items.push(entityRow.entity);
+            } else {
+                ArrayUtils.insert(entityRow.entity, entityRow.index, this.items);
+            }
+        } else if (entityRow.beforeRowId != null) {
+            const index = this.findIndexById(entityRow.beforeRowId);
+            ArrayUtils.insert(entityRow.entity, index, this.items);
+        } else if (entityRow.afterRowId != null) {
+            const index = this.findIndexById(entityRow.afterRowId);
+            ArrayUtils.insert(entityRow.entity, index + 1, this.items);
+        } else if (entityRow.append) {
+            this.items.push(entityRow.entity);
+        } else {
+            ArrayUtils.insert(entityRow.entity, 0, this.items);
+        }
+    }
+
+    /**
+     * @param {EntityRow<IdentifiableEntity>=} previousStatePart
+     * @param {EntityRow<IdentifiableEntity>=} partialState
+     * @param {string|number=} oldPartName
+     * @return {StateChange<EntityRow<IdentifiableEntity>>|undefined}
+     * @protected
+     */
     _stateChangeOf(previousStatePart, partialState, oldPartName) {
-        return super._stateChangeOf(previousStatePart, partialState, partialState?.index ?? oldPartName);
+        AssertionUtils.isTrue(previousStatePart != null || partialState != null);
+        // when partialState is empty than previousStatePart should not be empty
+        const newPosition = partialState?.entity != null ? this.indexOf(partialState?.entity) : undefined;
+        // oldPartName would depend on previousStatePart if not empty and fallback to partialState
+        return super._stateChangeOf(previousStatePart, partialState,
+            oldPartName ?? previousStatePart?.index ?? partialState?.index ?? newPosition);
     }
 
     /**
@@ -99,66 +135,84 @@ class CrudListState extends SimpleListState {
      * risk: the item is also used with the collectStateChange; a change by the final receiver will impact this.items!
      *
      * @param {IdentifiableEntity|{}} [initialValue]
-     * @param {boolean} [append]
+     * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}} options
      * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
-    createNewItem(initialValue, append = this.append) {
+    createNewItem(initialValue, options = {}) {
         const item = this.newEntityFactoryFn();
         if (initialValue != null) {
             $.extend(item, initialValue);
         }
-        return this.insertItem(item, append);
+        return this.insertItem(item, options);
     }
 
     /**
+     * see also IdentifiableEntity.TRANSIENT_ID
+     *
+     * If item was just made persistent (its "id" is not transient and itemIdToRemove != "id")
+     * than remove the transient entity and insert the item otherwise just update the item.
+     *
      * @param item {IdentifiableEntity} is to insert if itemIdToRemove exists (=newId) otherwise update
-     * @param itemIdToRemove {number|string} is to remove if exists
+     * @param previousItemId {number|string} is to remove if exists
      * @param append {boolean=}
      * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
-    save(item, itemIdToRemove, append = this.append) {
-        if (itemIdToRemove != null && !EntityUtils.idsAreEqual(item.id, itemIdToRemove)) {
-            this.removeById(itemIdToRemove);
-            return this.insertItem(item, append);
+
+    /*persistTransientOrUpdateExisting(item, previousItemId, append = this.append) {
+        if (!EntityUtils.idsAreEqual(item.id, previousItemId)) {
+            // item acquired a new, not-transient id, while previously had a transient one (i.e. previousItemId)
+            AssertionUtils.isTrue(previousItemId != null, "previousItemId shouldn't be NULL!");
+            AssertionUtils.isFalse(EntityUtils.isTransientId(item.id), `item.id shouldn't be transient! item.id = ${item.id}`);
+            this.removeById(previousItemId);
+            return this.insertItem(item, {append});
         } else {
+            // item's id didn't change
+            AssertionUtils.isTrue(!!this.findById(item.id));
             return this.updateItem(item);
         }
-    }
+    }*/
 
     /**
      * @param {IdentifiableEntity} item
-     * @param {boolean=} append
+     * @param {{previousItemId?: number|string, index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}} options
      * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
-    insertItem(item, append = this.append) {
-        const newItemIndex = append ? this.items.length : null;
-        return this._replaceItem(new EntityRow(item, {index: newItemIndex ?? 0}), null);
-    }
-
-    indexOf({item, index, beforeRowId, afterRowId, append}) {
-        if (beforeRowId != null) {
-            return this.findIndexById(beforeRowId);
-        } else if (afterRowId != null) {
-            return this.findIndexById(afterRowId) + 1;
-        } else if (typeof index === "number") {
-            return index;
-        } else if (typeof append === "number") {
-            return append;
-        } else if (item != null) {
-            return this.items.indexOf(item);
+    createOrUpdate(item, options = {}) {
+        if (options.previousItemId != null && item.id != null
+            && !EntityUtils.idsAreEqual(item.id, options.previousItemId)) {
+            // item acquired a new id, removing the previous version having options.previousItemId
+            this.removeById(options.previousItemId);
         }
-        return append ? this.items.length : 0;
+        if (this.findById(item.id)) {
+            return this.updateItem(item, options);
+        } else {
+            return this.createNewItem(item, options)
+        }
     }
 
     /**
      * @param {IdentifiableEntity} item
-     * @param {number=} newItemIndex
+     * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}} options
      * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
-    updateItem(item, newItemIndex) {
-        const oldIndex = this.findIndexById(item.id);
-        return this._replaceItem(new EntityRow(item,
-            {index: newItemIndex == null ? oldIndex : newItemIndex}), oldIndex);
+    insertItem(item, options = {}) {
+        options.append = options.append ?? this.append;
+        return this._replaceItem(new EntityRow(item, options));
+    }
+
+    indexOf(item) {
+        return this.items.indexOf(item);
+    }
+
+    /**
+     * @param {IdentifiableEntity} item
+     * @param {{previousIndex?: number, index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}} options
+     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
+     */
+    updateItem(item, options = {}) {
+        const previousIndex = options.previousIndex ?? this.findIndexById(item.id);
+        options.index = options.index ?? previousIndex;
+        return this._replaceItem(new EntityRow(item, options), previousIndex);
     }
 
     /**
@@ -202,5 +256,13 @@ class CrudListState extends SimpleListState {
      */
     findIndexById(id) {
         return EntityUtils.findIndexById(id, this.items);
+    }
+
+    /**
+     * @param {string|number} id
+     * @return {IdentifiableEntity}
+     */
+    findById(id) {
+        return EntityUtils.findById(id, this.items);
     }
 }

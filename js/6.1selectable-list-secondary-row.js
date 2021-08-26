@@ -23,13 +23,13 @@ $(() => {
             const selectableListState = selectableList.selectableListState;
             selectableListState.createNewItem({
                 name: `new dog (with ${rowPositionOnCreate})`
-            }, rowPositionOnCreate === "append");
+            }, {append: rowPositionOnCreate === "append"});
             selectableListState.updateItem({id: 3, name: "updated dog3"});
             selectableListState.removeById(2);
             selectableListState.insertItem({
                 id: 2,
                 name: `restored dog2 (with ${rowPositionOnCreate})`
-            }, rowPositionOnCreate === "append");
+            }, {append: rowPositionOnCreate === "append"});
         }))
         .then(() => {
             const entities = selectableList.extractAllEntities();
