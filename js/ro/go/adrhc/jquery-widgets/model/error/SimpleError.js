@@ -1,3 +1,6 @@
+/**
+ * @template E
+ */
 class SimpleError {
     /**
      * an error message fitting the operation
@@ -15,7 +18,7 @@ class SimpleError {
     /**
      * this is the original data involved in the failing request
      *
-     * @type {*}
+     * @type {E}
      */
     data;
     /**
@@ -24,10 +27,10 @@ class SimpleError {
     problems
 
     /**
-     * @param message {string}
-     * @param [operation] {string}
-     * @param [data] {*}
-     * @param [problems] {ServerError[]}
+     * @param {string=} message
+     * @param {string=} operation
+     * @param {E=} data
+     * @param {ServerError[]=} problems
      */
     constructor(message, operation, data, problems = []) {
         this.message = message;
@@ -38,17 +41,17 @@ class SimpleError {
     }
 
     /**
-     * @param data {Array|{}}
+     * @param {*|[]} values
      * @return {SimpleError[]|SimpleError}
      */
-    static parse(data) {
-        if (!data) {
+    static parse(values) {
+        if (!values) {
             return undefined;
         }
-        if ($.isArray(data)) {
-            return data.map(it => SimpleError.parse(it));
+        if ($.isArray(values)) {
+            return values.map(it => SimpleError.parse(it));
         } else {
-            const simpleError = $.extend(true, new SimpleError(), data);
+            const simpleError = $.extend(true, new SimpleError(), values);
             simpleError.problems = ServerError.parse(simpleError.problems);
             return simpleError;
         }

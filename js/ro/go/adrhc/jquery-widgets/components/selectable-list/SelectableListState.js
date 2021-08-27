@@ -1,5 +1,8 @@
 /**
- * SelectableListState extends CrudListState extends SimpleListState extends TaggingStateHolder
+ * CrudListState extends SimpleListState extends TaggingStateHolder extends StateHolder
+ *
+ * @template E
+ * @extends {CrudListState<E>}
  */
 class SelectableListState extends CrudListState {
     static DONT_RECORD_EVENTS = {dontRecordStateEvents: true};
@@ -10,31 +13,15 @@ class SelectableListState extends CrudListState {
     swappingState;
 
     /**
-     * @param {IdentifiableEntity[]} [initialState]
-     * @param {function(): IdentifiableEntity} [newEntityFactoryFn]
-     * @param {boolean} [newItemsGoLast]
-     * @param {RowSwappingStateHolder} [swappingState]
+     * see Documenting a destructuring parameter at https://jsdoc.app/tags-param.html#parameters-with-properties
+     *
+     * @param {Object} options
+     * @param {undefined|RowSwappingStateHolder} options.swappingState
+     * @param {{newEntityFactoryFn: (undefined|function(): IdentifiableEntity<E>), newItemsGoLast: undefined|boolean, initialState: undefined|TItem[], stateChangeMapper: undefined|TaggingStateChangeMapper<TItem,TItem>, changesCollector: undefined|StateChangesCollector<TItem>=}} superOptions
      */
-    constructor({
-                    initialState,
-                    newEntityFactoryFn,
-                    newItemsGoLast,
-                    swappingState = new RowSwappingStateHolder()
-                }) {
-        super({initialState, newEntityFactoryFn, newItemsGoLast});
-        this.swappingState = swappingState;
-    }
-
-    /**
-     * @param {SelectableListOptions} selectableListOptions
-     * @return {SelectableListState}
-     */
-    constructor(selectableListOptions) {
-        super(selectableListOptions);
-        return new SelectableListState({
-            newEntityFactoryFn: selectableListOptions.newEntityFactoryFn,
-            newItemsGoLast: selectableListOptions.newItemsGoLast
-        })
+    constructor({swappingState, ...superOptions}) {
+        super(superOptions);
+        this.swappingState = swappingState ?? new RowSwappingStateHolder();
     }
 
     /**
@@ -53,7 +40,7 @@ class SelectableListState extends CrudListState {
             return this.switchToOff();
         }
         const previousEntityRowSwap = this.swappingState.currentState;
-        const newEntityRowSwap = this._newEntityRowSwap(context, item, this.indexOf(item));
+        const newEntityRowSwap = this._newEntityRowSwap(context, item.entity, this.findIndexById(item.entity.id));
         const switched = !!this.swappingState.switchTo(newEntityRowSwap, SelectableListState.DONT_RECORD_EVENTS);
         if (switched) {
             AssertionUtils.isNotNull(newEntityRowSwap);
@@ -124,15 +111,15 @@ class SelectableListState extends CrudListState {
      * @private
      */
     _collectSwitch(entityRowSwap, switchType) {
-        const entity = this.findById(entityRowSwap.entityId);
-        if (entity == null) {
+        const rowEntity = this.findById(entityRowSwap.entityId);
+        if (rowEntity == null) {
             // removed entity meanwhile
             return undefined;
         }
         // entity might change after an editable or transient one is saved
-        entityRowSwap.entity = entity;
+        entityRowSwap.entity = rowEntity.entity;
         // index might change after removing a transient
-        entityRowSwap.index = this.indexOf(entityRowSwap.entity);
+        entityRowSwap.index = this.findIndexById(entityRowSwap.entity.id);
         return this.stateChanges.collect(new TaggedStateChange(switchType,
             undefined, entityRowSwap, entityRowSwap.index));
     }

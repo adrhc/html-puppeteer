@@ -23,18 +23,17 @@ class CrudListState extends SimpleListState {
     append;
 
     /**
-     * @param {{initialState: undefined|TItem[], newEntityFactoryFn: (undefined|function(): IdentifiableEntity<E>), newItemsGoLast: undefined|boolean, stateChangeMapper: undefined|TaggingStateChangeMapper<TItem,TItem>, changesCollector: undefined|StateChangesCollector<TItem>=}} options
+     * see Documenting a destructuring parameter at https://jsdoc.app/tags-param.html#parameters-with-properties
+     *
+     * @param {Object} options
+     * @param {undefined|function(): IdentifiableEntity<E>} options.newEntityFactoryFn
+     * @param {undefined|boolean} options.newItemsGoLast
+     * @param {{initialState: undefined|TItem[], stateChangeMapper: undefined|TaggingStateChangeMapper<TItem,TItem>, changesCollector: undefined|StateChangesCollector<TItem>=}} superOptions
      */
-    constructor({
-                    initialState,
-                    newEntityFactoryFn = () => new IdentifiableEntity(IdentifiableEntity.TRANSIENT_ID),
-                    newItemsGoLast = false,
-                    stateChangeMapper,
-                    changeManager
-                }) {
-        super({initialState, stateChangeMapper, changeManager});
-        this.newEntityFactoryFn = newEntityFactoryFn;
-        this.append = newItemsGoLast;
+    constructor({newEntityFactoryFn, newItemsGoLast, ...superOptions}) {
+        super(superOptions);
+        this.newEntityFactoryFn = newEntityFactoryFn ?? (() => new IdentifiableEntity(IdentifiableEntity.TRANSIENT_ID));
+        this.append = newItemsGoLast ?? false;
     }
 
     /**
@@ -76,7 +75,7 @@ class CrudListState extends SimpleListState {
             ArrayUtils.removeByIndex(previousIndex, this.items);
         } else if (newRowValues.index === previousIndex) {
             // the index is the same, only changing the value at that index
-            this.items[previousIndex] = newRowValues.entity;
+            this.items[previousIndex] = newRowValues;
         } else {
             // both item's value and index changed
             ArrayUtils.removeByIndex(previousIndex, this.items);
@@ -94,7 +93,7 @@ class CrudListState extends SimpleListState {
      */
     _stateChangeOf(previousStatePart, partialState, dueToChangePartName) {
         AssertionUtils.isTrue(previousStatePart != null || partialState != null);
-        const previousIndex = previousStatePart?.entity != null ? this.findIndexById(previousStatePart?.entity?.id) : undefined;
+        const previousIndex = previousStatePart?.entity != null ? this.findIndexById(previousStatePart.entity.id) : undefined;
         const newIndex = partialState?.entity != null ? this.findIndexById(partialState?.entity?.id) : undefined;
         // dueToChangePartName would depend on previousStatePart if not empty and fallback to partialState
         // When partialState is empty than previousStatePart should not be empty.
@@ -144,20 +143,20 @@ class CrudListState extends SimpleListState {
     _insertEntityRow(entityRow) {
         if (entityRow.index != null) {
             if (entityRow.index === PositionUtils.LAST_ELEMENT_INDEX) {
-                this.items.push(entityRow.entity);
+                this.items.push(entityRow);
             } else {
-                ArrayUtils.insert(entityRow.entity, entityRow.index, this.items);
+                ArrayUtils.insert(entityRow, entityRow.index, this.items);
             }
         } else if (entityRow.beforeRowId != null) {
             const index = this.findIndexById(entityRow.beforeRowId);
-            ArrayUtils.insert(entityRow.entity, index, this.items);
+            ArrayUtils.insert(entityRow, index, this.items);
         } else if (entityRow.afterRowId != null) {
             const index = this.findIndexById(entityRow.afterRowId);
-            ArrayUtils.insert(entityRow.entity, index + 1, this.items);
+            ArrayUtils.insert(entityRow, index + 1, this.items);
         } else if (entityRow.append) {
-            this.items.push(entityRow.entity);
+            this.items.push(entityRow);
         } else {
-            ArrayUtils.insert(entityRow.entity, 0, this.items);
+            ArrayUtils.insert(entityRow, 0, this.items);
         }
         this._updatePositioningProperties(entityRow);
     }
@@ -167,7 +166,7 @@ class CrudListState extends SimpleListState {
      * @protected
      */
     _updatePositioningProperties(entityRow) {
-        const index = this.indexOf(entityRow.entity);
+        const index = this.findIndexById(entityRow.entity.id);
         AssertionUtils.isTrue(entityRow.index == null
             || entityRow.index === PositionUtils.LAST_ELEMENT_INDEX || entityRow.index === index,
             `Bad index!\n${JSON.stringify(entityRow)}`);
@@ -176,11 +175,8 @@ class CrudListState extends SimpleListState {
         } else if (index === this.items.length - 1) {
             entityRow.append = true;
         } else {
-            /**
-             * @type {IdentifiableEntity<E>}
-             */
             const theJustAfterItem = this.items[index + 1];
-            entityRow.beforeRowId = theJustAfterItem.id;
+            entityRow.beforeRowId = theJustAfterItem.entity.id;
         }
         entityRow.index = index;
         AssertionUtils.isTrue(PositionUtils.arePositioningPropertiesValid(entityRow),
@@ -236,7 +232,7 @@ class CrudListState extends SimpleListState {
     createNewItem(initialValue, options = {}) {
         const item = this.newEntityFactoryFn();
         if (initialValue != null) {
-            $.extend(item, initialValue);
+            _.defaults(item, initialValue);
         }
         return this.insertItem(item, options);
     }
@@ -255,10 +251,6 @@ class CrudListState extends SimpleListState {
         // must be valid otherwise keep the previous position (i.e. currentIndex)
         options.index = options.index ?? (PositionUtils.areAllButIndexValid(options) ? undefined : currentIndex);
         return this.replacePart(new EntityRow(item, options), currentIndex);
-    }
-
-    indexOf(item) {
-        return this.items.indexOf(item);
     }
 
     /**
@@ -291,14 +283,14 @@ class CrudListState extends SimpleListState {
      * @return {number}
      */
     findIndexById(id) {
-        return EntityUtils.findIndexById(id, this.items);
+        return this.items.findIndex((rowEntity) => EntityUtils.idsAreEqual(rowEntity.entity.id, id));
     }
 
     /**
      * @param {string|number} id
-     * @return {IdentifiableEntity<E>}
+     * @return {TItem}
      */
     findById(id) {
-        return EntityUtils.findById(id, this.items);
+        return this.items.find((rowEntity) => EntityUtils.idsAreEqual(rowEntity.entity.id, id));
     }
 }

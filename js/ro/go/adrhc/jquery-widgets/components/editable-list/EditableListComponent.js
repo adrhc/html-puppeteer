@@ -59,7 +59,7 @@ class EditableListComponent extends SelectableListComponent {
     handleItemChange(stateChange) {
         console.log(`${this.constructor.name}.handleItemChange:\n${JSON.stringify(stateChange)}`);
         const entityRow = stateChange.stateOrPart;
-        if (ErrorEntity.isErrorItemId(entityRow?.entity?.id)) {
+        if (FailedEntity.isErrorItemId(entityRow?.entity?.id)) {
             // ignoring any previous state held by errorRow
             return this.errorRow.processStateChanges(
                 new CreateStateChange(entityRow, stateChange.partName));
@@ -81,7 +81,7 @@ class EditableListComponent extends SelectableListComponent {
     shouldIgnoreOnSwitch(ev) {
         const selectableList = ev.data;
         const rowDataId = selectableList.simpleListView.rowDataIdOf(ev.currentTarget);
-        return ErrorEntity.isErrorItemId(rowDataId) || super.shouldIgnoreOnSwitch(ev);
+        return FailedEntity.isErrorItemId(rowDataId) || super.shouldIgnoreOnSwitch(ev);
     }
 
     reset() {

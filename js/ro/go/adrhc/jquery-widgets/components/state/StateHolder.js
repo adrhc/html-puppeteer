@@ -3,9 +3,9 @@
  */
 class StateHolder {
     /**
-     * @param {{initialState: undefined|T, stateChangeMapper: undefined|IdentityStateChangeMapper<T|P>, changesCollector: undefined|StateChangesCollector<T|P>=}} options
+     * @param {{initialState: undefined|T, stateChangeMapper: undefined|IdentityStateChangeMapper<T|P>, changesCollector: undefined|StateChangesCollector<T|P>=}} [options]
      */
-    constructor({initialState, stateChangeMapper, changesCollector}) {
+    constructor({initialState, stateChangeMapper, changesCollector} = {}) {
         this._currentState = initialState;
         this._stateChanges = changesCollector ?? new StateChangesCollector(
             stateChangeMapper ?? new IdentityStateChangeMapper());
@@ -108,7 +108,7 @@ class StateHolder {
     }
 
     /**
-     * @param [anotherState]
+     * @param {T|P=} anotherState
      * @return {boolean}
      * @protected
      */

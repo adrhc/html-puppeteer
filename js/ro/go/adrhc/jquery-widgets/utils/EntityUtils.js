@@ -82,10 +82,6 @@ class EntityUtils {
         return items.findIndex((it) => EntityUtils.haveSameId(it, item));
     }
 
-    static findIndexById(id, items) {
-        return items.findIndex((it) => EntityUtils.idsAreEqual(it.id, id));
-    }
-
     /**
      * @param id {number|string}
      * @param items {Array<IdentifiableEntity>}

@@ -1,18 +1,10 @@
 /**
+ * SelectableListState extends CrudListState extends SimpleListState extends TaggingStateHolder extends StateHolder
  *
+ * @template E
+ * @extends {SelectableListState<E>}
  */
 class EditableListState extends SelectableListState {
-    /**
-     * @param {EditableListOptions} editableListOptions
-     * @return {EditableListState}
-     */
-    constructor(editableListOptions) {
-        return new EditableListState({
-            newEntityFactoryFn: editableListOptions.newEntityFactoryFn,
-            newItemsGoLast: editableListOptions.newItemsGoLast
-        })
-    }
-
     hasTransient() {
         return !!this.findById(IdentifiableEntity.TRANSIENT_ID);
     }
@@ -23,17 +15,18 @@ class EditableListState extends SelectableListState {
      * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
     createErrorItem(simpleError, failedId) {
-        const errorEntity = ErrorEntity.of(simpleError, failedId);
+        const errorEntity = FailedEntity.of(simpleError, failedId);
         return this.createOrUpdate(errorEntity, {beforeRowId: errorEntity.failedId});
     }
 
     /**
-     * @param {ErrorEntity=} errorEntity
+     * @param {FailedEntity=} errorEntity
      */
     removeErrorItems(...errorEntity) {
         const items = errorEntity.length ? errorEntity : this.items;
         items
-            .filter(it => ErrorEntity.isErrorItemId(it.id))
+            .map(entityRow => entityRow.entity)
+            .filter(entity => FailedEntity.isErrorItemId(entity.id))
             .forEach(errorEntity => this.removeById(errorEntity.id));
     }
 }

@@ -1,6 +1,9 @@
+/**
+ * @template E
+ */
 class SelectableListOptions extends SimpleListOptions {
     /**
-     * @type {function(): IdentifiableEntity}
+     * @type {undefined|function(): IdentifiableEntity<E>}
      */
     newEntityFactoryFn;
     /**
