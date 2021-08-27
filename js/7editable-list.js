@@ -3,7 +3,6 @@ $(() => {
 
     const component = new EditableListComponent({
         elemIdOrJQuery,
-        items: DbMocks.DOGS,
         dontAutoInitialize: true
     });
 
@@ -11,22 +10,25 @@ $(() => {
         .init()
         .then(() => component.doWithState((state) => {
             /**
-             * @type {CrudListState}
+             * @type {EditableListState}
              */
-            const crudListState = state;
-            crudListState.updateItem({id: 3, name: "component only (not repository) updated dog3"});
-            crudListState.removeById(2);
-            crudListState.insertItem({
+            const editableListState = state;
+            editableListState.removeById(2);
+            editableListState.insertItem({
                 id: 2,
-                name: `component only (not repository) restored dog2 (using append)`
+                name: `restored (NOT IN REPOSITORY YET, lost on reload) dog2 with position/index changed using append`
             }, {append: true});
-            crudListState.insertItem({
+            editableListState.updateItem({
+                id: 3,
+                name: "updated (NOT IN REPOSITORY YET, lost on reload) dog3 (position/index not changed)"
+            });
+            editableListState.updateItem({
                 id: 4,
-                name: `component only (not repository) added dog4 (using prepend)`
+                name: `changed (NOT IN REPOSITORY YET, lost on reload) dog4 position/index using prepend`
             }, {append: false});
-            crudListState.insertItem({
+            editableListState.updateItem({
                 id: 5,
-                name: `component only (not repository) added dog5 (using append)`
+                name: `changed (NOT IN REPOSITORY YET, lost on reload) dog5 position/index using append`
             }, {append: true});
         }));
 });

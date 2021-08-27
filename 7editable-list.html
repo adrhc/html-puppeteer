@@ -4,11 +4,11 @@
 <head>
     <title>JavaScript components</title>
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-    <link rel="stylesheet" href="css/ro/go/adrhc/responstable-table.css">
-    <link rel="stylesheet" href="css/library-customizations/responstable-table.css">
-    <link rel="stylesheet" href="css/ro/go/adrhc/util.css">
-    <link rel="stylesheet" href="css/ro/go/adrhc/dyna-sel-one.css">
-    <link rel="stylesheet" href="css/app.css">
+    <link href="css/ro/go/adrhc/responstable-table.css" rel="stylesheet">
+    <link href="css/library-customizations/responstable-table.css" rel="stylesheet">
+    <link href="css/ro/go/adrhc/util.css" rel="stylesheet">
+    <link href="css/ro/go/adrhc/dyna-sel-one.css" rel="stylesheet">
+    <link href="css/app.css" rel="stylesheet">
     <script src="libraries/modernizr-custom.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!--<script src="https://unpkg.com/mustache@latest"></script>-->
@@ -21,59 +21,61 @@
 <body>
 
 <div class="dogsTable">
-    <table id="dogsTable" class="responstable">
+    <table class="responstable"
+           data-items='[{"id":0,"name":"dog 0"},{"id":1,"name":"dog 1"},{"id":2,"name":"dog 2"},{"id":3,"name":"dog 3"},{"id":4,"name":"dog 4"},{"id":5,"name":"dog 5"},{"id":6,"name":"dog 6"},{"id":7,"name":"dog 7"},{"id":8,"name":"dog 8"},{"id":9,"name":"dog 9"}]'
+           data-row-position-on-create="append" id="dogsTable">
         <thead>
         <tr data-owner="dogsTable">
             <th>Dogs</th>
             <th>
                 <div class="buttons">
-                    <img data-owner="dogsTable" data-btn="reload" alt="reload"
+                    <img alt="reload" data-btn="reload" data-owner="dogsTable"
                          src="images/ro/go/adrhc/reload-button-32.png"/>
-                    <img data-owner="dogsTable" data-btn="showAdd" alt="show add"
+                    <img alt="show add" data-btn="showAdd" data-owner="dogsTable"
                          src="images/ro/go/adrhc/add-button-32.png"/>
                 </div>
             </th>
         </tr>
         </thead>
-        <tr data-owner="dogsTable" data-id="{{id}}" data-row-type="off">
+        <tr data-id="{{id}}" data-owner="dogsTable" data-row-type="off">
             <td>
-                <input type="hidden" name="id" value="{{id}}">{{{name}}}
+                <input name="id" type="hidden" value="{{id}}">{{{name}}}
             </td>
             <td>
                 <div class="buttons">
-                    <img data-owner="dogsTable" data-btn="showDelete" alt="show delete"
+                    <img alt="show delete" data-btn="showDelete" data-owner="dogsTable"
                          src="images/ro/go/adrhc/delete-button-32.png"/>
-                    <img data-owner="dogsTable" data-btn="showEdit" alt="show edit"
+                    <img alt="show edit" data-btn="showEdit" data-owner="dogsTable"
                          src="images/ro/go/adrhc/edit-button-32.png"/>
                 </div>
             </td>
         </tr>
-        <tr data-owner="dogsTable" data-id="{{id}}" data-row-type="on" class="row-editor">
+        <tr class="row-editor" data-id="{{id}}" data-owner="dogsTable" data-row-type="on">
             <td>
-                <input type="hidden" name="id" value="{{id}}">
-                <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
+                <input name="id" type="hidden" value="{{id}}">
+                <input autocomplete="off" name="name" placeholder="name" type="text" value="{{name}}">
             </td>
             <td>
                 <div class="buttons">
-                    <img data-owner="dogsTable" data-btn="cancel" alt="cancel"
+                    <img alt="cancel" data-btn="cancel" data-owner="dogsTable"
                          src="images/ro/go/adrhc/cancel-button-32.png"/>
-                    <img data-owner="dogsTable" data-btn="update" alt="update"
+                    <img alt="update" data-btn="update" data-owner="dogsTable"
                          src="images/ro/go/adrhc/save-button-32.png"/>
                 </div>
             </td>
         </tr>
-        <tr data-owner="dogsTable" data-id="{{id}}" data-row-type="delete" class="deletable-row">
+        <tr class="deletable-row" data-id="{{id}}" data-owner="dogsTable" data-row-type="delete">
             <td>{{{name}}}</td>
             <td>
                 <div class="buttons">
-                    <img data-owner="dogsTable" data-btn="cancel" alt="cancel"
+                    <img alt="cancel" data-btn="cancel" data-owner="dogsTable"
                          src="images/ro/go/adrhc/cancel-button-32.png"/>
-                    <img data-owner="dogsTable" data-btn="delete" alt="delete"
+                    <img alt="delete" data-btn="delete" data-owner="dogsTable"
                          src="images/ro/go/adrhc/delete-button-32.png"/>
                 </div>
             </td>
         </tr>
-        <tr data-owner="personsTable" data-id="{{id}}" data-row-type="error" data-secondary-row-part="{{failedId}}">
+        <tr data-id="{{id}}" data-owner="personsTable" data-row-type="error" data-secondary-row-part="{{failedId}}">
             <td colspan="2">
                 <table class="errors-table">
                     <tr>
