@@ -27,15 +27,20 @@ class SimpleRowView extends AbstractView {
      * @return {Promise<TaggedStateChange<EntityRow>>}
      */
     update(stateChange) {
+        /**
+         * @type {EntityRow}
+         */
         const rowValues = stateChange.stateOrPart;
         const previousStateOrPart = stateChange.previousStateOrPart;
         const rowIdToSearchFor = previousStateOrPart ? previousStateOrPart.entity.id : rowValues.entity.id;
+        const rowIndexChanged = stateChange.stateOrPart?.index !== stateChange.partName;
+        AssertionUtils.isTrue(!rowIndexChanged || PositionUtils.arePositioningPropertiesValid(rowValues))
         this.tableAdapter.renderRowWithTemplate({
             rowDataId: rowIdToSearchFor,
             rowValues,
             rowTmplHtml: this.tableAdapter.bodyRowTmplHtml,
             createIfNotExists: stateChange.changeType === "CREATE",
-            removeThenCreate: stateChange.partName !== stateChange.stateOrPart?.index
+            removeTheRowByIdThenCreateItAgain: rowIndexChanged
         });
         this.$elem = rowValues ? this.tableAdapter.$getRowByDataId(rowValues.entity.id) : undefined;
         return Promise.resolve(stateChange);

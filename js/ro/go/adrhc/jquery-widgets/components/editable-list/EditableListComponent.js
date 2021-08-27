@@ -73,8 +73,8 @@ class EditableListComponent extends SelectableListComponent {
      * @protected
      */
     handleItemOff(stateChange) {
-        return this.doWithState((editableListState) => {
-            editableListState.removeErrorItems();
+        return this.doWithState(() => {
+            this.editableListState.removeErrorItems();
         }).then(() => super.handleItemOff(stateChange));
     }
 
@@ -220,8 +220,8 @@ class EditableListComponent extends SelectableListComponent {
      */
     _handleUpdateError(simpleError, failedId) {
         console.error(`${this.constructor.name}._handleUpdateError, savedEntity:\n${JSON.stringify(simpleError)}`);
-        return this.doWithState((editableListState) => {
-            editableListState.createErrorItem(simpleError, failedId);
+        return this.doWithState(() => {
+            this.editableListState.createErrorItem(simpleError, failedId);
         })
     }
 

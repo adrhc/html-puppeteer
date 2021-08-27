@@ -2,8 +2,6 @@
  * Role: adapter to HTMLTableElement
  */
 class TableElementAdapter {
-    static LAST_ROW_INDEX = -1;
-    static LAST_ROW_INDEX = -1;
     /**
      * @type {string}
      */
@@ -66,7 +64,7 @@ class TableElementAdapter {
      * @param {number|string=} rowDataId
      * @param {string=} rowHtml
      * @param {boolean=true} replaceExisting
-     * @param {boolean=} removeThenCreate
+     * @param {boolean=} removeTheRowByIdThenCreateItAgain
      * @param {EntityRow=} rowValues
      * @param {boolean=} createIfNotExists
      */
@@ -74,14 +72,14 @@ class TableElementAdapter {
                   rowDataId,
                   rowHtml,
                   replaceExisting = true,
-                  removeThenCreate,
+                  removeTheRowByIdThenCreateItAgain,
                   rowValues,
                   createIfNotExists
               }) {
         rowHtml = rowHtml ? rowHtml : this.emptyRowHtmlOf(rowDataId);
         const $existingRow = rowDataId != null ? this.$getRowByDataId(rowDataId) : {};
         if ($existingRow.length) {
-            if (removeThenCreate) {
+            if (removeTheRowByIdThenCreateItAgain) {
                 $existingRow.remove();
             } else {
                 if (replaceExisting) {
@@ -95,8 +93,6 @@ class TableElementAdapter {
         const $row = $(rowHtml);
         if (rowValues.index === 0) {
             this.$tbody.prepend($row);
-        } else if (rowValues.index === TableElementAdapter.LAST_ROW_INDEX) {
-            this.$tbody.append($row);
         } else if (rowValues.beforeRowId != null) {
             this.$getRowByDataId(rowValues.beforeRowId).before($row);
         } else if (rowValues.afterRowId != null) {

@@ -11,7 +11,7 @@ class CrudListState extends SimpleListState {
     /**
      * whether to append or prepend new items
      *
-     * @type {boolean|undefined}
+     * @type {boolean}
      */
     append;
 
@@ -25,7 +25,7 @@ class CrudListState extends SimpleListState {
     constructor({
                     initialState,
                     newEntityFactoryFn = () => new IdentifiableEntity(IdentifiableEntity.TRANSIENT_ID),
-                    newItemsGoLast,
+                    newItemsGoLast = false,
                     stateChangeMapper,
                     changeManager
                 }) {
@@ -57,9 +57,6 @@ class CrudListState extends SimpleListState {
      * @protected
      */
     _replacePartImpl(newRowValues, previousIndex) {
-        AssertionUtils.isTrue(newRowValues?.index == null
-            || EntityRow.areAllButIndexPositioningPropertiesEmpty(newRowValues),
-            `Not allowed to have both index and positioning properties set! ${JSON.stringify(newRowValues)}`);
         const oldRowValues = this.getStatePart(previousIndex);
         if (oldRowValues == null) {
             if (newRowValues == null) {
@@ -130,7 +127,7 @@ class CrudListState extends SimpleListState {
      */
     _insertEntityRow(entityRow) {
         if (entityRow.index != null) {
-            if (entityRow.index === TableElementAdapter.LAST_ROW_INDEX) {
+            if (entityRow.index === PositionUtils.LAST_ELEMENT_INDEX) {
                 this.items.push(entityRow.entity);
             } else {
                 ArrayUtils.insert(entityRow.entity, entityRow.index, this.items);
@@ -154,22 +151,24 @@ class CrudListState extends SimpleListState {
      * @protected
      */
     _updateRelativePosition(entityRow) {
-        if (entityRow.index === 0 || entityRow.index === TableElementAdapter.LAST_ROW_INDEX
-            || entityRow.append != null || entityRow.beforeRowId != null || entityRow.afterRowId != null) {
-            return;
-        }
         const index = this.indexOf(entityRow.entity);
+        AssertionUtils.isTrue(entityRow.index == null
+            || entityRow.index === PositionUtils.LAST_ELEMENT_INDEX || entityRow.index === index,
+            `Bad index!\n${JSON.stringify(entityRow)}`);
         if (index === 0) {
             entityRow.append = false;
-        } else if (entityRow.index === this.items.length - 1) {
+        } else if (index === this.items.length - 1) {
             entityRow.append = true;
         } else {
             /**
              * @type {IdentifiableEntity}
              */
-            const itemFollowingEntityRow = this.items[index + 1];
-            entityRow.beforeRowId = itemFollowingEntityRow.id;
+            const theJustAfterItem = this.items[index + 1];
+            entityRow.beforeRowId = theJustAfterItem.id;
         }
+        entityRow.index = index;
+        AssertionUtils.isTrue(PositionUtils.arePositioningPropertiesValid(entityRow),
+            `Inconsistent positioning properties!\n${JSON.stringify(entityRow)}`);
     }
 
     /**
@@ -235,7 +234,9 @@ class CrudListState extends SimpleListState {
     updateItem(item, options = {}) {
         const currentIndex = this.findIndexById(item.id);
         AssertionUtils.isTrue(currentIndex !== -1, `Can't update missing item (id = ${item.id})!`);
-        options.index = EntityRow.areAllPositioningPropertiesEmpty(options) ? currentIndex : options.index;
+        // when options.index is missing than the other positioning properties
+        // must be valid otherwise keep the previous position (i.e. currentIndex)
+        options.index = options.index ?? (PositionUtils.areAllButIndexValid(options) ? undefined : currentIndex);
         return this.replacePart(new EntityRow(item, options), currentIndex);
     }
 
