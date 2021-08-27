@@ -40,7 +40,7 @@ class SimpleRowView extends AbstractView {
             rowValues,
             rowTmplHtml: this.tableAdapter.bodyRowTmplHtml,
             createIfNotExists: stateChange.changeType === "CREATE",
-            removeTheRowByIdThenCreateItAgain: rowIndexChanged
+            removeByIdThenCreateItAgain: rowIndexChanged
         });
         this.$elem = rowValues ? this.tableAdapter.$getRowByDataId(rowValues.entity.id) : undefined;
         return Promise.resolve(stateChange);

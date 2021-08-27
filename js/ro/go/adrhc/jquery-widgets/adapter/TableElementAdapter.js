@@ -64,7 +64,7 @@ class TableElementAdapter {
      * @param {number|string=} rowDataId
      * @param {string=} rowHtml
      * @param {boolean=true} replaceExisting
-     * @param {boolean=} removeTheRowByIdThenCreateItAgain
+     * @param {boolean=} removeByIdThenCreateItAgain
      * @param {EntityRow=} rowValues
      * @param {boolean=} createIfNotExists
      */
@@ -72,14 +72,14 @@ class TableElementAdapter {
                   rowDataId,
                   rowHtml,
                   replaceExisting = true,
-                  removeTheRowByIdThenCreateItAgain,
+                  removeByIdThenCreateItAgain,
                   rowValues,
                   createIfNotExists
               }) {
         rowHtml = rowHtml ? rowHtml : this.emptyRowHtmlOf(rowDataId);
         const $existingRow = rowDataId != null ? this.$getRowByDataId(rowDataId) : {};
         if ($existingRow.length) {
-            if (removeTheRowByIdThenCreateItAgain) {
+            if (removeByIdThenCreateItAgain) {
                 $existingRow.remove();
             } else {
                 if (replaceExisting) {
