@@ -41,11 +41,11 @@ class AbstractComponentOptions {
      * @param {boolean=} forceDontAutoInitialize
      * @return {AbstractComponentOptions}
      */
-    static of(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
-        return _.defaults(new AbstractComponentOptions(), options, {
+    constructor(options) {
+        const defaults = _.defaults({}, options, {
             state: options.state ?? new StateHolder(),
-            config: options.config ?? ComponentConfiguration.configWithDefaults(options.view?.$elem),
-            forceDontAutoInitialize
+            config: options.config ?? ComponentConfiguration.dataAttributesOf(options.view?.$elem)
         });
+        ObjectUtils.copyDeclaredProperties(this, defaults);
     }
 }

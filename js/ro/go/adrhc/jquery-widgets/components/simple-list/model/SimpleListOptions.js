@@ -27,10 +27,6 @@ class SimpleListOptions extends AbstractComponentOptions {
      */
     childProperty;
     /**
-     * @type {boolean}
-     */
-    dontAutoInitialize;
-    /**
      * @type {CrudRepository}
      */
     repository;
@@ -40,15 +36,15 @@ class SimpleListOptions extends AbstractComponentOptions {
     mustacheTableElemAdapter;
 
     /**
-     * @param {SimpleListOptions} options are the programmatically (javascript) passed options
-     * @param {boolean=} forceDontAutoInitialize
+     * @param {{}} options are the programmatically (javascript) passed options
      * @return {SimpleListOptions} is the options with the defaults applied
      */
-    static of(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
-        const simpleListOptions = _.defaults(new SimpleListOptions(), {forceDontAutoInitialize}, options);
-        simpleListOptions.config = options.config ?? SimpleListConfiguration.of(options);
+    constructor(options) {
+        super(options);
+        const simpleListOptions = _.defaults(new SimpleListOptions(), options);
+        simpleListOptions.config = options.config ?? new SimpleListConfiguration(options);
         simpleListOptions.state = options.state ?? new SimpleListState();
-        simpleListOptions.view = options.view ?? SimpleListView.of(options, simpleListOptions.config);
+        simpleListOptions.view = options.view ?? SimpleListView.of(simpleListOptions);
         return simpleListOptions;
     }
 
@@ -70,18 +66,22 @@ class SimpleListOptions extends AbstractComponentOptions {
      * @return {TableElementAdapter}
      */
     get tableElementAdapter() {
-        return this.simpleListView.tableAdapter;
+        return this.simpleListView?.tableAdapter;
     }
 
     /**
-     * This is the computed/runtime value of rowPositionOnCreate.
-     *
-     * see also this.config.rowPositionOnCreate
-     *
-     * @return {"prepend"|"append"}
+     * @return {"prepend"|"append"|undefined} this.simpleListConfiguration?.rowPositionOnCreate
      */
     get rowPositionOnCreate() {
-        return this.tableElementAdapter.rowPositionOnCreate
+        return this.simpleListConfiguration?.rowPositionOnCreate;
+    }
+
+    /**
+     * @return {boolean|undefined} this.simpleListConfiguration?.rowPositionOnCreate === "append"
+     */
+    get newItemsGoLast() {
+        const rowPositionOnCreate = this.simpleListConfiguration?.rowPositionOnCreate;
+        return rowPositionOnCreate == null ? undefined : rowPositionOnCreate === "append";
     }
 
     /**

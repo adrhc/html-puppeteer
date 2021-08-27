@@ -38,12 +38,16 @@ class AbstractComponent {
      * @type {ChildishBehaviour}
      */
     childishBehaviour;
+    /**
+     * @type {Promise<StateChange[]>}
+     */
+    autoInitializationResult;
 
     /**
-     * @param {AbstractComponentOptions} options
+     * @param {AbstractComponentOptions} params
      */
-    constructor(options) {
-        options = AbstractComponentOptions.of(options);
+    constructor(params) {
+        const options = new AbstractComponentOptions(params);
         this.state = options.state;
         this.view = options.view;
         this.config = options.config;
@@ -51,7 +55,7 @@ class AbstractComponent {
         this.entityExtractor = new DefaultEntityExtractor(this);
         this._setupCompositeBehaviour(options.compositeBehaviour, options.childCompFactories);
         this._setupChildishBehaviour(options);
-        return this._handleAutoInitialization(options.forceDontAutoInitialize);
+        this._handleAutoInitialization();
     }
 
     /**
@@ -97,30 +101,12 @@ class AbstractComponent {
     }
 
     /**
-     * @param {boolean=} dontAutoInitialize
-     * @return {Promise<StateChange[]>|undefined}
      * @protected
      */
-    _handleAutoInitialization(dontAutoInitialize = this.config.dontAutoInitialize) {
-        if (!dontAutoInitialize) {
-            return this.init();
+    _handleAutoInitialization() {
+        if (!this.config.dontAutoInitialize) {
+            this.autoInitializationResult = this.init();
         }
-    }
-
-    /**
-     * @returns {string}
-     * @protected
-     */
-    get eventsNamespace() {
-        return `.${this.constructor.name}.${this.view.owner}`;
-    }
-
-    /**
-     * @returns {string}
-     * @protected
-     */
-    get _ownerSelector() {
-        return `[data-${JQueryWidgetsConfig.OWNER_ATTRIBUTE}='${this.view.owner}']`;
     }
 
     /**
@@ -246,9 +232,9 @@ class AbstractComponent {
      */
     init() {
         return this._reloadState()
-            .then(this._handleViewUpdateOnInit.bind(this))
-            .then(this._configureEventsAndInitKidsOnInit.bind(this))
-            .catch(this._handleInitErrors.bind(this));
+            .then(this._handleViewUpdateOnInit)
+            .then(this._configureEventsAndInitKidsOnInit)
+            .catch(this._handleInitErrors);
     }
 
     /**
@@ -264,7 +250,7 @@ class AbstractComponent {
     }
 
     /**
-     * @param {StateChange[]} stateChanges
+     * @param {StateChange|StateChange[]} stateChanges
      * @return {Promise<StateChange[]>}
      * @protected
      */
@@ -287,7 +273,7 @@ class AbstractComponent {
     /**
      * Reloading the state from somewhere (e.g. a repository).
      *
-     * @return {Promise<*>} the loaded state
+     * @return {Promise<*>} with the loaded state
      * @protected
      */
     _reloadState() {
@@ -412,5 +398,21 @@ class AbstractComponent {
      */
     findKidsByClass(clazz) {
         return this.compositeBehaviour.findKids((kid) => kid instanceof clazz);
+    }
+
+    /**
+     * @returns {string}
+     * @protected
+     */
+    get eventsNamespace() {
+        return `.${this.constructor.name}.${this.view.owner}`;
+    }
+
+    /**
+     * @returns {string}
+     * @protected
+     */
+    get _ownerSelector() {
+        return `[data-${JQueryWidgetsConfig.OWNER_ATTRIBUTE}='${this.view.owner}']`;
     }
 }

@@ -1,92 +1,75 @@
 /**
  * This is the component's configuration which could be constructed from HTML data-* values.
+ * All data-* properties should be declared as fields otherwise they'll be ignored!
  *
  * @typedef {ComponentConfiguration} C
  */
 class ComponentConfiguration {
     /**
-     * @type {boolean}
+     * @type {boolean|undefined}
      */
     dontConfigEventsOnError;
     /**
-     * @type {boolean}
+     * @type {boolean|undefined}
      */
     dontAutoInitialize;
     /**
-     * @type {boolean}
+     * @type {boolean|undefined}
      */
     dontReloadFromState;
     /**
-     * @type {boolean}
+     * @type {boolean|undefined}
      */
     clearChildrenOnReset;
     /**
-     * @type {boolean}
+     * @type {boolean|undefined}
      */
     updateViewOnce;
     /**
-     * @type {boolean}
+     * @type {boolean|undefined}
      */
     skipOwnViewUpdates;
     /**
-     * @type {string}
+     * @type {string|undefined}
      */
     childProperty;
     /**
-     * @type {string}
+     * @type {string|undefined}
      */
     elemIdOrJQuery;
 
-    constructor({
-                    dontConfigEventsOnError,
-                    dontAutoInitialize,
-                    dontReloadFromState,
-                    clearChildrenOnReset,
-                    updateViewOnce,
-                    skipOwnViewUpdates,
-                    childProperty,
-                    elemIdOrJQuery
-                } = {}) {
-        this.dontConfigEventsOnError = dontConfigEventsOnError;
-        this.dontAutoInitialize = dontAutoInitialize;
-        this.dontReloadFromState = dontReloadFromState;
-        this.clearChildrenOnReset = clearChildrenOnReset;
-        this.updateViewOnce = updateViewOnce;
-        this.skipOwnViewUpdates = skipOwnViewUpdates;
-        this.childProperty = childProperty;
-        this.elemIdOrJQuery = elemIdOrJQuery;
+    constructor(options) {
+        ObjectUtils.copyDeclaredProperties(this, options);
     }
 
     /**
+     * Create a new ComponentConfiguration initialized with data-*, then {elemIdOrJQuery} and then ...firstWinDefaults.
+     *
      * @param {string|jQuery<HTMLElement>|function(): jQuery<HTMLElement>} elemIdOrJQuery
      * @param {Object=} firstWinDefaults are applied from left to right (first applied wins)
      * @return {C}
      */
-    static configWithDefaults(elemIdOrJQuery, ...firstWinDefaults) {
-        return _.defaults(new ComponentConfiguration(), DomUtils.dataOf(elemIdOrJQuery), {elemIdOrJQuery}, ...firstWinDefaults);
+    static dataAttributesOf(elemIdOrJQuery, ...firstWinDefaults) {
+        const defaults = _.defaults({}, DomUtils.dataOf(elemIdOrJQuery), {elemIdOrJQuery}, ...firstWinDefaults);
+        ObjectUtils.copyDeclaredProperties(new ComponentConfiguration(), defaults);
     }
 
     /**
-     * @param {Object} firstWinOverwrites
+     * @param {boolean=} value
+     * @param {boolean=} immutableOperation
      * @return {C}
      */
-    overwriteWith(...firstWinOverwrites) {
-        return _.defaults(this._new(), ...firstWinOverwrites, this);
-    }
-
-    /**
-     * @param {boolean=} dontAutoInitialize
-     * @return {C}
-     */
-    dontAutoInitializeOf(dontAutoInitialize = true) {
-        return this.overwriteWith({dontAutoInitialize});
+    dontAutoInitializeOf(value = true, immutableOperation = true) {
+        const object = immutableOperation ? ObjectUtils.copyDeclaredProperties(this._newOfSelfClass(), this) : this;
+        object.dontAutoInitialize = value;
+        return object;
     }
 
     /**
      * @return {C}
      * @protected
      */
-    _new() {
+    _newOfSelfClass() {
         const configClass = eval(this.constructor.name);
         return new configClass();
     }

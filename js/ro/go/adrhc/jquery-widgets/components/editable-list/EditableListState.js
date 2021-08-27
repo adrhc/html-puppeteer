@@ -6,11 +6,10 @@ class EditableListState extends SelectableListState {
      * @param {EditableListOptions} editableListOptions
      * @return {EditableListState}
      */
-    static of(editableListOptions) {
+    constructor(editableListOptions) {
         return new EditableListState({
             newEntityFactoryFn: editableListOptions.newEntityFactoryFn,
-            newItemsGoLast: editableListOptions.rowPositionOnCreate != null ?
-                editableListOptions.rowPositionOnCreate === "append" : undefined
+            newItemsGoLast: editableListOptions.newItemsGoLast
         })
     }
 

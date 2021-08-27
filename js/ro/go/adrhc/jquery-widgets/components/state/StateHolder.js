@@ -3,50 +3,12 @@
  */
 class StateHolder {
     /**
-     * @param {T} [initialState]
-     * @param {IdentityStateChangeMapper<T|P>} [stateChangeMapper]
-     * @param {StateChangesCollector<T|P>} [changesCollector]
+     * @param {{initialState: undefined|T, stateChangeMapper: undefined|IdentityStateChangeMapper<T|P>, changesCollector: undefined|StateChangesCollector<T|P>=}} options
      */
-    constructor({
-                    initialState,
-                    stateChangeMapper = new IdentityStateChangeMapper(),
-                    changesCollector = new StateChangesCollector(stateChangeMapper)
-                } = {}) {
+    constructor({initialState, stateChangeMapper, changesCollector}) {
         this._currentState = initialState;
-        this._stateChanges = changesCollector;
-    }
-
-    /**
-     * @type {StateChangesCollector<T|P>}
-     * @protected
-     */
-    _stateChanges;
-
-    /**
-     * @return {StateChangesCollector<T|P>}
-     */
-    get stateChanges() {
-        return this._stateChanges;
-    }
-
-    /**
-     * @type {T}
-     * @protected
-     */
-    _currentState;
-
-    /**
-     * @return {T}
-     */
-    get currentState() {
-        return this._currentState;
-    }
-
-    /**
-     * @param {T} currentState
-     */
-    set currentState(currentState) {
-        this._currentState = currentState;
+        this._stateChanges = changesCollector ?? new StateChangesCollector(
+            stateChangeMapper ?? new IdentityStateChangeMapper());
     }
 
     /**
@@ -93,7 +55,7 @@ class StateHolder {
      * @return {StateChange<P>|boolean} the newly created StateChange or, if dontRecordStateEvents = true, whether a state change occurred
      */
     replacePart(partialState, dueToChangePartName, dontRecordStateEvents) {
-        if (this._currentStatePartEquals(partialState, dueToChangePartName)) {
+        if (this._areStatePartsEqual(partialState, dueToChangePartName)) {
             return false;
         }
 
@@ -160,7 +122,7 @@ class StateHolder {
      * @return {boolean}
      * @protected
      */
-    _currentStatePartEquals(part, dueToChangePartName) {
+    _areStatePartsEqual(part, dueToChangePartName) {
         return this.getStatePart(dueToChangePartName) === part;
     }
 
@@ -185,5 +147,38 @@ class StateHolder {
     reset() {
         this._stateChanges.reset();
         this._currentState = undefined;
+    }
+
+    /**
+     * @type {StateChangesCollector<T|P>}
+     * @protected
+     */
+    _stateChanges;
+
+    /**
+     * @return {StateChangesCollector<T|P>}
+     */
+    get stateChanges() {
+        return this._stateChanges;
+    }
+
+    /**
+     * @type {T}
+     * @protected
+     */
+    _currentState;
+
+    /**
+     * @return {T}
+     */
+    get currentState() {
+        return this._currentState;
+    }
+
+    /**
+     * @param {T} currentState
+     */
+    set currentState(currentState) {
+        this._currentState = currentState;
     }
 }

@@ -13,14 +13,11 @@ class EditableListOptions extends SelectableListOptions {
     extractedEntityConverterFn;
 
     /**
-     * @param {EditableListOptions} options
-     * @param {boolean=} forceDontAutoInitialize
-     * @return {EditableListOptions}
+     * @param {{}} options
      */
-    static of(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
-        const editableListOptions = _.defaults(new EditableListOptions(),
-            SelectableListOptions.of(options, forceDontAutoInitialize));
-        editableListOptions.state = options.state ?? EditableListState.of(editableListOptions);
-        return editableListOptions;
+    constructor(options) {
+        super(options);
+        ObjectUtils.copyDeclaredProperties(this, options)
+        this.state = options.state ?? EditableListState.of(this);
     }
 }

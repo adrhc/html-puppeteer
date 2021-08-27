@@ -1,15 +1,17 @@
 /**
- * @template TItem, P
- * @extends {TaggingStateHolder<TItem[], P>}
+ * @template TItem
+ * @typedef {TItem} T
+ * @typedef {TItem} P
+ * @extends {TaggingStateHolder<TItem[], TItem>}
  */
 class SimpleListState extends TaggingStateHolder {
     /**
-     * @param {TItem[]} [initialState]
-     * @param {TaggingStateChangeMapper<TItem[]>} [stateChangeMapper]
-     * @param {StateChangesCollector<TItem[]>} [changeManager]
+     * https://jsdoc.app/tags-param.html#optional-parameters-and-default-values
+     *
+     * @param {TItem[]} [items=[]]
      */
-    constructor({initialState = [], stateChangeMapper, changeManager} = {}) {
-        super({initialState, stateChangeMapper, changeManager});
+    updateAll(items = []) {
+        this.replaceEntirely(items);
     }
 
     /**
@@ -24,12 +26,5 @@ class SimpleListState extends TaggingStateHolder {
      */
     set items(items) {
         this.currentState = items;
-    }
-
-    /**
-     * @param {TItem[]} [items=[]]
-     */
-    updateAll(items = []) {
-        this.replaceEntirely(items);
     }
 }

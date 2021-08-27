@@ -52,9 +52,9 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
     }) {
         super(parentComp);
         this.childProperty = childProperty;
-        this.childEntityGetter = childEntityGetter ? childEntityGetter : this._getChildEntityFrom.bind(this);
-        this.childEntitySetter = childEntitySetter ? childEntitySetter : this._setChildIntoParent.bind(this);
-        this.childEntityExtractorFn = childEntityExtractorFn ? childEntityExtractorFn : this._extractChildEntity.bind(this);
+        this.childEntityGetter = childEntityGetter ? childEntityGetter : this._getChildEntityFrom;
+        this.childEntitySetter = childEntitySetter ? childEntitySetter : this._setChildIntoParent;
+        this.childEntityExtractorFn = childEntityExtractorFn ? childEntityExtractorFn : this._extractChildEntity;
         this.toEntityConverter = toEntityConverter;
     }
 

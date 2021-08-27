@@ -1,11 +1,18 @@
 /**
- * @typedef {IdentifiableEntity} TItem
- * @typedef {IdentifiableEntity} P
- * @extends {SimpleListState<IdentifiableEntity[], EntityRow<IdentifiableEntity>>}
+ * https://github.com/google/closure-compiler/wiki/Generic-Types#inheritance-of-generic-types
+ *
+ * The type used for SimpleListState's generic parameter should in fact be TItem
+ * but this would make difficult to use this.items so when dealing with state changes the state/part will
+ * be considered TItem while when using this.items (e.g. for findById(it)) it'll
+ * be used IdentifiableEntity (as the return type).
+ *
+ * @template E
+ * @typedef {EntityRow<IdentifiableEntity<E>>} TItem
+ * @extends {SimpleListState<TItem>}
  */
 class CrudListState extends SimpleListState {
     /**
-     * @type {function(): IdentifiableEntity}
+     * @type {function(): IdentifiableEntity<E>}
      */
     newEntityFactoryFn;
     /**
@@ -16,11 +23,7 @@ class CrudListState extends SimpleListState {
     append;
 
     /**
-     * @param {IdentifiableEntity[]=} initialState
-     * @param {function(): IdentifiableEntity=} newEntityFactoryFn
-     * @param {boolean=} newItemsGoLast
-     * @param {TaggingStateChangeMapper<IdentifiableEntity[]>=} stateChangeMapper
-     * @param {StateChangesCollector<IdentifiableEntity[]>=} changeManager
+     * @param {{initialState: undefined|TItem[], newEntityFactoryFn: (undefined|function(): IdentifiableEntity<E>), newItemsGoLast: undefined|boolean, stateChangeMapper: undefined|TaggingStateChangeMapper<TItem,TItem>, changesCollector: undefined|StateChangesCollector<TItem>=}} options
      */
     constructor({
                     initialState,
@@ -35,25 +38,28 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @param {EntityRow<IdentifiableEntity>} newRowValues
+     * @param {TItem} newRowValues
      * @param {number} oldIndex
      * @return {boolean}
      * @protected
      */
-    _currentStatePartEquals(newRowValues, oldIndex) {
+    _areStatePartsEqual(newRowValues, oldIndex) {
         const isPrevNullOrMissing = oldIndex >= this.items.length ||
             oldIndex < this.items.length && this.items[oldIndex] == null;
-        const bothNewAndPrevAreNull = newRowValues == null && isPrevNullOrMissing;
-        return bothNewAndPrevAreNull ||
-            !isPrevNullOrMissing && newRowValues != null &&
-            newRowValues.index === oldIndex &&
-            this.items[oldIndex] === newRowValues.entity;
+        // both are null
+        return newRowValues == null && isPrevNullOrMissing
+            // both are not null
+            || !isPrevNullOrMissing && newRowValues != null
+            // both have same index
+            && newRowValues.index === oldIndex &&
+            // both have same entity
+            this._areStatePartsDataEqual(newRowValues.entity, this.items[oldIndex].entity);
     }
 
     /**
-     * @param {EntityRow<IdentifiableEntity>} newRowValues
+     * @param {TItem} newRowValues
      * @param {number} previousIndex
-     * @return {EntityRow<IdentifiableEntity>} previous state part
+     * @return {TItem} previous state part
      * @protected
      */
     _replacePartImpl(newRowValues, previousIndex) {
@@ -80,10 +86,10 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @param {EntityRow<IdentifiableEntity>=} previousStatePart
-     * @param {EntityRow<IdentifiableEntity>=} partialState
+     * @param {TItem=} previousStatePart
+     * @param {TItem=} partialState
      * @param {string|number=} dueToChangePartName
-     * @return {StateChange<EntityRow<IdentifiableEntity>>|undefined}
+     * @return {StateChange<TItem>|undefined}
      * @protected
      */
     _stateChangeOf(previousStatePart, partialState, dueToChangePartName) {
@@ -99,30 +105,40 @@ class CrudListState extends SimpleListState {
 
     /**
      * @param {number} index
-     * @return {EntityRow<IdentifiableEntity>|undefined}
+     * @return {TItem|undefined}
      */
     getStatePart(index) {
         if (this.items == null || index < 0 || index >= this.items.length) {
             return undefined;
         }
-        const item = this.items[index];
-        return item == null ? undefined : new EntityRow(item, {index});
+        return this.items[index];
     }
 
     /**
      * The purpose of this method is to provide type checking and a default for oldIndex parameter.
      *
-     * @param {EntityRow<IdentifiableEntity>} rowValues
-     * @param {number=} previousIndex
-     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>> | boolean}
+     * @param {TItem} rowValues
+     * @param {number=} dueToChangePartName
+     * @param {boolean=} dontRecordStateEvents
+     * @return {TaggedStateChange<TItem> | boolean}
      * @protected
      */
-    replacePart(rowValues, previousIndex = rowValues.index) {
-        return super.replacePart(rowValues, previousIndex);
+    replacePart(rowValues, dueToChangePartName = rowValues.index, dontRecordStateEvents) {
+        return super.replacePart(rowValues, dueToChangePartName, dontRecordStateEvents);
     }
 
     /**
-     * @param {EntityRow<IdentifiableEntity>} entityRow
+     * @param {E} newEntity
+     * @param {E} oldEntity
+     * @return {boolean}
+     * @protected
+     */
+    _areStatePartsDataEqual(newEntity, oldEntity) {
+        return newEntity === oldEntity;
+    }
+
+    /**
+     * @param {TItem} entityRow
      * @protected
      */
     _insertEntityRow(entityRow) {
@@ -143,14 +159,14 @@ class CrudListState extends SimpleListState {
         } else {
             ArrayUtils.insert(entityRow.entity, 0, this.items);
         }
-        this._updateRelativePosition(entityRow);
+        this._updatePositioningProperties(entityRow);
     }
 
     /**
-     * @param {EntityRow<IdentifiableEntity>} entityRow
+     * @param {TItem} entityRow
      * @protected
      */
-    _updateRelativePosition(entityRow) {
+    _updatePositioningProperties(entityRow) {
         const index = this.indexOf(entityRow.entity);
         AssertionUtils.isTrue(entityRow.index == null
             || entityRow.index === PositionUtils.LAST_ELEMENT_INDEX || entityRow.index === index,
@@ -161,7 +177,7 @@ class CrudListState extends SimpleListState {
             entityRow.append = true;
         } else {
             /**
-             * @type {IdentifiableEntity}
+             * @type {IdentifiableEntity<E>}
              */
             const theJustAfterItem = this.items[index + 1];
             entityRow.beforeRowId = theJustAfterItem.id;
@@ -179,10 +195,10 @@ class CrudListState extends SimpleListState {
      * Provide updateOptions only if wanting to change item's position.
      * Provide createOptions if wanting to change item's position or wanting to provide previousItemId.
      *
-     * @param {IdentifiableEntity} item
+     * @param {IdentifiableEntity<E>} item
      * @param {{previousItemId?: number|string, index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}=} createOptions
      * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}=} updateOptions
-     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
+     * @return {TaggedStateChange<TItem>}
      */
     createOrUpdate(item, createOptions = {}, updateOptions) {
         if (createOptions.previousItemId != null && !EntityUtils.idsAreEqual(item.id, createOptions.previousItemId)) {
@@ -199,22 +215,23 @@ class CrudListState extends SimpleListState {
     /**
      * Insert the provided item (unique by id) into this.items.
      *
-     * @param {IdentifiableEntity} item
+     * @param {IdentifiableEntity<E>} identifiableEntity
      * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}} options
-     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
+     * @return {TaggedStateChange<TItem>}
      */
-    insertItem(item, options = {}) {
-        AssertionUtils.isFalse(item.id != null && !!this.findById(item.id), `Can't insert duplicated item (id = ${item.id})!`);
+    insertItem(identifiableEntity, options = {}) {
+        AssertionUtils.isFalse(identifiableEntity.id != null && !!this.findById(identifiableEntity.id),
+            `Can't insert duplicated item (id = ${identifiableEntity.id})!`);
         options.append = options.append ?? this.append;
-        return this.replacePart(new EntityRow(item, options));
+        return this.replacePart(new EntityRow(identifiableEntity, options));
     }
 
     /**
      * Instantiate a new item and insert it into this.items (by calling insertItem).
      *
-     * @param {IdentifiableEntity|{}} [initialValue]
+     * @param {IdentifiableEntity<E>|undefined} [initialValue]
      * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}} options
-     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
+     * @return {TaggedStateChange<TItem>}
      */
     createNewItem(initialValue, options = {}) {
         const item = this.newEntityFactoryFn();
@@ -227,9 +244,9 @@ class CrudListState extends SimpleListState {
     /**
      * Update the item having item.id changing its position with options.
      *
-     * @param {IdentifiableEntity} item
+     * @param {IdentifiableEntity<E>} item
      * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}} options
-     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
+     * @return {TaggedStateChange<TItem>}
      */
     updateItem(item, options = {}) {
         const currentIndex = this.findIndexById(item.id);
@@ -245,7 +262,7 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
+     * @return {TaggedStateChange<TItem>}
      */
     removeTransient() {
         return this.removeById(IdentifiableEntity.TRANSIENT_ID);
@@ -253,7 +270,7 @@ class CrudListState extends SimpleListState {
 
     /**
      * @param {number|string} id
-     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>> | boolean}
+     * @return {TaggedStateChange<TItem> | boolean}
      */
     removeById(id) {
         const indexToRemove = this.findIndexById(id);
@@ -262,7 +279,7 @@ class CrudListState extends SimpleListState {
 
     /**
      * @param {number} index
-     * @return {TaggedStateChange<EntityRow<IdentifiableEntity>> | boolean}
+     * @return {TaggedStateChange<TItem> | boolean}
      * @protected
      */
     _removeItem(index) {
@@ -279,7 +296,7 @@ class CrudListState extends SimpleListState {
 
     /**
      * @param {string|number} id
-     * @return {IdentifiableEntity}
+     * @return {IdentifiableEntity<E>}
      */
     findById(id) {
         return EntityUtils.findById(id, this.items);

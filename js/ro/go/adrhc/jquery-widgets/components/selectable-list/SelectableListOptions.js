@@ -13,13 +13,11 @@ class SelectableListOptions extends SimpleListOptions {
     onRow;
 
     /**
-     * @param {SelectableListOptions} options
-     * @param {boolean=} forceDontAutoInitialize
-     * @return {SelectableListOptions}
+     * @param {{}} options
      */
-    static of(options, forceDontAutoInitialize = options.forceDontAutoInitialize) {
-        const selectableListOptions = _.defaults(new SelectableListOptions(),
-            SimpleListOptions.of(options, forceDontAutoInitialize));
+    constructor(options) {
+        super(options);
+        const selectableListOptions = _.defaults(new SelectableListOptions(), SimpleListOptions.of(options));
         selectableListOptions.state = options.state ?? SelectableListState.of(selectableListOptions);
         return selectableListOptions;
     }

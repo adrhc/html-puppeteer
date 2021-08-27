@@ -47,7 +47,7 @@ class ElasticListComponent extends SimpleListComponent {
                     dontAutoInitialize,
                     childishBehaviour,
                     parentComponent,
-                    config = SimpleListConfiguration.of({
+                    config = new SimpleListConfiguration({
                         elemIdOrJQuery,
                         bodyRowTmplId,
                         bodyRowTmplHtml,
@@ -99,7 +99,7 @@ class ElasticListComponent extends SimpleListComponent {
         this.crudListState = state;
         this.configurePartChangeHandlers({handleItemCreation: ["CREATE"]}, "Item");
         this._setupCompositeBehaviour(new ElasticListCompositeBehaviour(this, idRowCompFactoryFn), childCompFactories);
-        return this._handleAutoInitialization();
+        this._handleAutoInitialization();
     }
 
     /**

@@ -30,7 +30,7 @@ $(() => {
 
     container.compositeBehaviour.addChildComponentFactory([(parentComp) => {
         const elemIdOrJQuery = $("#person", parentComp.view.$elem);
-        return new DrawingComponent(elemIdOrJQuery, ComponentConfiguration.configWithDefaults(elemIdOrJQuery, {childProperty: "person"}));
+        return new DrawingComponent(elemIdOrJQuery, ComponentConfiguration.dataAttributesOf(elemIdOrJQuery, {childProperty: "person"}));
     }, (parentComp) => {
         const elemIdOrJQuery = $("#dogsTable", parentComp.view.$elem);
         return SimpleListFactory.create({items: DbMocks.DOGS, elemIdOrJQuery, childProperty: "dogs"});

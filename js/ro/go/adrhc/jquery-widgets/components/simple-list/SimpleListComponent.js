@@ -11,12 +11,13 @@ class SimpleListComponent extends AbstractTableBasedComponent {
 
     /**
      * @param {SimpleListOptions=} options are the programmatically (javascript) passed options
+     * @return {SimpleListComponent|Promise<StateChange[]>}
      */
     constructor(options) {
-        super(SimpleListOptions.of(options, true));
+        super(SimpleListOptions.of(options));
         this.handleWithAny(["CREATE", "REPLACE", "DELETE"])
         this.repository = options.repository ?? new InMemoryCrudRepository(this._configItemsOf(options));
-        return this._handleAutoInitialization(options.forceDontAutoInitialize);
+        this._handleAutoInitialization();
     }
 
     /**
@@ -77,7 +78,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     /**
      * Replaces the state with the one loaded from repository.
      *
-     * @return {Promise<*>}
+     * @return {Promise<[]>}
      * @protected
      */
     _reloadState() {

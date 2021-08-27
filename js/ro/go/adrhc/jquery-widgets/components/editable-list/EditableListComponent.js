@@ -91,13 +91,14 @@ class EditableListComponent extends SelectableListComponent {
 
     /**
      * @param {EditableListOptions=} options
+     * @return {EditableListComponent|Promise<EditableListComponent>}
      */
     constructor(options = new EditableListOptions()) {
-        super(EditableListOptions.of(options, true));
+        super(EditableListOptions.of({...options, true}));
         if (options.extractedEntityConverterFn) {
             this.selectableListEntityExtractor.entityConverterFn = options.extractedEntityConverterFn;
         }
-        return this._handleAutoInitialization();
+        this._handleAutoInitialization();
     }
 
     /**

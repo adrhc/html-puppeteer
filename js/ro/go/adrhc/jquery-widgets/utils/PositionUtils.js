@@ -40,10 +40,10 @@ class PositionUtils {
     }
 
     /**
-     * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: (boolean|undefined)}} positioningProperties
+     * @param {{index?: undefined|number, beforeRowId?: undefined|number, afterRowId?: undefined|number, append?: undefined|boolean}=} positioningProperties
      * @param {{}} target
      */
     static copyPositioningProperties(positioningProperties, target) {
-        PositionUtils.POSITIONING_PROPERTIES.forEach(it => target[it] = positioningProperties[it]);
+        PositionUtils.POSITIONING_PROPERTIES.forEach(it => target[it] = positioningProperties?.[it]);
     }
 }

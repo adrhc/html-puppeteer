@@ -29,11 +29,11 @@ class SelectableListState extends CrudListState {
      * @param {SelectableListOptions} selectableListOptions
      * @return {SelectableListState}
      */
-    static of(selectableListOptions) {
+    constructor(selectableListOptions) {
+        super(selectableListOptions);
         return new SelectableListState({
             newEntityFactoryFn: selectableListOptions.newEntityFactoryFn,
-            newItemsGoLast: selectableListOptions.rowPositionOnCreate != null ?
-                selectableListOptions.rowPositionOnCreate === "append" : undefined
+            newItemsGoLast: selectableListOptions.newItemsGoLast
         })
     }
 

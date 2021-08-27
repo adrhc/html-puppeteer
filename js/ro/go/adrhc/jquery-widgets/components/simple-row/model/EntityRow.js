@@ -1,6 +1,9 @@
+/**
+ * @template E
+ */
 class EntityRow {
     /**
-     * @type {IdentifiableEntity}
+     * @type {IdentifiableEntity<E>}
      */
     entity;
     /**
@@ -24,11 +27,11 @@ class EntityRow {
      * "index" is the position at which to create the row; useful
      * only when creating a row otherwise the row is matched by id.
      *
-     * @param {IdentifiableEntity} entity
-     * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}} options
+     * @param {IdentifiableEntity<E>} entity
+     * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}} [positioningProperties]
      */
-    constructor(entity, options = {}) {
-        PositionUtils.copyPositioningProperties(options, this);
+    constructor(entity, positioningProperties) {
+        PositionUtils.copyPositioningProperties(positioningProperties, this);
         this.entity = entity;
     }
 }

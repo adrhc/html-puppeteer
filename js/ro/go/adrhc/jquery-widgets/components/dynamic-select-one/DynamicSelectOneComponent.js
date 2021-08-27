@@ -59,43 +59,7 @@ class DynamicSelectOneComponent extends AbstractComponent {
         this.repository = repository;
         view.component = this;
         this.handleWithAny(true);
-        return this._handleAutoInitialization();
-    }
-
-    /**
-     * @returns {boolean}
-     */
-    get currentOptionsAreResultOfSearch() {
-        return this.dynaSelOneConfig.isEnoughTextToSearch(this.dynaSelOneState.currentState.title);
-    }
-
-    /**
-     * @return {DynaSelOneConfig}
-     */
-    get dynaSelOneConfig() {
-        return this.config;
-    }
-
-    /**
-     * @return {DynaSelOneStateHolder}
-     */
-    get dynaSelOneState() {
-        return this.state;
-    }
-
-    /**
-     * @return {DynamicSelectOneView}
-     */
-    get dynaSelOneView() {
-        return this.view;
-    }
-
-    init() {
-        return super.init().then(() => {
-            if (this.dynaSelOneConfig.focus) {
-                this.dynaSelOneView.focusMe();
-            }
-        })
+        this._handleAutoInitialization();
     }
 
     onOptionClick(ev) {
@@ -186,13 +150,7 @@ class DynamicSelectOneComponent extends AbstractComponent {
                 return super._reloadState();
             }
         }
-        return this.repository.findByTitle(title).then(options => {
-            const selectedItem = this._findOptionByExactTitle(title, options);
-            if (selectedItem) {
-                return this.doWithState(() => this.dynaSelOneState.updateUsingDynaSelOneItem(selectedItem));
-            }
-            return this.doWithState(() => this.dynaSelOneState.replaceEntirely(new DynaSelOneState(title, options)));
-        });
+        return this._repositoryFindByTitle(title);
     }
 
     /**
@@ -202,13 +160,23 @@ class DynamicSelectOneComponent extends AbstractComponent {
      */
     _updateBySearchingTheRepository(title) {
         console.log(`[${this.constructor.name}._updateBySearchingTheRepository] title = ${title}`);
-        return this.repository.findByTitle(title).then(options => {
-            const selectedItem = this._findOptionByExactTitle(title, options);
-            if (selectedItem) {
-                return this.doWithState(() => this.dynaSelOneState.updateUsingDynaSelOneItem(selectedItem));
-            }
-            return this.doWithState(() => this.dynaSelOneState.replaceEntirely(new DynaSelOneState(title, options)));
-        });
+        return this._repositoryFindByTitle(title);
+    }
+
+    /**
+     * @param {string} title
+     * @return {Promise<DynaSelOneItem[]>}
+     * @protected
+     */
+    _repositoryFindByTitle(title) {
+        return this.repository.findByTitle(title)
+            .then(options => {
+                const selectedItem = this._findOptionByExactTitle(title, options);
+                if (selectedItem) {
+                    return this.doWithState(() => this.dynaSelOneState.updateUsingDynaSelOneItem(selectedItem));
+                }
+                return this.doWithState(() => this.dynaSelOneState.replaceEntirely(new DynaSelOneState(title, options)));
+            });
     }
 
     /**
@@ -262,17 +230,6 @@ class DynamicSelectOneComponent extends AbstractComponent {
         this._configureOnBlur();
     }
 
-    _configureOnBlur() {
-        if (this.dynaSelOneConfig.searchOnBlur) {
-            this.dynaSelOneView.attachOnBlurHandler(this._searchWhenLostFocus);
-        }
-    }
-
-    updateViewOnAny(stateChange) {
-        this.dynaSelOneView.removeOnBlurHandlers();
-        return super.updateViewOnAny(stateChange).then(() => this._configureOnBlur());
-    }
-
     _setupChildishBehaviour({
                                 childishBehaviour,
                                 parentComponent,
@@ -287,5 +244,52 @@ class DynamicSelectOneComponent extends AbstractComponent {
             parentComponent, {childProperty, toEntityConverter});
         childishBehaviour.childComp = this;
         this.childishBehaviour = childishBehaviour;
+    }
+
+    init() {
+        return super.init().then(() => {
+            if (this.dynaSelOneConfig.focus) {
+                this.dynaSelOneView.focusMe();
+            }
+        })
+    }
+
+    updateViewOnAny(stateChange) {
+        this.dynaSelOneView.removeOnBlurHandlers();
+        return super.updateViewOnAny(stateChange).then(() => this._configureOnBlur());
+    }
+
+    _configureOnBlur() {
+        if (this.dynaSelOneConfig.searchOnBlur) {
+            this.dynaSelOneView.attachOnBlurHandler(this._searchWhenLostFocus);
+        }
+    }
+
+    /**
+     * @returns {boolean}
+     */
+    get currentOptionsAreResultOfSearch() {
+        return this.dynaSelOneConfig.isEnoughTextToSearch(this.dynaSelOneState.currentState.title);
+    }
+
+    /**
+     * @return {DynaSelOneConfig}
+     */
+    get dynaSelOneConfig() {
+        return this.config;
+    }
+
+    /**
+     * @return {DynaSelOneStateHolder}
+     */
+    get dynaSelOneState() {
+        return this.state;
+    }
+
+    /**
+     * @return {DynamicSelectOneView}
+     */
+    get dynaSelOneView() {
+        return this.view;
     }
 }

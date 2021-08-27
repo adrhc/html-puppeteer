@@ -20,6 +20,7 @@ class SelectableListComponent extends SimpleListComponent {
 
     /**
      * @param {SelectableListOptions=} options
+     * @return {SelectableListComponent|Promise<SelectableListComponent>}
      */
     constructor(options = new SelectableListOptions()) {
         super(SelectableListOptions.of(options, true));
@@ -30,7 +31,7 @@ class SelectableListComponent extends SimpleListComponent {
         }, "Item");
         this.entityExtractor = new SelectableListEntityExtractor(this);
         this.swappingRowSelector = this._createSwappingRowSelector(options);
-        return this._handleAutoInitialization();
+        this._handleAutoInitialization();
     }
 
     /**

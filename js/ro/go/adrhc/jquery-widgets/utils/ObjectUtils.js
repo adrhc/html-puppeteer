@@ -1,12 +1,14 @@
 class ObjectUtils {
     /**
-     * @param {Object} object
-     * @param {string} properties
-     * @return {Object}
+     * @param {{}} target
+     * @param {{}} source
+     * @return {{}}
      */
-    static propertiesOf(object, ...properties) {
-        const result = {};
-        properties.forEach(p => result[p] = object[p]);
-        return result;
+    static copyDeclaredProperties(target, source) {
+        if (!source) {
+            return target;
+        }
+        Object.keys(target).forEach(k => target[k] = source[k]);
+        return target;
     }
 }

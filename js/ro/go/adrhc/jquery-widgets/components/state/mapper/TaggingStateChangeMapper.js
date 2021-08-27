@@ -1,11 +1,12 @@
 /**
- * @template T
- * @extends {IdentityStateChangeMapper<T>}
+ * @template T, P
+ * @typedef {T|P} TYPE_OR_PART
+ * @extends {IdentityStateChangeMapper<TYPE_OR_PART>}
  */
 class TaggingStateChangeMapper extends IdentityStateChangeMapper {
     /**
-     * @param {StateChange<T>} stateChange
-     * @return {TaggedStateChange<T>}
+     * @param {StateChange<TYPE_OR_PART>} stateChange
+     * @return {TaggedStateChange<TYPE_OR_PART>}
      */
     map(stateChange) {
         if (!stateChange) {
@@ -19,7 +20,7 @@ class TaggingStateChangeMapper extends IdentityStateChangeMapper {
     }
 
     /**
-     * @param {StateChange<T>} change
+     * @param {StateChange<TYPE_OR_PART>} change
      * @return {string}
      * @protected
      */
@@ -34,7 +35,7 @@ class TaggingStateChangeMapper extends IdentityStateChangeMapper {
     }
 
     /**
-     * @param {T|*} stateOrPart
+     * @param {undefined|TYPE_OR_PART} stateOrPart
      * @param {string} partName
      * @return {boolean}
      * @protected
@@ -44,7 +45,7 @@ class TaggingStateChangeMapper extends IdentityStateChangeMapper {
     }
 
     /**
-     * @param {T|*} stateOrPart
+     * @param {undefined|TYPE_OR_PART} stateOrPart
      * @param {string} [partName]
      * @return {boolean}
      * @protected
@@ -58,7 +59,7 @@ class TaggingStateChangeMapper extends IdentityStateChangeMapper {
     }
 
     /**
-     * @param {*} part
+     * @param {undefined|P} part
      * @param {string} partName specify the state's part/section to change/manipulate
      * @return {boolean}
      * @protected
@@ -68,7 +69,7 @@ class TaggingStateChangeMapper extends IdentityStateChangeMapper {
     }
 
     /**
-     * @param state
+     * @param {undefined|T} state
      * @return {boolean}
      * @protected {boolean}
      */
