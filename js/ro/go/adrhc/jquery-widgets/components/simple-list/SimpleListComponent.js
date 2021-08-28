@@ -10,24 +10,28 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     repository;
 
     /**
-     * @param {SimpleListOptions=} options are the programmatically (javascript) passed options
-     * @return {SimpleListComponent|Promise<StateChange[]>}
+     * see also SimpleListOptions
      */
-    constructor(options) {
-        super(SimpleListOptions.of(options));
+    constructor({
+                    elemIdOrJQuery,
+                    items,
+                    state,
+                    view,
+                    config: {
+                        dontAutoInitialize,
+                        ...restOfConfig
+                    } = {},
+                    ...options
+                }) {
+        super({state, view, config: {elemIdOrJQuery, items, dontAutoInitialize: true, ...restOfConfig}, ...options});
+        this.config = new SimpleListConfiguration(this.config);
+        const simpleListOptions = new SimpleListOptions({...options, ...this});
+        this.state = state ?? new SimpleListState();
+        this.view = view ?? new SimpleListView({elemIdOrJQuery, ...this});
         this.handleWithAny(["CREATE", "REPLACE", "DELETE"])
-        this.repository = options.repository ?? new InMemoryCrudRepository(this._configItemsOf(options));
+        this.repository = options.repository ?? new InMemoryCrudRepository(this.simpleListConfiguration.parsedItems);
+        this.config.dontAutoInitialize = dontAutoInitialize ?? this.config.dontAutoInitialize;
         this._handleAutoInitialization();
-    }
-
-    /**
-     * @param {SimpleListOptions} options are the programmatically (javascript) passed options
-     * @return {IdentifiableEntity[]|Array} is options.items or (if empty) the items specified e.g. in HTML with "data-items"
-     * @protected
-     */
-    _configItemsOf(options) {
-        const configItems = this.simpleListConfiguration?.items ?? [];
-        return options.items ?? (typeof configItems === "string" ? JSON.parse(configItems) : configItems);
     }
 
     /**

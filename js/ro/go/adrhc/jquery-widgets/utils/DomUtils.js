@@ -1,6 +1,6 @@
 class DomUtils {
     /**
-     * @param {String|jQuery<HTMLElement>} elemIdOrJQuery
+     * @param {string|jQuery<HTMLElement>} elemIdOrJQuery
      * @return {jQuery<HTMLElement>}
      */
     static jQueryOf(elemIdOrJQuery) {
@@ -12,7 +12,7 @@ class DomUtils {
     }
 
     /**
-     * @param {String|jQuery<HTMLElement>} elemIdOrJQuery
+     * @param {string|jQuery<HTMLElement>} elemIdOrJQuery
      * @return {Object.<string, string>}
      */
     static dataOf(elemIdOrJQuery) {

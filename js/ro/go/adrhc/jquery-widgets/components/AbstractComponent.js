@@ -44,17 +44,20 @@ class AbstractComponent {
     autoInitializationResult;
 
     /**
-     * @param {AbstractComponentOptions} params
+     * @param {{} | AbstractComponentOptions} options
      */
-    constructor(params) {
-        const options = new AbstractComponentOptions(params);
-        this.state = options.state;
+    constructor(options) {
+        this.config = options.config ?? _.defaults({...options.config},
+            DomUtils.dataOf(options.view?.$elem), DomUtils.dataOf(options.config.elemIdOrJQuery));
+        this.state = options.state ?? new StateHolder();
         this.view = options.view;
         this.config = options.config;
         this.stateChangesDispatcher = new StateChangesDispatcher(this);
         this.entityExtractor = new DefaultEntityExtractor(this);
         this._setupCompositeBehaviour(options.compositeBehaviour, options.childCompFactories);
         this._setupChildishBehaviour(options);
+        this.config.dontAutoInitialize = this.config.dontAutoInitialize ?? AbstractComponent
+            .canConstructChildishBehaviour(this.childishBehaviour, options.parentComponent);
         this._handleAutoInitialization();
     }
 
@@ -232,9 +235,10 @@ class AbstractComponent {
      */
     init() {
         return this._reloadState()
-            .then(this._handleViewUpdateOnInit)
-            .then(this._configureEventsAndInitKidsOnInit)
-            .catch(this._handleInitErrors);
+            // https://stackoverflow.com/questions/34930771/why-is-this-undefined-inside-class-method-when-using-promises?answertab=active#tab-top
+            .then(this._handleViewUpdateOnInit.bind(this))
+            .then(this._configureEventsAndInitKidsOnInit.bind(this))
+            .catch(this._handleInitErrors.bind(this));
     }
 
     /**

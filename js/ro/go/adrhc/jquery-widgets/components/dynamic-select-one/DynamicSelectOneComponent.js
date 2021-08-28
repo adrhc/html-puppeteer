@@ -32,7 +32,7 @@ class DynamicSelectOneComponent extends AbstractComponent {
                     loadOptionsOnInit,
                     childishBehaviour,
                     parentComponent,
-                    config = DynaSelOneConfig.of({
+                    config = new DynaSelOneConfig({
                         elemIdOrJQuery,
                         toEntityConverter,
                         loadOptionsOnInit,

@@ -19,18 +19,19 @@ class SelectableListComponent extends SimpleListComponent {
     swappingRowSelector;
 
     /**
-     * @param {SelectableListOptions=} options
      * @return {SelectableListComponent|Promise<SelectableListComponent>}
      */
-    constructor(options = new SelectableListOptions()) {
-        super(SelectableListOptions.of(options, true));
+    constructor({state, config: {dontAutoInitialize, ...restOfConfig}, ...options}) {
+        super(SelectableListOptions.of({...options, config: {dontAutoInitialize: true, ...restOfConfig}}));
         this.configurePartChangeHandlers({
             handleItemChange: ["CREATE", "REPLACE", "DELETE"],
             handleItemOff: ["OFF"],
             handleItemOn: ["ON"]
         }, "Item");
+        this.state = state ?? new SelectableListState(this);
         this.entityExtractor = new SelectableListEntityExtractor(this);
         this.swappingRowSelector = this._createSwappingRowSelector(options);
+        this.config.dontAutoInitialize = dontAutoInitialize ?? this.config.dontAutoInitialize;
         this._handleAutoInitialization();
     }
 

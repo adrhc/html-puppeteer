@@ -16,7 +16,7 @@ class ContainerComponent extends AbstractComponent {
      */
     constructor(elemIdOrJQuery,
                 {
-                    config = ComponentConfiguration.dataAttributesOf(elemIdOrJQuery, {
+                    config = ComponentConfiguration.configWithDataAttributesOf(elemIdOrJQuery, {
                         updateViewOnce: true,
                         clearChildrenOnReset: true
                     }),

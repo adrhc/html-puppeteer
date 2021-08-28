@@ -4,13 +4,14 @@
  */
 class TaggingStateHolder extends StateHolder {
     /**
-     * @param {undefined|TaggingStateChangeMapper<T|P>} [stateChangeMapper]
-     * @param {{initialState: undefined|T, changesCollector: undefined|StateChangesCollector<T|P>=}} [options]
+     * @param {Object} params
+     * @param {undefined|TaggingStateChangeMapper<T|P>} [params.stateChangeMapper]
+     * @param {{initialState: undefined|T, changesCollector: undefined|StateChangesCollector<T|P>=}} [params.superParams]
      */
-    constructor({stateChangeMapper, options} = {}) {
+    constructor({stateChangeMapper, ...superParams} = {}) {
         super({
             stateChangeMapper: stateChangeMapper ?? new TaggingStateChangeMapper(),
-            ...options
+            ...superParams
         });
     }
 }

@@ -38,8 +38,8 @@ class ComponentConfiguration {
      */
     elemIdOrJQuery;
 
-    constructor(options) {
-        ObjectUtils.copyDeclaredProperties(this, options);
+    constructor(dataAttributes) {
+        ObjectUtils.copyDeclaredProperties(this, dataAttributes);
     }
 
     /**
@@ -49,7 +49,7 @@ class ComponentConfiguration {
      * @param {Object=} firstWinDefaults are applied from left to right (first applied wins)
      * @return {C}
      */
-    static dataAttributesOf(elemIdOrJQuery, ...firstWinDefaults) {
+    static configWithDataAttributesOf(elemIdOrJQuery, ...firstWinDefaults) {
         const defaults = _.defaults({}, DomUtils.dataOf(elemIdOrJQuery), {elemIdOrJQuery}, ...firstWinDefaults);
         ObjectUtils.copyDeclaredProperties(new ComponentConfiguration(), defaults);
     }

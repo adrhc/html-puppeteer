@@ -1,3 +1,6 @@
+
+
+goog.require('selectableList?.simpleListView?');
 class EditableListComponent extends SelectableListComponent {
     static DELETE_ROW_TYPE = "delete";
     static ERROR_ROW_TYPE = "error";
@@ -80,7 +83,7 @@ class EditableListComponent extends SelectableListComponent {
 
     shouldIgnoreOnSwitch(ev) {
         const selectableList = ev.data;
-        const rowDataId = selectableList.simpleListView.rowDataIdOf(ev.currentTarget);
+        const rowDataId = selectableList?.simpleListView?.rowDataIdOf(ev.currentTarget);
         return FailedEntity.isErrorItemId(rowDataId) || super.shouldIgnoreOnSwitch(ev);
     }
 
@@ -90,14 +93,14 @@ class EditableListComponent extends SelectableListComponent {
     }
 
     /**
-     * @param {EditableListOptions=} options
-     * @return {EditableListComponent|Promise<EditableListComponent>}
+     * @return {EditableListComponent}
      */
-    constructor(options = new EditableListOptions()) {
-        super(EditableListOptions.of({...options, true}));
+    constructor({config: {dontAutoInitialize, ...restOfConfig}, ...options}) {
+        super(new EditableListOptions({...options, config: {dontAutoInitialize: true, ...restOfConfig}}));
         if (options.extractedEntityConverterFn) {
             this.selectableListEntityExtractor.entityConverterFn = options.extractedEntityConverterFn;
         }
+        this.config.dontAutoInitialize = dontAutoInitialize ?? this.config.dontAutoInitialize;
         this._handleAutoInitialization();
     }
 

@@ -31,21 +31,11 @@ class AbstractComponentOptions {
      * @type {ComponentConfiguration}
      */
     config;
-    /**
-     * @type {boolean}
-     */
-    forceDontAutoInitialize;
 
     /**
-     * @param {AbstractComponentOptions} options
-     * @param {boolean=} forceDontAutoInitialize
-     * @return {AbstractComponentOptions}
+     * @param {{}=} params
      */
-    constructor(options) {
-        const defaults = _.defaults({}, options, {
-            state: options.state ?? new StateHolder(),
-            config: options.config ?? ComponentConfiguration.dataAttributesOf(options.view?.$elem)
-        });
-        ObjectUtils.copyDeclaredProperties(this, defaults);
+    constructor(params) {
+        _.defaults(this, params);
     }
 }

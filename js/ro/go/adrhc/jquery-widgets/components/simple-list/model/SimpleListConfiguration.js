@@ -14,16 +14,20 @@ class SimpleListConfiguration extends ComponentConfiguration {
     items;
 
     /**
-     * Evaluation order: props, data-* of props?.elemIdOrJQuery, computed dontAutoInitialize
-     *
-     * @param {Object=} props are the programmatically (javascript) passed configuration options
-     * @return {SimpleListConfiguration} which is the component's configuration
+     * @param {{}=} dataAttributes
      */
-    constructor(props) {
-        super(props);
-        return _.defaults(this, DomUtils.dataOf(props?.elemIdOrJQuery), {
-            dontAutoInitialize: AbstractComponent.canConstructChildishBehaviour(
-                props?.childishBehaviour, props?.parentComponent)
-        });
+    constructor(dataAttributes) {
+        super();
+        ObjectUtils.copyDeclaredProperties(this, dataAttributes);
+    }
+
+    /**
+     * This is the computed/runtime value of items.
+     *
+     * @return {[]}
+     */
+    get parsedItems() {
+        const configItems = this.items ?? [];
+        return typeof configItems === "string" ? JSON.parse(configItems) : configItems;
     }
 }

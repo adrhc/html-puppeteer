@@ -6,7 +6,7 @@ class DrawingComponent extends ContainerComponent {
      * @param {DefaultTemplatingView} [view]
      */
     constructor(elemIdOrJQuery,
-                config = ComponentConfiguration.dataAttributesOf(elemIdOrJQuery, {
+                config = ComponentConfiguration.configWithDataAttributesOf(elemIdOrJQuery, {
                     updateViewOnce: false,
                     clearChildrenOnReset: true
                 }),

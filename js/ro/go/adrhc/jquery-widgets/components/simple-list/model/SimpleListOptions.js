@@ -36,19 +36,6 @@ class SimpleListOptions extends AbstractComponentOptions {
     mustacheTableElemAdapter;
 
     /**
-     * @param {{}} options are the programmatically (javascript) passed options
-     * @return {SimpleListOptions} is the options with the defaults applied
-     */
-    constructor(options) {
-        super(options);
-        const simpleListOptions = _.defaults(new SimpleListOptions(), options);
-        simpleListOptions.config = options.config ?? new SimpleListConfiguration(options);
-        simpleListOptions.state = options.state ?? new SimpleListState();
-        simpleListOptions.view = options.view ?? SimpleListView.of(simpleListOptions);
-        return simpleListOptions;
-    }
-
-    /**
      * @return {SimpleListView}
      */
     get simpleListView() {
@@ -90,7 +77,6 @@ class SimpleListOptions extends AbstractComponentOptions {
      * @return {[]}
      */
     get items() {
-        const configItems = this.simpleListConfiguration?.items ?? [];
-        return typeof configItems === "string" ? JSON.parse(configItems) : configItems;
+        return this.simpleListConfiguration.parsedItems;
     }
 }

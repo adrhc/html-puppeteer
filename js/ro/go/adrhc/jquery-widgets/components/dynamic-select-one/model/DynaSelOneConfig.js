@@ -59,17 +59,19 @@ class DynaSelOneConfig extends ComponentConfiguration {
     /**
      * @type {string}
      */
-    tmplUrl = DynaSelOneConfig.DEFAULTS.tmplUrl;
+    tmplUrl;
 
     /**
      * Evaluation order: props, data-* of props.elemIdOrJQuery, DynaSelOneConfig.DEFAULTS
      *
-     * @param {Object=} props are the programmatically (javascript) passed configuration options
+     * @param {Object=} options
      * @return {DynaSelOneConfig}
      */
-    static of(props) {
-        const config = _.defaults(new DynaSelOneConfig(), props,
-            DomUtils.dataOf(props.elemIdOrJQuery), DynaSelOneConfig.DEFAULTS);
+    constructor(options) {
+        super();
+        const dataAttributes = DomUtils.dataOf(options.elemIdOrJQuery);
+        const config = _.defaults({}, options, dataAttributes, DynaSelOneConfig.DEFAULTS);
+        ObjectUtils.copyDeclaredProperties(this, config);
         config.searchOnBlur = config.searchOnBlur ?? config.minCharsToSearch > 0;
         config.loadOptionsOnInit = config.loadOptionsOnInit ?? config.minCharsToSearch === 0;
         return config;

@@ -3,6 +3,17 @@
  */
 class SimpleListView extends MustacheTableBasedView {
     /**
+     * @param {Object} params
+     * @param {MustacheTableElemAdapter=} params.mustacheTableElemAdapter
+     * @param {string=} params.elemIdOrJQuery
+     * @param {SimpleListConfiguration=} params.simpleListConfiguration
+     */
+    constructor({mustacheTableElemAdapter, elemIdOrJQuery, simpleListConfiguration}) {
+        super(mustacheTableElemAdapter ??
+            new MustacheTableElemAdapter(elemIdOrJQuery, simpleListConfiguration));
+    }
+
+    /**
      * @param stateChange {StateChange}
      */
     update(stateChange) {
@@ -10,15 +21,5 @@ class SimpleListView extends MustacheTableBasedView {
         const items = stateChange.stateOrPart.map(it => _.defaults({}, it, {[`${JQueryWidgetsConfig.OWNER_ATTRIBUTE}`]: this.owner}));
         this.mustacheTableElemAdapter.renderBodyWithTemplate({items});
         return Promise.resolve(stateChange);
-    }
-
-    /**
-     * @param {SimpleListOptions} simpleListOptions are the programmatically (javascript) passed options
-     * @return {SimpleListView}
-     */
-    static of(simpleListOptions) {
-        const mustacheTableElemAdapter = simpleListOptions.mustacheTableElemAdapter ??
-            new MustacheTableElemAdapter(simpleListOptions.elemIdOrJQuery, simpleListOptions.config);
-        return new SimpleListView(mustacheTableElemAdapter);
     }
 }

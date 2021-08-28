@@ -1,6 +1,6 @@
 class AjaxUtils {
     /**
-     * @param url {String}
+     * @param url {string}
      * @return {Promise<string>}
      */
 

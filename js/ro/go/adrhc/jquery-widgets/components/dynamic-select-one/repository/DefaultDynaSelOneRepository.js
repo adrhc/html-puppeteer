@@ -25,7 +25,7 @@ class DefaultDynaSelOneRepository extends DynaSelOneRepository {
     }
 
     /**
-     * @param title {String}
+     * @param title {string}
      * @returns {Promise<DynaSelOneItem[]>}
      */
     findByTitle(title) {

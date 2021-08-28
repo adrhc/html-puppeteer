@@ -13,11 +13,10 @@ class EditableListOptions extends SelectableListOptions {
     extractedEntityConverterFn;
 
     /**
-     * @param {{}} options
+     * @param {{}} params
      */
-    constructor(options) {
-        super(options);
-        ObjectUtils.copyDeclaredProperties(this, options)
-        this.state = options.state ?? EditableListState.of(this);
+    constructor(params) {
+        super(params);
+        this.state = params?.state ?? EditableListState.of(this);
     }
 }
