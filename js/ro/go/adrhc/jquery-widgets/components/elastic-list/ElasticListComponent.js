@@ -59,7 +59,7 @@ class ElasticListComponent extends SimpleListComponent {
                     }),
                     items = typeof config.items === "string" ? JSON.parse(config.items) : config.items ?? [],
                     repository = new InMemoryCrudRepository(items),
-                    mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, config),
+                    mustacheTableElemAdapter = new MustacheTableElemAdapter({elemIdOrJQuery, ...config}),
                     newEntityFactoryFn,
                     state = new CrudListState({
                         newEntityFactoryFn,

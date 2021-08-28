@@ -26,7 +26,8 @@ class EditableListFactory {
                       bodyRowTmplId,
                       bodyRowTmplHtml,
                       readOnlyRow,
-                      mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, {
+                      mustacheTableElemAdapter = new MustacheTableElemAdapter({
+                          elemIdOrJQuery,
                           bodyRowTmplId,
                           bodyRowTmplHtml: bodyRowTmplHtml ?? bodyRowTmplId != null ?
                               undefined : readOnlyRow.simpleRowView.tableAdapter.bodyRowTmplHtml

@@ -16,7 +16,7 @@ class SelectableListFactory {
     static create(elemIdOrJQuery, {
         items = [],
         bodyRowTmplId,
-        mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, bodyRowTmplId),
+        mustacheTableElemAdapter = new MustacheTableElemAdapter({elemIdOrJQuery, bodyRowTmplId}),
         repository = new InMemoryCrudRepository(items),
         newItemsGoLast,
         newEntityFactoryFn,

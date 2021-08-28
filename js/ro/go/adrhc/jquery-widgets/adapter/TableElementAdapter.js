@@ -12,21 +12,22 @@ class TableElementAdapter {
     rowPositionOnCreate;
 
     /**
-     * @param {string|jQuery<HTMLTableRowElement>} tableId
-     * @param {string=} rowDataId
-     * @param {string=} rowPositionOnCreate
+     * @param {Object} params
+     * @param {string|jQuery<HTMLTableRowElement>} params.elemIdOrJQuery
+     * @param {string=} params.rowDataId
+     * @param {string=} params.rowPositionOnCreate
      */
-    constructor(tableId,
-                {
+    constructor({
+                    elemIdOrJQuery,
                     rowDataId = "id",
                     rowPositionOnCreate = "prepend"
                 } = {
-                    rowDataId: "id",
-                    rowPositionOnCreate: "prepend"
-                }) {
+        rowDataId: "id",
+        rowPositionOnCreate: "prepend"
+    }) {
         this.rowDataId = rowDataId;
         this.rowPositionOnCreate = rowPositionOnCreate;
-        this._setupElem(tableId);
+        this._setupElem(elemIdOrJQuery);
         this._setupTableId();
         this._setupOwner();
     }

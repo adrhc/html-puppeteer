@@ -18,7 +18,8 @@ class SimpleListConfiguration extends ComponentConfiguration {
      */
     constructor(dataAttributes) {
         super();
-        ObjectUtils.copyDeclaredProperties(this, dataAttributes);
+        // ObjectUtils.copyDeclaredProperties(this, dataAttributes);
+        _.defaults(this, dataAttributes);
     }
 
     /**
@@ -29,5 +30,12 @@ class SimpleListConfiguration extends ComponentConfiguration {
     get parsedItems() {
         const configItems = this.items ?? [];
         return typeof configItems === "string" ? JSON.parse(configItems) : configItems;
+    }
+
+    /**
+     * @return {boolean|undefined} this.simpleListConfiguration?.rowPositionOnCreate === "append"
+     */
+    get newItemsGoLast() {
+        return this.rowPositionOnCreate == null ? undefined : this.rowPositionOnCreate === "append";
     }
 }

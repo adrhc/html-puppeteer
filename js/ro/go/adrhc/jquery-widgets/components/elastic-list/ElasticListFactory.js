@@ -21,7 +21,7 @@ class ElasticListFactory {
         newItemsGoLast,
         newEntityFactoryFn,
         crudListState = new CrudListState({newEntityFactoryFn, newItemsGoLast}),
-        mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, bodyRowTmplId),
+        mustacheTableElemAdapter = new MustacheTableElemAdapter({elemIdOrJQuery, bodyRowTmplId}),
         simpleListView = new SimpleListView(mustacheTableElemAdapter),
         rowChildCompFactories,
         rowChildishBehaviourFactoryFn = (parentComp) => new DefaultChildishBehaviour(parentComp),

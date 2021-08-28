@@ -4,11 +4,11 @@
 <head>
     <title>JavaScript components</title>
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-    <link rel="stylesheet" href="css/ro/go/adrhc/responstable-table.css">
-    <link rel="stylesheet" href="css/library-customizations/responstable-table.css">
-    <link rel="stylesheet" href="css/ro/go/adrhc/util.css">
-    <link rel="stylesheet" href="css/ro/go/adrhc/dyna-sel-one.css">
-    <link rel="stylesheet" href="css/app.css">
+    <link href="css/ro/go/adrhc/responstable-table.css" rel="stylesheet">
+    <link href="css/library-customizations/responstable-table.css" rel="stylesheet">
+    <link href="css/ro/go/adrhc/util.css" rel="stylesheet">
+    <link href="css/ro/go/adrhc/dyna-sel-one.css" rel="stylesheet">
+    <link href="css/app.css" rel="stylesheet">
     <script src="libraries/modernizr-custom.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!--<script src="https://unpkg.com/mustache@latest"></script>-->
@@ -21,11 +21,11 @@
 <body>
 <!-- dogs table with editable row -->
 <div class="dogsTable">
-    <table id="dogsTableWithEdit" class="responstable" data-dont-auto-initialize="true"
-           data-body-row-tmpl-id="readOnlyRowTmpl">
+    <table class="responstable" data-body-row-tmpl-id="readOnlyRowTmpl" data-dont-auto-initialize="true"
+           id="dogsTableWithEdit">
         <thead>
         <tr data-owner="dogsTableWithEdit">
-            <th data-owner="dogsTableWithEdit" data-btn="reload" title="reload">
+            <th data-btn="reload" data-owner="dogsTableWithEdit" title="reload">
                 Dogs with editable row
             </th>
         </tr>
@@ -46,11 +46,11 @@
 
 <!-- dogsTableWithDelete -->
 <div class="dogsTable">
-    <table id="dogsTableWithDelete" class="responstable"
-        data-body-row-tmpl-id="readOnlyRowTmpl">
+    <table class="responstable" data-body-row-tmpl-id="readOnlyRowTmpl"
+           id="dogsTableWithDelete">
         <thead>
         <tr>
-            <th data-owner="dogsTableWithDelete" data-btn="reload" title="reload">
+            <th data-btn="reload" data-owner="dogsTableWithDelete" title="reload">
                 Dogs with deleted row
             </th>
         </tr>
@@ -59,9 +59,9 @@
 </div>
 
 <template id="dogsTableWithDeleteSpecialRowTmpl">
-    <tr data-owner="dogsTableWithDelete" data-id="{{id}}" class="special-row">
+    <tr class="special-row" data-id="{{id}}" data-owner="dogsTableWithDelete">
         <td>
-            <input type="hidden" name="id" value="{{id}}">
+            <input name="id" type="hidden" value="{{id}}">
             {{name}}
         </td>
     </tr>
@@ -69,9 +69,9 @@
 
 <!-- common read-only row -->
 <template id="readOnlyRowTmpl">
-    <tr data-owner="{{owner}}" data-id="{{id}}">
+    <tr data-id="{{id}}" data-owner="{{owner}}">
         <td>
-            <input type="hidden" name="id" value="{{id}}">
+            <input name="id" type="hidden" value="{{id}}">
             {{name}}
         </td>
     </tr>

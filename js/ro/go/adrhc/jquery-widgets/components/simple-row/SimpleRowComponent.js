@@ -35,7 +35,8 @@ class SimpleRowComponent extends AbstractComponent {
                     rowPositionOnCreate,
                     childProperty,
                     clearChildrenOnReset,
-                    config = RowConfiguration.of(elemIdOrJQuery, {
+                    config = new RowConfiguration({
+                        elemIdOrJQuery,
                         bodyRowTmplId,
                         bodyRowTmplHtml,
                         bodyTmplHtml,
@@ -44,7 +45,7 @@ class SimpleRowComponent extends AbstractComponent {
                         childProperty,
                         clearChildrenOnReset: clearChildrenOnReset == null ? true : clearChildrenOnReset
                     }),
-                    mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, config),
+                    mustacheTableElemAdapter = new MustacheTableElemAdapter({elemIdOrJQuery, ...config}),
                     view = new SimpleRowView(mustacheTableElemAdapter),
                     initialState,
                     state = new TaggingStateHolder({initialState}),
@@ -115,8 +116,8 @@ class SimpleRowComponent extends AbstractComponent {
         this.reset();
         this.state.replaceEntirely(stateChange.stateOrPart, {dontRecordStateEvents: true});
         return super.updateViewOnAny(stateChange)
-            .then(this._configureEventsAndInitKidsOnInit)
-            .catch(this._handleInitErrors);
+            .then(this._configureEventsAndInitKidsOnInit.bind(this))
+            .catch(this._handleInitErrors.bind(this));
     }
 
     /**

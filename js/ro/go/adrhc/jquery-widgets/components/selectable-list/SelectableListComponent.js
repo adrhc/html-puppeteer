@@ -72,7 +72,7 @@ class SelectableListComponent extends SimpleListComponent {
      */
     _identifiableRowComponentFromRowElem($rowTmplElem) {
         const bodyRowTmplHtml = DomUtils.htmlIncludingSelfOf($rowTmplElem);
-        const config = RowConfiguration.of(this.config.elemIdOrJQuery, {bodyRowTmplHtml});
+        const config = new RowConfiguration({elemIdOrJQuery: this.config.elemIdOrJQuery, bodyRowTmplHtml});
         return new IdentifiableRowComponent({
             elemIdOrJQuery: this.config.elemIdOrJQuery,
             config

@@ -13,8 +13,6 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * see also SimpleListOptions
      */
     constructor({
-                    elemIdOrJQuery,
-                    items,
                     state,
                     view,
                     config: {
@@ -23,13 +21,15 @@ class SimpleListComponent extends AbstractTableBasedComponent {
                     } = {},
                     ...options
                 }) {
-        super({state, view, config: {elemIdOrJQuery, items, dontAutoInitialize: true, ...restOfConfig}, ...options});
+        super({state, view, config: {dontAutoInitialize: true, ...restOfConfig}, ...options});
         this.config = new SimpleListConfiguration(this.config);
-        const simpleListOptions = new SimpleListOptions({...options, ...this});
         this.state = state ?? new SimpleListState();
-        this.view = view ?? new SimpleListView({elemIdOrJQuery, ...this});
+        this.view = view ?? new SimpleListView({
+            mustacheTableElemAdapter: this.mustacheTableElemAdapter,
+            simpleListConfiguration: this.config
+        });
         this.handleWithAny(["CREATE", "REPLACE", "DELETE"])
-        this.repository = options.repository ?? new InMemoryCrudRepository(this.simpleListConfiguration.parsedItems);
+        this.repository = options.repository ?? new InMemoryCrudRepository(this.config.parsedItems);
         this.config.dontAutoInitialize = dontAutoInitialize ?? this.config.dontAutoInitialize;
         this._handleAutoInitialization();
     }
@@ -56,7 +56,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      */
     _handleReload() {
         this.reset();
-        return this.init().then(this._handleSuccessfulReload);
+        return this.init().then(this._handleSuccessfulReload.bind(this));
     }
 
     /**
@@ -92,13 +92,6 @@ class SimpleListComponent extends AbstractTableBasedComponent {
                 this.simpleListState.updateAll(items);
                 return items;
             });
-    }
-
-    /**
-     * @return {SimpleListConfiguration}
-     */
-    get simpleListConfiguration() {
-        return this.config
     }
 
     /**

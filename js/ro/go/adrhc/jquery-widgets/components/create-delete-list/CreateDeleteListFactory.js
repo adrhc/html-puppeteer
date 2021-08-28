@@ -24,7 +24,7 @@ class CreateDeleteListFactory {
         crudListState = new CrudListState({newEntityFactoryFn, newItemsGoLast}),
         bodyRowTmplId,
         bodyRowTmplHtml,
-        mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, bodyRowTmplId, bodyRowTmplHtml),
+        mustacheTableElemAdapter = new MustacheTableElemAdapter({elemIdOrJQuery, bodyRowTmplId, bodyRowTmplHtml}),
         simpleListView = new SimpleListView(mustacheTableElemAdapter),
         rowChildCompFactories,
         rowChildishBehaviourFactoryFn = (parentComp) => new DefaultChildishBehaviour(parentComp),

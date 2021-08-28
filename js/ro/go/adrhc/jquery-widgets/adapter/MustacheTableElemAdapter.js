@@ -9,8 +9,8 @@ class MustacheTableElemAdapter extends TableElementAdapter {
      * @param {string|jQuery<HTMLTableRowElement>} tableId
      * @param options
      */
-    constructor(tableId, options = new MustacheTableElemAdapterOptions()) {
-        super(tableId, options);
+    constructor(options = new MustacheTableElemAdapterOptions()) {
+        super(options);
         this._setupBodyRowTmplHtml(options.bodyRowTmplId, options.bodyRowTmplHtml);
         this._setupBodyTmplHtml(options.bodyTmplHtml);
     }
@@ -23,7 +23,7 @@ class MustacheTableElemAdapter extends TableElementAdapter {
      * @protected
      */
     _setupBodyRowTmplHtml(bodyRowTmplId, bodyRowTmplHtml) {
-        bodyRowTmplId = !!bodyRowTmplId ? bodyRowTmplId : `${this.tableId}RowTmpl`;
+        bodyRowTmplId = bodyRowTmplId ?? `${this.tableId}RowTmpl`;
         if (bodyRowTmplHtml) {
             this.bodyRowTmplHtml = bodyRowTmplHtml;
         } else if ($(`#${bodyRowTmplId}`).length) {

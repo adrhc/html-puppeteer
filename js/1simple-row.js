@@ -30,6 +30,7 @@ function createDogsWithDeleteRow(initialData) {
 $(() => {
     const simpleListComponent = new SimpleListComponent({
         elemIdOrJQuery: dogsTableWithEdit,
+        bodyRowTmplId: "readOnlyRowTmpl",
         items: DbMocks.dogsOf(3),
     });
     simpleListComponent.init().then(stateChanges => {
@@ -101,8 +102,9 @@ $(() => {
     });
 
     // dogs table with deleted row
-    new SimpleListComponent({
+    /*new SimpleListComponent({
         elemIdOrJQuery: dogsTableWithDelete,
+        bodyRowTmplId: "readOnlyRowTmpl",
         items: DbMocks.dogsOf(3)
     }).then(stateChanges => {
         const items = stateChanges[0].stateOrPart;
@@ -116,6 +118,6 @@ $(() => {
             })
             // rendering the "delete" representation
             .then(() => rowId0.update(new EntityRow(item0, {index: 1})))
-    });
+    });*/
 
 });

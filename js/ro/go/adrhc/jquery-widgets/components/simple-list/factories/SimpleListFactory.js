@@ -16,7 +16,7 @@ class SimpleListFactory {
         items = [],
         bodyRowTmplId,
         bodyRowTmplHtml,
-        mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, bodyRowTmplId, bodyRowTmplHtml),
+        mustacheTableElemAdapter = new MustacheTableElemAdapter({elemIdOrJQuery, bodyRowTmplId, bodyRowTmplHtml}),
         repository = new InMemoryCrudRepository(items),
         state = new SimpleListState({}),
         view = new SimpleListView(mustacheTableElemAdapter),

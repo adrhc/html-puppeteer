@@ -29,17 +29,17 @@ class IdentifiableRowComponent extends SimpleRowComponent {
                     rowPositionOnCreate,
                     childProperty,
                     clearChildrenOnReset,
-                    config = RowConfiguration.of(
-                        elemIdOrJQuery, {
-                            bodyRowTmplId,
-                            bodyRowTmplHtml,
-                            bodyTmplHtml,
-                            rowDataId,
-                            rowPositionOnCreate,
-                            childProperty,
-                            clearChildrenOnReset,
-                        }),
-                    mustacheTableElemAdapter = new MustacheTableElemAdapter(elemIdOrJQuery, config),
+                    config = new RowConfiguration({
+                        elemIdOrJQuery,
+                        bodyRowTmplId,
+                        bodyRowTmplHtml,
+                        bodyTmplHtml,
+                        rowDataId,
+                        rowPositionOnCreate,
+                        childProperty,
+                        clearChildrenOnReset,
+                    }),
+                    mustacheTableElemAdapter = new MustacheTableElemAdapter({elemIdOrJQuery, config}),
                     view = new SimpleRowView(mustacheTableElemAdapter),
                     initialState,
                     state = new TaggingStateHolder({initialState}),
@@ -61,14 +61,14 @@ class IdentifiableRowComponent extends SimpleRowComponent {
         });
     }
 
-    updateViewOnDELETE(stateChange) {
-        this._removeSecondaryRowParts(stateChange.previousStateOrPart?.entity.id);
-        return super.updateViewOnDELETE(stateChange);
-    }
-
     updateViewOnAny(stateChange) {
         this._removeSecondaryRowParts(stateChange.stateOrPart.entity.id);
         return super.updateViewOnAny(stateChange);
+    }
+
+    updateViewOnDELETE(stateChange) {
+        this._removeSecondaryRowParts(stateChange.previousStateOrPart?.entity.id);
+        return super.updateViewOnDELETE(stateChange);
     }
 
     _removeSecondaryRowParts(rowId) {

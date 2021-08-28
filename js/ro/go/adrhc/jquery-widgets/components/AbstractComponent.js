@@ -3,9 +3,7 @@
  */
 class AbstractComponent {
     /**
-     * component's configuration
-     *
-     * @type {ComponentConfiguration}
+     * @type {{}}
      */
     config;
     /**
@@ -44,20 +42,22 @@ class AbstractComponent {
     autoInitializationResult;
 
     /**
-     * @param {{} | AbstractComponentOptions} options
+     * @param {{}} options could contain both behaviour and layout specifications
      */
     constructor(options) {
-        this.config = options.config ?? _.defaults({...options.config},
+        // options used as layout specifications
+        this.config = _.defaults({...options.config}, {...options},
             DomUtils.dataOf(options.view?.$elem), DomUtils.dataOf(options.config.elemIdOrJQuery));
         this.state = options.state ?? new StateHolder();
         this.view = options.view;
-        this.config = options.config;
         this.stateChangesDispatcher = new StateChangesDispatcher(this);
         this.entityExtractor = new DefaultEntityExtractor(this);
         this._setupCompositeBehaviour(options.compositeBehaviour, options.childCompFactories);
         this._setupChildishBehaviour(options);
         this.config.dontAutoInitialize = this.config.dontAutoInitialize ?? AbstractComponent
             .canConstructChildishBehaviour(this.childishBehaviour, options.parentComponent);
+        // options used as behaviour specifications
+        _.defaults(this, {...options});
         this._handleAutoInitialization();
     }
 

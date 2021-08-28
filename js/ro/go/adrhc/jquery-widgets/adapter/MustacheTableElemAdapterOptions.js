@@ -1,5 +1,9 @@
 class MustacheTableElemAdapterOptions {
     /**
+     * @type {string}
+     */
+    elemIdOrJQuery;
+    /**
      * the id of the <template> for a single row
      *
      * @type {string}
