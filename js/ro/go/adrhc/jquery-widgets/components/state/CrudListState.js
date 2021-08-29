@@ -160,6 +160,9 @@ class CrudListState extends SimpleListState {
                 ArrayUtils.insert(entityRow, entityRow.index, this.items);
             }
             this._updatePositioningProperties(entityRow);
+        } else {
+            AssertionUtils.isTrue(typeof entityRow.append === "boolean",
+                `No positioning properties provided!\n${JSON.stringify(entityRow)}`)
         }
         AssertionUtils.isTrue(PositionUtils.arePositioningPropertiesValid(entityRow),
             `Inconsistent positioning properties!\n${JSON.stringify(entityRow)}`);
@@ -171,7 +174,8 @@ class CrudListState extends SimpleListState {
      */
     _updatePositioningProperties(entityRow) {
         const index = this.findIndexById(entityRow.entity.id);
-        AssertionUtils.isTrue(entityRow.index === index, `Bad index!\n${JSON.stringify(entityRow)}`);
+        AssertionUtils.isTrue(entityRow.index === index,
+            `Bad positioning index!\n${JSON.stringify(entityRow)}`);
         if (index === 0) {
             entityRow.append = false;
         } else if (index === this.items.length - 1) {
