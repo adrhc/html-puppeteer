@@ -213,19 +213,19 @@ class EditableListComponent extends SelectableListComponent {
         console.log(`${this.constructor.name}._handleUpdateSuccessful, savedEntity:\n${JSON.stringify(savedEntity)}`);
         return this.doWithState(() => {
             this.editableListState.switchToOff();
-            this.editableListState.createOrUpdate(savedEntity, {previousItemId});
+            this.editableListState.createOrUpdate(savedEntity, previousItemId);
         });
     }
 
     /**
      * @param {SimpleError} simpleError
-     * @param {number|string} failedId is the id before getting an error (e.g. IdentifiableEntity.TRANSIENT_ID)
+     * @param {number|string} failedItemId is the id before getting an error (e.g. IdentifiableEntity.TRANSIENT_ID)
      * @protected
      */
-    _handleUpdateError(simpleError, failedId) {
+    _handleUpdateError(simpleError, failedItemId) {
         console.error(`${this.constructor.name}._handleUpdateError, savedEntity:\n${JSON.stringify(simpleError)}`);
         return this.doWithState(() => {
-            this.editableListState.createErrorItem(simpleError, failedId);
+            this.editableListState.createErrorItem(simpleError, failedItemId);
         })
     }
 

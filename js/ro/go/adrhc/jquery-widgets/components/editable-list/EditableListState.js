@@ -11,12 +11,12 @@ class EditableListState extends SelectableListState {
 
     /**
      * @param {SimpleError} simpleError
-     * @param {number|string} failedId is the id before getting an error (e.g. IdentifiableEntity.TRANSIENT_ID)
+     * @param {number|string} failedItemId is the id before getting an error (e.g. IdentifiableEntity.TRANSIENT_ID)
      * @return {TaggedStateChange<EntityRow<IdentifiableEntity>>}
      */
-    createErrorItem(simpleError, failedId) {
-        const errorEntity = FailedEntity.of(simpleError, failedId);
-        return this.createOrUpdate(errorEntity, {beforeRowId: errorEntity.failedId});
+    createErrorItem(simpleError, failedItemId) {
+        const errorEntity = FailedEntity.of(simpleError, failedItemId);
+        return this.createOrUpdate(errorEntity, undefined, {beforeRowId: errorEntity.failedItemId});
     }
 
     /**

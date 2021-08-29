@@ -46,4 +46,12 @@ class PositionUtils {
     static copyPositioningProperties(positioningProperties, target) {
         PositionUtils.POSITIONING_PROPERTIES.forEach(it => target[it] = positioningProperties?.[it]);
     }
+
+    /**
+     * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: (boolean|undefined)}} positioningProperties
+     * @return boolean
+     */
+    static areAllPositioningPropertiesEmpty(positioningProperties = {}) {
+        return !PositionUtils.POSITIONING_PROPERTIES.find(p => positioningProperties[p] != null);
+    }
 }

@@ -56,30 +56,30 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @param {TItem} newRowValues
+     * @param {TItem} entityRow
      * @param {number} previousIndex
      * @return {TItem} previous state part
      * @protected
      */
-    _replacePartImpl(newRowValues, previousIndex) {
+    _replacePartImpl(entityRow, previousIndex) {
         const oldRowValues = this.getStatePart(previousIndex);
         if (oldRowValues == null) {
-            if (newRowValues == null) {
+            if (entityRow == null) {
                 console.warn("both old and new items are null, nothing else to do");
                 return oldRowValues;
             }
             // old item doesn't exists, inserting the new one
-            this._insertEntityRow(newRowValues);
-        } else if (newRowValues == null) {
+            this._insertEntityRow(entityRow);
+        } else if (entityRow == null) {
             // old item exists but the new one is null (i.e. old is deleted)
             ArrayUtils.removeByIndex(previousIndex, this.items);
-        } else if (newRowValues.index === previousIndex) {
+        } else if (entityRow.index === previousIndex) {
             // the index is the same, only changing the value at that index
-            this.items[previousIndex] = newRowValues;
+            this.items[previousIndex] = entityRow;
         } else {
             // both item's value and index changed
             ArrayUtils.removeByIndex(previousIndex, this.items);
-            this._insertEntityRow(newRowValues);
+            this._insertEntityRow(entityRow);
         }
         return oldRowValues;
     }
@@ -137,6 +137,8 @@ class CrudListState extends SimpleListState {
     }
 
     /**
+     * Priority when adding to items: index, beforeRowId, afterRowId, append
+     *
      * @param {TItem} entityRow
      * @protected
      */
@@ -147,6 +149,7 @@ class CrudListState extends SimpleListState {
             } else {
                 ArrayUtils.insert(entityRow, entityRow.index, this.items);
             }
+            this._updatePositioningProperties(entityRow);
         } else if (entityRow.beforeRowId != null) {
             const index = this.findIndexById(entityRow.beforeRowId);
             ArrayUtils.insert(entityRow, index, this.items);
@@ -158,7 +161,8 @@ class CrudListState extends SimpleListState {
         } else {
             ArrayUtils.insert(entityRow, 0, this.items);
         }
-        this._updatePositioningProperties(entityRow);
+        AssertionUtils.isTrue(PositionUtils.arePositioningPropertiesValid(entityRow),
+            `Inconsistent positioning properties!\n${JSON.stringify(entityRow)}`);
     }
 
     /**
@@ -167,9 +171,7 @@ class CrudListState extends SimpleListState {
      */
     _updatePositioningProperties(entityRow) {
         const index = this.findIndexById(entityRow.entity.id);
-        AssertionUtils.isTrue(entityRow.index == null
-            || entityRow.index === PositionUtils.LAST_ELEMENT_INDEX || entityRow.index === index,
-            `Bad index!\n${JSON.stringify(entityRow)}`);
+        AssertionUtils.isTrue(entityRow.index === index, `Bad index!\n${JSON.stringify(entityRow)}`);
         if (index === 0) {
             entityRow.append = false;
         } else if (index === this.items.length - 1) {
@@ -179,8 +181,6 @@ class CrudListState extends SimpleListState {
             entityRow.beforeRowId = theJustAfterItem.entity.id;
         }
         entityRow.index = index;
-        AssertionUtils.isTrue(PositionUtils.arePositioningPropertiesValid(entityRow),
-            `Inconsistent positioning properties!\n${JSON.stringify(entityRow)}`);
     }
 
     /**
@@ -192,16 +192,24 @@ class CrudListState extends SimpleListState {
      * Provide createOptions if wanting to change item's position or wanting to provide previousItemId.
      *
      * @param {IdentifiableEntity<E>} item
-     * @param {{previousItemId?: number|string, index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}=} createOptions
+     * @param {number|string=} previousItemId
+     * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}=} createOptions
      * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}=} updateOptions
      * @return {TaggedStateChange<TItem>}
      */
-    createOrUpdate(item, createOptions = {}, updateOptions) {
-        if (createOptions.previousItemId != null && !EntityUtils.idsAreEqual(item.id, createOptions.previousItemId)) {
+    createOrUpdate(item, previousItemId, createOptions, updateOptions) {
+        if (previousItemId != null && !EntityUtils.idsAreEqual(item.id, previousItemId)) {
             // item acquired a new id, removing the previous version having options.previousItemId
-            this.removeById(createOptions.previousItemId);
+            const stateChange = this.removeById(previousItemId);
+            // by default keeping the previous index for the item that changed its id
+            if (createOptions) {
+                createOptions = createOptions ?? {};
+                createOptions.index = createOptions.index ?? stateChange.partName;
+            }
         }
         if (this.findById(item.id)) {
+            AssertionUtils.isTrue(previousItemId == null,
+                `Item changed its id but the new allocated id is already used!\n${JSON.stringify(item)}`);
             return this.updateItem(item, updateOptions);
         } else {
             return this.createNewItem(item, createOptions)
@@ -210,6 +218,7 @@ class CrudListState extends SimpleListState {
 
     /**
      * Insert the provided item (unique by id) into this.items.
+     * Use this.append as the default positioning approach.
      *
      * @param {IdentifiableEntity<E>} identifiableEntity
      * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}} options
@@ -218,7 +227,7 @@ class CrudListState extends SimpleListState {
     insertItem(identifiableEntity, options = {}) {
         AssertionUtils.isFalse(identifiableEntity.id != null && !!this.findById(identifiableEntity.id),
             `Can't insert duplicated item (id = ${identifiableEntity.id})!`);
-        options.append = options.append ?? this.append;
+        options.append = PositionUtils.areAllPositioningPropertiesEmpty() ? this.append : options.append;
         return this.replacePart(new EntityRow(identifiableEntity, options));
     }
 
@@ -239,6 +248,7 @@ class CrudListState extends SimpleListState {
 
     /**
      * Update the item having item.id changing its position with options.
+     * Use current item's index as the default positioning approach.
      *
      * @param {IdentifiableEntity<E>} item
      * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: boolean}} options
@@ -249,7 +259,7 @@ class CrudListState extends SimpleListState {
         AssertionUtils.isTrue(currentIndex !== -1, `Can't update missing item (id = ${item.id})!`);
         // when options.index is missing than the other positioning properties
         // must be valid otherwise keep the previous position (i.e. currentIndex)
-        options.index = options.index ?? (PositionUtils.areAllButIndexValid(options) ? undefined : currentIndex);
+        options.index = PositionUtils.areAllPositioningPropertiesEmpty() ? currentIndex : options.index;
         return this.replacePart(new EntityRow(item, options), currentIndex);
     }
 
