@@ -137,20 +137,13 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * Priority when adding to items: index, beforeRowId, afterRowId, append
+     * Priority when adding to items: beforeRowId, afterRowId, append (boolean but not null), index
      *
      * @param {TItem} entityRow
      * @protected
      */
     _insertEntityRow(entityRow) {
-        if (entityRow.index != null) {
-            if (entityRow.index === PositionUtils.LAST_ELEMENT_INDEX) {
-                this.items.push(entityRow);
-            } else {
-                ArrayUtils.insert(entityRow, entityRow.index, this.items);
-            }
-            this._updatePositioningProperties(entityRow);
-        } else if (entityRow.beforeRowId != null) {
+        if (entityRow.beforeRowId != null) {
             const index = this.findIndexById(entityRow.beforeRowId);
             ArrayUtils.insert(entityRow, index, this.items);
         } else if (entityRow.afterRowId != null) {
@@ -158,8 +151,15 @@ class CrudListState extends SimpleListState {
             ArrayUtils.insert(entityRow, index + 1, this.items);
         } else if (entityRow.append) {
             this.items.push(entityRow);
-        } else {
+        } else if (entityRow.append === false) {
             ArrayUtils.insert(entityRow, 0, this.items);
+        } else if (entityRow.index != null) {
+            if (entityRow.index === PositionUtils.LAST_ELEMENT_INDEX) {
+                this.items.push(entityRow);
+            } else {
+                ArrayUtils.insert(entityRow, entityRow.index, this.items);
+            }
+            this._updatePositioningProperties(entityRow);
         }
         AssertionUtils.isTrue(PositionUtils.arePositioningPropertiesValid(entityRow),
             `Inconsistent positioning properties!\n${JSON.stringify(entityRow)}`);
