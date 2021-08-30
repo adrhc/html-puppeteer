@@ -8,6 +8,16 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @type {CrudRepository}
      */
     repository;
+    /**
+     * @type {"prepend"|"append"|undefined}
+     */
+    rowPositionOnCreate;
+    /**
+     * items formatted as JSON
+     *
+     * @type {string|string[]|undefined}
+     */
+    items;
 
     /**
      * see also SimpleListOptions
