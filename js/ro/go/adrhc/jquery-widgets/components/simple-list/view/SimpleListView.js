@@ -4,11 +4,11 @@
 class SimpleListView extends MustacheTableBasedView {
     /**
      * @param {Object} params
-     * @param {MustacheTableElemAdapter=} params.mustacheTableElemAdapter
-     * @param {SimpleListConfiguration=} params.simpleListConfiguration
+     * @param {MustacheTableElemAdapter=} [params.mustacheTableElemAdapter]
+     * @param {{}=} params.restOfOptions
      */
-    constructor({mustacheTableElemAdapter, simpleListConfiguration}) {
-        super(mustacheTableElemAdapter ?? new MustacheTableElemAdapter(simpleListConfiguration));
+    constructor({mustacheTableElemAdapter, ...restOfOptions}) {
+        super(mustacheTableElemAdapter ?? new MustacheTableElemAdapter(restOfOptions));
     }
 
     /**

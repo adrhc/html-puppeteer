@@ -15,22 +15,15 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     constructor({
                     state,
                     view,
-                    config: {
-                        dontAutoInitialize,
-                        ...restOfConfig
-                    } = {},
-                    ...options
+                    dontAutoInitialize,
+                    ...restOfOptions
                 }) {
-        super({state, view, config: {dontAutoInitialize: true, ...restOfConfig}, ...options});
-        this.config = new SimpleListConfiguration(this.config);
+        super({state, view, dontAutoInitialize: true, ...restOfOptions});
         this.state = state ?? new SimpleListState();
-        this.view = view ?? new SimpleListView({
-            mustacheTableElemAdapter: this.mustacheTableElemAdapter,
-            simpleListConfiguration: this.config
-        });
+        this.view = view ?? new SimpleListView(this);
         this.handleWithAny(["CREATE", "REPLACE", "DELETE"])
-        this.repository = options.repository ?? new InMemoryCrudRepository(this.config.parsedItems);
-        this.config.dontAutoInitialize = dontAutoInitialize ?? this.config.dontAutoInitialize;
+        this.repository = this.repository ?? new InMemoryCrudRepository(this.parsedItems);
+        this.dontAutoInitialize = dontAutoInitialize ?? this.view.booleanData("dontAutoInitialize");
         this._handleAutoInitialization();
     }
 
@@ -92,6 +85,23 @@ class SimpleListComponent extends AbstractTableBasedComponent {
                 this.simpleListState.replaceAll(items);
                 return items;
             });
+    }
+
+    /**
+     * This is the computed/runtime value of items.
+     *
+     * @return {[]}
+     */
+    get parsedItems() {
+        const configItems = this.items ?? [];
+        return typeof configItems === "string" ? JSON.parse(configItems) : configItems;
+    }
+
+    /**
+     * @return {boolean|undefined} this.simpleListConfiguration?.rowPositionOnCreate === "append"
+     */
+    get newItemsGoLast() {
+        return this.rowPositionOnCreate == null ? undefined : this.rowPositionOnCreate === "append";
     }
 
     /**

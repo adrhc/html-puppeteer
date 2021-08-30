@@ -5,18 +5,6 @@
  */
 class AbstractView {
     /**
-     * @type {jQuery<HTMLElement>}
-     * @protected
-     */
-    _$elem;
-
-    /**
-     * @type {string}
-     * @protected
-     */
-    _owner;
-
-    /**
      * @param elemIdOrJQuery {string|jQuery<HTMLTableRowElement>}
      * @protected
      */
@@ -63,18 +51,33 @@ class AbstractView {
     }
 
     /**
+     * @param {string} name is the HTML data attribute name
      * @return {string}
      */
-    get owner() {
-        return this._owner;
+    data(name) {
+        return this.$elem?.data(name);
+    }
+
+    booleanData() {
+        const value = this.$elem?.data(name);
+        return value === "true" ? true : (value === "false" ? false : undefined);
     }
 
     /**
-     * @param owner {string}
+     * owner and $elem are something like a configuration so should not be reset
+     *
+     * owner and $elem: if any would be changed then the new value would be
+     * used while there's no loss if the previous value is simply overwritten
      */
-    set owner(owner) {
-        this._owner = owner;
+    reset() {
+        // do nothing
     }
+
+    /**
+     * @type {jQuery<HTMLElement>}
+     * @protected
+     */
+    _$elem;
 
     /**
      * @return {jQuery<HTMLElement>}
@@ -91,20 +94,30 @@ class AbstractView {
     }
 
     /**
+     * @type {string}
+     * @protected
+     */
+    _owner;
+
+    /**
+     * @return {string}
+     */
+    get owner() {
+        return this._owner;
+    }
+
+    /**
+     * @param owner {string}
+     */
+    set owner(owner) {
+        this._owner = owner;
+    }
+
+    /**
      * @returns {string}
      * @protected
      */
     get eventsNamespace() {
         return `.${this.constructor.name}.${this.owner}`;
-    }
-
-    /**
-     * owner and $elem are something like a configuration so should not be reset
-     *
-     * owner and $elem: if any would be changed then the new value would be
-     * used while there's no loss if the previous value is simply overwritten
-     */
-    reset() {
-        // do nothing
     }
 }

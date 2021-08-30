@@ -3,10 +3,6 @@
  */
 class AbstractComponent {
     /**
-     * @type {{}}
-     */
-    config;
-    /**
      * @type {{skipOwnViewUpdates: boolean}}
      */
     runtimeConfig = {};
@@ -46,18 +42,15 @@ class AbstractComponent {
      */
     constructor(options) {
         // options used as layout specifications
-        this.config = _.defaults({...options.config}, {...options},
-            DomUtils.dataOf(options.view?.$elem), DomUtils.dataOf(options.config.elemIdOrJQuery));
-        this.state = options.state ?? new StateHolder();
-        this.view = options.view;
-        this.stateChangesDispatcher = new StateChangesDispatcher(this);
-        this.entityExtractor = new DefaultEntityExtractor(this);
-        this._setupCompositeBehaviour(options.compositeBehaviour, options.childCompFactories);
-        this._setupChildishBehaviour(options);
-        this.config.dontAutoInitialize = this.config.dontAutoInitialize ?? AbstractComponent
-            .canConstructChildishBehaviour(this.childishBehaviour, options.parentComponent);
-        // options used as behaviour specifications
-        _.defaults(this, {...options});
+        _.defaults(this, {...options}, DomUtils.dataOf(options.view?.$elem),
+            DomUtils.dataOf(options.elemIdOrJQuery));
+        this.state = this.state ?? new StateHolder();
+        this.stateChangesDispatcher = this.stateChangesDispatcher ?? new StateChangesDispatcher(this);
+        this.entityExtractor = this.entityExtractor ?? new DefaultEntityExtractor(this);
+        this._setupCompositeBehaviour();
+        this._setupChildishBehaviour();
+        this.dontAutoInitialize = this.dontAutoInitialize ?? AbstractComponent
+            .canConstructChildishBehaviour(this.childishBehaviour, this.parentComponent);
         this._handleAutoInitialization();
     }
 
@@ -71,35 +64,25 @@ class AbstractComponent {
     }
 
     /**
-     * @param {ChildishBehaviour=} childishBehaviour
-     * @param {AbstractComponent=} parentComponent
-     * @param {string|number} [childProperty]
      * @protected
      */
-    _setupChildishBehaviour({
-                                childishBehaviour,
-                                parentComponent,
-                                childProperty = this.config.childProperty
-                            }) {
-        if (!AbstractComponent.canConstructChildishBehaviour(childishBehaviour, parentComponent)) {
+    _setupChildishBehaviour() {
+        if (!AbstractComponent.canConstructChildishBehaviour(this.childishBehaviour, this.parentComponent)) {
             console.log(`${this.constructor.name} no childish behaviour`);
             return;
         }
-        childishBehaviour = childishBehaviour ?? new DefaultChildishBehaviour(parentComponent, {childProperty})
-        childishBehaviour.childComp = this;
-        this.childishBehaviour = childishBehaviour;
+        this.childishBehaviour = childishBehaviour ?? new DefaultChildishBehaviour(this.parentComponent, {childProperty: this.childProperty})
+        this.childishBehaviour.childComp = this;
     }
 
     /**
      * @typedef {function(parentComp: AbstractComponent): AbstractComponent} childCompFactoryFn
-     * @param {CompositeBehaviour} compositeBehaviour
-     * @param {childCompFactoryFn|Array<childCompFactoryFn>|ChildComponentFactory|ChildComponentFactory[]} [childCompFactories]
      * @protected
      */
-    _setupCompositeBehaviour(compositeBehaviour, childCompFactories) {
-        this.compositeBehaviour = compositeBehaviour ?? new CompositeBehaviour(this);
-        if (childCompFactories) {
-            this.compositeBehaviour.addChildComponentFactory(childCompFactories);
+    _setupCompositeBehaviour() {
+        this.compositeBehaviour = this.compositeBehaviour ?? new CompositeBehaviour(this);
+        if (this.childCompFactories) {
+            this.compositeBehaviour.addChildComponentFactory(this.childCompFactories);
         }
     }
 
@@ -107,7 +90,7 @@ class AbstractComponent {
      * @protected
      */
     _handleAutoInitialization() {
-        if (!this.config.dontAutoInitialize) {
+        if (!this.dontAutoInitialize) {
             this.autoInitializationResult = this.init();
         }
     }
@@ -206,7 +189,7 @@ class AbstractComponent {
         return this.view
             .update(stateChange)
             .then(() => {
-                if (this.config.updateViewOnce) {
+                if (this.updateViewOnce) {
                     this.runtimeConfig.skipOwnViewUpdates = true;
                 }
                 return this.compositeBehaviour.processStateChangeWithKids(stateChange);
@@ -264,8 +247,8 @@ class AbstractComponent {
     }
 
     _handleInitErrors(err) {
-        console.error(`${this.constructor.name}.init, dontConfigEventsOnError = ${this.config.dontConfigEventsOnError}, error:\n`, err);
-        if (!this.config.dontConfigEventsOnError) {
+        console.error(`${this.constructor.name}.init, dontConfigEventsOnError = ${this.dontConfigEventsOnError}, error:\n`, err);
+        if (!this.dontConfigEventsOnError) {
             // jqXHR is missing finally, so, if we would need to _configureEvents
             // on errors too, we would have to use catch anyway
             this._configureEvents();
@@ -336,7 +319,7 @@ class AbstractComponent {
      * brings the component to the state existing at its creation
      */
     reset() {
-        this.compositeBehaviour.reset(this.config.clearChildrenOnReset);
+        this.compositeBehaviour.reset(this.clearChildrenOnReset);
         if (this.view.$elem) {
             this.view.$elem.off();
         }
