@@ -22,10 +22,10 @@
 <!-- dogs table with editable row -->
 <div class="dogsTable">
     <table class="responstable" data-body-row-tmpl-id="readOnlyRowTmpl" data-dont-auto-initialize="true"
-           id="dogsTableWithEdit">
+           id="dogsTable">
         <thead>
-        <tr data-owner="dogsTableWithEdit">
-            <th data-btn="reload" data-owner="dogsTableWithEdit" title="reload">
+        <tr data-owner="dogsTable">
+            <th data-btn="reload" data-owner="dogsTable" title="reload">
                 Dogs with editable row
             </th>
         </tr>
@@ -33,8 +33,8 @@
     </table>
 </div>
 
-<template id="dogsTableWithEditSelectedRowTmpl">
-    <tr data-owner="dogsTableWithEdit" data-id="{{id}}">
+<template id="dogsTableEditableRowTmpl">
+    <tr data-owner="dogsTable" data-id="{{id}}">
         <td>
             <input type="hidden" name="id" value="{{id}}">
             <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
@@ -44,30 +44,17 @@
 
 <BR>
 
-<!-- dogsTableWithDelete -->
-<div class="dogsTable">
-    <table class="responstable" data-body-row-tmpl-id="readOnlyRowTmpl"
-           id="dogsTableWithDelete">
-        <thead>
-        <tr>
-            <th data-btn="reload" data-owner="dogsTableWithDelete" title="reload">
-                Dogs with deleted row
-            </th>
-        </tr>
-        </thead>
-    </table>
-</div>
-
-<template id="dogsTableWithDeleteSpecialRowTmpl">
-    <tr class="special-row" data-id="{{id}}" data-owner="dogsTableWithDelete">
-        <td>
+<template id="dogsTableDeletableRowTmpl">
+    <tr class="special-row" data-id="{{id}}" data-owner="dogsTable">
+        <td style="text-decoration: line-through">
             <input name="id" type="hidden" value="{{id}}">
+            <input name="name" type="hidden" value="{{name}}">
             {{name}}
         </td>
     </tr>
 </template>
 
-<!-- common read-only row -->
+<!-- read-only row -->
 <template id="readOnlyRowTmpl">
     <tr data-id="{{id}}" data-owner="{{owner}}">
         <td>
