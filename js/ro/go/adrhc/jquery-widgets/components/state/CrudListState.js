@@ -174,8 +174,8 @@ class CrudListState extends SimpleListState {
      */
     _updatePositioningProperties(entityRow) {
         const index = this.findIndexById(entityRow.entity.id);
-        AssertionUtils.isTrue(entityRow.index === index,
-            `Bad positioning index!\n${JSON.stringify(entityRow)}`);
+        AssertionUtils.isTrue(entityRow.index === PositionUtils.LAST_ELEMENT_INDEX ||
+            entityRow.index === index, `Bad positioning index!\n${JSON.stringify(entityRow)}`);
         if (index === 0) {
             entityRow.append = false;
         } else if (index === this.items.length - 1) {
