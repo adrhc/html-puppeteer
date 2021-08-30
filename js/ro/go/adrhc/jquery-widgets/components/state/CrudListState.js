@@ -111,7 +111,7 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * The purpose of this method is to provide type checking and a default for oldIndex parameter.
+     * The purpose of this method is to provide type checking and a default for the dueToChangePartName parameter.
      *
      * @param {TItem} rowValues
      * @param {number=} dueToChangePartName
@@ -119,8 +119,8 @@ class CrudListState extends SimpleListState {
      * @return {TaggedStateChange<TItem> | boolean}
      * @protected
      */
-    replacePart(rowValues, dueToChangePartName = rowValues.index, dontRecordStateEvents) {
-        return super.replacePart(rowValues, dueToChangePartName, dontRecordStateEvents);
+    replacePart(rowValues, dueToChangePartName, dontRecordStateEvents) {
+        return super.replacePart(rowValues, dueToChangePartName ?? rowValues.index, dontRecordStateEvents);
     }
 
     /**
