@@ -124,12 +124,12 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * Inserting the entityRow at the position specified by entityRow.
+     * Inserting the entityRow at the position specified by entityRow. Updating the index to the index in
+     * this.items; the updated index is used to determine whether a position change occurred while the
+     * actual placement of the item will actually rely on the other positioning properties
+     * (see rowIndexChanged in SimpleRowView.update).
      *
-     * The entityRow.index is synced with the index in this.items
-     * because it'll be used by SimpleRowView (see rowIndexChanged).
-     *
-     * Priority when adding to items: beforeRowId, afterRowId, append (boolean but not null), index
+     * Priority when adding to items: beforeRowId, afterRowId, append (boolean but not null), index.
      *
      * @param {TItem} entityRow
      * @protected
