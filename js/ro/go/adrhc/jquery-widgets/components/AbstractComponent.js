@@ -36,6 +36,38 @@ class AbstractComponent {
      * @type {Promise<StateChange[]>}
      */
     autoInitializationResult;
+    /**
+     * @type {boolean|undefined}
+     */
+    dontConfigEventsOnError;
+    /**
+     * @type {boolean|undefined}
+     */
+    dontAutoInitialize;
+    /**
+     * @type {boolean|undefined}
+     */
+    dontReloadFromState;
+    /**
+     * @type {boolean|undefined}
+     */
+    clearChildrenOnReset;
+    /**
+     * @type {boolean|undefined}
+     */
+    updateViewOnce;
+    /**
+     * @type {boolean|undefined}
+     */
+    skipOwnViewUpdates;
+    /**
+     * @type {string|undefined}
+     */
+    childProperty;
+    /**
+     * @type {string|undefined}
+     */
+    elemIdOrJQuery;
 
     /**
      * @param {{}} options could contain both behaviour and layout specifications
@@ -47,43 +79,42 @@ class AbstractComponent {
         this.state = this.state ?? new StateHolder();
         this.stateChangesDispatcher = this.stateChangesDispatcher ?? new StateChangesDispatcher(this);
         this.entityExtractor = this.entityExtractor ?? new DefaultEntityExtractor(this);
-        this._setupCompositeBehaviour();
-        this._setupChildishBehaviour();
-        this.dontAutoInitialize = this.dontAutoInitialize ?? AbstractComponent
-            .canConstructChildishBehaviour(this.childishBehaviour, this.parentComponent);
+        this._setupCompositeBehaviour(options.childCompFactories);
+        this._setupChildishBehaviour(options.parentComponent);
+        this.dontAutoInitialize = this.dontAutoInitialize ?? !!this.childishBehaviour;
         this._handleAutoInitialization();
-    }
-
-    /**
-     * @param {ChildishBehaviour} childishBehaviour
-     * @param {AbstractComponent} parentComponent
-     * @return {boolean}
-     */
-    static canConstructChildishBehaviour(childishBehaviour, parentComponent) {
-        return childishBehaviour != null || parentComponent != null;
-    }
-
-    /**
-     * @protected
-     */
-    _setupChildishBehaviour() {
-        if (!AbstractComponent.canConstructChildishBehaviour(this.childishBehaviour, this.parentComponent)) {
-            console.log(`${this.constructor.name} no childish behaviour`);
-            return;
-        }
-        this.childishBehaviour = childishBehaviour ?? new DefaultChildishBehaviour(this.parentComponent, {childProperty: this.childProperty})
-        this.childishBehaviour.childComp = this;
     }
 
     /**
      * @typedef {function(parentComp: AbstractComponent): AbstractComponent} childCompFactoryFn
      * @protected
      */
-    _setupCompositeBehaviour() {
+    _setupCompositeBehaviour(childCompFactories) {
         this.compositeBehaviour = this.compositeBehaviour ?? new CompositeBehaviour(this);
-        if (this.childCompFactories) {
-            this.compositeBehaviour.addChildComponentFactory(this.childCompFactories);
+        if (childCompFactories) {
+            this.compositeBehaviour.addChildComponentFactory(childCompFactories);
         }
+    }
+
+    /**
+     * @protected
+     */
+    _setupChildishBehaviour(parentComponent) {
+        if (!this.canConstructChildishBehaviour(parentComponent)) {
+            console.log(`${this.constructor.name} no childish behaviour`);
+            return;
+        }
+        this.childishBehaviour = this.childishBehaviour ?? new DefaultChildishBehaviour(parentComponent, {childProperty: this.childProperty})
+        this.childishBehaviour.childComp = this;
+    }
+
+    /**
+     * @param {AbstractComponent} parentComponent
+     * @return {boolean}
+     * @protected
+     */
+    canConstructChildishBehaviour(parentComponent) {
+        return this.childishBehaviour != null || parentComponent != null;
     }
 
     /**

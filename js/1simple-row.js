@@ -33,7 +33,7 @@ $(() => {
     });
     const simpleListTableAdapter = simpleListComponent.tableBasedView.tableAdapter;
     simpleListComponent.init().then(stateChanges => {
-        const items = stateChanges[0].newStateOrPart;
+        const items = simpleListComponent.simpleListState.items;
         const item0 = items[0];
         const item2 = items[2];
         const row0 = createEditRow(item0); // the current state is set to item0
@@ -104,7 +104,8 @@ $(() => {
             AssertionUtils.isTrue(JSON.stringify(extractedEntity) === "{\"id\":\"555\",\"name\":\"new deleted dog (id = 555, prepended)\"}");
             const firstRow = simpleListTableAdapter.$getAllRows().first();
             AssertionUtils.isTrue(firstRow[0] === row555.view.$elem[0]);
+        }).then(() => {
+            console.log("TESTS PASSED");
         });
     });
-
 });

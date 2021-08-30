@@ -98,7 +98,8 @@ class ElasticListComponent extends SimpleListComponent {
         this.entityExtractor = new ElasticListEntityExtractor(this);
         this.crudListState = state;
         this.configurePartChangeHandlers({handleItemCreation: ["CREATE"]}, "Item");
-        this._setupCompositeBehaviour(new ElasticListCompositeBehaviour(this, idRowCompFactoryFn), childCompFactories);
+        this.compositeBehaviour = this.compositeBehaviour ?? new ElasticListCompositeBehaviour(this, idRowCompFactoryFn);
+        this._setupCompositeBehaviour(childCompFactories);
         this._handleAutoInitialization();
     }
 
