@@ -73,11 +73,8 @@ class CrudListState extends SimpleListState {
         } else if (entityRow == null) {
             // old item exists but the new one is null (i.e. old is deleted)
             ArrayUtils.removeByIndex(previousIndex, this.items);
-        } else if (entityRow.index === previousIndex) {
-            // the index is the same, only changing the value at that index
-            this.items[previousIndex] = entityRow;
         } else {
-            // both item's value and index changed
+            // oldRowValues and entityRow are not null
             ArrayUtils.removeByIndex(previousIndex, this.items);
             this._insertEntityRow(entityRow);
         }
@@ -127,16 +124,11 @@ class CrudListState extends SimpleListState {
     }
 
     /**
-     * @param {E} newEntity
-     * @param {E} oldEntity
-     * @return {boolean}
-     * @protected
-     */
-    _areStatePartsDataEqual(newEntity, oldEntity) {
-        return newEntity === oldEntity;
-    }
-
-    /**
+     * Inserting the entityRow at the position specified by entityRow.
+     *
+     * The entityRow.index is synced with the index in this.items
+     * because it'll be used by SimpleRowView (see rowIndexChanged).
+     *
      * Priority when adding to items: beforeRowId, afterRowId, append (boolean but not null), index
      *
      * @param {TItem} entityRow
@@ -145,17 +137,28 @@ class CrudListState extends SimpleListState {
     _insertEntityRow(entityRow) {
         if (entityRow.beforeRowId != null) {
             const index = this.findIndexById(entityRow.beforeRowId);
+            AssertionUtils.isTrue(entityRow.index == null || entityRow.index === index);
             ArrayUtils.insert(entityRow, index, this.items);
+            entityRow.index = entityRow.index ?? index;
         } else if (entityRow.afterRowId != null) {
-            const index = this.findIndexById(entityRow.afterRowId);
-            ArrayUtils.insert(entityRow, index + 1, this.items);
+            const newIndex = this.findIndexById(entityRow.afterRowId) + 1;
+            AssertionUtils.isTrue(entityRow.index == null || entityRow.index === newIndex);
+            ArrayUtils.insert(entityRow, newIndex, this.items);
+            entityRow.index = entityRow.index ?? newIndex;
         } else if (entityRow.append) {
+            const newIndex = this.items.length;
+            AssertionUtils.isTrue(entityRow.index == null || entityRow.index === newIndex
+                || entityRow.index === PositionUtils.LAST_ELEMENT_INDEX);
             this.items.push(entityRow);
+            entityRow.index = entityRow.index ?? newIndex;
         } else if (entityRow.append === false) {
+            AssertionUtils.isTrue(entityRow.index == null || entityRow.index === 0);
             ArrayUtils.insert(entityRow, 0, this.items);
+            entityRow.index = entityRow.index ?? 0;
         } else if (entityRow.index != null) {
             if (entityRow.index === PositionUtils.LAST_ELEMENT_INDEX) {
                 this.items.push(entityRow);
+                entityRow.index = this.items.length - 1;
             } else {
                 ArrayUtils.insert(entityRow, entityRow.index, this.items);
             }
@@ -164,7 +167,7 @@ class CrudListState extends SimpleListState {
             AssertionUtils.isTrue(typeof entityRow.append === "boolean",
                 `No positioning properties provided!\n${JSON.stringify(entityRow)}`)
         }
-        AssertionUtils.isTrue(PositionUtils.arePositioningPropertiesValid(entityRow),
+        AssertionUtils.isTrue(PositionUtils.areAllButIndexValid(entityRow),
             `Inconsistent positioning properties!\n${JSON.stringify(entityRow)}`);
     }
 
@@ -184,7 +187,16 @@ class CrudListState extends SimpleListState {
             const theJustAfterItem = this.items[index + 1];
             entityRow.beforeRowId = theJustAfterItem.entity.id;
         }
-        entityRow.index = index;
+    }
+
+    /**
+     * @param {E} newEntity
+     * @param {E} oldEntity
+     * @return {boolean}
+     * @protected
+     */
+    _areStatePartsDataEqual(newEntity, oldEntity) {
+        return newEntity === oldEntity;
     }
 
     /**

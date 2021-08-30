@@ -81,20 +81,22 @@ class TableElementAdapter {
         const $existingRow = rowDataId != null ? this.$getRowByDataId(rowDataId) : {};
         if ($existingRow.length) {
             if (removeByIdThenCreateItAgain) {
+                // existing row with the position changed (removing previous position)
                 $existingRow.remove();
             } else {
                 if (replaceExisting) {
+                    // existing row with the position unchanged (replacing previous position)
                     $existingRow.replaceWith(rowHtml);
                 }
                 return;
             }
         } else if (!createIfNotExists) {
+            // not existing row with no permission to create it
+            console.warn("not existing row with no permission to create it!\n", rowValues);
             return;
         }
         const $row = $(rowHtml);
-        if (rowValues.index === 0) {
-            this.$tbody.prepend($row);
-        } else if (rowValues.beforeRowId != null) {
+        if (rowValues.beforeRowId != null) {
             this.$getRowByDataId(rowValues.beforeRowId).before($row);
         } else if (rowValues.afterRowId != null) {
             this.$getRowByDataId(rowValues.afterRowId).after($row);

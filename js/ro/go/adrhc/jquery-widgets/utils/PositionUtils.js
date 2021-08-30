@@ -10,29 +10,10 @@ class PositionUtils {
      *
      * @type {string[]}
      */
-    static POSITIONING_PROPERTIES = ["index", "beforeRowId", "afterRowId", "append"];
+    static POSITIONING_PROPERTIES = ["beforeRowId", "afterRowId", "append", "index"];
 
     /**
-     * Check whether positioning properties are not empty and valid.
-     *
-     * The row position can change to a specific one (when index is specified) or a relative one
-     * (when other than index is specified). We should never change the position with the index
-     * (other than 0 or PositionUtils.LAST_ELEMENT_INDEX) because it's not reliable; instead,
-     * the other positioning fields should be used.
-     *
-     * about "append?: (boolean|undefined)" see the link below:
-     * https://stackoverflow.com/questions/25773222/how-to-annotate-anonymous-object-with-optional-property-in-jsdoc
-     *
-     * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: (boolean|undefined)}} positioningProperties
-     * @return true
-     */
-    static arePositioningPropertiesValid(positioningProperties) {
-        return PositionUtils.areAllButIndexValid(positioningProperties) || positioningProperties.index === 0
-            || positioningProperties.index === PositionUtils.LAST_ELEMENT_INDEX;
-    }
-
-    /**
-     * @param {{index?: number, beforeRowId?: number, afterRowId?: number, append?: (boolean|undefined)}} positioningProperties
+     * @param {{beforeRowId?: number, afterRowId?: number, append?: (boolean|undefined)}} positioningProperties
      * @return true
      */
     static areAllButIndexValid(positioningProperties = {}) {

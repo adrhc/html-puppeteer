@@ -34,7 +34,7 @@ class SimpleRowView extends AbstractView {
         const previousStateOrPart = stateChange.previousStateOrPart;
         const rowIdToSearchFor = previousStateOrPart ? previousStateOrPart.entity.id : rowValues.entity.id;
         const rowIndexChanged = stateChange.stateOrPart?.index !== stateChange.partName;
-        AssertionUtils.isTrue(!rowIndexChanged || PositionUtils.arePositioningPropertiesValid(rowValues))
+        AssertionUtils.isTrue(!rowIndexChanged || PositionUtils.areAllButIndexValid(rowValues))
         this.tableAdapter.renderRowWithTemplate({
             rowDataId: rowIdToSearchFor,
             rowValues,
