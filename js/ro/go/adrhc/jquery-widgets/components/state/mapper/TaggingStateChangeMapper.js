@@ -5,8 +5,8 @@
  */
 class TaggingStateChangeMapper extends IdentityStateChangeMapper {
     /**
-     * @param {StateChange<TYPE_OR_PART>} stateChange
-     * @return {TaggedStateChange<TYPE_OR_PART>}
+     * @param {StateChange<TYPE_OR_PART, TYPE_OR_PART>} stateChange
+     * @return {TaggedStateChange<TYPE_OR_PART, TYPE_OR_PART>}
      */
     map(stateChange) {
         if (!stateChange) {
@@ -14,9 +14,7 @@ class TaggingStateChangeMapper extends IdentityStateChangeMapper {
         } else if (stateChange instanceof TaggedStateChange) {
             return stateChange;
         }
-        const typedStateChange = $.extend(new TaggedStateChange(), stateChange);
-        typedStateChange.changeType = this._changeTypeOf(stateChange);
-        return typedStateChange;
+        return _.defaults(new TaggedStateChange(this._changeTypeOf(stateChange)), stateChange);
     }
 
     /**
@@ -25,7 +23,7 @@ class TaggingStateChangeMapper extends IdentityStateChangeMapper {
      * @protected
      */
     _changeTypeOf(change) {
-        if (this._isChangeTypeOfDelete(change.stateOrPart, change.partName)) {
+        if (this._isChangeTypeOfDelete(change.newStateOrPart, change.partName)) {
             return "DELETE";
         } else if (this._isPristine(change.previousStateOrPart, change.partName)) {
             return "CREATE";

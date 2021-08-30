@@ -27,25 +27,33 @@ class SimpleRowView extends AbstractView {
      * @return {Promise<TaggedStateChange<EntityRow>>}
      */
     update(stateChange) {
-        /**
-         * @type {EntityRow}
-         */
-        const rowValues = stateChange.stateOrPart;
-        const previousStateOrPart = stateChange.previousStateOrPart;
-        const rowIdToSearchFor = previousStateOrPart ? previousStateOrPart.entity.id : rowValues.entity.id;
-        const rowIndexChanged = stateChange.stateOrPart?.index !== stateChange.partName;
-        AssertionUtils.isTrue(!rowIndexChanged || PositionUtils.areAllButIndexValid(rowValues))
-        this.tableAdapter.renderRowWithTemplate({
-            rowDataId: rowIdToSearchFor,
-            rowValues,
-            rowTmplHtml: this.tableAdapter.bodyRowTmplHtml,
-            createIfNotExists: stateChange.changeType === "CREATE",
-            removeByIdThenCreateItAgain: rowIndexChanged
-        });
-        this.$elem = rowValues ? this.tableAdapter.$getRowByDataId(rowValues.entity.id) : undefined;
+        const newEntityRow = stateChange.newStateOrPart;
+        const previousEntityRow = stateChange.previousStateOrPart;
+        AssertionUtils.isFalse(newEntityRow == null,
+            `This change should be handled by deleteRowByDataId!\n${JSON.stringify(previousEntityRow)}`);
+        const rowIndexChanged = newEntityRow?.index !== previousEntityRow?.index;
+        AssertionUtils.isTrue(!rowIndexChanged || PositionUtils.areAllButIndexValid(newEntityRow))
+        const previousRowId = previousEntityRow?.entity?.id;
+        if (rowIndexChanged && !!previousRowId) {
+            this.deleteRowByDataId(previousRowId);
+        }
+        this._updateRow(newEntityRow, stateChange.changeType, previousRowId);
         return Promise.resolve(stateChange);
     }
 
+    _updateRow(entityRow, changeType, previousRowId) {
+        this.tableAdapter.renderRowWithTemplate({
+            rowDataId: previousRowId ?? entityRow.entity.id,
+            rowValues: entityRow,
+            rowTmplHtml: this.tableAdapter.bodyRowTmplHtml,
+            createIfNotExists: changeType === "CREATE"
+        });
+        this.$elem = entityRow ? this.tableAdapter.$getRowByDataId(entityRow.entity.id) : undefined;
+    }
+
+    /**
+     * @param {string|number} rowDataId is the data-id HTML attribute value
+     */
     deleteRowByDataId(rowDataId) {
         this.tableAdapter.deleteRowByDataId(rowDataId);
     }

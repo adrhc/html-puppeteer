@@ -143,15 +143,14 @@ class AbstractComponent {
     }
 
     /**
-     * @param {*} stateOrPart
-     * @param {string|number} [partName]
-     * @param {boolean} [dontRecordStateEvents]
+     * @param {*} state
+     * @param {boolean=} dontRecordStateEvents
      * @return {Promise<StateChange[]>}
      * @final
      */
-    update(stateOrPart, {partName, dontRecordStateEvents} = {}) {
+    update(state, dontRecordStateEvents) {
         return this.doWithState((basicState) => {
-            basicState.replace(stateOrPart, {partName, dontRecordStateEvents});
+            basicState.replace(state, dontRecordStateEvents);
         });
     }
 

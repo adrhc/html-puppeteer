@@ -58,16 +58,12 @@ class MustacheTableElemAdapter extends TableElementAdapter {
      * @param {number|string=} rowDataId
      * @param {EntityRow=} rowValues
      * @param {string=} rowTmplHtml
-     * @param {boolean=} replaceExisting
-     * @param {boolean=} removeByIdThenCreateItAgain
      * @param {boolean} createIfNotExists
      */
     renderRowWithTemplate({
                               rowDataId,
                               rowValues,
                               rowTmplHtml,
-                              replaceExisting,
-                              removeByIdThenCreateItAgain,
                               createIfNotExists
                           }) {
         const dataToRender = _.defaults({}, rowValues.entity, {[`${JQueryWidgetsConfig.OWNER_ATTRIBUTE}`]: this.owner});
@@ -75,8 +71,6 @@ class MustacheTableElemAdapter extends TableElementAdapter {
         super.renderRow({
             rowDataId,
             rowHtml,
-            replaceExisting,
-            removeByIdThenCreateItAgain,
             rowValues,
             createIfNotExists
         });

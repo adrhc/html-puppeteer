@@ -39,7 +39,7 @@ class IdentifiableRowComponent extends SimpleRowComponent {
                         childProperty,
                         clearChildrenOnReset,
                     }),
-                    mustacheTableElemAdapter = new MustacheTableElemAdapter({elemIdOrJQuery, config}),
+                    mustacheTableElemAdapter = new MustacheTableElemAdapter({elemIdOrJQuery, ...config}),
                     view = new SimpleRowView(mustacheTableElemAdapter),
                     initialState,
                     state = new TaggingStateHolder({initialState}),
@@ -62,7 +62,7 @@ class IdentifiableRowComponent extends SimpleRowComponent {
     }
 
     updateViewOnAny(stateChange) {
-        this._removeSecondaryRowParts(stateChange.stateOrPart.entity.id);
+        this._removeSecondaryRowParts(stateChange.newStateOrPart.entity.id);
         return super.updateViewOnAny(stateChange);
     }
 

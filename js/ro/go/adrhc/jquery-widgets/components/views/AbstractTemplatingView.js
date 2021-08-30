@@ -29,7 +29,7 @@ class AbstractTemplatingView extends AbstractView {
      * @return {Promise<StateChange>}
      */
     update(stateChange) {
-        return this._updateImpl(stateChange.stateOrPart).then(() => stateChange);
+        return this._updateImpl(stateChange.newStateOrPart).then(() => stateChange);
     }
 
     /**

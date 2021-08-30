@@ -64,32 +64,21 @@ class TableElementAdapter {
     /**
      * @param {number|string=} rowDataId
      * @param {string=} rowHtml
-     * @param {boolean=true} replaceExisting
-     * @param {boolean=} removeByIdThenCreateItAgain
      * @param {EntityRow=} rowValues
      * @param {boolean=} createIfNotExists
      */
     renderRow({
                   rowDataId,
                   rowHtml,
-                  replaceExisting = true,
-                  removeByIdThenCreateItAgain,
                   rowValues,
                   createIfNotExists
               }) {
-        rowHtml = rowHtml ? rowHtml : this.emptyRowHtmlOf(rowDataId);
+        rowHtml = rowHtml ?? this.emptyRowHtmlOf(rowDataId);
         const $existingRow = rowDataId != null ? this.$getRowByDataId(rowDataId) : {};
         if ($existingRow.length) {
-            if (removeByIdThenCreateItAgain) {
-                // existing row with the position changed (removing previous position)
-                $existingRow.remove();
-            } else {
-                if (replaceExisting) {
-                    // existing row with the position unchanged (replacing previous position)
-                    $existingRow.replaceWith(rowHtml);
-                }
-                return;
-            }
+            // existing row with the position unchanged (replacing previous position)
+            $existingRow.replaceWith(rowHtml);
+            return;
         } else if (!createIfNotExists) {
             // not existing row with no permission to create it
             console.warn("not existing row with no permission to create it!\n", rowValues);

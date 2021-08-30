@@ -121,7 +121,7 @@ class SelectableListState extends CrudListState {
         // index might change after removing a transient
         entityRowSwap.index = this.findIndexById(entityRowSwap.entity.id);
         return this.stateChanges.collect(new TaggedStateChange(switchType,
-            undefined, entityRowSwap, entityRowSwap.index));
+            undefined, entityRowSwap, undefined, entityRowSwap.index));
     }
 
     reset() {

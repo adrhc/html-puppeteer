@@ -10,8 +10,8 @@ class SimpleListState extends TaggingStateHolder {
      *
      * @param {TItem[]} [items=[]]
      */
-    updateAll(items = []) {
-        this.replaceEntirely(items);
+    replaceAll(items = []) {
+        super.replace(items);
     }
 
     /**

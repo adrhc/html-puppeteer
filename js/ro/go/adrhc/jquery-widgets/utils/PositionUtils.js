@@ -3,7 +3,7 @@
  * or a relative one (when other than index positioning property is specified).
  */
 class PositionUtils {
-    static LAST_ELEMENT_INDEX = -1;
+    static LAST_ELEMENT_INDEX = -9;
     /**
      * evaluation order should be:
      * index === 0, beforeRowId, afterRowId, append (when append != null), index

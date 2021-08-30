@@ -1,5 +1,5 @@
 class CreateStateChange extends TaggedStateChange {
-    constructor(stateOrPart, partName) {
-        super(CUDTags.CREATE, undefined, stateOrPart, partName);
+    constructor(stateOrPart, newPartName) {
+        super(CUDTags.CREATE, undefined, stateOrPart, undefined, newPartName);
     }
 }

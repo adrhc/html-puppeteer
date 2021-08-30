@@ -103,7 +103,7 @@ class CompositeBehaviour {
      */
     _extractChildState(stateChange, kid) {
         if (kid.childishBehaviour) {
-            return kid.childishBehaviour.getChildEntityFrom(stateChange.stateOrPart, stateChange.partName);
+            return kid.childishBehaviour.getChildEntityFrom(stateChange.newStateOrPart, stateChange.partName);
         } else {
             return kid.state.currentState;
         }

@@ -38,8 +38,8 @@ class ElasticListCompositeBehaviour extends CompositeBehaviour {
      * @return {IdentifiableRowComponent}
      */
     createChildComponent(stateChange) {
-        const kid = this.idRowCompFactoryFn(stateChange.stateOrPart.entity,
-            stateChange.stateOrPart.index, this.elasticListComponent);
+        const kid = this.idRowCompFactoryFn(stateChange.newStateOrPart.entity,
+            stateChange.newStateOrPart.index, this.elasticListComponent);
         this.addChildComponent(kid);
         return kid;
     }

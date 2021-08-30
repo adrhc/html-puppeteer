@@ -38,7 +38,7 @@ class ContainerComponent extends AbstractComponent {
             return super._reloadState();
         } else {
             const stateChange = this._collectStateChangeOfSelf();
-            return Promise.resolve(stateChange.stateOrPart);
+            return Promise.resolve(stateChange.newStateOrPart);
         }
     }
 

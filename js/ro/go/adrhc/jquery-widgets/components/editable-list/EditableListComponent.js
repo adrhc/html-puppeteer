@@ -61,7 +61,7 @@ class EditableListComponent extends SelectableListComponent {
      */
     handleItemChange(stateChange) {
         console.log(`${this.constructor.name}.handleItemChange:\n${JSON.stringify(stateChange)}`);
-        const entityRow = stateChange.stateOrPart;
+        const entityRow = stateChange.newStateOrPart;
         if (FailedEntity.isErrorItemId(entityRow?.entity?.id)) {
             // ignoring any previous state held by errorRow
             return this.errorRow.processStateChanges(
@@ -143,7 +143,7 @@ class EditableListComponent extends SelectableListComponent {
         return editableList.doWithState(() => {
             const editableListState = editableList.editableListState;
             const taggedStateChange = editableListState.createNewItem();
-            editableListState.switchTo(taggedStateChange.stateOrPart.entity.id, "showAdd");
+            editableListState.switchTo(taggedStateChange.newStateOrPart.entity.id, "showAdd");
         });
     }
 
