@@ -44,7 +44,7 @@ class JQWUtil {
      */
     static componentInstanceFor(type, $el, options) {
         const dynamicClass = eval(type);
-        new dynamicClass(_.defaults({elemIdOrJQuery: $el}, options));
+        return new dynamicClass(_.defaults({elemIdOrJQuery: $el}, options));
     }
 
     /**
