@@ -62,40 +62,33 @@ class TableElementAdapter {
     }
 
     /**
-     * @param {number|string=} rowDataId
-     * @param {string=} rowHtml
-     * @param {EntityRow=} rowValues
-     * @param {boolean=} createIfNotExists
+     * @param {Object} params
+     * @param {number|string=} params.rowToReplaceId
+     * @param {string=} params.newRowHtml
+     * @param {{index?: undefined|number, beforeRowId?: undefined|number, afterRowId?: undefined|number, append?: undefined|boolean}=} params.rowPosition
      */
     renderRow({
-                  rowDataId,
-                  rowHtml,
-                  rowValues,
-                  createIfNotExists
+                  rowToReplaceId,
+                  newRowHtml,
+                  rowPosition,
               }) {
-        rowHtml = rowHtml ?? this.emptyRowHtmlOf(rowDataId);
-        const $existingRow = rowDataId != null ? this.$getRowByDataId(rowDataId) : {};
-        if ($existingRow.length) {
+        if (rowToReplaceId != null) {
             // existing row with the position unchanged (replacing previous position)
-            $existingRow.replaceWith(rowHtml);
-            return;
-        } else if (!createIfNotExists) {
-            // not existing row with no permission to create it
-            console.warn("not existing row with no permission to create it!\n", rowValues);
+            this.$getRowByDataId(rowToReplaceId).replaceWith(newRowHtml);
             return;
         }
-        const $row = $(rowHtml);
-        if (rowValues.beforeRowId != null) {
-            this.$getRowByDataId(rowValues.beforeRowId).before($row);
-        } else if (rowValues.afterRowId != null) {
-            this.$getRowByDataId(rowValues.afterRowId).after($row);
-        } else if (rowValues.append != null) {
-            this.$tbody[rowValues.append ? "append" : "prepend"]($row);
-        } else if (rowValues.index != null) {
-            console.warn("index is not reliable, don't use it!\n", rowValues);
-            $(`tr:eq(${rowValues.index - 1})`, this.$tbody).after($row);
+        const $row = $(newRowHtml);
+        if (rowPosition.beforeRowId != null) {
+            this.$getRowByDataId(rowPosition.beforeRowId).before($row);
+        } else if (rowPosition.afterRowId != null) {
+            this.$getRowByDataId(rowPosition.afterRowId).after($row);
+        } else if (rowPosition.append != null) {
+            this.$tbody[rowPosition.append ? "append" : "prepend"]($row);
+        } else if (rowPosition.index != null) {
+            console.warn("index is not reliable, don't use it!\n", rowPosition);
+            $(`tr:eq(${rowPosition.index - 1})`, this.$tbody).after($row);
         } else {
-            console.error(`don't use "rowPositionOnCreate" (${this.rowPositionOnCreate})!\n`, rowValues);
+            console.error(`don't use "rowPositionOnCreate" (${this.rowPositionOnCreate})!\n`, rowPosition);
             this.$tbody[this.rowPositionOnCreate]($row);
         }
     }

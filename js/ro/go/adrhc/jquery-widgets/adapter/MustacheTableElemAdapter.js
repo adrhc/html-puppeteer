@@ -55,24 +55,21 @@ class MustacheTableElemAdapter extends TableElementAdapter {
     }
 
     /**
-     * @param {number|string=} rowDataId
-     * @param {EntityRow=} rowValues
+     * @param {number|string=} rowToReplaceId
+     * @param {EntityRow=} entityRow
      * @param {string=} rowTmplHtml
-     * @param {boolean} createIfNotExists
      */
     renderRowWithTemplate({
-                              rowDataId,
-                              rowValues,
+                              rowToReplaceId,
+                              entityRow,
                               rowTmplHtml,
-                              createIfNotExists
                           }) {
-        const dataToRender = _.defaults({}, rowValues.entity, {[`${JQueryWidgetsConfig.OWNER_ATTRIBUTE}`]: this.owner});
-        const rowHtml = this._renderTemplate(dataToRender, rowTmplHtml);
+        const dataToRender = _.defaults({}, entityRow.entity, {[`${JQueryWidgetsConfig.OWNER_ATTRIBUTE}`]: this.owner});
+        const newRowHtml = this._renderTemplate(dataToRender, rowTmplHtml);
         super.renderRow({
-            rowDataId,
-            rowHtml,
-            rowValues,
-            createIfNotExists
+            rowToReplaceId,
+            newRowHtml,
+            rowPosition: entityRow
         });
     }
 

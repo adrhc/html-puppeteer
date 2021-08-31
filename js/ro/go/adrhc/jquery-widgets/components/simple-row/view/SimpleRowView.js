@@ -27,28 +27,38 @@ class SimpleRowView extends AbstractView {
      * @return {Promise<TaggedStateChange<EntityRow>>}
      */
     update(stateChange) {
+        /**
+         * @type {EntityRow}
+         */
         const newEntityRow = stateChange.newStateOrPart;
         const previousEntityRow = stateChange.previousStateOrPart;
         AssertionUtils.isFalse(newEntityRow == null,
             `This change should be handled by deleteRowByDataId!\n${JSON.stringify(previousEntityRow)}`);
-        const rowIndexChanged = newEntityRow?.index !== previousEntityRow?.index;
-        AssertionUtils.isTrue(!rowIndexChanged || PositionUtils.areAllButIndexValid(newEntityRow))
+        const positionChanged = newEntityRow?.index !== previousEntityRow?.index;
         const previousRowId = previousEntityRow?.entity?.id;
-        if (rowIndexChanged && !!previousRowId) {
+        let rowToReplaceId;
+        if (!!previousRowId && positionChanged) {
+            AssertionUtils.isTrue(PositionUtils.areAllButIndexValid(newEntityRow));
             this.deleteRowByDataId(previousRowId);
+        } else {
+            rowToReplaceId = previousRowId;
         }
-        this._updateRow(newEntityRow, stateChange.changeType, previousRowId);
+        this._updateRow(newEntityRow, rowToReplaceId);
         return Promise.resolve(stateChange);
     }
 
-    _updateRow(entityRow, changeType, previousRowId) {
+    /**
+     * @param {EntityRow} entityRow
+     * @param {string=} rowToReplaceId
+     * @private
+     */
+    _updateRow(entityRow, rowToReplaceId) {
         this.tableAdapter.renderRowWithTemplate({
-            rowDataId: previousRowId ?? entityRow.entity.id,
-            rowValues: entityRow,
-            rowTmplHtml: this.tableAdapter.bodyRowTmplHtml,
-            createIfNotExists: changeType === "CREATE"
+            rowToReplaceId,
+            entityRow,
+            rowTmplHtml: this.tableAdapter.bodyRowTmplHtml
         });
-        this.$elem = entityRow ? this.tableAdapter.$getRowByDataId(entityRow.entity.id) : undefined;
+        this.$elem = this.tableAdapter.$getRowByDataId(entityRow.entity.id);
     }
 
     /**
@@ -56,6 +66,7 @@ class SimpleRowView extends AbstractView {
      */
     deleteRowByDataId(rowDataId) {
         this.tableAdapter.deleteRowByDataId(rowDataId);
+        this.$elem = undefined;
     }
 
     $getOwnedRowByData(dataKey, dataValue) {

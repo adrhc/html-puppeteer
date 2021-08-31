@@ -3,7 +3,7 @@ table th {
 }
 
 tr.row-editor, tr.row-part {
-    background-color: ivory !important;
+    background-color: ivory;
 }
 
 table td input {
@@ -13,8 +13,8 @@ table td input {
     width: fill-available;
 }
 
-.special-row {
-    background-color: darkorange;
+.deleted-row {
+    text-decoration: line-through;
 }
 
 /* editable table */

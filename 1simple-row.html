@@ -45,8 +45,8 @@
 <BR>
 
 <template id="dogsTableDeletableRowTmpl">
-    <tr class="special-row" data-id="{{id}}" data-owner="dogsTable">
-        <td style="text-decoration: line-through">
+    <tr class="deleted-row" data-id="{{id}}" data-owner="dogsTable">
+        <td>
             <input name="id" type="hidden" value="{{id}}">
             <input name="name" type="hidden" value="{{name}}">
             {{name}}
