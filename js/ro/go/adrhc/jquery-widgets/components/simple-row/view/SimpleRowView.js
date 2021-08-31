@@ -38,12 +38,13 @@ class SimpleRowView extends AbstractView {
         const previousRowId = previousEntityRow?.entity?.id;
         let rowToReplaceId;
         if (!!previousRowId && positionChanged) {
-            AssertionUtils.isTrue(PositionUtils.areAllButIndexValid(newEntityRow));
+            AssertionUtils.isTrue(PositionUtils.areAllButIndexValid(newEntityRow),
+                `When changing both identity and position the relative positioning values must be provided!\n${JSON.stringify(newEntityRow)}`);
             this.deleteRowByDataId(previousRowId);
         } else {
             rowToReplaceId = previousRowId;
         }
-        this._updateRow(newEntityRow, rowToReplaceId);
+        this._renderRow(newEntityRow, rowToReplaceId);
         return Promise.resolve(stateChange);
     }
 
@@ -52,12 +53,8 @@ class SimpleRowView extends AbstractView {
      * @param {string=} rowToReplaceId
      * @private
      */
-    _updateRow(entityRow, rowToReplaceId) {
-        this.tableAdapter.renderRowWithTemplate({
-            rowToReplaceId,
-            entityRow,
-            rowTmplHtml: this.tableAdapter.bodyRowTmplHtml
-        });
+    _renderRow(entityRow, rowToReplaceId) {
+        this.tableAdapter.renderRowWithTemplate({rowToReplaceId, entityRow});
         this.$elem = this.tableAdapter.$getRowByDataId(entityRow.entity.id);
     }
 

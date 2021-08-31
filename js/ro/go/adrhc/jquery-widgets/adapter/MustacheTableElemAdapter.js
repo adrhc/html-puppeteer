@@ -62,7 +62,7 @@ class MustacheTableElemAdapter extends TableElementAdapter {
     renderRowWithTemplate({
                               rowToReplaceId,
                               entityRow,
-                              rowTmplHtml,
+                              rowTmplHtml = this.bodyRowTmplHtml,
                           }) {
         const dataToRender = _.defaults({}, entityRow.entity, {[`${JQueryWidgetsConfig.OWNER_ATTRIBUTE}`]: this.owner});
         const newRowHtml = this._renderTemplate(dataToRender, rowTmplHtml);
