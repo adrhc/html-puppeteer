@@ -8,7 +8,7 @@ class ObjectUtils {
         if (!source) {
             return target;
         }
-        Object.keys(target).forEach(k => target[k] = source[k]);
+        Object.keys(target).filter(k => source[k] != null).forEach(k => target[k] = source[k]);
         return target;
     }
 }

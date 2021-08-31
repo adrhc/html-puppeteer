@@ -65,17 +65,25 @@ class AbstractComponent {
      */
     childProperty;
     /**
-     * @type {string|undefined}
+     * @type {string|jQuery<HTMLElement>|undefined}
      */
     elemIdOrJQuery;
+    /**
+     * @type {{}}
+     */
+    dataAttributes;
+    /**
+     * @type {{}}
+     */
+    config;
 
     /**
      * @param {{}} options could contain both behaviour and layout specifications
      */
     constructor(options) {
-        // options used as layout specifications
-        _.defaults(this, {...options}, DomUtils.dataOf(options.view?.$elem),
-            DomUtils.dataOf(options.elemIdOrJQuery));
+        this.dataAttributes = this.dataAttributesOf(options.view?.$elem, options.elemIdOrJQuery);
+        this.config = this.aggregatedOptionsOf(options); // includes this.dataAttributes
+        ObjectUtils.copyDeclaredProperties(this, this.config);
         this.state = this.state ?? new StateHolder();
         this.stateChangesDispatcher = this.stateChangesDispatcher ?? new StateChangesDispatcher(this);
         this.entityExtractor = this.entityExtractor ?? new DefaultEntityExtractor(this);
@@ -83,6 +91,27 @@ class AbstractComponent {
         this._setupChildishBehaviour(options.parentComponent);
         this.dontAutoInitialize = this.dontAutoInitialize ?? !!this.childishBehaviour;
         this._handleAutoInitialization();
+    }
+
+    /**
+     * @param {jQuery<HTMLElement>=} $viewElem
+     * @param {string|jQuery<HTMLElement>=} elemIdOrJQuery
+     * @return {{}}
+     * @protected
+     */
+    dataAttributesOf($viewElem, elemIdOrJQuery) {
+        return _.defaults({}, DomUtils.dataOf($viewElem), DomUtils.dataOf(elemIdOrJQuery));
+    }
+
+    /**
+     * depends on this.dataAttributes
+     *
+     * @param {{}} options
+     * @return {{}}
+     * @private
+     */
+    aggregatedOptionsOf(options) {
+        return _.defaults({}, {...options}, this.dataAttributes);
     }
 
     /**

@@ -29,11 +29,12 @@ class SimpleListComponent extends AbstractTableBasedComponent {
                     ...restOfOptions
                 }) {
         super({state, view, dontAutoInitialize: true, ...restOfOptions});
+        ObjectUtils.copyDeclaredProperties(this, this.config);
         this.state = state ?? new SimpleListState();
-        this.view = view ?? new SimpleListView(this);
+        this.view = view ?? new SimpleListView(this.config);
         this.handleWithAny(["CREATE", "REPLACE", "DELETE"])
         this.repository = this.repository ?? new InMemoryCrudRepository(this.parsedItems);
-        this.dontAutoInitialize = dontAutoInitialize ?? this.view.booleanData("dontAutoInitialize");
+        this.dontAutoInitialize = dontAutoInitialize ?? this.dataAttributes.dontAutoInitialize;
         this._handleAutoInitialization();
     }
 
