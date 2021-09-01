@@ -3,6 +3,10 @@
  */
 class SimpleRowComponent extends AbstractComponent {
     /**
+     * @type {TaggingStateHolder}
+     */
+    state;
+    /**
      * @type {SimpleRowView}
      */
     view;
@@ -19,6 +23,7 @@ class SimpleRowComponent extends AbstractComponent {
      */
     constructor(options) {
         super({clearChildrenOnReset: true, dontAutoInitialize: true, ...options});
+        ObjectUtils.copyDeclaredProperties(this, this.aggregatedOptions);
         const mustacheTableElemAdapter = this.aggregatedOptions.mustacheTableElemAdapter
             ?? new MustacheTableElemAdapter(this.aggregatedOptions);
         this.view = this.aggregatedOptions.view ?? new SimpleRowView(mustacheTableElemAdapter);
