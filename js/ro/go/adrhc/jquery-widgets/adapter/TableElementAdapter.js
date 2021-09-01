@@ -62,21 +62,18 @@ class TableElementAdapter {
     }
 
     /**
-     * @param {Object} params
-     * @param {number|string=} params.rowToReplaceId
-     * @param {string=} params.newRowHtml
-     * @param {{index?: undefined|number, beforeRowId?: undefined|number, afterRowId?: undefined|number, append?: undefined|boolean}=} params.rowPosition
+     * @param {string} newRowHtml
+     * @param {number|string} rowToReplaceId
      */
-    renderRow({
-                  rowToReplaceId,
-                  newRowHtml,
-                  rowPosition,
-              }) {
-        if (rowToReplaceId != null) {
-            // existing row with the position unchanged (replacing previous position)
-            this.$getRowByDataId(rowToReplaceId).replaceWith(newRowHtml);
-            return;
-        }
+    replaceRow(newRowHtml, rowToReplaceId) {
+        this.$getRowByDataId(rowToReplaceId).replaceWith(newRowHtml);
+    }
+
+    /**
+     * @param {string} newRowHtml
+     * @param {{index?: undefined|number, beforeRowId?: undefined|number, afterRowId?: undefined|number, append?: undefined|boolean}} rowPosition
+     */
+    createRow(newRowHtml, rowPosition) {
         const $row = $(newRowHtml);
         if (rowPosition.beforeRowId != null) {
             this.$getRowByDataId(rowPosition.beforeRowId).before($row);
@@ -119,10 +116,6 @@ class TableElementAdapter {
     rowDataIdOfParent(elem) {
         const $elem = elem instanceof jQuery ? elem : $(elem);
         return $elem.parents(`tr${this.ownerSelector}`).data(this.rowDataId);
-    }
-
-    emptyRowHtmlOf(rowDataId) {
-        return `<tr data-${JQueryWidgetsConfig.OWNER_ATTRIBUTE}='${this.owner}' data-id='${rowDataId}'></tr>`;
     }
 
     deleteRowByDataId(rowDataId) {

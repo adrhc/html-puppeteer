@@ -40,7 +40,7 @@ class MustacheTableElemAdapter extends TableElementAdapter {
      * @protected
      */
     _setupBodyTmplHtml(bodyTmplHtml) {
-        if (!!bodyTmplHtml) {
+        if (bodyTmplHtml != null) {
             this.bodyTmplHtml = bodyTmplHtml;
         } else if (this.bodyRowTmplHtml) {
             this.bodyTmplHtml = "{{#items}}{{> bodyRow}}{{/items}}";
@@ -55,27 +55,40 @@ class MustacheTableElemAdapter extends TableElementAdapter {
     }
 
     /**
-     * @param {number|string=} rowToReplaceId
+     * @param {number|string} rowToReplaceId
      * @param {EntityRow=} entityRow
      * @param {string=} rowTmplHtml
      */
-    renderRowWithTemplate({
-                              rowToReplaceId,
-                              entityRow,
-                              rowTmplHtml = this.bodyRowTmplHtml,
-                          }) {
-        const dataToRender = _.defaults({}, entityRow.entity, {[`${JQueryWidgetsConfig.OWNER_ATTRIBUTE}`]: this.owner});
-        const newRowHtml = this._renderTemplate(dataToRender, rowTmplHtml);
-        super.renderRow({
-            rowToReplaceId,
-            newRowHtml,
-            rowPosition: entityRow
-        });
+    replaceEntityRow(rowToReplaceId, entityRow, rowTmplHtml) {
+        const newRowHtml = this._renderEntityRow(entityRow, rowTmplHtml);
+        super.replaceRow(newRowHtml, rowToReplaceId);
+    }
+
+    /**
+     * Here entityRow is needed for the positioning properties.
+     *
+     * @param {EntityRow} entityRow
+     * @param {string=} rowTmplHtml
+     */
+    createEntityRow(entityRow, rowTmplHtml) {
+        const newRowHtml = this._renderEntityRow(entityRow, rowTmplHtml);
+        super.createRow(newRowHtml, entityRow);
+    }
+
+    /**
+     * @param {EntityRow=} entityRow
+     * @param {string=} rowTmplHtml
+     * @return {string}
+     * @private
+     */
+    _renderEntityRow(entityRow, rowTmplHtml = this.bodyRowTmplHtml) {
+        const dataToRender = _.defaults({}, entityRow?.entity, {[`${JQueryWidgetsConfig.OWNER_ATTRIBUTE}`]: this.owner});
+        return this._renderTemplate(dataToRender, rowTmplHtml);
     }
 
     /**
      * @param {{}} data
-     * @param rowTmplHtml {string}
+     * @param {string} rowTmplHtml
      * @return {string}
      * @private
      */

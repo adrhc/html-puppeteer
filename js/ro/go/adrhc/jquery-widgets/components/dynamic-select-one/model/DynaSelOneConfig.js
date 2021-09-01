@@ -82,6 +82,6 @@ class DynaSelOneConfig extends ComponentConfiguration {
      * @returns {boolean}
      */
     isEnoughTextToSearch(text) {
-        return this.minCharsToSearch === 0 || !!text && text.length >= this.minCharsToSearch;
+        return this.minCharsToSearch === 0 || text != null && text.length >= this.minCharsToSearch;
     }
 }

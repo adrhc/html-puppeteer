@@ -33,28 +33,49 @@ class SimpleRowView extends AbstractView {
         const newEntityRow = stateChange.newStateOrPart;
         const previousEntityRow = stateChange.previousStateOrPart;
         AssertionUtils.isFalse(newEntityRow == null,
-            `This change should be handled by deleteRowByDataId!\n${JSON.stringify(previousEntityRow)}`);
-        const positionChanged = newEntityRow?.index !== previousEntityRow?.index;
+            `newEntityRow == null must be handled by deleteRowByDataId!\npreviousEntityRow:\n${JSON.stringify(previousEntityRow)}`);
         const previousRowId = previousEntityRow?.entity?.id;
-        let rowToReplaceId;
-        if (!!previousRowId && positionChanged) {
+        if (newEntityRow?.index !== previousEntityRow?.index) {
+            // row position changed
+            if (previousRowId != null) {
+                // removing the previous row because it has to be redraw
+                // anyway considering that at least its position changed
+                this.deleteRowByDataId(previousRowId);
+            }
             AssertionUtils.isTrue(PositionUtils.areAllButIndexValid(newEntityRow),
-                `When changing both identity and position the relative positioning values must be provided!\n${JSON.stringify(newEntityRow)}`);
-            this.deleteRowByDataId(previousRowId);
+                `The relative positioning values must be provided!\n${JSON.stringify(newEntityRow)}`);
+            this._createEntityRow(newEntityRow);
         } else {
-            rowToReplaceId = previousRowId;
+            // row position is the same
+            if (previousRowId != null) {
+                this._replaceEntityRow(previousRowId, newEntityRow);
+            } else {
+                AssertionUtils.isTrue(PositionUtils.areAllButIndexValid(newEntityRow),
+                    `The relative positioning values must be provided!\n${JSON.stringify(newEntityRow)}`);
+                this._createEntityRow(newEntityRow);
+            }
         }
-        this._renderRow(newEntityRow, rowToReplaceId);
         return Promise.resolve(stateChange);
     }
 
     /**
+     * Here entityRow is needed for the positioning properties and its entity.id.
+     *
      * @param {EntityRow} entityRow
-     * @param {string=} rowToReplaceId
-     * @private
+     * @protected
      */
-    _renderRow(entityRow, rowToReplaceId) {
-        this.tableAdapter.renderRowWithTemplate({rowToReplaceId, entityRow});
+    _createEntityRow(entityRow) {
+        this.tableAdapter.createEntityRow(entityRow);
+        this.$elem = this.tableAdapter.$getRowByDataId(entityRow.entity.id);
+    }
+
+    /**
+     * @param {number|string} rowToReplaceId
+     * @param {EntityRow=} entityRow
+     * @protected
+     */
+    _replaceEntityRow(rowToReplaceId, entityRow) {
+        this.tableAdapter.replaceEntityRow(rowToReplaceId, entityRow);
         this.$elem = this.tableAdapter.$getRowByDataId(entityRow.entity.id);
     }
 
