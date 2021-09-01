@@ -27,7 +27,7 @@ class SimpleRowComponent extends AbstractComponent {
         const mustacheTableElemAdapter = this.aggregatedOptions.mustacheTableElemAdapter
             ?? new MustacheTableElemAdapter(this.aggregatedOptions);
         this.view = this.aggregatedOptions.view ?? new SimpleRowView(mustacheTableElemAdapter);
-        this.state = this.aggregatedOptions.state ?? new TaggingStateHolder(this.aggregatedOptions);
+        this.state = this.aggregatedOptions.state ?? new SimpleRowState(this.aggregatedOptions);
         this.handleWithAny(true);
         this.setHandlerName("updateViewOnDELETE", "DELETE")
     }

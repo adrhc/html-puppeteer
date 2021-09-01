@@ -30,27 +30,16 @@ class SimpleRowView extends AbstractView {
         /**
          * @type {EntityRow}
          */
-        const newEntityRow = stateChange.newStateOrPart;
         const previousEntityRow = stateChange.previousStateOrPart;
+        const newEntityRow = stateChange.newStateOrPart;
         AssertionUtils.isFalse(newEntityRow == null,
-            `newEntityRow == null must be handled by deleteRowByDataId!\npreviousEntityRow:\n${JSON.stringify(previousEntityRow)}`);
-        const previousRowId = previousEntityRow?.entity?.id;
-        const positionChanged = newEntityRow?.index !== previousEntityRow?.index;
-        // previous row exists and position changed
-        if (previousRowId != null && positionChanged) {
-            // removing the previous row because it has to be redraw
-            // anyway considering that at least its position changed
-            this.deleteRowByDataId(previousRowId);
-        }
-        // previous row is missing or the position changed
-        if (previousRowId == null || positionChanged) {
+            `Null newEntityRow must be handled by deleteRowByDataId!\npreviousEntityRow:\n${JSON.stringify(previousEntityRow)}`);
+        if (previousEntityRow) {
+            this._replaceEntityRow(previousEntityRow.entity.id, newEntityRow);
+        } else {
             AssertionUtils.isTrue(PositionUtils.areAllButIndexValid(newEntityRow),
                 `The relative positioning values must be provided!\n${JSON.stringify(newEntityRow)}`);
             this._createEntityRow(newEntityRow);
-        }
-        // previous row exists and the position is the same
-        if (previousRowId != null && !positionChanged) {
-            this._replaceEntityRow(previousRowId, newEntityRow);
         }
         return Promise.resolve(stateChange);
     }
