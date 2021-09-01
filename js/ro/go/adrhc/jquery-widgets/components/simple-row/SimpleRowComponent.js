@@ -8,6 +8,13 @@ class SimpleRowComponent extends AbstractComponent {
     view;
 
     /**
+     * @return {SimpleRowView}
+     */
+    get simpleRowView() {
+        return this.view;
+    }
+
+    /**
      * @param {{}} options
      */
     constructor(options) {
@@ -70,7 +77,7 @@ class SimpleRowComponent extends AbstractComponent {
     }
 
     /**
-     * @param stateChange {StateChange}
+     * @param {StateChange} stateChange
      * @return {Promise<StateChange>}
      */
     updateViewOnDELETE(stateChange) {
@@ -80,12 +87,5 @@ class SimpleRowComponent extends AbstractComponent {
         }
         this.reset(); // kids are also reset
         return Promise.resolve(stateChange);
-    }
-
-    /**
-     * @return {SimpleRowView}
-     */
-    get simpleRowView() {
-        return this.view;
     }
 }

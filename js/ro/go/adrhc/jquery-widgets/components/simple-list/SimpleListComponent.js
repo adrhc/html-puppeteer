@@ -18,6 +18,38 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @type {string|string[]|undefined}
      */
     items;
+    /**
+     * @type {SimpleListState}
+     */
+    state;
+    /**
+     * @type {SimpleListView}
+     */
+    view;
+
+    /**
+     * This is the computed/runtime value of items.
+     *
+     * @return {[]}
+     */
+    get parsedItems() {
+        const configItems = this.items ?? [];
+        return typeof configItems === "string" ? JSON.parse(configItems) : configItems;
+    }
+
+    /**
+     * @return {boolean|undefined} this.simpleListConfiguration?.rowPositionOnCreate === "append"
+     */
+    get newItemsGoLast() {
+        return this.rowPositionOnCreate == null ? undefined : this.rowPositionOnCreate === "append";
+    }
+
+    /**
+     * @return {SimpleListState}
+     */
+    get simpleListState() {
+        return this.state;
+    }
 
     constructor(options) {
         super({dontAutoInitialize: true, ...options});
@@ -87,34 +119,5 @@ class SimpleListComponent extends AbstractTableBasedComponent {
                 this.simpleListState.replaceAll(items);
                 return items;
             });
-    }
-
-    /**
-     * @type {SimpleListView}
-     */
-    view;
-
-    /**
-     * This is the computed/runtime value of items.
-     *
-     * @return {[]}
-     */
-    get parsedItems() {
-        const configItems = this.items ?? [];
-        return typeof configItems === "string" ? JSON.parse(configItems) : configItems;
-    }
-
-    /**
-     * @return {boolean|undefined} this.simpleListConfiguration?.rowPositionOnCreate === "append"
-     */
-    get newItemsGoLast() {
-        return this.rowPositionOnCreate == null ? undefined : this.rowPositionOnCreate === "append";
-    }
-
-    /**
-     * @return {SimpleListState}
-     */
-    get simpleListState() {
-        return this.state;
     }
 }

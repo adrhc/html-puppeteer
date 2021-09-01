@@ -35,17 +35,17 @@ class DynamicSelectOneView extends DefaultTemplatingView {
     }
 
     attachSearchKeyupHandler(handler) {
-        const event = DomUtils.appendNamespaceTo('keyup', this.eventsNamespace);
+        const event = DomUtils.appendNamespaceTo('keyup', this._eventsNamespace);
         this.$elem.on(event, `[name='${this.config.name}']`, this.component, handler);
     }
 
     attachOptionClickHandler(handler) {
-        const event = DomUtils.appendNamespaceTo(['click', 'keyup'], this.eventsNamespace);
+        const event = DomUtils.appendNamespaceTo(['click', 'keyup'], this._eventsNamespace);
         this.$elem.on(event, "option", this.component, handler);
     }
 
     attachOnBlurHandler(handler) {
-        const event = DomUtils.appendNamespaceTo('blur', this.eventsNamespace);
+        const event = DomUtils.appendNamespaceTo('blur', this._eventsNamespace);
         this.$elem.on(event, `[name='${this.config.name}']`, this.component, handler);
     }
 

@@ -117,7 +117,7 @@ class AbstractView {
      * @returns {string}
      * @protected
      */
-    get eventsNamespace() {
+    get _eventsNamespace() {
         return `.${this.constructor.name}.${this.owner}`;
     }
 }
