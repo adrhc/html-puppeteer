@@ -35,25 +35,22 @@ class SimpleRowView extends AbstractView {
         AssertionUtils.isFalse(newEntityRow == null,
             `newEntityRow == null must be handled by deleteRowByDataId!\npreviousEntityRow:\n${JSON.stringify(previousEntityRow)}`);
         const previousRowId = previousEntityRow?.entity?.id;
-        if (newEntityRow?.index !== previousEntityRow?.index) {
-            // row position changed
-            if (previousRowId != null) {
-                // removing the previous row because it has to be redraw
-                // anyway considering that at least its position changed
-                this.deleteRowByDataId(previousRowId);
-            }
+        const positionChanged = newEntityRow?.index !== previousEntityRow?.index;
+        // previous row exists and position changed
+        if (previousRowId != null && positionChanged) {
+            // removing the previous row because it has to be redraw
+            // anyway considering that at least its position changed
+            this.deleteRowByDataId(previousRowId);
+        }
+        // previous row is missing or the position changed
+        if (previousRowId == null || positionChanged) {
             AssertionUtils.isTrue(PositionUtils.areAllButIndexValid(newEntityRow),
                 `The relative positioning values must be provided!\n${JSON.stringify(newEntityRow)}`);
             this._createEntityRow(newEntityRow);
-        } else {
-            // row position is the same
-            if (previousRowId != null) {
-                this._replaceEntityRow(previousRowId, newEntityRow);
-            } else {
-                AssertionUtils.isTrue(PositionUtils.areAllButIndexValid(newEntityRow),
-                    `The relative positioning values must be provided!\n${JSON.stringify(newEntityRow)}`);
-                this._createEntityRow(newEntityRow);
-            }
+        }
+        // previous row exists and the position is the same
+        if (previousRowId != null && !positionChanged) {
+            this._replaceEntityRow(previousRowId, newEntityRow);
         }
         return Promise.resolve(stateChange);
     }
