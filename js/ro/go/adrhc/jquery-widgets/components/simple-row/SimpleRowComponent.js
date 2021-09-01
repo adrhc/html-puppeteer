@@ -43,7 +43,7 @@ class SimpleRowComponent extends AbstractComponent {
                         rowDataId,
                         rowPositionOnCreate,
                         childProperty,
-                        clearChildrenOnReset: clearChildrenOnReset == null ? true : clearChildrenOnReset
+                        clearChildrenOnReset: clearChildrenOnReset ?? true
                     }),
                     mustacheTableElemAdapter = new MustacheTableElemAdapter({elemIdOrJQuery, ...config}),
                     view = new SimpleRowView(mustacheTableElemAdapter),
