@@ -222,6 +222,10 @@ class TableElementAdapter {
         return `[data-${JQueryWidgetsConfig.OWNER_ATTRIBUTE}='${this.owner}']`;
     }
 
+    get rowsCount() {
+        return $("tr", this.$tbody).length;
+    }
+
     get columnsCount() {
         let columnsCount = 0;
         const firstRow = this.$firstRow;

@@ -19,22 +19,13 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      */
     items;
 
-    /**
-     * see also SimpleListOptions
-     */
-    constructor({
-                    state,
-                    view,
-                    dontAutoInitialize,
-                    ...restOfOptions
-                }) {
-        super({state, view, dontAutoInitialize: true, ...restOfOptions});
-        ObjectUtils.copyDeclaredProperties(this, this.config);
-        this.state = state ?? new SimpleListState();
-        this.view = view ?? new SimpleListView(this.config);
+    constructor(options) {
+        super({dontAutoInitialize: true, ...options});
+        ObjectUtils.copyDeclaredProperties(this, this.aggregatedOptions);
+        this.state = this.aggregatedOptions.state ?? new SimpleListState();
+        this.view = this.aggregatedOptions.view ?? new SimpleListView(this.aggregatedOptions);
         this.handleWithAny(["CREATE", "REPLACE", "DELETE"])
-        this.repository = this.repository ?? new InMemoryCrudRepository(this.parsedItems);
-        this.dontAutoInitialize = dontAutoInitialize ?? this.dataAttributes.dontAutoInitialize;
+        this.repository = this.aggregatedOptions.repository ?? new InMemoryCrudRepository(this.parsedItems);
         this._handleAutoInitialization();
     }
 
@@ -97,6 +88,11 @@ class SimpleListComponent extends AbstractTableBasedComponent {
                 return items;
             });
     }
+
+    /**
+     * @type {SimpleListView}
+     */
+    view;
 
     /**
      * This is the computed/runtime value of items.

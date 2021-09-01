@@ -129,6 +129,7 @@ $(() => {
             const extractedEntity = row444.extractEntity();
             AssertionUtils.isTrue(JSON.stringify(extractedEntity) === "{\"id\":\"444\",\"name\":\"dog44 id (44) changed to 444 and index from undefined to 4\"}");
         }).then(() => {
+            AssertionUtils.isTrue(simpleListTableAdapter.rowsCount === 8);
             console.log("TESTS PASSED");
         });
     });

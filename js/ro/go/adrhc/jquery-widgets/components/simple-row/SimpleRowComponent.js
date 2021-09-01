@@ -5,68 +5,17 @@ class SimpleRowComponent extends AbstractComponent {
     /**
      * @type {SimpleRowView}
      */
-    simpleRowView;
+    view;
 
     /**
-     * @param elemIdOrJQuery
-     * @param bodyRowTmplId
-     * @param bodyRowTmplHtml
-     * @param bodyTmplHtml
-     * @param rowDataId
-     * @param rowPositionOnCreate
-     * @param childProperty
-     * @param clearChildrenOnReset
-     * @param mustacheTableElemAdapter
-     * @param initialState
-     * @param {TaggingStateHolder} state
-     * @param {SimpleRowView=} view
-     * @param childCompFactories
-     * @param childishBehaviour
-     * @param {ComponentConfiguration=} config
-     * @param compositeBehaviour
-     * @param parentComponent
+     * @param {{}} options
      */
-    constructor({
-                    elemIdOrJQuery,
-                    bodyRowTmplId,
-                    bodyRowTmplHtml,
-                    bodyTmplHtml,
-                    rowDataId,
-                    rowPositionOnCreate,
-                    childProperty,
-                    clearChildrenOnReset,
-                    config = new RowConfiguration({
-                        elemIdOrJQuery,
-                        bodyRowTmplId,
-                        bodyRowTmplHtml,
-                        bodyTmplHtml,
-                        rowDataId,
-                        rowPositionOnCreate,
-                        childProperty,
-                        clearChildrenOnReset: clearChildrenOnReset ?? true
-                    }),
-                    mustacheTableElemAdapter = new MustacheTableElemAdapter({elemIdOrJQuery, ...config}),
-                    view = new SimpleRowView(mustacheTableElemAdapter),
-                    initialState,
-                    state = new TaggingStateHolder({initialState}),
-                    compositeBehaviour,
-                    childCompFactories,
-                    childishBehaviour,
-                    parentComponent
-                }) {
-        // the "super" missing parameters (e.g. bodyRowTmplId) are included in "config" or they are
-        // simply intermediate values (e.g. elemIdOrJQuery is used to compute mustacheTableElemAdapter)
-        super({
-            view,
-            state,
-            compositeBehaviour,
-            childCompFactories,
-            childishBehaviour,
-            parentComponent,
-            config: config.dontAutoInitializeOf()
-        });
-        this.config = config; // the "config" set by "super" is different (see line above)
-        this.simpleRowView = view;
+    constructor(options) {
+        super({clearChildrenOnReset: true, dontAutoInitialize: true, ...options});
+        const mustacheTableElemAdapter = this.aggregatedOptions.mustacheTableElemAdapter
+            ?? new MustacheTableElemAdapter(this.aggregatedOptions);
+        this.view = this.aggregatedOptions.view ?? new SimpleRowView(mustacheTableElemAdapter);
+        this.state = this.aggregatedOptions.state ?? new TaggingStateHolder(this.aggregatedOptions);
         this.handleWithAny(true);
         this.setHandlerName("updateViewOnDELETE", "DELETE")
     }
@@ -131,5 +80,12 @@ class SimpleRowComponent extends AbstractComponent {
         }
         this.reset(); // kids are also reset
         return Promise.resolve(stateChange);
+    }
+
+    /**
+     * @return {SimpleRowView}
+     */
+    get simpleRowView() {
+        return this.view;
     }
 }

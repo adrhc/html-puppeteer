@@ -75,16 +75,16 @@ class AbstractComponent {
     /**
      * @type {{}}
      */
-    config;
+    aggregatedOptions;
 
     /**
      * @param {{}} options could contain both behaviour and layout specifications
      */
     constructor(options) {
         this.dataAttributes = this.dataAttributesOf(options.view?.$elem, options.elemIdOrJQuery);
-        this.config = this.aggregatedOptionsOf(options); // includes this.dataAttributes
-        ObjectUtils.copyDeclaredProperties(this, this.config);
-        this.state = this.state ?? new StateHolder();
+        this.aggregatedOptions = this.aggregatedOptionsOf(options); // includes this.dataAttributes
+        ObjectUtils.copyDeclaredProperties(this, this.aggregatedOptions);
+        this.state = this.state ?? new StateHolder(this.aggregatedOptions.initialState);
         this.stateChangesDispatcher = this.stateChangesDispatcher ?? new StateChangesDispatcher(this);
         this.entityExtractor = this.entityExtractor ?? new DefaultEntityExtractor(this);
         this._setupCompositeBehaviour(options.childCompFactories);
@@ -345,11 +345,11 @@ class AbstractComponent {
     }
 
     /**
-     * @param {{}} config containing {handlerName: [changeTypes]}
+     * @param {{}} options containing {handlerName: [changeTypes]}
      * @param {string} [partName]
      */
-    configurePartChangeHandlers(config, partName) {
-        this.stateChangesDispatcher.partChangeHandlers.configureHandlerName(config);
+    configurePartChangeHandlers(options, partName) {
+        this.stateChangesDispatcher.partChangeHandlers.configureHandlerName(options);
         if (partName != null) {
             this.stateChangesDispatcher.usePartName(partName);
         }
