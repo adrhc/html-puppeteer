@@ -4,11 +4,11 @@
 <head>
     <title>JavaScript components</title>
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-    <link rel="stylesheet" href="css/ro/go/adrhc/responstable-table.css">
-    <link rel="stylesheet" href="css/library-customizations/responstable-table.css">
-    <link rel="stylesheet" href="css/ro/go/adrhc/util.css">
-    <link rel="stylesheet" href="css/ro/go/adrhc/dyna-sel-one.css">
-    <link rel="stylesheet" href="css/app.css">
+    <link href="css/ro/go/adrhc/responstable-table.css" rel="stylesheet">
+    <link href="css/library-customizations/responstable-table.css" rel="stylesheet">
+    <link href="css/ro/go/adrhc/util.css" rel="stylesheet">
+    <link href="css/ro/go/adrhc/dyna-sel-one.css" rel="stylesheet">
+    <link href="css/app.css" rel="stylesheet">
     <script src="libraries/modernizr-custom.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!--<script src="https://unpkg.com/mustache@latest"></script>-->
@@ -21,10 +21,10 @@
 <body>
 <!-- dogs table -->
 <div class="dogsTable">
-    <table id="dogsTable" class="responstable" data-some-config="some-config">
+    <table class="responstable" data-some-config="some-config" id="dogsTable">
         <thead>
         <tr>
-            <th data-owner="dogsTable" data-btn="reload" title="reload">Dogs</th>
+            <th data-btn="reload" data-owner="dogsTable" title="reload">Dogs</th>
         </tr>
         </thead>
     </table>
@@ -32,9 +32,9 @@
 
 <!-- dogs row template -->
 <template id="dogsTableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}">
+    <tr data-id="{{id}}" data-owner="dogsTable">
         <td>
-            <input type="hidden" name="id" value="{{id}}">
+            <input name="id" type="hidden" value="{{id}}">
             {{name}}
         </td>
     </tr>

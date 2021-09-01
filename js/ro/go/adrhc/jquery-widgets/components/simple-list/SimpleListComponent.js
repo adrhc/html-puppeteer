@@ -58,6 +58,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
         this.view = this.aggregatedOptions.view ?? new SimpleListView(this.aggregatedOptions);
         this.handleWithAny(["CREATE", "REPLACE", "DELETE"])
         this.repository = this.aggregatedOptions.repository ?? new InMemoryCrudRepository(this.parsedItems);
+        this.dontAutoInitialize = this._dontAutoInitializeOf(options);
         this._handleAutoInitialization();
     }
 

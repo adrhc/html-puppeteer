@@ -105,8 +105,17 @@ class AbstractComponent {
         this.entityExtractor = this.entityExtractor ?? new DefaultEntityExtractor(this);
         this._setupCompositeBehaviour(options.childCompFactories);
         this._setupChildishBehaviour(options.parentComponent);
-        this.dontAutoInitialize = this.dontAutoInitialize ?? !!this.childishBehaviour;
+        this.dontAutoInitialize = this._dontAutoInitializeOf(options);
         this._handleAutoInitialization();
+    }
+
+    /**
+     * @param {{dontAutoInitialize?: boolean|undefined}=} options
+     * @return {boolean|undefined}
+     * @protected
+     */
+    _dontAutoInitializeOf({dontAutoInitialize} = {}) {
+        return dontAutoInitialize ?? this.dataAttributes.dontAutoInitialize ?? !!this.childishBehaviour;
     }
 
     /**

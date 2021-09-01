@@ -109,11 +109,6 @@ class AbstractView {
         return this.$elem?.data(name);
     }
 
-    booleanData() {
-        const value = this.$elem?.data(name);
-        return value === "true" ? true : (value === "false" ? false : undefined);
-    }
-
     /**
      * owner and $elem are something like a configuration so should not be reset
      *
