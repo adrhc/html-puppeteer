@@ -5,6 +5,16 @@
 class SimpleListComponent extends AbstractTableBasedComponent {
     static MESSAGES = {reloadSuccessful: "Datele au fost reîncărcate!"};
     /**
+     * @type {boolean|undefined}
+     */
+    dontAutoInitialize;
+    /**
+     * items formatted as JSON
+     *
+     * @type {string|string[]|undefined}
+     */
+    items;
+    /**
      * @type {CrudRepository}
      */
     repository;
@@ -12,12 +22,6 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @type {"prepend"|"append"|undefined}
      */
     rowPositionOnCreate;
-    /**
-     * items formatted as JSON
-     *
-     * @type {string|string[]|undefined}
-     */
-    items;
     /**
      * @type {SimpleListState}
      */
@@ -28,6 +32,13 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     view;
 
     /**
+     * @return {boolean|undefined} this.simpleListConfiguration?.rowPositionOnCreate === "append"
+     */
+    get newItemsGoLast() {
+        return this.rowPositionOnCreate == null ? undefined : this.rowPositionOnCreate === "append";
+    }
+
+    /**
      * This is the computed/runtime value of items.
      *
      * @return {[]}
@@ -35,13 +46,6 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     get parsedItems() {
         const configItems = this.items ?? [];
         return typeof configItems === "string" ? JSON.parse(configItems) : configItems;
-    }
-
-    /**
-     * @return {boolean|undefined} this.simpleListConfiguration?.rowPositionOnCreate === "append"
-     */
-    get newItemsGoLast() {
-        return this.rowPositionOnCreate == null ? undefined : this.rowPositionOnCreate === "append";
     }
 
     /**

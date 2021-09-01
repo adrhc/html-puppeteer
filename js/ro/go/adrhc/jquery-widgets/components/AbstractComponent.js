@@ -3,29 +3,17 @@
  */
 class AbstractComponent {
     /**
-     * @type {{skipOwnViewUpdates: boolean}}
+     * @type {{}}
      */
-    runtimeConfig = {};
+    aggregatedOptions;
     /**
-     * @type {StateHolder}
+     * @type {Promise<StateChange[]>}
      */
-    state;
+    autoInitializationResult;
     /**
-     * @type {AbstractView}
+     * @type {string|undefined}
      */
-    view;
-    /**
-     * @type {StateChangesDispatcher}
-     */
-    stateChangesDispatcher;
-    /**
-     * @type {CompositeBehaviour}
-     */
-    compositeBehaviour;
-    /**
-     * @type {EntityExtractor}
-     */
-    entityExtractor;
+    childProperty;
     /**
      * capability of acting as a child
      *
@@ -33,13 +21,17 @@ class AbstractComponent {
      */
     childishBehaviour;
     /**
-     * @type {Promise<StateChange[]>}
-     */
-    autoInitializationResult;
-    /**
      * @type {boolean|undefined}
      */
-    dontConfigEventsOnError;
+    clearChildrenOnReset;
+    /**
+     * @type {CompositeBehaviour}
+     */
+    compositeBehaviour;
+    /**
+     * @type {{}}
+     */
+    dataAttributes;
     /**
      * @type {boolean|undefined}
      */
@@ -47,35 +39,43 @@ class AbstractComponent {
     /**
      * @type {boolean|undefined}
      */
+    dontConfigEventsOnError;
+    /**
+     * @type {boolean|undefined}
+     */
     dontReloadFromState;
-    /**
-     * @type {boolean|undefined}
-     */
-    clearChildrenOnReset;
-    /**
-     * @type {boolean|undefined}
-     */
-    updateViewOnce;
-    /**
-     * @type {boolean|undefined}
-     */
-    skipOwnViewUpdates;
-    /**
-     * @type {string|undefined}
-     */
-    childProperty;
     /**
      * @type {string|jQuery<HTMLElement>|undefined}
      */
     elemIdOrJQuery;
     /**
-     * @type {{}}
+     * @type {EntityExtractor}
      */
-    dataAttributes;
+    entityExtractor;
     /**
-     * @type {{}}
+     * @type {{skipOwnViewUpdates: boolean}}
      */
-    aggregatedOptions;
+    runtimeConfig = {};
+    /**
+     * @type {boolean|undefined}
+     */
+    skipOwnViewUpdates;
+    /**
+     * @type {StateHolder}
+     */
+    state;
+    /**
+     * @type {StateChangesDispatcher}
+     */
+    stateChangesDispatcher;
+    /**
+     * @type {boolean|undefined}
+     */
+    updateViewOnce;
+    /**
+     * @type {AbstractView}
+     */
+    view;
 
     /**
      * @returns {string}
