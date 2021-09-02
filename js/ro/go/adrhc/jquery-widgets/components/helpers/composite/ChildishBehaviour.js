@@ -55,7 +55,7 @@ class ChildishBehaviour {
      * Used by CompositeBehaviour.processStateChangeWithKids
      * where each kid extracts its part from the parent state.
      *
-     * @param [parentStateOrPart]
+     * @param {*=} parentStateOrPart
      * @param {string=} partName
      * @return {*} the child state extracted from the parent
      */
@@ -63,7 +63,7 @@ class ChildishBehaviour {
         return undefined;
     }
 
-    detachChild() {
+    leaveTheParent() {
         ArrayUtils.removeElements(this.parentComp.compositeBehaviour.childComponents, this._childComp);
     }
 }

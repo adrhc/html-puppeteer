@@ -3,10 +3,6 @@
  */
 class AbstractComponent {
     /**
-     * @type {{}}
-     */
-    defaults;
-    /**
      * @type {Promise<StateChange[]>}
      */
     autoInitializationResult;
@@ -33,6 +29,10 @@ class AbstractComponent {
      */
     dataAttributes;
     /**
+     * @type {{}}
+     */
+    defaults;
+    /**
      * @type {boolean|undefined}
      */
     dontAutoInitialize;
@@ -52,6 +52,12 @@ class AbstractComponent {
      * @type {EntityExtractor}
      */
     entityExtractor;
+    /**
+     * is the parent component of this component
+     *
+     * @type {AbstractComponent}
+     */
+    parentComponent;
     /**
      * @type {{skipOwnViewUpdates: boolean}}
      */
@@ -100,13 +106,46 @@ class AbstractComponent {
         this.dataAttributes = this.dataAttributesOf(options.view?.$elem, options.elemIdOrJQuery);
         this.defaults = this.defaultsOf(options); // includes this.dataAttributes
         Object.assign(this, this.defaults);
-        this.state = this.state ?? new StateHolder(this.defaults.initialState);
-        this.stateChangesDispatcher = this.stateChangesDispatcher ?? new StateChangesDispatcher(this);
-        this.entityExtractor = this.entityExtractor ?? new DefaultEntityExtractor(this);
-        this._setupCompositeBehaviour(options.childCompFactories);
-        this._setupChildishBehaviour(options.parentComponent);
+        this.state = this.state ?? this._createStateHolder();
+        this.view = this.view ?? this._createView();
+        this.stateChangesDispatcher = this.stateChangesDispatcher ?? this._createStateChangesDispatcher();
+        this.entityExtractor = this.entityExtractor ?? this._createEntityExtractor();
+        this._setupChildishBehaviour();
+        this._setupCompositeBehaviour();
         this.dontAutoInitialize = this._dontAutoInitializeOf(options);
         this._handleAutoInitialization();
+    }
+
+    /**
+     * @return {AbstractView}
+     * @protected
+     */
+    _createView() {
+        return undefined;
+    }
+
+    /**
+     * @return {StateHolder}
+     * @protected
+     */
+    _createStateHolder() {
+        return new StateHolder(this.defaults);
+    }
+
+    /**
+     * @return {StateChangesDispatcher}
+     * @protected
+     */
+    _createStateChangesDispatcher() {
+        return new StateChangesDispatcher(this);
+    }
+
+    /**
+     * @return {EntityExtractor}
+     * @protected
+     */
+    _createEntityExtractor() {
+        return new DefaultEntityExtractor(this, this.defaults);
     }
 
     /**
@@ -140,26 +179,41 @@ class AbstractComponent {
     }
 
     /**
-     * @typedef {function(parentComp: AbstractComponent): AbstractComponent} childCompFactoryFn
      * @protected
      */
-    _setupCompositeBehaviour(childCompFactories) {
-        this.compositeBehaviour = this.compositeBehaviour ?? new CompositeBehaviour(this);
-        if (childCompFactories) {
-            this.compositeBehaviour.addChildComponentFactory(childCompFactories);
+    _setupCompositeBehaviour() {
+        this.compositeBehaviour = this.compositeBehaviour ?? this._createCompositeBehaviour();
+        if (this.defaults.childCompFactories) {
+            this.compositeBehaviour.addChildComponentFactory(this.defaults.childCompFactories);
         }
     }
 
     /**
      * @protected
      */
-    _setupChildishBehaviour(parentComponent) {
-        if (!this.canConstructChildishBehaviour(parentComponent)) {
+    _setupChildishBehaviour() {
+        if (!this.canConstructChildishBehaviour()) {
             console.log(`${this.constructor.name} no childish behaviour`);
             return;
         }
-        this.childishBehaviour = this.childishBehaviour ?? new DefaultChildishBehaviour(parentComponent, {childProperty: this.childProperty})
+        this.childishBehaviour = this.childishBehaviour ?? this._createChildishBehaviour()
         this.childishBehaviour.childComp = this;
+    }
+
+    /**
+     * @return {ChildishBehaviour}
+     * @protected
+     */
+    _createChildishBehaviour() {
+        return new DefaultChildishBehaviour(this.parentComponent, this.defaults);
+    }
+
+    /**
+     * @return {CompositeBehaviour}
+     * @protected
+     */
+    _createCompositeBehaviour() {
+        return new CompositeBehaviour(this);
     }
 
     /**
@@ -167,8 +221,8 @@ class AbstractComponent {
      * @return {boolean}
      * @protected
      */
-    canConstructChildishBehaviour(parentComponent) {
-        return this.childishBehaviour != null || parentComponent != null;
+    canConstructChildishBehaviour() {
+        return this.childishBehaviour != null || this.parentComponent != null;
     }
 
     /**
@@ -189,9 +243,7 @@ class AbstractComponent {
      * @return {boolean}
      */
     updateStateFromKidsViews(parentState) {
-        if (this.childishBehaviour) {
-            this.childishBehaviour.updateParentStateFromKidView(parentState);
-        }
+        this.childishBehaviour?.updateParentStateFromKidView(parentState);
     }
 
     /**
@@ -362,11 +414,11 @@ class AbstractComponent {
      * Assigns handlerName to change types.
      *
      * @param {string} handlerName
-     * @param {string|number} changeType defaults to [handlerName]
+     * @param {string|number|string[]|number[]} changeTypes
      */
-    setHandlerName(handlerName, ...changeType) {
-        const changeTypes = changeType.length ? changeType : [handlerName];
-        this.stateChangesDispatcher.stateChangeHandlers.setHandlerName(handlerName, ...changeTypes);
+    setHandlerName(handlerName, changeTypes) {
+        changeTypes = changeTypes.length ? changeTypes : [changeTypes];
+        this.stateChangesDispatcher.stateChangeHandlers.setHandlerName(handlerName, changeTypes);
     }
 
     /**
@@ -387,7 +439,7 @@ class AbstractComponent {
         if (typeof enableForAllOrSpecificChangeTypes === "boolean") {
             this.setHandlerName("updateViewOnAny", enableForAllOrSpecificChangeTypes ? StateChangeHandlersManager.ALL_CHANGE_TYPES : undefined);
         } else {
-            this.setHandlerName("updateViewOnAny", ...enableForAllOrSpecificChangeTypes);
+            this.setHandlerName("updateViewOnAny", enableForAllOrSpecificChangeTypes);
         }
     }
 
@@ -405,9 +457,7 @@ class AbstractComponent {
      */
     reset() {
         this.compositeBehaviour.reset(this.clearChildrenOnReset);
-        if (this.view.$elem) {
-            this.view.$elem.off();
-        }
+        this.view.$elem?.off();
         this.view.reset();
         this.state.reset();
     }

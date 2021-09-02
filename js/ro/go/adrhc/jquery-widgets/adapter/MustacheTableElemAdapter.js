@@ -6,13 +6,23 @@
  */
 class MustacheTableElemAdapter extends TableElementAdapter {
     /**
-     * @param {string|jQuery<HTMLTableRowElement>} tableId
-     * @param options
+     * @return {jQuery<HTMLTableRowElement>} the row template for this table
      */
-    constructor(options = new MustacheTableElemAdapterOptions()) {
-        super(options);
-        this._setupBodyRowTmplHtml(options.bodyRowTmplId, options.bodyRowTmplHtml);
-        this._setupBodyTmplHtml(options.bodyTmplHtml);
+    get $bodyRowTmpl() {
+        return super.$firstRow;
+    }
+
+    /**
+     * @param {Object} options
+     * @param {string} options.bodyRowTmplId is the id of the <template> for a single row
+     * @param {string} options.bodyRowTmplHtml is the <template> for a single row
+     * @param {string} options.bodyTmplHtml is the rule to generate the table rows; when !!bodyRowTmplHtml it is: {{#items}}{{> bodyRow}}{{/items}}
+     * @param {{}} tableElementAdapterOptions
+     */
+    constructor({bodyRowTmplId, bodyRowTmplHtml, bodyTmplHtml, ...tableElementAdapterOptions}) {
+        super(tableElementAdapterOptions);
+        this._setupBodyRowTmplHtml(bodyRowTmplId, bodyRowTmplHtml);
+        this._setupBodyTmplHtml(bodyTmplHtml);
     }
 
     /**
@@ -100,12 +110,5 @@ class MustacheTableElemAdapter extends TableElementAdapter {
         } else {
             return rowTmplHtml;
         }
-    }
-
-    /**
-     * @return {jQuery<HTMLTableRowElement>} the row template for this table
-     */
-    get $bodyRowTmpl() {
-        return super.$firstRow;
     }
 }

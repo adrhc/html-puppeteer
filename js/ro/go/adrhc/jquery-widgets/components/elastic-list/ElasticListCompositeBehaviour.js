@@ -1,5 +1,4 @@
 class ElasticListCompositeBehaviour extends CompositeBehaviour {
-
     /**
      * @param parentComp {ElasticListComponent}
      * @param idRowCompFactoryFn {function(entity: IdentifiableEntity, index: number, parent: ElasticListComponent): IdentifiableRowComponent}
@@ -8,6 +7,33 @@ class ElasticListCompositeBehaviour extends CompositeBehaviour {
         super(parentComp);
         this.idRowCompFactoryFn = idRowCompFactoryFn;
         this.elasticListComponent = parentComp;
+    }
+
+    /**
+     * @typedef {function(parentComp: AbstractComponent): AbstractComponent} childCompFactoryFn
+     *
+     * @param {Object} options
+     * @param {ElasticListComponent} parentComponent
+     * @param {boolean=} options.newItemsGoLast
+     * @param {function(parentComponent: AbstractComponent): DefaultChildishBehaviour)} options.rowChildishBehaviourFactoryFn
+     * @param {function(item, index, elasticListComponent: ElasticListComponent): IdentifiableRowComponent} options.idRowCompFactoryFn
+     * @param {childCompFactoryFn|Array<childCompFactoryFn>|ChildComponentFactory|ChildComponentFactory[]} rowChildCompFactories
+     * @return {ElasticListCompositeBehaviour}
+     */
+    static of({parentComponent, newItemsGoLast, rowChildishBehaviourFactoryFn, idRowCompFactoryFn, rowChildCompFactories}) {
+        rowChildishBehaviourFactoryFn = rowChildishBehaviourFactoryFn ??
+            ((parentComponent) => new DefaultChildishBehaviour(parentComponent));
+        idRowCompFactoryFn = idRowCompFactoryFn ??
+            ((item, index, elasticListComponent) => {
+                const idRowComp = new IdentifiableRowComponent({
+                    mustacheTableElemAdapter: elasticListComponent.tableBasedView.tableAdapter,
+                    childCompFactories: rowChildCompFactories,
+                    childishBehaviour: rowChildishBehaviourFactoryFn(elasticListComponent)
+                });
+                idRowComp.state.replace(new EntityRow(item, {index, append: newItemsGoLast}));
+                return idRowComp;
+            });
+        return new ElasticListCompositeBehaviour(parentComponent, idRowCompFactoryFn);
     }
 
     /**

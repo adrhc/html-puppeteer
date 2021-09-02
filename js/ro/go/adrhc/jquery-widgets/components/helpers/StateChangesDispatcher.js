@@ -8,6 +8,10 @@ class StateChangesDispatcher {
      */
     handlerPrefix = "updateViewOn";
     /**
+     * @type {StateChangeHandlersManager}
+     */
+    partChangeHandlers = new StateChangeHandlersManager();
+    /**
      * @type {string}
      */
     partName;
@@ -15,10 +19,6 @@ class StateChangesDispatcher {
      * @type {StateChangeHandlersManager}
      */
     stateChangeHandlers = new StateChangeHandlersManager();
-    /**
-     * @type {StateChangeHandlersManager}
-     */
-    partChangeHandlers = new StateChangeHandlersManager();
 
     /**
      * @param component {AbstractComponent}
@@ -64,7 +64,9 @@ class StateChangesDispatcher {
             return Promise.resolve(stateChange);
         }
 
-        let partChangeHandlerName = this._partChangeHandlerNameOf(stateChange.changeType, stateChange.partName);
+        let partChangeHandlerName = this._partChangeHandlerNameOf(
+            // todo: check if stateChange.newPartName ?? stateChange.previousPartName approach is ok
+            stateChange.changeType, stateChange.newPartName ?? stateChange.previousPartName);
         if (partChangeHandlerName) {
             return this.component[partChangeHandlerName](stateChange);
         }
@@ -134,17 +136,18 @@ class StateChangeHandlersManager {
      * Assigns handlerName to change types.
      *
      * @param {string} handlerName
-     * @param {string|number} changeType
+     * @param {string|number|string[]|number[]} changeTypes
      */
-    setHandlerName(handlerName, ...changeType) {
-        this.stateChangeHandlers[handlerName] = changeType;
+    setHandlerName(handlerName, changeTypes) {
+        changeTypes = changeTypes.length ? changeTypes : [changeTypes];
+        this.stateChangeHandlers[handlerName] = changeTypes;
     }
 
     /**
      * @param {{}} config containing {handlerName: [changeTypes]}
      */
     configureHandlerName(config) {
-        $.extend(this.stateChangeHandlers, config);
+        Object.assign(this.stateChangeHandlers, config);
     }
 
     /**

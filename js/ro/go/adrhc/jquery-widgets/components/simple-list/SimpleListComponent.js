@@ -9,33 +9,17 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      */
     dontAutoInitialize;
     /**
-     * items formatted as JSON
-     *
-     * @type {string|string[]|undefined}
-     */
-    items;
-    /**
      * @type {CrudRepository}
      */
     repository;
-    /**
-     * @type {"prepend"|"append"|undefined}
-     */
-    rowPositionOnCreate;
-    /**
-     * @type {SimpleListState}
-     */
-    state;
-    /**
-     * @type {SimpleListView}
-     */
-    view;
 
     /**
+     * rowPositionOnCreate could be "prepend"|"append"
+     *
      * @return {boolean|undefined} this.simpleListConfiguration?.rowPositionOnCreate === "append"
      */
     get newItemsGoLast() {
-        return this.rowPositionOnCreate == null ? undefined : this.rowPositionOnCreate === "append";
+        return this.defaults.rowPositionOnCreate == null ? undefined : this.defaults.rowPositionOnCreate === "append";
     }
 
     /**
@@ -44,7 +28,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @return {[]}
      */
     get parsedItems() {
-        const configItems = this.items ?? [];
+        const configItems = this.defaults.items ?? [];
         return typeof configItems === "string" ? JSON.parse(configItems) : configItems;
     }
 
@@ -55,15 +39,36 @@ class SimpleListComponent extends AbstractTableBasedComponent {
         return this.state;
     }
 
-    constructor(options) {
-        super({dontAutoInitialize: true, ...options});
-        Object.assign(this, this.defaults);
-        this.state = this.defaults.state ?? new SimpleListState();
-        this.view = this.defaults.view ?? new SimpleListView(this.defaults);
+    constructor(abstractComponentOptions) {
+        super({dontAutoInitialize: true, ...abstractComponentOptions});
+        this.repository = this.defaults.repository ?? this._createCrudRepository();
         this.handleWithAny(["CREATE", "REPLACE", "DELETE"])
-        this.repository = this.defaults.repository ?? new InMemoryCrudRepository(this.parsedItems);
-        this.dontAutoInitialize = this._dontAutoInitializeOf(options);
+        this.dontAutoInitialize = this._dontAutoInitializeOf(abstractComponentOptions);
         this._handleAutoInitialization();
+    }
+
+    /**
+     * @return {CrudRepository}
+     * @protected
+     */
+    _createCrudRepository() {
+        return new InMemoryCrudRepository(this.parsedItems, this.defaults.responseConverter, this.defaults.requestConverter);
+    }
+
+    /**
+     * @return {StateHolder}
+     * @protected
+     */
+    _createStateHolder() {
+        return new SimpleListState(this.defaults);
+    }
+
+    /**
+     * @return {SimpleListView}
+     * @protected
+     */
+    _createView() {
+        return new SimpleListView(this.defaults);
     }
 
     /**

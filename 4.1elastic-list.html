@@ -4,10 +4,10 @@
 <head>
     <title>JavaScript components</title>
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-    <link rel="stylesheet" href="css/ro/go/adrhc/responstable-table.css">
-    <link rel="stylesheet" href="css/ro/go/adrhc/util.css">
-    <link rel="stylesheet" href="css/ro/go/adrhc/dyna-sel-one.css">
-    <link rel="stylesheet" href="css/app.css">
+    <link href="css/ro/go/adrhc/responstable-table.css" rel="stylesheet">
+    <link href="css/ro/go/adrhc/util.css" rel="stylesheet">
+    <link href="css/ro/go/adrhc/dyna-sel-one.css" rel="stylesheet">
+    <link href="css/app.css" rel="stylesheet">
     <script src="libraries/modernizr-custom.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!--<script src="https://unpkg.com/mustache@latest"></script>-->
@@ -19,19 +19,19 @@
 <body>
 
 <div class="dogsTable">
-    <table id="dogsTable" class="responstable"
+    <table class="responstable" data-items='[{"id": 1, "name": "dog1"}, {"id": 2, "name": "dog2"}, {"id": 3, "name": "dog3"}]'
            data-jqw-type="ElasticList"
            data-row-position-on-create="append"
-           data-items='[{"id": 1, "name": "dog1"}, {"id": 2, "name": "dog2"}, {"id": 3, "name": "dog3"}]'>
+           id="dogsTable">
         <thead>
         <tr>
-            <th data-owner="dogsTable" data-btn="reload" title="reload">Dogs</th>
+            <th data-btn="reload" data-owner="dogsTable" title="reload">Dogs</th>
         </tr>
         </thead>
-        <tr data-owner="{{owner}}" data-id="{{id}}">
+        <tr data-id="{{id}}" data-owner="{{owner}}">
             <td>
-                <input data-owner="dogsTable" type="hidden" name="id" value="{{id}}">
-                <input data-owner="dogsTable" type="hidden" name="name" value="{{name}}">
+                <input data-owner="dogsTable" name="id" type="hidden" value="{{id}}">
+                <input data-owner="dogsTable" name="name" type="hidden" value="{{name}}">
                 {{{name}}}
             </td>
         </tr>
@@ -54,7 +54,6 @@
 <!-- helpers -->
 <script src="js/ro/go/adrhc/jquery-widgets/helper/CachedHtmlTemplate.js"></script>
 <!-- adapters -->
-<script src="js/ro/go/adrhc/jquery-widgets/adapter/MustacheTableElemAdapterOptions.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/adapter/TableElementAdapter.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/adapter/MustacheTableElemAdapter.js"></script>
 <!-- model -->
@@ -82,6 +81,7 @@
 <script src="js/ro/go/adrhc/jquery-widgets/components/state/mapper/IdentityStateChangeMapper.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/state/mapper/TaggingStateChangeMapper.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/state/SimpleListState.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/state/PartialStateHolder.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/state/CrudListState.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/model/on-off/swapping-details.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/state/RowSwappingStateHolder.js"></script>

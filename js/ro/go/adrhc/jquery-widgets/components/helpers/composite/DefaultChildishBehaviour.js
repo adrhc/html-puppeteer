@@ -83,7 +83,7 @@ class DefaultChildishBehaviour extends ChildishBehaviour {
      *
      * compositeBehaviour.processStateChangeWithKids calls kidComp.update(compositeBehaviour._extractChildState)
      *
-     * @param {*} parentStateOrPart available from a parent-StateChange
+     * @param {*=} parentStateOrPart available from a parent-StateChange
      * @param {string=} partName
      * @return {*}
      */

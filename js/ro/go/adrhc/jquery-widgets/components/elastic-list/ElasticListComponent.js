@@ -9,98 +9,63 @@
  */
 class ElasticListComponent extends SimpleListComponent {
     /**
-     * @type {CrudListState}
+     * @type {boolean|undefined}
      */
-    crudListState;
+    dontAutoInitialize;
 
     /**
-     * @param elemIdOrJQuery {string|jQuery<HTMLTableElement>}
-     * @param bodyRowTmplId
-     * @param bodyRowTmplHtml
-     * @param bodyTmplHtml
-     * @param rowDataId
-     * @param rowPositionOnCreate
-     * @param childProperty
-     * @param dontAutoInitialize
-     * @param {ComponentConfiguration} [config]
-     * @param repository {CrudRepository}
-     * @param state {CrudListState}
-     * @param view {SimpleListView}
-     * @param idRowCompFactoryFn {function(identifiableEntity: IdentifiableEntity, index: number, elasticListComponent: ElasticListComponent): IdentifiableRowComponent}
-     * @param items {[]=} is the equivalent of the parsed config-items
-     * @param newItemsGoLast
-     * @param newEntityFactoryFn
-     * @param mustacheTableElemAdapter
-     * @param rowChildCompFactories
-     * @param rowChildishBehaviourFactoryFn
-     * @param childishBehaviour
-     * @param parentComponent
+     * @type {CrudListState}
      */
-    constructor({
-                    elemIdOrJQuery,
-                    bodyRowTmplId,
-                    bodyRowTmplHtml,
-                    bodyTmplHtml,
-                    rowDataId,
-                    rowPositionOnCreate,
-                    childProperty,
-                    dontAutoInitialize,
-                    childishBehaviour,
-                    parentComponent,
-                    config = new SimpleListConfiguration({
-                        elemIdOrJQuery,
-                        bodyRowTmplId,
-                        bodyRowTmplHtml,
-                        bodyTmplHtml,
-                        rowDataId,
-                        rowPositionOnCreate,
-                        childProperty,
-                        dontAutoInitialize
-                    }),
-                    items = typeof config.items === "string" ? JSON.parse(config.items) : config.items ?? [],
-                    repository = new InMemoryCrudRepository(items),
-                    mustacheTableElemAdapter = new MustacheTableElemAdapter({elemIdOrJQuery, ...config}),
-                    newEntityFactoryFn,
-                    state = new CrudListState({
-                        newEntityFactoryFn,
-                        newItemsGoLast: mustacheTableElemAdapter.rowPositionOnCreate != null ?
-                            mustacheTableElemAdapter.rowPositionOnCreate === "append" : undefined
-                    }),
-                    view = new SimpleListView(mustacheTableElemAdapter),
-                    rowChildCompFactories,
-                    rowChildishBehaviourFactoryFn = (parentComp) => new DefaultChildishBehaviour(parentComp),
-                    idRowCompFactoryFn = (item, index, elasticListComponent) => {
-                        const idRowComp = new IdentifiableRowComponent({
-                            mustacheTableElemAdapter: elasticListComponent.tableBasedView.tableAdapter,
-                            childCompFactories: rowChildCompFactories,
-                            childishBehaviour: rowChildishBehaviourFactoryFn(elasticListComponent)
-                        });
-                        idRowComp.state.replaceEntirely(new EntityRow(item, {index}));
-                        return idRowComp;
-                    },
-                    compositeBehaviour,
-                    childCompFactories
-                }
-    ) {
-        // the "super" missing parameters (e.g. bodyRowTmplId) are included in "config" or they are
-        // simply intermediate values (e.g. elemIdOrJQuery is used to compute mustacheTableElemAdapter)
-        super({
-            config: config.dontAutoInitializeOf(),
-            repository,
-            state,
-            view,
-            compositeBehaviour,
-            childCompFactories,
-            childishBehaviour,
-            parentComponent
-        });
-        this.config = config; // the "config" set by "super" is different (see line above)
-        this.entityExtractor = new ElasticListEntityExtractor(this);
-        this.crudListState = state;
-        this.configurePartChangeHandlers({handleItemCreation: ["CREATE"]}, "Item");
-        this.compositeBehaviour = this.compositeBehaviour ?? new ElasticListCompositeBehaviour(this, idRowCompFactoryFn);
-        this._setupCompositeBehaviour(childCompFactories);
+    get crudListState() {
+        return this.state;
+    };
+
+    /**
+     * @return {ElasticListCompositeBehaviour}
+     */
+    get elasticListComposite() {
+        return this.compositeBehaviour;
+    }
+
+    /**
+     * @param {{}} options
+     */
+    constructor(options) {
+        super({dontAutoInitialize: true, ...options});
+        this.configurePartChangeHandlers({
+            handleItemCreation: ["CREATE"],
+            updateViewOnAnyItem: [StateChangeHandlersManager.ALL_CHANGE_TYPES]
+        }, "Item");
+        this.dontAutoInitialize = this._dontAutoInitializeOf(options);
         this._handleAutoInitialization();
+    }
+
+    /**
+     * @return {StateHolder}
+     * @protected
+     */
+    _createStateHolder() {
+        return new CrudListState({
+            newItemsGoLast: this.newItemsGoLast, ...this.defaults
+        });
+    }
+
+    /**
+     * @return {EntityExtractor}
+     * @protected
+     */
+    _createEntityExtractor() {
+        return new ElasticListEntityExtractor(this);
+    }
+
+    /**
+     * @return {CompositeBehaviour}
+     * @protected
+     */
+    _createCompositeBehaviour() {
+        return ElasticListCompositeBehaviour.of({
+            ...this.defaults, parentComponent: this, newItemsGoLast: this.newItemsGoLast
+        });
     }
 
     /**
@@ -109,7 +74,8 @@ class ElasticListComponent extends SimpleListComponent {
     _handleReload() {
         return this.doWithState(() => {
             this.compositeBehaviour.childComponents.forEach(kid => {
-                this.crudListState.removeById(kid.state.currentState.entity.id);
+                const kidEntityId = kid.state.currentState.entity.id;
+                this.crudListState.removeById(kidEntityId);
             });
         }).then(() => super._handleReload());
     }
@@ -124,17 +90,17 @@ class ElasticListComponent extends SimpleListComponent {
     }
 
     /**
-     * This is an ElasticListComponent where its view (SimpleListView) is able to handle a collection
-     * of items but not a single item; for 1 item-update I'm delegating to its row the update-view call.
+     * This is an ElasticListComponent having SimpleListView as view which is able to handle a collection
+     * of items but not a single item; for 1 item-update I'm delegating the update-view call to its row.
      *
-     * @param stateChange
+     * @param {StateChange} stateChange
      * @return {Promise}
      */
     updateViewOnAnyItem(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnAnyITEM:\n${JSON.stringify(stateChange)}`);
-        const previousId = stateChange.previousStateOrPart.entity.id;
+        const previousId = stateChange.previousStateOrPart.id;
         const idRowComp = this.elasticListComposite.findKidById(previousId);
-        return idRowComp.update(stateChange.stateOrPart);
+        return idRowComp.update(stateChange.newStateOrPart);
     }
 
     /**
@@ -145,12 +111,5 @@ class ElasticListComponent extends SimpleListComponent {
         console.log(`${this.constructor.name}.updateViewOnAny: removing all rows only\n${JSON.stringify(stateChange)}`);
         this.tableBasedView.tableAdapter.removeAllRows();
         return Promise.resolve(stateChange);
-    }
-
-    /**
-     * @return {ElasticListCompositeBehaviour}
-     */
-    get elasticListComposite() {
-        return this.compositeBehaviour;
     }
 }
