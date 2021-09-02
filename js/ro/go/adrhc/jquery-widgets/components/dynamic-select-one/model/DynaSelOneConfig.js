@@ -71,7 +71,7 @@ class DynaSelOneConfig extends ComponentConfiguration {
         super();
         const dataAttributes = DomUtils.dataOf(options.elemIdOrJQuery);
         const config = _.defaults({}, options, dataAttributes, DynaSelOneConfig.DEFAULTS);
-        ObjectUtils.copyDeclaredProperties(this, config);
+        Object.assign(this, config);
         config.searchOnBlur = config.searchOnBlur ?? config.minCharsToSearch > 0;
         config.loadOptionsOnInit = config.loadOptionsOnInit ?? config.minCharsToSearch === 0;
         return config;

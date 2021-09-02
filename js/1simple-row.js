@@ -30,6 +30,7 @@ $(() => {
         elemIdOrJQuery: dogsTable,
         bodyRowTmplId: "readOnlyRowTmpl",
         items: DbMocks.dogsOf(3),
+        dontAutoInitialize: true
     });
     const simpleListTableAdapter = simpleListComponent.tableBasedView.tableAdapter;
     simpleListComponent.init().then(stateChanges => {

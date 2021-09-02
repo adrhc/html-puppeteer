@@ -99,7 +99,7 @@ class AbstractComponent {
     constructor(options) {
         this.dataAttributes = this.dataAttributesOf(options.view?.$elem, options.elemIdOrJQuery);
         this.aggregatedOptions = this.aggregatedOptionsOf(options); // includes this.dataAttributes
-        ObjectUtils.copyDeclaredProperties(this, this.aggregatedOptions);
+        Object.assign(this, this.aggregatedOptions);
         this.state = this.state ?? new StateHolder(this.aggregatedOptions.initialState);
         this.stateChangesDispatcher = this.stateChangesDispatcher ?? new StateChangesDispatcher(this);
         this.entityExtractor = this.entityExtractor ?? new DefaultEntityExtractor(this);

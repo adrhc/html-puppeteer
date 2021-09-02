@@ -21,8 +21,7 @@
 <body>
 <!-- dogs table with editable row -->
 <div class="dogsTable">
-    <table class="responstable" data-body-row-tmpl-id="readOnlyRowTmpl" data-dont-auto-initialize="true"
-           id="dogsTable">
+    <table class="responstable" data-body-row-tmpl-id="readOnlyRowTmpl" id="dogsTable">
         <thead>
         <tr data-owner="dogsTable">
             <th data-btn="reload" data-owner="dogsTable" title="reload">
@@ -34,10 +33,10 @@
 </div>
 
 <template id="dogsTableEditableRowTmpl">
-    <tr data-owner="dogsTable" data-id="{{id}}">
+    <tr data-id="{{id}}" data-owner="dogsTable">
         <td>
-            <input type="hidden" name="id" value="{{id}}">
-            <input type="text" autocomplete="off" placeholder="name" name="name" value="{{name}}">
+            <input name="id" type="hidden" value="{{id}}">
+            <input autocomplete="off" name="name" placeholder="name" type="text" value="{{name}}">
         </td>
     </tr>
 </template>
@@ -75,7 +74,6 @@
 <script src="js/ro/go/adrhc/jquery-widgets/utils/PositionUtils.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/utils/FormUtils.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/utils/HtmlUtils.js"></script>
-<script src="js/ro/go/adrhc/jquery-widgets/utils/ObjectUtils.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/utils/RestUtils.js"></script>
 <!-- helpers -->
 <script src="js/ro/go/adrhc/jquery-widgets/helper/CachedHtmlTemplate.js"></script>

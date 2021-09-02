@@ -18,7 +18,7 @@ class SimpleListConfiguration extends ComponentConfiguration {
      */
     constructor(dataAttributes) {
         super();
-        // ObjectUtils.copyDeclaredProperties(this, dataAttributes);
+        // Object.assign(this, dataAttributes);
         _.defaults(this, dataAttributes);
     }
 

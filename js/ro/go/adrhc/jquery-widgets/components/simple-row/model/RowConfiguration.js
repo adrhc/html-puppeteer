@@ -13,6 +13,6 @@ class RowConfiguration extends ComponentConfiguration {
      */
     constructor(dataAttributes) {
         super();
-        ObjectUtils.copyDeclaredProperties(this, dataAttributes);
+        Object.assign(this, dataAttributes);
     }
 }

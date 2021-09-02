@@ -57,7 +57,7 @@ class SimpleListComponent extends AbstractTableBasedComponent {
 
     constructor(options) {
         super({dontAutoInitialize: true, ...options});
-        ObjectUtils.copyDeclaredProperties(this, this.aggregatedOptions);
+        Object.assign(this, this.aggregatedOptions);
         this.state = this.aggregatedOptions.state ?? new SimpleListState();
         this.view = this.aggregatedOptions.view ?? new SimpleListView(this.aggregatedOptions);
         this.handleWithAny(["CREATE", "REPLACE", "DELETE"])

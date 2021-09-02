@@ -39,7 +39,7 @@ class ComponentConfiguration {
     elemIdOrJQuery;
 
     constructor(dataAttributes) {
-        ObjectUtils.copyDeclaredProperties(this, dataAttributes);
+        Object.assign(this, dataAttributes);
     }
 
     /**
@@ -51,7 +51,7 @@ class ComponentConfiguration {
      */
     static configWithDataAttributesOf(elemIdOrJQuery, ...firstWinDefaults) {
         const defaults = _.defaults({}, DomUtils.dataOf(elemIdOrJQuery), {elemIdOrJQuery}, ...firstWinDefaults);
-        ObjectUtils.copyDeclaredProperties(new ComponentConfiguration(), defaults);
+        Object.assign(new ComponentConfiguration(), defaults);
     }
 
     /**
@@ -60,7 +60,7 @@ class ComponentConfiguration {
      * @return {C}
      */
     dontAutoInitializeOf(value = true, immutableOperation = true) {
-        const object = immutableOperation ? ObjectUtils.copyDeclaredProperties(this._newOfSelfClass(), this) : this;
+        const object = immutableOperation ? Object.assign(this._newOfSelfClass(), this) : this;
         object.dontAutoInitialize = value;
         return object;
     }
