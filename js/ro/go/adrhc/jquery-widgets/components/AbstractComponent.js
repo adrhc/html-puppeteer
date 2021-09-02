@@ -5,7 +5,7 @@ class AbstractComponent {
     /**
      * @type {{}}
      */
-    aggregatedOptions;
+    defaults;
     /**
      * @type {Promise<StateChange[]>}
      */
@@ -98,9 +98,9 @@ class AbstractComponent {
      */
     constructor(options) {
         this.dataAttributes = this.dataAttributesOf(options.view?.$elem, options.elemIdOrJQuery);
-        this.aggregatedOptions = this.aggregatedOptionsOf(options); // includes this.dataAttributes
-        Object.assign(this, this.aggregatedOptions);
-        this.state = this.state ?? new StateHolder(this.aggregatedOptions.initialState);
+        this.defaults = this.defaultsOf(options); // includes this.dataAttributes
+        Object.assign(this, this.defaults);
+        this.state = this.state ?? new StateHolder(this.defaults.initialState);
         this.stateChangesDispatcher = this.stateChangesDispatcher ?? new StateChangesDispatcher(this);
         this.entityExtractor = this.entityExtractor ?? new DefaultEntityExtractor(this);
         this._setupCompositeBehaviour(options.childCompFactories);
@@ -125,7 +125,7 @@ class AbstractComponent {
      * @protected
      */
     dataAttributesOf($viewElem, elemIdOrJQuery) {
-        return _.defaults({}, DomUtils.dataOf($viewElem), DomUtils.dataOf(elemIdOrJQuery));
+        return Object.assign({}, DomUtils.dataOf(elemIdOrJQuery), DomUtils.dataOf($viewElem));
     }
 
     /**
@@ -135,8 +135,8 @@ class AbstractComponent {
      * @return {{}}
      * @private
      */
-    aggregatedOptionsOf(options) {
-        return _.defaults({}, {...options}, this.dataAttributes);
+    defaultsOf(options) {
+        return Object.assign({}, this.dataAttributes, {...options});
     }
 
     /**

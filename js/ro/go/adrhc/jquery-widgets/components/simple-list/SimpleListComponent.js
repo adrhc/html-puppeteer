@@ -57,11 +57,11 @@ class SimpleListComponent extends AbstractTableBasedComponent {
 
     constructor(options) {
         super({dontAutoInitialize: true, ...options});
-        Object.assign(this, this.aggregatedOptions);
-        this.state = this.aggregatedOptions.state ?? new SimpleListState();
-        this.view = this.aggregatedOptions.view ?? new SimpleListView(this.aggregatedOptions);
+        Object.assign(this, this.defaults);
+        this.state = this.defaults.state ?? new SimpleListState();
+        this.view = this.defaults.view ?? new SimpleListView(this.defaults);
         this.handleWithAny(["CREATE", "REPLACE", "DELETE"])
-        this.repository = this.aggregatedOptions.repository ?? new InMemoryCrudRepository(this.parsedItems);
+        this.repository = this.defaults.repository ?? new InMemoryCrudRepository(this.parsedItems);
         this.dontAutoInitialize = this._dontAutoInitializeOf(options);
         this._handleAutoInitialization();
     }

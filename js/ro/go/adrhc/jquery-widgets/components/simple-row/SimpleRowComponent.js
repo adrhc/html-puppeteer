@@ -23,11 +23,11 @@ class SimpleRowComponent extends AbstractComponent {
      */
     constructor(options) {
         super({clearChildrenOnReset: true, dontAutoInitialize: true, ...options});
-        Object.assign(this, this.aggregatedOptions);
-        const mustacheTableElemAdapter = this.aggregatedOptions.mustacheTableElemAdapter
-            ?? new MustacheTableElemAdapter(this.aggregatedOptions);
-        this.view = this.aggregatedOptions.view ?? new SimpleRowView(mustacheTableElemAdapter);
-        this.state = this.aggregatedOptions.state ?? new SimpleRowState(this.aggregatedOptions);
+        Object.assign(this, this.defaults);
+        const mustacheTableElemAdapter = this.defaults.mustacheTableElemAdapter
+            ?? new MustacheTableElemAdapter(this.defaults);
+        this.view = this.defaults.view ?? new SimpleRowView(mustacheTableElemAdapter);
+        this.state = this.defaults.state ?? new SimpleRowState(this.defaults);
         this.handleWithAny(true);
         this.setHandlerName("updateViewOnDELETE", "DELETE")
     }
