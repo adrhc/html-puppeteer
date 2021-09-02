@@ -4,10 +4,10 @@
 <head>
     <title>JavaScript components</title>
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-    <link rel="stylesheet" href="css/ro/go/adrhc/responstable-table.css">
-    <link rel="stylesheet" href="css/ro/go/adrhc/util.css">
-    <link rel="stylesheet" href="css/ro/go/adrhc/dyna-sel-one.css">
-    <link rel="stylesheet" href="css/app.css">
+    <link href="css/ro/go/adrhc/responstable-table.css" rel="stylesheet">
+    <link href="css/ro/go/adrhc/util.css" rel="stylesheet">
+    <link href="css/ro/go/adrhc/dyna-sel-one.css" rel="stylesheet">
+    <link href="css/app.css" rel="stylesheet">
     <script src="libraries/modernizr-custom.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!--<script src="https://unpkg.com/mustache@latest"></script>-->
@@ -19,30 +19,30 @@
 <body>
 
 <!-- dogs table with append -->
-<div class="dogsTable">
-    <table id="dogsTableWithAppend" class="responstable"
+<!--<div class="dogsTable">
+    <table class="responstable" data-body-row-tmpl-id="dogsTableRowTmpl"
+           data-items='[{"id": 1, "name": "dog1"}, {"id": 2, "name": "dog2"}, {"id": 3, "name": "dog3"}]'
            data-jqw-type="ElasticList"
-           data-body-row-tmpl-id="dogsTableRowTmpl"
            data-row-position-on-create="append"
-           data-items='[{"id": 1, "name": "dog1"}, {"id": 2, "name": "dog2"}, {"id": 3, "name": "dog3"}]'>
+           id="dogsTableWithAppend">
         <thead>
         <tr>
-            <th data-owner="dogsTableWithAppend" data-btn="reload" title="reload">Dogs with append</th>
+            <th data-btn="reload" data-owner="dogsTableWithAppend" title="reload">Dogs with append</th>
         </tr>
         </thead>
     </table>
-</div>
+</div>-->
 
 <!-- dogs table with prepend -->
 <div class="dogsTable">
-    <table id="dogsTableWithPrepend" class="responstable"
+    <table class="responstable" data-body-row-tmpl-id="dogsTableRowTmpl"
+           data-items='[{"id": 1, "name": "dog1"}, {"id": 2, "name": "dog2"}, {"id": 3, "name": "dog3"}]'
            data-jqw-type="ElasticList"
-           data-body-row-tmpl-id="dogsTableRowTmpl"
            data-row-position-on-create="prepend"
-           data-items='[{"id": 1, "name": "dog1"}, {"id": 2, "name": "dog2"}, {"id": 3, "name": "dog3"}]'>
+           id="dogsTableWithPrepend">
         <thead>
         <tr>
-            <th data-owner="dogsTableWithPrepend" data-btn="reload" title="reload">Dogs with prepend</th>
+            <th data-btn="reload" data-owner="dogsTableWithPrepend" title="reload">Dogs with prepend</th>
         </tr>
         </thead>
     </table>
@@ -50,10 +50,10 @@
 
 <!-- dogs row template -->
 <template id="dogsTableRowTmpl">
-    <tr data-owner="{{owner}}" data-id="{{id}}">
+    <tr data-id="{{id}}" data-owner="{{owner}}">
         <td>
-            <input data-owner="{{owner}}" type="hidden" name="id" value="{{id}}">
-            <input data-owner="{{owner}}" type="hidden" name="name" value="{{name}}">
+            <input data-owner="{{owner}}" name="id" type="hidden" value="{{id}}">
+            <input data-owner="{{owner}}" name="name" type="hidden" value="{{name}}">
             {{{name}}}
         </td>
     </tr>
@@ -102,6 +102,7 @@
 <script src="js/ro/go/adrhc/jquery-widgets/components/state/mapper/IdentityStateChangeMapper.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/state/mapper/TaggingStateChangeMapper.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/state/SimpleListState.js"></script>
+<script src="js/ro/go/adrhc/jquery-widgets/components/state/PartialStateHolder.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/state/CrudListState.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/model/on-off/swapping-details.js"></script>
 <script src="js/ro/go/adrhc/jquery-widgets/components/state/RowSwappingStateHolder.js"></script>

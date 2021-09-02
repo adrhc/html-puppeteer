@@ -94,13 +94,13 @@ class CrudListState extends PartialStateHolder {
      * Instantiate a new item and insert it into this.items (by calling insertItem).
      *
      * @param {IdentifiableEntity<E>|undefined} [initialValue]
-     * @param {{index: number, append: boolean}=} position
+     * @param {{index?: number, append?: boolean}} [position]
      * @return {TaggedStateChange<TItem>}
      */
     createNewItem(initialValue, position) {
         const item = this.newEntityFactoryFn();
         if (initialValue != null) {
-            _.defaults(item, initialValue);
+            Object.assign(item, initialValue);
         }
         return this.insertItem(item, position);
     }
@@ -119,13 +119,16 @@ class CrudListState extends PartialStateHolder {
         if (previousItemId == null) {
             // identity not changed
             AssertionUtils.isTrue(identifiableEntity !== null);
+            previousIndex = this.findIndexById(identifiableEntity.id);
             nextIndex = this._newItemPositionOf(identifiableEntity.id, position);
         } else if (identifiableEntity != null) {
-            // identity changed
+            // identity is changed if previousItemId !== identifiableEntity.id
+            previousIndex = this.findIndexById(previousItemId);
             nextIndex = this._newItemPositionOf(previousItemId, position);
         } else {
             // new item is empty
-            AssertionUtils.isTrue(index == null && append === undefined);
+            AssertionUtils.isNull(position);
+            previousIndex = this.findIndexById(previousItemId);
         }
         return this.replaceStateOrPart(identifiableEntity, previousIndex, nextIndex);
     }
