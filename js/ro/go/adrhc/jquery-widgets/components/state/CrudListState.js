@@ -12,15 +12,15 @@
  */
 class CrudListState extends PartialStateHolder {
     /**
-     * @type {function(): IdentifiableEntity<E>}
-     */
-    newEntityFactoryFn;
-    /**
      * whether to append or prepend new items
      *
      * @type {boolean}
      */
     append;
+    /**
+     * @type {function(): IdentifiableEntity<E>}
+     */
+    newEntityFactoryFn;
 
     /**
      * see Documenting a destructuring parameter at https://jsdoc.app/tags-param.html#parameters-with-properties
@@ -28,10 +28,10 @@ class CrudListState extends PartialStateHolder {
      * @param {Object} options
      * @param {undefined|function(): IdentifiableEntity<E>} options.newEntityFactoryFn
      * @param {undefined|boolean} options.newItemsGoLast
-     * @param {{initialState: undefined|TItem[], stateChangeMapper: undefined|TaggingStateChangeMapper<TItem,TItem>, changesCollector: undefined|StateChangesCollector<TItem>=}} superOptions
+     * @param {{}} partialStateHolderOptions
      */
-    constructor({newEntityFactoryFn, newItemsGoLast, ...superOptions}) {
-        super(superOptions);
+    constructor({newEntityFactoryFn, newItemsGoLast, ...partialStateHolderOptions}) {
+        super(partialStateHolderOptions);
         this.newEntityFactoryFn = newEntityFactoryFn ?? (() => new IdentifiableEntity(IdentifiableEntity.TRANSIENT_ID));
         this.append = newItemsGoLast ?? false;
     }

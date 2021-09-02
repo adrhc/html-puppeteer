@@ -1,17 +1,17 @@
 /**
  * @typedef {jQuery<HTMLElement>|HTMLElement} jQueryOrHtmlElem
- *
- * @typedef {Object} OptionsType
- * @property {jQueryOrHtmlElem} parentComponentElem
- * @property {boolean} dontAutoInitialize
- * @property {boolean} alwaysReturnArray
+ */
+/** @typedef {Object} createComponents~Options
+ * @property {jQueryOrHtmlElem=} parentComponentElem
+ * @property {boolean=} dontAutoInitialize
+ * @property {boolean=} alwaysReturnArray
  */
 class JQWUtil {
-    static COMPONENT_TYPE = "jqw-type";
     static COMPONENT_NAME_SUFIX = "Component";
+    static COMPONENT_TYPE = "jqw-type";
 
     /**
-     * @param {OptionsType} options
+     * @param {...createComponents~Options} options
      * @return {AbstractComponent|AbstractComponent[]}
      */
     static createComponents(options = {}) {
@@ -39,7 +39,7 @@ class JQWUtil {
     /**
      * @param {string} type
      * @param {jQueryOrHtmlElem} $el
-     * @param {OptionsType} options
+     * @param {createComponents~Options} options
      * @return {AbstractComponent}
      */
     static componentInstanceFor(type, $el, options) {

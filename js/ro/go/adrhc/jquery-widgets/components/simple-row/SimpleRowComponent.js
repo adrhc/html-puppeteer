@@ -3,7 +3,7 @@
  */
 class SimpleRowComponent extends AbstractComponent {
     /**
-     * @type {TaggingStateHolder}
+     * @type {SimpleRowState}
      */
     state;
     /**
@@ -87,9 +87,7 @@ class SimpleRowComponent extends AbstractComponent {
      */
     updateViewOnDELETE(stateChange) {
         this.simpleRowView.deleteRowByDataId(stateChange.previousStateOrPart.entity.id);
-        if (this.childishBehaviour) {
-            this.childishBehaviour.detachChild();
-        }
+        this.childishBehaviour?.leaveTheParent();
         this.reset(); // kids are also reset
         return Promise.resolve(stateChange);
     }

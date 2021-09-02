@@ -12,21 +12,107 @@ class TableElementAdapter {
     rowPositionOnCreate;
 
     /**
-     * @param {Object} params
-     * @param {string|jQuery<HTMLTableRowElement>} params.elemIdOrJQuery
-     * @param {string=} params.rowDataId
-     * @param {string=} params.rowPositionOnCreate
+     * @returns {jQuery<HTMLTableRowElement>}
      */
-    constructor({
-                    elemIdOrJQuery,
-                    rowDataId = "id",
-                    rowPositionOnCreate = "prepend"
-                } = {
-        rowDataId: "id",
-        rowPositionOnCreate: "prepend"
-    }) {
-        this.rowDataId = rowDataId;
-        this.rowPositionOnCreate = rowPositionOnCreate;
+    get $firstRow() {
+        return this.$rowByIndex(1);
+    }
+
+    /**
+     * @returns {jQuery<HTMLBodyElement>}
+     */
+    get $tbody() {
+        if (!this._$tbody.length) {
+            this.$table.append("<tbody></tbody>");
+        }
+        return this._$tbody;
+    }
+
+    /**
+     * @type {jQuery<HTMLTableElement>}
+     * @private
+     */
+    _$table;
+
+    /**
+     * @returns {jQuery<HTMLTableElement>}
+     */
+    get $table() {
+        return this._$table;
+    }
+
+    /**
+     * @returns {jQuery<HTMLBodyElement>}
+     */
+    get _$tbody() {
+        return this.$table.children("tbody");
+    }
+
+    /**
+     * @type {string}
+     * @private
+     */
+    _owner;
+
+    /**
+     * @returns {string}
+     */
+    get owner() {
+        return this._owner;
+    }
+
+    /**
+     * @type {string}
+     * @private
+     */
+    _tableId;
+
+    get tableId() {
+        return this._tableId;
+    }
+
+    get columnsCount() {
+        let columnsCount = 0;
+        const firstRow = this.$firstRow;
+        if (!firstRow) {
+            const tableColumnsCount = this.$table.data("columns-count");
+            return tableColumnsCount ? +tableColumnsCount : 1; // default to 1 column
+        }
+        let tds = firstRow.children("th");
+        if (!tds.length) {
+            tds = firstRow.children("td");
+        }
+        for (let td of tds) {
+            const colspan = $(td).attr('colspan');
+            if (colspan) {
+                columnsCount += +colspan;
+            } else {
+                columnsCount++;
+            }
+        }
+        return columnsCount;
+    }
+
+    /**
+     * @returns {string}
+     */
+    get ownerSelector() {
+        return `[data-${JQueryWidgetsConfig.OWNER_ATTRIBUTE}='${this.owner}']`;
+    }
+
+    get rowsCount() {
+        return $("tr", this.$tbody).length;
+    }
+
+    /**
+     * @param {Object} options
+     * @param {string|jQuery<HTMLTableRowElement>} options.elemIdOrJQuery
+     * @param {string=} options.rowDataId
+     * @param {string=} options.rowPositionOnCreate
+     */
+    constructor({elemIdOrJQuery, rowDataId, rowPositionOnCreate}) {
+        this.rowDataId = rowDataId ?? "id";
+        this.rowPositionOnCreate = rowPositionOnCreate ?? "prepend";
         this._setupElem(elemIdOrJQuery);
         this._setupTableId();
         this._setupOwner();
@@ -177,98 +263,5 @@ class TableElementAdapter {
     $rowByData(dataName, rowType) {
         const $row = this.$tbody.children(`tr[${dataName}=${rowType}]`);
         return $row.length ? $row : undefined;
-    }
-
-    /**
-     * @type {jQuery<HTMLTableElement>}
-     * @private
-     */
-    _$table;
-
-    /**
-     * @returns {jQuery<HTMLTableElement>}
-     */
-    get $table() {
-        return this._$table;
-    }
-
-    /**
-     * @type {string}
-     * @private
-     */
-    _tableId;
-
-    get tableId() {
-        return this._tableId;
-    }
-
-    /**
-     * @type {string}
-     * @private
-     */
-    _owner;
-
-    /**
-     * @returns {string}
-     */
-    get owner() {
-        return this._owner;
-    }
-
-    /**
-     * @returns {string}
-     */
-    get ownerSelector() {
-        return `[data-${JQueryWidgetsConfig.OWNER_ATTRIBUTE}='${this.owner}']`;
-    }
-
-    get rowsCount() {
-        return $("tr", this.$tbody).length;
-    }
-
-    get columnsCount() {
-        let columnsCount = 0;
-        const firstRow = this.$firstRow;
-        if (!firstRow) {
-            const tableColumnsCount = this.$table.data("columns-count");
-            return tableColumnsCount ? +tableColumnsCount : 1; // default to 1 column
-        }
-        let tds = firstRow.children("th");
-        if (!tds.length) {
-            tds = firstRow.children("td");
-        }
-        for (let td of tds) {
-            const colspan = $(td).attr('colspan');
-            if (colspan) {
-                columnsCount += +colspan;
-            } else {
-                columnsCount++;
-            }
-        }
-        return columnsCount;
-    }
-
-    /**
-     * @returns {jQuery<HTMLBodyElement>}
-     */
-    get $tbody() {
-        if (!this._$tbody.length) {
-            this.$table.append("<tbody></tbody>");
-        }
-        return this._$tbody;
-    }
-
-    /**
-     * @returns {jQuery<HTMLBodyElement>}
-     */
-    get _$tbody() {
-        return this.$table.children("tbody");
-    }
-
-    /**
-     * @returns {jQuery<HTMLTableRowElement>}
-     */
-    get $firstRow() {
-        return this.$rowByIndex(1);
     }
 }

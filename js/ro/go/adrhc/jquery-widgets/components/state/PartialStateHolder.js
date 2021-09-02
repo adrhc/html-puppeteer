@@ -24,7 +24,7 @@ class PartialStateHolder extends SimpleListState {
             return true;
         }
 
-        const stateChange = new TaggedStateChange(previousStateOrPart, newStateOrPart, previousPartName, newPartName);
+        const stateChange = new StateChange(previousStateOrPart, newStateOrPart, previousPartName, newPartName);
         return this.collectStateChange(stateChange);
     }
 
