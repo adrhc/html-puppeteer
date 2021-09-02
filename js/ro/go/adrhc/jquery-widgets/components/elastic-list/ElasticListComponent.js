@@ -93,14 +93,18 @@ class ElasticListComponent extends SimpleListComponent {
      * This is an ElasticListComponent having SimpleListView as view which is able to handle a collection
      * of items but not a single item; for 1 item-update I'm delegating the update-view call to its row.
      *
-     * @param {StateChange} stateChange
+     * @param {StateChange<IdentifiableEntity>} stateChange
      * @return {Promise}
      */
     updateViewOnAnyItem(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnAnyITEM:\n${JSON.stringify(stateChange)}`);
         const previousId = stateChange.previousStateOrPart.id;
         const idRowComp = this.elasticListComposite.findKidById(previousId);
-        return idRowComp.update(stateChange.newStateOrPart);
+        // When a create/delete occurs before the update the index will
+        // change despite the fact that there's no position changing.
+        return idRowComp.update(stateChange.newStateOrPart ?
+            new EntityRow(stateChange.newStateOrPart, {index: stateChange.newPartName})
+            : undefined);
     }
 
     /**

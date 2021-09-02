@@ -10,10 +10,11 @@ class SimpleRowState extends TaggingStateHolder {
      * @protected
      */
     _stateChangesOf(previousEntityRow, newEntityRow) {
+        // DELETE only
         if (newEntityRow == null) {
-            // DELETE only
             return [new StateChange(previousEntityRow)];
         }
+        // otherwise
         const previousRowId = previousEntityRow?.entity?.id;
         const positionChanged = newEntityRow.index !== previousEntityRow?.index;
         const changes = [];
