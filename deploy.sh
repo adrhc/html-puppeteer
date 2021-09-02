@@ -3,7 +3,7 @@
 RSYNCB_linux="rsync -cEhimprt --delete-after --ignore-errors"
 RSYNCB_linux_KL="$RSYNCB_linux --delete-excluded -l"
 
-TARGET_DIR="/home/adr/apps/opt/apache-htdocs/jquery-widgets"
+TARGET_DIR="$HOME/apps/opt/apache-htdocs/jquery-widgets"
 
 mkdir -p $TARGET_DIR
 
