@@ -85,17 +85,22 @@ class ElasticListComponent extends SimpleListComponent {
     }
 
     /**
-     * @param stateChange {TaggedStateChange}
-     * @return {Promise}
+     * @param {TaggedStateChange<IdentifiableEntity>} stateChange
+     * @return {Promise<StateChange[]>}
      */
     handleItemCreation(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnItemCREATE:\n${JSON.stringify(stateChange)}`);
-        // positioning relies on this.newItemsGoLast
+        // positioning relies on using append=this.newItemsGoLast (index is ignored)
         return this.elasticListComposite.createChildComponent(stateChange).init();
     }
 
+    /**
+     * @param {TaggedStateChange<IdentifiableEntity>} stateChange
+     * @return {Promise<StateChange[]>}
+     */
     handleItemRemoval(stateChange) {
         console.log(`${this.constructor.name}.handleItemRemoval:\n${JSON.stringify(stateChange)}`);
+        // positioning properties doesn't matter because the update is with undefined
         return this.kidOf(stateChange).update();
     }
 
@@ -103,15 +108,18 @@ class ElasticListComponent extends SimpleListComponent {
      * This is an ElasticListComponent having SimpleListView as view which is able to handle a collection
      * of items but not a single item; for 1 item-update I'm delegating the update-view call to its row.
      *
-     * @param {StateChange<IdentifiableEntity>} stateChange
-     * @return {Promise}
+     * @param {TaggedStateChange<IdentifiableEntity>} stateChange
+     * @return {Promise<StateChange[]>}
      */
     handleItemUpdate(stateChange) {
         console.log(`${this.constructor.name}.handleItemUpdate:\n${JSON.stringify(stateChange)}`);
-        // When a create/delete occurs before the update, the index will
-        // change despite the fact that there's no position update necessary.
-        return this.kidOf(stateChange).update(
-            new EntityRow(stateChange.newStateOrPart, {index: stateChange.newPartName}));
+        // When a create/delete occurs before the update, the index (in CrudListState)
+        // will change despite the fact that there's no position update necessary.
+        //
+        // index should not be used for positioning hence it's not even provided; each update
+        // will actually land (row's PoV) on the same index (undefined) everytime, such that
+        // the index change (in CrudListState) won't affect the positioning (row's PoV).
+        return this.kidOf(stateChange).update(new EntityRow(stateChange.newStateOrPart));
     }
 
     /**

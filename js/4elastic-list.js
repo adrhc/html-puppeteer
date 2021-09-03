@@ -3,41 +3,42 @@ const JSONs = {
     append: "[{\"id\":\"1\",\"name\":\"dog1\"},{\"id\":\"3\",\"name\":\"updated dog3\"},{\"name\":\"new dog with append\"},{\"id\":\"2\",\"name\":\"restored dog2 with append\"}]"
 };
 
-$(() => {
-    /**
-     * @type {ElasticListComponent[]}
-     */
-    // const components = JQWUtil.createComponents({dontAutoInitialize: true});
-    // [...components].forEach(component => {
-    /**
-     * @type {ElasticListComponent}
-     */
-    const component = JQWUtil.createComponents({dontAutoInitialize: true});
-        const rowPositionOnCreate = component.rowPositionOnCreate;
-        component
-            .init()
-            .then(() => component.doWithState((state) => {
-                /**
-                 * @type {CrudListState}
-                 */
-                const crudListState = state;
-                crudListState.createNewItem({name: `new dog with ${rowPositionOnCreate}`}); // transient id
-                crudListState.updateItem({id: 3, name: "updated dog3"});
-                crudListState.removeById(2);
-                // creating a new item with a not transient id (here id=2)
-                crudListState.insertItem({
-                    id: 2,
-                    name: `restored dog2 with ${rowPositionOnCreate}`
-                });
-            }))
-            .then(() => {
-                const entities = component.extractAllEntities(true);
-                console.log("component.extractAllEntities:\n", entities);
-                AssertionUtils.isTrue(entities.length === 4, "entities.length === 4");
-                AssertionUtils.isTrue(JSON.stringify(entities) === JSONs[rowPositionOnCreate], "entities JSON should match")
-            })
-            .then(() => {
-                console.log("FINISHED");
+/**
+ * @param {ElasticListComponent} component
+ */
+function changeElasticListComponentState(component) {
+    const rowPositionOnCreate = component.newItemsGoLast ? "append" : "prepend";
+    component
+        .init()
+        .then(() => component.doWithState((state) => {
+            /**
+             * @type {CrudListState}
+             */
+            const crudListState = state;
+            crudListState.createNewItem({name: `new dog with ${rowPositionOnCreate}`}); // transient id
+            crudListState.updateItem({id: 3, name: "updated dog3"});
+            crudListState.removeById(2);
+            // creating a new item with a not transient id (here id=2)
+            crudListState.insertItem({
+                id: 2,
+                name: `restored dog2 with ${rowPositionOnCreate}`
             });
-    // });
+        }))
+        .then(() => {
+            const entities = component.extractAllEntities(true);
+            console.log("component.extractAllEntities:\n", entities);
+            AssertionUtils.isTrue(entities.length === 4, "entities.length === 4");
+            AssertionUtils.isTrue(JSON.stringify(entities) === JSONs[rowPositionOnCreate], "entities JSON should match")
+        })
+        .then(() => {
+            console.log("FINISHED");
+        });
+}
+
+$(() => {
+    // changeElasticListComponentState(JQWUtil.createComponents({dontAutoInitialize: true}));
+    const components = JQWUtil.createComponents({dontAutoInitialize: true});
+    [...components].forEach(component => {
+        changeElasticListComponentState(component);
+    });
 });

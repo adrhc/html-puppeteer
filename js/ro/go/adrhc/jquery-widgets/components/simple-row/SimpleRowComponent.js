@@ -16,7 +16,6 @@ class SimpleRowComponent extends AbstractComponent {
      */
     constructor(options) {
         super({
-            rowPositionOnCreate: SimpleRowComponent.DEFAULT_POSITION,
             clearChildrenOnReset: true,
             dontAutoInitialize: true,
             ...options
@@ -27,7 +26,10 @@ class SimpleRowComponent extends AbstractComponent {
 
     _createView() {
         const mustacheTableElemAdapter = this.defaults.mustacheTableElemAdapter
-            ?? new MustacheTableElemAdapter(this.defaults);
+            ?? new MustacheTableElemAdapter({
+                rowPositionOnCreate: SimpleRowComponent.DEFAULT_POSITION,
+                ...this.defaults
+            });
         return new SimpleRowView(mustacheTableElemAdapter);
     }
 
