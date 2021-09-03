@@ -9,8 +9,11 @@ $(() => {
      */
     // const components = JQWUtil.createComponents({dontAutoInitialize: true});
     // [...components].forEach(component => {
+    /**
+     * @type {ElasticListComponent}
+     */
     const component = JQWUtil.createComponents({dontAutoInitialize: true});
-        const rowPositionOnCreate = component.newItemsGoLast ? "append" : "prepend";
+        const rowPositionOnCreate = component.rowPositionOnCreate;
         component
             .init()
             .then(() => component.doWithState((state) => {

@@ -1,4 +1,6 @@
 /**
+ * SimpleListState extends TaggingStateHolder extends StateHolder
+ *
  * @template TItem
  * @typedef {TItem} T
  * @typedef {TItem} P

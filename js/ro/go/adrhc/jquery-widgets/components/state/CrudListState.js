@@ -1,4 +1,6 @@
 /**
+ * CrudListState extends PartialStateHolder extends SimpleListState extends TaggingStateHolder extends StateHolder
+ *
  * https://github.com/google/closure-compiler/wiki/Generic-Types#inheritance-of-generic-types
  *
  * The type used for SimpleListState's generic parameter should in fact be TItem
@@ -27,13 +29,13 @@ class CrudListState extends PartialStateHolder {
      *
      * @param {Object} options
      * @param {undefined|function(): IdentifiableEntity<E>} options.newEntityFactoryFn
-     * @param {undefined|boolean} options.newItemsGoLast
+     * @param {boolean} options.newItemsGoLast
      * @param {{}} partialStateHolderOptions
      */
     constructor({newEntityFactoryFn, newItemsGoLast, ...partialStateHolderOptions}) {
         super(partialStateHolderOptions);
         this.newEntityFactoryFn = newEntityFactoryFn ?? (() => new IdentifiableEntity(IdentifiableEntity.TRANSIENT_ID));
-        this.append = newItemsGoLast ?? false;
+        this.append = newItemsGoLast;
     }
 
     /**
