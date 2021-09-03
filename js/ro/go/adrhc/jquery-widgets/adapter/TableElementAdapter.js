@@ -108,11 +108,12 @@ class TableElementAdapter {
      * @param {Object} options
      * @param {string|jQuery<HTMLTableRowElement>} options.elemIdOrJQuery
      * @param {string=} options.rowDataId
-     * @param {string=} options.rowPositionOnCreate
+     * @param {"append"|"prepend"} options.rowPositionOnCreate
      */
     constructor({elemIdOrJQuery, rowDataId, rowPositionOnCreate}) {
         this.rowDataId = rowDataId ?? "id";
-        this.rowPositionOnCreate = rowPositionOnCreate ?? "prepend";
+        AssertionUtils.isNotNull(rowPositionOnCreate);
+        this.rowPositionOnCreate = rowPositionOnCreate;
         this._setupElem(elemIdOrJQuery);
         this._setupTableId();
         this._setupOwner();

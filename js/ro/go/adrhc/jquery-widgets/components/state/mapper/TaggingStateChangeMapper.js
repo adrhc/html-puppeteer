@@ -23,6 +23,7 @@ class TaggingStateChangeMapper extends IdentityStateChangeMapper {
      * @protected
      */
     _changeTypeOf(change) {
+        AssertionUtils.isFalse(change.newStateOrPart == null && change.previousStateOrPart == null);
         if (this._isChangeTypeOfDelete(change.newStateOrPart, change.partName)) {
             return "DELETE";
         } else if (this._isPristine(change.previousStateOrPart, change.partName)) {

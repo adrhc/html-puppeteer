@@ -2,14 +2,7 @@
  * "state" is a EntityRow
  */
 class SimpleRowComponent extends AbstractComponent {
-    /**
-     * @type {SimpleRowState}
-     */
-    state;
-    /**
-     * @type {SimpleRowView}
-     */
-    view;
+    static DEFAULT_POSITION = "prepend";
 
     /**
      * @return {SimpleRowView}
@@ -22,14 +15,24 @@ class SimpleRowComponent extends AbstractComponent {
      * @param {{}} options
      */
     constructor(options) {
-        super({clearChildrenOnReset: true, dontAutoInitialize: true, ...options});
-        Object.assign(this, this.defaults);
-        const mustacheTableElemAdapter = this.defaults.mustacheTableElemAdapter
-            ?? new MustacheTableElemAdapter(this.defaults);
-        this.view = this.defaults.view ?? new SimpleRowView(mustacheTableElemAdapter);
-        this.state = this.defaults.state ?? new SimpleRowState(this.defaults);
+        super({
+            rowPositionOnCreate: SimpleRowComponent.DEFAULT_POSITION,
+            clearChildrenOnReset: true,
+            dontAutoInitialize: true,
+            ...options
+        });
         this.handleWithAny(true);
         this.setHandlerName("updateViewOnDELETE", "DELETE")
+    }
+
+    _createView() {
+        const mustacheTableElemAdapter = this.defaults.mustacheTableElemAdapter
+            ?? new MustacheTableElemAdapter(this.defaults);
+        return new SimpleRowView(mustacheTableElemAdapter);
+    }
+
+    _createStateHolder() {
+        return new SimpleRowState(this.defaults);
     }
 
     /**

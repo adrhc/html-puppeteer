@@ -263,10 +263,9 @@ class AbstractComponent {
     }
 
     /**
-     * @param {*} state
+     * @param {*=} state
      * @param {boolean=} dontRecordStateEvents
      * @return {Promise<StateChange[]>}
-     * @final
      */
     update(state, dontRecordStateEvents) {
         return this.doWithState((basicState) => {

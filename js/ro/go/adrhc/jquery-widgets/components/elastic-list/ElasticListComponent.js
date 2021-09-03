@@ -34,6 +34,8 @@ class ElasticListComponent extends SimpleListComponent {
         super({dontAutoInitialize: true, ...options});
         this.configurePartChangeHandlers({
             handleItemCreation: ["CREATE"],
+            handleItemRemoval: ["DELETE"],
+            handleItemUpdate: ["REPLACE"],
             updateViewOnAnyItem: [StateChangeHandlersManager.ALL_CHANGE_TYPES]
         }, "Item");
         this.dontAutoInitialize = this._dontAutoInitializeOf(options);
@@ -41,12 +43,14 @@ class ElasticListComponent extends SimpleListComponent {
     }
 
     /**
+     * see this.newItemsGoLast (computed property)
+     *
      * @return {StateHolder}
      * @protected
      */
     _createStateHolder() {
         return new CrudListState({
-            newItemsGoLast: this.newItemsGoLast, ...this.defaults
+            ...this.defaults, newItemsGoLast: this.newItemsGoLast
         });
     }
 
@@ -64,7 +68,7 @@ class ElasticListComponent extends SimpleListComponent {
      */
     _createCompositeBehaviour() {
         return ElasticListCompositeBehaviour.of({
-            ...this.defaults, parentComponent: this, newItemsGoLast: this.newItemsGoLast
+            ...this.defaults, parentComponent: this
         });
     }
 
@@ -86,7 +90,13 @@ class ElasticListComponent extends SimpleListComponent {
      */
     handleItemCreation(stateChange) {
         console.log(`${this.constructor.name}.updateViewOnItemCREATE:\n${JSON.stringify(stateChange)}`);
+        // positioning relies on this.newItemsGoLast
         return this.elasticListComposite.createChildComponent(stateChange).init();
+    }
+
+    handleItemRemoval(stateChange) {
+        console.log(`${this.constructor.name}.handleItemRemoval:\n${JSON.stringify(stateChange)}`);
+        return this.kidOf(stateChange).update();
     }
 
     /**
@@ -96,15 +106,21 @@ class ElasticListComponent extends SimpleListComponent {
      * @param {StateChange<IdentifiableEntity>} stateChange
      * @return {Promise}
      */
-    updateViewOnAnyItem(stateChange) {
-        console.log(`${this.constructor.name}.updateViewOnAnyITEM:\n${JSON.stringify(stateChange)}`);
+    handleItemUpdate(stateChange) {
+        console.log(`${this.constructor.name}.handleItemUpdate:\n${JSON.stringify(stateChange)}`);
+        // When a create/delete occurs before the update, the index will
+        // change despite the fact that there's no position update necessary.
+        return this.kidOf(stateChange).update(
+            new EntityRow(stateChange.newStateOrPart, {index: stateChange.newPartName}));
+    }
+
+    /**
+     * @param {StateChange<IdentifiableEntity>} stateChange
+     * @return {IdentifiableRowComponent}
+     */
+    kidOf(stateChange) {
         const previousId = stateChange.previousStateOrPart.id;
-        const idRowComp = this.elasticListComposite.findKidById(previousId);
-        // When a create/delete occurs before the update the index will
-        // change despite the fact that there's no position changing.
-        return idRowComp.update(stateChange.newStateOrPart ?
-            new EntityRow(stateChange.newStateOrPart, {index: stateChange.newPartName})
-            : undefined);
+        return this.elasticListComposite.findKidById(previousId);
     }
 
     /**

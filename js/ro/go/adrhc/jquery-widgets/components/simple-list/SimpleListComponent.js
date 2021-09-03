@@ -3,6 +3,7 @@
  * Updatable by a state change containing all items.
  */
 class SimpleListComponent extends AbstractTableBasedComponent {
+    static DEFAULT_POSITION = "prepend";
     static MESSAGES = {reloadSuccessful: "Datele au fost reîncărcate!"};
     /**
      * @type {boolean|undefined}
@@ -14,12 +15,12 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     repository;
 
     /**
-     * rowPositionOnCreate could be "prepend"|"append"
+     * This is a computed property, never to be overridden by this.defaults.
      *
-     * @return {boolean|undefined} this.simpleListConfiguration?.rowPositionOnCreate === "append"
+     * @return {boolean} this.rowPositionOnCreate === "append"
      */
     get newItemsGoLast() {
-        return this.defaults.rowPositionOnCreate == null ? undefined : this.defaults.rowPositionOnCreate === "append";
+        return this.rowPositionOnCreate === "append";
     }
 
     /**
@@ -40,7 +41,11 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     }
 
     constructor(abstractComponentOptions) {
-        super({dontAutoInitialize: true, ...abstractComponentOptions});
+        super({
+            rowPositionOnCreate: SimpleListComponent.DEFAULT_POSITION,
+            dontAutoInitialize: true,
+            ...abstractComponentOptions
+        });
         this.repository = this.defaults.repository ?? this._createCrudRepository();
         this.handleWithAny(["CREATE", "REPLACE", "DELETE"])
         this.dontAutoInitialize = this._dontAutoInitializeOf(abstractComponentOptions);

@@ -1,4 +1,6 @@
 /**
+ * SimpleRowState extends TaggingStateHolder extends StateHolder
+ *
  * @typedef {EntityRow} T
  * @extends {TaggingStateHolder<EntityRow>}
  */

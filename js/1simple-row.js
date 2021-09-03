@@ -121,7 +121,7 @@ $(() => {
         }).then((row44) => {
             const item44 = row44.state.currentState.entity;
             AssertionUtils.isNull(item44.index);
-            // update row44 identity to 444 and its index to 4 (from undefined)
+            // update row44 identity to 444 and changing its position (index=4 from undefined + using append=true)
             return row44.update(new EntityRow({
                 id: 444,
                 name: `dog44 id (${item44.id}) changed to 444 and index from undefined to 4`

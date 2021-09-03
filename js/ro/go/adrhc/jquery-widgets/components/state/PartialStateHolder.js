@@ -1,4 +1,6 @@
 /**
+ * PartialStateHolder extends SimpleListState extends TaggingStateHolder extends StateHolder
+ *
  * @template TItem
  * @extends {SimpleListState<TItem>}
  */
