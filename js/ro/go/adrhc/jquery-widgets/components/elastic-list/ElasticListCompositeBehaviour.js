@@ -44,7 +44,8 @@ class ElasticListCompositeBehaviour extends CompositeBehaviour {
                 childCompFactories: rowChildCompFactories,
                 childishBehaviour: rowChildishBehaviourFactoryFn(elasticListComponent)
             });
-            idRowComp.state.replace(new EntityRow(item, {index, append: elasticListComponent.newItemsGoLast}));
+            // index should not be used hence is not even provided
+            idRowComp.state.replace(new EntityRow(item, {append: elasticListComponent.newItemsGoLast}));
             return idRowComp;
         });
     }
@@ -60,8 +61,6 @@ class ElasticListCompositeBehaviour extends CompositeBehaviour {
     }
 
     /**
-     * Creates child components from items while computing the afterRowId based on items ordering.
-     *
      * @return {IdentifiableRowComponent[]}
      * @protected
      */

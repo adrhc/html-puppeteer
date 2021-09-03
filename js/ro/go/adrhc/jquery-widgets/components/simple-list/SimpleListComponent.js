@@ -13,6 +13,10 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @type {CrudRepository}
      */
     repository;
+    /**
+     * @type {"append", "prepend"}
+     */
+    rowPositionOnCreate;
 
     /**
      * This is a computed property, never to be overridden by this.defaults.
@@ -42,10 +46,10 @@ class SimpleListComponent extends AbstractTableBasedComponent {
 
     constructor(abstractComponentOptions) {
         super({
-            rowPositionOnCreate: SimpleListComponent.DEFAULT_POSITION,
             dontAutoInitialize: true,
             ...abstractComponentOptions
         });
+        this.rowPositionOnCreate = this.defaults.rowPositionOnCreate ?? SimpleListComponent.DEFAULT_POSITION;
         this.repository = this.defaults.repository ?? this._createCrudRepository();
         this.handleWithAny(["CREATE", "REPLACE", "DELETE"])
         this.dontAutoInitialize = this._dontAutoInitializeOf(abstractComponentOptions);
@@ -73,7 +77,10 @@ class SimpleListComponent extends AbstractTableBasedComponent {
      * @protected
      */
     _createView() {
-        return new SimpleListView(this.defaults);
+        return new SimpleListView({
+            rowPositionOnCreate: SimpleListComponent.DEFAULT_POSITION,
+            ...this.defaults
+        });
     }
 
     /**
