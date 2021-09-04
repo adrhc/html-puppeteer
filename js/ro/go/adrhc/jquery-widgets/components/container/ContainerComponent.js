@@ -31,11 +31,11 @@ class ContainerComponent extends AbstractComponent {
         }
     }
 
-    _reloadState() {
-        console.debug(`${this.constructor.name}._reloadState`);
+    _initializeState() {
+        console.debug(`${this.constructor.name}._initializeState`);
         console.debug(JSON.stringify(this.state.currentState));
         if (this.config.dontReloadFromState) {
-            return super._reloadState();
+            return super._initializeState();
         } else {
             const stateChange = this._collectStateChangeOfSelf();
             return Promise.resolve(stateChange.newStateOrPart);

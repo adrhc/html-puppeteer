@@ -2,7 +2,25 @@ class SelectableListEntityExtractor extends DefaultEntityExtractor {
     /**
      * @type {SelectableListComponent}
      */
-    selectableList;
+    get selectableList() {
+        return this.component;
+    }
+
+    /**
+     * Returns the IdentifiableRowComponent dealing with an "active" selection.
+     * The specific row though depend on the EntityRowSwap.context if
+     * present otherwise is the this.swappingRowSelector[false].
+     *
+     * @return {IdentifiableRowComponent} responsible for the currently "selected" row
+     */
+    get selectedRowComponent() {
+        const entityRowSwap = this.selectableList.selectableListState.currentEntityRowSwap;
+        if (!entityRowSwap) {
+            return undefined;
+        }
+        const context = entityRowSwap.context ?? SwitchType.ON;
+        return this.selectableList.swappingRowSelector[context];
+    }
 
     constructor(component, {
         dontRemoveGeneratedId,
@@ -13,7 +31,6 @@ class SelectableListEntityExtractor extends DefaultEntityExtractor {
         }
     }) {
         super(component, {dontRemoveGeneratedId, entityConverterFn});
-        this.selectableList = component;
     }
 
     /**
@@ -24,7 +41,7 @@ class SelectableListEntityExtractor extends DefaultEntityExtractor {
      * @return {{}}
      */
     extractSelectedEntity(useOwnerOnFields) {
-        const onRow = this.selectableList.selectedRowComponent;
+        const onRow = this.selectedRowComponent;
         return onRow ? this.entityConverterFn(onRow.extractEntity(useOwnerOnFields)) : undefined;
     }
 

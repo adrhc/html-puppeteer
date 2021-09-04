@@ -57,6 +57,14 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     }
 
     /**
+     * @return {EventsBinderConfigurer<SimpleListComponent>}
+     * @protected
+     */
+    _createEventsBinderConfigurer() {
+        return new SimpleListEventsBinder(this);
+    }
+
+    /**
      * @return {CrudRepository}
      * @protected
      */
@@ -84,32 +92,18 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     }
 
     /**
-     * RELOAD
-     *
-     * @param ev {Event}
-     */
-    onReload(ev) {
-        ev.stopPropagation();
-        /**
-         * @type {SimpleListComponent}
-         */
-        const simpleListComponent = ev.data;
-        simpleListComponent._handleReload();
-    }
-
-    /**
      * Although very similar to init, reload is another scenario, that's why it's ok to have its own method.
      *
      * @return {Promise<StateChange[]>}
      * @protected
      */
-    _handleReload() {
+    reload() {
         this.reset();
         return this.init().then(this._handleSuccessfulReload.bind(this));
     }
 
     /**
-     * Called after successfully reloading (i.e. after _handleReload call).
+     * Called after successfully reloading (i.e. after reload call).
      *
      * @private
      */
@@ -118,26 +112,15 @@ class SimpleListComponent extends AbstractTableBasedComponent {
     }
 
     /**
-     * linking triggers to component's handlers (aka capabilities)
-     *
-     * @protected
-     */
-    _configureEvents() {
-        console.log(`${this.constructor.name}._configureEvents`);
-        this.view.$elem.on(this._appendNamespaceTo("click"),
-            this._btnSelector("reload"), this, this.onReload);
-    }
-
-    /**
      * Replaces the state with the one loaded from repository.
      *
      * @return {Promise<[]>}
      * @protected
      */
-    _reloadState() {
+    _initializeState() {
         return this._handleRepoErrors(this.repository.findAll())
             .then((items) => {
-                console.log(`${this.constructor.name}._reloadState items:\n`, JSON.stringify(items));
+                console.log(`${this.constructor.name}._initializeState items:\n`, JSON.stringify(items));
                 this.simpleListState.replaceAll(items);
                 return items;
             });

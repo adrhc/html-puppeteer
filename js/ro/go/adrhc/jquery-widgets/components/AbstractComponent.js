@@ -53,6 +53,10 @@ class AbstractComponent {
      */
     entityExtractor;
     /**
+     * @type {EventsBinderConfigurer}
+     */
+    eventsBinderConfigurer;
+    /**
      * is the parent component of this component
      *
      * @type {AbstractComponent}
@@ -84,22 +88,6 @@ class AbstractComponent {
     view;
 
     /**
-     * @returns {string}
-     * @protected
-     */
-    get _eventsNamespace() {
-        return `.${this.constructor.name}.${this.view.owner}`;
-    }
-
-    /**
-     * @returns {string}
-     * @protected
-     */
-    get _ownerSelector() {
-        return `[data-${JQueryWidgetsConfig.OWNER_ATTRIBUTE}='${this.view.owner}']`;
-    }
-
-    /**
      * @param {{}} options could contain both behaviour and layout specifications
      */
     constructor(options) {
@@ -108,12 +96,21 @@ class AbstractComponent {
         Object.assign(this, this.defaults);
         this.state = this.state ?? this._createStateHolder();
         this.view = this.view ?? this._createView();
+        this.eventsBinderConfigurer = this.eventsBinderConfigurer ?? this._createEventsBinderConfigurer();
         this.stateChangesDispatcher = this.stateChangesDispatcher ?? this._createStateChangesDispatcher();
         this.entityExtractor = this.entityExtractor ?? this._createEntityExtractor();
         this._setupChildishBehaviour();
         this._setupCompositeBehaviour();
         this.dontAutoInitialize = this._dontAutoInitializeOf(options);
         this._handleAutoInitialization();
+    }
+
+    /**
+     * @return {EventsBinderConfigurer}
+     * @protected
+     */
+    _createEventsBinderConfigurer() {
+        // do nothing;
     }
 
     /**
@@ -352,7 +349,7 @@ class AbstractComponent {
      * @return {Promise<StateChange[]>}
      */
     init() {
-        return this._reloadState()
+        return this._initializeState()
             // https://stackoverflow.com/questions/34930771/why-is-this-undefined-inside-class-method-when-using-promises?answertab=active#tab-top
             .then(this._handleViewUpdateOnInit.bind(this))
             .then(this._configureEventsAndInitKidsOnInit.bind(this))
@@ -378,7 +375,7 @@ class AbstractComponent {
      */
     _configureEventsAndInitKidsOnInit(stateChanges) {
         console.log(`${this.constructor.name}.init: compositeBehaviour.init`);
-        this._configureEvents();
+        this.eventsBinderConfigurer?.attachEventHandlers();
         return this.compositeBehaviour.init().then(() => stateChanges);
     }
 
@@ -387,7 +384,7 @@ class AbstractComponent {
         if (!this.dontConfigEventsOnError) {
             // jqXHR is missing finally, so, if we would need to _configureEvents
             // on errors too, we would have to use catch anyway
-            this._configureEvents();
+            this.eventsBinderConfigurer?.attachEventHandlers();
         }
         throw err;
     }
@@ -398,15 +395,8 @@ class AbstractComponent {
      * @return {Promise<*>} with the loaded state
      * @protected
      */
-    _reloadState() {
+    _initializeState() {
         return Promise.resolve();
-    }
-
-    /**
-     * @protected
-     */
-    _configureEvents() {
-        // do nothing
     }
 
     /**
@@ -468,7 +458,6 @@ class AbstractComponent {
      * @return {Promise}
      * @protected
      */
-
     _handleRepoErrors(promise) {
         return promise.catch((jqXHR, textStatus) => {
             console.error(`${this.constructor.name}._handleRepoErrors`);
@@ -483,32 +472,6 @@ class AbstractComponent {
                 throw textStatus;
             }
         });
-    }
-
-    /**
-     * @param events {string,string[]}
-     * @return {string|*}
-     * @protected
-     */
-    _appendNamespaceTo(events) {
-        if ($.isArray(events)) {
-            return events.map(ev => this._appendNamespaceTo(ev)).join(" ");
-        } else {
-            return `${events}${this._eventsNamespace}`;
-        }
-    }
-
-    /**
-     * @param btnNames {string[]|string}
-     * @param [dontUseOwner] {boolean}
-     * @return {string} a selector e.g. [data-owner='personsTable'][data-btn='reload']
-     * @protected
-     */
-    _btnSelector(btnNames, dontUseOwner) {
-        if (!$.isArray(btnNames)) {
-            btnNames = [btnNames];
-        }
-        return btnNames.map(name => `${this._ownerSelector}[data-btn='${name}']`).join();
     }
 
     /**

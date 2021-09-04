@@ -73,15 +73,15 @@ class ElasticListComponent extends SimpleListComponent {
     }
 
     /**
-     * Removes its kids then calls super._handleReload().
+     * Removes its kids then calls super.reload().
      */
-    _handleReload() {
+    reload() {
         return this.doWithState(() => {
             this.compositeBehaviour.childComponents.forEach(kid => {
                 const kidEntityId = kid.state.currentState.entity.id;
                 this.crudListState.removeById(kidEntityId);
             });
-        }).then(() => super._handleReload());
+        }).then(() => super.reload());
     }
 
     /**

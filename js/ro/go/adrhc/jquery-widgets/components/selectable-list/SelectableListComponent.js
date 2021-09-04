@@ -5,18 +5,35 @@
  * item but only if already exists (in table) otherwise nothing will be rendered for it.
  */
 class SelectableListComponent extends SimpleListComponent {
-    static ROW_TYPE_DATA_NAME = "data-row-type";
     static OFF_ROW_TYPE = "off";
     static ON_ROW_TYPE = "on";
     static ROW_TEMPLATE_INDEXES = {
         "off": 1,
         "on": 2,
     }
-
+    static ROW_TYPE_DATA_NAME = "data-row-type";
     /**
      * @type {Object}
      */
     swappingRowSelector;
+
+    get offRow() {
+        return this.swappingRowSelector[SwitchType.OFF];
+    }
+
+    /**
+     * @return {SelectableListState}
+     */
+    get selectableListState() {
+        return this.state;
+    }
+
+    /**
+     * @return {SimpleListView}
+     */
+    get simpleListView() {
+        return this.view;
+    }
 
     /**
      * @return {SelectableListComponent|Promise<SelectableListComponent>}
@@ -33,6 +50,10 @@ class SelectableListComponent extends SimpleListComponent {
         this.swappingRowSelector = this._createSwappingRowSelector(options);
         this.config.dontAutoInitialize = dontAutoInitialize ?? this.config.dontAutoInitialize;
         this._handleAutoInitialization();
+    }
+
+    _createEventsBinderConfigurer() {
+        return new SelectableListEventsBinder(this);
     }
 
     /**
@@ -101,25 +122,6 @@ class SelectableListComponent extends SimpleListComponent {
     }
 
     /**
-     * (existing) item selection event handler
-     *
-     * @param ev {Event}
-     */
-    onSwitch(ev) {
-        const selectableList = ev.data;
-        if (selectableList.shouldIgnoreOnSwitch(ev)) {
-            return;
-        }
-        ev.stopPropagation();
-        const rowDataId = selectableList.simpleListView.rowDataIdOf(this);
-        selectableList.switchTo(rowDataId);
-    }
-
-    shouldIgnoreOnSwitch(ev) {
-        return !$(ev.currentTarget).is("tr,td,th");
-    }
-
-    /**
      * @param context {string|boolean|undefined}
      * @param rowDataId {number|string}
      * @return {Promise<StateChange[]>}
@@ -159,58 +161,5 @@ class SelectableListComponent extends SimpleListComponent {
         const rowComp = this.swappingRowSelector[context];
         return rowComp.processStateChanges(
             new CreateStateChange(stateChange.newStateOrPart, stateChange.partName));
-    }
-
-    /**
-     * linking "outside" (and/or default) triggers to component's handlers (aka capabilities)
-     *
-     * @protected
-     */
-    _configureEvents() {
-        super._configureEvents();
-        this.simpleListView.$elem
-            .on(this._appendNamespaceTo("dblclick"),
-                `tr${this._ownerSelector}`, this, this.onSwitch);
-    }
-
-    /**
-     * Returns the IdentifiableRowComponent dealing with an "active" selection.
-     * The specific row though depend on the EntityRowSwap.context if
-     * present otherwise is the this.swappingRowSelector[false].
-     *
-     * @return {IdentifiableRowComponent} responsible for the currently "selected" row
-     */
-    get selectedRowComponent() {
-        const entityRowSwap = this.selectableListState.currentEntityRowSwap;
-        if (!entityRowSwap) {
-            return undefined;
-        }
-        const context = entityRowSwap.context ?? SwitchType.ON;
-        return this.swappingRowSelector[context];
-    }
-
-    /**
-     * @return {SimpleListView}
-     */
-    get simpleListView() {
-        return this.view;
-    }
-
-    /**
-     * @return {SelectableListState}
-     */
-    get selectableListState() {
-        return this.state;
-    }
-
-    /**
-     * @return {SelectableListEntityExtractor}
-     */
-    get selectableListEntityExtractor() {
-        return this.entityExtractor;
-    }
-
-    get offRow() {
-        return this.swappingRowSelector[SwitchType.OFF];
     }
 }

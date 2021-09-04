@@ -23,7 +23,7 @@ if (Modernizr.template) {
         /**
          * JQWUtil.createComponents() creates a Promise because data-dont-auto-initialize="true" is missing
          *
-         * JQWUtil.createComponents() will process a StateChange (see its _reloadState), such that
+         * JQWUtil.createComponents() will process a StateChange (see its _initializeState), such that
          * updateViewOnce (see ContainerComponent) will be set (to true), so that's why resetThenUpdate() is used.
          */
         JQWUtil.createComponents()

@@ -140,14 +140,14 @@ class DynamicSelectOneComponent extends AbstractComponent {
         }
     }
 
-    _reloadState() {
+    _initializeState() {
         const title = this.dynaSelOneState.currentState.title;
         if (!this.dynaSelOneConfig.loadOptionsOnInit) {
             if (this.dynaSelOneState.isPristine()) {
                 return this.doWithState(() => this.dynaSelOneState.replaceEntirely(
                     this.dynaSelOneState.currentState, {forceUpdate: true}));
             } else {
-                return super._reloadState();
+                return super._initializeState();
             }
         }
         return this._repositoryFindByTitle(title);
