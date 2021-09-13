@@ -11,7 +11,7 @@ note bottom of EventsBinder
   Contains handlers for DOM events.
   Usual handler processing:
   - capture only intended events
-  (use business agnostic filters)i
+  (use business agnostic filters)
   - invoke suitable component methods
 end note
 
@@ -144,7 +144,7 @@ class StateChange {
 }
 
 class TypedStateChange {
-changeType
+changeType: string
 }
 
 interface StateChangeEnhancer<T extends StateChange> {
@@ -257,11 +257,8 @@ end note
 
 note left of PartsAllocator::createNewOwners
 - iterates the state parts
-- creates new part owning
-component initializing
-their state with the
-corresponding state part
-- calls <i>newOwner.init()</i>
+- creates new part owning components
+- calls <i>newOwner.render(part)</i>
 end note
 
 note left of PartsAllocator::removeMissingOwners
