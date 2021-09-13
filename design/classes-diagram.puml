@@ -19,10 +19,10 @@ abstract AbstractComponent {
 config
 eventsBinder
 stateInitializer
-[initErrorsHandler]
 stateHolder
 stateSynchronizer
 stateChangesHandlerAdapter
+[initErrorsHandler]
 +init()
 +syncState()
 #doWithState(fn(stateHolder))
@@ -40,11 +40,6 @@ Contains methods usually doing this:
 State changing methods
 might use <i>syncState()</i>.
 end note
-
-/'State changing methods might
-use <i>syncStateWithView()</i> and/or 
-<i>PartsAllocator.getStateParts()</i>.
-end note'/
 
 /'note left of AbstractComponent::constructor
 <i>config</i> parameter is used
@@ -86,52 +81,9 @@ note left of AbstractComponent::doWithState
   <i>.processStateChanges</i>
 end note
 
-class StateSynchronizer {
-partsAllocator
-domValuesReader
-+syncState(stateHolder)
-#syncStateWithView(stateHolder)
-#syncStateWithPartOwners(stateHolder)
-}
-
-note right of StateSynchronizer::syncState
-Updates (silently) the
-state using view's values
-and part owners state.
-end note
-
-note right of StateSynchronizer::syncStateWithPartOwners
-It'll call <i>syncState()</i> on
-part owners components
-before reading their state.
-end note
-
 interface ErrorsHandler {
 +accept(error)
 }
-
-abstract PartsAllocator {
-parts: Map<partName, AbstractComponent>
-#updatePartOwners(stateChange)
-#{abstract}iterateParts(newState, \nfn(partName, part, previousPartName))
-#{abstract}createOwner(partName, part)
-}
-
-note right of PartsAllocator::updatePartOwners
-- iterates the state parts
-- creates new part
-  owning component
-- sets new owners state
-- calls <i>newOwner.init()</i>
-- removes from <i>parts</i>
-  those not found in iterator
-end note
-
-note top of PartsAllocator
-Contains methods usually doing this:
-- analyze the state changes
-- manage the state parts owners
-end note
 
 interface AbstractView {
 +create(values)
@@ -170,7 +122,19 @@ sets stateHolder state
 (from e.g. a repository)
 end note
 
+class StateChange {
+  oldPartName
+  newPartName
+  oldStateOrPart
+  newStateOrPart
+}
+
+class TypedStateChange {
+  changeType
+}
+
 interface StateChangesCollector {
+stateChanges
 +collect(stateChange)
 +collect(stateChanges)
 +consumeOne(): StateChang
@@ -221,10 +185,15 @@ Conveys state changes
 to the suitable handlers.
 end note
 
-class StateChangesHandler
+abstract StateChangesHandler {
++created(stateChange)
++modified(stateChange)
++removed(stateChange)
+}
 
 abstract ComponentIllustrator {
 view: AbstractView
+stateSynchronizer
 }
 
 note left of ComponentIllustrator
@@ -238,24 +207,67 @@ usually doing this:
   <i>AbstractView</i>
 end note
 
+abstract PartsAllocator {
+parts: Map<partName, AbstractComponent>
+stateSynchronizer
+#createNewOwners(stateChange)
+#removeMissingOwners(stateChange)
+#{abstract}createOwner(partName, part)
+}
+
+note top of PartsAllocator
+Contains methods usually doing this:
+- analyze the state changes
+- manage the state parts owners
+end note
+
+note right of PartsAllocator::createNewOwners
+- iterates the state parts
+- creates new part owning
+  component initializing
+  their state with the
+  corresponding state part
+- calls <i>newOwner.init()</i>
+end note
+
+note right of PartsAllocator::removeMissingOwners
+- iterates the state parts
+- removes the <i>parts</i> no
+  longer found in iterator
+end note
+
+class StateSynchronizer {
+stateHolder
+'view: AbstractView
+domValuesReader
+partOwners: Map<partName, AbstractComponent>
++syncState()
++viewUpdated(view)
++partOwnersUpdated(partOwners)
+#syncStateWithView()
+#syncStateWithPartOwners()
+}
+
+note right of StateSynchronizer::syncState
+Updates (silently) the
+state using view's values
+and part owners state.
+end note
+
+note right of StateSynchronizer::syncStateWithPartOwners
+It'll call <i>syncState()</i> on
+part owners components
+before reading their state.
+end note
+
 abstract DomValuesReader {
-domElement
+view: AbstractView
 {abstract}+extractDomValues()
 }
 
-note right of DomValuesReader::domElement
-is the component's
-(root) DOM element
-end note
-
 note right of DomValuesReader::extractDomValues
-Extracts the values
-from component's view
-(fields or whatever else).
-Having the view's root 
-DOM element must be
-enough to know how to 
-extract all its values.
+Extracts the input 
+values from view.
 end note
 
 AbstractComponent "1" *-down- "1" EventsBinder
@@ -269,12 +281,15 @@ StateChangesHandler <|-up- PartsAllocator
 'DomValuesReader "1" *-up- "1" AbstractView
 StateSynchronizer "1" *-down- "1" DomValuesReader
 StateSynchronizer -up-> PartsAllocator
+StateSynchronizer -up-> ComponentIllustrator
 AbstractComponent "1" *-up- "1" StateSynchronizer
 AbstractComponent "1" *-down- "1" ErrorsHandler
 'AbstractComponent "1" *-right- "1" PartsAllocator
 PartialStateHolder -up-|> StateHolder
 StateHolder "1" *-up- "1" StateChangesCollector
+StateChangesCollector "1" *-up- "many" StateChange
 ComponentIllustrator --|> StateChangesHandler
+TypedStateChange -down-|> StateChange
 'PartsAllocator -down-> StateHolder
 
 /'note as setElement
