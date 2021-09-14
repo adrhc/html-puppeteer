@@ -3,7 +3,7 @@ import CopyStateChangeHandler from "../../app/components/state-change-handlers/C
 
 /**
  * @param {AbstractComponent} component
- * @param {Object} componentOptions
+ * @param {Object=} componentOptions
  * @param {string=} componentOptions.debuggerElemIdOrJQuery
  * @param {string=} componentOptions.initialDebuggerMessage
  * @param {boolean=} componentOptions.showAsJson

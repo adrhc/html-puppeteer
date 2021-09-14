@@ -1,19 +1,25 @@
-import GlobalConfig from "./GlobalConfig";
+import GlobalConfig from "./GlobalConfig.js";
+import COMPONENTS_FACTORY from "../core/ComponentsFactories.js";
 
 /**
  * @typedef {Object} createComponents~Options
  * @property {jQuery<HTMLElement>=} parentComponentElem
  * @property {boolean=} alwaysReturnArray
  */
-export default class Puppeteer {
+class Puppeteer {
     /**
+     * @param {{}=} componentsOptions
      * @param {jQuery<HTMLElement>=} parentComponentElem
+     * @param {boolean=} dontRender
      * @param {boolean=} alwaysReturnArray
      * @return {AbstractComponent|AbstractComponent[]}
      */
-    static animate(parentComponentElem, alwaysReturnArray) {
-        const components = Puppeteer.componentsOf(parentComponentElem);
+    animate(componentsOptions, dontRender, parentComponentElem, alwaysReturnArray) {
+        const components = this.componentsOf(parentComponentElem, componentsOptions);
         console.log("components.length:", components.length);
+        if (!dontRender) {
+            this.renderComponents(components);
+        }
         if (components.length === 1 && !alwaysReturnArray) {
             return components[0];
         }
@@ -21,46 +27,57 @@ export default class Puppeteer {
     }
 
     /**
-     * @param {jQuery<HTMLElement>=} parentComponentElem
-     * @return {AbstractComponent|AbstractComponent[]}
+     * @param {jQuery<AbstractComponent>} $components
+     * @protected
      */
-    static componentsOf(parentComponentElem) {
-        return Puppeteer.$componentElementsOf(parentComponentElem)
+    renderComponents($components) {
+        $components.each((index, comp) => comp.render());
+    }
+
+    /**
+     * @param {jQuery<HTMLElement>=} parentComponentElem
+     * @param {{}} componentsOptions
+     * @return {AbstractComponent|AbstractComponent[]}
+     * @protected
+     */
+    componentsOf(parentComponentElem, componentsOptions) {
+        return this.$componentElementsOf(parentComponentElem)
             .map((index, el) => {
                 const $el = $(el);
-                const type = Puppeteer.componentTypeOf($el);
-                return Puppeteer.instanceOf(type, $el);
+                const type = this.componentTypeOf($el);
+                return this.instanceOf(type, $el, componentsOptions);
             });
     }
 
     /**
      * @param {jQuery<HTMLElement>=} parentComponentElem
      * @return {jQuery}
+     * @protected
      */
-    static $componentElementsOf(parentComponentElem) {
+    $componentElementsOf(parentComponentElem) {
         return $(`[data-${GlobalConfig.DATA_TYPE}]`, parentComponentElem);
     }
 
     /**
      * @param {string} type
      * @param {jQuery<HTMLElement>} $el
+     * @param {{}} componentOptions
      * @return {AbstractComponent}
+     * @protected
      */
-    static instanceOf(type, $el) {
-        const dynamicClass = eval(type);
-        return new dynamicClass({elemIdOrJQuery: $el});
+    instanceOf(type, $el, componentOptions = {}) {
+        return COMPONENTS_FACTORY.create(type, {elemIdOrJQuery: $el, ...componentOptions});
     }
 
     /**
      * @param {jQuery<HTMLElement>} $el
      * @return {string}
+     * @protected
      */
-    static componentTypeOf($el) {
-        const type = $el.data(GlobalConfig.DATA_TYPE);
-        if (type.endsWith(GlobalConfig.COMPONENT_NAME_SUFFIX)) {
-            return type;
-        } else {
-            return `${_.startCase(type)}${GlobalConfig.COMPONENT_NAME_SUFFIX}`;
-        }
+    componentTypeOf($el) {
+        return $el.data(GlobalConfig.DATA_TYPE);
     }
 }
+
+const PUPPETEER = new Puppeteer();
+export default PUPPETEER;
