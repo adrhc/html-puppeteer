@@ -1,5 +1,3 @@
-import StringUtils from "../util/StringUtils.js";
-
 export default class StateChangesHandlerAdapter {
     /**
      * @type {string}
@@ -118,7 +116,7 @@ export default class StateChangesHandlerAdapter {
      * @protected
      */
     _partMethodVerbOf(changeType) {
-        return `${StringUtils.toTitleCase(changeType)}`;
+        return _.startCase(changeType);
     }
 
     /**
@@ -127,6 +125,6 @@ export default class StateChangesHandlerAdapter {
      * @protected
      */
     _methodVerbOf(changeType) {
-        return `${StringUtils.toCamelCase(changeType)}`;
+        return _.camelCase(changeType);
     }
 }

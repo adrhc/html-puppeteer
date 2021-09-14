@@ -8,12 +8,15 @@
     <script src="libraries/handlebars.min-v4.7.7.js"></script>
     <!-- see https://github.com/lodash/lodash/wiki/FP-Guide#installation -->
     <script src="libraries/lodash4_lodash.min.js_lodash.fp.min.js"></script>
+    <link href="ro/go/adrhc/app/css/main.css" rel="stylesheet">
 </head>
 
 <body>
 <script>const fp = _.noConflict()</script>
 <script src="1simpleComponent.js" type="module"></script>
-<div id="root">{{text}}</div>
+<div class="container">
+    <div class="section" id="root">{{text}}</div>
+</div>
 </body>
 
 </html>

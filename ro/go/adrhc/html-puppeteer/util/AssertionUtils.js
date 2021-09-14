@@ -1,4 +1,4 @@
-import {ALERT_ON_FAILED_ASSERTION} from "./GlobalConfig.js";
+import GlobalConfig from "./GlobalConfig.js";
 
 export default class AssertionUtils {
     /**
@@ -68,7 +68,7 @@ export default class AssertionUtils {
      * @private
      */
     static _alertOrThrow(exceptionMessage) {
-        if (ALERT_ON_FAILED_ASSERTION) {
+        if (GlobalConfig.ALERT_ON_FAILED_ASSERTION) {
             alert(exceptionMessage);
         } else {
             throw exceptionMessage;
