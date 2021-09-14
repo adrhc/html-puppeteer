@@ -13,4 +13,9 @@ export default class StateChangesHandler {
      * @param {StateChange} stateChange
      */
     removed(stateChange) {}
+
+    /**
+     * @param {StateChange} stateChange
+     */
+    changeOccurred(stateChange) {}
 }

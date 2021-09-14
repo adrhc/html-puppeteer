@@ -217,6 +217,7 @@ interface StateChangesHandler {
 +created(stateChange)
 +modified(stateChange)
 +removed(stateChange)
++changeOccurred(stateChange)
 }
 
 interface PartialStateChangesHandler {
@@ -224,6 +225,7 @@ interface PartialStateChangesHandler {
 +partModified(stateChange)
 +partRelocated(stateChange)
 +partRemoved(stateChange)
++partChangeOccurred(stateChange)
 }
 
 abstract ComponentIllustrator {

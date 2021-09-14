@@ -9,15 +9,21 @@ export default class ClockComponent extends SimpleComponent {
         this.interval = interval;
     }
 
+    /**
+     * @return {this}
+     */
     render() {
         super.render();
         this.handle = setInterval(() => {
             this.doWithState((state) =>
-                state.replace({time: new Date()}));
+                state.replace(new Date()));
         }, this.interval)
         return this;
     }
 
+    /**
+     * stops the clock
+     */
     close() {
         clearInterval(this.handle);
     }

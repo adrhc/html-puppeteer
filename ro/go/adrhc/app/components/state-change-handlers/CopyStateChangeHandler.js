@@ -16,20 +16,10 @@ export default class CopyStateChangeHandler extends StateChangesHandler {
         this.copyAsJson = copyAsJson;
     }
 
-    created(stateChange) {
-        this._copyState(stateChange.newStateOrPart);
-    }
-
-    replaced(stateChange) {
-        this._copyState(stateChange.newStateOrPart);
-    }
-
-    removed(stateChange) {
-        this._copyState(stateChange.newStateOrPart);
-    }
-
-    _copyState(newState) {
-        const value = this.copyAsJson ? (newState ? JSON.stringify(newState, undefined, 2) : undefined) : newState;
+    changeOccurred(stateChange) {
+        const state = stateChange.newStateOrPart;
+        const value = !this.copyAsJson ? state :
+            (state ? JSON.stringify(state, undefined, 2) : undefined);
         this.component.doWithState(component => component.replace(value));
     }
 }

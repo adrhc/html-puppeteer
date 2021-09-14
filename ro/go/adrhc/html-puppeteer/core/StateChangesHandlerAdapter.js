@@ -4,6 +4,14 @@ export default class StateChangesHandlerAdapter {
     /**
      * @type {string}
      */
+    allChangesMethod;
+    /**
+     * @type {string}
+     */
+    allPartChangesMethod;
+    /**
+     * @type {string}
+     */
     partMethodPrefix;
     /**
      * @type {StateChangesHandler[]}
@@ -23,9 +31,13 @@ export default class StateChangesHandlerAdapter {
                     partsAllocator,
                     extraStateChangesHandlers = [],
                     stateChangesHandlers,
-                    partMethodPrefix = "part"
+                    allChangesMethod = "changeOccurred",
+                    allPartChangesMethod = "partChangeOccurred",
+                    partMethodPrefix = "part",
                 }) {
         this.partMethodPrefix = partMethodPrefix;
+        this.allChangesMethod = allChangesMethod;
+        this.allPartChangesMethod = allPartChangesMethod;
         this.stateChangesHandlers = stateChangesHandlers ?? [];
         this.stateChangesHandlers.push(componentIllustrator);
         this.stateChangesHandlers.push(partsAllocator);
@@ -57,8 +69,14 @@ export default class StateChangesHandlerAdapter {
      * @param {TypedStateChange} typedStateChange
      * @protected
      */
-    _invokeStateChangesHandler(stateChangesHandler, methodName, typedStateChange,) {
+    _invokeStateChangesHandler(stateChangesHandler, methodName, typedStateChange) {
         stateChangesHandler?.[methodName](typedStateChange);
+        if (this.allChangesMethod != null) {
+            stateChangesHandler?.[this.allChangesMethod](typedStateChange);
+        }
+        if (this.allPartChangesMethod != null && this._isPartialChange(typedStateChange)) {
+            stateChangesHandler?.[this.allPartChangesMethod](typedStateChange);
+        }
     }
 
     /**

@@ -95,13 +95,13 @@ export default class AbstractComponent {
     }
 
     /**
-     * @param {*=} values
-     * @return {AbstractComponent}
+     * @param {*=} value
+     * @return {this}
      */
-    render(values) {
-        if (values != null) {
+    render(value) {
+        if (value != null) {
             this.doWithState(sh => {
-                sh.replace(values);
+                sh.replace(value);
             });
         } else if (this.stateInitializer) {
             this._initializeState();

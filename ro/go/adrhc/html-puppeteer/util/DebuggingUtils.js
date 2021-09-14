@@ -10,7 +10,7 @@ import CopyStateChangeHandler from "../../app/components/state-change-handlers/C
 export function withDebugger(component, debuggerElemIdOrJQuery = "debugger", initialDebuggerMessage = "state debugger", showAsJson = true) {
     const simpleDebugger = new SimpleComponent({
         elemIdOrJQuery: "debugger",
-        initialState: "showing the state used"
+        initialState: `showing the state${showAsJson ? " as JSON" : ""}`
     }).render();
     component.stateChangesHandlerAdapter.stateChangesHandlers
         .push(new CopyStateChangeHandler(simpleDebugger, showAsJson));
