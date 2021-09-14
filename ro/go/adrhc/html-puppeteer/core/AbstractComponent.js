@@ -1,5 +1,6 @@
 import StateHolder from "./StateHolder";
 import ValuesStateInitializer from "./ValuesStateInitializer";
+import StateChangesHandlerAdapter from "./StateChangesHandlerAdapter";
 
 export default class AbstractComponent {
     /**
@@ -20,27 +21,54 @@ export default class AbstractComponent {
      * @param {*=} config.initialState
      * @param {StateHolder=} config.stateHolder
      * @param {StateInitializer=} config.stateInitializer
+     * @param {StateChangesHandlerAdapter} config.stateChangesHandlerAdapter
+     * @param {ComponentIllustrator} config.componentIllustrator
+     * @param {PartsAllocator} config.partsAllocator
+     * @param {StateChangesHandler[]} config.stateChangesHandlers
+     * @param {string} config.partMethodPrefix
      */
-    constructor({initialState, stateHolder, stateInitializer} = {}) {
-        this.stateHolder = stateHolder ?? new StateHolder();
-        this._setStateInitializer(stateInitializer, initialState);
-    }
-
-    _setStateChangesHandlerAdapter() {
-        this.stateChangesHandlerAdapter = new StateChangesHandlerAdapter();
+    constructor({
+                    initialState, stateHolder, stateInitializer, stateChangesHandlerAdapter,
+                    componentIllustrator, partsAllocator, stateChangesHandlers, partMethodPrefix
+                }) {
+        this.stateHolder = stateHolder ?? this._createStateHolder();
+        this.stateInitializer = stateInitializer ?? this._createStateInitializer(initialState);
+        this.stateChangesHandlerAdapter = stateChangesHandlerAdapter ??
+            this._createStateChangesHandlerAdapter(componentIllustrator, partsAllocator, stateChangesHandlers, partMethodPrefix);
     }
 
     /**
-     * @param {StateInitializer} stateInitializer
-     * @param {*} initialState
+     * @return {StateHolder}
      * @protected
      */
-    _setStateInitializer(stateInitializer, initialState) {
-        if (stateInitializer != null) {
-            this.stateInitializer = stateInitializer;
-        } else if (initialState != null) {
-            this.stateInitializer = new ValuesStateInitializer(initialState, this.stateHolder);
-        }
+    _createStateHolder() {
+        return new StateHolder();
+    }
+
+    /**
+     * @param {ComponentIllustrator} componentIllustrator
+     * @param {PartsAllocator} partsAllocator
+     * @param {StateChangesHandler[]} stateChangesHandlers
+     * @param {string} partMethodPrefix
+     * @return {StateChangesHandlerAdapter}
+     * @protected
+     */
+    _createStateChangesHandlerAdapter(componentIllustrator, partsAllocator, stateChangesHandlers, partMethodPrefix) {
+        return new StateChangesHandlerAdapter({
+            componentIllustrator,
+            partsAllocator,
+            stateChangesHandlers,
+            partMethodPrefix
+        });
+    }
+
+    /**
+     * @param {*=} initialState
+     * @return {StateInitializer}
+     * @protected
+     */
+    _createStateInitializer(initialState) {
+        return initialState != null ? new ValuesStateInitializer(initialState, this.stateHolder) : undefined;
     }
 
     /**

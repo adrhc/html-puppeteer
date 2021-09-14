@@ -26,10 +26,10 @@ export default class StateChangesHandlerAdapter {
 
     /**
      * @param {Object} config
-     * @param {ComponentIllustrator} config.componentIllustrator
-     * @param {PartsAllocator} config.partsAllocator
-     * @param {StateChangesHandler[]} config.stateChangesHandlers
-     * @param {string} config.partMethodPrefix
+     * @param {ComponentIllustrator=} config.componentIllustrator
+     * @param {PartsAllocator=} config.partsAllocator
+     * @param {StateChangesHandler[]=} config.stateChangesHandlers
+     * @param {string=} config.partMethodPrefix
      */
     constructor({componentIllustrator, partsAllocator, stateChangesHandlers = [], partMethodPrefix = "part"}) {
         this.partMethodPrefix = partMethodPrefix;
