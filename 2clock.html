@@ -8,12 +8,16 @@
     <script src="libraries/handlebars.min-v4.7.7.js"></script>
     <!-- see https://github.com/lodash/lodash/wiki/FP-Guide#installation -->
     <script src="libraries/lodash4_lodash.min.js_lodash.fp.min.js"></script>
+    <link href="ro/go/adrhc/app/css/main.css" rel="stylesheet">
 </head>
 
 <body>
 <script>const fp = _.noConflict()</script>
-<script src="index.js" type="module"></script>
-<div id="root">{{text}}</div>
+<script src="2clock.js" type="module"></script>
+<div class="container">
+    <div class="title">Clock component</div>
+    <div id="component">{{time}}</div>
+</div>
 </body>
 
 </html>
