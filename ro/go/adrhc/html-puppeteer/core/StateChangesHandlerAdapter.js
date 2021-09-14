@@ -1,4 +1,4 @@
-import StringUtils from "../util/StringUtils";
+import StringUtils from "../util/StringUtils.js";
 
 export default class StateChangesHandlerAdapter {
     /**
@@ -8,7 +8,7 @@ export default class StateChangesHandlerAdapter {
     /**
      * @type {StateChangesHandler[]}
      */
-    stateChangesHandlers;
+    stateChangesHandlers = [null, null];
 
     /**
      * @param {ComponentIllustrator} componentIllustrator
@@ -31,7 +31,7 @@ export default class StateChangesHandlerAdapter {
      * @param {StateChangesHandler[]=} config.stateChangesHandlers
      * @param {string=} config.partMethodPrefix
      */
-    constructor({componentIllustrator, partsAllocator, stateChangesHandlers = [], partMethodPrefix = "part"}) {
+    constructor({componentIllustrator, partsAllocator, stateChangesHandlers, partMethodPrefix = "part"}) {
         this.partMethodPrefix = partMethodPrefix;
         this.componentIllustrator = componentIllustrator;
         this.partsAllocator = partsAllocator;
@@ -63,8 +63,7 @@ export default class StateChangesHandlerAdapter {
      * @protected
      */
     _invokeStateChangesHandler(stateChangesHandler, methodName, typedStateChange,) {
-        const handlerMethod = stateChangesHandler?.[methodName];
-        handlerMethod?.(typedStateChange);
+        stateChangesHandler?.[methodName](typedStateChange);
     }
 
     /**

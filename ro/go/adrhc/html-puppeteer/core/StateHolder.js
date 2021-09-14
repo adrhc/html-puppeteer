@@ -1,5 +1,5 @@
-import StateChangesCollector from "./StateChangesCollector";
-import StateChange from "./StateChange";
+import StateChangesCollector from "./StateChangesCollector.js";
+import StateChange from "./StateChange.js";
 
 /**
  * @template SHT

@@ -1,4 +1,4 @@
-import {ALERT_ON_FAILED_ASSERTION} from "./GlobalConfig";
+import {ALERT_ON_FAILED_ASSERTION} from "./GlobalConfig.js";
 
 export default class AssertionUtils {
     /**

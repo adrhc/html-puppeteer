@@ -1,6 +1,6 @@
-import StateChangeEnhancer from "./StateChangeEnhancer";
-import TypedStateChange, {CUDTypes} from "./TypedStateChange";
-import AssertionUtils from "../util/AssertionUtils";
+import StateChangeEnhancer from "./StateChangeEnhancer.js";
+import TypedStateChange, {CUDTypes} from "./TypedStateChange.js";
+import AssertionUtils from "../util/AssertionUtils.js";
 
 /**
  * @template SCT, SCP

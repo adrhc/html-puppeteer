@@ -1,6 +1,6 @@
-import StateHolder from "./StateHolder";
-import ValuesStateInitializer from "./ValuesStateInitializer";
-import StateChangesHandlerAdapter from "./StateChangesHandlerAdapter";
+import StateHolder from "./StateHolder.js";
+import ValuesStateInitializer from "./ValuesStateInitializer.js";
+import StateChangesHandlerAdapter from "./StateChangesHandlerAdapter.js";
 
 export default class AbstractComponent {
     /**
@@ -73,7 +73,6 @@ export default class AbstractComponent {
 
     /**
      * @param {*} values
-     * @abstract
      */
     render(values) {
         if (values != null) {
@@ -96,7 +95,9 @@ export default class AbstractComponent {
     }
 
     /**
-     * @abstract
+     * set state to undefined
      */
-    close() {}
+    close() {
+        this.stateHolder.replace();
+    }
 }

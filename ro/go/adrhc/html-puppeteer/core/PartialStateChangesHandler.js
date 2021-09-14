@@ -1,4 +1,4 @@
-import StateChangesHandler from "./StateChangesHandler";
+import StateChangesHandler from "./StateChangesHandler.js";
 
 export default class PartialStateChangesHandler extends StateChangesHandler {
     partRemoved(stateChange) {}

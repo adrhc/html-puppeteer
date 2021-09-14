@@ -1,4 +1,4 @@
-import StateChange from "./StateChange";
+import StateChange from "./StateChange.js";
 
 /**
  * @template SCT, SCP
@@ -24,8 +24,8 @@ export default class TypedStateChange extends StateChange {
 }
 
 export class CUDTypes {
-    static CREATED = "CREATED";
-    static DELETED = "DELETED";
-    static RELOCATED = "RELOCATED";
-    static REPLACED = "REPLACED";
+    static CREATED = "created";
+    static DELETED = "deleted";
+    static RELOCATED = "relocated";
+    static REPLACED = "replaced";
 }

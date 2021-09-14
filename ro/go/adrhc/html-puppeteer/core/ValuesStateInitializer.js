@@ -1,4 +1,4 @@
-import StateInitializer from "./StateInitializer";
+import StateInitializer from "./StateInitializer.js";
 
 export default class ValuesStateInitializer extends StateInitializer {
     /**

@@ -7,7 +7,7 @@ export default class StateChangesHandler {
     /**
      * @param {StateChange} stateChange
      */
-    modified(stateChange) {}
+    replaced(stateChange) {}
 
     /**
      * @param {StateChange} stateChange

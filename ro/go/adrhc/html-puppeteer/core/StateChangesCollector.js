@@ -1,4 +1,4 @@
-import TypeStateChangeEnhancer from "./TypeStateChangeEnhancer";
+import TypeStateChangeEnhancer from "./TypeStateChangeEnhancer.js";
 
 /**
  * @template SCT

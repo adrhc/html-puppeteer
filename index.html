@@ -9,14 +9,37 @@
     <!-- see https://github.com/lodash/lodash/wiki/FP-Guide#installation -->
     <script src="libraries/lodash4_lodash.min.js_lodash.fp.min.js"></script>
     <!-- BEGIN puppeteer -->
-    <script type="module" src="ro/go/adrhc/html-puppeteer/core/AbstractComponent.js"></script>
+<!--    <script src="ro/go/adrhc/html-puppeteer/util/AssertionUtils.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/util/DomUtils.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/util/GlobalConfig.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/util/HtmlGenerator.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/util/HtmlUtils.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/util/StringUtils.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/core/AbstractComponent.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/core/AbstractTemplatingView.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/core/AbstractView.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/core/ComponentIllustrator.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/core/PartialStateChangesHandler.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/core/PartsAllocator.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/core/SimpleComponent.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/core/SimpleView.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/core/StateChange.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/core/StateChangeEnhancer.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/core/StateChangesCollector.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/core/StateChangesHandler.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/core/StateChangesHandlerAdapter.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/core/StateHolder.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/core/StateInitializer.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/core/TypedStateChange.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/core/TypeStateChangeEnhancer.js" type="module"></script>-->
+<!--    <script src="ro/go/adrhc/html-puppeteer/core/ValuesStateInitializer.js" type="module"></script>-->
     <!-- end puppeteer -->
 </head>
 
 <body>
 <script>const fp = _.noConflict()</script>
-<script type="module" src="index.js"></script>
-<div id="root"></div>
+<script src="index.js" type="module"></script>
+<div id="root">{{text}}</div>
 </body>
 
 </html>

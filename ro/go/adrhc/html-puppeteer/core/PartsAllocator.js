@@ -1,4 +1,4 @@
-import PartialStateChangesHandler from "./PartialStateChangesHandler";
+import PartialStateChangesHandler from "./PartialStateChangesHandler.js";
 
 export default class PartsAllocator extends PartialStateChangesHandler {
     /**
