@@ -39,11 +39,21 @@ export default class StateChangesHandlerAdapter {
         this.allChangesMethod = allChangesMethod;
         this.allPartChangesMethod = allPartChangesMethod;
         this.stateChangesHandlers = stateChangesHandlers ?? [];
-        this.stateChangesHandlers.push(componentIllustrator);
-        this.stateChangesHandlers.push(partsAllocator);
+        this._appendStateChangesHandler(componentIllustrator);
+        this._appendStateChangesHandler(partsAllocator);
         this.stateChangesHandlers.push(...extraStateChangesHandlers);
         if (stateChangesHandlers != null) {
             this.stateChangesHandlers = stateChangesHandlers;
+        }
+    }
+
+    /**
+     * @param {StateChangesHandler} stateChangesHandler
+     * @protected
+     */
+    _appendStateChangesHandler(stateChangesHandler) {
+        if (stateChangesHandler != null) {
+            this.stateChangesHandlers.push(stateChangesHandler);
         }
     }
 

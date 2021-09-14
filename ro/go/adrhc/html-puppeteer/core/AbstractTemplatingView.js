@@ -31,10 +31,11 @@ export default class AbstractTemplatingView extends AbstractView {
      * @protected
      */
     _createTemplate(templateId) {
+        templateId = templateId ?? this.$elem.data("templateId");
         if (templateId) {
             return HtmlUtils.templateTextOf(templateId);
         } else {
-            return this.$elem.html();
+            return this.$elem.text();
         }
     }
 }
