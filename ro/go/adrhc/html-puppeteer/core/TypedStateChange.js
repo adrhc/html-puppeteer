@@ -1,19 +1,19 @@
 import StateChange from "./StateChange";
 
 /**
- * @template T, P
- * @extends {StateChange<T, P>}
+ * @template SCT, SCP
+ * @extends {StateChange<SCT, SCP>}
  */
 export default class TypedStateChange extends StateChange {
     /**
-     * @type {"CREATE"|"DELETE"|"REPLACE"}
+     * @type {string}
      */
     changeType;
 
     /**
      * @param {string} changeType
-     * @param {T|P=} previousStateOrPart
-     * @param {T|P=} stateOrPart
+     * @param {SCT|SCP=} previousStateOrPart
+     * @param {SCT|SCP=} stateOrPart
      * @param {string|number=} previousPartName is the "old" part name, if any; could be empty when is about a "create" (aka "create")
      * @param {string|number=} newPartName is the "new" part name; could be empty when is replacing with nothing (aka "delete")
      */
@@ -24,7 +24,8 @@ export default class TypedStateChange extends StateChange {
 }
 
 export class CUDTypes {
-    static CREATE = "CREATE";
-    static DELETE = "DELETE";
-    static REPLACE = "REPLACE";
+    static CREATED = "CREATED";
+    static DELETED = "DELETED";
+    static RELOCATED = "RELOCATED";
+    static REPLACED = "REPLACED";
 }

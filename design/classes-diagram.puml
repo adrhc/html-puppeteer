@@ -1,0 +1,339 @@
+@startuml
+
+title HTML puppeteer - Classes Diagram
+
+abstract EventsBinder {
+  #abstractComponent
+  {abstract}+attachEventHandlers()
+}
+
+note bottom of EventsBinder
+  Contains handlers for DOM events.
+  Usual handler processing:
+  - capture only intended events
+  (use business agnostic filters)
+  - invoke suitable component methods
+end note
+
+abstract AbstractComponent {
+  #config
+  #eventsBinder
+  #stateInitializer
+  #stateHolder
+  #stateSynchronizer
+  #stateChangesHandlerAdapter
+  #[initErrorsHandler]
+  +render(values)
+  +close()
+  +syncState()
+  #doWithState(fn(stateHolder))
+}
+
+note right of AbstractComponent
+  Contains methods
+  usually doing these:
+
+  - receive a (DOM) event
+  - analyze the event
+  - change the state using
+  <i>doWithState(fn(stateHolder))</i>
+
+  State changing methods
+  might use <i>syncState()</i>.
+end note
+
+/'note left of AbstractComponent::constructor
+<i>config</i> parameter is used
+to set/initialize any field.
+
+If too complex <i>config</i> could
+actually be a <i>configurer</i> class.
+
+An important <i>config</i> attribute
+is the component's DOM element
+which usually will already exist.
+end note'/
+
+/'note left of AbstractComponent::domElement
+Is the component's DOM element
+which for parent/root components
+will usually already exist.
+Part owner components on the
+other hand should be able to
+create and identify it by only
+using the state; e.g. dom
+element's id could be <i>partName</i>.
+end note'/
+
+note left of AbstractComponent::"render(values)"
+- attaches the DOM
+event handlers
+- initializes the state
+  (by default using <i>values</i>)
+- handles potential errors
+end note
+
+note left of AbstractComponent::"close()"
+- clears the state
+- detaches DOM
+  event handlers
+end note
+
+note left of AbstractComponent::syncState
+Synchronizes state with
+its visual representation
+Uses <i>StateSynchronizer</i>.
+end note
+
+note left of AbstractComponent::doWithState
+Allows for ad-hoc state changes.
+- <i>fn(stateHolder)</i>
+- <i>stateChangesHandlerAdapter</i>
+<i>.processStateChanges</i>
+end note
+
+interface ErrorsHandler {
++accept(error)
+}
+
+interface AbstractView {
++create(values)
++replace(values)
++remove()
+}
+
+note left of AbstractView::create
+Creates the DOM
+element to contain
+the <i>values</i> to display.
+If <i>values</i> is not empty
+calls <i>replace(values)</i>
+to show them.
+end note
+
+note left of AbstractView::replace
+Replaces the previous
+displayed values with
+the new ones.
+end note
+
+note left of AbstractView::remove
+Removes the view's
+DOM element.
+end note
+
+abstract StateInitializer {
+#stateHolder
++load()
+}
+
+note bottom of StateInitializer
+sets stateHolder state
+(from e.g. a repository)
+end note
+
+class ValuesStateInitializer {
+-values
+}
+
+class StateChange {
+#oldPartName
+#newPartName
+#oldStateOrPart
+#newStateOrPart
+}
+
+class TypedStateChange {
+changeType: string
+}
+
+interface StateChangeEnhancer<T extends StateChange> {
++enhance(stateChange): T
+}
+
+interface StateChangesCollector {
+#stateChanges
+#stateChangeEnhancer
++collect(stateChange)
++collect(stateChanges)
++consumeOne(): StateChange
++consumeAll(): StateChange[]
+}
+
+interface StateHolder {
++get()
++replace(newState, [dontRecordEvents])
+#stateChangesCollector
+}
+
+note right of StateHolder::replace
+Besides replacing the
+state it'll also record
+the changes using
+<i>stateChangesCollector</i>.
+end note
+
+interface PartialStateHolder {
++getPart(partName)
++replacePart(partName, \nnewPart, [dontRecordChanges])
+}
+
+note right of PartialStateHolder::replacePart {
+A null/undefined replacement
+value should be treated as
+"completelly remove the
+associated objects" while
+an empty object should be
+treated as "use empty for
+all part's fields".
+}
+
+class StateChangesHandlerAdapter {
+stateChangesHandlers
++addHandler(stateChangesHandler)
++processStateChanges(typedStateChanges)
+}
+
+/'note left of StateChangesHandlerAdapter::handlerMappingRules
+Defaults to:
+- map state initialization
+(aka creation) to
+<i>created(stateChange)</i>
+- map state modification
+to <i>modified(stateChange)</i>
+- map state part (aka section)
+modification to
+<i>partModified(stateChange)</i>
+- map state part removal to
+<i>partRemoved(stateChange)</i>
+end note'/
+
+note right of StateChangesHandlerAdapter::processStateChanges
+Conveys state changes
+to the suitable handlers.
+end note
+
+interface StateChangesHandler {
++created(stateChange)
++modified(stateChange)
++removed(stateChange)
+}
+
+interface PartialStateChangesHandler {
++partCreated(stateChange)
++partModified(stateChange)
++partRelocated(stateChange)
++partRemoved(stateChange)
+}
+
+abstract ComponentIllustrator {
+view: AbstractView
+stateSynchronizer
+}
+
+note bottom of ComponentIllustrator
+Contains methods
+usually doing these:
+- analyze the
+state changes
+- compute the
+values to display
+- use some
+<i>AbstractView</i>
+end note
+
+abstract PartsAllocator {
+parts: Map<partName, AbstractComponent>
+stateSynchronizer
+#createNewOwners(stateChange)
+#removeMissingOwners(stateChange)
+#{abstract}createOwner(partName, part)
+}
+
+note top of PartsAllocator
+Contains methods usually doing these:
+- analyze the state changes
+- manage the state parts owners
+end note
+
+note left of PartsAllocator::createNewOwners
+- iterates the state parts
+- creates new part owning components
+- calls <i>newOwner.render(part)</i>
+end note
+
+note left of PartsAllocator::removeMissingOwners
+- iterates the state parts
+- closes then removes
+  the <i>parts</i> no longer
+  found in iterator
+end note
+
+class StateSynchronizer {
+  #stateHolder
+  #domValuesReader
+  #partOwners: Map<partName, AbstractComponent>
+  +syncState()
+  +viewUpdated(view)
+  +partOwnersUpdated(partOwners)
+  #syncStateWithView()
+  #syncStateWithPartOwners()
+}
+
+note left of StateSynchronizer::syncState
+Updates (silently) the
+state using view's values
+and part owners state.
+end note
+
+note left of StateSynchronizer::syncStateWithPartOwners
+It'll call <i>syncState()</i> on
+part owners components
+before reading their state.
+end note
+
+abstract DomValuesReader {
+  view: AbstractView
+  {abstract}+extractDomValues()
+}
+
+note left of DomValuesReader::extractDomValues
+Extracts the input
+values from view.
+end note
+
+AbstractComponent "1" *-down- "1" EventsBinder
+AbstractComponent "1" *-down- "1" StateHolder
+AbstractComponent "1" *-down- "1" StateInitializer
+AbstractComponent "1" *-up- "1" StateChangesHandlerAdapter
+StateChangesHandlerAdapter "1" *-up- "many" StateChangesHandler
+ComponentIllustrator "1" *-up- "1" AbstractView
+PartialStateChangesHandler -down-|> StateChangesHandler
+PartsAllocator -down-|> PartialStateChangesHandler
+'StateChangesHandler -up-{ AbstractView : might use
+'DomValuesReader "1" *-up- "1" AbstractView
+StateSynchronizer "1" *-up- "1" DomValuesReader
+StateSynchronizer -up-> PartsAllocator
+StateSynchronizer -up-> ComponentIllustrator
+AbstractComponent "1" *-up- "1" StateSynchronizer
+AbstractComponent "1" *-down- "1" ErrorsHandler
+'AbstractComponent "1" *-right- "1" PartsAllocator
+PartialStateHolder -up-|> StateHolder
+StateHolder "1" *-up- "1" StateChangesCollector
+StateChangesCollector "1" *-up- "many" StateChange
+ComponentIllustrator --|> StateChangesHandler
+TypedStateChange -down-|> StateChange
+'PartsAllocator -down-> StateHolder
+ValuesStateInitializer -up-|> StateInitializer
+StateChangesCollector "1" *-up- "1" StateChangeEnhancer
+
+/'note as setElement
+<i>domElement</i>
+is the component's
+(root) DOM element
+end note
+
+ComponentIllustrator .. setElement
+setElement .. DomValuesReader'/
+
+@enduml

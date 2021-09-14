@@ -1,5 +1,5 @@
 /**
- * @template T, P
+ * @template SCT, SCP
  */
 export default class StateChange {
     /**
@@ -7,7 +7,7 @@ export default class StateChange {
      */
     newPartName;
     /**
-     * @type {T|P}
+     * @type {SCT|SCP}
      */
     newStateOrPart;
     /**
@@ -15,15 +15,15 @@ export default class StateChange {
      */
     previousPartName;
     /**
-     * @type {T|P}
+     * @type {SCT|SCP}
      */
     previousStateOrPart
 
     /**
      * previousPartName and newPartName could be the same (this in fact should be the usual case)
      *
-     * @param {T|P=} previousStateOrPart
-     * @param {T|P=} newStateOrPart
+     * @param {SCT|SCP=} previousStateOrPart
+     * @param {SCT|SCP=} newStateOrPart
      * @param {string|number=} previousPartName is the "old" part name, if any; could be empty when is about a "create"
      * @param {string|number=} newPartName is the "new" part name; could be empty when replacing with nothing (aka "delete"); by default keeping the previous part name if the new one is not provided and newStateOrPart is not empty
      */

@@ -4,17 +4,47 @@ export default class StateChangesHandlerAdapter {
     /**
      * @type {string}
      */
-    partMethodPrefix = "part"
+    partMethodPrefix;
     /**
      * @type {StateChangesHandler[]}
      */
-    stateChangesHandlers = [];
+    stateChangesHandlers;
 
     /**
-     * @param {TypedStateChange[]} typedStateChanges
+     * @param {ComponentIllustrator} componentIllustrator
      */
-    processStateChanges(typedStateChanges) {
-        typedStateChanges.forEach(sc => this._processStateChange(sc))
+    set componentIllustrator(componentIllustrator) {
+        this.stateChangesHandlers[0] = componentIllustrator;
+    }
+
+    /**
+     * @param {PartsAllocator} partsAllocator
+     */
+    set partsAllocator(partsAllocator) {
+        this.stateChangesHandlers[1] = partsAllocator;
+    }
+
+    /**
+     * @param {Object} config
+     * @param {ComponentIllustrator} config.componentIllustrator
+     * @param {PartsAllocator} config.partsAllocator
+     * @param {StateChangesHandler[]} config.stateChangesHandlers
+     * @param {string} config.partMethodPrefix
+     */
+    constructor({componentIllustrator, partsAllocator, stateChangesHandlers = [], partMethodPrefix = "part"}) {
+        this.partMethodPrefix = partMethodPrefix;
+        this.componentIllustrator = componentIllustrator;
+        this.partsAllocator = partsAllocator;
+        if (stateChangesHandlers != null) {
+            this.stateChangesHandlers = stateChangesHandlers;
+        }
+    }
+
+    /**
+     * @param {StateChangesCollector} stateChangesCollector
+     */
+    processStateChanges(stateChangesCollector) {
+        stateChangesCollector.consumeAll().forEach(sc => this._processStateChange(sc))
     }
 
     /**
@@ -33,8 +63,8 @@ export default class StateChangesHandlerAdapter {
      * @protected
      */
     _invokeStateChangesHandler(stateChangesHandler, methodName, typedStateChange,) {
-        const handlerMethod = stateChangesHandler[methodName];
-        handlerMethod(typedStateChange);
+        const handlerMethod = stateChangesHandler?.[methodName];
+        handlerMethod?.(typedStateChange);
     }
 
     /**
@@ -66,7 +96,7 @@ export default class StateChangesHandlerAdapter {
      * @protected
      */
     _partMethodVerbOf(changeType) {
-        return `${StringUtils.toTitleCase(changeType)}d`;
+        return `${StringUtils.toTitleCase(changeType)}`;
     }
 
     /**
@@ -75,6 +105,6 @@ export default class StateChangesHandlerAdapter {
      * @protected
      */
     _methodVerbOf(changeType) {
-        return `${changeType.toLowerCase()}d`;
+        return `${StringUtils.toCamelCase(changeType)}`;
     }
 }

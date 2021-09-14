@@ -1,20 +1,46 @@
 import StateHolder from "./StateHolder";
+import ValuesStateInitializer from "./ValuesStateInitializer";
 
 export default class AbstractComponent {
+    /**
+     * @type {StateChangesHandlerAdapter}
+     */
+    stateChangesHandlerAdapter;
     /**
      * @type {StateHolder}
      */
     stateHolder;
     /**
-     * @type {StateChangesHandlerAdapter}
+     * @type {StateInitializer}
      */
-    stateChangesHandlerAdapter;
+    stateInitializer;
 
     /**
-     * @param {StateHolder=} stateHolder
+     * @param {Object} config
+     * @param {*=} config.initialState
+     * @param {StateHolder=} config.stateHolder
+     * @param {StateInitializer=} config.stateInitializer
      */
-    constructor({stateHolder}) {
+    constructor({initialState, stateHolder, stateInitializer} = {}) {
         this.stateHolder = stateHolder ?? new StateHolder();
+        this._setStateInitializer(stateInitializer, initialState);
+    }
+
+    _setStateChangesHandlerAdapter() {
+        this.stateChangesHandlerAdapter = new StateChangesHandlerAdapter();
+    }
+
+    /**
+     * @param {StateInitializer} stateInitializer
+     * @param {*} initialState
+     * @protected
+     */
+    _setStateInitializer(stateInitializer, initialState) {
+        if (stateInitializer != null) {
+            this.stateInitializer = stateInitializer;
+        } else if (initialState != null) {
+            this.stateInitializer = new ValuesStateInitializer(initialState, this.stateHolder);
+        }
     }
 
     /**
@@ -38,7 +64,7 @@ export default class AbstractComponent {
      */
     doWithState(stateUpdaterFn) {
         stateUpdaterFn(this.stateHolder);
-        return this.updateViewOnStateChanges();
+        this.stateChangesHandlerAdapter.processStateChanges(this.stateHolder.stateChangesCollector);
     }
 
     /**
