@@ -4,18 +4,20 @@ export default class ValuesStateInitializer extends StateInitializer {
     /**
      * @type {*}
      */
-    values;
+    value;
 
     /**
-     * @param {*} values
-     * @param {StateHolder} stateHolder
+     * @param {*} value
      */
-    constructor(values, stateHolder) {super();}
+    constructor(value) {
+        super();
+        this.value = value;
+    }
 
     /**
      * loads this.values into stateHolder
      */
-    load() {
-        this.stateHolder.replace(this.values);
+    load(stateHolder) {
+        stateHolder.replace(this.value);
     }
 }

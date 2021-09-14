@@ -8,33 +8,28 @@ export default class StateChangesHandlerAdapter {
     /**
      * @type {StateChangesHandler[]}
      */
-    stateChangesHandlers = [null, null];
-
-    /**
-     * @param {ComponentIllustrator} componentIllustrator
-     */
-    set componentIllustrator(componentIllustrator) {
-        this.stateChangesHandlers[0] = componentIllustrator;
-    }
-
-    /**
-     * @param {PartsAllocator} partsAllocator
-     */
-    set partsAllocator(partsAllocator) {
-        this.stateChangesHandlers[1] = partsAllocator;
-    }
+    stateChangesHandlers;
 
     /**
      * @param {Object} config
      * @param {ComponentIllustrator=} config.componentIllustrator
      * @param {PartsAllocator=} config.partsAllocator
+     * @param {StateChangesHandler[]=} config.extraStateChangesHandlers
      * @param {StateChangesHandler[]=} config.stateChangesHandlers
      * @param {string=} config.partMethodPrefix
      */
-    constructor({componentIllustrator, partsAllocator, stateChangesHandlers, partMethodPrefix = "part"}) {
+    constructor({
+                    componentIllustrator,
+                    partsAllocator,
+                    extraStateChangesHandlers = [],
+                    stateChangesHandlers,
+                    partMethodPrefix = "part"
+                }) {
         this.partMethodPrefix = partMethodPrefix;
-        this.componentIllustrator = componentIllustrator;
-        this.partsAllocator = partsAllocator;
+        this.stateChangesHandlers = stateChangesHandlers ?? [];
+        this.stateChangesHandlers.push(componentIllustrator);
+        this.stateChangesHandlers.push(partsAllocator);
+        this.stateChangesHandlers.push(...extraStateChangesHandlers);
         if (stateChangesHandlers != null) {
             this.stateChangesHandlers = stateChangesHandlers;
         }

@@ -17,8 +17,9 @@
     font-weight: bold;
 }
 
-#component {
+.section {
     margin-left: auto;
     margin-right: auto;
     width: fit-content;
+    margin-top: 1rem;
 }

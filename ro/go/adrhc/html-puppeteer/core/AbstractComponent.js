@@ -24,17 +24,31 @@ export default class AbstractComponent {
      * @param {StateChangesHandlerAdapter} config.stateChangesHandlerAdapter
      * @param {ComponentIllustrator} config.componentIllustrator
      * @param {PartsAllocator} config.partsAllocator
+     * @param {StateChangesHandler[]} config.extraStateChangesHandlers
      * @param {StateChangesHandler[]} config.stateChangesHandlers
      * @param {string} config.partMethodPrefix
      */
     constructor({
-                    initialState, stateHolder, stateInitializer, stateChangesHandlerAdapter,
-                    componentIllustrator, partsAllocator, stateChangesHandlers, partMethodPrefix
+                    initialState,
+                    stateHolder,
+                    stateInitializer,
+                    stateChangesHandlerAdapter,
+                    componentIllustrator,
+                    partsAllocator,
+                    extraStateChangesHandlers,
+                    stateChangesHandlers,
+                    partMethodPrefix
                 }) {
         this.stateHolder = stateHolder ?? this._createStateHolder();
         this.stateInitializer = stateInitializer ?? this._createStateInitializer(initialState);
         this.stateChangesHandlerAdapter = stateChangesHandlerAdapter ??
-            this._createStateChangesHandlerAdapter(componentIllustrator, partsAllocator, stateChangesHandlers, partMethodPrefix);
+            this._createStateChangesHandlerAdapter({
+                componentIllustrator,
+                partsAllocator,
+                extraStateChangesHandlers,
+                stateChangesHandlers,
+                partMethodPrefix
+            });
     }
 
     /**
@@ -46,17 +60,26 @@ export default class AbstractComponent {
     }
 
     /**
-     * @param {ComponentIllustrator} componentIllustrator
-     * @param {PartsAllocator} partsAllocator
-     * @param {StateChangesHandler[]} stateChangesHandlers
-     * @param {string} partMethodPrefix
+     * @param {Object} config
+     * @param {ComponentIllustrator} config.componentIllustrator
+     * @param {PartsAllocator} config.partsAllocator
+     * @param {StateChangesHandler[]} config.extraStateChangesHandlers
+     * @param {StateChangesHandler[]} config.stateChangesHandlers
+     * @param {string} config.partMethodPrefix
      * @return {StateChangesHandlerAdapter}
      * @protected
      */
-    _createStateChangesHandlerAdapter(componentIllustrator, partsAllocator, stateChangesHandlers, partMethodPrefix) {
+    _createStateChangesHandlerAdapter({
+                                          componentIllustrator,
+                                          partsAllocator,
+                                          extraStateChangesHandlers,
+                                          stateChangesHandlers,
+                                          partMethodPrefix
+                                      } = {}) {
         return new StateChangesHandlerAdapter({
             componentIllustrator,
             partsAllocator,
+            extraStateChangesHandlers,
             stateChangesHandlers,
             partMethodPrefix
         });
@@ -68,18 +91,31 @@ export default class AbstractComponent {
      * @protected
      */
     _createStateInitializer(initialState) {
-        return initialState != null ? new ValuesStateInitializer(initialState, this.stateHolder) : undefined;
+        return initialState != null ? new ValuesStateInitializer(initialState) : undefined;
     }
 
     /**
-     * @param {*} values
+     * @param {*=} values
+     * @return {AbstractComponent}
      */
     render(values) {
         if (values != null) {
             this.doWithState(sh => {
                 sh.replace(values);
             });
+        } else if (this.stateInitializer) {
+            this._initializeState();
         }
+        return this;
+    }
+
+    /**
+     * @protected
+     */
+    _initializeState() {
+        this.doWithState((stateHolder) => {
+            this.stateInitializer.load(stateHolder);
+        });
     }
 
     /**
@@ -87,7 +123,6 @@ export default class AbstractComponent {
      *
      * @param {function(state: StateHolder)} stateUpdaterFn
      * @return {StateChange[]}
-     * @protected
      */
     doWithState(stateUpdaterFn) {
         stateUpdaterFn(this.stateHolder);
