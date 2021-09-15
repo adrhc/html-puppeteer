@@ -3,20 +3,32 @@ import SimpleComponent from "../../../html-puppeteer/core/SimpleComponent.js";
 export default class ClockComponent extends SimpleComponent {
     handle;
     interval;
+    stateGeneratorFn;
 
-    constructor({interval = 1000, ...otherConfig}) {
-        super(otherConfig);
+    /**
+     * @param {number=} interval
+     * @param {function(date: Date): *=} stateGeneratorFn
+     * @param {AbstractComponentOptionsWithConfigurator} componentOptions
+     */
+    constructor({
+                    interval = 1000,
+                    stateGeneratorFn,
+                    ...componentOptions
+                }) {
+        super(componentOptions);
         this.interval = interval;
+        this.stateGeneratorFn = stateGeneratorFn ?? ((date) => date);
     }
 
     /**
+     * @param {*=} value
      * @return {this}
      */
-    render() {
-        super.render();
+    render(value) {
+        super.render(value);
         this.handle = setInterval(() => {
             this.doWithState((state) =>
-                state.replace(new Date()));
+                state.replace(this.stateGeneratorFn(new Date())));
         }, this.interval)
         return this;
     }

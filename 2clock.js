@@ -4,7 +4,6 @@ import {withDebuggerConfigurator} from "./ro/go/adrhc/html-puppeteer/util/Debugg
 $(() => {
     new ClockComponent(withDebuggerConfigurator({
         elemIdOrJQuery: "component",
-        initialState: "wait 2s for a state change",
         interval: 2000
-    })).render();
+    })).render("wait 2s for a state change");
 })
