@@ -7,23 +7,23 @@ import DomUtils from "../util/DomUtils.js";
 /**
  * @typedef {{[key: string]: string|number|boolean}} DataAttributes
  */
-export default class DefaultComponentConfigurer extends ComponentConfigurator {
+export default class DefaultComponentConfigurator extends ComponentConfigurator {
     /**
      * @type {DataAttributes}
      */
     dataAttributes;
     /**
-     * @type {AbstractComponentOptions}
+     * @type {AbstractComponentOptionsWithConfigurator}
      */
     options;
 
     /**
-     * @param {AbstractComponentOptions} options
+     * @param {AbstractComponentOptionsWithConfigurator} options
      */
-    constructor(options) {
+    constructor(options = {}) {
         super();
         this.options = options;
-        this.dataAttributes = DomUtils.dataOf(this.options.elemIdOrJQuery);
+        this.dataAttributes = DomUtils.dataOf(this.options.elemIdOrJQuery) ?? {};
     }
 
     /**

@@ -1,7 +1,8 @@
-import DefaultComponentConfigurer from "./DefaultComponentConfigurer.js";
+import DefaultComponentConfigurator from "./DefaultComponentConfigurator.js";
 
 /**
  * @typedef {Object} AbstractComponentOptions
+ * @property {ComponentConfigurator[]=} extraConfigurators
  * @property {string=} elemIdOrJQuery
  * @property {StateHolder=} stateHolder
  * @property {StateInitializer=} stateInitializer
@@ -39,8 +40,9 @@ export default class AbstractComponent {
      * @param {AbstractComponentOptions=} restOfOptions
      */
     constructor({configurator, ...restOfOptions}) {
-        configurator = configurator ?? new DefaultComponentConfigurer(restOfOptions);
+        configurator = configurator ?? new DefaultComponentConfigurator(restOfOptions);
         configurator.configure(this);
+        restOfOptions.extraConfigurators?.forEach(c => c.configure(this));
     }
 
     /**
