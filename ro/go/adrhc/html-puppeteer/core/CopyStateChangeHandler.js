@@ -1,4 +1,4 @@
-import StateChangesHandler from "../../../html-puppeteer/core/StateChangesHandler.js";
+import StateChangesHandler from "./StateChangesHandler.js";
 
 export default class CopyStateChangeHandler extends StateChangesHandler {
     /**
@@ -10,12 +10,19 @@ export default class CopyStateChangeHandler extends StateChangesHandler {
      */
     copyAsJson;
 
+    /**
+     * @param {AbstractComponent} component
+     * @param {boolean} copyAsJson
+     */
     constructor(component, copyAsJson) {
         super();
         this.component = component;
         this.copyAsJson = copyAsJson;
     }
 
+    /**
+     * @param {StateChange} stateChange
+     */
     changeOccurred(stateChange) {
         const state = stateChange.newStateOrPart;
         const value = !this.copyAsJson ? state :

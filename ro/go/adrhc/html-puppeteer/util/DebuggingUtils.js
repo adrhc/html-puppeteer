@@ -1,5 +1,5 @@
 import SimpleComponent from "../core/SimpleComponent.js";
-import CopyStateChangeHandler from "../../app/components/state-change-handlers/CopyStateChangeHandler.js";
+import CopyStateChangeHandler from "../core/CopyStateChangeHandler.js";
 import ComponentConfigurator from "../core/ComponentConfigurator.js";
 
 /**
