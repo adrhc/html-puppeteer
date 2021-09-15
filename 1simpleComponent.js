@@ -1,6 +1,7 @@
 import SimpleComponent from "./ro/go/adrhc/html-puppeteer/core/SimpleComponent.js";
+import {withDebuggerConfigurator} from "./ro/go/adrhc/html-puppeteer/util/DebuggingUtils.js";
 
 $(() => {
-    const simple = new SimpleComponent({elemIdOrJQuery: "component"});
-    simple.render({text: "Hello puppeteer!"});
+    new SimpleComponent(withDebuggerConfigurator({elemIdOrJQuery: "component"}))
+        .render({text: "Hello puppeteer!"});
 })

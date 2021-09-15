@@ -10,49 +10,13 @@ import ComponentConfigurator from "../core/ComponentConfigurator.js";
  */
 
 /**
- * @param {AbstractComponent} component
- * @param {DebuggerOptions=} debuggerOptions
- */
-
-/*export function withDebugger(component, debuggerOptions) {
-    const debuggerStateChangeHandler = createDebuggerStateChangeHandler(debuggerOptions);
-    component.stateChangesHandlerAdapter.stateChangesHandlers.push(debuggerStateChangeHandler);
-    return component;
-}*/
-
-/**
- * @param {AbstractComponentOptionsWithConfigurator|DebuggerOptions} debuggerAndComponentOptions
- * @return {AbstractComponentOptionsWithConfigurator}
- */
-export function withDebuggerStateChangeHandler(debuggerAndComponentOptions) {
-    const debuggerStateChangeHandler = createDebuggerStateChangeHandler(debuggerAndComponentOptions);
-    let stateChangesHandlers;
-    if (debuggerAndComponentOptions.stateChangesHandlerAdapter) {
-        stateChangesHandlers = debuggerAndComponentOptions.stateChangesHandlerAdapter.stateChangesHandlers;
-    } else {
-        const extraStateChangesHandlers = debuggerAndComponentOptions.extraStateChangesHandlers ?? [];
-        extraStateChangesHandlers.push(debuggerStateChangeHandler);
-        debuggerAndComponentOptions.extraStateChangesHandlers = extraStateChangesHandlers;
-    }
-    debuggerAndComponentOptions.stateChangesHandlers.push(debuggerStateChangeHandler);
-}
-
-/**
  * @param {AbstractComponentOptionsWithConfigurator & DebuggerOptions} debuggerAndComponentOptions
  * @return {AbstractComponentOptionsWithConfigurator}
  */
-export function withDebuggerConfigurator(debuggerAndComponentOptions) {
+export function withDebuggerConfigurator(debuggerAndComponentOptions = {}) {
     debuggerAndComponentOptions.extraConfigurators = debuggerAndComponentOptions.extraConfigurators ?? [];
     debuggerAndComponentOptions.extraConfigurators.push(createDebuggerComponentConfigurator(debuggerAndComponentOptions))
     return debuggerAndComponentOptions;
-}
-
-/**
- * @param {DebuggerOptions=} debuggerOptions
- * @return {AbstractComponentOptionsWithConfigurator}
- */
-export function createDebuggerConfiguration(debuggerOptions) {
-    return {configurator: createDebuggerComponentConfigurator(debuggerOptions)}
 }
 
 /**
