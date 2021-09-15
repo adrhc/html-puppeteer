@@ -6,14 +6,18 @@ import DefaultComponentConfigurer from "./DefaultComponentConfigurer.js";
  * @property {StateHolder=} stateHolder
  * @property {StateInitializer=} stateInitializer
  * @property {*=} initialState
- * @property {StateChangesHandlerAdapter} stateChangesHandlerAdapter
+ * @property {StateChangesHandlerAdapter=} stateChangesHandlerAdapter
  * @property {string=} allChangesMethod
  * @property {string=} allPartChangesMethod
  * @property {string=} partMethodPrefix
- * @property {StateChangesHandler[]} stateChangesHandlers
- * @property {ComponentIllustrator} componentIllustrator
- * @property {PartsAllocator} partsAllocator
- * @property {StateChangesHandler[]} extraStateChangesHandlers
+ * @property {StateChangesHandler[]=} stateChangesHandlers
+ * @property {ComponentIllustrator=} componentIllustrator
+ * @property {PartsAllocator=} partsAllocator
+ * @property {StateChangesHandler[]=} extraStateChangesHandlers
+ */
+/**
+ * @typedef {AbstractComponentOptions} AbstractComponentOptionsWithConfigurator
+ * @property {ComponentConfigurator=} configurator
  */
 export default class AbstractComponent {
     /**
@@ -30,13 +34,13 @@ export default class AbstractComponent {
     stateInitializer;
 
     /**
-     * @param {Object} config
-     * @param {ComponentConfigurer} config.configurer
-     * @param {AbstractComponentOptions} options
+     * @param {AbstractComponentOptionsWithConfigurator} options
+     * @param {ComponentConfigurator=} options.configurator
+     * @param {AbstractComponentOptions=} restOfOptions
      */
-    constructor({configurer, ...options}) {
-        configurer = configurer ?? new DefaultComponentConfigurer(options);
-        configurer.configure(this);
+    constructor({configurator, ...restOfOptions}) {
+        configurator = configurator ?? new DefaultComponentConfigurer(restOfOptions);
+        configurator.configure(this);
     }
 
     /**

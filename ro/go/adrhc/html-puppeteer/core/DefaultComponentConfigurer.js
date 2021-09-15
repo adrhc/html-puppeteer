@@ -1,4 +1,4 @@
-import ComponentConfigurer from "./ComponentConfigurer.js";
+import ComponentConfigurator from "./ComponentConfigurator.js";
 import StateHolder from "./StateHolder.js";
 import StateChangesHandlerAdapter from "./StateChangesHandlerAdapter.js";
 import ValuesStateInitializer from "./ValuesStateInitializer.js";
@@ -7,15 +7,15 @@ import DomUtils from "../util/DomUtils.js";
 /**
  * @typedef {{[key: string]: string|number|boolean}} DataAttributes
  */
-export default class DefaultComponentConfigurer extends ComponentConfigurer {
-    /**
-     * @type {AbstractComponentOptions}
-     */
-    options;
+export default class DefaultComponentConfigurer extends ComponentConfigurator {
     /**
      * @type {DataAttributes}
      */
     dataAttributes;
+    /**
+     * @type {AbstractComponentOptions}
+     */
+    options;
 
     /**
      * @param {AbstractComponentOptions} options
@@ -23,13 +23,15 @@ export default class DefaultComponentConfigurer extends ComponentConfigurer {
     constructor(options) {
         super();
         this.options = options;
+        this.dataAttributes = DomUtils.dataOf(this.options.elemIdOrJQuery);
     }
 
     /**
+     * Sets the component's fields (e.g. stateHolder) to sensible defaults.
+     *
      * @param {AbstractComponent} component
      */
     _setComponentDefaults(component) {
-        this.dataAttributes = DomUtils.dataOf(this.options.elemIdOrJQuery);
         component.stateHolder = this.options.stateHolder ?? this._createStateHolder();
         component.stateChangesHandlerAdapter =
             this.options.stateChangesHandlerAdapter ?? this._createStateChangesHandlerAdapter();

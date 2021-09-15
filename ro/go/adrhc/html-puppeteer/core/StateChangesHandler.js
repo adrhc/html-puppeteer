@@ -1,3 +1,6 @@
+/**
+ * @abstract
+ */
 export default class StateChangesHandler {
     /**
      * @param {StateChange} stateChange

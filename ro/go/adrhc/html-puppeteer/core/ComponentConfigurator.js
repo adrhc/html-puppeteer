@@ -1,4 +1,4 @@
-export default class ComponentConfigurer {
+export default class ComponentConfigurator {
     /**
      * @param {AbstractComponent} abstractComponent
      */

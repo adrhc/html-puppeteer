@@ -1,6 +1,6 @@
 import SimpleComponent from "../core/SimpleComponent.js";
 import CopyStateChangeHandler from "../../app/components/state-change-handlers/CopyStateChangeHandler.js";
-import ComponentConfigurer from "../core/ComponentConfigurer.js";
+import ComponentConfigurator from "../core/ComponentConfigurator.js";
 
 /**
  * @param {AbstractComponent} component
@@ -22,7 +22,7 @@ export function withDebugger(component, debuggerOptions) {
  * @param {string=} debuggerOptions.initialDebuggerMessage
  */
 export function createDebuggerConfiguration(debuggerOptions) {
-    return {configurer: createDebuggerComponentConfigurer(debuggerOptions)}
+    return {configurator: createDebuggerComponentConfigurer(debuggerOptions)}
 }
 
 /**
@@ -53,7 +53,7 @@ function createDebuggerStateChangeHandler({showAsJson, debuggerElemIdOrJQuery, i
     return new CopyStateChangeHandler(simpleDebugger, showAsJson);
 }
 
-class DebuggerComponentConfigurer extends ComponentConfigurer {
+class DebuggerComponentConfigurer extends ComponentConfigurator {
     debuggerStateChangeHandler;
 
     constructor(debuggerStateChangeHandler) {
