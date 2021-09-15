@@ -1,11 +1,6 @@
 import GlobalConfig from "./GlobalConfig.js";
 import COMPONENTS_FACTORY from "../core/ComponentsFactories.js";
 
-/**
- * @typedef {Object} createComponents~Options
- * @property {jQuery<HTMLElement>=} parentComponentElem
- * @property {boolean=} alwaysReturnArray
- */
 class Puppeteer {
     /**
      * @param {{}=} componentsOptions

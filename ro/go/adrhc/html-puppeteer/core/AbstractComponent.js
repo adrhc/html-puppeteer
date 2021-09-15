@@ -1,7 +1,20 @@
-import StateHolder from "./StateHolder.js";
-import ValuesStateInitializer from "./ValuesStateInitializer.js";
-import StateChangesHandlerAdapter from "./StateChangesHandlerAdapter.js";
+import DefaultComponentConfigurer from "./DefaultComponentConfigurer.js";
 
+/**
+ * @typedef {Object} AbstractComponentOptions
+ * @property {string=} elemIdOrJQuery
+ * @property {StateHolder=} stateHolder
+ * @property {StateInitializer=} stateInitializer
+ * @property {*=} initialState
+ * @property {StateChangesHandlerAdapter} stateChangesHandlerAdapter
+ * @property {string=} allChangesMethod
+ * @property {string=} allPartChangesMethod
+ * @property {string=} partMethodPrefix
+ * @property {StateChangesHandler[]} stateChangesHandlers
+ * @property {ComponentIllustrator} componentIllustrator
+ * @property {PartsAllocator} partsAllocator
+ * @property {StateChangesHandler[]} extraStateChangesHandlers
+ */
 export default class AbstractComponent {
     /**
      * @type {StateChangesHandlerAdapter}
@@ -18,85 +31,12 @@ export default class AbstractComponent {
 
     /**
      * @param {Object} config
-     * @param {*=} config.initialState
-     * @param {StateHolder=} config.stateHolder
-     * @param {StateInitializer=} config.stateInitializer
-     * @param {StateChangesHandlerAdapter} config.stateChangesHandlerAdapter
-     * @param {ComponentIllustrator} config.componentIllustrator
-     * @param {PartsAllocator} config.partsAllocator
-     * @param {StateChangesHandler[]} config.extraStateChangesHandlers
-     * @param {StateChangesHandler[]} config.stateChangesHandlers
-     * @param {string} config.partMethodPrefix
-     * @param {ComponentConfigurer} configurer
+     * @param {ComponentConfigurer} config.configurer
+     * @param {AbstractComponentOptions} options
      */
-    constructor({
-                    initialState,
-                    stateHolder,
-                    stateInitializer,
-                    stateChangesHandlerAdapter,
-                    componentIllustrator,
-                    partsAllocator,
-                    extraStateChangesHandlers,
-                    stateChangesHandlers,
-                    partMethodPrefix,
-                    configurer
-                }) {
-        this.stateHolder = stateHolder ?? this._createStateHolder();
-        this.stateInitializer = stateInitializer ?? this._createStateInitializer(initialState);
-        this.stateChangesHandlerAdapter = stateChangesHandlerAdapter ??
-            this._createStateChangesHandlerAdapter({
-                componentIllustrator,
-                partsAllocator,
-                extraStateChangesHandlers,
-                stateChangesHandlers,
-                partMethodPrefix
-            });
-        if (configurer) {
-            configurer.configure(this);
-        }
-    }
-
-    /**
-     * @return {StateHolder}
-     * @protected
-     */
-    _createStateHolder() {
-        return new StateHolder();
-    }
-
-    /**
-     * @param {Object} config
-     * @param {ComponentIllustrator} config.componentIllustrator
-     * @param {PartsAllocator} config.partsAllocator
-     * @param {StateChangesHandler[]} config.extraStateChangesHandlers
-     * @param {StateChangesHandler[]} config.stateChangesHandlers
-     * @param {string} config.partMethodPrefix
-     * @return {StateChangesHandlerAdapter}
-     * @protected
-     */
-    _createStateChangesHandlerAdapter({
-                                          componentIllustrator,
-                                          partsAllocator,
-                                          extraStateChangesHandlers,
-                                          stateChangesHandlers,
-                                          partMethodPrefix
-                                      } = {}) {
-        return new StateChangesHandlerAdapter({
-            componentIllustrator,
-            partsAllocator,
-            extraStateChangesHandlers,
-            stateChangesHandlers,
-            partMethodPrefix
-        });
-    }
-
-    /**
-     * @param {*=} initialState
-     * @return {StateInitializer}
-     * @protected
-     */
-    _createStateInitializer(initialState) {
-        return initialState != null ? new ValuesStateInitializer(initialState) : undefined;
+    constructor({configurer, ...options}) {
+        configurer = configurer ?? new DefaultComponentConfigurer(options);
+        configurer.configure(this);
     }
 
     /**

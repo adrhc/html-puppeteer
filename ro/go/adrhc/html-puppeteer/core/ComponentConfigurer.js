@@ -9,12 +9,14 @@ export default class ComponentConfigurer {
 
     /**
      * @param {AbstractComponent} abstractComponent
+     * @protected
      */
     _setComponentDefaults(abstractComponent) {
     }
 
     /**
      * @param {StateChangesHandlerAdapter} stateChangesHandlerAdapter
+     * @protected
      */
     _configureStateChangesHandlerAdapter(stateChangesHandlerAdapter) {}
 }

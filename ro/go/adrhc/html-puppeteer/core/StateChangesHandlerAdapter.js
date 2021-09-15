@@ -7,11 +7,14 @@ import {pushNotNull} from "../util/ArrayUtils.js";
  * @property {StateChangesHandler[]} extraStateChangesHandlers
  */
 /**
- * @typedef {Object} ComponentOptions
+ * @typedef {Object} StateChangesHandlerAdapterOptions
  * @property {string=} allChangesMethod
  * @property {string=} allPartChangesMethod
  * @property {string=} partMethodPrefix
  * @property {StateChangesHandler[]=} stateChangesHandlers
+ * @property {ComponentIllustrator} componentIllustrator
+ * @property {PartsAllocator} partsAllocator
+ * @property {StateChangesHandler[]} extraStateChangesHandlers
  */
 export default class StateChangesHandlerAdapter {
     /**
@@ -32,24 +35,14 @@ export default class StateChangesHandlerAdapter {
     stateChangesHandlers;
 
     /**
-     * @param {ComponentOptions} config
-     * @param {StateChangesHandlersOptions} config.stateChangesHandlersOptions
-     * @param {ComponentIllustrator=} stateChangesHandlersOptions.componentIllustrator
-     * @param {PartsAllocator=} stateChangesHandlersOptions.partsAllocator
-     * @param {StateChangesHandler[]=} stateChangesHandlersOptions.extraStateChangesHandlers
+     * @param {StateChangesHandlerAdapterOptions} options
      */
-    constructor({
-                    allChangesMethod = "changeOccurred",
-                    allPartChangesMethod = "partChangeOccurred",
-                    partMethodPrefix = "part",
-                    stateChangesHandlers,
-                    ...stateChangesHandlersOptions
-                }) {
-        this.partMethodPrefix = partMethodPrefix;
-        this.allChangesMethod = allChangesMethod;
-        this.allPartChangesMethod = allPartChangesMethod;
-        this.stateChangesHandlers = stateChangesHandlers ??
-            this._createStateChangesHandlers(stateChangesHandlersOptions);
+    constructor(options) {
+        this.partMethodPrefix = options.partMethodPrefix ?? "part";
+        this.allChangesMethod = options.allChangesMethod ?? "changeOccurred";
+        this.allPartChangesMethod = options.allPartChangesMethod ?? "partChangeOccurred";
+        this.stateChangesHandlers = options.stateChangesHandlers ??
+            this._createStateChangesHandlers(options);
     }
 
     /**

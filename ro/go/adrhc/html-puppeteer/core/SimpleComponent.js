@@ -4,11 +4,6 @@ import DomUtils from "../util/DomUtils.js";
 
 export default class SimpleComponent extends AbstractComponent {
     /**
-     * @type {{}}
-     */
-    dataAttributes;
-
-    /**
      * @param {{}} config
      */
     constructor(config = {}) {
@@ -16,8 +11,6 @@ export default class SimpleComponent extends AbstractComponent {
             componentIllustrator: new ComponentIllustrator(config),
             ...config
         });
-        this.dataAttributes = this._extractDataAttributes();
-        this.stateInitializer = this.stateInitializer ?? this._createStateInitializer(this.dataAttributes.state);
     }
 
     /**

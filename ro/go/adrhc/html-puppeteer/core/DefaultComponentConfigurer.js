@@ -1,33 +1,24 @@
-import ComponentConfigurer from "./ComponentConfigurer";
+import ComponentConfigurer from "./ComponentConfigurer.js";
 import StateHolder from "./StateHolder.js";
 import StateChangesHandlerAdapter from "./StateChangesHandlerAdapter.js";
 import ValuesStateInitializer from "./ValuesStateInitializer.js";
+import DomUtils from "../util/DomUtils.js";
+
 /**
- * @typedef {Object} StateChangesHandlersOptions
- * @property {ComponentIllustrator} componentIllustrator
- * @property {PartsAllocator} partsAllocator
- * @property {StateChangesHandler[]} extraStateChangesHandlers
- */
-/**
- * @typedef {Object} ComponentOptions
- * @property {StateHolder=} stateHolder
- * @property {StateInitializer=} stateInitializer
- * @property {*=} initialState
- * @property {StateChangesHandlerAdapter} stateChangesHandlerAdapter
- * @property {string=} allChangesMethod
- * @property {string=} allPartChangesMethod
- * @property {string=} partMethodPrefix
- * @property {StateChangesHandler[]} stateChangesHandlers
- * @property {StateChangesHandlersOptions} stateChangesHandlersOptions
+ * @typedef {{[key: string]: string|number|boolean}} DataAttributes
  */
 export default class DefaultComponentConfigurer extends ComponentConfigurer {
     /**
-     * @type {ComponentOptions}
+     * @type {AbstractComponentOptions}
      */
     options;
+    /**
+     * @type {DataAttributes}
+     */
+    dataAttributes;
 
     /**
-     * @param {ComponentOptions} options
+     * @param {AbstractComponentOptions} options
      */
     constructor(options) {
         super();
@@ -35,13 +26,14 @@ export default class DefaultComponentConfigurer extends ComponentConfigurer {
     }
 
     /**
-     * @param {AbstractComponent} abstractComponent
+     * @param {AbstractComponent} component
      */
-    _setComponentDefaults(abstractComponent) {
-        abstractComponent.stateHolder = this.options.stateHolder ?? this._createStateHolder();
-        abstractComponent.stateInitializer = this.options.stateInitializer ?? this._createStateInitializer();
-        abstractComponent.stateChangesHandlerAdapter =
+    _setComponentDefaults(component) {
+        this.dataAttributes = DomUtils.dataOf(this.options.elemIdOrJQuery);
+        component.stateHolder = this.options.stateHolder ?? this._createStateHolder();
+        component.stateChangesHandlerAdapter =
             this.options.stateChangesHandlerAdapter ?? this._createStateChangesHandlerAdapter();
+        component.stateInitializer = this.options.stateInitializer ?? this._createStateInitializer();
     }
 
     /**
@@ -65,6 +57,7 @@ export default class DefaultComponentConfigurer extends ComponentConfigurer {
      * @protected
      */
     _createStateInitializer() {
-        return this.options.initialState != null ? new ValuesStateInitializer(this.options.initialState) : undefined;
+        const initialState = this.options.initialState ?? this.dataAttributes.state;
+        return initialState != null ? new ValuesStateInitializer(initialState) : undefined;
     }
 }
