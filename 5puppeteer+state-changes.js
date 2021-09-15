@@ -1,6 +1,10 @@
 import PUPPETEER from "./ro/go/adrhc/html-puppeteer/util/Puppeteer.js";
 import {withDebuggerConfigurator} from "./ro/go/adrhc/html-puppeteer/util/DebuggingUtils.js";
+import COMPONENTS_FACTORY from "./ro/go/adrhc/html-puppeteer/core/ComponentsFactories.js";
+import ClockComponent from "./ro/go/adrhc/app/components/clock/ClockComponent.js";
+import {generateDogs} from "./ro/go/adrhc/app/DataGenerators.js";
 
 $(() => {
-    PUPPETEER.animate(withDebuggerConfigurator());
-})
+    COMPONENTS_FACTORY.registerType("clock", (options) => new ClockComponent(options));
+    PUPPETEER.animate(withDebuggerConfigurator({stateGeneratorFn: () => generateDogs(5)}));
+});

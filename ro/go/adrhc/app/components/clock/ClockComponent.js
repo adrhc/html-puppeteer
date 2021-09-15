@@ -11,12 +11,12 @@ export default class ClockComponent extends SimpleComponent {
      * @param {AbstractComponentOptionsWithConfigurator} componentOptions
      */
     constructor({
-                    interval = 1000,
+                    interval,
                     stateGeneratorFn,
                     ...componentOptions
                 }) {
         super(componentOptions);
-        this.interval = interval;
+        this.interval = interval ?? this.dataAttributes.interval ?? 1000;
         this.stateGeneratorFn = stateGeneratorFn ?? ((date) => date);
     }
 
@@ -29,7 +29,7 @@ export default class ClockComponent extends SimpleComponent {
         this.handle = setInterval(() => {
             this.doWithState((state) =>
                 state.replace(this.stateGeneratorFn(new Date())));
-        }, this.interval)
+        }, this.interval);
         return this;
     }
 

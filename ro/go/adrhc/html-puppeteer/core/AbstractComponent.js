@@ -22,6 +22,10 @@ import DefaultComponentConfigurator from "./DefaultComponentConfigurator.js";
  */
 export default class AbstractComponent {
     /**
+     * @type {DataAttributes}
+     */
+    dataAttributes;
+    /**
      * @type {StateChangesHandlerAdapter}
      */
     stateChangesHandlerAdapter;
