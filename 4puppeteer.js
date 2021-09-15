@@ -1,6 +1,6 @@
 import PUPPETEER from "./ro/go/adrhc/html-puppeteer/util/Puppeteer.js";
+import {createDebuggerConfiguration} from "./ro/go/adrhc/html-puppeteer/util/DebuggingUtils.js";
 
 $(() => {
-    // withDebugger(new SimpleComponent({elemIdOrJQuery: "component"})).render();
-    PUPPETEER.animate();
+    PUPPETEER.animate(createDebuggerConfiguration());
 })

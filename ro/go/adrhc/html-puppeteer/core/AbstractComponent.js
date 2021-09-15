@@ -27,6 +27,7 @@ export default class AbstractComponent {
      * @param {StateChangesHandler[]} config.extraStateChangesHandlers
      * @param {StateChangesHandler[]} config.stateChangesHandlers
      * @param {string} config.partMethodPrefix
+     * @param {ComponentConfigurer} configurer
      */
     constructor({
                     initialState,
@@ -37,7 +38,8 @@ export default class AbstractComponent {
                     partsAllocator,
                     extraStateChangesHandlers,
                     stateChangesHandlers,
-                    partMethodPrefix
+                    partMethodPrefix,
+                    configurer
                 }) {
         this.stateHolder = stateHolder ?? this._createStateHolder();
         this.stateInitializer = stateInitializer ?? this._createStateInitializer(initialState);
@@ -49,6 +51,9 @@ export default class AbstractComponent {
                 stateChangesHandlers,
                 partMethodPrefix
             });
+        if (configurer) {
+            configurer.configure(this);
+        }
     }
 
     /**

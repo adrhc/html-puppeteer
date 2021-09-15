@@ -1,3 +1,18 @@
+import {pushNotNull} from "../util/ArrayUtils.js";
+
+/**
+ * @typedef {Object} StateChangesHandlersOptions
+ * @property {ComponentIllustrator} componentIllustrator
+ * @property {PartsAllocator} partsAllocator
+ * @property {StateChangesHandler[]} extraStateChangesHandlers
+ */
+/**
+ * @typedef {Object} ComponentOptions
+ * @property {string=} allChangesMethod
+ * @property {string=} allPartChangesMethod
+ * @property {string=} partMethodPrefix
+ * @property {StateChangesHandler[]=} stateChangesHandlers
+ */
 export default class StateChangesHandlerAdapter {
     /**
      * @type {string}
@@ -17,42 +32,45 @@ export default class StateChangesHandlerAdapter {
     stateChangesHandlers;
 
     /**
-     * @param {Object} config
-     * @param {ComponentIllustrator=} config.componentIllustrator
-     * @param {PartsAllocator=} config.partsAllocator
-     * @param {StateChangesHandler[]=} config.extraStateChangesHandlers
-     * @param {StateChangesHandler[]=} config.stateChangesHandlers
-     * @param {string=} config.partMethodPrefix
+     * @param {ComponentOptions} config
+     * @param {StateChangesHandlersOptions} config.stateChangesHandlersOptions
+     * @param {ComponentIllustrator=} stateChangesHandlersOptions.componentIllustrator
+     * @param {PartsAllocator=} stateChangesHandlersOptions.partsAllocator
+     * @param {StateChangesHandler[]=} stateChangesHandlersOptions.extraStateChangesHandlers
      */
     constructor({
-                    componentIllustrator,
-                    partsAllocator,
-                    extraStateChangesHandlers = [],
-                    stateChangesHandlers,
                     allChangesMethod = "changeOccurred",
                     allPartChangesMethod = "partChangeOccurred",
                     partMethodPrefix = "part",
+                    stateChangesHandlers,
+                    ...stateChangesHandlersOptions
                 }) {
         this.partMethodPrefix = partMethodPrefix;
         this.allChangesMethod = allChangesMethod;
         this.allPartChangesMethod = allPartChangesMethod;
-        this.stateChangesHandlers = stateChangesHandlers ?? [];
-        this._appendStateChangesHandler(componentIllustrator);
-        this._appendStateChangesHandler(partsAllocator);
-        this.stateChangesHandlers.push(...extraStateChangesHandlers);
-        if (stateChangesHandlers != null) {
-            this.stateChangesHandlers = stateChangesHandlers;
-        }
+        this.stateChangesHandlers = stateChangesHandlers ??
+            this._createStateChangesHandlers(stateChangesHandlersOptions);
+    }
+
+    /**
+     * @param {StateChangesHandlersOptions} options
+     * @return {StateChangesHandler[]}
+     * @protected
+     */
+    _createStateChangesHandlers({
+                                    componentIllustrator,
+                                    partsAllocator,
+                                    extraStateChangesHandlers,
+                                }) {
+        extraStateChangesHandlers = extraStateChangesHandlers ?? [];
+        return pushNotNull([], componentIllustrator, partsAllocator, ...extraStateChangesHandlers);
     }
 
     /**
      * @param {StateChangesHandler} stateChangesHandler
-     * @protected
      */
-    _appendStateChangesHandler(stateChangesHandler) {
-        if (stateChangesHandler != null) {
-            this.stateChangesHandlers.push(stateChangesHandler);
-        }
+    appendStateChangesHandler(stateChangesHandler) {
+        pushNotNull(this.stateChangesHandlers, stateChangesHandler);
     }
 
     /**
