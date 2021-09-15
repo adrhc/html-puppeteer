@@ -13,7 +13,7 @@ import ComponentConfigurator from "../core/ComponentConfigurator.js";
  * @param {AbstractComponentOptionsWithConfigurator & DebuggerOptions | {}} debuggerAndComponentOptions
  * @return {AbstractComponentOptionsWithConfigurator}
  */
-export function withDebuggerConfigurator(debuggerAndComponentOptions = {}) {
+export function withDebugger(debuggerAndComponentOptions = {}) {
     debuggerAndComponentOptions.extraConfigurators = debuggerAndComponentOptions.extraConfigurators ?? [];
     debuggerAndComponentOptions.extraConfigurators.push(createDebuggerComponentConfigurator(debuggerAndComponentOptions))
     return debuggerAndComponentOptions;
