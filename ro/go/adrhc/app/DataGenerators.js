@@ -1,14 +1,19 @@
 import {rangeIterator} from "../html-puppeteer/util/StreamUtils.js";
 
 /**
- * @param {number} max
- * @return {{}[]}
+ * @typedef {{[key:string]:*}} Dogs
+ * @property {{id: string, name: string}} dogs
  */
-export function generateDogs(max) {
+/**
+ * @param {number} max
+ * @param {DataAttributes} dataAttributes
+ * @return {Dogs}
+ */
+export function generateDogs(max, dataAttributes = {}) {
     const count = _.random(1, max);
     const dogs = [];
     rangeIterator(1, count, (i) => {
         dogs.push({id: i, name: `dog${i}`});
     });
-    return dogs;
+    return {dogs, ...dataAttributes};
 }

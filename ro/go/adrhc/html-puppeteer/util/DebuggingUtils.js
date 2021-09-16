@@ -1,6 +1,6 @@
 import SimpleComponent from "../core/SimpleComponent.js";
 import CopyStateChangeHandler from "../core/CopyStateChangeHandler.js";
-import ComponentConfigurator from "../core/ComponentConfigurator.js";
+import {withStateChangesHandlerAdapterExtraConfiguratorOf} from "../core/AbstractComponent.js";
 
 /**
  * @typedef {Object} DebuggerOptions
@@ -14,18 +14,11 @@ import ComponentConfigurator from "../core/ComponentConfigurator.js";
  * @return {AbstractComponentOptionsWithConfigurator}
  */
 export function withDebugger(debuggerAndComponentOptions = {}) {
-    debuggerAndComponentOptions.extraConfigurators = debuggerAndComponentOptions.extraConfigurators ?? [];
-    debuggerAndComponentOptions.extraConfigurators.push(createDebuggerComponentConfigurator(debuggerAndComponentOptions))
-    return debuggerAndComponentOptions;
-}
-
-/**
- * @param {DebuggerOptions=} options
- * @return {DebuggerComponentConfigurator}
- */
-export function createDebuggerComponentConfigurator(options) {
-    const debuggerStateChangeHandler = createDebuggerStateChangeHandler(options);
-    return new DebuggerComponentConfigurator(debuggerStateChangeHandler);
+    const debuggerStateChangeHandler = createDebuggerStateChangeHandler(debuggerAndComponentOptions);
+    return withStateChangesHandlerAdapterExtraConfiguratorOf(debuggerAndComponentOptions,
+        (scha) => {
+            scha.appendStateChangesHandler(debuggerStateChangeHandler);
+        });
 }
 
 /**
@@ -43,20 +36,4 @@ function createDebuggerStateChangeHandler({showAsJson, debuggerElemIdOrJQuery, i
         initialState: initialDebuggerMessage
     }).render();
     return new CopyStateChangeHandler(simpleDebugger, showAsJson);
-}
-
-class DebuggerComponentConfigurator extends ComponentConfigurator {
-    debuggerStateChangeHandler;
-
-    /**
-     * @param {StateChangesHandler} debuggerStateChangeHandler
-     */
-    constructor(debuggerStateChangeHandler) {
-        super();
-        this.debuggerStateChangeHandler = debuggerStateChangeHandler;
-    }
-
-    _configureStateChangesHandlerAdapter(stateChangesHandlerAdapter) {
-        stateChangesHandlerAdapter.appendStateChangesHandler(this.debuggerStateChangeHandler);
-    }
 }

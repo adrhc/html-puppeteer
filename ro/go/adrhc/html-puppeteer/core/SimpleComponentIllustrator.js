@@ -1,11 +1,14 @@
 import ComponentIllustrator from "./ComponentIllustrator.js";
 import SimpleView from "./SimpleView.js";
 
+/**
+ * @typedef {AbstractTemplatingViewOptions} AbstractTemplatingViewOptionsWithView
+ * @property {AbstractView=} view
+ */
 export default class SimpleComponentIllustrator extends ComponentIllustrator {
     /**
-     * @param {Object} options
-     * @param {AbstractView=} options.view
-     * @param {AbstractTemplatingViewOptions} viewConfig
+     * @param {AbstractTemplatingViewOptionsWithView} options
+     * @param {AbstractTemplatingViewOptions=} viewConfig
      */
     constructor({view, ...viewConfig}) {
         super();

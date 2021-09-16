@@ -1,20 +1,14 @@
 import DefaultComponentConfigurator from "./DefaultComponentConfigurator.js";
+import {defaultsExtraConfiguratorOf, stateChangesHandlerAdapterExtraConfiguratorOf} from "./ComponentConfigurator.js";
 
 /**
- * @typedef {Object} AbstractComponentOptions
+ * @typedef {{[key:string]:*} & StateChangesHandlerAdapterOptions & AbstractTemplatingViewOptionsWithView} AbstractComponentOptions
  * @property {ComponentConfigurator[]=} extraConfigurators
  * @property {string=} elemIdOrJQuery
  * @property {StateHolder=} stateHolder
  * @property {StateInitializer=} stateInitializer
  * @property {*=} initialState
  * @property {StateChangesHandlerAdapter=} stateChangesHandlerAdapter
- * @property {string=} allChangesMethod
- * @property {string=} allPartChangesMethod
- * @property {string=} partMethodPrefix
- * @property {StateChangesHandler[]=} stateChangesHandlers
- * @property {ComponentIllustrator=} componentIllustrator
- * @property {PartsAllocator=} partsAllocator
- * @property {StateChangesHandler[]=} extraStateChangesHandlers
  */
 /**
  * @typedef {AbstractComponentOptions} AbstractComponentOptionsWithConfigurator
@@ -112,4 +106,22 @@ export function extraConfiguratorsOf(options, configuratorToAppend) {
     options.extraConfigurators = options.extraConfigurators ?? [];
     options.extraConfigurators.push(configuratorToAppend);
     return options;
+}
+
+/**
+ * @param {AbstractComponentOptions} options
+ * @param {function(component: StateChangesHandlerAdapter)} configureStateChangesHandlerAdapterFn
+ * @return {AbstractComponentOptionsWithConfigurator}
+ */
+export function withStateChangesHandlerAdapterExtraConfiguratorOf(options, configureStateChangesHandlerAdapterFn) {
+    return extraConfiguratorsOf(options, stateChangesHandlerAdapterExtraConfiguratorOf(configureStateChangesHandlerAdapterFn))
+}
+
+/**
+ * @param {AbstractComponentOptions} options
+ * @param {function(component: AbstractComponent)} setComponentDefaultsFn
+ * @return {AbstractComponentOptionsWithConfigurator}
+ */
+export function withDefaultsExtraConfiguratorOf(options, setComponentDefaultsFn) {
+    return extraConfiguratorsOf(options, defaultsExtraConfiguratorOf(setComponentDefaultsFn))
 }

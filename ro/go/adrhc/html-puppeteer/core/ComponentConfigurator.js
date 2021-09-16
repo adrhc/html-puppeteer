@@ -13,7 +13,9 @@ export default class ComponentConfigurator {
      * @protected
      */
     _executeExtraConfigurators(abstractComponent) {
-        abstractComponent.options.extraConfigurators?.forEach(c => c.configure(abstractComponent));
+        const {extraConfigurators, ...otherOptions} = abstractComponent.options;
+        abstractComponent.options = otherOptions;
+        extraConfigurators?.forEach(c => c.configure(abstractComponent));
     }
 
     /**
@@ -31,10 +33,20 @@ export default class ComponentConfigurator {
 }
 
 /**
+ * @param {function(component: StateChangesHandlerAdapter)} configureStateChangesHandlerAdapterFn
+ * @return {ComponentConfigurator}
+ */
+export function stateChangesHandlerAdapterExtraConfiguratorOf(configureStateChangesHandlerAdapterFn) {
+    const cc = new ComponentConfigurator();
+    cc._configureStateChangesHandlerAdapter = configureStateChangesHandlerAdapterFn;
+    return cc;
+}
+
+/**
  * @param {function(component: AbstractComponent)} setComponentDefaultsFn
  * @return {ComponentConfigurator}
  */
-export function defaultsComponentConfiguratorOf(setComponentDefaultsFn) {
+export function defaultsExtraConfiguratorOf(setComponentDefaultsFn) {
     const cc = new ComponentConfigurator();
     cc._setComponentDefaults = setComponentDefaultsFn;
     return cc;

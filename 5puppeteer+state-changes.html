@@ -18,8 +18,7 @@
 
 <div class="container">
     <div class="section title">ClockComponent</div>
-    <div class="section" data-interval="3000"
-         data-state='[{"name": "generating new dogs each 3s"}]' data-template-id="table-template"
+    <div class="section" data-interval="3000" data-state='{"interval": 3000}' data-template-id="table-template"
          data-type="clock"></div>
     <div class="section title">Debugger (shows as JSON the state used above)</div>
     <div class="section" id="debugger">{{this}}</div>
@@ -29,10 +28,10 @@
     <table class="responstable">
         <thead>
         <tr>
-            <th colSpan="2">Dogs</th>
+            <th colSpan="2">Generating new dogs each {{interval}} ms</th>
         </tr>
         </thead>
-        {{#each this}}
+        {{#each dogs}}
             <tr>
                 <td>{{id}}</td>
                 <td>{{name}}</td>
