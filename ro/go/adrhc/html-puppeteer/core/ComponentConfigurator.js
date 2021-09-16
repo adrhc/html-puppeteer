@@ -5,6 +5,15 @@ export default class ComponentConfigurator {
     configure(abstractComponent) {
         this._setComponentDefaults(abstractComponent);
         this._configureStateChangesHandlerAdapter(abstractComponent.stateChangesHandlerAdapter);
+        this._executeExtraConfigurators(abstractComponent);
+    }
+
+    /**
+     * @param {AbstractComponent} abstractComponent
+     * @protected
+     */
+    _executeExtraConfigurators(abstractComponent) {
+        abstractComponent.options.extraConfigurators?.forEach(c => c.configure(abstractComponent));
     }
 
     /**
@@ -19,4 +28,14 @@ export default class ComponentConfigurator {
      * @protected
      */
     _configureStateChangesHandlerAdapter(stateChangesHandlerAdapter) {}
+}
+
+/**
+ * @param {function(component: AbstractComponent)} setComponentDefaultsFn
+ * @return {ComponentConfigurator}
+ */
+export function defaultsComponentConfiguratorOf(setComponentDefaultsFn) {
+    const cc = new ComponentConfigurator();
+    cc._setComponentDefaults = setComponentDefaultsFn;
+    return cc;
 }

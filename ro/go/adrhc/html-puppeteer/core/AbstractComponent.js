@@ -26,6 +26,10 @@ export default class AbstractComponent {
      */
     dataAttributes;
     /**
+     * @type {AbstractComponentOptions}
+     */
+    options;
+    /**
      * @type {StateChangesHandlerAdapter}
      */
     stateChangesHandlerAdapter;
@@ -44,9 +48,16 @@ export default class AbstractComponent {
      * @param {AbstractComponentOptions=} restOfOptions
      */
     constructor({configurator, ...restOfOptions}) {
-        configurator = configurator ?? new DefaultComponentConfigurator(restOfOptions);
+        configurator = configurator ?? this._createComponentConfigurator(restOfOptions);
         configurator.configure(this);
-        restOfOptions.extraConfigurators?.forEach(c => c.configure(this));
+    }
+
+    /**
+     * @param {AbstractComponentOptions} options
+     * @protected
+     */
+    _createComponentConfigurator(options) {
+        return new DefaultComponentConfigurator(options);
     }
 
     /**
@@ -90,4 +101,15 @@ export default class AbstractComponent {
     close() {
         this.stateHolder.replace();
     }
+}
+
+/**
+ * @param {AbstractComponentOptionsWithConfigurator} options
+ * @param {ComponentConfigurator} configuratorToAppend
+ * @return {AbstractComponentOptionsWithConfigurator}
+ */
+export function extraConfiguratorsOf(options, configuratorToAppend) {
+    options.extraConfigurators = options.extraConfigurators ?? [];
+    options.extraConfigurators.push(configuratorToAppend);
+    return options;
 }

@@ -32,6 +32,7 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
      * @param {AbstractComponent} component
      */
     _setComponentDefaults(component) {
+        component.options = this.options;
         component.dataAttributes = this.dataAttributes;
         component.stateHolder = this.options.stateHolder ?? this._createStateHolder();
         component.stateChangesHandlerAdapter =
