@@ -3,8 +3,9 @@
 title HTML puppeteer - Classes Diagram
 
 abstract EventsBinder {
-  #abstractComponent
+  component: AbstractComponent
   {abstract}+attachEventHandlers()
+  {abstract}+detachEventHandlers()
 }
 
 note bottom of EventsBinder
@@ -304,30 +305,30 @@ Extracts the input
 values from view.
 end note
 
-AbstractComponent "1" *-down- "1" EventsBinder
-AbstractComponent "1" *-down- "1" StateHolder
-AbstractComponent "1" *-down- "1" StateInitializer
-AbstractComponent "1" *-up- "1" StateChangesHandlerAdapter
-StateChangesHandlerAdapter "1" *-up- "many" StateChangesHandler
-ComponentIllustrator "1" *-up- "1" AbstractView
+AbstractComponent *-down- EventsBinder
+AbstractComponent *-down- StateHolder
+AbstractComponent *-down- StateInitializer
+AbstractComponent *-up- StateChangesHandlerAdapter
+StateChangesHandlerAdapter *-up- "many" StateChangesHandler
+ComponentIllustrator *-up- AbstractView
 PartialStateChangesHandler -down-|> StateChangesHandler
 PartsAllocator -down-|> PartialStateChangesHandler
 'StateChangesHandler -up-{ AbstractView : might use
-'DomValuesReader "1" *-up- "1" AbstractView
-StateSynchronizer "1" *-up- "1" DomValuesReader
+'DomValuesReader *-up- AbstractView
+StateSynchronizer *-up- DomValuesReader
 StateSynchronizer -up-> PartsAllocator
 StateSynchronizer -up-> ComponentIllustrator
-AbstractComponent "1" *-up- "1" StateSynchronizer
-AbstractComponent "1" *-down- "1" ErrorsHandler
-'AbstractComponent "1" *-right- "1" PartsAllocator
+AbstractComponent *-up- StateSynchronizer
+AbstractComponent *-down- ErrorsHandler
+'AbstractComponent *-right- PartsAllocator
 PartialStateHolder -up-|> StateHolder
-StateHolder "1" *-up- "1" StateChangesCollector
-StateChangesCollector "1" *-up- "many" StateChange
+StateHolder *-up- StateChangesCollector
+StateChangesCollector *-up- "many" StateChange
 ComponentIllustrator --|> StateChangesHandler
 TypedStateChange -down-|> StateChange
 'PartsAllocator -down-> StateHolder
 ValuesStateInitializer -up-|> StateInitializer
-StateChangesCollector "1" *-up- "1" StateChangeEnhancer
+StateChangesCollector *-up- StateChangeEnhancer
 
 /'note as setElement
 <i>domElement</i>

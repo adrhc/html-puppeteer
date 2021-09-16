@@ -1,29 +1,29 @@
 export default class ComponentConfigurator {
     /**
-     * @param {AbstractComponent} abstractComponent
+     * @param {AbstractComponent} component
      */
-    configure(abstractComponent) {
-        this._setComponentDefaults(abstractComponent);
-        this._configureStateChangesHandlerAdapter(abstractComponent.stateChangesHandlerAdapter);
-        this._executeExtraConfigurators(abstractComponent);
+    configure(component) {
+        this._setComponentDefaults(component);
+        component.eventsBinder.component = component;
+        this._configureStateChangesHandlerAdapter(component.stateChangesHandlerAdapter);
+        this._executeExtraConfigurators(component);
     }
 
     /**
-     * @param {AbstractComponent} abstractComponent
+     * @param {AbstractComponent} component
      * @protected
      */
-    _executeExtraConfigurators(abstractComponent) {
-        const {extraConfigurators, ...otherOptions} = abstractComponent.options;
-        abstractComponent.options = otherOptions;
-        extraConfigurators?.forEach(c => c.configure(abstractComponent));
+    _executeExtraConfigurators(component) {
+        const {extraConfigurators, ...otherOptions} = component.options;
+        component.options = otherOptions;
+        extraConfigurators?.forEach(c => c.configure(component));
     }
 
     /**
-     * @param {AbstractComponent} abstractComponent
+     * @param {AbstractComponent} component
      * @protected
      */
-    _setComponentDefaults(abstractComponent) {
-    }
+    _setComponentDefaults(component) {}
 
     /**
      * @param {StateChangesHandlerAdapter} stateChangesHandlerAdapter
@@ -33,7 +33,7 @@ export default class ComponentConfigurator {
 }
 
 /**
- * @param {function(component: StateChangesHandlerAdapter)} configureStateChangesHandlerAdapterFn
+ * @param {function(stateChangesHandlerAdapter: StateChangesHandlerAdapter)} configureStateChangesHandlerAdapterFn
  * @return {ComponentConfigurator}
  */
 export function stateChangesHandlerAdapterExtraConfiguratorOf(configureStateChangesHandlerAdapterFn) {

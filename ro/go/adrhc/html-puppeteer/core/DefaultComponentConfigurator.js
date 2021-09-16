@@ -3,6 +3,7 @@ import StateHolder from "./StateHolder.js";
 import StateChangesHandlerAdapter from "./StateChangesHandlerAdapter.js";
 import ValuesStateInitializer from "./ValuesStateInitializer.js";
 import {dataOf} from "../util/DomUtils.js";
+import EventsBinder from "./EventsBinder.js";
 
 /**
  * @typedef {{[key: string]: string|number|boolean}} DataAttributes
@@ -38,6 +39,16 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
         component.stateChangesHandlerAdapter =
             this.options.stateChangesHandlerAdapter ?? this._createStateChangesHandlerAdapter();
         component.stateInitializer = this.options.stateInitializer ?? this._createStateInitializer();
+        component.eventsBinder = this.options.eventsBinder ?? this._createEventsBinder(component);
+    }
+
+    /**
+     * @param {AbstractComponent} component
+     * @return {EventsBinder}
+     * @protected
+     */
+    _createEventsBinder(component) {
+        return new EventsBinder(component);
     }
 
     /**
@@ -61,7 +72,7 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
      * @protected
      */
     _createStateInitializer() {
-        const initialState = this.options.initialState ?? this.dataAttributes.state;
+        const initialState = this.options.initialState ?? this.dataAttributes.initialState;
         return initialState != null ? new ValuesStateInitializer(initialState) : undefined;
     }
 }

@@ -2,19 +2,16 @@ import {pushNotNull} from "../util/ArrayUtils.js";
 
 /**
  * @typedef {Object} StateChangesHandlersOptions
- * @property {ComponentIllustrator} componentIllustrator
- * @property {PartsAllocator} partsAllocator
- * @property {StateChangesHandler[]} extraStateChangesHandlers
+ * @property {ComponentIllustrator=} componentIllustrator
+ * @property {PartsAllocator=} partsAllocator
+ * @property {StateChangesHandler[]=} extraStateChangesHandlers
  */
 /**
- * @typedef {Object} StateChangesHandlerAdapterOptions
+ * @typedef {StateChangesHandlersOptions} StateChangesHandlerAdapterOptions
  * @property {string=} allChangesMethod
  * @property {string=} allPartChangesMethod
  * @property {string=} partMethodPrefix
  * @property {StateChangesHandler[]=} stateChangesHandlers
- * @property {ComponentIllustrator} componentIllustrator
- * @property {PartsAllocator} partsAllocator
- * @property {StateChangesHandler[]} extraStateChangesHandlers
  */
 export default class StateChangesHandlerAdapter {
     /**
@@ -138,4 +135,12 @@ export default class StateChangesHandlerAdapter {
     _methodVerbOf(changeType) {
         return _.camelCase(changeType);
     }
+}
+
+/**
+ * @param {StateChangesHandler} stateChangesHandler
+ * @return {StateChangesHandlerAdapter}
+ */
+export function stateCHAOf(stateChangesHandler) {
+    return new StateChangesHandlerAdapter({stateChangesHandlers: [stateChangesHandler]})
 }

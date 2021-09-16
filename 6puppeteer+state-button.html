@@ -14,12 +14,15 @@
 
 <body>
 <script>const fp = _.noConflict()</script>
-<script src="5puppeteer+state-changes.js" type="module"></script>
+<script src="6puppeteer+state-button.js" type="module"></script>
 
 <div class="container">
     <div class="section title">ClockComponent</div>
-    <div class="section" data-interval="3000" data-template-id="table-template"
-         data-type="clock"></div>
+    <div class="section">
+        <button name="stop">Stop</button>
+        <button name="start">Start</button>
+    </div>
+    <div class="section" data-interval="3000" data-template-id="table-template" data-type="clock"></div>
     <div class="section title">Debugger (shows as JSON the state used above)</div>
     <div class="section" id="debugger">{{this}}</div>
 </div>

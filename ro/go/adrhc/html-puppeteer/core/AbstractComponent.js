@@ -20,6 +20,10 @@ export default class AbstractComponent {
      */
     dataAttributes;
     /**
+     * @type {EventsBinder}
+     */
+    eventsBinder;
+    /**
      * @type {AbstractComponentOptions}
      */
     options;
@@ -66,6 +70,7 @@ export default class AbstractComponent {
         } else if (this.stateInitializer) {
             this._initializeState();
         }
+        this.eventsBinder.attachEventHandlers();
         return this;
     }
 
@@ -82,7 +87,6 @@ export default class AbstractComponent {
      * Offers the state for manipulation then updates the view.
      *
      * @param {function(state: StateHolder)} stateUpdaterFn
-     * @return {StateChange[]}
      */
     doWithState(stateUpdaterFn) {
         stateUpdaterFn(this.stateHolder);
@@ -93,6 +97,7 @@ export default class AbstractComponent {
      * set state to undefined
      */
     close() {
+        this.eventsBinder.detachEventHandlers();
         this.stateHolder.replace();
     }
 }
