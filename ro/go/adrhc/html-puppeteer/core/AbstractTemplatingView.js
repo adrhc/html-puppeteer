@@ -1,6 +1,6 @@
 import AbstractView from "./AbstractView.js";
-import HtmlUtils from "../util/HtmlUtils.js";
-import DomUtils from "../util/DomUtils.js";
+import {jQueryOf} from "../util/DomUtils.js";
+import {templateTextOf} from "../util/HtmlUtils.js";
 
 /**
  * @typedef {Object} AbstractTemplatingViewOptions
@@ -33,7 +33,7 @@ export default class AbstractTemplatingView extends AbstractView {
      * @protected
      */
     _createElem(elemIdOrJQuery) {
-        return DomUtils.jQueryOf(elemIdOrJQuery);
+        return jQueryOf(elemIdOrJQuery);
     }
 
     /**
@@ -43,7 +43,7 @@ export default class AbstractTemplatingView extends AbstractView {
     _createTemplate(templateId) {
         templateId = templateId ?? this.$elem.data("templateId");
         if (templateId) {
-            return HtmlUtils.templateTextOf(templateId);
+            return templateTextOf(templateId);
         } else {
             return this.$elem.text();
         }

@@ -1,5 +1,5 @@
 import AbstractTemplatingView from "./AbstractTemplatingView.js";
-import HtmlGenerator from "../util/HtmlGenerator.js";
+import {generateHtml} from "../util/HtmlGenerator.js";
 
 export default class SimpleView extends AbstractTemplatingView {
     /**
@@ -13,6 +13,6 @@ export default class SimpleView extends AbstractTemplatingView {
      * @param {{}} values
      */
     replace(values) {
-        this.$elem.html(HtmlGenerator.generateHtml(this.htmlTemplate, values))
+        this.$elem.html(generateHtml(this.htmlTemplate, values))
     }
 }

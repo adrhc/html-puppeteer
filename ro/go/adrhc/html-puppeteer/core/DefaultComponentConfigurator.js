@@ -2,7 +2,7 @@ import ComponentConfigurator from "./ComponentConfigurator.js";
 import StateHolder from "./StateHolder.js";
 import StateChangesHandlerAdapter from "./StateChangesHandlerAdapter.js";
 import ValuesStateInitializer from "./ValuesStateInitializer.js";
-import DomUtils from "../util/DomUtils.js";
+import {dataOf} from "../util/DomUtils.js";
 
 /**
  * @typedef {{[key: string]: string|number|boolean}} DataAttributes
@@ -23,7 +23,7 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
     constructor(options = {}) {
         super();
         this.options = options;
-        this.dataAttributes = DomUtils.dataOf(this.options.elemIdOrJQuery) ?? {};
+        this.dataAttributes = dataOf(this.options.elemIdOrJQuery) ?? {};
     }
 
     /**
