@@ -3,7 +3,7 @@ import SimpleView from "./SimpleView.js";
 
 /**
  * @typedef {AbstractTemplatingViewOptions} AbstractTemplatingViewOptionsWithView
- * @property {AbstractView=} view
+ * @property {SimpleView=} view
  */
 export default class SimpleComponentIllustrator extends ComponentIllustrator {
     /**

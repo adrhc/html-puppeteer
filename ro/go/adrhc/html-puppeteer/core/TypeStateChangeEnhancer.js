@@ -1,6 +1,6 @@
 import StateChangeEnhancer from "./StateChangeEnhancer.js";
-import TypedStateChange, {CUDTypes} from "./TypedStateChange.js";
-import AssertionUtils from "../util/AssertionUtils.js";
+import TypedStateChange, {CREATED, DELETED, RELOCATED, REPLACED} from "./TypedStateChange.js";
+import {isFalse} from "../util/AssertionUtils.js";
 
 /**
  * @template SCT, SCP
@@ -26,17 +26,17 @@ export default class TypeStateChangeEnhancer extends StateChangeEnhancer {
      * @protected
      */
     _changeTypeOf(change) {
-        AssertionUtils.isFalse(change.previousStateOrPart == null && change.newStateOrPart == null);
+        isFalse(change.previousStateOrPart == null && change.newStateOrPart == null);
         if (this._isChangeTypeOfDelete(change.newStateOrPart, change.newPartName)) {
-            return CUDTypes.DELETED;
+            return DELETED;
         } else if (this._isPristine(change.previousStateOrPart, change.previousPartName)) {
-            return CUDTypes.CREATED;
+            return CREATED;
         } else if (change.previousPartName != null &&
             change.newPartName != null &&
             change.previousPartName !== change.newPartName) {
-            return CUDTypes.RELOCATED;
+            return RELOCATED;
         } else {
-            return CUDTypes.REPLACED;
+            return REPLACED;
         }
     }
 

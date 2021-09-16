@@ -23,9 +23,7 @@ export default class TypedStateChange extends StateChange {
     }
 }
 
-export class CUDTypes {
-    static CREATED = "created";
-    static DELETED = "deleted";
-    static RELOCATED = "relocated";
-    static REPLACED = "replaced";
-}
+export const CREATED = "created";
+export const DELETED = "deleted";
+export const RELOCATED = "relocated";
+export const REPLACED = "replaced";
