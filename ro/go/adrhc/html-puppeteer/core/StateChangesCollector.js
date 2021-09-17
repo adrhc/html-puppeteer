@@ -1,8 +1,7 @@
 import TypeStateChangeEnhancer from "./TypeStateChangeEnhancer.js";
 
 /**
- * @template SCT
- * @template SCP
+ * @template SCT, SCP
  */
 export default class StateChangesCollector {
     /**

@@ -35,6 +35,35 @@ export default class ComponentConfigurator {
 }
 
 /**
+ * @param {AbstractComponentOptions} options
+ * @param {function(component: StateChangesHandlerAdapter)} configureStateChangesHandlerAdapterFn
+ * @return {AbstractComponentOptionsWithConfigurator}
+ */
+export function withStateChangesHandlerAdapterConfiguratorOf(options, configureStateChangesHandlerAdapterFn) {
+    return withExtraConfiguratorsOf(options, stateCHAConfiguratorOf(configureStateChangesHandlerAdapterFn))
+}
+
+/**
+ * @param {AbstractComponentOptions} options
+ * @param {function(component: AbstractComponent)} setComponentDefaultsFn
+ * @return {AbstractComponentOptionsWithConfigurator}
+ */
+export function withDefaultsConfiguratorOf(options, setComponentDefaultsFn) {
+    return withExtraConfiguratorsOf(options, defaultsConfiguratorOf(setComponentDefaultsFn))
+}
+
+/**
+ * @param {AbstractComponentOptionsWithConfigurator} options
+ * @param {ComponentConfigurator} configuratorToAppend
+ * @return {AbstractComponentOptionsWithConfigurator}
+ */
+export function withExtraConfiguratorsOf(options, configuratorToAppend) {
+    options.extraConfigurators = options.extraConfigurators ?? [];
+    options.extraConfigurators.push(configuratorToAppend);
+    return options;
+}
+
+/**
  * @param {function(stateChangesHandlerAdapter: StateChangesHandlerAdapter)} configureStateChangesHandlerAdapterFn
  * @return {ComponentConfigurator}
  */

@@ -8,8 +8,6 @@ import StateChange from "./StateChange.js";
  */
 /**
  * @template SHT
- * @typedef {SHT} SCT
- * @typedef {SHT} SCP
  */
 export default class StateHolder {
     /**

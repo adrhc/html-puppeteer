@@ -1,9 +1,7 @@
 import DefaultComponentConfigurator from "./DefaultComponentConfigurator.js";
-import {defaultsConfiguratorOf, stateCHAConfiguratorOf} from "./ComponentConfigurator.js";
 
 /**
  * @typedef {{[key:string]:*} & StateChangesHandlerAdapterOptions & AbstractTemplatingViewOptionsWithView} AbstractComponentOptions
- * @property {boolean=} dontConfigure
  * @property {ComponentConfigurator[]=} extraConfigurators
  * @property {string=} elemIdOrJQuery
  * @property {StateHolder=} stateHolder
@@ -20,7 +18,7 @@ import {defaultsConfiguratorOf, stateCHAConfiguratorOf} from "./ComponentConfigu
  */
 export default class AbstractComponent {
     /**
-     * @typedef {AbstractComponentOptions & DataAttributes}
+     * @type {AbstractComponentOptions & DataAttributes}
      */
     config;
     /**
@@ -53,19 +51,15 @@ export default class AbstractComponent {
      * @param {ComponentConfigurator=} options.configurator
      * @param {AbstractComponentOptions=} restOfOptions
      */
-    constructor({dontConfigure, configurator, ...restOfOptions}) {
-        this._configure(restOfOptions, dontConfigure);
+    constructor({configurator, ...restOfOptions}) {
+        this._configure(restOfOptions);
     }
 
     /**
      * @param {AbstractComponentOptionsWithConfigurator} options
-     * @param {boolean=} dontConfigure
      * @protected
      */
-    _configure(options, dontConfigure) {
-        if (dontConfigure) {
-            return;
-        }
+    _configure(options) {
         const configurator = options.configurator ?? this._createComponentConfigurator(options);
         configurator.configure(this);
     }
@@ -120,33 +114,4 @@ export default class AbstractComponent {
         this.eventsBinder.detachEventHandlers();
         this.stateHolder.replace();
     }
-}
-
-/**
- * @param {AbstractComponentOptionsWithConfigurator} options
- * @param {ComponentConfigurator} configuratorToAppend
- * @return {AbstractComponentOptionsWithConfigurator}
- */
-export function extraConfiguratorsOf(options, configuratorToAppend) {
-    options.extraConfigurators = options.extraConfigurators ?? [];
-    options.extraConfigurators.push(configuratorToAppend);
-    return options;
-}
-
-/**
- * @param {AbstractComponentOptions} options
- * @param {function(component: StateChangesHandlerAdapter)} configureStateChangesHandlerAdapterFn
- * @return {AbstractComponentOptionsWithConfigurator}
- */
-export function withStateChangesHandlerAdapterConfiguratorOf(options, configureStateChangesHandlerAdapterFn) {
-    return extraConfiguratorsOf(options, stateCHAConfiguratorOf(configureStateChangesHandlerAdapterFn))
-}
-
-/**
- * @param {AbstractComponentOptions} options
- * @param {function(component: AbstractComponent)} setComponentDefaultsFn
- * @return {AbstractComponentOptionsWithConfigurator}
- */
-export function withDefaultsConfiguratorOf(options, setComponentDefaultsFn) {
-    return extraConfiguratorsOf(options, defaultsConfiguratorOf(setComponentDefaultsFn))
 }
