@@ -6,6 +6,17 @@ export default class Scenario6EventsBinder extends EventsBinder {
         const clock = /** @type {ClockComponent} */ this.component;
         $(namedBtn("start")).on("click.Scenario6EventsBinder", () => clock.startClock());
         $(namedBtn("stop")).on("click.Scenario6EventsBinder", () => clock.stopClock());
+        $(namedBtn("change")).on("click.Scenario6EventsBinder", () => {
+            clock.doWithClockState(clockState => {
+                const json = $("input[name='internal-clock-state']").val();
+                if (!json.trim()) {
+                    return;
+                }
+                const {interval, stopped} = JSON.parse(json);
+                const newState = _.defaults({interval, stopped}, clockState.currentState)
+                clockState.replace(newState);
+            })
+        });
     }
 
     detachEventHandlers() {
