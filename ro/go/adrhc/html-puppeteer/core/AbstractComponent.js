@@ -63,6 +63,7 @@ export default class AbstractComponent {
     _configure(options) {
         const configurator = options.configurator ?? new DefaultComponentConfigurator(options);
         configurator.configure(this);
+        this.config.extraConfigurators?.forEach(c => c.configure(this));
     }
 
     /**
@@ -74,20 +75,13 @@ export default class AbstractComponent {
             this.doWithState(sh => {
                 sh.replace(value);
             });
-        } else if (this.stateInitializer) {
-            this._initializeState();
+        } else {
+            this.doWithState((sh) => {
+                this.stateInitializer?.load(sh);
+            });
         }
-        this.eventsBinder.attachEventHandlers();
+        this.eventsBinder?.attachEventHandlers();
         return this;
-    }
-
-    /**
-     * @protected
-     */
-    _initializeState() {
-        this.doWithState((stateHolder) => {
-            this.stateInitializer.load(stateHolder);
-        });
     }
 
     /**
@@ -104,7 +98,7 @@ export default class AbstractComponent {
      * set state to undefined
      */
     close() {
-        this.eventsBinder.detachEventHandlers();
+        this.eventsBinder?.detachEventHandlers();
         this.stateHolder.replace();
     }
 }

@@ -3,7 +3,6 @@ import StateHolder from "./StateHolder.js";
 import StateChangesHandlerAdapter from "./StateChangesHandlerAdapter.js";
 import ValuesStateInitializer from "./ValuesStateInitializer.js";
 import {dataOf} from "../util/DomUtils.js";
-import EventsBinder from "./EventsBinder.js";
 import {coalesce} from "../util/ObjectUtils.js";
 
 /**
@@ -34,41 +33,26 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
      *
      * @param {AbstractComponent} component
      */
-    _setComponentDefaults(component) {
+    configure(component) {
         component.dataAttributes = this.dataAttributes;
         component.options = this.options;
         component.config = this.config;
-        component.stateHolder = this.config.stateHolder ?? this._createStateHolder();
+        component.stateHolder = this.config.stateHolder ?? new StateHolder(this.config);
         component.stateChangesHandlerAdapter =
-            this.config.stateChangesHandlerAdapter ?? this._createStateChangesHandlerAdapter();
+            this.config.stateChangesHandlerAdapter ?? new StateChangesHandlerAdapter(this.config);
         component.stateInitializer = this.config.stateInitializer ?? this._createStateInitializer();
-        component.eventsBinder = this.config.eventsBinder ?? this._createEventsBinder(component);
-        component.eventsBinder.component = component;
+        this._setAndConfigureEventsBinder(component);
     }
 
     /**
      * @param {AbstractComponent} component
-     * @return {EventsBinder}
      * @protected
      */
-    _createEventsBinder(component) {
-        return new EventsBinder(component);
-    }
-
-    /**
-     * @return {StateHolder}
-     * @protected
-     */
-    _createStateHolder() {
-        return new StateHolder(this.config);
-    }
-
-    /**
-     * @return {StateChangesHandlerAdapter}
-     * @protected
-     */
-    _createStateChangesHandlerAdapter() {
-        return new StateChangesHandlerAdapter(this.config);
+    _setAndConfigureEventsBinder(component) {
+        component.eventsBinder = this.config.eventsBinder;
+        if (component.eventsBinder) {
+            component.eventsBinder.component = component;
+        }
     }
 
     /**

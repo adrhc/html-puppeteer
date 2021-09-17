@@ -2,7 +2,7 @@ import SimpleComponent from "../../../html-puppeteer/core/SimpleComponent.js";
 import ClockStateHandler from "./ClockStateHandler.js";
 import ValuesStateInitializer from "../../../html-puppeteer/core/ValuesStateInitializer.js";
 import {simpleStateProcessorOf} from "../../../html-puppeteer/core/state/StateProcessor.js";
-import {setStateInitializerOf} from "../../../html-puppeteer/core/component/OptionsDsl.js";
+import {withStateInitializerOf} from "../../../html-puppeteer/core/component/OptionsDsl.js";
 
 /**
  * @typedef {StateHolder<ClockState>} ClockStateHolder
@@ -21,7 +21,7 @@ export default class ClockComponent extends SimpleComponent {
      * @param {ClockOptions} options
      */
     constructor(options) {
-        super(setStateInitializerOf(stateInitializerOf).to(options));
+        super(withStateInitializerOf(stateInitializerOf).to(options));
         this.doWithClockState = this.config.doWithClockState ?? createClockStateProcessor(this).doWithState;
         this._executeClockConfigurators();
     }
@@ -63,14 +63,14 @@ export default class ClockComponent extends SimpleComponent {
 function createClockStateProcessor(clock) {
     const stateGeneratorFn = clock.options.stateGeneratorFn ?? ClockComponent.DEFAULT_STATE_GENERATOR_FN;
     const stateChangesHandler = new ClockStateHandler(clock, stateGeneratorFn);
-    return simpleStateProcessorOf(clock, stateChangesHandler, initialClockStateOf(clock.config));
+    return simpleStateProcessorOf(clock, stateChangesHandler, initialInternalClockStateOf(clock.config));
 }
 
 /**
  * @param {ComponentConfig} componentConfig
  * @return {ClockState} is the initial state used to construct ClockComponent.doWithClockState
  */
-function initialClockStateOf(componentConfig) {
+function initialInternalClockStateOf(componentConfig) {
     const interval = componentConfig.interval ?? 1000;
     const stopped = componentConfig.stopped ?? false;
     return {interval, stopped};
@@ -81,7 +81,7 @@ function initialClockStateOf(componentConfig) {
  * @return {StateInitializer} is the ClockComponent's state initializer
  */
 function stateInitializerOf(component) {
-    const {interval} = initialClockStateOf(component.config);
+    const {interval} = initialInternalClockStateOf(component.config);
     return component.config.stateInitializer ??
         new ValuesStateInitializer(component.config.initialState ?? {interval});
 }

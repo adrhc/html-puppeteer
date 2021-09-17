@@ -16,7 +16,7 @@ import {addStateChangeHandler} from "../core/component/OptionsDsl.js";
  * @return {AbstractComponentOptions}
  */
 export function withDebugger(debuggerOptions) {
-    return addDebugger(debuggerOptions).to();
+    return addDebugger(debuggerOptions).options();
 }
 
 /**

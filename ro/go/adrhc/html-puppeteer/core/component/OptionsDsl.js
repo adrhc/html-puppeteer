@@ -4,25 +4,29 @@ import ComponentConfigurator from "../ComponentConfigurator.js";
  * @typedef {function(component: AbstractComponent): StateInitializer} StateInitializerProviderFn
  */
 /**
- * @typedef {function(component: AbstractComponent)} SetComponentDefaultsFn
+ * @typedef {function(component: AbstractComponent)} ComponentConfiguratorFn
  */
 export class OptionsDsl {
     /**
      * AbstractComponentOptions
      */
-    options = {};
+    _options = {};
+
+    options() {
+        return this.to();
+    }
 
     /**
      * @param {AbstractComponentOptions=} options
      */
     to(options = {}) {
-        if (this.options.extraConfigurators) {
+        if (this._options.extraConfigurators) {
             options.extraConfigurators = options.extraConfigurators ?? [];
-            options.extraConfigurators.push(...this.options.extraConfigurators);
+            options.extraConfigurators.push(...this._options.extraConfigurators);
         }
-        if (this.options.extraStateChangesHandlers) {
+        if (this._options.extraStateChangesHandlers) {
             options.extraStateChangesHandlers = options.extraStateChangesHandlers ?? [];
-            options.extraStateChangesHandlers.push(...this.options.extraStateChangesHandlers);
+            options.extraStateChangesHandlers.push(...this._options.extraStateChangesHandlers);
         }
         return options;
     }
@@ -30,12 +34,12 @@ export class OptionsDsl {
     /**
      * adds extra defaults related ComponentConfigurator
      *
-     * @param {SetComponentDefaultsFn} setComponentDefaultsFn
+     * @param {ComponentConfiguratorFn} componentConfiguratorFn
      * @return {OptionsDsl}
      */
-    addDefaultsOf(setComponentDefaultsFn) {
-        this.options.extraConfigurators = this.options.extraConfigurators ?? [];
-        this.options.extraConfigurators.push(defaultsConfiguratorOf(setComponentDefaultsFn));
+    addConfiguratorOf(componentConfiguratorFn) {
+        this._options.extraConfigurators = this._options.extraConfigurators ?? [];
+        this._options.extraConfigurators.push(componentConfiguratorOf(componentConfiguratorFn));
         return this;
     }
 
@@ -45,8 +49,8 @@ export class OptionsDsl {
      * @param {StateChangesHandler} stateChangesHandler
      */
     addStateChangeHandler(stateChangesHandler) {
-        this.options.extraStateChangesHandlers = this.options.extraStateChangesHandlers ?? [];
-        this.options.extraStateChangesHandlers.push(stateChangesHandler);
+        this._options.extraStateChangesHandlers = this._options.extraStateChangesHandlers ?? [];
+        this._options.extraStateChangesHandlers.push(stateChangesHandler);
         return this;
     }
 
@@ -56,16 +60,16 @@ export class OptionsDsl {
      * @param {ComponentConfigurator} configurator
      */
     addConfigurator(configurator) {
-        this.options.extraConfigurators = this.options.extraConfigurators ?? [];
-        this.options.extraConfigurators.push(configurator);
+        this._options.extraConfigurators = this._options.extraConfigurators ?? [];
+        this._options.extraConfigurators.push(configurator);
         return this;
     }
 
     /**
      * @param {StateInitializerProviderFn} stateInitializerProviderFn
      */
-    setStateInitializerOf(stateInitializerProviderFn) {
-        return addDefaultsOf((component) => {
+    withStateInitializerOf(stateInitializerProviderFn) {
+        return this.addConfiguratorOf((component) => {
             component.stateInitializer = stateInitializerProviderFn(component);
         });
     }
@@ -74,11 +78,11 @@ export class OptionsDsl {
 /**
  * adds extra defaults related ComponentConfigurator
  *
- * @param {SetComponentDefaultsFn} setComponentDefaultsFn
+ * @param {ComponentConfiguratorFn} componentConfiguratorFn
  * @return {OptionsDsl}
  */
-export function addDefaultsOf(setComponentDefaultsFn) {
-    return new OptionsDsl().addDefaultsOf(setComponentDefaultsFn);
+export function addConfiguratorOf(componentConfiguratorFn) {
+    return new OptionsDsl().addConfiguratorOf(componentConfiguratorFn);
 }
 
 /**
@@ -97,33 +101,33 @@ export function addStateChangeHandler(stateChangesHandler) {
  * @param {ComponentConfigurator} configurator
  */
 export function addConfigurator(configurator) {
-    return new OptionsDsl().addConfigurator(stateChangesHandler);
+    return new OptionsDsl().addConfigurator(configurator);
 }
 
 /**
  * @param {StateInitializerProviderFn} stateInitializerProviderFn
  */
-export function setStateInitializerOf(stateInitializerProviderFn) {
-    return new OptionsDsl().setStateInitializerOf(stateInitializerProviderFn);
+export function withStateInitializerOf(stateInitializerProviderFn) {
+    return new OptionsDsl().withStateInitializerOf(stateInitializerProviderFn);
 }
 
 /**
- * @param {function(component: AbstractComponent)} setComponentDefaultsFn
- * @return {DefaultsComponentConfigurator}
+ * @param {ComponentConfiguratorFn} componentConfiguratorFn
+ * @return {DelegatingComponentConfigurator}
  */
-function defaultsConfiguratorOf(setComponentDefaultsFn) {
-    return new DefaultsComponentConfigurator(setComponentDefaultsFn);
+function componentConfiguratorOf(componentConfiguratorFn) {
+    return new DelegatingComponentConfigurator(componentConfiguratorFn);
 }
 
-class DefaultsComponentConfigurator extends ComponentConfigurator {
-    setComponentDefaultsFn;
+class DelegatingComponentConfigurator extends ComponentConfigurator {
+    componentConfiguratorFn;
 
-    constructor(setComponentDefaultsFn) {
+    constructor(componentConfiguratorFn) {
         super();
-        this.setComponentDefaultsFn = setComponentDefaultsFn;
+        this.componentConfiguratorFn = componentConfiguratorFn;
     }
 
-    _setComponentDefaults(component) {
-        this.setComponentDefaultsFn(component);
+    configure(component) {
+        this.componentConfiguratorFn(component);
     }
 }
