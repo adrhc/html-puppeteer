@@ -28,7 +28,7 @@ export default class ClockComponent extends SimpleComponent {
                 // already declared by AbstractComponent
                 clockComponent.stateInitializer = stateInitializerOf(clockComponent);
             }))
-        this.doWithClockState = createClockStateProcessor(this).doWithState;
+        this.doWithClockState = this.config.doWithClockState ?? createClockStateProcessor(this).doWithState;
         this._executeClockConfigurators();
     }
 
