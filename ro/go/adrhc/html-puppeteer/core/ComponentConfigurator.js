@@ -15,6 +15,8 @@ export default class ComponentConfigurator {
      */
     _executeExtraConfigurators(component) {
         const {extraConfigurators, ...otherOptions} = component.options;
+        // extraConfigurators must be removed from component.options to
+        // not be again and again processed by _executeExtraConfigurators
         component.options = otherOptions;
         extraConfigurators?.forEach(c => c.configure(component));
     }
@@ -36,7 +38,7 @@ export default class ComponentConfigurator {
  * @param {function(stateChangesHandlerAdapter: StateChangesHandlerAdapter)} configureStateChangesHandlerAdapterFn
  * @return {ComponentConfigurator}
  */
-export function stateChangesHandlerAdapterExtraConfiguratorOf(configureStateChangesHandlerAdapterFn) {
+export function stateCHAConfiguratorOf(configureStateChangesHandlerAdapterFn) {
     const cc = new ComponentConfigurator();
     cc._configureStateChangesHandlerAdapter = configureStateChangesHandlerAdapterFn;
     return cc;
@@ -46,7 +48,7 @@ export function stateChangesHandlerAdapterExtraConfiguratorOf(configureStateChan
  * @param {function(component: AbstractComponent)} setComponentDefaultsFn
  * @return {ComponentConfigurator}
  */
-export function defaultsExtraConfiguratorOf(setComponentDefaultsFn) {
+export function defaultsConfiguratorOf(setComponentDefaultsFn) {
     const cc = new ComponentConfigurator();
     cc._setComponentDefaults = setComponentDefaultsFn;
     return cc;

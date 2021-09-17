@@ -1,8 +1,8 @@
 import SimpleComponent from "../../../html-puppeteer/core/SimpleComponent.js";
 import ClockStateHandler from "./ClockStateHandler.js";
-import {doWithStateOf} from "../../../html-puppeteer/util/StateUtils.js";
-import {withDefaultsExtraConfiguratorOf} from "../../../html-puppeteer/core/AbstractComponent.js";
+import {withDefaultsConfiguratorOf} from "../../../html-puppeteer/core/AbstractComponent.js";
 import ValuesStateInitializer from "../../../html-puppeteer/core/ValuesStateInitializer.js";
+import {simpleStateProcessorOf} from "../../../html-puppeteer/core/state/StateProcessor.js";
 
 /**
  * @typedef {StateHolder<ClockState>} ClockStateHolder
@@ -17,23 +17,18 @@ export default class ClockComponent extends SimpleComponent {
      * @param {AbstractComponentOptionsWithConfigurator} options
      */
     constructor(options) {
-        super(withDefaultsExtraConfiguratorOf(options, (component) => {
-            const {interval} = clockState(component);
-            const initialState = component.options.initialState ?? component.dataAttributes.initialState ?? {interval};
-            component.stateInitializer = component.options.stateInitializer ?? new ValuesStateInitializer(initialState);
+        super(withDefaultsConfiguratorOf(options, (component) => {
+            // stateInitializer must be set inside of a Configurator otherwise, if set after super(),
+            // the this.stateInitializer field will override super.stateInitializer because is
+            // already declared by AbstractComponent
+            component.stateInitializer = stateInitializerOf(component);
         }));
-        this.doWithClockState = this._createDoWithClockState();
+        // better be set after super() call because AbstractComponent doesn't
+        // contain doWithClockState field (though there's no overriding risk here)
+        this.doWithClockState = createClockStateProcessor(this).doWithState;
     }
 
-    /**
-     * @return {function(stateUpdaterFn: function(state: ClockStateHolder))}
-     * @protected
-     */
-    _createDoWithClockState() {
-        const stateGeneratorFn = this.options.stateGeneratorFn ?? ((date) => date);
-        const stateChangesHandler = new ClockStateHandler(this, stateGeneratorFn);
-        return doWithStateOf(stateChangesHandler, this, clockState(this)).doWithState;
-    }
+    static DEFAULT_STATE_GENERATOR_FN = (component, date) => date;
 
     /**
      * stops the clock
@@ -57,14 +52,27 @@ export default class ClockComponent extends SimpleComponent {
 }
 
 /**
+ * @param {ClockComponent} clock
+ * @return {StateProcessor}
+ */
+function createClockStateProcessor(clock) {
+    const stateGeneratorFn = clock.options.stateGeneratorFn ?? ClockComponent.DEFAULT_STATE_GENERATOR_FN;
+    const stateChangesHandler = new ClockStateHandler(clock, stateGeneratorFn);
+    return simpleStateProcessorOf(clock, stateChangesHandler, initialClockStateOf(clock));
+}
+
+/**
  * @type {AbstractComponent} component
  * @return {ClockState}
- * @protected
  */
-function clockState(component) {
-    // have to use this.options instead of simply options
-    // because some configurators might change this.options
-    const interval = component.options.interval ?? component.dataAttributes.interval ?? 1000;
-    const stopped = component.options.stopped ?? component.dataAttributes.stopped ?? false;
+function initialClockStateOf(component) {
+    const interval = component.config.interval ?? 1000;
+    const stopped = component.config.stopped ?? false;
     return {interval, stopped};
+}
+
+function stateInitializerOf(component) {
+    const {interval} = initialClockStateOf(component);
+    return component.config.stateInitializer ??
+        new ValuesStateInitializer(component.config.initialState ?? {interval});
 }

@@ -11,7 +11,7 @@ class Puppeteer {
      */
     animate(componentsOptions, dontRender, parentComponentElem, alwaysReturnArray) {
         const components = this.componentsOf(parentComponentElem, componentsOptions);
-        console.log("components.length:", components.length);
+        console.log("[Puppeteer.animate] components.length:", components.length);
         if (!dontRender) {
             this.renderComponents(components);
         }

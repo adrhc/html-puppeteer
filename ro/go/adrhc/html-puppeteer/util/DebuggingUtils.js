@@ -1,6 +1,6 @@
 import SimpleComponent from "../core/SimpleComponent.js";
 import CopyStateChangeHandler from "../core/CopyStateChangeHandler.js";
-import {withStateChangesHandlerAdapterExtraConfiguratorOf} from "../core/AbstractComponent.js";
+import {withStateChangesHandlerAdapterConfiguratorOf} from "../core/AbstractComponent.js";
 
 /**
  * @typedef {Object} DebuggerOptions
@@ -15,7 +15,7 @@ import {withStateChangesHandlerAdapterExtraConfiguratorOf} from "../core/Abstrac
  */
 export function withDebugger(debuggerAndComponentOptions = {}) {
     const debuggerStateChangeHandler = createDebuggerStateChangeHandler(debuggerAndComponentOptions);
-    return withStateChangesHandlerAdapterExtraConfiguratorOf(debuggerAndComponentOptions,
+    return withStateChangesHandlerAdapterConfiguratorOf(debuggerAndComponentOptions,
         (scha) => {
             scha.appendStateChangesHandler(debuggerStateChangeHandler);
         });

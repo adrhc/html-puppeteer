@@ -2,6 +2,11 @@ import StateChangesCollector from "./StateChangesCollector.js";
 import StateChange from "./StateChange.js";
 
 /**
+ * @typedef {Object} StateHolderOptions
+ * @property {StateChangeEnhancer=} stateChangeEnhancer
+ * @property {StateChangesCollector=} stateChangesCollector
+ */
+/**
  * @template SHT
  * @typedef {SHT} SCT
  * @typedef {SHT} SCP
@@ -41,7 +46,7 @@ export default class StateHolder {
     }
 
     /**
-     * @param {{stateChangeEnhancer: undefined|StateChangeEnhancer, stateChangesCollector: undefined|StateChangesCollector=}} [options]
+     * @param {StateHolderOptions=} options
      */
     constructor({stateChangeEnhancer, stateChangesCollector} = {}) {
         this._stateChangesCollector = stateChangesCollector ?? new StateChangesCollector(stateChangeEnhancer);

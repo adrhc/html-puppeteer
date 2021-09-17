@@ -4,6 +4,7 @@ import StateChangesHandlerAdapter from "./StateChangesHandlerAdapter.js";
 import ValuesStateInitializer from "./ValuesStateInitializer.js";
 import {dataOf} from "../util/DomUtils.js";
 import EventsBinder from "./EventsBinder.js";
+import {coalesce} from "../util/ObjectUtils.js";
 
 /**
  * @typedef {{[key: string]: string|number|boolean}} DataAttributes
@@ -25,6 +26,7 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
         super();
         this.options = options;
         this.dataAttributes = dataOf(this.options.elemIdOrJQuery) ?? {};
+        this.config = coalesce(this.dataAttributes, this.options);
     }
 
     /**
@@ -33,13 +35,14 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
      * @param {AbstractComponent} component
      */
     _setComponentDefaults(component) {
-        component.options = this.options;
         component.dataAttributes = this.dataAttributes;
-        component.stateHolder = this.options.stateHolder ?? this._createStateHolder();
+        component.options = this.options;
+        component.config = this.config;
+        component.stateHolder = this.config.stateHolder ?? this._createStateHolder();
         component.stateChangesHandlerAdapter =
-            this.options.stateChangesHandlerAdapter ?? this._createStateChangesHandlerAdapter();
-        component.stateInitializer = this.options.stateInitializer ?? this._createStateInitializer();
-        component.eventsBinder = this.options.eventsBinder ?? this._createEventsBinder(component);
+            this.config.stateChangesHandlerAdapter ?? this._createStateChangesHandlerAdapter();
+        component.stateInitializer = this.config.stateInitializer ?? this._createStateInitializer();
+        component.eventsBinder = this.config.eventsBinder ?? this._createEventsBinder(component);
     }
 
     /**
@@ -56,7 +59,7 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
      * @protected
      */
     _createStateHolder() {
-        return new StateHolder();
+        return new StateHolder(this.config);
     }
 
     /**
@@ -64,7 +67,7 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
      * @protected
      */
     _createStateChangesHandlerAdapter() {
-        return new StateChangesHandlerAdapter(this.options);
+        return new StateChangesHandlerAdapter(this.config);
     }
 
     /**
@@ -72,7 +75,7 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
      * @protected
      */
     _createStateInitializer() {
-        const initialState = this.options.initialState ?? this.dataAttributes.initialState;
+        const initialState = this.config.initialState;
         return initialState != null ? new ValuesStateInitializer(initialState) : undefined;
     }
 }

@@ -9,17 +9,37 @@
     <!-- see https://github.com/lodash/lodash/wiki/FP-Guide#installation -->
     <script src="libraries/lodash4_lodash.min.js_lodash.fp.min.js"></script>
     <link href="ro/go/adrhc/app/css/main.css" rel="stylesheet">
+    <link href="ro/go/adrhc/app/css/responstable.css" rel="stylesheet">
 </head>
 
 <body>
 <script>const fp = _.noConflict()</script>
-<script src="1simpleComponent.js" type="module"></script>
+<script src="5puppeteer-clock-dogs.js" type="module"></script>
+
 <div class="container">
-    <div class="section title">SimpleComponent</div>
-    <div class="section" id="component">{{text}}</div>
+    <div class="section title">ClockComponent</div>
+    <div class="section" data-interval="3000" data-template-id="table-template"
+         data-type="clock"></div>
     <div class="section title">Debugger (shows as JSON the state used above)</div>
     <div class="section" id="debugger">{{this}}</div>
 </div>
+
+<script id="table-template" type="text/x-handlebars-template">
+    <table class="responstable">
+        <thead>
+        <tr>
+            <th colSpan="2">Generating new dogs each {{interval}} ms</th>
+        </tr>
+        </thead>
+        {{#each dogs}}
+            <tr>
+                <td>{{id}}</td>
+                <td>{{name}}</td>
+            </tr>
+        {{/each}}
+    </table>
+</script>
+
 </body>
 
 </html>

@@ -1,5 +1,5 @@
 import DefaultComponentConfigurator from "./DefaultComponentConfigurator.js";
-import {defaultsExtraConfiguratorOf, stateChangesHandlerAdapterExtraConfiguratorOf} from "./ComponentConfigurator.js";
+import {defaultsConfiguratorOf, stateCHAConfiguratorOf} from "./ComponentConfigurator.js";
 
 /**
  * @typedef {{[key:string]:*} & StateChangesHandlerAdapterOptions & AbstractTemplatingViewOptionsWithView} AbstractComponentOptions
@@ -15,6 +15,10 @@ import {defaultsExtraConfiguratorOf, stateChangesHandlerAdapterExtraConfigurator
  * @property {ComponentConfigurator=} configurator
  */
 export default class AbstractComponent {
+    /**
+     * @typedef {AbstractComponentOptions & DataAttributes}
+     */
+    config;
     /**
      * @type {DataAttributes}
      */
@@ -118,8 +122,8 @@ export function extraConfiguratorsOf(options, configuratorToAppend) {
  * @param {function(component: StateChangesHandlerAdapter)} configureStateChangesHandlerAdapterFn
  * @return {AbstractComponentOptionsWithConfigurator}
  */
-export function withStateChangesHandlerAdapterExtraConfiguratorOf(options, configureStateChangesHandlerAdapterFn) {
-    return extraConfiguratorsOf(options, stateChangesHandlerAdapterExtraConfiguratorOf(configureStateChangesHandlerAdapterFn))
+export function withStateChangesHandlerAdapterConfiguratorOf(options, configureStateChangesHandlerAdapterFn) {
+    return extraConfiguratorsOf(options, stateCHAConfiguratorOf(configureStateChangesHandlerAdapterFn))
 }
 
 /**
@@ -127,6 +131,6 @@ export function withStateChangesHandlerAdapterExtraConfiguratorOf(options, confi
  * @param {function(component: AbstractComponent)} setComponentDefaultsFn
  * @return {AbstractComponentOptionsWithConfigurator}
  */
-export function withDefaultsExtraConfiguratorOf(options, setComponentDefaultsFn) {
-    return extraConfiguratorsOf(options, defaultsExtraConfiguratorOf(setComponentDefaultsFn))
+export function withDefaultsConfiguratorOf(options, setComponentDefaultsFn) {
+    return extraConfiguratorsOf(options, defaultsConfiguratorOf(setComponentDefaultsFn))
 }

@@ -14,12 +14,12 @@
 
 <body>
 <script>const fp = _.noConflict()</script>
-<script src="5puppeteer+state-changes.js" type="module"></script>
+<script src="4puppeteer-sc-table.js" type="module"></script>
 
 <div class="container">
-    <div class="section title">ClockComponent</div>
-    <div class="section" data-interval="3000" data-template-id="table-template"
-         data-type="clock"></div>
+    <div class="section title">SimpleComponent</div>
+    <div class="section" data-initial-state='[{"id": 1, "name": "dog1"}, {"id": 2, "name": "dog2"}, {"id": 3, "name": "dog3"}]'
+         data-template-id="table-template" data-type="simple"></div>
     <div class="section title">Debugger (shows as JSON the state used above)</div>
     <div class="section" id="debugger">{{this}}</div>
 </div>
@@ -28,10 +28,10 @@
     <table class="responstable">
         <thead>
         <tr>
-            <th colSpan="2">Generating new dogs each {{interval}} ms</th>
+            <th colSpan="2">Dogs</th>
         </tr>
         </thead>
-        {{#each dogs}}
+        {{#each this}}
             <tr>
                 <td>{{id}}</td>
                 <td>{{name}}</td>
