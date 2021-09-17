@@ -48,11 +48,9 @@ export default class AbstractComponent {
 
     /**
      * @param {AbstractComponentOptionsWithConfigurator} options
-     * @param {ComponentConfigurator=} options.configurator
-     * @param {AbstractComponentOptions=} restOfOptions
      */
-    constructor({configurator, ...restOfOptions}) {
-        this._configure(restOfOptions);
+    constructor(options) {
+        this._configure(options);
     }
 
     /**
