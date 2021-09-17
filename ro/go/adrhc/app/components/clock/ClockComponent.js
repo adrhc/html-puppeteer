@@ -2,14 +2,14 @@ import SimpleComponent from "../../../html-puppeteer/core/SimpleComponent.js";
 import ClockStateHandler from "./ClockStateHandler.js";
 import ValuesStateInitializer from "../../../html-puppeteer/core/ValuesStateInitializer.js";
 import {simpleStateProcessorOf} from "../../../html-puppeteer/core/state/StateProcessor.js";
-import {defaultsConfiguratorOf} from "../../../html-puppeteer/core/ComponentConfigurator.js";
+import {withDefaultsConfiguratorOf} from "../../../html-puppeteer/core/ComponentConfigurator.js";
 
 /**
  * @typedef {StateHolder<ClockState>} ClockStateHolder
  */
 /**
  * @typedef {AbstractComponentOptionsWithConfigurator} ClockOptions
- * @property {ComponentConfigurator[]=} extraClockConfigurators
+ * @property {ComponentConfigurator[]=} clockConfigurators
  */
 export default class ClockComponent extends SimpleComponent {
     /**
@@ -19,21 +19,17 @@ export default class ClockComponent extends SimpleComponent {
 
     /**
      * @param {ClockOptions} options
-     * @param {AbstractComponentOptions=} options.restOfOptions
      */
-    constructor({extraConfigurators, ...restOfOptions}) {
-        super({
-            extraConfigurators: [...extraConfigurators,
-                defaultsConfiguratorOf((clockComponent) => {
-                    // stateInitializer must be set inside of a Configurator otherwise, if set after super(),
-                    // the this.stateInitializer field will override super.stateInitializer because is
-                    // already declared by AbstractComponent
-                    clockComponent.stateInitializer = stateInitializerOf(clockComponent);
-                })],
-            ...restOfOptions
-        });
+    constructor(options) {
+        super(withDefaultsConfiguratorOf(options,
+            (clockComponent) => {
+                // stateInitializer must be set inside of a Configurator otherwise, if set after super(),
+                // the this.stateInitializer field will override super.stateInitializer because is
+                // already declared by AbstractComponent
+                clockComponent.stateInitializer = stateInitializerOf(clockComponent);
+            }))
         this.doWithClockState = createClockStateProcessor(this).doWithState;
-        this._configureClock();
+        this._executeClockConfigurators();
     }
 
     static DEFAULT_STATE_GENERATOR_FN = (component, date) => date;
@@ -41,8 +37,8 @@ export default class ClockComponent extends SimpleComponent {
     /**
      * execute ClockComponent only configurators
      */
-    _configureClock() {
-        this.config.extraClockConfigurators?.forEach(/** @type {ComponentConfigurator} */cc => cc.configure(this));
+    _executeClockConfigurators() {
+        this.config.clockConfigurators?.forEach(/** @type {ComponentConfigurator} */cc => cc.configure(this));
     }
 
     /**
