@@ -8,12 +8,47 @@
     <script src="libraries/handlebars.min-v4.7.7.js"></script>
     <!-- see https://github.com/lodash/lodash/wiki/FP-Guide#installation -->
     <script src="libraries/lodash4_lodash.min.js_lodash.fp.min.js"></script>
+    <link href="ro/go/adrhc/app/css/main.css" rel="stylesheet">
+    <link href="ro/go/adrhc/app/css/responstable.css" rel="stylesheet">
 </head>
 
 <body>
 <script>const fp = _.noConflict()</script>
-<script src="index.js" type="module"></script>
-<div id="component">{{text}}</div>
+<script src="6puppeteer-clock-dogs-button.js" type="module"></script>
+
+<div class="container">
+    <div class="section title">Clock Component</div>
+    <div class="section buttons">
+        <button name="stop">Stop</button>
+        <button name="start">Start</button>
+    </div>
+    <div class="section title">Clock (internal) state</div>
+    <div class="section" id="internal-clock-debugger">{{this}}</div>
+    <div class="section clock-internal-state">
+        <div><button name="change">Change (internal) clock state</button></div>
+        <div><input name="internal-clock-state" placeholder="fill in the Clock (internal) state" type="text"></div>
+    </div>
+    <div class="section title">Generated state</div>
+    <div class="section" id="component-debugger">{{this}}</div>
+    <div class="section fit-content" data-interval="1500" data-template-id="table-template" data-type="clock"></div>
+</div>
+
+<script id="table-template" type="text/x-handlebars-template">
+    <table class="responstable">
+        <thead>
+        <tr>
+            <th colSpan="2">Generating new dogs each {{interval}} ms</th>
+        </tr>
+        </thead>
+        {{#each dogs}}
+            <tr>
+                <td>{{id}}</td>
+                <td>{{name}}</td>
+            </tr>
+        {{/each}}
+    </table>
+</script>
+
 </body>
 
 </html>
