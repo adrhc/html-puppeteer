@@ -3,6 +3,7 @@ import {defaultsConfiguratorOf, stateCHAConfiguratorOf} from "./ComponentConfigu
 
 /**
  * @typedef {{[key:string]:*} & StateChangesHandlerAdapterOptions & AbstractTemplatingViewOptionsWithView} AbstractComponentOptions
+ * @property {boolean=} dontConfigure
  * @property {ComponentConfigurator[]=} extraConfigurators
  * @property {string=} elemIdOrJQuery
  * @property {StateHolder=} stateHolder
@@ -13,6 +14,9 @@ import {defaultsConfiguratorOf, stateCHAConfiguratorOf} from "./ComponentConfigu
 /**
  * @typedef {AbstractComponentOptions} AbstractComponentOptionsWithConfigurator
  * @property {ComponentConfigurator=} configurator
+ */
+/**
+ * @abstract
  */
 export default class AbstractComponent {
     /**
@@ -49,8 +53,20 @@ export default class AbstractComponent {
      * @param {ComponentConfigurator=} options.configurator
      * @param {AbstractComponentOptions=} restOfOptions
      */
-    constructor({configurator, ...restOfOptions}) {
-        configurator = configurator ?? this._createComponentConfigurator(restOfOptions);
+    constructor({dontConfigure, configurator, ...restOfOptions}) {
+        this._configure(restOfOptions, dontConfigure);
+    }
+
+    /**
+     * @param {AbstractComponentOptionsWithConfigurator} options
+     * @param {boolean=} dontConfigure
+     * @protected
+     */
+    _configure(options, dontConfigure) {
+        if (dontConfigure) {
+            return;
+        }
+        const configurator = options.configurator ?? this._createComponentConfigurator(options);
         configurator.configure(this);
     }
 

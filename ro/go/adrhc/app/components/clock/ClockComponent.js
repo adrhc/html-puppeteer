@@ -15,17 +15,22 @@ export default class ClockComponent extends SimpleComponent {
 
     /**
      * @param {AbstractComponentOptionsWithConfigurator} options
+     * @param {AbstractComponentOptions=} restOfOptions
      */
-    constructor(options) {
-        super(withDefaultsConfiguratorOf(options, (component) => {
-            // stateInitializer must be set inside of a Configurator otherwise, if set after super(),
-            // the this.stateInitializer field will override super.stateInitializer because is
-            // already declared by AbstractComponent
-            component.stateInitializer = stateInitializerOf(component);
-        }));
-        // better be set after super() call because AbstractComponent doesn't
-        // contain doWithClockState field (though there's no overriding risk here)
-        this.doWithClockState = createClockStateProcessor(this).doWithState;
+    constructor({dontConfigure, ...restOfOptions}) {
+        super(withDefaultsConfiguratorOf({dontConfigure: true, ...restOfOptions},
+            (clockComponent) => {
+                // stateInitializer must be set inside of a Configurator otherwise, if set after super(),
+                // the this.stateInitializer field will override super.stateInitializer because is
+                // already declared by AbstractComponent
+                clockComponent.stateInitializer = stateInitializerOf(clockComponent);
+                // this could be placed out of the configurator with no overriding
+                // risk but it's better to keep it in the configurator to give
+                // the extending classes the chance to configure/override it too
+                clockComponent.doWithClockState = createClockStateProcessor(
+                    /** @type {ClockComponent} */ clockComponent).doWithState;
+            }));
+        this._configure(restOfOptions, dontConfigure);
     }
 
     static DEFAULT_STATE_GENERATOR_FN = (component, date) => date;
