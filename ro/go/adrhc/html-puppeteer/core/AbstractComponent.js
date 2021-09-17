@@ -14,11 +14,14 @@ import DefaultComponentConfigurator from "./DefaultComponentConfigurator.js";
  * @property {ComponentConfigurator=} configurator
  */
 /**
+ * @typedef {AbstractComponentOptions & DataAttributes} ComponentConfig
+ */
+/**
  * @abstract
  */
 export default class AbstractComponent {
     /**
-     * @type {AbstractComponentOptions & DataAttributes}
+     * @type {ComponentConfig}
      */
     config;
     /**

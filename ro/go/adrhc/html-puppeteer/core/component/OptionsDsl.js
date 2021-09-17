@@ -1,6 +1,9 @@
 import {defaultsConfiguratorOf} from "../ComponentConfigurator.js";
 
 /**
+ * @typedef {function(component: AbstractComponent): StateInitializer} StateInitializerProviderFn
+ */
+/**
  * @typedef {function(component: AbstractComponent)} SetComponentDefaultsFn
  */
 export class OptionsDsl {
@@ -8,6 +11,21 @@ export class OptionsDsl {
      * AbstractComponentOptions
      */
     options = {};
+
+    /**
+     * @param {AbstractComponentOptions=} options
+     */
+    to(options = {}) {
+        if (this.options.extraConfigurators) {
+            options.extraConfigurators = options.extraConfigurators ?? [];
+            options.extraConfigurators.push(...this.options.extraConfigurators);
+        }
+        if (this.options.extraStateChangesHandlers) {
+            options.extraStateChangesHandlers = options.extraStateChangesHandlers ?? [];
+            options.extraStateChangesHandlers.push(...this.options.extraStateChangesHandlers);
+        }
+        return options;
+    }
 
     /**
      * adds extra defaults related ComponentConfigurator
@@ -33,21 +51,6 @@ export class OptionsDsl {
     }
 
     /**
-     * @param {AbstractComponentOptions=} options
-     */
-    to(options = {}) {
-        if (this.options.extraConfigurators) {
-            options.extraConfigurators = options.extraConfigurators ?? [];
-            options.extraConfigurators.push(...this.options.extraConfigurators);
-        }
-        if (this.options.extraStateChangesHandlers) {
-            options.extraStateChangesHandlers = options.extraStateChangesHandlers ?? [];
-            options.extraStateChangesHandlers.push(...this.options.extraStateChangesHandlers);
-        }
-        return options;
-    }
-
-    /**
      * adds an extra ComponentConfigurator
      *
      * @param {ComponentConfigurator} configurator
@@ -56,6 +59,15 @@ export class OptionsDsl {
         this.options.extraConfigurators = this.options.extraConfigurators ?? [];
         this.options.extraConfigurators.push(configurator);
         return this;
+    }
+
+    /**
+     * @param {StateInitializerProviderFn} stateInitializerProviderFn
+     */
+    setStateInitializerOf(stateInitializerProviderFn) {
+        return addDefaultsOf((component) => {
+            component.stateInitializer = stateInitializerProviderFn(component);
+        });
     }
 }
 
@@ -86,5 +98,11 @@ export function addStateChangeHandler(stateChangesHandler) {
  */
 export function addConfigurator(configurator) {
     return new OptionsDsl().addConfigurator(stateChangesHandler);
+}
 
+/**
+ * @param {StateInitializerProviderFn} stateInitializerProviderFn
+ */
+export function setStateInitializerOf(stateInitializerProviderFn) {
+    return new OptionsDsl().setStateInitializerOf(stateInitializerProviderFn);
 }

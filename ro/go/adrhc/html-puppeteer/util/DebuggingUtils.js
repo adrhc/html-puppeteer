@@ -10,7 +10,7 @@ import {addStateChangeHandler} from "../core/component/OptionsDsl.js";
  */
 
 /**
- * creates then adds a debugger extra StateChangesHandler
+ * creates then adds a debugger (CopyStateChangeHandler) as an extra StateChangesHandler
  *
  * @param {DebuggerOptions=} debuggerOptions
  * @return {OptionsDsl}
