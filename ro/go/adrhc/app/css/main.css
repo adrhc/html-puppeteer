@@ -17,7 +17,42 @@
     font-weight: bold;
 }
 
-.section {
+.fit-content {
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
     width: fit-content;
+}
+
+.section {
     margin: 1rem auto;
+    text-align: center;
+}
+
+.section.buttons {
+    width: -webkit-fill-available;
+    width: -moz-available;
+    width: fill-available;
+    display: flex;
+    justify-content: center;
+}
+
+.section.buttons :not(:first-child) {
+    margin-left: 0.4rem;
+}
+
+.section.clock-internal-state {
+    display: flex;
+    flex-direction: column;
+}
+
+.section.clock-internal-state div {
+    display: flex;
+    justify-content: center;
+    border: 1px solid black;
+}
+
+.section.clock-internal-state div input {
+    width: -webkit-fill-available;
+    width: -moz-available;
+    width: fill-available;
 }

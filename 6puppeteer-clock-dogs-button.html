@@ -18,19 +18,19 @@
 
 <div class="container">
     <div class="section title">Clock Component</div>
-    <div class="section">
+    <div class="section buttons">
         <button name="stop">Stop</button>
         <button name="start">Start</button>
     </div>
     <div class="section title">Clock (internal) state</div>
     <div class="section" id="internal-clock-debugger">{{this}}</div>
-    <div class="section">
-        <button name="start">Change clock state</button>
-        <input placeholder="fill in the ClockComponent's state (json)" type="text">
+    <div class="section clock-internal-state">
+        <div><button name="start">Change clock state</button></div>
+        <div><input placeholder="fill in the ClockComponent's state (json)" type="text"></div>
     </div>
     <div class="section title">Generated state</div>
     <div class="section" id="component-debugger">{{this}}</div>
-    <div class="section" data-interval="3000" data-template-id="table-template" data-type="clock"></div>
+    <div class="section fit-content" data-interval="3000" data-template-id="table-template" data-type="clock"></div>
 </div>
 
 <script id="table-template" type="text/x-handlebars-template">
