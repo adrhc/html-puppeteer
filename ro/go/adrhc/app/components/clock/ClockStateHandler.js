@@ -1,10 +1,14 @@
 import StateChangesHandler from "../../../html-puppeteer/core/StateChangesHandler.js";
+import ClockComponent from "./ClockComponent.js";
 
 /**
  * @typedef {{stopped: boolean, interval: number}} ClockState
  */
 /**
  * @typedef {function(component: AbstractComponent, date: Date): *} StateGeneratorFn
+ */
+/**
+ * @template SCT, SCP
  */
 export default class ClockStateHandler extends StateChangesHandler {
     /**
@@ -15,19 +19,20 @@ export default class ClockStateHandler extends StateChangesHandler {
      * @type {number|undefined}
      */
     handle;
+
     /**
-     * @type {StateGeneratorFn}
+     * @return {StateGeneratorFn}
      */
-    stateGeneratorFn;
+    get stateGeneratorFn() {
+        return this.clock.config.stateGeneratorFn ?? ClockComponent.DEFAULT_STATE_GENERATOR_FN;
+    }
 
     /**
      * @param {ClockComponent} clock
-     * @param {StateGeneratorFn} stateGeneratorFn
      */
-    constructor(clock, stateGeneratorFn) {
+    constructor(clock) {
         super();
         this.clock = clock;
-        this.stateGeneratorFn = stateGeneratorFn;
     }
 
     /**

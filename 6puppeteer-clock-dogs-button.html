@@ -17,18 +17,20 @@
 <script src="6puppeteer-clock-dogs-button.js" type="module"></script>
 
 <div class="container">
-    <div class="section title">ClockComponent</div>
+    <div class="section title">Clock Component</div>
     <div class="section">
         <button name="stop">Stop</button>
         <button name="start">Start</button>
     </div>
+    <div class="section title">Clock (internal) state</div>
+    <div class="section" id="internal-clock-debugger">{{this}}</div>
     <div class="section">
         <button name="start">Change clock state</button>
         <input placeholder="fill in the ClockComponent's state (json)" type="text">
     </div>
+    <div class="section title">Generated state</div>
+    <div class="section" id="component-debugger">{{this}}</div>
     <div class="section" data-interval="3000" data-template-id="table-template" data-type="clock"></div>
-    <div class="section title">Debugger (shows as JSON the state used above)</div>
-    <div class="section" id="debugger">{{this}}</div>
 </div>
 
 <script id="table-template" type="text/x-handlebars-template">

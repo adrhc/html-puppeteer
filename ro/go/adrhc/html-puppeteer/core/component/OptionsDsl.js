@@ -1,6 +1,13 @@
 import ComponentConfigurator from "../ComponentConfigurator.js";
 
 /**
+ * @typedef {{[key:string]:*}} Bag
+ */
+/**
+ * @typedef {function(options: Bag)} BagConsumer
+ */
+
+/**
  * @typedef {function(component: AbstractComponent): StateInitializer} StateInitializerProviderFn
  */
 /**
@@ -8,7 +15,7 @@ import ComponentConfigurator from "../ComponentConfigurator.js";
  */
 export class OptionsDsl {
     /**
-     * AbstractComponentOptions
+     * @type {Bag}
      */
     _options = {};
 
@@ -18,6 +25,7 @@ export class OptionsDsl {
 
     /**
      * @param {AbstractComponentOptions=} options
+     * @return {AbstractComponentOptions}
      */
     to(options = {}) {
         if (this._options.extraConfigurators) {
@@ -73,6 +81,14 @@ export class OptionsDsl {
             component.stateInitializer = stateInitializerProviderFn(component);
         });
     }
+
+    /**
+     * @param {BagConsumer} fn
+     */
+    doWithOptions(fn) {
+        fn(this._options)
+        return this;
+    }
 }
 
 /**
@@ -115,7 +131,7 @@ export function withStateInitializerOf(stateInitializerProviderFn) {
  * @param {ComponentConfiguratorFn} componentConfiguratorFn
  * @return {DelegatingComponentConfigurator}
  */
-function componentConfiguratorOf(componentConfiguratorFn) {
+export function componentConfiguratorOf(componentConfiguratorFn) {
     return new DelegatingComponentConfigurator(componentConfiguratorFn);
 }
 

@@ -1,11 +1,11 @@
 import SimpleComponent from "../core/SimpleComponent.js";
 import CopyStateChangeHandler from "../core/CopyStateChangeHandler.js";
-import {addStateChangeHandler} from "../core/component/OptionsDsl.js";
+import {OptionsDsl} from "../core/component/OptionsDsl.js";
 
 /**
  * @typedef {Object} DebuggerOptions
  * @property {boolean=} showAsJson
- * @property {string=} debuggerElemIdOrJQuery
+ * @property {string} [debuggerElemIdOrJQuery="debugger"]
  * @property {string=} initialDebuggerMessage
  */
 
@@ -23,11 +23,10 @@ export function withDebugger(debuggerOptions) {
  * creates then adds a debugger (CopyStateChangeHandler) as an extra StateChangesHandler
  *
  * @param {DebuggerOptions=} debuggerOptions
- * @return {OptionsDsl}
+ * @return {DebuggerDsl}
  */
 export function addDebugger(debuggerOptions = {}) {
-    const debuggerStateChangeHandler = createDebuggerStateChangeHandler(debuggerOptions);
-    return addStateChangeHandler(debuggerStateChangeHandler);
+    return new DebuggerDsl().addDebugger(debuggerOptions);
 }
 
 /**
@@ -37,7 +36,7 @@ export function addDebugger(debuggerOptions = {}) {
  * @param {string=} debuggerOptions.initialDebuggerMessage
  * @return {CopyStateChangeHandler}
  */
-function createDebuggerStateChangeHandler({showAsJson, debuggerElemIdOrJQuery, initialDebuggerMessage} = {}) {
+export function createDebuggerStateChangeHandler({showAsJson, debuggerElemIdOrJQuery, initialDebuggerMessage} = {}) {
     showAsJson = showAsJson ?? true;
     debuggerElemIdOrJQuery = debuggerElemIdOrJQuery ?? "debugger";
     initialDebuggerMessage = initialDebuggerMessage ?? "state debugger";
@@ -46,4 +45,17 @@ function createDebuggerStateChangeHandler({showAsJson, debuggerElemIdOrJQuery, i
         initialState: initialDebuggerMessage
     }).render();
     return new CopyStateChangeHandler(simpleDebugger, showAsJson);
+}
+
+export class DebuggerDsl extends OptionsDsl {
+    /**
+     * creates then adds a debugger (CopyStateChangeHandler) as an extra StateChangesHandler
+     *
+     * @param {DebuggerOptions=} debuggerOptions
+     * @return {DebuggerDsl}
+     */
+    addDebugger(debuggerOptions = {}) {
+        const debuggerStateChangeHandler = createDebuggerStateChangeHandler(debuggerOptions);
+        return this.addStateChangeHandler(debuggerStateChangeHandler);
+    }
 }

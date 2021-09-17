@@ -59,8 +59,8 @@ export default class StateChangesHandlerAdapter {
     /**
      * @param {StateChangesHandler} stateChangesHandler
      */
-    appendStateChangesHandler(stateChangesHandler) {
-        pushNotNull(this.stateChangesHandlers, stateChangesHandler);
+    appendStateChangesHandlers(...stateChangesHandler) {
+        stateChangesHandler?.forEach(sch => pushNotNull(this.stateChangesHandlers, sch));
     }
 
     /**

@@ -1,8 +1,9 @@
 import SimpleComponent from "../../../html-puppeteer/core/SimpleComponent.js";
 import ClockStateHandler from "./ClockStateHandler.js";
 import ValuesStateInitializer from "../../../html-puppeteer/core/ValuesStateInitializer.js";
-import {simpleStateProcessorOf} from "../../../html-puppeteer/core/state/StateProcessor.js";
+import {stateProcessorOf} from "../../../html-puppeteer/core/state/StateProcessor.js";
 import {withStateInitializerOf} from "../../../html-puppeteer/core/component/OptionsDsl.js";
+import {createDebuggerStateChangeHandler, DebuggerDsl} from "../../../html-puppeteer/util/DebuggingUtils.js";
 
 /**
  * @typedef {StateHolder<ClockState>} ClockStateHolder
@@ -19,21 +20,20 @@ export default class ClockComponent extends SimpleComponent {
 
     /**
      * @param {ClockOptions} options
+     * @constructor
      */
     constructor(options) {
         super(withStateInitializerOf(stateInitializerOf).to(options));
         this.doWithClockState = this.config.doWithClockState ?? createClockStateProcessor(this).doWithState;
-        this._executeClockConfigurators();
     }
-
-    static DEFAULT_STATE_GENERATOR_FN = (component, date) => date;
 
     /**
-     * execute ClockComponent only configurators
+     * @param {AbstractComponent} component
+     * @param {Date} date
+     * @constant
+     * @default
      */
-    _executeClockConfigurators() {
-        this.config.clockConfigurators?.forEach(/** @type {ComponentConfigurator} */cc => cc.configure(this));
-    }
+    static DEFAULT_STATE_GENERATOR_FN = (component, date) => date;
 
     /**
      * stops the clock
@@ -57,13 +57,50 @@ export default class ClockComponent extends SimpleComponent {
 }
 
 /**
+ * @param {DebuggerOptions} debuggerOptions
+ * @return {ClockDsl}
+ */
+export function addClockDebugger(debuggerOptions) {
+    return new ClockDsl().addClockDebugger(debuggerOptions);
+}
+
+class ClockDsl extends DebuggerDsl {
+    /**
+     * creates then adds a debugger (CopyStateChangeHandler) as an extra StateChangesHandler
+     *
+     * @param {DebuggerOptions=} debuggerOptions
+     * @return {ClockDsl}
+     */
+    addClockDebugger(debuggerOptions = {}) {
+        return this.doWithOptions((options) => {
+            options.clockExtraSCHAs = options.clockExtraSCHAs ?? [];
+            options.clockExtraSCHAs.push(createDebuggerStateChangeHandler(debuggerOptions));
+        });
+    }
+
+    /**
+     * @param {AbstractComponentOptions=} options
+     * @return {ClockOptions}
+     */
+    to(options = {}) {
+        if (this._options.clockExtraSCHAs) {
+            options.clockExtraSCHAs = options.clockExtraSCHAs ?? [];
+            options.clockExtraSCHAs.push(...this._options.clockExtraSCHAs);
+        }
+        return super.to(options);
+    }
+}
+
+/**
  * @param {ClockComponent} clock
  * @return {StateProcessor}
  */
 function createClockStateProcessor(clock) {
-    const stateGeneratorFn = clock.options.stateGeneratorFn ?? ClockComponent.DEFAULT_STATE_GENERATOR_FN;
-    const stateChangesHandler = new ClockStateHandler(clock, stateGeneratorFn);
-    return simpleStateProcessorOf(clock, stateChangesHandler, initialInternalClockStateOf(clock.config));
+    return stateProcessorOf({
+        component: clock,
+        extraStateChangesHandlers: [new ClockStateHandler(clock), ...clock.config.clockExtraSCHAs],
+        initialState: initialInternalClockStateOf(clock.config)
+    });
 }
 
 /**

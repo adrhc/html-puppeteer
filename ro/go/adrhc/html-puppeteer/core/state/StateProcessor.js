@@ -48,11 +48,12 @@ export class StateProcessor {
  * @param {StateProcessorOptions} options
  * @param {AbstractComponent} options.component
  * @param {*=} options.initialState
+ * @param {StateProcessorOptions=} options.restOfOptions
  * @return {StateProcessor}
  */
-export function stateProcessorOf({component, initialState, ...options}) {
-    const stateChangesHandlerAdapter = new StateChangesHandlerAdapter(options);
-    const stateHolder = new StateHolder(options);
+export function stateProcessorOf({component, initialState, ...restOfOptions}) {
+    const stateChangesHandlerAdapter = new StateChangesHandlerAdapter(restOfOptions);
+    const stateHolder = new StateHolder(restOfOptions);
     let doWithState = (stateUpdaterFn) => {
         stateUpdaterFn(stateHolder);
         stateChangesHandlerAdapter.processStateChanges(stateHolder.stateChangesCollector);
