@@ -2,7 +2,7 @@ import SimpleComponent from "../../../html-puppeteer/core/SimpleComponent.js";
 import ClockStateHandler from "./ClockStateHandler.js";
 import ValuesStateInitializer from "../../../html-puppeteer/core/ValuesStateInitializer.js";
 import {simpleStateProcessorOf} from "../../../html-puppeteer/core/state/StateProcessor.js";
-import {withDefaultsConfiguratorOf} from "../../../html-puppeteer/core/ComponentConfigurator.js";
+import {addDefaultsOf} from "../../../html-puppeteer/core/component/OptionsDsl.js";
 
 /**
  * @typedef {StateHolder<ClockState>} ClockStateHolder
@@ -21,13 +21,12 @@ export default class ClockComponent extends SimpleComponent {
      * @param {ClockOptions} options
      */
     constructor(options) {
-        super(withDefaultsConfiguratorOf(options,
-            (clockComponent) => {
-                // stateInitializer must be set inside of a Configurator otherwise, if set after super(),
-                // the this.stateInitializer field will override super.stateInitializer because is
-                // already declared by AbstractComponent
-                clockComponent.stateInitializer = stateInitializerOf(clockComponent);
-            }))
+        super(addDefaultsOf((clockComponent) => {
+            // stateInitializer must be set inside of a Configurator otherwise, if set after super(),
+            // the this.stateInitializer field will override super.stateInitializer because is
+            // already declared by AbstractComponent
+            clockComponent.stateInitializer = stateInitializerOf(clockComponent);
+        }).to(options));
         this.doWithClockState = this.config.doWithClockState ?? createClockStateProcessor(this).doWithState;
         this._executeClockConfigurators();
     }

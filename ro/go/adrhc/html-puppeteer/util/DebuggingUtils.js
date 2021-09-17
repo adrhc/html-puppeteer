@@ -1,24 +1,23 @@
 import SimpleComponent from "../core/SimpleComponent.js";
 import CopyStateChangeHandler from "../core/CopyStateChangeHandler.js";
-import {withStateChangesHandlerAdapterConfiguratorOf} from "../core/ComponentConfigurator.js";
+import {addStateChangeHandler} from "../core/component/OptionsDsl.js";
 
 /**
  * @typedef {Object} DebuggerOptions
  * @property {boolean=} showAsJson
  * @property {string=} debuggerElemIdOrJQuery
- * @property {string=} initialDebuggerMessage*
+ * @property {string=} initialDebuggerMessage
  */
 
 /**
- * @param {AbstractComponentOptionsWithConfigurator & DebuggerOptions | {}} debuggerAndComponentOptions
- * @return {AbstractComponentOptionsWithConfigurator}
+ * creates then adds a debugger extra StateChangesHandler
+ *
+ * @param {DebuggerOptions=} debuggerOptions
+ * @return {OptionsDsl}
  */
-export function withDebugger(debuggerAndComponentOptions = {}) {
-    const debuggerStateChangeHandler = createDebuggerStateChangeHandler(debuggerAndComponentOptions);
-    return withStateChangesHandlerAdapterConfiguratorOf(debuggerAndComponentOptions,
-        (scha) => {
-            scha.appendStateChangesHandler(debuggerStateChangeHandler);
-        });
+export function addDebugger(debuggerOptions = {}) {
+    const debuggerStateChangeHandler = createDebuggerStateChangeHandler(debuggerOptions);
+    return addStateChangeHandler(debuggerStateChangeHandler);
 }
 
 /**
@@ -26,6 +25,7 @@ export function withDebugger(debuggerAndComponentOptions = {}) {
  * @param {boolean=} debuggerOptions.showAsJson
  * @param {string=} debuggerOptions.debuggerElemIdOrJQuery
  * @param {string=} debuggerOptions.initialDebuggerMessage
+ * @return {CopyStateChangeHandler}
  */
 function createDebuggerStateChangeHandler({showAsJson, debuggerElemIdOrJQuery, initialDebuggerMessage} = {}) {
     showAsJson = showAsJson ?? true;

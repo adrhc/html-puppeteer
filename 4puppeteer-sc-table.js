@@ -1,6 +1,6 @@
 import PUPPETEER from "./ro/go/adrhc/html-puppeteer/util/Puppeteer.js";
-import {withDebugger} from "./ro/go/adrhc/html-puppeteer/util/DebuggingUtils.js";
+import {addDebugger} from "./ro/go/adrhc/html-puppeteer/util/DebuggingUtils.js";
 
 $(() => {
-    PUPPETEER.animate(withDebugger());
+    PUPPETEER.animate(addDebugger().to());
 })
