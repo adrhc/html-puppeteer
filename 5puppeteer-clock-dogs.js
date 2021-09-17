@@ -6,5 +6,7 @@ import {generateDogs} from "./ro/go/adrhc/app/Generators.js";
 
 $(() => {
     COMPONENTS_FACTORY.registerType("clock", (options) => new ClockComponent(options));
-    PUPPETEER.animate(addDebugger().to({stateGeneratorFn: (component) => generateDogs(5, component.dataAttributes)}));
+    PUPPETEER.animate(addDebugger().to({
+        stateGeneratorFn: (component) => generateDogs(5, component.dataAttributes)
+    }));
 });
