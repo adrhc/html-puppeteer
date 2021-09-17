@@ -43,6 +43,7 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
             this.config.stateChangesHandlerAdapter ?? this._createStateChangesHandlerAdapter();
         component.stateInitializer = this.config.stateInitializer ?? this._createStateInitializer();
         component.eventsBinder = this.config.eventsBinder ?? this._createEventsBinder(component);
+        component.eventsBinder.component = component;
     }
 
     /**

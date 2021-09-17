@@ -1,4 +1,4 @@
-import {defaultsConfiguratorOf} from "../ComponentConfigurator.js";
+import ComponentConfigurator from "../ComponentConfigurator.js";
 
 /**
  * @typedef {function(component: AbstractComponent): StateInitializer} StateInitializerProviderFn
@@ -105,4 +105,25 @@ export function addConfigurator(configurator) {
  */
 export function setStateInitializerOf(stateInitializerProviderFn) {
     return new OptionsDsl().setStateInitializerOf(stateInitializerProviderFn);
+}
+
+/**
+ * @param {function(component: AbstractComponent)} setComponentDefaultsFn
+ * @return {DefaultsComponentConfigurator}
+ */
+function defaultsConfiguratorOf(setComponentDefaultsFn) {
+    return new DefaultsComponentConfigurator(setComponentDefaultsFn);
+}
+
+class DefaultsComponentConfigurator extends ComponentConfigurator {
+    setComponentDefaultsFn;
+
+    constructor(setComponentDefaultsFn) {
+        super();
+        this.setComponentDefaultsFn = setComponentDefaultsFn;
+    }
+
+    _setComponentDefaults(component) {
+        this.setComponentDefaultsFn(component);
+    }
 }
