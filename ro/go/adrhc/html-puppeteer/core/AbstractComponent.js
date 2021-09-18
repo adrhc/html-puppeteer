@@ -89,6 +89,6 @@ export default class AbstractComponent {
      */
     close() {
         this.eventsBinder?.detachEventHandlers();
-        this.stateHolder.replace();
+        this.doWithState(stateHolder => stateHolder.replace());
     }
 }
