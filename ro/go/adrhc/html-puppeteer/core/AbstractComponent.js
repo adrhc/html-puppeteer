@@ -51,14 +51,6 @@ export default class AbstractComponent {
      * @param {AbstractComponentOptions} options
      */
     constructor(options) {
-        this._configure(options);
-    }
-
-    /**
-     * @param {AbstractComponentOptions} options
-     * @protected
-     */
-    _configure(options) {
         const configurator = options.configurator ?? new DefaultComponentConfigurator(options);
         configurator.configure(this);
         applyExtraConfigurators(this);
