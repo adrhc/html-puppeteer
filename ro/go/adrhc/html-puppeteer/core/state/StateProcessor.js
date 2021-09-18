@@ -1,11 +1,11 @@
-import StateChangesHandlerAdapter from "../StateChangesHandlerAdapter.js";
+import StateChangesHandlersInvoker from "../StateChangesHandlersInvoker.js";
 import StateHolder from "../StateHolder.js";
 
 /**
  * @typedef {Object} StateProcessorOptions
- * @property {DoWithStateFn} doWithState
- * @property {StateChangesHandlerAdapter} stateChangesHandlerAdapter
  * @property {StateHolder} stateHolder
+ * @property {StateChangesHandlersInvoker} stateChangesHandlersInvoker
+ * @property {DoWithStateFn} doWithState
  */
 
 /**
@@ -17,9 +17,9 @@ export class StateProcessor {
      */
     doWithState;
     /**
-     * @type {StateChangesHandlerAdapter}
+     * @type {StateChangesHandlersInvoker}
      */
-    stateChangesHandlerAdapter;
+    stateChangesHandlersInvoker;
     /**
      * @type {StateHolder}
      */
@@ -28,48 +28,36 @@ export class StateProcessor {
     /**
      * @param {StateProcessorOptions} options
      */
-    constructor({stateHolder, stateChangesHandlerAdapter, doWithState}) {
+    constructor({stateHolder, stateChangesHandlersInvoker, doWithState}) {
         this.stateHolder = stateHolder;
-        this.stateChangesHandlerAdapter = stateChangesHandlerAdapter;
+        this.stateChangesHandlersInvoker = stateChangesHandlersInvoker;
         this.doWithState = doWithState;
     }
 }
 
 /**
- * @typedef {StateHolderOptions & StateChangesHandlerAdapterOptions} StateProcessorOptions
- * @property {StateHolder=} stateHolder
- * @property {StateChangesHandlerAdapter=} stateChangesHandlerAdapter
- * @property {DoWithStateFn=} doWithStateFn
+ * @typedef {StateProcessorOptions & StateHolderOptions & StateChangesHandlersInvokerOptions} StateProcessorOfOptions
  * @property {AbstractComponent=} component
  * @property {*=} initialState
  */
 
 /**
- * @param {StateProcessorOptions} options
- * @param {AbstractComponent} options.component
- * @param {*=} options.initialState
- * @param {StateProcessorOptions=} options.restOfOptions
+ * This is a StateProcessor builder.
+ *
+ * @param {StateProcessorOfOptions} options
+ * @param {StateProcessorOfOptions=} options.restOfOptions
  * @return {StateProcessor}
  */
 export function stateProcessorOf({component, initialState, ...restOfOptions}) {
-    const stateChangesHandlerAdapter = new StateChangesHandlerAdapter(restOfOptions);
+    const stateChangesHandlersInvoker = new StateChangesHandlersInvoker(restOfOptions);
     const stateHolder = new StateHolder(restOfOptions);
-    let doWithState = (stateUpdaterFn) => {
+    const doWithStateFn = (stateUpdaterFn) => {
         stateUpdaterFn(stateHolder);
-        stateChangesHandlerAdapter.processStateChanges(stateHolder.stateChangesCollector);
+        stateChangesHandlersInvoker.processStateChanges(stateHolder.stateChangesCollector);
     };
-    doWithState = doWithState.bind(component);
+    const doWithState = doWithStateFn.bind(component);
     if (initialState != null) {
         doWithState((sh) => sh.replace(initialState));
     }
-    return new StateProcessor({/** @type {DoWithStateFn} */ doWithState, stateHolder, stateChangesHandlerAdapter});
-}
-
-/**
- * @param {AbstractComponent} component
- * @param {StateChangesHandler} stateChangesHandler
- * @param {*=} initialState
- */
-export function simpleStateProcessorOf(component, stateChangesHandler, initialState) {
-    return stateProcessorOf({component, initialState, stateChangesHandlers: [stateChangesHandler]});
+    return new StateProcessor({stateHolder, stateChangesHandlersInvoker, doWithState});
 }

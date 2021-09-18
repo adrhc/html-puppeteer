@@ -1,27 +1,25 @@
 import DefaultComponentConfigurator from "./DefaultComponentConfigurator.js";
+import {applyExtraConfigurators} from "./ComponentConfigurator.js";
 
 /**
- * @typedef {{[key:string]:*} & StateChangesHandlerAdapterOptions & AbstractTemplatingViewOptionsWithView} AbstractComponentOptions
- * @property {ComponentConfigurator[]=} extraConfigurators
+ * @typedef {Bag & ValuesStateInitializerOptions & StateChangesHandlersInvoker & AbstractTemplatingViewOptionsWithView} AbstractComponentOptions
  * @property {string=} elemIdOrJQuery
  * @property {StateHolder=} stateHolder
  * @property {StateInitializer=} stateInitializer
- * @property {*=} initialState
- * @property {StateChangesHandlerAdapter=} stateChangesHandlerAdapter
- */
-/**
- * @typedef {AbstractComponentOptions} AbstractComponentOptionsWithConfigurator
+ * @property {StateChangesHandlersInvoker=} stateChangesHandlersInvoker
+ * @property {EventsBinder=} eventsBinder
  * @property {ComponentConfigurator=} configurator
+ * @property {ComponentConfigurator[]=} extraConfigurators
  */
 /**
- * @typedef {AbstractComponentOptions & DataAttributes} ComponentConfig
+ * @typedef {AbstractComponentOptions & DataAttributes} ComponentConfigField
  */
 /**
  * @abstract
  */
 export default class AbstractComponent {
     /**
-     * @type {ComponentConfig}
+     * @type {ComponentConfigField}
      */
     config;
     /**
@@ -37,9 +35,9 @@ export default class AbstractComponent {
      */
     options;
     /**
-     * @type {StateChangesHandlerAdapter}
+     * @type {StateChangesHandlersInvoker}
      */
-    stateChangesHandlerAdapter;
+    stateChangesHandlersInvoker;
     /**
      * @type {StateHolder}
      */
@@ -50,20 +48,20 @@ export default class AbstractComponent {
     stateInitializer;
 
     /**
-     * @param {AbstractComponentOptionsWithConfigurator} options
+     * @param {AbstractComponentOptions} options
      */
     constructor(options) {
         this._configure(options);
     }
 
     /**
-     * @param {AbstractComponentOptionsWithConfigurator} options
+     * @param {AbstractComponentOptions} options
      * @protected
      */
     _configure(options) {
         const configurator = options.configurator ?? new DefaultComponentConfigurator(options);
         configurator.configure(this);
-        this.config.extraConfigurators?.forEach(c => c.configure(this));
+        applyExtraConfigurators(this);
     }
 
     /**
@@ -91,7 +89,7 @@ export default class AbstractComponent {
      */
     doWithState(stateUpdaterFn) {
         stateUpdaterFn(this.stateHolder);
-        this.stateChangesHandlerAdapter.processStateChanges(this.stateHolder.stateChangesCollector);
+        this.stateChangesHandlersInvoker.processStateChanges(this.stateHolder.stateChangesCollector);
     }
 
     /**

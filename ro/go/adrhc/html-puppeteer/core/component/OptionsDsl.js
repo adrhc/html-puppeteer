@@ -1,13 +1,6 @@
 import ComponentConfigurator from "../ComponentConfigurator.js";
 
 /**
- * @typedef {{[key:string]:*}} Bag
- */
-/**
- * @typedef {function(options: Bag)} BagConsumer
- */
-
-/**
  * @typedef {function(component: AbstractComponent): StateInitializer} StateInitializerProviderFn
  */
 /**
@@ -129,13 +122,13 @@ export function withStateInitializerOf(stateInitializerProviderFn) {
 
 /**
  * @param {ComponentConfiguratorFn} componentConfiguratorFn
- * @return {DelegatingComponentConfigurator}
+ * @return {FunctionComponentConfigurator}
  */
 export function componentConfiguratorOf(componentConfiguratorFn) {
-    return new DelegatingComponentConfigurator(componentConfiguratorFn);
+    return new FunctionComponentConfigurator(componentConfiguratorFn);
 }
 
-class DelegatingComponentConfigurator extends ComponentConfigurator {
+class FunctionComponentConfigurator extends ComponentConfigurator {
     componentConfiguratorFn;
 
     constructor(componentConfiguratorFn) {

@@ -9,7 +9,7 @@ import {createDebuggerStateChangeHandler, DebuggerDsl} from "../../../html-puppe
  * @typedef {StateHolder<ClockState>} ClockStateHolder
  */
 /**
- * @typedef {AbstractComponentOptionsWithConfigurator} ClockOptions
+ * @typedef {AbstractComponentOptions} ClockOptions
  * @property {ComponentConfigurator[]=} clockConfigurators
  */
 export default class ClockComponent extends SimpleComponent {
@@ -73,8 +73,8 @@ class ClockDsl extends DebuggerDsl {
      */
     addClockDebugger(debuggerOptions = {}) {
         return this.doWithOptions((options) => {
-            options.clockExtraSCHAs = options.clockExtraSCHAs ?? [];
-            options.clockExtraSCHAs.push(createDebuggerStateChangeHandler(debuggerOptions));
+            options.clockExtraSCHIs = options.clockExtraSCHIs ?? [];
+            options.clockExtraSCHIs.push(createDebuggerStateChangeHandler(debuggerOptions));
         });
     }
 
@@ -83,9 +83,9 @@ class ClockDsl extends DebuggerDsl {
      * @return {ClockOptions}
      */
     to(options = {}) {
-        if (this._options.clockExtraSCHAs) {
-            options.clockExtraSCHAs = options.clockExtraSCHAs ?? [];
-            options.clockExtraSCHAs.push(...this._options.clockExtraSCHAs);
+        if (this._options.clockExtraSCHIs) {
+            options.clockExtraSCHIs = options.clockExtraSCHIs ?? [];
+            options.clockExtraSCHIs.push(...this._options.clockExtraSCHIs);
         }
         return super.to(options);
     }
@@ -98,13 +98,13 @@ class ClockDsl extends DebuggerDsl {
 function createClockStateProcessor(clock) {
     return stateProcessorOf({
         component: clock,
-        extraStateChangesHandlers: [new ClockStateHandler(clock), ...clock.config.clockExtraSCHAs],
+        extraStateChangesHandlers: [new ClockStateHandler(clock), ...clock.config.clockExtraSCHIs],
         initialState: initialInternalClockStateOf(clock.config)
     });
 }
 
 /**
- * @param {ComponentConfig} componentConfig
+ * @param {ComponentConfigField} componentConfig
  * @return {ClockState} is the initial state used to construct ClockComponent.doWithClockState
  */
 function initialInternalClockStateOf(componentConfig) {

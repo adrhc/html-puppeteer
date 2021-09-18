@@ -3,7 +3,7 @@ import SimpleComponentIllustrator from "./SimpleComponentIllustrator.js";
 
 export default class SimpleComponent extends AbstractComponent {
     /**
-     * @param {AbstractComponentOptionsWithConfigurator} options
+     * @param {AbstractComponentOptions} options
      * @param {ComponentIllustrator} options.componentIllustrator
      * @param {AbstractComponentOptions} restOfOptions
      */

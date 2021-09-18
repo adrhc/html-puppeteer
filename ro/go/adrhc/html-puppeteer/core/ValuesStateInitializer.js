@@ -1,5 +1,9 @@
 import StateInitializer from "./StateInitializer.js";
 
+/**
+ * @typedef {Bag} ValuesStateInitializerOptions
+ * @property {*} initialState
+ */
 export default class ValuesStateInitializer extends StateInitializer {
     /**
      * @type {*}

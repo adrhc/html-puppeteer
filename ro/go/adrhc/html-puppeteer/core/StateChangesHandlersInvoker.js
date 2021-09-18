@@ -1,53 +1,53 @@
 import {pushNotNull} from "../util/ArrayUtils.js";
 
 /**
- * @typedef {Object} StateChangesHandlersOptions
+ * @typedef {Object} StateChangesHandlersField
  * @property {ComponentIllustrator=} componentIllustrator
  * @property {PartsAllocator=} partsAllocator
  * @property {StateChangesHandler[]=} extraStateChangesHandlers
  */
 /**
- * @typedef {StateChangesHandlersOptions} StateChangesHandlerAdapterOptions
- * @property {string=} allChangesMethod
- * @property {string=} allPartChangesMethod
- * @property {string=} partMethodPrefix
+ * @typedef {StateChangesHandlersField} StateChangesHandlersInvokerOptions
+ * @property {string=} captureAllChangesMethod
+ * @property {string=} captureAllPartChangesMethod
+ * @property {string=} partChangeMethodPrefix
  * @property {StateChangesHandler[]=} stateChangesHandlers
  */
-export default class StateChangesHandlerAdapter {
+export default class StateChangesHandlersInvoker {
     /**
      * @type {string}
      */
-    allChangesMethod;
+    captureAllChangesMethod;
     /**
      * @type {string}
      */
-    allPartChangesMethod;
+    captureAllPartChangesMethod;
     /**
      * @type {string}
      */
-    partMethodPrefix;
+    partChangeMethodPrefix;
     /**
      * @type {StateChangesHandler[]}
      */
     stateChangesHandlers;
 
     /**
-     * @param {StateChangesHandlerAdapterOptions} options
+     * @param {StateChangesHandlersInvokerOptions} options
      */
     constructor(options) {
-        this.partMethodPrefix = options.partMethodPrefix ?? "part";
-        this.allChangesMethod = options.allChangesMethod ?? "changeOccurred";
-        this.allPartChangesMethod = options.allPartChangesMethod ?? "partChangeOccurred";
+        this.partChangeMethodPrefix = options.partChangeMethodPrefix ?? "part";
+        this.captureAllChangesMethod = options.captureAllChangesMethod ?? "changeOccurred";
+        this.captureAllPartChangesMethod = options.captureAllPartChangesMethod ?? "partChangeOccurred";
         this.stateChangesHandlers = options.stateChangesHandlers ??
-            this._createStateChangesHandlers(options);
+            this._createStateChangesInvokers(options);
     }
 
     /**
-     * @param {StateChangesHandlersOptions} options
+     * @param {StateChangesHandlersField} options
      * @return {StateChangesHandler[]}
      * @protected
      */
-    _createStateChangesHandlers({
+    _createStateChangesInvokers({
                                     componentIllustrator,
                                     partsAllocator,
                                     extraStateChangesHandlers,
@@ -87,11 +87,11 @@ export default class StateChangesHandlerAdapter {
      */
     _invokeStateChangesHandler(stateChangesHandler, methodName, typedStateChange) {
         stateChangesHandler?.[methodName](typedStateChange);
-        if (this.allChangesMethod != null) {
-            stateChangesHandler?.[this.allChangesMethod](typedStateChange);
+        if (this.captureAllChangesMethod != null) {
+            stateChangesHandler?.[this.captureAllChangesMethod](typedStateChange);
         }
-        if (this.allPartChangesMethod != null && this._isPartialChange(typedStateChange)) {
-            stateChangesHandler?.[this.allPartChangesMethod](typedStateChange);
+        if (this.captureAllPartChangesMethod != null && this._isPartialChange(typedStateChange)) {
+            stateChangesHandler?.[this.captureAllPartChangesMethod](typedStateChange);
         }
     }
 
@@ -103,7 +103,7 @@ export default class StateChangesHandlerAdapter {
     _methodNameOf(typedStateChange) {
         if (this._isPartialChange(typedStateChange)) {
             const suffix = this._partMethodVerbOf(typedStateChange.changeType);
-            return `${this.partMethodPrefix}${suffix}`;
+            return `${this.partChangeMethodPrefix}${suffix}`;
         } else {
             return this._methodVerbOf(typedStateChange.changeType);
         }
@@ -139,8 +139,8 @@ export default class StateChangesHandlerAdapter {
 
 /**
  * @param {StateChangesHandler} stateChangesHandler
- * @return {StateChangesHandlerAdapter}
+ * @return {StateChangesHandlersInvoker}
  */
-export function stateCHAOf(stateChangesHandler) {
-    return new StateChangesHandlerAdapter({stateChangesHandlers: [stateChangesHandler]})
+export function stateChangesHandlersInvokerOf(stateChangesHandler) {
+    return new StateChangesHandlersInvoker({stateChangesHandlers: [stateChangesHandler]})
 }

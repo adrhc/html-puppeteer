@@ -1,6 +1,10 @@
+/**
+ * @template SHT
+ * @abstract
+ */
 export default class StateInitializer {
     /**
-     * @abstract
+     * @param {StateHolder<SHT>} stateHolder
      */
     load(stateHolder) {}
 }

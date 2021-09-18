@@ -1,31 +1,27 @@
 import ComponentConfigurator from "./ComponentConfigurator.js";
 import StateHolder from "./StateHolder.js";
-import StateChangesHandlerAdapter from "./StateChangesHandlerAdapter.js";
+import StateChangesHandlersInvoker from "./StateChangesHandlersInvoker.js";
 import ValuesStateInitializer from "./ValuesStateInitializer.js";
 import {dataOf} from "../util/DomUtils.js";
-import {coalesce} from "../util/ObjectUtils.js";
 
-/**
- * @typedef {{[key: string]: string|number|boolean}} DataAttributes
- */
 export default class DefaultComponentConfigurator extends ComponentConfigurator {
     /**
      * @type {DataAttributes}
      */
     dataAttributes;
     /**
-     * @type {AbstractComponentOptionsWithConfigurator}
+     * @type {AbstractComponentOptions}
      */
     options;
 
     /**
-     * @param {AbstractComponentOptionsWithConfigurator} options
+     * @param {AbstractComponentOptions} options
      */
     constructor(options = {}) {
         super();
         this.options = options;
         this.dataAttributes = dataOf(this.options.elemIdOrJQuery) ?? {};
-        this.config = coalesce(this.dataAttributes, this.options);
+        this.config = _.defaults(this.options, this.dataAttributes);
     }
 
     /**
@@ -34,14 +30,22 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
      * @param {AbstractComponent} component
      */
     configure(component) {
+        this._setOptionsDataAttributesAndConfig(component);
+        component.stateHolder = this.config.stateHolder ?? new StateHolder(this.config);
+        component.stateChangesHandlersInvoker =
+            this.config.stateChangesHandlersInvoker ?? new StateChangesHandlersInvoker(this.config);
+        this._setAndConfigureStateInitializer(component);
+        this._setAndConfigureEventsBinder(component);
+    }
+
+    /**
+     * @param {AbstractComponent} component
+     * @protected
+     */
+    _setOptionsDataAttributesAndConfig(component) {
         component.dataAttributes = this.dataAttributes;
         component.options = this.options;
         component.config = this.config;
-        component.stateHolder = this.config.stateHolder ?? new StateHolder(this.config);
-        component.stateChangesHandlerAdapter =
-            this.config.stateChangesHandlerAdapter ?? new StateChangesHandlerAdapter(this.config);
-        component.stateInitializer = this.config.stateInitializer ?? this._createStateInitializer();
-        this._setAndConfigureEventsBinder(component);
     }
 
     /**
@@ -56,11 +60,13 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
     }
 
     /**
-     * @return {StateInitializer}
+     * @param {AbstractComponent} component
      * @protected
      */
-    _createStateInitializer() {
-        const initialState = this.config.initialState;
-        return initialState != null ? new ValuesStateInitializer(initialState) : undefined;
+    _setAndConfigureStateInitializer(component) {
+        component.stateInitializer = this.config.stateInitializer;
+        if (component.stateInitializer == null && this.config.initialState != null) {
+            component.stateInitializer = new ValuesStateInitializer(this.config.initialState);
+        }
     }
 }
