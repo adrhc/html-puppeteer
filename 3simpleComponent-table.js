@@ -1,4 +1,4 @@
-import {addDebugger} from "./ro/go/adrhc/html-puppeteer/util/DebuggingUtils.js";
+import {addDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/DebuggerOptionsBuilder.js";
 import SimpleComponent from "./ro/go/adrhc/html-puppeteer/core/SimpleComponent.js";
 
 $(() => {

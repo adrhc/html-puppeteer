@@ -6,7 +6,7 @@ import ComponentConfigurator from "../ComponentConfigurator.js";
 /**
  * @typedef {function(component: AbstractComponent)} ComponentConfiguratorFn
  */
-export class OptionsDsl {
+export class OptionsBuilder {
     /**
      * @type {Bag}
      */
@@ -17,6 +17,8 @@ export class OptionsDsl {
     }
 
     /**
+     * This is the equivalent of Builder.build()
+     *
      * @param {AbstractComponentOptions=} options
      * @return {AbstractComponentOptions}
      */
@@ -36,11 +38,11 @@ export class OptionsDsl {
      * adds extra defaults related ComponentConfigurator
      *
      * @param {ComponentConfiguratorFn} componentConfiguratorFn
-     * @return {OptionsDsl}
+     * @return {OptionsBuilder}
      */
-    addConfiguratorOf(componentConfiguratorFn) {
+    addConfiguratorFn(componentConfiguratorFn) {
         this._options.extraConfigurators = this._options.extraConfigurators ?? [];
-        this._options.extraConfigurators.push(componentConfiguratorOf(componentConfiguratorFn));
+        this._options.extraConfigurators.push(new FunctionComponentConfigurator(componentConfiguratorFn));
         return this;
     }
 
@@ -58,28 +60,28 @@ export class OptionsDsl {
     /**
      * adds an extra ComponentConfigurator
      *
-     * @param {ComponentConfigurator} configurator
+     * @param {ComponentConfigurator} componentConfigurator
      */
-    addConfigurator(configurator) {
+    addConfigurator(componentConfigurator) {
         this._options.extraConfigurators = this._options.extraConfigurators ?? [];
-        this._options.extraConfigurators.push(configurator);
+        this._options.extraConfigurators.push(componentConfigurator);
         return this;
     }
 
     /**
      * @param {StateInitializerProviderFn} stateInitializerProviderFn
      */
-    withStateInitializerOf(stateInitializerProviderFn) {
-        return this.addConfiguratorOf((component) => {
+    withStateInitializerFn(stateInitializerProviderFn) {
+        return this.addConfiguratorFn((component) => {
             component.stateInitializer = stateInitializerProviderFn(component);
         });
     }
 
     /**
-     * @param {BagConsumer} fn
+     * @param {BagConsumer} optionsConsumer
      */
-    doWithOptions(fn) {
-        fn(this._options)
+    withOptionsConsumer(optionsConsumer) {
+        optionsConsumer(this._options)
         return this;
     }
 }
@@ -88,20 +90,20 @@ export class OptionsDsl {
  * adds extra defaults related ComponentConfigurator
  *
  * @param {ComponentConfiguratorFn} componentConfiguratorFn
- * @return {OptionsDsl}
+ * @return {OptionsBuilder}
  */
-export function addConfiguratorOf(componentConfiguratorFn) {
-    return new OptionsDsl().addConfiguratorOf(componentConfiguratorFn);
+export function addConfiguratorFn(componentConfiguratorFn) {
+    return new OptionsBuilder().addConfiguratorFn(componentConfiguratorFn);
 }
 
 /**
  * adds an extra StateChangesHandler
  *
  * @param {StateChangesHandler} stateChangesHandler
- * @return {OptionsDsl}
+ * @return {OptionsBuilder}
  */
 export function addStateChangeHandler(stateChangesHandler) {
-    return new OptionsDsl().addStateChangeHandler(stateChangesHandler);
+    return new OptionsBuilder().addStateChangeHandler(stateChangesHandler);
 }
 
 /**
@@ -110,22 +112,14 @@ export function addStateChangeHandler(stateChangesHandler) {
  * @param {ComponentConfigurator} configurator
  */
 export function addConfigurator(configurator) {
-    return new OptionsDsl().addConfigurator(configurator);
+    return new OptionsBuilder().addConfigurator(configurator);
 }
 
 /**
  * @param {StateInitializerProviderFn} stateInitializerProviderFn
  */
-export function withStateInitializerOf(stateInitializerProviderFn) {
-    return new OptionsDsl().withStateInitializerOf(stateInitializerProviderFn);
-}
-
-/**
- * @param {ComponentConfiguratorFn} componentConfiguratorFn
- * @return {FunctionComponentConfigurator}
- */
-export function componentConfiguratorOf(componentConfiguratorFn) {
-    return new FunctionComponentConfigurator(componentConfiguratorFn);
+export function withStateInitializerFn(stateInitializerProviderFn) {
+    return new OptionsBuilder().withStateInitializerFn(stateInitializerProviderFn);
 }
 
 class FunctionComponentConfigurator extends ComponentConfigurator {

@@ -1,9 +1,8 @@
 import SimpleComponent from "../../../html-puppeteer/core/SimpleComponent.js";
 import ClockStateHandler from "./ClockStateHandler.js";
 import ValuesStateInitializer from "../../../html-puppeteer/core/ValuesStateInitializer.js";
-import {stateProcessorOf} from "../../../html-puppeteer/core/state/StateProcessor.js";
-import {withStateInitializerOf} from "../../../html-puppeteer/core/component/OptionsDsl.js";
-import {createDebuggerStateChangeHandler, DebuggerDsl} from "../../../html-puppeteer/util/DebuggingUtils.js";
+import {withStateInitializerFn} from "../../../html-puppeteer/core/component/OptionsBuilder.js";
+import {stateProcessorOf} from "../../../html-puppeteer/core/state/StateProcessorBuilder.js";
 
 /**
  * @typedef {StateHolder<ClockState>} ClockStateHolder
@@ -23,7 +22,7 @@ export default class ClockComponent extends SimpleComponent {
      * @constructor
      */
     constructor(options) {
-        super(withStateInitializerOf(stateInitializerOf).to(options));
+        super(withStateInitializerFn(stateInitializerOf).to(options));
         this.doWithClockState = this.config.doWithClockState ?? createClockStateProcessor(this).doWithState;
     }
 
@@ -57,48 +56,13 @@ export default class ClockComponent extends SimpleComponent {
 }
 
 /**
- * @param {DebuggerOptions} debuggerOptions
- * @return {ClockDsl}
- */
-export function addClockDebugger(debuggerOptions) {
-    return new ClockDsl().addClockDebugger(debuggerOptions);
-}
-
-class ClockDsl extends DebuggerDsl {
-    /**
-     * creates then adds a debugger (CopyStateChangeHandler) as an extra StateChangesHandler
-     *
-     * @param {DebuggerOptions=} debuggerOptions
-     * @return {ClockDsl}
-     */
-    addClockDebugger(debuggerOptions = {}) {
-        return this.doWithOptions((options) => {
-            options.clockExtraSCHIs = options.clockExtraSCHIs ?? [];
-            options.clockExtraSCHIs.push(createDebuggerStateChangeHandler(debuggerOptions));
-        });
-    }
-
-    /**
-     * @param {AbstractComponentOptions=} options
-     * @return {ClockOptions}
-     */
-    to(options = {}) {
-        if (this._options.clockExtraSCHIs) {
-            options.clockExtraSCHIs = options.clockExtraSCHIs ?? [];
-            options.clockExtraSCHIs.push(...this._options.clockExtraSCHIs);
-        }
-        return super.to(options);
-    }
-}
-
-/**
  * @param {ClockComponent} clock
  * @return {StateProcessor}
  */
 function createClockStateProcessor(clock) {
     return stateProcessorOf({
         component: clock,
-        extraStateChangesHandlers: [new ClockStateHandler(clock), ...clock.config.clockExtraSCHIs],
+        extraStateChangesHandlers: [new ClockStateHandler(clock), ...(clock.config.clockExtraSCHIs ?? [])],
         initialState: initialInternalClockStateOf(clock.config)
     });
 }
