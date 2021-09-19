@@ -1,15 +1,19 @@
 import SimpleComponent from "../../../html-puppeteer/core/SimpleComponent.js";
 import StateGeneratingOnClockStateChanges from "./StateGeneratingOnClockStateChanges.js";
-import ValuesStateInitializer from "../../../html-puppeteer/core/ValuesStateInitializer.js";
-import {withStateInitializerFn} from "../../../html-puppeteer/core/component/OptionsBuilder.js";
 import {stateProcessorOf} from "../../../html-puppeteer/core/state/StateProcessorBuilder.js";
 
+/**
+ * @typedef {ClockState} ClockStateProcessorOptions
+ * @property {StateGeneratorFn} stateGeneratorFn
+ * @property {StateChangesHandler[]=} clockExtraStateChangesHandlers
+ * @property {number=} interval
+ * @property {boolean=} stopped
+ */
 /**
  * @typedef {StateHolder<ClockState>} ClockStateHolder
  */
 /**
- * @typedef {AbstractComponentOptions} ClockOptions
- * @property {StateChangesHandler[]=} clockExtraStateChangesHandlers
+ * @typedef {AbstractComponentOptions & ClockStateProcessorOptions} PeriodicallyStateChangingOptions
  */
 export default class PeriodicallyStateChangingComponent extends SimpleComponent {
     /**
@@ -18,17 +22,16 @@ export default class PeriodicallyStateChangingComponent extends SimpleComponent 
     doWithClockState;
 
     /**
-     * @param {ClockOptions} options
+     * @param {PeriodicallyStateChangingOptions} options
      * @constructor
      */
     constructor(options) {
-        super(withStateInitializerFn(stateInitializerOf).to(options));
+        super(options);
         this.config.stateGeneratorFn = this.config.stateGeneratorFn ??
             PeriodicallyStateChangingComponent.DEFAULT_STATE_GENERATOR_FN;
         this.doWithClockState = this.config.doWithClockState ??
-            createClockStateProcessor(this,
-                this.config.stateGeneratorFn, clockStateOf(this.config),
-                this.config.clockExtraStateChangesHandlers).doWithState;
+            createClockStateProcessor(this,  /** @type {ClockStateProcessorOptions} */ this.config)
+                .doWithState;
     }
 
     /**
@@ -61,21 +64,17 @@ export default class PeriodicallyStateChangingComponent extends SimpleComponent 
 
 /**
  * @param {PeriodicallyStateChangingComponent} generatedStateReceiverComponent
- * @param {StateGeneratorFn} stateGeneratorFn
- * @param {ClockState=} initialClockState
- * @param {StateChangesHandler[]=} clockExtraStateChangesHandlers
+ * @param {ClockStateProcessorOptions} options
  * @return {StateProcessor}
  */
 function createClockStateProcessor(generatedStateReceiverComponent,
-                                   stateGeneratorFn,
-                                   initialClockState,
-                                   clockExtraStateChangesHandlers) {
+                                   options) {
     return stateProcessorOf({
         extraStateChangesHandlers: [
-            new StateGeneratingOnClockStateChanges(generatedStateReceiverComponent, stateGeneratorFn),
-            ...(clockExtraStateChangesHandlers ?? [])
+            new StateGeneratingOnClockStateChanges(generatedStateReceiverComponent, options.stateGeneratorFn),
+            ...(options.clockExtraStateChangesHandlers ?? [])
         ],
-        initialState: initialClockState
+        initialState: clockStateOf(options)
     });
 }
 
@@ -87,14 +86,4 @@ function clockStateOf(object) {
     const interval = object?.interval ?? 1000;
     const stopped = object?.stopped ?? false;
     return {interval, stopped};
-}
-
-/**
- * @param {AbstractComponent} component
- * @return {StateInitializer} is the PeriodicallyStateChangingComponent's state initializer
- */
-function stateInitializerOf(component) {
-    const {interval} = clockStateOf(component.config);
-    return component.config.stateInitializer ??
-        new ValuesStateInitializer(component.config.initialState ?? {interval});
 }

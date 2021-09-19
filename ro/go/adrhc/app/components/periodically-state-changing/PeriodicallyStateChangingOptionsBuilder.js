@@ -16,7 +16,7 @@ class PeriodicallyStateChangingOptionsBuilder extends DebuggerOptionsBuilder {
 
     /**
      * @param {AbstractComponentOptions=} options
-     * @return {ClockOptions}
+     * @return {PeriodicallyStateChangingOptions}
      */
     to(options = {}) {
         if (this._options.clockExtraStateChangesHandlers) {
