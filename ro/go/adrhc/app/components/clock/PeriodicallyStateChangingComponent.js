@@ -1,5 +1,5 @@
 import SimpleComponent from "../../../html-puppeteer/core/SimpleComponent.js";
-import StateGeneratorClockStateChangesHandler from "./StateGeneratorClockStateChangesHandler.js";
+import StateGeneratingOnClockStateChanges from "./StateGeneratingOnClockStateChanges.js";
 import ValuesStateInitializer from "../../../html-puppeteer/core/ValuesStateInitializer.js";
 import {withStateInitializerFn} from "../../../html-puppeteer/core/component/OptionsBuilder.js";
 import {stateProcessorOf} from "../../../html-puppeteer/core/state/StateProcessorBuilder.js";
@@ -71,7 +71,7 @@ function createClockStateProcessor(generatedStateReceiverComponent,
     return stateProcessorOf({
         component: generatedStateReceiverComponent,
         extraStateChangesHandlers: [
-            new StateGeneratorClockStateChangesHandler(generatedStateReceiverComponent, stateGeneratorFn),
+            new StateGeneratingOnClockStateChanges(generatedStateReceiverComponent, stateGeneratorFn),
             ...(clockExtraStateChangesHandlers ?? [])
         ],
         initialState: initialClockState
