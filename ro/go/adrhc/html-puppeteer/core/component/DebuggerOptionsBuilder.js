@@ -1,4 +1,4 @@
-import {OptionsBuilder} from "./OptionsBuilder.js";
+import {AbstractComponentOptionsBuilder} from "./AbstractComponentOptionsBuilder.js";
 import SimpleComponent from "../SimpleComponent.js";
 import CopyStateChangeHandler from "../CopyStateChangeHandler.js";
 
@@ -8,7 +8,7 @@ import CopyStateChangeHandler from "../CopyStateChangeHandler.js";
  * @property {string} [debuggerElemIdOrJQuery="debugger"]
  * @property {string=} initialDebuggerMessage
  */
-export default class DebuggerOptionsBuilder extends OptionsBuilder {
+export default class DebuggerOptionsBuilder extends AbstractComponentOptionsBuilder {
     /**
      * creates then adds a debugger (CopyStateChangeHandler) as an extra StateChangesHandler
      *

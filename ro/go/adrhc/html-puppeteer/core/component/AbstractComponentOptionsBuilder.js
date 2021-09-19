@@ -6,7 +6,7 @@ import ComponentConfigurator from "../ComponentConfigurator.js";
 /**
  * @typedef {function(component: AbstractComponent)} ComponentConfiguratorFn
  */
-export class OptionsBuilder {
+export class AbstractComponentOptionsBuilder {
     /**
      * @type {Bag}
      */
@@ -38,7 +38,7 @@ export class OptionsBuilder {
      * adds extra defaults related ComponentConfigurator
      *
      * @param {ComponentConfiguratorFn} componentConfiguratorFn
-     * @return {OptionsBuilder}
+     * @return {AbstractComponentOptionsBuilder}
      */
     addConfiguratorFn(componentConfiguratorFn) {
         this._options.extraConfigurators = this._options.extraConfigurators ?? [];
@@ -90,20 +90,20 @@ export class OptionsBuilder {
  * adds extra defaults related ComponentConfigurator
  *
  * @param {ComponentConfiguratorFn} componentConfiguratorFn
- * @return {OptionsBuilder}
+ * @return {AbstractComponentOptionsBuilder}
  */
 export function addConfiguratorFn(componentConfiguratorFn) {
-    return new OptionsBuilder().addConfiguratorFn(componentConfiguratorFn);
+    return new AbstractComponentOptionsBuilder().addConfiguratorFn(componentConfiguratorFn);
 }
 
 /**
  * adds an extra StateChangesHandler
  *
  * @param {StateChangesHandler} stateChangesHandler
- * @return {OptionsBuilder}
+ * @return {AbstractComponentOptionsBuilder}
  */
 export function addStateChangeHandler(stateChangesHandler) {
-    return new OptionsBuilder().addStateChangeHandler(stateChangesHandler);
+    return new AbstractComponentOptionsBuilder().addStateChangeHandler(stateChangesHandler);
 }
 
 /**
@@ -112,14 +112,14 @@ export function addStateChangeHandler(stateChangesHandler) {
  * @param {ComponentConfigurator} configurator
  */
 export function addConfigurator(configurator) {
-    return new OptionsBuilder().addConfigurator(configurator);
+    return new AbstractComponentOptionsBuilder().addConfigurator(configurator);
 }
 
 /**
  * @param {StateInitializerProviderFn} stateInitializerProviderFn
  */
 export function withStateInitializerFn(stateInitializerProviderFn) {
-    return new OptionsBuilder().withStateInitializerFn(stateInitializerProviderFn);
+    return new AbstractComponentOptionsBuilder().withStateInitializerFn(stateInitializerProviderFn);
 }
 
 class FunctionComponentConfigurator extends ComponentConfigurator {
