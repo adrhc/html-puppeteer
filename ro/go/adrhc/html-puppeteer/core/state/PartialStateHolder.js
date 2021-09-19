@@ -1,7 +1,7 @@
 import StateHolder from "./StateHolder.js";
 import {isTrue} from "../../util/AssertionUtils.js";
-import StateChange from "./change/StateChange.js";
 import {insert, removeByIndex} from "../../util/ArrayUtils.js";
+import PartStateChange from "./change/PartStateChange.js";
 
 /**
  * @template SCT, SCP
@@ -30,13 +30,15 @@ export default class PartialStateHolder extends StateHolder {
             return false;
         }
 
+        const previousState = dontRecordStateEvents ? undefined : _.cloneDeep(this.currentState);
         const previousStateOrPart = this._replacePart(newPart, newPartName, previousPartName);
 
         if (dontRecordStateEvents) {
             return true;
         }
 
-        const stateChange = new StateChange(previousStateOrPart, newPart, previousPartName, newPartName);
+        const newState = _.cloneDeep(this.currentState);
+        const stateChange = new PartStateChange(previousStateOrPart, newPart, previousPartName, newPartName, previousState, newState);
         return this.collectStateChanges(stateChange);
     }
 

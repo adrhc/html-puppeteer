@@ -1,28 +1,33 @@
 import StateChangesHandler from "./StateChangesHandler.js";
 
+/**
+ * @template SCT, SCP
+ *
+ * @interface
+ */
 export default class PartialStateChangesHandler extends StateChangesHandler {
     /**
-     * @param {StateChange} stateChange
+     * @param {PartStateChange} partStateChange
      */
-    partRemoved(stateChange) {}
+    partRemoved(partStateChange) {}
 
     /**
-     * @param {StateChange} stateChange
+     * @param {PartStateChange} partStateChange
      */
-    partCreated(stateChange) {}
+    partCreated(partStateChange) {}
 
     /**
-     * @param {StateChange} stateChange
+     * @param {PartStateChange} partStateChange
      */
-    partRelocated(stateChange) {}
+    partRelocated(partStateChange) {}
 
     /**
-     * @param {StateChange} stateChange
+     * @param {PartStateChange} partStateChange
      */
-    partReplaced(stateChange) {}
+    partReplaced(partStateChange) {}
 
     /**
-     * @param {StateChange} stateChange
+     * @param {PartStateChange} partStateChange
      */
-    partChangeOccurred(stateChange) {}
+    partChangeOccurred(partStateChange) {}
 }

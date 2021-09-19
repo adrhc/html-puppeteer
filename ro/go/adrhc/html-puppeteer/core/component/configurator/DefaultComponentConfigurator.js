@@ -1,8 +1,8 @@
 import ComponentConfigurator from "./ComponentConfigurator.js";
-import StateHolder from "../../state/StateHolder.js";
 import StateChangesHandlersInvoker from "../../state-processor/StateChangesHandlersInvoker.js";
 import ValuesStateInitializer from "../ValuesStateInitializer.js";
 import {dataOf} from "../../../util/DomUtils.js";
+import PartialStateHolder from "../../state/PartialStateHolder.js";
 
 export default class DefaultComponentConfigurator extends ComponentConfigurator {
     /**
@@ -31,7 +31,7 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
      */
     configure(component) {
         this._setOptionsDataAttributesAndConfig(component);
-        component.stateHolder = this.config.stateHolder ?? new StateHolder(this.config);
+        component.stateHolder = this.config.stateHolder ?? new PartialStateHolder(this.config);
         component.stateChangesHandlersInvoker =
             this.config.stateChangesHandlersInvoker ?? new StateChangesHandlersInvoker(this.config);
         this._setAndConfigureStateInitializer(component);

@@ -24,8 +24,8 @@ export default class StateChange {
      *
      * @param {SCT|SCP=} previousStateOrPart
      * @param {SCT|SCP=} newStateOrPart
-     * @param {string|number=} previousPartName is the "old" part name, if any; could be empty when is about a "create"
-     * @param {string|number=} newPartName is the "new" part name; could be empty when replacing with nothing (aka "delete"); by default keeping the previous part name if the new one is not provided and newStateOrPart is not empty
+     * @param {PartName=} previousPartName is the "old" part name, if any; could be empty when is about a "create"
+     * @param {PartName=} newPartName is the "new" part name; could be empty when replacing with nothing (aka "delete"); by default keeping the previous part name if the new one is not provided and newStateOrPart is not empty
      */
     constructor(previousStateOrPart, newStateOrPart, previousPartName,
                 newPartName = newStateOrPart != null ? previousPartName : undefined) {

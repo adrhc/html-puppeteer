@@ -2,6 +2,7 @@ import StateChange from "./StateChange.js";
 
 /**
  * @template SCT, SCP
+ *
  * @extends {StateChange<SCT, SCP>}
  */
 export default class TypedStateChange extends StateChange {
