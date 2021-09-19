@@ -1,4 +1,4 @@
-import ComponentIllustrator from "./ComponentIllustrator.js";
+import ComponentIllustrator from "./state-changes-handler/ComponentIllustrator.js";
 import SimpleView from "./SimpleView.js";
 
 /**

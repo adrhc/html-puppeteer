@@ -1,4 +1,4 @@
-import StateChangesHandler from "./StateChangesHandler.js";
+import StateChangesHandler from "../StateChangesHandler.js";
 
 export default class ComponentIllustrator extends StateChangesHandler {
     /**
