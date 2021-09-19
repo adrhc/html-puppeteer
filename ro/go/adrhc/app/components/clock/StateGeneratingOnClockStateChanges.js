@@ -8,6 +8,7 @@ import StateChangesHandler from "../../../html-puppeteer/core/StateChangesHandle
  */
 /**
  * @template SCT, SCP
+ * @extends {StateChangesHandler}
  */
 export default class StateGeneratingOnClockStateChanges extends StateChangesHandler {
     /**
@@ -26,6 +27,7 @@ export default class StateGeneratingOnClockStateChanges extends StateChangesHand
     /**
      * @param {AbstractComponent} generatedStateReceiverComponent
      * @param {StateGeneratorFn} stateGeneratorFn
+     * @constructor
      */
     constructor(generatedStateReceiverComponent, stateGeneratorFn) {
         super();
