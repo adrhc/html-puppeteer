@@ -30,14 +30,19 @@ export default class PartialStateHolder extends StateHolder {
             return false;
         }
 
+        // currentState will be changed by _replacePart
         const previousState = dontRecordStateEvents ? undefined : _.cloneDeep(this.currentState);
+
         const previousPart = this._replacePart(newPart, newPartName, previousPartName);
 
         if (dontRecordStateEvents) {
             return true;
         }
 
+        // cloning because a subsequent partial change might alter the _currentState
         const newState = _.cloneDeep(this.currentState);
+
+        // parts never change partially so there's no need to clone them
         const stateChange = this._partialStateChangesOf(previousPart, newPart, previousPartName, newPartName, previousState, newState);
         return this.collectStateChanges(stateChange);
     }

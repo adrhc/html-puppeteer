@@ -12,9 +12,10 @@ $(() => {
         .doPeriodicallyWithState(stateHolder => {
             if (stateHolder.currentState == null) {
                 stateHolder.replace({interval: stateHolder.config.interval});
+            } else {
+                const part = generateDogsOrCats(3);
+                stateHolder.replacePart(part.value, part.name);
             }
-            const part = generateDogsOrCats(5);
-            stateHolder.replacePart(part.value, part.name);
         })
         .addDebugger({debuggerElemIdOrJQuery: "component-debugger"})
         .to({

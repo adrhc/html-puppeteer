@@ -72,7 +72,10 @@ export default class StateHolder {
             return true;
         }
 
-        const stateChanges = this._stateChangesOf(previousState, newState);
+        // cloning because a subsequent partial change might alter the _currentState which now is newState
+        const clonedNewState = _.cloneDeep(newState);
+
+        const stateChanges = this._stateChangesOf(previousState, clonedNewState);
 
         return this.collectStateChanges(stateChanges);
     }
