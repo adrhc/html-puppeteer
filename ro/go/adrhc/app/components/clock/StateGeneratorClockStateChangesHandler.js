@@ -4,7 +4,7 @@ import StateChangesHandler from "../../../html-puppeteer/core/StateChangesHandle
  * @typedef {{stopped: boolean, interval: number}} ClockState
  */
 /**
- * @typedef {function(component: AbstractComponent, date: Date): *} StateGeneratorFn
+ * @typedef {function(generatedStateReceiverComponent: AbstractComponent, date: Date): *} StateGeneratorFn
  */
 /**
  * @template SCT, SCP
@@ -13,23 +13,23 @@ export default class StateGeneratorClockStateChangesHandler extends StateChanges
     /**
      * @type {AbstractComponent}
      */
-    component;
+    generatedStateReceiverComponent;
     /**
      * @type {number|undefined}
      */
-    handle;
+    setIntervalHandle;
     /**
      * @type {StateGeneratorFn}
      */
     stateGeneratorFn;
 
     /**
-     * @param {AbstractComponent} component
+     * @param {AbstractComponent} generatedStateReceiverComponent
      * @param {StateGeneratorFn} stateGeneratorFn
      */
-    constructor(component, stateGeneratorFn) {
+    constructor(generatedStateReceiverComponent, stateGeneratorFn) {
         super();
-        this.component = component;
+        this.generatedStateReceiverComponent = generatedStateReceiverComponent;
         this.stateGeneratorFn = stateGeneratorFn;
     }
 
@@ -46,30 +46,30 @@ export default class StateGeneratorClockStateChangesHandler extends StateChanges
     }
 
     /**
-     * starts the component
+     * starts the generatedStateReceiverComponent
      *
      * @protected
      */
     _start(interval) {
         this._stop();
-        const component = this.component;
+        const generatedStateReceiverComponent = this.generatedStateReceiverComponent;
         const stateGeneratorFn = this.stateGeneratorFn;
-        this.handle = setInterval(() => {
-            component.doWithState((state) =>
-                state.replace(stateGeneratorFn(component, new Date())));
+        this.setIntervalHandle = setInterval(() => {
+            generatedStateReceiverComponent.doWithState((state) =>
+                state.replace(stateGeneratorFn(generatedStateReceiverComponent, new Date())));
         }, interval);
-        console.log("component started");
+        console.log("clock started");
     }
 
     /**
      * @protected
      */
     _stop() {
-        if (this.handle == null) {
+        if (this.setIntervalHandle == null) {
             return;
         }
-        clearInterval(this.handle);
-        this.handle = undefined;
-        console.log("component stopped");
+        clearInterval(this.setIntervalHandle);
+        this.setIntervalHandle = undefined;
+        console.log("clock stopped");
     }
 }

@@ -3,7 +3,7 @@ import {namedBtn} from "../../../html-puppeteer/util/SelectorUtils.js";
 
 export default class Scenario6EventsBinder extends EventsBinder {
     attachEventHandlers() {
-        const clock = /** @type {ClockComponent} */ this.component;
+        const clock = /** @type {PeriodicallyStateChangingComponent} */ this.component;
         $(namedBtn("start")).on("click.Scenario6EventsBinder", () => clock.startClock());
         $(namedBtn("stop")).on("click.Scenario6EventsBinder", () => clock.stopClock());
         $(namedBtn("change")).on("click.Scenario6EventsBinder", () => {
