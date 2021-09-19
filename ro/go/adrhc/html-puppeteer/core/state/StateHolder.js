@@ -2,40 +2,40 @@ import StateChangesCollector from "./StateChangesCollector.js";
 import StateChange from "./change/StateChange.js";
 
 /**
- * @template SHT
+ * @template SCT
  * @typedef {Object} StateHolderOptions
- * @property {StateChangeEnhancer<SHT, SHT>=} stateChangeEnhancer
- * @property {StateChangesCollector<SHT, SHT>=} stateChangesCollector
+ * @property {StateChangeEnhancer<SCT, SCT>=} stateChangeEnhancer
+ * @property {StateChangesCollector<SCT, SCT>=} stateChangesCollector
  */
 export default class StateHolder {
     /**
-     * @type {SHT}
+     * @type {SCT}
      * @protected
      */
     _currentState;
 
     /**
-     * @return {SHT}
+     * @return {SCT}
      */
     get currentState() {
         return this._currentState;
     }
 
     /**
-     * @param {SHT} currentState
+     * @param {SCT} currentState
      */
     set currentState(currentState) {
         this._currentState = currentState;
     }
 
     /**
-     * @type {StateChangesCollector<SHT, SHT>}
+     * @type {StateChangesCollector<SCT, SCT>}
      * @protected
      */
     _stateChangesCollector;
 
     /**
-     * @return {StateChangesCollector<SHT, SHT>}
+     * @return {StateChangesCollector<SCT, SCT>}
      */
     get stateChangesCollector() {
         return this._stateChangesCollector;
@@ -43,15 +43,16 @@ export default class StateHolder {
 
     /**
      * @param {StateHolderOptions=} options
+     * @constructor
      */
-    constructor({stateChangeEnhancer, stateChangesCollector} = {}) {
+    constructor({stateChangeEnhancer, stateChangesCollector}) {
         this._stateChangesCollector = stateChangesCollector ?? new StateChangesCollector(stateChangeEnhancer);
     }
 
     /**
-     * @param {SHT=} newState
+     * @param {SCT=} newState
      * @param {boolean=} dontRecordChanges
-     * @return {StateChange<SHT, SHT>|boolean} the newly created StateChange or, if dontRecordChanges = true, whether a state change occurred
+     * @return {StateChange<SCT, SCT>|boolean} the newly created StateChange or, if dontRecordChanges = true, whether a state change occurred
      */
     replace(newState, dontRecordChanges) {
         if (this._currentStateEquals(newState)) {
@@ -70,9 +71,9 @@ export default class StateHolder {
     }
 
     /**
-     * @param {SHT=} previousState
-     * @param {SHT=} newState
-     * @return {StateChange<SHT, SHT>[]}
+     * @param {SCT=} previousState
+     * @param {SCT=} newState
+     * @return {StateChange<SCT, SCT>[]}
      * @protected
      */
     _stateChangesOf(previousState, newState) {
@@ -80,8 +81,8 @@ export default class StateHolder {
     }
 
     /**
-     * @param {SHT} [newState] is the new state value to store
-     * @return {SHT} the previous state
+     * @param {SCT} [newState] is the new state value to store
+     * @return {SCT} the previous state
      * @protected
      */
     _replaceImpl(newState) {
@@ -91,7 +92,7 @@ export default class StateHolder {
     }
 
     /**
-     * @param {SHT=} anotherState
+     * @param {SCT=} anotherState
      * @return {boolean}
      * @protected
      */
@@ -100,7 +101,7 @@ export default class StateHolder {
     }
 
     /**
-     * @return {StateChange<SHT, SHT>[]|undefined}
+     * @return {StateChange<SCT, SCT>[]|undefined}
      */
     collectStateChanges(stateChanges) {
         return stateChanges.map(sc => this.stateChangesCollector.collect(sc)).filter(it => it != null);

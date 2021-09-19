@@ -14,10 +14,11 @@ export default class StateChangesCollector {
     stateChanges = [];
 
     /**
-     * @param {StateChangeEnhancer<SCT, SCP>} stateChangeEnhancer
+     * @param {StateChangeEnhancer<SCT, SCP>=} stateChangeEnhancer
+     * @constructor
      */
-    constructor(stateChangeEnhancer = new TypeStateChangeEnhancer()) {
-        this.stateChangeEnhancer = stateChangeEnhancer;
+    constructor(stateChangeEnhancer) {
+        this.stateChangeEnhancer = stateChangeEnhancer ?? new TypeStateChangeEnhancer();
     }
 
     /**
