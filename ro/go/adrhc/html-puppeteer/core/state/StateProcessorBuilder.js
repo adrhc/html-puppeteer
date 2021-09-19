@@ -6,7 +6,6 @@ import {StateProcessor} from "./StateProcessor.js";
  * @typedef {Object} StateProcessorOptions
  * @property {StateHolder} stateHolder
  * @property {StateChangesHandlersInvoker} stateChangesHandlersInvoker
- * @property {DoWithStateFn} doWithState
  */
 /**
  * @typedef {StateProcessorOptions & StateHolderOptions & StateChangesHandlersInvokerOptions} StateProcessorBuilderOptions
@@ -32,14 +31,11 @@ class StateProcessorBuilder {
     build() {
         const stateChangesHandlersInvoker = new StateChangesHandlersInvoker(this._options);
         const stateHolder = new StateHolder(this._options);
-        const doWithState = (stateUpdaterFn) => {
-            stateUpdaterFn(stateHolder);
-            stateChangesHandlersInvoker.processStateChanges(stateHolder.stateChangesCollector);
-        };
+        const stateProcessor = new StateProcessor(stateHolder, stateChangesHandlersInvoker);
         if (this._options.initialState != null) {
-            doWithState((sh) => sh.replace(this._options.initialState));
+            stateProcessor.doWithState((sh) => sh.replace(this._options.initialState));
         }
-        return new StateProcessor(stateHolder, stateChangesHandlersInvoker, doWithState);
+        return stateProcessor;
     }
 }
 

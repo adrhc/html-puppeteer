@@ -1,6 +1,7 @@
 import SimpleComponent from "../../../html-puppeteer/core/SimpleComponent.js";
 import StateGeneratingOnClockStateChanges from "./StateGeneratingOnClockStateChanges.js";
 import {stateProcessorOf} from "../../../html-puppeteer/core/state/StateProcessorBuilder.js";
+import {StateProcessor} from "../../../html-puppeteer/core/state/StateProcessor.js";
 
 /**
  * @typedef {ClockState} ClockStateProcessorOptions
@@ -17,9 +18,9 @@ import {stateProcessorOf} from "../../../html-puppeteer/core/state/StateProcesso
  */
 export default class PeriodicallyStateChangingComponent extends SimpleComponent {
     /**
-     * @type {function(stateUpdaterFn: function(state: ClockStateHolder))}
+     * @type {StateProcessor}
      */
-    doWithClockState;
+    clockStateProcessor;
 
     /**
      * @param {PeriodicallyStateChangingOptions} options
@@ -29,9 +30,8 @@ export default class PeriodicallyStateChangingComponent extends SimpleComponent 
         super(options);
         this.config.stateGeneratorFn = this.config.stateGeneratorFn ??
             PeriodicallyStateChangingComponent.DEFAULT_STATE_GENERATOR_FN;
-        this.doWithClockState = this.config.doWithClockState ??
-            createClockStateProcessor(this,  /** @type {ClockStateProcessorOptions} */ this.config)
-                .doWithState;
+        this.clockStateProcessor = this.config.clockStateProcessor ??
+            createClockStateProcessor(this,  /** @type {ClockStateProcessorOptions} */ this.config);
     }
 
     /**
@@ -45,7 +45,7 @@ export default class PeriodicallyStateChangingComponent extends SimpleComponent 
      * stops the clock
      */
     startClock() {
-        this.doWithClockState((clockState) => {
+        this.clockStateProcessor.doWithState((clockState) => {
             const state = clockState.currentState;
             clockState.replace({...state, stopped: false});
         })
@@ -55,7 +55,7 @@ export default class PeriodicallyStateChangingComponent extends SimpleComponent 
      * stops the clock
      */
     stopClock() {
-        this.doWithClockState((clockState) => {
+        this.clockStateProcessor.doWithState((clockState) => {
             const state = clockState.currentState;
             clockState.replace({...state, stopped: true});
         })
@@ -80,7 +80,7 @@ function createClockStateProcessor(generatedStateReceiverComponent,
 
 /**
  * @param {Bag=} object
- * @return {ClockState} is the initial state used to construct PeriodicallyStateChangingComponent.doWithClockState
+ * @return {ClockState}
  */
 function clockStateOf(object) {
     const interval = object?.interval ?? 1000;
