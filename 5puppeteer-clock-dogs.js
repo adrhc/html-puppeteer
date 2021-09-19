@@ -5,7 +5,7 @@ import PeriodicallyStateChangingComponent from "./ro/go/adrhc/app/components/clo
 import {generateDogs} from "./ro/go/adrhc/app/Generators.js";
 
 $(() => {
-    COMPONENTS_FACTORY.registerType("clock", (options) => new PeriodicallyStateChangingComponent(options));
+    COMPONENTS_FACTORY.registerType("periodically-state-changing", (options) => new PeriodicallyStateChangingComponent(options));
     PUPPETEER.animate(addDebugger().to({
         stateGeneratorFn: (component) => generateDogs(5, component.dataAttributes)
     }));

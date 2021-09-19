@@ -6,7 +6,7 @@ import Scenario6EventsBinder from "./ro/go/adrhc/app/scenarios/6puppeteer+state-
 import {addClockDebugger} from "./ro/go/adrhc/app/components/clock/ClockOptionsBuilder.js";
 
 $(() => {
-    COMPONENTS_FACTORY.registerType("clock", (options) => new PeriodicallyStateChangingComponent(options));
+    COMPONENTS_FACTORY.registerType("periodically-state-changing", (options) => new PeriodicallyStateChangingComponent(options));
     PUPPETEER.animate(addClockDebugger({debuggerElemIdOrJQuery: "internal-clock-debugger"})
         .addDebugger({debuggerElemIdOrJQuery: "component-debugger"})
         .to({

@@ -1,11 +1,11 @@
 import DebuggerOptionsBuilder from "../../../html-puppeteer/core/component/DebuggerOptionsBuilder.js";
 
-class ClockOptionsBuilder extends DebuggerOptionsBuilder {
+class PeriodicallyStateChangingOptionsBuilder extends DebuggerOptionsBuilder {
     /**
      * creates then adds a debugger (CopyStateChangeHandler) as an extra StateChangesHandler
      *
      * @param {DebuggerOptions=} debuggerOptions
-     * @return {ClockOptionsBuilder}
+     * @return {PeriodicallyStateChangingOptionsBuilder}
      */
     addClockDebugger(debuggerOptions = {}) {
         return this.withOptionsConsumer((options) => {
@@ -29,8 +29,8 @@ class ClockOptionsBuilder extends DebuggerOptionsBuilder {
 
 /**
  * @param {DebuggerOptions} debuggerOptions
- * @return {ClockOptionsBuilder}
+ * @return {PeriodicallyStateChangingOptionsBuilder}
  */
 export function addClockDebugger(debuggerOptions) {
-    return new ClockOptionsBuilder().addClockDebugger(debuggerOptions);
+    return new PeriodicallyStateChangingOptionsBuilder().addClockDebugger(debuggerOptions);
 }
