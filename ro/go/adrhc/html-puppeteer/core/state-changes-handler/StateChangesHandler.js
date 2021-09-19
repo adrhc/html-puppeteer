@@ -1,7 +1,5 @@
 /**
  * @template SCT, SCP
- *
- * @interface
  */
 export default class StateChangesHandler {
     /**

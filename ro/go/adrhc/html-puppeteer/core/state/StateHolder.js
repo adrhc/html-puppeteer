@@ -9,6 +9,11 @@ import StateChange from "./change/StateChange.js";
  */
 export default class StateHolder {
     /**
+     * @type {Bag}
+     */
+    config;
+
+    /**
      * @type {SCT}
      * @protected
      */
@@ -43,9 +48,11 @@ export default class StateHolder {
 
     /**
      * @param {StateHolderOptions=} options
+     * @param {Bag=} restOfOptions
      * @constructor
      */
-    constructor({stateChangeEnhancer, stateChangesCollector}) {
+    constructor({stateChangeEnhancer, stateChangesCollector, ...restOfOptions}) {
+        this.config = restOfOptions;
         this._stateChangesCollector = stateChangesCollector ?? new StateChangesCollector(stateChangeEnhancer);
     }
 

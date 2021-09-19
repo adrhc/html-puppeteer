@@ -1,6 +1,7 @@
-import StateChangesHandler from "./StateChangesHandler.js";
+import PartialStateChangesHandler from "./PartialStateChangesHandler.js";
+import StateChange from "../state/change/StateChange.js";
 
-export default class CopyStatesChangeHandler extends StateChangesHandler {
+export default class CopyStatesChangeHandler extends PartialStateChangesHandler {
     /**
      * @type {AbstractComponent}
      */
@@ -18,6 +19,13 @@ export default class CopyStatesChangeHandler extends StateChangesHandler {
         super();
         this.component = component;
         this.copyAsJson = copyAsJson;
+    }
+
+    /**
+     * @param {PartStateChange} partStateChange
+     */
+    partChangeOccurred(partStateChange) {
+        this.changeOccurred(new StateChange(partStateChange.oldState, partStateChange.newState))
     }
 
     /**

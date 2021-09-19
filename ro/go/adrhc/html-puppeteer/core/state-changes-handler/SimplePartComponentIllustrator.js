@@ -1,11 +1,33 @@
-import ComponentIllustrator from "./ComponentIllustrator.js";
 import StateChange from "../state/change/StateChange.js";
+import SimpleView from "../view/SimpleView.js";
+import ComponentIllustrator from "./ComponentIllustrator.js";
 
 /**
- * @implements {PartialStateChangesHandler}
- * @extends {ComponentIllustrator}
+ * @typedef {AbstractTemplatingViewOptions} AbstractTemplatingViewOptionsWithView
+ * @property {SimpleView=} view
  */
-export default class PartComponentIllustrator extends ComponentIllustrator {
+/**
+ * @implements {PartialStateChangesHandler}
+ */
+export default class SimplePartComponentIllustrator extends ComponentIllustrator {
+    /**
+     * @param {AbstractTemplatingViewOptionsWithView} options
+     * @param {AbstractTemplatingViewOptions=} viewConfig
+     */
+    constructor({view, ...viewConfig}) {
+        super();
+        this.view = view ?? this._createView(viewConfig);
+    }
+
+    /**
+     * @param {AbstractTemplatingViewOptions} viewConfig
+     * @return {SimpleView}
+     * @protected
+     */
+    _createView(viewConfig) {
+        return new SimpleView(viewConfig);
+    }
+
     /**
      * @param {PartStateChange} partStateChange
      */

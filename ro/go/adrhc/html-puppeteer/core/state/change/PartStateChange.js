@@ -15,16 +15,16 @@ export default class PartStateChange extends StateChange {
 
     /**
      *
-     * @param {SCT|SCP} previousStateOrPart
-     * @param {SCT|SCP} newStateOrPart
+     * @param {SCP} previousPart
+     * @param {SCP} newPart
      * @param {PartName=} previousPartName
      * @param {PartName=} newPartName
      * @param {SCT} oldState
      * @param {SCT} newState
      */
-    constructor(previousStateOrPart, newStateOrPart, previousPartName,
+    constructor(previousPart, newPart, previousPartName,
                 newPartName, oldState, newState) {
-        super(previousStateOrPart, newStateOrPart, previousPartName, newPartName);
+        super(previousPart, newPart, previousPartName, newPartName);
         this.oldState = oldState;
         this.newState = newState;
     }

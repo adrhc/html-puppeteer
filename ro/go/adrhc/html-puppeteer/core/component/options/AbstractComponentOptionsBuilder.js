@@ -78,6 +78,8 @@ export class AbstractComponentOptionsBuilder {
     }
 
     /**
+     * Useful when on has to also check the current this._options values.
+     *
      * @param {BagConsumer} optionsConsumer
      */
     withOptionsConsumer(optionsConsumer) {
