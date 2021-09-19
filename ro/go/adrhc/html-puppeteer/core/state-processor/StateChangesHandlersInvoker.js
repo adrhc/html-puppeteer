@@ -88,10 +88,10 @@ export default class StateChangesHandlersInvoker {
     _invokeStateChangesHandler(stateChangesHandler, methodName, typedStateChange) {
         stateChangesHandler?.[methodName]?.(typedStateChange);
         if (this.captureAllChangesMethod != null) {
-            stateChangesHandler?.[this.captureAllChangesMethod]?.(typedStateChange);
+            stateChangesHandler[this.captureAllChangesMethod]?.(typedStateChange);
         }
         if (this.captureAllPartChangesMethod != null && this._isPartialChange(typedStateChange)) {
-            stateChangesHandler?.[this.captureAllPartChangesMethod]?.(typedStateChange);
+            stateChangesHandler[this.captureAllPartChangesMethod]?.(typedStateChange);
         }
     }
 
