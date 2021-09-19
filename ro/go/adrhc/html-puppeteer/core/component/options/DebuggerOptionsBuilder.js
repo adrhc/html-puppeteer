@@ -1,6 +1,6 @@
 import {AbstractComponentOptionsBuilder} from "./AbstractComponentOptionsBuilder.js";
-import SimpleComponent from "../SimpleComponent.js";
-import CopyStateChangeHandler from "../CopyStateChangeHandler.js";
+import SimpleComponent from "../../SimpleComponent.js";
+import CopyStateChangeHandler from "../../CopyStateChangeHandler.js";
 
 /**
  * @typedef {Object} DebuggerOptions

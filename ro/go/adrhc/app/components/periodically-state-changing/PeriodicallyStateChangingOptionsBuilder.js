@@ -1,4 +1,4 @@
-import DebuggerOptionsBuilder from "../../../html-puppeteer/core/component/DebuggerOptionsBuilder.js";
+import DebuggerOptionsBuilder from "../../../html-puppeteer/core/component/options/DebuggerOptionsBuilder.js";
 
 class PeriodicallyStateChangingOptionsBuilder extends DebuggerOptionsBuilder {
     /**
