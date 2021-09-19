@@ -1,12 +1,6 @@
 /**
  * @typedef {function(stateUpdaterFn: function(state: StateHolder))} DoWithStateFn
  */
-/**
- * @typedef {Object} StateProcessorOptions
- * @property {StateHolder} stateHolder
- * @property {StateChangesHandlersInvoker} stateChangesHandlersInvoker
- * @property {DoWithStateFn} doWithState
- */
 export class StateProcessor {
     /**
      * @type {DoWithStateFn}
@@ -22,9 +16,12 @@ export class StateProcessor {
     stateHolder;
 
     /**
-     * @param {StateProcessorOptions} options
+     * @param {StateHolder} stateHolder
+     * @param {StateChangesHandlersInvoker} stateChangesHandlersInvoker
+     * @param {DoWithStateFn} doWithState
+     * @constructor
      */
-    constructor({stateHolder, stateChangesHandlersInvoker, doWithState}) {
+    constructor(stateHolder, stateChangesHandlersInvoker, doWithState) {
         this.stateHolder = stateHolder;
         this.stateChangesHandlersInvoker = stateChangesHandlersInvoker;
         this.doWithState = doWithState;

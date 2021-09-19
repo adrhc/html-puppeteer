@@ -3,8 +3,13 @@ import StateHolder from "../StateHolder.js";
 import {StateProcessor} from "./StateProcessor.js";
 
 /**
+ * @typedef {Object} StateProcessorOptions
+ * @property {StateHolder} stateHolder
+ * @property {StateChangesHandlersInvoker} stateChangesHandlersInvoker
+ * @property {DoWithStateFn} doWithState
+ */
+/**
  * @typedef {StateProcessorOptions & StateHolderOptions & StateChangesHandlersInvokerOptions} StateProcessorBuilderOptions
- * @property {AbstractComponent=} component
  * @property {*=} initialState
  */
 class StateProcessorBuilder {
@@ -27,15 +32,14 @@ class StateProcessorBuilder {
     build() {
         const stateChangesHandlersInvoker = new StateChangesHandlersInvoker(this._options);
         const stateHolder = new StateHolder(this._options);
-        const doWithStateFn = (stateUpdaterFn) => {
+        const doWithState = (stateUpdaterFn) => {
             stateUpdaterFn(stateHolder);
             stateChangesHandlersInvoker.processStateChanges(stateHolder.stateChangesCollector);
         };
-        const doWithState = doWithStateFn.bind(this._options.component);
         if (this._options.initialState != null) {
             doWithState((sh) => sh.replace(this._options.initialState));
         }
-        return new StateProcessor({stateHolder, stateChangesHandlersInvoker, doWithState});
+        return new StateProcessor(stateHolder, stateChangesHandlersInvoker, doWithState);
     }
 }
 

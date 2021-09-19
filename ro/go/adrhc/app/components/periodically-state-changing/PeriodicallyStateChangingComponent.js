@@ -71,7 +71,6 @@ function createClockStateProcessor(generatedStateReceiverComponent,
                                    initialClockState,
                                    clockExtraStateChangesHandlers) {
     return stateProcessorOf({
-        component: generatedStateReceiverComponent,
         extraStateChangesHandlers: [
             new StateGeneratingOnClockStateChanges(generatedStateReceiverComponent, stateGeneratorFn),
             ...(clockExtraStateChangesHandlers ?? [])
