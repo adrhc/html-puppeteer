@@ -1,4 +1,4 @@
-import AbstractComponent from "./AbstractComponent.js";
+import AbstractComponent from "./component/AbstractComponent.js";
 import SimpleComponentIllustrator from "./SimpleComponentIllustrator.js";
 
 export default class SimpleComponent extends AbstractComponent {
