@@ -15,5 +15,6 @@ export function generateDogs(max, dataAttributes = {}) {
     rangeIterator(1, count, (i) => {
         dogs.push({id: i, name: `dog${i}`});
     });
-    return {dogs, ...dataAttributes};
+    const {interval} = dataAttributes;
+    return {dogs, interval};
 }
