@@ -1,4 +1,4 @@
-import EventsBinder from "../../../html-puppeteer/core/EventsBinder.js";
+import EventsBinder from "../../../html-puppeteer/core/component/EventsBinder.js";
 import {namedBtn} from "../../../html-puppeteer/util/SelectorUtils.js";
 
 export default class Scenario6EventsBinder extends EventsBinder {

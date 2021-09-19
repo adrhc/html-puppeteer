@@ -1,5 +1,5 @@
-import GlobalConfig from "./GlobalConfig.js";
-import COMPONENTS_FACTORY from "../core/ComponentsFactories.js";
+import GlobalConfig from "../util/GlobalConfig.js";
+import COMPONENTS_FACTORY from "./ComponentsFactories.js";
 
 class Puppeteer {
     /**

@@ -1,4 +1,4 @@
-import SimpleComponent from "./SimpleComponent.js";
+import SimpleComponent from "./component/SimpleComponent.js";
 
 class ComponentsFactory {
     TYPES = {"simple": (options) => new SimpleComponent(options)};
@@ -16,7 +16,7 @@ class ComponentsFactory {
         return component;
     }
 
-    registerType(type, factory) {
+    registerComponentType(type, factory) {
         this.TYPES[type] = factory;
     }
 }

@@ -1,7 +1,7 @@
-import SimpleComponent from "../../../html-puppeteer/core/SimpleComponent.js";
+import SimpleComponent from "../../../html-puppeteer/core/component/SimpleComponent.js";
 import StateGeneratingOnClockStateChanges from "./StateGeneratingOnClockStateChanges.js";
-import {stateProcessorOf} from "../../../html-puppeteer/core/state/StateProcessorBuilder.js";
-import {StateProcessor} from "../../../html-puppeteer/core/state/StateProcessor.js";
+import {stateProcessorOf} from "../../../html-puppeteer/core/state-processor/StateProcessorBuilder.js";
+import {StateProcessor} from "../../../html-puppeteer/core/state-processor/StateProcessor.js";
 
 /**
  * @typedef {ClockState} ClockStateProcessorOptions

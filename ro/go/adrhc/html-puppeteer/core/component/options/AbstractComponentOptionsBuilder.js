@@ -1,4 +1,4 @@
-import ComponentConfigurator from "../../ComponentConfigurator.js";
+import ComponentConfigurator from "../configurator/ComponentConfigurator.js";
 
 /**
  * @typedef {function(component: AbstractComponent): StateInitializer} StateInitializerProviderFn

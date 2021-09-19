@@ -1,6 +1,6 @@
 import StateChangeEnhancer from "./StateChangeEnhancer.js";
-import TypedStateChange, {CREATED, DELETED, RELOCATED, REPLACED} from "./TypedStateChange.js";
-import {isFalse} from "../util/AssertionUtils.js";
+import TypedStateChange, {CREATED, DELETED, RELOCATED, REPLACED} from "../TypedStateChange.js";
+import {isFalse} from "../../../../util/AssertionUtils.js";
 
 /**
  * @template SCT, SCP

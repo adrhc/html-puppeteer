@@ -1,8 +1,8 @@
 import ComponentConfigurator from "./ComponentConfigurator.js";
-import StateHolder from "./StateHolder.js";
-import StateChangesHandlersInvoker from "./StateChangesHandlersInvoker.js";
-import ValuesStateInitializer from "./ValuesStateInitializer.js";
-import {dataOf} from "../util/DomUtils.js";
+import StateHolder from "../../state/StateHolder.js";
+import StateChangesHandlersInvoker from "../../state-processor/StateChangesHandlersInvoker.js";
+import ValuesStateInitializer from "../ValuesStateInitializer.js";
+import {dataOf} from "../../../util/DomUtils.js";
 
 export default class DefaultComponentConfigurator extends ComponentConfigurator {
     /**

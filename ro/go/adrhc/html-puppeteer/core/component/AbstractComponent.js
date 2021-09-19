@@ -1,6 +1,6 @@
-import DefaultComponentConfigurator from "../DefaultComponentConfigurator.js";
-import {applyExtraConfigurators} from "../ComponentConfigurator.js";
-import {StateProcessor} from "../state/StateProcessor.js";
+import DefaultComponentConfigurator from "./configurator/DefaultComponentConfigurator.js";
+import {applyExtraConfigurators} from "./configurator/ComponentConfigurator.js";
+import {StateProcessor} from "../state-processor/StateProcessor.js";
 
 /**
  * @typedef {Bag & ValuesStateInitializerOptions & StateChangesHandlersInvoker & AbstractTemplatingViewOptionsWithView} AbstractComponentOptions

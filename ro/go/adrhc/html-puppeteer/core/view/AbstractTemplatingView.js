@@ -1,6 +1,6 @@
 import AbstractView from "./AbstractView.js";
-import {jQueryOf} from "../util/DomUtils.js";
-import {templateTextOf} from "../util/HtmlUtils.js";
+import {jQueryOf} from "../../util/DomUtils.js";
+import {templateTextOf} from "../../util/HtmlUtils.js";
 
 /**
  * @typedef {Object} AbstractTemplatingViewOptions

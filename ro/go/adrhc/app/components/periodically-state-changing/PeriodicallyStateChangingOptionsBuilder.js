@@ -2,7 +2,7 @@ import DebuggerOptionsBuilder from "../../../html-puppeteer/core/component/optio
 
 class PeriodicallyStateChangingOptionsBuilder extends DebuggerOptionsBuilder {
     /**
-     * creates then adds a debugger (CopyStateChangeHandler) as an extra StateChangesHandler
+     * creates then adds a debugger (CopyStatesChangeHandler) as an extra StateChangesHandler
      *
      * @param {DebuggerOptions=} debuggerOptions
      * @return {PeriodicallyStateChangingOptionsBuilder}

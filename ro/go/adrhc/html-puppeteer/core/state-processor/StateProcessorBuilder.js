@@ -1,5 +1,5 @@
-import StateChangesHandlersInvoker from "../StateChangesHandlersInvoker.js";
-import StateHolder from "../StateHolder.js";
+import StateChangesHandlersInvoker from "./StateChangesHandlersInvoker.js";
+import StateHolder from "../state/StateHolder.js";
 import {StateProcessor} from "./StateProcessor.js";
 
 /**

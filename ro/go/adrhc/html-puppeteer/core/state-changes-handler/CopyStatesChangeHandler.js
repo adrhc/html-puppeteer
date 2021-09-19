@@ -1,6 +1,6 @@
 import StateChangesHandler from "./StateChangesHandler.js";
 
-export default class CopyStateChangeHandler extends StateChangesHandler {
+export default class CopyStatesChangeHandler extends StateChangesHandler {
     /**
      * @type {AbstractComponent}
      */

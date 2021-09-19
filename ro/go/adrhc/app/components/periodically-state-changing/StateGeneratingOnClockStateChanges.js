@@ -1,4 +1,4 @@
-import StateChangesHandler from "../../../html-puppeteer/core/StateChangesHandler.js";
+import StateChangesHandler from "../../../html-puppeteer/core/state-changes-handler/StateChangesHandler.js";
 
 /**
  * @typedef {{stopped: boolean, interval: number}} ClockState

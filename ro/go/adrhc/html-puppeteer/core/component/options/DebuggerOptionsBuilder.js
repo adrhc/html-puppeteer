@@ -1,6 +1,6 @@
 import {AbstractComponentOptionsBuilder} from "./AbstractComponentOptionsBuilder.js";
-import SimpleComponent from "../../SimpleComponent.js";
-import CopyStateChangeHandler from "../../CopyStateChangeHandler.js";
+import SimpleComponent from "../SimpleComponent.js";
+import CopyStatesChangeHandler from "../../state-changes-handler/CopyStatesChangeHandler.js";
 
 /**
  * @typedef {Object} DebuggerOptions
@@ -10,7 +10,7 @@ import CopyStateChangeHandler from "../../CopyStateChangeHandler.js";
  */
 export default class DebuggerOptionsBuilder extends AbstractComponentOptionsBuilder {
     /**
-     * creates then adds a debugger (CopyStateChangeHandler) as an extra StateChangesHandler
+     * creates then adds a debugger (CopyStatesChangeHandler) as an extra StateChangesHandler
      *
      * @param {DebuggerOptions=} debuggerOptions
      * @return {DebuggerOptionsBuilder}
@@ -25,7 +25,7 @@ export default class DebuggerOptionsBuilder extends AbstractComponentOptionsBuil
      * @param {boolean=} debuggerOptions.showAsJson
      * @param {string=} debuggerOptions.debuggerElemIdOrJQuery
      * @param {string=} debuggerOptions.initialDebuggerMessage
-     * @return {CopyStateChangeHandler}
+     * @return {CopyStatesChangeHandler}
      * @protected
      */
     _createDebuggerStateChangeHandler({showAsJson, debuggerElemIdOrJQuery, initialDebuggerMessage} = {}) {
@@ -36,12 +36,12 @@ export default class DebuggerOptionsBuilder extends AbstractComponentOptionsBuil
             elemIdOrJQuery: debuggerElemIdOrJQuery,
             initialState: initialDebuggerMessage
         }).render();
-        return new CopyStateChangeHandler(simpleDebugger, showAsJson);
+        return new CopyStatesChangeHandler(simpleDebugger, showAsJson);
     }
 }
 
 /**
- * creates options with a debugger (CopyStateChangeHandler) as an extra StateChangesHandler
+ * creates options with a debugger (CopyStatesChangeHandler) as an extra StateChangesHandler
  *
  * @param {DebuggerOptions=} debuggerOptions
  * @return {AbstractComponentOptions}
@@ -51,7 +51,7 @@ export function withDebugger(debuggerOptions) {
 }
 
 /**
- * creates then adds a debugger (CopyStateChangeHandler) as an extra StateChangesHandler
+ * creates then adds a debugger (CopyStatesChangeHandler) as an extra StateChangesHandler
  *
  * @param {DebuggerOptions=} debuggerOptions
  * @return {DebuggerOptionsBuilder}

@@ -1,5 +1,5 @@
-import ComponentIllustrator from "./state-changes-handler/ComponentIllustrator.js";
-import SimpleView from "./SimpleView.js";
+import ComponentIllustrator from "./ComponentIllustrator.js";
+import SimpleView from "../view/SimpleView.js";
 
 /**
  * @typedef {AbstractTemplatingViewOptions} AbstractTemplatingViewOptionsWithView

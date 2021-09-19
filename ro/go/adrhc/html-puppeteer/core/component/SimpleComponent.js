@@ -1,5 +1,5 @@
-import AbstractComponent from "./component/AbstractComponent.js";
-import SimpleComponentIllustrator from "./SimpleComponentIllustrator.js";
+import AbstractComponent from "./AbstractComponent.js";
+import SimpleComponentIllustrator from "../state-changes-handler/SimpleComponentIllustrator.js";
 
 export default class SimpleComponent extends AbstractComponent {
     /**

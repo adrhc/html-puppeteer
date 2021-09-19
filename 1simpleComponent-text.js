@@ -1,4 +1,4 @@
-import SimpleComponent from "./ro/go/adrhc/html-puppeteer/core/SimpleComponent.js";
+import SimpleComponent from "./ro/go/adrhc/html-puppeteer/core/component/SimpleComponent.js";
 import {addDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/options/DebuggerOptionsBuilder.js";
 
 $(() => {
