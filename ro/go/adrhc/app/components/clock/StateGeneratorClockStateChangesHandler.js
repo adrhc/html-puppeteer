@@ -1,5 +1,4 @@
 import StateChangesHandler from "../../../html-puppeteer/core/StateChangesHandler.js";
-import ClockComponent from "./ClockComponent.js";
 
 /**
  * @typedef {{stopped: boolean, interval: number}} ClockState
@@ -10,57 +9,56 @@ import ClockComponent from "./ClockComponent.js";
 /**
  * @template SCT, SCP
  */
-export default class ClockStateHandler extends StateChangesHandler {
+export default class StateGeneratorClockStateChangesHandler extends StateChangesHandler {
     /**
-     * @type {ClockComponent}
+     * @type {AbstractComponent}
      */
-    clock;
+    component;
     /**
      * @type {number|undefined}
      */
     handle;
+    /**
+     * @type {StateGeneratorFn}
+     */
+    stateGeneratorFn;
 
     /**
-     * @return {StateGeneratorFn}
+     * @param {AbstractComponent} component
+     * @param {StateGeneratorFn} stateGeneratorFn
      */
-    get stateGeneratorFn() {
-        return this.clock.config.stateGeneratorFn ?? ClockComponent.DEFAULT_STATE_GENERATOR_FN;
-    }
-
-    /**
-     * @param {ClockComponent} clock
-     */
-    constructor(clock) {
+    constructor(component, stateGeneratorFn) {
         super();
-        this.clock = clock;
+        this.component = component;
+        this.stateGeneratorFn = stateGeneratorFn;
     }
 
     /**
      * @param {StateChange<SCT, SCP>} stateChange
      */
     changeOccurred(stateChange) {
-        const clockState = /** @type {ClockState} */ stateChange.newStateOrPart;
-        if (clockState.stopped) {
+        const newClockState = /** @type {ClockState} */ stateChange.newStateOrPart;
+        if (newClockState.stopped) {
             this._stop();
         } else {
-            this._start(clockState.interval);
+            this._start(newClockState.interval);
         }
     }
 
     /**
-     * starts the clock
+     * starts the component
      *
      * @protected
      */
     _start(interval) {
         this._stop();
-        const clock = this.clock;
+        const component = this.component;
         const stateGeneratorFn = this.stateGeneratorFn;
         this.handle = setInterval(() => {
-            clock.doWithState((state) =>
-                state.replace(stateGeneratorFn(clock, new Date())));
+            component.doWithState((state) =>
+                state.replace(stateGeneratorFn(component, new Date())));
         }, interval);
-        console.log("clock started");
+        console.log("component started");
     }
 
     /**
@@ -72,6 +70,6 @@ export default class ClockStateHandler extends StateChangesHandler {
         }
         clearInterval(this.handle);
         this.handle = undefined;
-        console.log("clock stopped");
+        console.log("component stopped");
     }
 }

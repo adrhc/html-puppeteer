@@ -1,5 +1,5 @@
 import SimpleComponent from "../../../html-puppeteer/core/SimpleComponent.js";
-import ClockStateHandler from "./ClockStateHandler.js";
+import StateGeneratorClockStateChangesHandler from "./StateGeneratorClockStateChangesHandler.js";
 import ValuesStateInitializer from "../../../html-puppeteer/core/ValuesStateInitializer.js";
 import {withStateInitializerFn} from "../../../html-puppeteer/core/component/OptionsBuilder.js";
 import {stateProcessorOf} from "../../../html-puppeteer/core/state/StateProcessorBuilder.js";
@@ -23,7 +23,8 @@ export default class ClockComponent extends SimpleComponent {
      */
     constructor(options) {
         super(withStateInitializerFn(stateInitializerOf).to(options));
-        this.doWithClockState = this.config.doWithClockState ?? createClockStateProcessor(this).doWithState;
+        this.doWithClockState = this.config.doWithClockState ?? createClockStateProcessor(this,
+            this.config.stateGeneratorFn, this.config, this.config.clockExtraStateChangesHandlers).doWithState;
     }
 
     /**
@@ -56,24 +57,33 @@ export default class ClockComponent extends SimpleComponent {
 }
 
 /**
- * @param {ClockComponent} clock
+ * @param {ClockComponent} generatedStateReceiverComponent
+ * @param {StateGeneratorFn} stateGeneratorFn
+ * @param {Bag=} initialClockStateValues
+ * @param {StateChangesHandler[]=} clockExtraStateChangesHandlers
  * @return {StateProcessor}
  */
-function createClockStateProcessor(clock) {
+function createClockStateProcessor(generatedStateReceiverComponent,
+                                   stateGeneratorFn,
+                                   initialClockStateValues,
+                                   clockExtraStateChangesHandlers) {
     return stateProcessorOf({
-        component: clock,
-        extraStateChangesHandlers: [new ClockStateHandler(clock), ...(clock.config.clockExtraSCHIs ?? [])],
-        initialState: initialInternalClockStateOf(clock.config)
+        component: generatedStateReceiverComponent,
+        extraStateChangesHandlers: [
+            new StateGeneratorClockStateChangesHandler(generatedStateReceiverComponent, stateGeneratorFn),
+            ...(clockExtraStateChangesHandlers ?? [])
+        ],
+        initialState: clockStateOf(initialClockStateValues)
     });
 }
 
 /**
- * @param {ComponentConfigField} componentConfig
+ * @param {Bag=} object
  * @return {ClockState} is the initial state used to construct ClockComponent.doWithClockState
  */
-function initialInternalClockStateOf(componentConfig) {
-    const interval = componentConfig.interval ?? 1000;
-    const stopped = componentConfig.stopped ?? false;
+function clockStateOf(object) {
+    const interval = object?.interval ?? 1000;
+    const stopped = object?.stopped ?? false;
     return {interval, stopped};
 }
 
@@ -82,7 +92,7 @@ function initialInternalClockStateOf(componentConfig) {
  * @return {StateInitializer} is the ClockComponent's state initializer
  */
 function stateInitializerOf(component) {
-    const {interval} = initialInternalClockStateOf(component.config);
+    const {interval} = clockStateOf(component.config);
     return component.config.stateInitializer ??
         new ValuesStateInitializer(component.config.initialState ?? {interval});
 }

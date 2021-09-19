@@ -1,6 +1,6 @@
-import DebuggerOptionsBuilder from "./DebuggerOptionsBuilder.js";
+import DebuggerOptionsBuilder from "../../../html-puppeteer/core/component/DebuggerOptionsBuilder.js";
 
-export default class ClockOptionsBuilder extends DebuggerOptionsBuilder {
+class ClockOptionsBuilder extends DebuggerOptionsBuilder {
     /**
      * creates then adds a debugger (CopyStateChangeHandler) as an extra StateChangesHandler
      *
@@ -9,8 +9,8 @@ export default class ClockOptionsBuilder extends DebuggerOptionsBuilder {
      */
     addClockDebugger(debuggerOptions = {}) {
         return this.withOptionsConsumer((options) => {
-            options.clockExtraSCHIs = options.clockExtraSCHIs ?? [];
-            options.clockExtraSCHIs.push(this._createDebuggerStateChangeHandler(debuggerOptions));
+            options.clockExtraStateChangesHandlers = options.clockExtraStateChangesHandlers ?? [];
+            options.clockExtraStateChangesHandlers.push(this._createDebuggerStateChangeHandler(debuggerOptions));
         });
     }
 
@@ -19,9 +19,9 @@ export default class ClockOptionsBuilder extends DebuggerOptionsBuilder {
      * @return {ClockOptions}
      */
     to(options = {}) {
-        if (this._options.clockExtraSCHIs) {
-            options.clockExtraSCHIs = options.clockExtraSCHIs ?? [];
-            options.clockExtraSCHIs.push(...this._options.clockExtraSCHIs);
+        if (this._options.clockExtraStateChangesHandlers) {
+            options.clockExtraStateChangesHandlers = options.clockExtraStateChangesHandlers ?? [];
+            options.clockExtraStateChangesHandlers.push(...this._options.clockExtraStateChangesHandlers);
         }
         return super.to(options);
     }

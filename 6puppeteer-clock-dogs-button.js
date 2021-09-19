@@ -3,7 +3,7 @@ import COMPONENTS_FACTORY from "./ro/go/adrhc/html-puppeteer/core/ComponentsFact
 import ClockComponent from "./ro/go/adrhc/app/components/clock/ClockComponent.js";
 import {generateDogs} from "./ro/go/adrhc/app/Generators.js";
 import Scenario6EventsBinder from "./ro/go/adrhc/app/scenarios/6puppeteer+state-button/Scenario6EventsBinder.js";
-import {addClockDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/ClockOptionsBuilder.js";
+import {addClockDebugger} from "./ro/go/adrhc/app/components/clock/ClockOptionsBuilder.js";
 
 $(() => {
     COMPONENTS_FACTORY.registerType("clock", (options) => new ClockComponent(options));
