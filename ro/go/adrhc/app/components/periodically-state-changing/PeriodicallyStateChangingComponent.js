@@ -23,18 +23,20 @@ export default class PeriodicallyStateChangingComponent extends SimpleComponent 
      */
     constructor(options) {
         super(withStateInitializerFn(stateInitializerOf).to(options));
-        this.doWithClockState = this.config.doWithClockState ?? createClockStateProcessor(this,
-            this.config.stateGeneratorFn, clockStateOf(this.config),
-            this.config.clockExtraStateChangesHandlers).doWithState;
+        this.config.stateGeneratorFn = this.config.stateGeneratorFn ??
+            PeriodicallyStateChangingComponent.DEFAULT_STATE_GENERATOR_FN;
+        this.doWithClockState = this.config.doWithClockState ??
+            createClockStateProcessor(this,
+                this.config.stateGeneratorFn, clockStateOf(this.config),
+                this.config.clockExtraStateChangesHandlers).doWithState;
     }
 
     /**
-     * @param {AbstractComponent} component
-     * @param {Date} date
+     * @type {StateGeneratorFn}
      * @constant
      * @default
      */
-    static DEFAULT_STATE_GENERATOR_FN = (component, date) => date;
+    static DEFAULT_STATE_GENERATOR_FN = (generatedStateReceiverComponent, date) => date;
 
     /**
      * stops the clock
