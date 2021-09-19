@@ -1,5 +1,6 @@
 import DefaultComponentConfigurator from "./DefaultComponentConfigurator.js";
 import {applyExtraConfigurators} from "./ComponentConfigurator.js";
+import {StateProcessor} from "./state/StateProcessor.js";
 
 /**
  * @typedef {Bag & ValuesStateInitializerOptions & StateChangesHandlersInvoker & AbstractTemplatingViewOptionsWithView} AbstractComponentOptions
@@ -17,8 +18,10 @@ import {applyExtraConfigurators} from "./ComponentConfigurator.js";
 /**
  * @abstract
  */
-export default class AbstractComponent {
+export default class AbstractComponent extends StateProcessor {
     /**
+     * Is options with dataAttributes as defaults.
+     *
      * @type {ComponentConfigField}
      */
     config;
@@ -35,14 +38,6 @@ export default class AbstractComponent {
      */
     options;
     /**
-     * @type {StateChangesHandlersInvoker}
-     */
-    stateChangesHandlersInvoker;
-    /**
-     * @type {StateHolder}
-     */
-    stateHolder;
-    /**
      * @type {StateInitializer}
      */
     stateInitializer;
@@ -51,6 +46,7 @@ export default class AbstractComponent {
      * @param {AbstractComponentOptions} options
      */
     constructor(options) {
+        super(options.stateHolder, options.stateChangesHandlersInvoker);
         const configurator = options.configurator ?? new DefaultComponentConfigurator(options);
         configurator.configure(this);
         applyExtraConfigurators(this);
@@ -72,16 +68,6 @@ export default class AbstractComponent {
         }
         this.eventsBinder?.attachEventHandlers();
         return this;
-    }
-
-    /**
-     * Offers the state for manipulation then updates the view.
-     *
-     * @param {function(state: StateHolder)} stateUpdaterFn
-     */
-    doWithState(stateUpdaterFn) {
-        stateUpdaterFn(this.stateHolder);
-        this.stateChangesHandlersInvoker.processStateChanges(this.stateHolder.stateChangesCollector);
     }
 
     /**
