@@ -123,6 +123,13 @@ Removes the view's
 DOM element.
 end note
 
+abstract AbstractTemplatingView implements AbstractView {
+$elem: jQuery<HTMLElement>
+htmlTemplate: string
+}
+
+class SimpleView extends AbstractTemplatingView
+
 abstract StateInitializer {
 #stateHolder
 +load()
@@ -133,8 +140,8 @@ sets stateHolder state
 (from e.g. a repository)
 end note
 
-class ValuesStateInitializer {
--values
+class ValuesStateInitializer extends StateInitializer {
+#values
 }
 
 class StateChange {
@@ -145,7 +152,7 @@ class StateChange {
 #changeType
 }
 
-class PartStateChange {
+class PartStateChange extends StateChange {
 #oldState
 #newState
 }
@@ -177,7 +184,7 @@ the changes using
 <i>stateChangesCollector</i>.
 end note
 
-interface PartialStateHolder {
+interface PartialStateHolder extends StateHolder {
 +getPart(partName)
 +replacePart(partName, \nnewPart, [dontRecordChanges])
 }
@@ -224,7 +231,7 @@ interface StateChangesHandler {
 +changeOccurred(stateChange)
 }
 
-interface PartialStateChangesHandler {
+interface PartialStateChangesHandler extends StateChangesHandler {
 +partCreated(stateChange)
 +partModified(stateChange)
 +partRelocated(stateChange)
@@ -232,7 +239,7 @@ interface PartialStateChangesHandler {
 +partChangeOccurred(stateChange)
 }
 
-abstract ComponentIllustrator {
+abstract ComponentIllustrator implements StateChangesHandler {
 view: AbstractView
 stateSynchronizer
 }
@@ -244,7 +251,7 @@ delegate to corresponding
 <i>changeOccurred</i> does nothing.
 end note
 
-class SimplePartComponentIllustrator {
+class SimplePartComponentIllustrator extends ComponentIllustrator implements PartialStateChangesHandler {
 view: SimpleView
 }
 
@@ -254,7 +261,7 @@ note top of SimplePartComponentIllustrator
 The other <i>part</i> methods do nothing.
 end note
 
-abstract PartsAllocator {
+abstract PartsAllocator implements PartialStateChangesHandler {
 parts: Map<partName, AbstractComponent>
 stateSynchronizer
 #createNewOwners(stateChange)
@@ -309,10 +316,10 @@ abstract DomValuesReader {
   {abstract}+extractDomValues()
 }
 
-note left of DomValuesReader::extractDomValues
+/'note right of DomValuesReader::extractDomValues
 Extracts the input
 values from view.
-end note
+end note'/
 
 AbstractComponent *-down- EventsBinder
 AbstractComponent *-down- StateHolder
@@ -320,25 +327,25 @@ AbstractComponent *-down- StateInitializer
 AbstractComponent *-up- StateChangesHandlerAdapter
 StateChangesHandlerAdapter *-up- "many" StateChangesHandler
 ComponentIllustrator *-up- AbstractView
-PartialStateChangesHandler -down-|> StateChangesHandler
-PartsAllocator -down-|> PartialStateChangesHandler
+'PartialStateChangesHandler -down-|> StateChangesHandler
+'PartsAllocator -down-|> PartialStateChangesHandler
 'StateChangesHandler -up-{ AbstractView : might use
 'DomValuesReader *-up- AbstractView
-StateSynchronizer *-up- DomValuesReader
+StateSynchronizer *-down- DomValuesReader
 StateSynchronizer -up-> PartsAllocator
 StateSynchronizer -up-> ComponentIllustrator
-SimplePartComponentIllustrator -down-> ComponentIllustrator
-SimplePartComponentIllustrator -down-|> PartialStateChangesHandler
+'SimplePartComponentIllustrator -down-> ComponentIllustrator
+'SimplePartComponentIllustrator -down-|> PartialStateChangesHandler
 AbstractComponent *-up- StateSynchronizer
 AbstractComponent *-down- ErrorsHandler
 'AbstractComponent *-right- PartsAllocator
-PartialStateHolder -up-|> StateHolder
+'PartialStateHolder -up-|> StateHolder
 StateHolder *-up- StateChangesCollector
 StateChangesCollector *-up- "many" StateChange
-ComponentIllustrator --|> StateChangesHandler
-PartStateChange -down-> StateChange
+'ComponentIllustrator --|> StateChangesHandler
+'PartStateChange -down-> StateChange
 'PartsAllocator -down-> StateHolder
-ValuesStateInitializer -up-|> StateInitializer
+'ValuesStateInitializer -up-|> StateInitializer
 StateChangesCollector *-up- StateChangeEnhancer
 
 /'note as setElement
