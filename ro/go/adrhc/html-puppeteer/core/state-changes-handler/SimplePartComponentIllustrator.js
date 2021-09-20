@@ -7,8 +7,9 @@ import ComponentIllustrator from "./ComponentIllustrator.js";
  * @property {SimpleView=} view
  */
 /**
- * @implements {PartialStateChangesHandler}
+ * @template SCT, SCP
  * @extends {ComponentIllustrator}
+ * @extends {PartialStateChangesHandler}
  */
 export default class SimplePartComponentIllustrator extends ComponentIllustrator {
     /**
@@ -30,35 +31,35 @@ export default class SimplePartComponentIllustrator extends ComponentIllustrator
     }
 
     /**
-     * @param {PartStateChange} partStateChange
+     * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partRemoved(partStateChange) {
         // do nothing, rely on partChangeOccurred() method
     }
 
     /**
-     * @param {PartStateChange} partStateChange
+     * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partCreated(partStateChange) {
         // do nothing, rely on partChangeOccurred() method
     }
 
     /**
-     * @param {PartStateChange} partStateChange
+     * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partRelocated(partStateChange) {
         // do nothing, rely on partChangeOccurred() method
     }
 
     /**
-     * @param {PartStateChange} partStateChange
+     * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partReplaced(partStateChange) {
         // do nothing, rely on partChangeOccurred() method
     }
 
     /**
-     * @param {PartStateChange} partStateChange
+     * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partChangeOccurred(partStateChange) {
         super.replaced(new StateChange(partStateChange.oldState, partStateChange.newState))

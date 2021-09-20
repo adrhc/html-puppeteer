@@ -1,10 +1,12 @@
 import StateChangesHandler from "./StateChangesHandler.js";
 
 /**
+ * This should be treated like an interface with default implementations.
+ *
  * @template SCT, SCP
  *
  * @extends {StateChangesHandler}
- * @interface
+ * @abstract
  */
 export default class PartialStateChangesHandler extends StateChangesHandler {
     /**

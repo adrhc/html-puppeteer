@@ -71,7 +71,7 @@ export default class StateChangesHandlersInvoker {
     }
 
     /**
-     * @param {TypedStateChange} typedStateChange
+     * @param {StateChange} typedStateChange
      * @protected
      */
     _processStateChange(typedStateChange) {
@@ -82,7 +82,7 @@ export default class StateChangesHandlersInvoker {
     /**
      * @param {StateChangesHandler} stateChangesHandler
      * @param {string} methodName
-     * @param {TypedStateChange} typedStateChange
+     * @param {StateChange} typedStateChange
      * @protected
      */
     _invokeStateChangesHandler(stateChangesHandler, methodName, typedStateChange) {
@@ -96,7 +96,7 @@ export default class StateChangesHandlersInvoker {
     }
 
     /**
-     * @param {TypedStateChange} typedStateChange
+     * @param {StateChange} typedStateChange
      * @return {string}
      * @protected
      */
@@ -110,7 +110,7 @@ export default class StateChangesHandlersInvoker {
     }
 
     /**
-     * @param {TypedStateChange} typedStateChange
+     * @param {StateChange} typedStateChange
      * @return {boolean}
      * @protected
      */

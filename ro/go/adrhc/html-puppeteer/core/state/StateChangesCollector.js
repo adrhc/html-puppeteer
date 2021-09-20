@@ -9,7 +9,7 @@ export default class StateChangesCollector {
      */
     stateChangeEnhancer;
     /**
-     * @type {TypedStateChange<SCT, SCP>[]}
+     * @type {StateChange<SCT, SCP>[]}
      */
     stateChanges = [];
 
@@ -22,7 +22,7 @@ export default class StateChangesCollector {
     }
 
     /**
-     * @param {TypedStateChange<SCT, SCP>|undefined} stateChange
+     * @param {StateChange<SCT, SCP>|undefined} stateChange
      */
     collect(stateChange) {
         const enhancedStateChange = this.stateChangeEnhancer.enhance(stateChange);
@@ -34,14 +34,14 @@ export default class StateChangesCollector {
     }
 
     /**
-     * @return {TypedStateChange<SCT, SCP>}
+     * @return {StateChange<SCT, SCP>}
      */
     consumeOne() {
         return this.stateChanges.shift();
     }
 
     /**
-     * @return {TypedStateChange<SCT, SCP>[]}
+     * @return {StateChange<SCT, SCP>[]}
      */
     consumeAll() {
         const changes = this.stateChanges;

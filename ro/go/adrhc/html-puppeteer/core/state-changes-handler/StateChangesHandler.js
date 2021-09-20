@@ -1,7 +1,8 @@
 /**
- * @template SCT, SCP
+ * This should be treated like an interface with default implementations.
  *
- * @interface
+ * @template SCT, SCP
+ * @abstract
  */
 export default class StateChangesHandler {
     /**

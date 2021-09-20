@@ -3,6 +3,10 @@
  */
 export default class StateChange {
     /**
+     * @type {string}
+     */
+    changeType;
+    /**
      * @type {string|number}
      */
     newPartName;

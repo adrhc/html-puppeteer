@@ -1,5 +1,5 @@
 import StateChangeEnhancer from "./StateChangeEnhancer.js";
-import TypedStateChange, {CREATED, DELETED, RELOCATED, REPLACED} from "../TypedStateChange.js";
+import {CREATED, DELETED, RELOCATED, REPLACED} from "../StateChangeTypes.js";
 import {isFalse} from "../../../../util/AssertionUtils.js";
 /**
  * @typedef {string,number|boolean} PartName
@@ -12,15 +12,13 @@ import {isFalse} from "../../../../util/AssertionUtils.js";
 export default class TypeStateChangeEnhancer extends StateChangeEnhancer {
     /**
      * @param {StateChange<SCT, SCP>} stateChange
-     * @return {TypedStateChange<SCT, SCP>}
+     * @return {StateChange<SCT, SCP>}
      */
     enhance(stateChange) {
-        if (!stateChange) {
-            return undefined;
-        } else if (stateChange instanceof TypedStateChange) {
-            return stateChange;
+        if (stateChange) {
+            stateChange.changeType = stateChange.changeType ?? this._changeTypeOf(stateChange);
         }
-        return _.defaults(new TypedStateChange(this._changeTypeOf(stateChange)), stateChange);
+        return stateChange;
     }
 
     /**

@@ -20,7 +20,7 @@ export default class PartialStateHolder extends StateHolder {
      * @param {PartName|undefined=} previousPartName
      * @param {PartName|undefined=} newPartName
      * @param {boolean=} dontRecordStateEvents
-     * @return {boolean|TypedStateChange<SCT, SCP>}
+     * @return {boolean|StateChange<SCT, SCP>}
      */
     replacePart(newPart, previousPartName,
                 newPartName = newPart != null ? previousPartName : undefined,

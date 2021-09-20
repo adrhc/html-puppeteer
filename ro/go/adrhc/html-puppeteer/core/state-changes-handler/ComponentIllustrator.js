@@ -3,7 +3,8 @@ import StateChangesHandler from "./StateChangesHandler.js";
 /**
  * @template SCT, SCP
  *
- * @implements StateChangesHandler
+ * @extends {StateChangesHandler}
+ * @abstract
  */
 export default class ComponentIllustrator extends StateChangesHandler {
     /**
@@ -30,12 +31,5 @@ export default class ComponentIllustrator extends StateChangesHandler {
      */
     removed(stateChange) {
         this.view.remove();
-    }
-
-    /**
-     * @param {StateChange<SCT, SCP>} stateChange
-     */
-    changeOccurred(stateChange) {
-        // do nothing
     }
 }

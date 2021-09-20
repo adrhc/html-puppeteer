@@ -142,13 +142,16 @@ class StateChange {
 #newPartName
 #oldStateOrPart
 #newStateOrPart
+#changeType
 }
 
-class TypedStateChange {
-changeType: string
+class PartStateChange {
+#oldState
+#newState
 }
 
-interface StateChangeEnhancer<T extends StateChange> {
+'interface StateChangeEnhancer<T extends StateChange> {
+interface StateChangeEnhancer {
 +enhance(stateChange): T
 }
 
@@ -192,7 +195,7 @@ all part's fields".
 class StateChangesHandlerAdapter {
 stateChangesHandlers
 +addHandler(stateChangesHandler)
-+processStateChanges(typedStateChanges)
++processStateChanges(stateChanges)
 }
 
 /'note left of StateChangesHandlerAdapter::handlerMappingRules
@@ -235,14 +238,20 @@ stateSynchronizer
 }
 
 note bottom of ComponentIllustrator
-Contains methods
-usually doing these:
-- analyze the
-state changes
-- compute the
-values to display
-- use some
-<i>AbstractView</i>
+<i>created</i>, <i>replaced</i>, <i>removed</i>
+delegate to corresponding
+<i>view</i> methods.
+<i>changeOccurred</i> does nothing.
+end note
+
+class SimplePartComponentIllustrator {
+view: SimpleView
+}
+
+note top of SimplePartComponentIllustrator
+<i>partChangeOccurred()</i> delegates to
+<i>super.replaced(oldState, newState)</i>.
+The other <i>part</i> methods do nothing.
 end note
 
 abstract PartsAllocator {
@@ -318,6 +327,8 @@ PartsAllocator -down-|> PartialStateChangesHandler
 StateSynchronizer *-up- DomValuesReader
 StateSynchronizer -up-> PartsAllocator
 StateSynchronizer -up-> ComponentIllustrator
+SimplePartComponentIllustrator -down-> ComponentIllustrator
+SimplePartComponentIllustrator -down-|> PartialStateChangesHandler
 AbstractComponent *-up- StateSynchronizer
 AbstractComponent *-down- ErrorsHandler
 'AbstractComponent *-right- PartsAllocator
@@ -325,7 +336,7 @@ PartialStateHolder -up-|> StateHolder
 StateHolder *-up- StateChangesCollector
 StateChangesCollector *-up- "many" StateChange
 ComponentIllustrator --|> StateChangesHandler
-TypedStateChange -down-|> StateChange
+PartStateChange -down-> StateChange
 'PartsAllocator -down-> StateHolder
 ValuesStateInitializer -up-|> StateInitializer
 StateChangesCollector *-up- StateChangeEnhancer
