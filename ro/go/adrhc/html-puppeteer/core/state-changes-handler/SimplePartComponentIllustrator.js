@@ -8,6 +8,7 @@ import ComponentIllustrator from "./ComponentIllustrator.js";
  */
 /**
  * @implements {PartialStateChangesHandler}
+ * @extends {ComponentIllustrator}
  */
 export default class SimplePartComponentIllustrator extends ComponentIllustrator {
     /**

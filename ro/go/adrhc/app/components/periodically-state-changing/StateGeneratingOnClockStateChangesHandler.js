@@ -7,16 +7,20 @@ import StateChangesHandler from "../../../html-puppeteer/core/state-changes-hand
  * @typedef {function(componentConfig: AbstractComponentOptions, date: Date): *} StateGeneratorFn
  */
 /**
- * @typedef {Object} StateGeneratingOnClockStateChangesOptions
+ * @typedef {Object} StateGeneratingOnClockStateChangesHandlerOptions
  * @property {DoWithStateFn} doWithStateFn
  * @property {StateGeneratorFn} stateGeneratorFn
  */
 /**
+ * Using clock events to start/stop the interval-time.
+ * Using StateGeneratingOnClockStateChangesHandlerOptions to construct the
+ * doWithStateFn to be used to change the state of generatedStateReceiverComponent.
+ * 
  * @template SCT, SCP
  * @typedef {function(stateHolder: PartialStateHolder)} DoWithStateFn
  * @extends {StateChangesHandler}
  */
-export default class StateGeneratingOnClockStateChanges extends StateChangesHandler {
+export default class StateGeneratingOnClockStateChangesHandler extends StateChangesHandler {
     /**
      * @type {DoWithStateFn}
      */
@@ -32,7 +36,7 @@ export default class StateGeneratingOnClockStateChanges extends StateChangesHand
 
     /**
      * @param {AbstractComponent} generatedStateReceiverComponent
-     * @param {StateGeneratingOnClockStateChangesOptions} options
+     * @param {StateGeneratingOnClockStateChangesHandlerOptions} options
      * @constructor
      */
     constructor(generatedStateReceiverComponent, options) {

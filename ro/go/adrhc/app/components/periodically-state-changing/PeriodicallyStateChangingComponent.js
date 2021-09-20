@@ -1,10 +1,10 @@
 import SimpleComponent from "../../../html-puppeteer/core/component/SimpleComponent.js";
-import StateGeneratingOnClockStateChanges from "./StateGeneratingOnClockStateChanges.js";
+import StateGeneratingOnClockStateChangesHandler from "./StateGeneratingOnClockStateChangesHandler.js";
 import {stateProcessorOf} from "../../../html-puppeteer/core/state-processor/StateProcessorBuilder.js";
 import {StateProcessor} from "../../../html-puppeteer/core/state-processor/StateProcessor.js";
 
 /**
- * @typedef {ClockState & StateGeneratingOnClockStateChangesOptions} ClockStateProcessorOptions
+ * @typedef {ClockState & StateGeneratingOnClockStateChangesHandlerOptions} ClockStateProcessorOptions
  * @property {StateChangesHandler[]=} clockExtraStateChangesHandlers
  * @property {number=} interval
  * @property {boolean=} stopped
@@ -70,7 +70,7 @@ function createClockStateProcessor(generatedStateReceiverComponent,
                                    options) {
     return stateProcessorOf({
         extraStateChangesHandlers: [
-            new StateGeneratingOnClockStateChanges(generatedStateReceiverComponent, options),
+            new StateGeneratingOnClockStateChangesHandler(generatedStateReceiverComponent, options),
             ...(options.clockExtraStateChangesHandlers ?? [])
         ],
         initialState: clockStateOf(options)

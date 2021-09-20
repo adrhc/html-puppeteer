@@ -3,7 +3,7 @@ import StateChangesHandler from "./StateChangesHandler.js";
 /**
  * @template SCT, SCP
  *
- * @extends StateChangesHandler
+ * @implements StateChangesHandler
  */
 export default class ComponentIllustrator extends StateChangesHandler {
     /**
