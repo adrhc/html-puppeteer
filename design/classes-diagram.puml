@@ -201,12 +201,12 @@ Removes the view's
 DOM element.
 end note
 
-abstract AbstractTemplatingView implements AbstractView {
+abstract AbstractTemplateView implements AbstractView {
 $elem: jQuery<HTMLElement>
 htmlTemplate: string
 }
 
-class SimpleView extends AbstractTemplatingView
+class SimpleView extends AbstractTemplateView
 
 class StateChangesHandlerAdapter {
 stateChangesHandlers
@@ -251,7 +251,6 @@ interface PartialStateChangesHandler extends StateChangesHandler {
 
 abstract ComponentIllustrator implements StateChangesHandler {
 view: AbstractView
-stateSynchronizer
 }
 
 note bottom of ComponentIllustrator

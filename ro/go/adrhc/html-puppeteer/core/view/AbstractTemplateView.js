@@ -3,13 +3,13 @@ import {jQueryOf} from "../../util/DomUtils.js";
 import {templateTextOf} from "../../util/HtmlUtils.js";
 
 /**
- * @typedef {Object} AbstractTemplatingViewOptions
+ * @typedef {Object} AbstractTemplateViewOptions
  * @property {jQuery<HTMLElement>} $elem
  * @property {string|jQuery<HTMLElement>} elemIdOrJQuery
  * @property {string} htmlTemplate
  * @property {string} templateId
  */
-export default class AbstractTemplatingView extends AbstractView {
+export default class AbstractTemplateView extends AbstractView {
     /**
      * @type {jQuery<HTMLElement>}
      */
@@ -20,7 +20,7 @@ export default class AbstractTemplatingView extends AbstractView {
     htmlTemplate;
 
     /**
-     * @param {AbstractTemplatingViewOptions} options
+     * @param {AbstractTemplateViewOptions} options
      */
     constructor({$elem, elemIdOrJQuery, htmlTemplate, templateId} = {}) {
         super();

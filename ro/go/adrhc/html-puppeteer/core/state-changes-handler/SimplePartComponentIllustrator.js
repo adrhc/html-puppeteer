@@ -3,7 +3,7 @@ import SimpleView from "../view/SimpleView.js";
 import ComponentIllustrator from "./ComponentIllustrator.js";
 
 /**
- * @typedef {AbstractTemplatingViewOptions} AbstractTemplatingViewOptionsWithView
+ * @typedef {AbstractTemplateViewOptions} AbstractTemplateViewOptionsWithView
  * @property {SimpleView=} view
  */
 /**
@@ -13,8 +13,8 @@ import ComponentIllustrator from "./ComponentIllustrator.js";
  */
 export default class SimplePartComponentIllustrator extends ComponentIllustrator {
     /**
-     * @param {AbstractTemplatingViewOptionsWithView} options
-     * @param {AbstractTemplatingViewOptions=} viewConfig
+     * @param {AbstractTemplateViewOptionsWithView} options
+     * @param {AbstractTemplateViewOptions=} viewConfig
      */
     constructor({view, ...viewConfig}) {
         super();
@@ -22,7 +22,7 @@ export default class SimplePartComponentIllustrator extends ComponentIllustrator
     }
 
     /**
-     * @param {AbstractTemplatingViewOptions} viewConfig
+     * @param {AbstractTemplateViewOptions} viewConfig
      * @return {SimpleView}
      * @protected
      */

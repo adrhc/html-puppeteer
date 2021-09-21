@@ -3,7 +3,7 @@ import {applyExtraConfigurators} from "./configurator/ComponentConfigurator.js";
 import {StateProcessor} from "../state-processor/StateProcessor.js";
 
 /**
- * @typedef {Bag & ValuesStateInitializerOptions & StateChangesHandlersInvoker & AbstractTemplatingViewOptionsWithView} AbstractComponentOptions
+ * @typedef {Bag & ValuesStateInitializerOptions & StateChangesHandlersInvoker & AbstractTemplateViewOptionsWithView} AbstractComponentOptions
  * @property {string=} elemIdOrJQuery
  * @property {StateHolder=} stateHolder
  * @property {StateInitializer=} stateInitializer

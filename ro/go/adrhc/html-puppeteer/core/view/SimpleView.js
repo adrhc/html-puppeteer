@@ -1,7 +1,7 @@
-import AbstractTemplatingView from "./AbstractTemplatingView.js";
+import AbstractTemplateView from "./AbstractTemplateView.js";
 import {generateHtml} from "../../util/HtmlGenerator.js";
 
-export default class SimpleView extends AbstractTemplatingView {
+export default class SimpleView extends AbstractTemplateView {
     /**
      * @param {{}} values
      */
