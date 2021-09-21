@@ -1,8 +1,7 @@
-import {addDebugger, withDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/options/DebuggerOptionsBuilder.js";
+import {addDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/options/DebuggerOptionsBuilder.js";
 import PUPPETEER from "./ro/go/adrhc/html-puppeteer/core/Puppeteer.js";
 import {generateCats} from "./ro/go/adrhc/app/Generators.js";
 import {namedBtn} from "./ro/go/adrhc/html-puppeteer/util/SelectorUtils.js";
-import {USE_HTML} from "./ro/go/adrhc/html-puppeteer/core/view/SimpleView.js";
 
 class App {
     parent;
@@ -13,12 +12,8 @@ class App {
 
     createCatsChild() {
         return this.parent.create("cats", "simple",
-            addDebugger({debuggerElemIdOrJQuery: "child-debugger"})
-                .to({
-                    initialState: {cats: generateCats(2)},
-                    viewRemovalStrategy: USE_HTML,
-                    onRemoveViewHtml: "cats child component was removed!"
-                }));
+            addDebugger({debuggerElemIdOrJQuery: "cats-debugger"})
+                .to({initialState: {cats: generateCats(2)}}));
     }
 
     run() {
@@ -37,7 +32,8 @@ class App {
 
 $(() => {
     // the puppeteer
-    const component = PUPPETEER.animate(withDebugger({debuggerElemIdOrJQuery: "parent-debugger"}));
+    // const component = PUPPETEER.animate(withDebugger({debuggerElemIdOrJQuery: "parent-debugger"}));
+    const component = PUPPETEER.animate();
 
     // the application using the html-puppeteer
     new App(component).run();

@@ -1,4 +1,5 @@
 import SimpleComponent from "./component/SimpleComponent.js";
+import SimpleContainerComponent from "./component/SimpleContainerComponent.js";
 
 /**
  * @typedef {function(options: Bag): AbstractContainerComponent} ComponentProviderFn
@@ -7,7 +8,10 @@ import SimpleComponent from "./component/SimpleComponent.js";
 /**
  * @type {{[key: string]: ComponentProviderFn}}
  */
-const COMPONENT_TYPES = {"simple": (options) => new SimpleComponent(options)};
+const COMPONENT_TYPES = {
+    "simple": (options) => new SimpleComponent(options),
+    "simple-container": (options) => new SimpleContainerComponent(options)
+};
 
 /**
  * @param {string} type

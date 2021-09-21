@@ -5,7 +5,7 @@ import {StateProcessor} from "../state-processor/StateProcessor.js";
 /**
  * @typedef {Bag & ValueStateInitializerOptions & StateChangesHandlersInvoker & SimpleViewOptions} AbstractComponentOptions
  * @property {string=} elemIdOrJQuery
- * @property {StateHolder=} stateHolder
+ * @property {PartialStateHolder=} stateHolder
  * @property {StateInitializer=} stateInitializer
  * @property {StateChangesHandlersInvoker=} stateChangesHandlersInvoker
  * @property {EventsBinder=} eventsBinder

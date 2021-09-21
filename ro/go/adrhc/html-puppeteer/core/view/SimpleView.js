@@ -31,8 +31,8 @@ export default class SimpleView extends AbstractTemplateView {
     constructor({viewRemovalStrategy, onRemoveViewHtml, ...restOfOptions}) {
         super(restOfOptions);
         this.viewRemovalStrategy = viewRemovalStrategy ?? USE_HTML_TEMPLATE;
-        isTrue(viewRemovalStrategy !== USE_HTML || !!onRemoveViewHtml);
         this.onRemoveViewHtml = onRemoveViewHtml ?? "";
+        isTrue(this.viewRemovalStrategy !== USE_HTML || !!this.onRemoveViewHtml);
     }
 
     /**

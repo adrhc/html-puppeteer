@@ -19,26 +19,39 @@
 <div class="container">
 	<div class="section title">PeriodicallyStateChangingComponent</div>
 	<div class="section flex-center fill-available buttons">
-		<button name="remove" disabled>Close (aka remove) child</button>
+		<button disabled name="remove">Close (aka remove) child</button>
 		<button name="create">Create and render the child</button>
 	</div>
 	<div class="section title">parent debugger</div>
 	<div class="section" id="parent-debugger">No debugging data available yet!</div>
+	<div class="section title">children (message) debugger</div>
+	<div class="section" id="children-debugger">No debugging data available yet!</div>
 	<div class="section title">children (cats) debugger</div>
-	<div class="section" id="child-debugger">No debugging data available yet!</div>
+	<div class="section" id="cats-debugger">No debugging data available yet!</div>
 	<div class="section title">Component's view (parent and its children)</div>
 	<div class="section flex-column fit-content bgc-aliceblue"
-	     data-initial-state='{"text": "this is the parent state displayed by its view (below is the child component)"}'
+	     data-initial-state='{"text": "this is the parent state displayed by its view (below is the child component)", "message": "The \"message\" children was automatically created!"}'
 	     data-template-id="parent-template"
-	     data-type="simple"
+	     data-type="simple-container"
 	     id="parent-component"></div>
 </div>
 
 <script id="parent-template" type="text/x-handlebars-template">
 	<div class="part parent">{{text}}</div>
-	<div class="part" data-part="cats" data-template-id="table-template" data-type="simple">
-		(cats) children is not created yet
+	<div class="part" data-part="message" data-type="simple" data-template-id="message-template"
+	     data-view-removal-strategy="USE_HTML"
+	     data-on-remove-view-html='"message" child component was removed!'>
+		The "message" child is not available yet!
 	</div>
+	<div class="part" data-part="cats" data-template-id="table-template"
+	     data-view-removal-strategy="USE_HTML"
+	     data-on-remove-view-html='"cats" child component was removed!'>
+		The "cats" child is not available yet!
+	</div>
+</script>
+
+<script id="message-template" type="text/x-handlebars-template">
+	{{#if message}}{{message}}{{else}}The "message" children is not available yet!{{/if}}
 </script>
 
 <script id="table-template" type="text/x-handlebars-template">

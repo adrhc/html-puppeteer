@@ -1,16 +1,9 @@
 import AbstractComponent from "./AbstractComponent.js";
-import {createByType} from "../ComponentsFactories.js";
-import {jQueryOf} from "../../util/DomUtils.js";
 
 /**
  * @abstract
  */
 export default class AbstractContainerComponent extends AbstractComponent {
-    /**
-     * @type {{[key: string]: AbstractContainerComponent}}
-     */
-    components = {};
-
     /**
      * @param {PartName} partName
      * @param {string} type is the child component type
@@ -18,25 +11,12 @@ export default class AbstractContainerComponent extends AbstractComponent {
      * @param {boolean=} dontRender
      * @return {AbstractComponent}
      */
-    create(partName, type, options, dontRender) {
-        const $childElem = $(`[data-part="${partName}"]`, jQueryOf(this.config.elemIdOrJQuery));
-        this.components[partName] = createByType(type, {elemIdOrJQuery: $childElem, ...options});
-        if (!dontRender) {
-            this.components[partName].render();
-        }
-    }
+    create(partName, type, options, dontRender) {}
 
     /**
      * @param {PartName} partName
      */
-    removeByName(partName) {
-        if (!this.components[partName]) {
-            console.error(`Trying to close missing child: ${partName}!`);
-            return;
-        }
-        this.components[partName].close();
-        delete this.components[partName];
-    }
+    removeByName(partName) {}
 
     /**
      * @param {PartName} fromPartName

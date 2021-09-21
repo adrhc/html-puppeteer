@@ -88,8 +88,7 @@ Returns a state copy.
 end note
 
 abstract AbstractContainerComponent extends AbstractComponent {
-  #components: {statePartName: component}
-  +create(statePartName, type, \noptions): AbstractComponent
+  +create(statePartName, type, options, \ndontRender): AbstractComponent
   +removeByName(statePartName)
   +move(fromPartName, toPartName)
 }
