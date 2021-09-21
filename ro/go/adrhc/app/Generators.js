@@ -11,6 +11,18 @@ import {rangeIterator} from "../html-puppeteer/util/StreamUtils.js";
  */
 
 /**
+ * @param {function(part: Part)} consumerFn
+ * @param {number} [max=5]
+ * @param {number=} intervalMs
+ */
+export function withPeriodicallyGenerateDogsOrCats(consumerFn, max = 5, intervalMs = 1000) {
+    setInterval(() => {
+        const catsOrDogs = generateDogsOrCats(max);
+        consumerFn(catsOrDogs)
+    }, intervalMs);
+}
+
+/**
  * @param {number} max
  * @return {Part}
  */

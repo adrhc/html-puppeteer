@@ -12,12 +12,13 @@ class App {
     }
 
     createCatsChild() {
-        return this.parent.create("cats", "simple", addDebugger({debuggerElemIdOrJQuery: "child-debugger"})
-            .to({
-                initialState: {cats: generateCats(2)},
-                viewRemovalStrategy: USE_HTML,
-                onRemoveViewHtml: "cats child component was removed!"
-            }));
+        return this.parent.create("cats", "simple",
+            addDebugger({debuggerElemIdOrJQuery: "child-debugger"})
+                .to({
+                    initialState: {cats: generateCats(2)},
+                    viewRemovalStrategy: USE_HTML,
+                    onRemoveViewHtml: "cats child component was removed!"
+                }));
     }
 
     run() {
