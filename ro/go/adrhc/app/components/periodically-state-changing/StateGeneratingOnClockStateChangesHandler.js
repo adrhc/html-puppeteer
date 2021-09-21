@@ -4,11 +4,11 @@ import StateChangesHandler from "../../../html-puppeteer/core/state-changes-hand
  * @typedef {{stopped: boolean, interval: number}} ClockState
  */
 /**
- * @typedef {function(componentConfig: AbstractComponentOptions, date: Date): *} StateGeneratorFn
+ * @typedef {function(componentConfig: AbstractComponentOptions, clockStateChange: StateChange): *} StateGeneratorFn
  */
 /**
  * @typedef {Object} StateGeneratingOnClockStateChangesHandlerOptions
- * @property {DoWithStateAndClockFn} doWithStateFn
+ * @property {DoWithStateAndClockFn} doWithStateAndClockFn
  * @property {StateGeneratorFn} stateGeneratorFn
  */
 /**
@@ -42,8 +42,8 @@ export default class StateGeneratingOnClockStateChangesHandler extends StateChan
     constructor(generatedStateReceiverComponent, options) {
         super();
         this.generatedStateReceiverComponent = generatedStateReceiverComponent;
-        this.doWithStateAndClockFn = options.doWithStateFn ?? ((stateHolder) => {
-            const generatedState = options.stateGeneratorFn(generatedStateReceiverComponent.config, new Date());
+        this.doWithStateAndClockFn = options.doWithStateAndClockFn ?? ((stateHolder, clockStateChange) => {
+            const generatedState = options.stateGeneratorFn(generatedStateReceiverComponent.config, clockStateChange);
             stateHolder.replace(generatedState);
         });
     }

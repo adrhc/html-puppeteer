@@ -38,7 +38,7 @@ export default class PeriodicallyStateChangingComponent extends SimpleComponent 
      * @constant
      * @default
      */
-    static DEFAULT_STATE_GENERATOR_FN = (generatedStateReceiverComponent, date) => date;
+    static DEFAULT_STATE_GENERATOR_FN = () => new Date();
 
     /**
      * stops the clock

@@ -11,7 +11,10 @@ $(() => {
     PUPPETEER.animate(addClockDebugger({debuggerElemIdOrJQuery: "clock-debugger"})
         .addDebugger({debuggerElemIdOrJQuery: "component-debugger"})
         .to({
-            stateGeneratorFn: (componentConfig) => generateAndAppendDogs(5, {interval: componentConfig.interval}),
+            stateGeneratorFn: (componentConfig, clockStateChange) =>
+                generateAndAppendDogs(5, {
+                    interval: (/** @type {ClockState} */ clockStateChange.newState)?.interval
+                }),
             eventsBinder: new Scenario6EventsBinder()
         }));
 });

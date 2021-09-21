@@ -4,6 +4,6 @@ import {addDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/options/D
 $(() => {
     new PeriodicallyStateChangingComponent(addDebugger().to({
         elemIdOrJQuery: "component",
-        interval: 1500
-    })).render("wait 1500 ms for a state change");
+        interval: 1000
+    })).render("wait 1000 ms for a state change");
 })

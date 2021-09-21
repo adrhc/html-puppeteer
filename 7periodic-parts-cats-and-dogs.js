@@ -9,7 +9,8 @@ import {addClockDebugger} from "./ro/go/adrhc/app/components/periodically-state-
 $(() => {
     COMPONENTS_FACTORY.registerComponentType("periodically-state-changing", (options) => new PeriodicallyStateChangingComponent(options));
     PUPPETEER.animate(addClockDebugger({debuggerElemIdOrJQuery: "clock-debugger"})
-        .doPeriodicallyWithState((stateHolder, clockStateChange) => {
+        // some state changing method provided to the component as a configuration option
+        .doPeriodicallyWithStateAndClock((stateHolder, clockStateChange) => {
             if (stateHolder.currentState == null) {
                 // set the initial state
                 stateHolder.replace({interval: stateHolder.config.interval});

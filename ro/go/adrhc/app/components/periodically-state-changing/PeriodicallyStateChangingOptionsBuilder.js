@@ -15,11 +15,11 @@ class PeriodicallyStateChangingOptionsBuilder extends DebuggerOptionsBuilder {
     }
 
     /**
-     * @param {DoWithStateAndClockFn} doWithStateFn
+     * @param {DoWithStateAndClockFn} doWithStateAndClockFn
      * @return {PeriodicallyStateChangingOptionsBuilder}
      */
-    doPeriodicallyWithState(doWithStateFn) {
-        this._options.doWithStateFn = doWithStateFn;
+    doPeriodicallyWithStateAndClock(doWithStateAndClockFn) {
+        this._options.doWithStateAndClockFn = doWithStateAndClockFn;
         return this;
     }
 
@@ -32,8 +32,8 @@ class PeriodicallyStateChangingOptionsBuilder extends DebuggerOptionsBuilder {
             options.clockExtraStateChangesHandlers = options.clockExtraStateChangesHandlers ?? [];
             options.clockExtraStateChangesHandlers.push(...this._options.clockExtraStateChangesHandlers);
         }
-        if (this._options.doWithStateFn) {
-            options.doWithStateFn = this._options.doWithStateFn;
+        if (this._options.doWithStateAndClockFn) {
+            options.doWithStateAndClockFn = this._options.doWithStateAndClockFn;
         }
         return super.to(options);
     }
@@ -45,11 +45,4 @@ class PeriodicallyStateChangingOptionsBuilder extends DebuggerOptionsBuilder {
  */
 export function addClockDebugger(debuggerOptions) {
     return new PeriodicallyStateChangingOptionsBuilder().addClockDebugger(debuggerOptions);
-}
-
-/**
- * @param {DoWithStateAndClockFn} doWithStateFn
- */
-export function doPeriodicallyWithState(doWithStateFn) {
-    return new PeriodicallyStateChangingOptionsBuilder().doPeriodicallyWithState(doWithStateFn);
 }

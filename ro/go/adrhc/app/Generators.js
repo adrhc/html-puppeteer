@@ -38,16 +38,32 @@ export function generateDogs(max) {
     return _generate(max, "dog");
 }
 
-function _generate(max, property) {
+/**
+ * Generate an "max" size array like this:
+ * {
+ *  id: 1-based-index,
+ *  name: "[generation=${generation}] ${name}${id}"
+ * }
+ *
+ * @param {number} max
+ * @param {string} name
+ * @return {Bag[]}
+ */
+function _generate(max, name) {
     const generation = _.random(1, 1000);
     const count = _.random(1, max);
     const dogs = [];
     rangeIterator(1, count, (i) => {
-        dogs.push({id: i, name: `[generation=${generation}] ${property}${i}`});
+        dogs.push({id: i, name: `[generation=${generation}] ${name}${i}`});
     });
     return dogs;
 }
 
+/**
+ * @param {number} max
+ * @param {Bag} object to append to the generated dogs
+ * @return {Bag}
+ */
 export function generateAndAppendDogs(max, object) {
     object.dogs = generateDogs(max);
     return object;
