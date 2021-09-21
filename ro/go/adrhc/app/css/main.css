@@ -71,10 +71,13 @@
     padding: .3rem;
 }
 
-.parent {
-    margin-bottom: .3rem;
+.thin-dashed-border {
     border-style: dashed;
     border-width: thin;
+}
+
+.mb3 {
+    margin-bottom: .3rem;
 }
 
 .bgc-aliceblue {
