@@ -9,5 +9,5 @@ $(() => {
     setInterval(() => {
         const part = generateDogsOrCats(3);
         component.replacePart(part.value, part.name)
-    }, 1000);
+    }, 1500);
 });
