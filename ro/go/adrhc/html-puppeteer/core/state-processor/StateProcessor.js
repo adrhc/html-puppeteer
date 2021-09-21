@@ -1,5 +1,5 @@
 /**
- * @typedef {function(state: StateHolder)} StateUpdaterFn
+ * @typedef {function(state: PartialStateHolder)} StateUpdaterFn
  */
 export class StateProcessor {
     /**
@@ -7,12 +7,12 @@ export class StateProcessor {
      */
     stateChangesHandlersInvoker;
     /**
-     * @type {StateHolder}
+     * @type {PartialStateHolder}
      */
     stateHolder;
 
     /**
-     * @param {StateHolder} stateHolder
+     * @param {PartialStateHolder} stateHolder
      * @param {StateChangesHandlersInvoker} stateChangesHandlersInvoker
      * @constructor
      */

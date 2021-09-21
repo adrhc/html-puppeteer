@@ -3,18 +3,20 @@
 title HTML puppeteer - Classes Diagram
 
 abstract AbstractComponent {
-  -stateHolder
+  -partialStateHolder
   #config
   #eventsBinder
   #stateInitializer
   #domValuesReader
   #stateChangesHandlerAdapter
   #[initErrorsHandler]
-  +render(values)
+  #doWithState(fn(partialStateHolder))
+  +render(value)
   +close()
   +getState()
+  +replaceState(newState)
+  +replacePart(newPart, \npreviousPartName, \nnewPartName, \ndontRecordStateEvents)
   +syncState()
-  +doWithState(fn(stateHolder))
 }
 
 note top of AbstractComponent
@@ -53,10 +55,17 @@ using the state; e.g. dom
 element's id could be <i>partName</i>.
 end note'/
 
-note left of AbstractComponent::"render(values)"
+note left of AbstractComponent::doWithState
+Applies (using <i>fn</i>)) the state
+changes then passes
+the related events to
+<i>StateChangesHandlerAdapter</i>.
+end note
+
+note left of AbstractComponent::"render(value)"
 Attaches DOM event
 handlers, initializes the
-state using <i>values</i>
+state using <i>value</i>
 (if provided, otherwise
 uses <i>stateInitializer</i>)
 and handles the state
@@ -76,12 +85,6 @@ end note
 note left of AbstractComponent::syncState
 Synchronizes state with
 its visual representation.
-end note
-
-note left of AbstractComponent::doWithState
-Allows for state changes
-then passes the related events to
-<i>StateChangesHandlerAdapter</i>.
 end note
 
 abstract AbstractContainerComponent extends AbstractComponent {
@@ -106,8 +109,7 @@ note bottom of EventsBinder
 end note
 
 abstract StateInitializer {
-#stateHolder
-+load()
++load(stateHolder)
 }
 
 note bottom of StateInitializer
@@ -115,8 +117,8 @@ sets stateHolder state
 (from e.g. a repository)
 end note
 
-class ValuesStateInitializer extends StateInitializer {
-#values
+class ValueStateInitializer extends StateInitializer {
+#value
 }
 
 class StateChange {
@@ -180,23 +182,23 @@ interface ErrorsHandler {
 }
 
 interface AbstractView {
-+create(values)
-+replace(values)
++create(value)
++replace(value)
 +remove()
 }
 
 /'note right of AbstractView::create
 Creates the DOM
 element to contain
-the <i>values</i> to display.
-If <i>values</i> is not empty
-calls <i>replace(values)</i>
+the <i>value</i> to display.
+If <i>value</i> is not empty
+calls <i>replace(value)</i>
 to show them.
 end note'/
 
 /'note left of AbstractView::replace
 Replaces the previous
-displayed values with
+displayed value with
 the new ones.
 end note'/
 
@@ -314,7 +316,7 @@ class StateSynchronizer {
 
 note left of StateSynchronizer::syncState
 Updates (silently) the
-state using view's values
+state using view's value
 and part owners state.
 end note
 
@@ -331,7 +333,7 @@ abstract DomValuesReader {
 
 /'note right of DomValuesReader::extractDomValues
 Extracts the input
-values from view.
+value from view.
 end note'/
 
 AbstractComponent *-down- EventsBinder
@@ -359,7 +361,7 @@ StateChangesCollector *-- "many" StateChange
 'ComponentIllustrator --|> StateChangesHandler
 'PartStateChange -down-> StateChange
 'PartsAllocator -down-> StateHolder
-'ValuesStateInitializer -up-|> StateInitializer
+'ValueStateInitializer -up-|> StateInitializer
 StateChangesCollector *-- StateChangeEnhancer
 
 /'note as setElement

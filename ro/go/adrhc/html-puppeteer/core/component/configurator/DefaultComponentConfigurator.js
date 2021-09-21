@@ -1,6 +1,6 @@
 import ComponentConfigurator from "./ComponentConfigurator.js";
 import StateChangesHandlersInvoker from "../../state-processor/StateChangesHandlersInvoker.js";
-import ValuesStateInitializer from "../ValuesStateInitializer.js";
+import ValueStateInitializer from "../ValueStateInitializer.js";
 import {dataOf} from "../../../util/DomUtils.js";
 import PartialStateHolder from "../../state/PartialStateHolder.js";
 
@@ -66,7 +66,7 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
     _setAndConfigureStateInitializer(component) {
         component.stateInitializer = this.config.stateInitializer;
         if (component.stateInitializer == null && this.config.initialState != null) {
-            component.stateInitializer = new ValuesStateInitializer(this.config.initialState);
+            component.stateInitializer = new ValueStateInitializer(this.config.initialState);
         }
     }
 }

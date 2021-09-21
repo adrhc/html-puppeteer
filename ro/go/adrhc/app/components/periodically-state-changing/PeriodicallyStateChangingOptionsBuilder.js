@@ -15,7 +15,7 @@ class PeriodicallyStateChangingOptionsBuilder extends DebuggerOptionsBuilder {
     }
 
     /**
-     * @param {DoWithStateFn} doWithStateFn
+     * @param {DoWithStateAndClockFn} doWithStateFn
      * @return {PeriodicallyStateChangingOptionsBuilder}
      */
     doPeriodicallyWithState(doWithStateFn) {
@@ -48,7 +48,7 @@ export function addClockDebugger(debuggerOptions) {
 }
 
 /**
- * @param {DoWithStateFn} doWithStateFn
+ * @param {DoWithStateAndClockFn} doWithStateFn
  */
 export function doPeriodicallyWithState(doWithStateFn) {
     return new PeriodicallyStateChangingOptionsBuilder().doPeriodicallyWithState(doWithStateFn);

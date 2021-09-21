@@ -3,7 +3,7 @@ import {applyExtraConfigurators} from "./configurator/ComponentConfigurator.js";
 import {StateProcessor} from "../state-processor/StateProcessor.js";
 
 /**
- * @typedef {Bag & ValuesStateInitializerOptions & StateChangesHandlersInvoker & AbstractTemplateViewOptionsWithView} AbstractComponentOptions
+ * @typedef {Bag & ValueStateInitializerOptions & StateChangesHandlersInvoker & AbstractTemplateViewOptionsWithView} AbstractComponentOptions
  * @property {string=} elemIdOrJQuery
  * @property {StateHolder=} stateHolder
  * @property {StateInitializer=} stateInitializer
@@ -57,6 +57,28 @@ export default class AbstractComponent extends StateProcessor {
      */
     getState() {
         return _.cloneDeep(this.stateHolder.currentState);
+    }
+
+    /**
+     * Completely replaces the component's state.
+     *
+     * @param {Bag} newState
+     */
+    replaceState(newState) {
+        this.doWithState(stateHolder => stateHolder.replace(newState));
+    }
+
+    /**
+     * Replaces a component's state part.
+     *
+     * @param {Bag=} newPart
+     * @param {PartName|undefined=} previousPartName
+     * @param {PartName|undefined=} newPartName
+     * @param {boolean=} dontRecordStateEvents
+     */
+    replacePart(newPart, previousPartName, newPartName, dontRecordStateEvents) {
+        this.doWithState(partialStateHolder =>
+            partialStateHolder.replacePart(newPart, previousPartName, newPartName, dontRecordStateEvents));
     }
 
     /**

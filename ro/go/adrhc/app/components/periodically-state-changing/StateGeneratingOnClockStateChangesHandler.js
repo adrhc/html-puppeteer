@@ -8,23 +8,23 @@ import StateChangesHandler from "../../../html-puppeteer/core/state-changes-hand
  */
 /**
  * @typedef {Object} StateGeneratingOnClockStateChangesHandlerOptions
- * @property {DoWithStateFn} doWithStateFn
+ * @property {DoWithStateAndClockFn} doWithStateFn
  * @property {StateGeneratorFn} stateGeneratorFn
  */
 /**
  * Using clock events to start/stop the interval-time.
  * Using StateGeneratingOnClockStateChangesHandlerOptions to construct the
- * doWithStateFn to be used to change the state of generatedStateReceiverComponent.
- * 
+ * doWithStateAndClockFn to be used to change the state of generatedStateReceiverComponent.
+ *
  * @template SCT, SCP
- * @typedef {function(stateHolder: PartialStateHolder)} DoWithStateFn
+ * @typedef {function(stateHolder: PartialStateHolder, clockStateChange: StateChange)} DoWithStateAndClockFn
  * @extends {StateChangesHandler}
  */
 export default class StateGeneratingOnClockStateChangesHandler extends StateChangesHandler {
     /**
-     * @type {DoWithStateFn}
+     * @type {DoWithStateAndClockFn}
      */
-    doWithStateFn;
+    doWithStateAndClockFn;
     /**
      * @type {AbstractComponent}
      */
@@ -42,35 +42,38 @@ export default class StateGeneratingOnClockStateChangesHandler extends StateChan
     constructor(generatedStateReceiverComponent, options) {
         super();
         this.generatedStateReceiverComponent = generatedStateReceiverComponent;
-        this.doWithStateFn = options.doWithStateFn ?? ((stateHolder) => {
+        this.doWithStateAndClockFn = options.doWithStateFn ?? ((stateHolder) => {
             const generatedState = options.stateGeneratorFn(generatedStateReceiverComponent.config, new Date());
             stateHolder.replace(generatedState);
         });
     }
 
     /**
-     * @param {StateChange<SCT, SCP>} stateChange
+     * @param {StateChange<SCT, SCP>} clockStateChange
      */
-    changeOccurred(stateChange) {
-        const newClockState = /** @type {ClockState} */ stateChange.newState;
+    changeOccurred(clockStateChange) {
+        const newClockState = /** @type {ClockState} */ clockStateChange.newState;
         if (newClockState.stopped) {
             this._stop();
         } else {
-            this._start(newClockState.interval);
+            this._start(clockStateChange);
         }
     }
 
     /**
      * starts the generatedStateReceiverComponent
      *
+     * @param {StateChange<SCT, SCP>} clockStateChange
      * @protected
      */
-    _start(interval) {
+    _start(clockStateChange) {
         this._stop();
+        const interval = (/** @type {ClockState} */ clockStateChange.newState).interval;
         const generatedStateReceiverComponent = this.generatedStateReceiverComponent;
-        const doWithStateFn = this.doWithStateFn;
+        const doWithStateAndClockFn = this.doWithStateAndClockFn;
         this.setIntervalHandle = setInterval(() =>
-            generatedStateReceiverComponent.doWithState((state) => doWithStateFn(state)), interval);
+            generatedStateReceiverComponent.doWithState((state) =>
+                doWithStateAndClockFn(state, clockStateChange)), interval);
         console.log("clock started");
     }
 
