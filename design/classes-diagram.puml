@@ -2,26 +2,12 @@
 
 title HTML puppeteer - Classes Diagram
 
-abstract EventsBinder {
-  component: AbstractComponent
-  {abstract}+attachEventHandlers()
-  {abstract}+detachEventHandlers()
-}
-
-note bottom of EventsBinder
-  Contains handlers for DOM events.
-  Usual handler processing:
-  - capture only intended events
-  (use business agnostic filters)
-  - invoke suitable component methods
-end note
-
 abstract AbstractComponent {
   #config
   #eventsBinder
   #stateInitializer
   #stateHolder
-  #stateSynchronizer
+  #domValuesReader
   #stateChangesHandlerAdapter
   #[initErrorsHandler]
   +render(values)
@@ -70,8 +56,9 @@ note left of AbstractComponent::"render(values)"
 - attaches the DOM
 event handlers
 - initializes the state
-  (by default using <i>values</i>)
-- handles potential errors
+  using <i>values</i> (if provided) 
+  otherwise the <i>stateInitializer</i>
+- handles state loading errors
 end note
 
 note left of AbstractComponent::"close()"
@@ -93,42 +80,26 @@ Allows for ad-hoc state changes.
 <i>.processStateChanges</i>
 end note
 
-interface ErrorsHandler {
-+accept(error)
+abstract AbstractContainerComponent extends AbstractComponent {
+  #components: {location: component}
+  +create(location, componentType)
+  +close(location)
+  +move(fromLocation, toLocation)
 }
 
-interface AbstractView {
-+create(values)
-+replace(values)
-+remove()
+abstract EventsBinder {
+  component: AbstractComponent
+  {abstract}+attachEventHandlers()
+  {abstract}+detachEventHandlers()
 }
 
-note left of AbstractView::create
-Creates the DOM
-element to contain
-the <i>values</i> to display.
-If <i>values</i> is not empty
-calls <i>replace(values)</i>
-to show them.
+note bottom of EventsBinder
+  Contains handlers for DOM events.
+  Usual handler processing:
+  - capture only intended events
+  (use business agnostic filters)
+  - invoke suitable component methods
 end note
-
-note left of AbstractView::replace
-Replaces the previous
-displayed values with
-the new ones.
-end note
-
-note left of AbstractView::remove
-Removes the view's
-DOM element.
-end note
-
-abstract AbstractTemplatingView implements AbstractView {
-$elem: jQuery<HTMLElement>
-htmlTemplate: string
-}
-
-class SimpleView extends AbstractTemplatingView
 
 abstract StateInitializer {
 #stateHolder
@@ -177,19 +148,20 @@ interface StateHolder {
 #stateChangesCollector
 }
 
-note right of StateHolder::replace
+/'note left of StateHolder::replace
 Besides replacing the
 state it'll also record
 the changes using
 <i>stateChangesCollector</i>.
-end note
+end note'/
 
 interface PartialStateHolder extends StateHolder {
 +getPart(partName)
 +replacePart(partName, \nnewPart, [dontRecordChanges])
 }
 
-note right of PartialStateHolder::replacePart {
+' note left of PartialStateHolder::replacePart
+note bottom of PartialStateHolder
 A null/undefined replacement
 value should be treated as
 "completelly remove the
@@ -197,7 +169,44 @@ associated objects" while
 an empty object should be
 treated as "use empty for
 all part's fields".
+end note
+
+interface ErrorsHandler {
++accept(error)
 }
+
+interface AbstractView {
++create(values)
++replace(values)
++remove()
+}
+
+note left of AbstractView::create
+Creates the DOM
+element to contain
+the <i>values</i> to display.
+If <i>values</i> is not empty
+calls <i>replace(values)</i>
+to show them.
+end note
+
+/'note left of AbstractView::replace
+Replaces the previous
+displayed values with
+the new ones.
+end note'/
+
+note left of AbstractView::remove
+Removes the view's
+DOM element.
+end note
+
+abstract AbstractTemplatingView implements AbstractView {
+$elem: jQuery<HTMLElement>
+htmlTemplate: string
+}
+
+class SimpleView extends AbstractTemplatingView
 
 class StateChangesHandlerAdapter {
 stateChangesHandlers
@@ -219,7 +228,8 @@ modification to
 <i>partRemoved(stateChange)</i>
 end note'/
 
-note right of StateChangesHandlerAdapter::processStateChanges
+' note left of StateChangesHandlerAdapter::processStateChanges
+note top of StateChangesHandlerAdapter
 Conveys state changes
 to the suitable handlers.
 end note
@@ -261,7 +271,7 @@ note top of SimplePartComponentIllustrator
 The other <i>part</i> methods do nothing.
 end note
 
-abstract PartsAllocator implements PartialStateChangesHandler {
+/'abstract PartsAllocator implements PartialStateChangesHandler {
 parts: Map<partName, AbstractComponent>
 stateSynchronizer
 #createNewOwners(stateChange)
@@ -309,7 +319,7 @@ note left of StateSynchronizer::syncStateWithPartOwners
 It'll call <i>syncState()</i> on
 part owners components
 before reading their state.
-end note
+end note'/
 
 abstract DomValuesReader {
   view: AbstractView
@@ -324,6 +334,7 @@ end note'/
 AbstractComponent *-down- EventsBinder
 AbstractComponent *-down- StateHolder
 AbstractComponent *-down- StateInitializer
+AbstractComponent *-down- DomValuesReader
 AbstractComponent *-up- StateChangesHandlerAdapter
 StateChangesHandlerAdapter *-up- "many" StateChangesHandler
 ComponentIllustrator *-up- AbstractView
@@ -331,22 +342,22 @@ ComponentIllustrator *-up- AbstractView
 'PartsAllocator -down-|> PartialStateChangesHandler
 'StateChangesHandler -up-{ AbstractView : might use
 'DomValuesReader *-up- AbstractView
-StateSynchronizer *-down- DomValuesReader
+/'StateSynchronizer *-down- DomValuesReader
 StateSynchronizer -up-> PartsAllocator
-StateSynchronizer -up-> ComponentIllustrator
+StateSynchronizer -up-> ComponentIllustrator'/
 'SimplePartComponentIllustrator -down-> ComponentIllustrator
 'SimplePartComponentIllustrator -down-|> PartialStateChangesHandler
-AbstractComponent *-up- StateSynchronizer
+'AbstractComponent *-up- StateSynchronizer
 AbstractComponent *-down- ErrorsHandler
 'AbstractComponent *-right- PartsAllocator
 'PartialStateHolder -up-|> StateHolder
-StateHolder *-up- StateChangesCollector
-StateChangesCollector *-up- "many" StateChange
+StateHolder *-down- StateChangesCollector
+StateChangesCollector *-down- "many" StateChange
 'ComponentIllustrator --|> StateChangesHandler
 'PartStateChange -down-> StateChange
 'PartsAllocator -down-> StateHolder
 'ValuesStateInitializer -up-|> StateInitializer
-StateChangesCollector *-up- StateChangeEnhancer
+StateChangesCollector *-down- StateChangeEnhancer
 
 /'note as setElement
 <i>domElement</i>
