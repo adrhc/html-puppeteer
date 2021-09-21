@@ -11,18 +11,18 @@ class App {
         this.parent = parent;
     }
 
-    createSimpleComponentOptions() {
-        return addDebugger({debuggerElemIdOrJQuery: "child-debugger"})
+    createCatsChild() {
+        return this.parent.create("cats", "simple", addDebugger({debuggerElemIdOrJQuery: "child-debugger"})
             .to({
                 initialState: {cats: generateCats(2)},
                 viewRemovalStrategy: USE_HTML,
                 onRemoveViewHtml: "cats child component was removed!"
-            });
+            }));
     }
 
     run() {
         $(namedBtn("create")).on("click", () => {
-            this.parent.create("cats", "simple", this.createSimpleComponentOptions());
+            this.createCatsChild();
             $(namedBtn("create")).attr('disabled', 'disabled');
             $(namedBtn("remove")).removeAttr('disabled');
         });
@@ -36,7 +36,7 @@ class App {
 
 $(() => {
     // the puppeteer
-    const component = PUPPETEER.animate(withDebugger());
+    const component = PUPPETEER.animate(withDebugger({debuggerElemIdOrJQuery: "parent-debugger"}));
 
     // the application using the html-puppeteer
     new App(component).run();

@@ -7,7 +7,7 @@ export const REMOVE_CONTENT = "REMOVE_CONTENT";
 export const USE_HTML_TEMPLATE = "USE_THE_TEMPLATE";
 export const USE_HTML = "USE_HTML";
 /**
- * @typedef {REMOVE_ELEMENT|REMOVE_CONTENT|USE_HTML_TEMPLATE} ViewRemovalStrategy
+ * @typedef {"REMOVE_ELEMENT"|"REMOVE_CONTENT"|"USE_HTML_TEMPLATE"|"USE_HTML"} ViewRemovalStrategy
  */
 /**
  * @typedef {AbstractTemplateViewOptions} SimpleViewOptions
@@ -31,7 +31,7 @@ export default class SimpleView extends AbstractTemplateView {
     constructor({viewRemovalStrategy, onRemoveViewHtml, ...restOfOptions}) {
         super(restOfOptions);
         this.viewRemovalStrategy = viewRemovalStrategy ?? USE_HTML_TEMPLATE;
-        isTrue(`${viewRemovalStrategy}` !== USE_HTML || !!onRemoveViewHtml);
+        isTrue(viewRemovalStrategy !== USE_HTML || !!onRemoveViewHtml);
         this.onRemoveViewHtml = onRemoveViewHtml ?? "";
     }
 
