@@ -17,30 +17,23 @@
 <script src="8simple-parts-cats-and-dogs.js" type="module"></script>
 
 <div class="container">
-    <div class="section title">PeriodicallyStateChangingComponent</div>
-    <div class="section flex-center fill-available buttons">
+<!--    <div class="section title">SimpleComponent</div>-->
+    <!--<div class="section flex-center fill-available buttons">
         <button name="stop">Stop</button>
         <button name="start">Start</button>
-    </div>
-    <div class="section title">Clock (internal) state</div>
-    <div class="section" id="internal-clock-debugger">{{this}}</div>
-    <div class="section clock-internal-state">
-        <div>
-            <button name="change">Change (internal) clock state</button>
-        </div>
-        <div><input name="internal-clock-state" placeholder="fill in the Clock (internal) state" type="text"></div>
-    </div>
-    <div class="section title">Generated state</div>
+    </div>-->
+    <div class="section title">SimpleComponent (partial state changing each 1s)</div>
     <div class="section" id="component-debugger">{{this}}</div>
-    <div class="section flex-center fill-available" data-interval="1500" data-template-id="table-template"
-         data-type="periodically-state-changing"></div>
+    <div class="section title">Component's view</div>
+    <div class="section flex-center fill-available" data-template-id="table-template"
+         data-type="simple" data-initial-state='{}'></div>
 </div>
 
 <script id="table-template" type="text/x-handlebars-template">
     <table class="responstable">
         <thead>
         <tr>
-            <th colSpan="2">Generating new dogs each {{interval}} ms</th>
+            <th colSpan="2">Generating new dogs each 1000 ms</th>
         </tr>
         </thead>
         {{#each dogs}}

@@ -8,7 +8,7 @@ export default class Scenario6EventsBinder extends EventsBinder {
         $(namedBtn("stop")).on("click.Scenario6EventsBinder", () => clock.stopClock());
         $(namedBtn("change")).on("click.Scenario6EventsBinder", () => {
             clock.clockStateProcessor.doWithState(clockState => {
-                const json = $("input[name='internal-clock-state']").val();
+                const json = $("input[name='clock-state']").val();
                 if (!json.trim()) {
                     return;
                 }
