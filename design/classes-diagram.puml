@@ -12,6 +12,7 @@ abstract AbstractComponent {
   #[initErrorsHandler]
   +render(values)
   +close()
+  +getState()
   +syncState()
   +doWithState(fn(stateHolder))
 }
@@ -68,6 +69,10 @@ and detaches the
 DOM event handlers
 end note
 
+note left of AbstractComponent::get
+Returns a state copy.
+end note
+
 note left of AbstractComponent::syncState
 Synchronizes state with
 its visual representation.
@@ -75,16 +80,15 @@ end note
 
 note left of AbstractComponent::doWithState
 Allows for state changes
-then passes the related
-state changes events to
+then passes the related events to
 <i>StateChangesHandlerAdapter</i>.
 end note
 
 abstract AbstractContainerComponent extends AbstractComponent {
-  #components: {location: component}
-  +create(location, componentType)
-  +close(location)
-  +move(fromLocation, toLocation)
+  #components: {statePartName: component}
+  +create(statePartName, componentType)
+  +close(statePartName)
+  +move(fromPartName, toPartName)
 }
 
 abstract EventsBinder {
@@ -116,16 +120,16 @@ class ValuesStateInitializer extends StateInitializer {
 }
 
 class StateChange {
-#oldPartName
-#newPartName
-#oldStateOrPart
-#newStateOrPart
+#previousState
+#newState
 #changeType
 }
 
 class PartStateChange extends StateChange {
-#oldState
-#newState
+#previousPartName
+#previousPart
+#newPartName
+#newPart
 }
 
 'interface StateChangeEnhancer<T extends StateChange> {
@@ -157,7 +161,7 @@ end note'/
 
 interface PartialStateHolder extends StateHolder {
 +getPart(partName)
-+replacePart(partName, \nnewPart, [dontRecordChanges])
++replacePart(newPart, \npreviousPartName, \nnewPartName, \n[dontRecordChanges])
 }
 
 ' note left of PartialStateHolder::replacePart
@@ -181,14 +185,14 @@ interface AbstractView {
 +remove()
 }
 
-note right of AbstractView::create
+/'note right of AbstractView::create
 Creates the DOM
 element to contain
 the <i>values</i> to display.
 If <i>values</i> is not empty
 calls <i>replace(values)</i>
 to show them.
-end note
+end note'/
 
 /'note left of AbstractView::replace
 Replaces the previous
@@ -223,7 +227,7 @@ Defaults to:
 to <i>replaced(stateChange)</i>
 - map state part (aka section)
 modification to
-<i>partModified(stateChange)</i>
+<i>partReplaced(stateChange)</i>
 - map state part removal to
 <i>partRemoved(stateChange)</i>
 end note'/
@@ -243,7 +247,7 @@ interface StateChangesHandler {
 
 interface PartialStateChangesHandler extends StateChangesHandler {
 +partCreated(stateChange)
-+partModified(stateChange)
++partReplaced(stateChange)
 +partRelocated(stateChange)
 +partRemoved(stateChange)
 +partChangeOccurred(stateChange)
@@ -264,13 +268,10 @@ class SimplePartComponentIllustrator extends ComponentIllustrator implements Par
 +partChangeOccurred(stateChange)
 }
 
-note left of SimplePartComponentIllustrator::partChangeOccurred
-<i>partChangeOccurred()</i>
-delegates to <i>super.replaced()</i>
-with a StateChange containing
-the oldState and newState.
-The other <i>part*</i> methods
-do nothing.
+note left of SimplePartComponentIllustrator
+By default will render
+(aka pass to <i>view</i>) the
+complete new state.
 end note
 
 /'abstract PartsAllocator implements PartialStateChangesHandler {

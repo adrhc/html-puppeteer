@@ -53,6 +53,13 @@ export default class AbstractComponent extends StateProcessor {
     }
 
     /**
+     * @return {Bag}
+     */
+    getState() {
+        return _.cloneDeep(this.stateHolder.currentState);
+    }
+
+    /**
      * @param {*=} value
      * @return {this}
      */
