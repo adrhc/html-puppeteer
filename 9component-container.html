@@ -24,13 +24,14 @@
 	</div>
 	<div class="section title">parent debugger</div>
 	<div class="section" id="parent-debugger">No debugging data available yet!</div>
-	<div class="section title">"message" child state</div>
+	<div class="section title">last automatically detected children state</div>
 	<div class="section" id="children-debugger">No debugging data available yet!</div>
 	<div class="section title">"cats" child debugger</div>
 	<div class="section" id="cats-debugger">No debugging data available yet!</div>
 	<div class="section title">Component's view (parent and its children)</div>
 	<div class="section flex-column fit-content bgc-aliceblue"
-	     data-initial-state='{"text": "this is the parent state displayed by its view (below is the child component)"}'
+	     data-initial-state='{"text": "this is the parent state displayed by its view (below is the child component)",
+	     "message2": "\"message2\" child initialized from parent state"}'
 	     data-template-id="parent-template"
 	     data-type="simple-container"
 	     id="parent-component"></div>
@@ -38,11 +39,18 @@
 
 <script id="parent-template" type="text/x-handlebars-template">
 	<div class="part thin-dashed-border mb3">{{text}}</div>
-	<div class="part thin-dashed-border mb3" data-part="message" data-type="simple" data-template-id="message-template"
-	     data-initial-state='The "message" child was <i>automatically</i> created!'
+	<div class="part thin-dashed-border mb3" data-part="message1" data-type="simple"
+	     data-template-id="message1-template"
+	     data-initial-state='The "message1" child was <i>automatically</i> created!<BR>initial state is from <i>data-initial-state</i> attribute'
 	     data-view-removal-strategy="USE_HTML"
-	     data-on-remove-view-html='"message" child component was removed!'>
-		The "message" child is not available yet!
+	     data-on-remove-view-html='"message1" child component was removed!'>
+		The "message1" child is not available yet!
+	</div>
+	<div class="part thin-dashed-border mb3" data-part="message2" data-type="simple"
+	     data-template-id="message2-template"
+	     data-view-removal-strategy="USE_HTML"
+	     data-on-remove-view-html='"message2" child component was removed!'>
+		The "message2" child is not available yet!
 	</div>
 	<div class="part" data-part="cats" data-template-id="cats-template"
 	     data-view-removal-strategy="USE_HTML"
@@ -51,8 +59,12 @@
 	</div>
 </script>
 
-<script id="message-template" type="text/x-handlebars-template">
-	{{#if this}}{{{this}}}{{else}}The "message" child is not available yet!{{/if}}
+<script id="message1-template" type="text/x-handlebars-template">
+	{{#if this}}{{{this}}}{{else}}The "message1" child is not available yet!{{/if}}
+</script>
+
+<script id="message2-template" type="text/x-handlebars-template">
+	{{#if this}}{{{this}}}{{else}}The "message2" child is not available yet!{{/if}}
 </script>
 
 <script id="cats-template" type="text/x-handlebars-template">

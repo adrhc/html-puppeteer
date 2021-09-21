@@ -54,6 +54,7 @@ export class AbstractComponentOptionsBuilder {
      * adds an extra StateChangesHandler
      *
      * @param {StateChangesHandler} stateChangesHandler
+     * @return {AbstractComponentOptionsBuilder}
      */
     addStateChangeHandler(stateChangesHandler) {
         this._options.extraStateChangesHandlers = this._options.extraStateChangesHandlers ?? [];
@@ -65,6 +66,7 @@ export class AbstractComponentOptionsBuilder {
      * adds an extra ComponentConfigurator
      *
      * @param {ComponentConfigurator} componentConfigurator
+     * @return {AbstractComponentOptionsBuilder}
      */
     addConfigurator(componentConfigurator) {
         this._options.extraConfigurators = this._options.extraConfigurators ?? [];
@@ -74,6 +76,7 @@ export class AbstractComponentOptionsBuilder {
 
     /**
      * @param {ComponentIllustratorProviderFn} componentIllustratorProviderFn
+     * @return {AbstractComponentOptionsBuilder}
      */
     addComponentIllustratorProvider(componentIllustratorProviderFn) {
         this.addConfiguratorFn((component) => {
@@ -85,9 +88,14 @@ export class AbstractComponentOptionsBuilder {
 
     /**
      * @param {StateInitializerProviderFn} stateInitializerProviderFn
+     * @param {boolean} useIfMissing
+     * @return {AbstractComponentOptionsBuilder}
      */
-    withStateInitializerFn(stateInitializerProviderFn) {
+    withStateInitializerFn(stateInitializerProviderFn, useIfMissing) {
         return this.addConfiguratorFn((component) => {
+            if (useIfMissing && component.stateInitializer) {
+                return;
+            }
             component.stateInitializer = stateInitializerProviderFn(component);
         });
     }
@@ -138,9 +146,11 @@ export function addConfigurator(configurator) {
 
 /**
  * @param {StateInitializerProviderFn} stateInitializerProviderFn
+ * @param {boolean} useIfMissing
+ * @return {AbstractComponentOptionsBuilder}
  */
-export function withStateInitializerFn(stateInitializerProviderFn) {
-    return new AbstractComponentOptionsBuilder().withStateInitializerFn(stateInitializerProviderFn);
+export function withStateInitializerFn(stateInitializerProviderFn, useIfMissing) {
+    return new AbstractComponentOptionsBuilder().withStateInitializerFn(stateInitializerProviderFn, useIfMissing);
 }
 
 class FunctionComponentConfigurator extends ComponentConfigurator {

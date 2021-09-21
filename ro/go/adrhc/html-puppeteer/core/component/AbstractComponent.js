@@ -42,6 +42,10 @@ export default class AbstractComponent extends StateProcessor {
      * @type {StateInitializer}
      */
     stateInitializer;
+    /**
+     * @type {AbstractComponent}
+     */
+    parent;
 
     /**
      * @param {AbstractComponentOptions} options
@@ -95,6 +99,16 @@ export default class AbstractComponent extends StateProcessor {
      * @return {this}
      */
     render(value) {
+        this._initializeState(value);
+        this.eventsBinder?.attachEventHandlers();
+        return this;
+    }
+
+    /**
+     * @param {*=} value
+     * @protected
+     */
+    _initializeState(value) {
         if (value != null) {
             this.replaceState(value);
         } else {
@@ -102,8 +116,6 @@ export default class AbstractComponent extends StateProcessor {
                 this.stateInitializer?.load(sh);
             });
         }
-        this.eventsBinder?.attachEventHandlers();
-        return this;
     }
 
     /**

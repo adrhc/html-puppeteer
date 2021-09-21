@@ -1,6 +1,6 @@
 /**
  * @template SCT
- * @abstract
+ * @interface
  */
 export default class StateInitializer {
     /**

@@ -1,6 +1,6 @@
 import ComponentConfigurator from "./ComponentConfigurator.js";
 import StateChangesHandlersInvoker from "../../state-processor/StateChangesHandlersInvoker.js";
-import ValueStateInitializer from "../ValueStateInitializer.js";
+import ValueStateInitializer from "../state-initializer/ValueStateInitializer.js";
 import {dataOf} from "../../../util/DomUtils.js";
 import PartialStateHolder from "../../state/PartialStateHolder.js";
 
@@ -31,6 +31,7 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
      */
     configure(component) {
         this._setOptionsDataAttributesAndConfig(component);
+        component.parent = this.config.parent;
         component.stateHolder = this.config.stateHolder ?? new PartialStateHolder(this.config);
         component.stateChangesHandlersInvoker =
             this.config.stateChangesHandlersInvoker ?? new StateChangesHandlersInvoker(this.config);
@@ -65,8 +66,13 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
      */
     _setAndConfigureStateInitializer(component) {
         component.stateInitializer = this.config.stateInitializer;
-        if (component.stateInitializer == null && this.config.initialState != null) {
-            component.stateInitializer = new ValueStateInitializer(this.config.initialState);
+        if (component.stateInitializer == null) {
+            const partName = component.config.part;
+            const partValue = partName ? component.parent?.getState()?.[partName] : undefined;
+            const initialState = this.config.initialState ?? partValue;
+            if(initialState != null) {
+                component.stateInitializer = new ValueStateInitializer(initialState);
+            }
         }
     }
 }
