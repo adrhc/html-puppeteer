@@ -1,5 +1,5 @@
 import GlobalConfig from "../util/GlobalConfig.js";
-import COMPONENTS_FACTORY from "./ComponentsFactories.js";
+import {createByType} from "./ComponentsFactories.js";
 
 class Puppeteer {
     /**
@@ -61,7 +61,7 @@ class Puppeteer {
      * @protected
      */
     instanceOf(type, $el, componentOptions = {}) {
-        return COMPONENTS_FACTORY.create(type, {elemIdOrJQuery: $el, ...componentOptions});
+        return createByType(type, {elemIdOrJQuery: $el, ...componentOptions});
     }
 
     /**

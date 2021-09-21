@@ -1,25 +1,32 @@
 import SimpleComponent from "./component/SimpleComponent.js";
 
-class ComponentsFactory {
-    TYPES = {"simple": (options) => new SimpleComponent(options)};
+/**
+ * @typedef {function(options: Bag): AbstractComponent} ComponentProviderFn
+ */
 
-    /**
-     * @param {string} type
-     * @param {{}=} options
-     * @return {AbstractComponent}
-     */
-    create(type, options) {
-        const component = this.TYPES[type]?.(options);
-        if (!component) {
-            throw new Error(`Bad component type: ${type}!`);
-        }
-        return component;
-    }
+/**
+ * @type {{[key: string]: ComponentProviderFn}}
+ */
+const COMPONENT_TYPES = {"simple": (options) => new SimpleComponent(options)};
 
-    registerComponentType(type, factory) {
-        this.TYPES[type] = factory;
+/**
+ * @param {string} type
+ * @param {{}=} options
+ * @return {AbstractComponent}
+ */
+export function createByType(type, options) {
+    const component = COMPONENT_TYPES[type]?.(options);
+    if (!component) {
+        throw new Error(`Bad component type: ${type}!`);
     }
+    return component;
 }
 
-const COMPONENTS_FACTORY = new ComponentsFactory();
-export default COMPONENTS_FACTORY;
+/**
+ * @param {string} type
+ * @param {ComponentProviderFn} componentProviderFn
+ */
+export function registerComponentType(type, componentProviderFn) {
+    COMPONENT_TYPES[type] = componentProviderFn;
+}
+

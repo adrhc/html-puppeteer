@@ -33,6 +33,11 @@
     justify-content: center;
 }
 
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
 .fill-available {
     width: -webkit-fill-available;
     width: -moz-available;
@@ -59,4 +64,13 @@
     width: -moz-available;
     width: fill-available;
     background-color: aliceblue;
+}
+
+.part, .parent {
+    border-style: outset;
+    padding: .3rem;
+}
+
+.parent {
+    margin-bottom: .3rem;
 }

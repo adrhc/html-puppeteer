@@ -31,7 +31,7 @@ export default class DebuggerOptionsBuilder extends AbstractComponentOptionsBuil
     _createDebuggerStateChangeHandler({showAsJson, debuggerElemIdOrJQuery, initialDebuggerMessage} = {}) {
         showAsJson = showAsJson ?? true;
         debuggerElemIdOrJQuery = debuggerElemIdOrJQuery ?? "debugger";
-        initialDebuggerMessage = initialDebuggerMessage ?? "state debugger";
+        initialDebuggerMessage = initialDebuggerMessage ?? "debugger has no data";
         const simpleDebugger = new SimpleComponent({
             elemIdOrJQuery: debuggerElemIdOrJQuery,
             initialState: initialDebuggerMessage
