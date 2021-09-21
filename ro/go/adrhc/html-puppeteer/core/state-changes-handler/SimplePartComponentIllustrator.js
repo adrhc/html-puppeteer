@@ -62,6 +62,6 @@ export default class SimplePartComponentIllustrator extends ComponentIllustrator
      * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partChangeOccurred(partStateChange) {
-        super.replaced(new StateChange(partStateChange.oldState, partStateChange.newState))
+        super.replaced(new StateChange(partStateChange.previousState, partStateChange.newState))
     }
 }

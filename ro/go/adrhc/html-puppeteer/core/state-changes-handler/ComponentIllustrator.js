@@ -16,14 +16,14 @@ export default class ComponentIllustrator extends StateChangesHandler {
      * @param {StateChange} stateChange
      */
     created(stateChange) {
-        this.view.create(stateChange.newStateOrPart);
+        this.view.create(stateChange.newState);
     }
 
     /**
      * @param {StateChange} stateChange
      */
     replaced(stateChange) {
-        this.view.replace(stateChange.newStateOrPart);
+        this.view.replace(stateChange.newState);
     }
 
     /**

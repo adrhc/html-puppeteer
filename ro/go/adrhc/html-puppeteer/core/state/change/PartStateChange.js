@@ -7,25 +7,35 @@ export default class PartStateChange extends StateChange {
     /**
      * @type {SCT}
      */
-    newState;
+    newPart;
+    /**
+     * @type {string|number}
+     */
+    newPartName;
     /**
      * @type {SCT}
      */
-    oldState;
+    previousPart;
+    /**
+     * @type {string|number}
+     */
+    previousPartName;
 
     /**
-     *
      * @param {SCP} previousPart
      * @param {SCP} newPart
-     * @param {PartName=} previousPartName
-     * @param {PartName=} newPartName
-     * @param {SCT} oldState
-     * @param {SCT} newState
+     * @param {PartName=} previousPartName is the "old" part name, if any; could be empty when is about a "create"
+     * @param {PartName=} newPartName is the "new" part name; could be empty when replacing with nothing (aka "delete")
+     * @param {SCT} previousCompleteState
+     * @param {SCT} newCompleteState
      */
-    constructor(previousPart, newPart, previousPartName,
-                newPartName, oldState, newState) {
-        super(previousPart, newPart, previousPartName, newPartName);
-        this.oldState = oldState;
-        this.newState = newState;
+    constructor(previousCompleteState, newCompleteState,
+                previousPart, newPart, previousPartName,
+                newPartName = newPart != null ? previousPartName : undefined) {
+        super(previousCompleteState, newCompleteState);
+        this.previousPart = previousPart;
+        this.newPart = newPart;
+        this.previousPartName = previousPartName;
+        this.newPartName = newPartName;
     }
 }

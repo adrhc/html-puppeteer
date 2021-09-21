@@ -27,10 +27,10 @@ export default class TypeStateChangeEnhancer extends StateChangeEnhancer {
      * @protected
      */
     _changeTypeOf(change) {
-        isFalse(change.previousStateOrPart == null && change.newStateOrPart == null);
-        if (this._isChangeTypeOfDelete(change.newStateOrPart, change.newPartName)) {
+        isFalse(change.previousState == null && change.newState == null);
+        if (this._isChangeTypeOfDelete(change.newState, change.newPartName)) {
             return DELETED;
-        } else if (this._isPristine(change.previousStateOrPart, change.previousPartName)) {
+        } else if (this._isPristine(change.previousState, change.previousPartName)) {
             return CREATED;
         } else if (change.previousPartName != null &&
             change.newPartName != null &&

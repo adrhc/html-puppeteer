@@ -43,7 +43,7 @@ export default class PartialStateHolder extends StateHolder {
         const newState = _.cloneDeep(this.currentState);
 
         // parts never change partially so there's no need to clone them
-        const stateChange = this._partialStateChangesOf(previousPart, newPart, previousPartName, newPartName, previousState, newState);
+        const stateChange = this._partialStateChangesOf(previousState, newState, previousPart, newPart, previousPartName, newPartName);
         return this.collectStateChanges(stateChange);
     }
 
@@ -57,8 +57,8 @@ export default class PartialStateHolder extends StateHolder {
      * @return {StateChange<SCT, SCT>[]}
      * @protected
      */
-    _partialStateChangesOf(previousPart, newPart, previousPartName, newPartName, previousState, newState) {
-        return [new PartStateChange(previousPart, newPart, previousPartName, newPartName, previousState, newState)];
+    _partialStateChangesOf(previousState, newState, previousPart, newPart, previousPartName, newPartName) {
+        return [new PartStateChange(previousState, newState, previousPart, newPart, previousPartName, newPartName)];
     }
 
     /**

@@ -25,14 +25,14 @@ export default class CopyStatesChangeHandler extends PartialStateChangesHandler 
      * @param {PartStateChange} partStateChange
      */
     partChangeOccurred(partStateChange) {
-        this.changeOccurred(new StateChange(partStateChange.oldState, partStateChange.newState))
+        this.changeOccurred(new StateChange(partStateChange.previousState, partStateChange.newState))
     }
 
     /**
      * @param {StateChange} stateChange
      */
     changeOccurred(stateChange) {
-        const state = stateChange.newStateOrPart;
+        const state = stateChange.newState;
         const value = !this.copyAsJson ? state :
             (state ? JSON.stringify(state, undefined, 2) : undefined);
         this.component.doWithState(component => component.replace(value));

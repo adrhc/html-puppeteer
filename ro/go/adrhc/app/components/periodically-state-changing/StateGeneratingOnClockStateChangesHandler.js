@@ -52,7 +52,7 @@ export default class StateGeneratingOnClockStateChangesHandler extends StateChan
      * @param {StateChange<SCT, SCP>} stateChange
      */
     changeOccurred(stateChange) {
-        const newClockState = /** @type {ClockState} */ stateChange.newStateOrPart;
+        const newClockState = /** @type {ClockState} */ stateChange.newState;
         if (newClockState.stopped) {
             this._stop();
         } else {
