@@ -14,7 +14,7 @@ $(() => {
         .addDebugger({debuggerElemIdOrJQuery: "component-debugger"})
         .to({
             stateGeneratorFn: (componentConfig, clockStateChange) =>
-                generateAndAppendDogs(5, {
+                generateAndAppendDogs({
                     interval: (/** @type {ClockState} */ clockStateChange.newState)?.interval
                 }),
             eventsBinder: new Scenario6EventsBinder()

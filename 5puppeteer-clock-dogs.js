@@ -8,9 +8,10 @@ import {generateAndAppendDogs} from "./ro/go/adrhc/app/Generators.js";
 $(() => {
     registerComponentType("periodically-state-changing",
         (options) => new PeriodicallyStateChangingComponent(options));
+
     PUPPETEER.animate(addDebugger().to({
         stateGeneratorFn: (componentConfig, clockStateChange) =>
-            generateAndAppendDogs(5, {
+            generateAndAppendDogs({
                 interval: (/** @type {ClockState} */ clockStateChange.newState)?.interval
             })
     }));

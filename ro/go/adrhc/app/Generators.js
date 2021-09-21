@@ -72,11 +72,11 @@ function _generate(max, name) {
 }
 
 /**
- * @param {number} max
- * @param {Bag} object to append to the generated dogs
+ * @param {Bag} appendToObject to append to the generated dogs
+ * @param {number=} [max=5]
  * @return {Bag}
  */
-export function generateAndAppendDogs(max, object) {
-    object.dogs = generateDogs(max);
-    return object;
+export function generateAndAppendDogs(appendToObject, max = 5) {
+    appendToObject.dogs = generateDogs(max);
+    return appendToObject;
 }
