@@ -7,7 +7,7 @@ class Puppeteer {
      * @param {jQuery<HTMLElement>=} parentComponentElem
      * @param {boolean=} dontRender
      * @param {boolean=} alwaysReturnArray
-     * @return {AbstractComponent|AbstractComponent[]}
+     * @return {AbstractContainerComponent|AbstractContainerComponent[]}
      */
     animate(componentsOptions, dontRender, parentComponentElem, alwaysReturnArray) {
         const components = this.componentsOf(parentComponentElem, componentsOptions);
@@ -22,7 +22,7 @@ class Puppeteer {
     }
 
     /**
-     * @param {jQuery<AbstractComponent>} $components
+     * @param {jQuery<AbstractContainerComponent>} $components
      * @protected
      */
     renderComponents($components) {
@@ -32,7 +32,7 @@ class Puppeteer {
     /**
      * @param {jQuery<HTMLElement>=} parentComponentElem
      * @param {{}} componentsOptions
-     * @return {AbstractComponent|AbstractComponent[]}
+     * @return {AbstractContainerComponent|AbstractContainerComponent[]}
      * @protected
      */
     componentsOf(parentComponentElem, componentsOptions) {
@@ -57,7 +57,7 @@ class Puppeteer {
      * @param {string} type
      * @param {jQuery<HTMLElement>} $el
      * @param {{}} componentOptions
-     * @return {AbstractComponent}
+     * @return {AbstractContainerComponent}
      * @protected
      */
     instanceOf(type, $el, componentOptions = {}) {

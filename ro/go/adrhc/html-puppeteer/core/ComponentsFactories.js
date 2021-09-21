@@ -1,7 +1,7 @@
 import SimpleComponent from "./component/SimpleComponent.js";
 
 /**
- * @typedef {function(options: Bag): AbstractComponent} ComponentProviderFn
+ * @typedef {function(options: Bag): AbstractContainerComponent} ComponentProviderFn
  */
 
 /**
@@ -12,7 +12,7 @@ const COMPONENT_TYPES = {"simple": (options) => new SimpleComponent(options)};
 /**
  * @param {string} type
  * @param {{}=} options
- * @return {AbstractComponent}
+ * @return {AbstractContainerComponent}
  */
 export function createByType(type, options) {
     const component = COMPONENT_TYPES[type]?.(options);

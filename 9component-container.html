@@ -17,17 +17,12 @@
 <script src="9component-container.js" type="module"></script>
 
 <div class="container">
-    <!--    <div class="section title">SimpleComponent</div>-->
-    <!--<div class="section flex-center fill-available buttons">
-        <button name="stop">Stop</button>
-        <button name="start">Start</button>
-    </div>-->
     <div class="section title">SimpleComponent with children (parent debugger)</div>
     <div class="section" id="parent-debugger">{{this}}</div>
     <div class="section title">children (cats) debugger</div>
     <div class="section" id="child-debugger">{{this}}</div>
     <div class="section title">Component's view (parent and its children)</div>
-    <div class="section flex-column fill-available" data-template-id="parent-template" data-type="simple"
+    <div class="section flex-column fit-content bgc-aliceblue" data-template-id="parent-template" data-type="simple"
          id="parent-component"></div>
 </div>
 
@@ -36,6 +31,22 @@
     <div class="part" data-part="cats" data-template-id="table-template" data-type="simple">
         (cats) children is not created yet
     </div>
+</script>
+
+<script id="table-template" type="text/x-handlebars-template">
+    <table class="responstable">
+        <thead>
+        <tr>
+            <th colSpan="2">Generated cats</th>
+        </tr>
+        </thead>
+        {{#each cats}}
+            <tr>
+                <td>{{id}}</td>
+                <td>{{name}}</td>
+            </tr>
+        {{/each}}
+    </table>
 </script>
 
 </body>

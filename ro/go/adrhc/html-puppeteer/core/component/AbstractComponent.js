@@ -60,6 +60,14 @@ export default class AbstractComponent extends StateProcessor {
     }
 
     /**
+     * @param {PartName} partName
+     * @return {*}
+     */
+    getPart(partName) {
+        return _.cloneDeep(this.stateHolder.getPart(partName));
+    }
+
+    /**
      * Completely replaces the component's state.
      *
      * @param {Bag} newState

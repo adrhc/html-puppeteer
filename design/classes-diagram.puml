@@ -13,10 +13,10 @@ abstract AbstractComponent {
   #doWithState(fn(partialStateHolder))
   +render(value)
   +close()
+  +syncState()
   +getState()
   +replaceState(newState)
   +replacePart(newPart, \npreviousPartName, \nnewPartName, \ndontRecordStateEvents)
-  +syncState()
 }
 
 note top of AbstractComponent
@@ -78,13 +78,13 @@ and detaches the
 DOM event handlers
 end note
 
-note left of AbstractComponent::get
-Returns a state copy.
-end note
-
 note left of AbstractComponent::syncState
 Synchronizes state with
 its visual representation.
+end note
+
+note left of AbstractComponent::getState
+Returns a state copy.
 end note
 
 abstract AbstractContainerComponent extends AbstractComponent {

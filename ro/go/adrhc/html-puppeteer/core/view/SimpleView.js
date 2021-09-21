@@ -13,6 +13,6 @@ export default class SimpleView extends AbstractTemplateView {
      * @param {{}} values
      */
     replace(values) {
-        this.$elem.html(generateHtml(this.htmlTemplate, values))
+        this.$elem.html(generateHtml(this.htmlTemplate, values) ?? "")
     }
 }

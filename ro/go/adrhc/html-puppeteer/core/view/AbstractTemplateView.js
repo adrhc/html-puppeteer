@@ -1,6 +1,7 @@
 import AbstractView from "./AbstractView.js";
 import {jQueryOf} from "../../util/DomUtils.js";
 import {templateTextOf} from "../../util/HtmlUtils.js";
+import {isTrue} from "../../util/AssertionUtils.js";
 
 /**
  * @typedef {Object} AbstractTemplateViewOptions
@@ -26,6 +27,7 @@ export default class AbstractTemplateView extends AbstractView {
         super();
         this.$elem = $elem ?? this._createElem(elemIdOrJQuery);
         this.htmlTemplate = htmlTemplate ?? this._createTemplate(templateId)
+        isTrue(!!this.htmlTemplate, `HTML template not provided! elemId = ${this.$elem.attr("id")}, data-part = ${this.$elem.data("part")}`)
     }
 
     /**
