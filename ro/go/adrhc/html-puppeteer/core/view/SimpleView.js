@@ -15,4 +15,11 @@ export default class SimpleView extends AbstractTemplateView {
     replace(values) {
         this.$elem.html(generateHtml(this.htmlTemplate, values) ?? "")
     }
+
+    /**
+     * removes the DOM element
+     */
+    remove() {
+        this.$elem.html("");
+    }
 }

@@ -90,7 +90,7 @@ end note
 abstract AbstractContainerComponent extends AbstractComponent {
   #components: {statePartName: component}
   +create(statePartName, type, \noptions): AbstractComponent
-  +close(statePartName)
+  +removeByName(statePartName)
   +move(fromPartName, toPartName)
 }
 

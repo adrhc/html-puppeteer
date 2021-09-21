@@ -29,7 +29,7 @@ export default class AbstractContainerComponent extends AbstractComponent {
     /**
      * @param {PartName} partName
      */
-    closeByName(partName) {
+    removeByName(partName) {
         if (!this.components[partName]) {
             console.error(`Trying to close missing child: ${partName}!`);
             return;

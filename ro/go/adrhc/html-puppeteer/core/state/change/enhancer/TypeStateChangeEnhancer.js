@@ -1,5 +1,5 @@
 import StateChangeEnhancer from "./StateChangeEnhancer.js";
-import {CREATED, DELETED, RELOCATED, REPLACED} from "../StateChangeTypes.js";
+import {CREATED, REMOVED, RELOCATED, REPLACED} from "../StateChangeTypes.js";
 import {isFalse} from "../../../../util/AssertionUtils.js";
 /**
  * @typedef {string,number|boolean} PartName
@@ -29,7 +29,7 @@ export default class TypeStateChangeEnhancer extends StateChangeEnhancer {
     _changeTypeOf(change) {
         isFalse(change.previousState == null && change.newState == null);
         if (this._isChangeTypeOfDelete(change.newState, change.newPartName)) {
-            return DELETED;
+            return REMOVED;
         } else if (this._isPristine(change.previousState, change.previousPartName)) {
             return CREATED;
         } else if (change.previousPartName != null &&

@@ -91,7 +91,7 @@ export default class PartialStateHolder extends StateHolder {
             // old item doesn't exists, inserting the new one
             this._insertPart(newPart, newPartName);
         } else if (newPart == null) {
-            // old item exists but the new one is null (i.e. old is deleted)
+            // old item exists but the new one is null (i.e. old is removed)
             this._removePart(previousPartName);
         } else {
             // previousItem and newPart are not null

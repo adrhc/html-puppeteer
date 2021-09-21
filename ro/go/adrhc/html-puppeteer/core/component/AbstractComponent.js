@@ -70,7 +70,7 @@ export default class AbstractComponent extends StateProcessor {
     /**
      * Completely replaces the component's state.
      *
-     * @param {Bag} newState
+     * @param {Bag=} newState
      */
     replaceState(newState) {
         this.doWithState(stateHolder => stateHolder.replace(newState));
@@ -95,9 +95,7 @@ export default class AbstractComponent extends StateProcessor {
      */
     render(value) {
         if (value != null) {
-            this.doWithState(sh => {
-                sh.replace(value);
-            });
+            this.replaceState(value);
         } else {
             this.doWithState((sh) => {
                 this.stateInitializer?.load(sh);
@@ -112,6 +110,6 @@ export default class AbstractComponent extends StateProcessor {
      */
     close() {
         this.eventsBinder?.detachEventHandlers();
-        this.doWithState(stateHolder => stateHolder.replace());
+        this.replaceState();
     }
 }

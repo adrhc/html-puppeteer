@@ -3,21 +3,21 @@ import StateChange from "../state/change/StateChange.js";
 
 export default class CopyStatesChangeHandler extends PartialStateChangesHandler {
     /**
-     * @type {AbstractComponent}
-     */
-    component;
-    /**
      * @type {boolean}
      */
     copyAsJson;
+    /**
+     * @type {AbstractComponent}
+     */
+    receiverComponent;
 
     /**
-     * @param {AbstractComponent} component
+     * @param {AbstractComponent} receiverComponent
      * @param {boolean} copyAsJson
      */
-    constructor(component, copyAsJson) {
+    constructor(receiverComponent, copyAsJson) {
         super();
-        this.component = component;
+        this.receiverComponent = receiverComponent;
         this.copyAsJson = copyAsJson;
     }
 
@@ -35,6 +35,6 @@ export default class CopyStatesChangeHandler extends PartialStateChangesHandler 
         const state = stateChange.newState;
         const value = !this.copyAsJson ? state :
             (state ? JSON.stringify(state, undefined, 2) : undefined);
-        this.component.doWithState(component => component.replace(value));
+        this.receiverComponent.replaceState(value);
     }
 }
