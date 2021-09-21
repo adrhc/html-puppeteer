@@ -30,7 +30,7 @@
 	<div class="section" id="cats-debugger">No debugging data available yet!</div>
 	<div class="section title">Component's view (parent and its children)</div>
 	<div class="section flex-column fit-content bgc-aliceblue"
-	     data-initial-state='{"text": "this is the parent state displayed by its view (below is the child component)", "message": "The \"message\" children was automatically created!"}'
+	     data-initial-state='{"text": "this is the parent state displayed by its view (below is the child component)", "message": "The \"message\" children was <i>automatically</i> created!"}'
 	     data-template-id="parent-template"
 	     data-type="simple-container"
 	     id="parent-component"></div>
@@ -51,7 +51,7 @@
 </script>
 
 <script id="message-template" type="text/x-handlebars-template">
-	{{#if message}}{{message}}{{else}}The "message" children is not available yet!{{/if}}
+	{{#if message}}{{{message}}}{{else}}The "message" children is not available yet!{{/if}}
 </script>
 
 <script id="table-template" type="text/x-handlebars-template">

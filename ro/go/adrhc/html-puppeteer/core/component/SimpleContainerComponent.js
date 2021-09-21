@@ -2,9 +2,9 @@ import PUPPETEER from "../Puppeteer.js";
 import {USE_HTML} from "../view/SimpleView.js";
 import {jQueryOf} from "../../util/DomUtils.js";
 import {createByType} from "../ComponentsFactories.js";
-import SimpleComponent from "./SimpleComponent.js";
 import SimplePartComponentIllustrator from "../state-changes-handler/SimplePartComponentIllustrator.js";
 import AbstractContainerComponent from "./AbstractContainerComponent.js";
+import {addComponentIllustratorProvider} from "./options/AbstractComponentOptionsBuilder.js";
 
 /**
  * @typedef {{[key: string]: AbstractContainerComponent}} ComponentsCollection
@@ -28,10 +28,8 @@ export default class SimpleContainerComponent extends AbstractContainerComponent
      * @param {SimpleContainerComponentOptions} restOfOptions
      */
     constructor({componentIllustrator, ...restOfOptions} = {}) {
-        super({
-            componentIllustrator: componentIllustrator ?? new SimplePartComponentIllustrator(restOfOptions),
-            ...restOfOptions
-        });
+        super(addComponentIllustratorProvider(config =>
+            (componentIllustrator ?? new SimplePartComponentIllustrator(config))).to(restOfOptions));
         this.components = restOfOptions.components ?? {};
     }
 
