@@ -1,5 +1,6 @@
 import StateChangesHandlersInvoker from "./StateChangesHandlersInvoker.js";
 import {StateProcessor} from "./StateProcessor.js";
+import PartialStateHolder from "../state/PartialStateHolder.js";
 
 /**
  * @typedef {Object} StateProcessorOptions

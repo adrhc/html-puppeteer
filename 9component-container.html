@@ -2,14 +2,14 @@
 <html lang="en">
 
 <head>
-    <title>HTML puppeteer</title>
-    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-    <script src="libraries/jquery-3.6.0.js"></script>
-    <script src="libraries/handlebars.min-v4.7.7.js"></script>
-    <!-- see https://github.com/lodash/lodash/wiki/FP-Guide#installation -->
-    <script src="libraries/lodash4_lodash.min.js_lodash.fp.min.js"></script>
-    <link href="ro/go/adrhc/app/css/main.css" rel="stylesheet">
-    <link href="ro/go/adrhc/app/css/responstable.css" rel="stylesheet">
+	<title>HTML puppeteer</title>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<script src="libraries/jquery-3.6.0.js"></script>
+	<script src="libraries/handlebars.min-v4.7.7.js"></script>
+	<!-- see https://github.com/lodash/lodash/wiki/FP-Guide#installation -->
+	<script src="libraries/lodash4_lodash.min.js_lodash.fp.min.js"></script>
+	<link href="ro/go/adrhc/app/css/main.css" rel="stylesheet">
+	<link href="ro/go/adrhc/app/css/responstable.css" rel="stylesheet">
 </head>
 
 <body>
@@ -17,41 +17,44 @@
 <script src="9component-container.js" type="module"></script>
 
 <div class="container">
-    <div class="section title">PeriodicallyStateChangingComponent</div>
-    <div class="section flex-center fill-available buttons">
-        <button name="remove">Close (aka remove) child</button>
-        <button name="create">Create and render the child</button>
-    </div>
-    <div class="section title">parent debugger</div>
-    <div class="section" id="parent-debugger">no data available yet!</div>
-    <div class="section title">children (cats) debugger</div>
-    <div class="section" id="child-debugger">No debugging data available yet!</div>
-    <div class="section title">Component's view (parent and its children)</div>
-    <div class="section flex-column fit-content bgc-aliceblue" data-template-id="parent-template" data-type="simple"
-         id="parent-component"></div>
+	<div class="section title">PeriodicallyStateChangingComponent</div>
+	<div class="section flex-center fill-available buttons">
+		<button name="remove" disabled>Close (aka remove) child</button>
+		<button name="create">Create and render the child</button>
+	</div>
+	<div class="section title">parent debugger</div>
+	<div class="section" id="parent-debugger">No debugging data available yet!</div>
+	<div class="section title">children (cats) debugger</div>
+	<div class="section" id="child-debugger">No debugging data available yet!</div>
+	<div class="section title">Component's view (parent and its children)</div>
+	<div class="section flex-column fit-content bgc-aliceblue"
+	     data-initial-state='{"text": "this is the parent state displayed by its view (below is the child component)"}'
+	     data-template-id="parent-template"
+	     data-type="simple"
+	     id="parent-component"></div>
 </div>
 
 <script id="parent-template" type="text/x-handlebars-template">
-    <div class="part parent">{{text}}</div>
-    <div class="part" data-part="cats" data-template-id="table-template" data-type="simple">
-        (cats) children is not created yet
-    </div>
+	<div class="part parent">{{text}}</div>
+	<div class="part" data-part="cats" data-template-id="table-template" data-type="simple">
+		(cats) children is not created yet
+	</div>
 </script>
 
 <script id="table-template" type="text/x-handlebars-template">
-    <table class="responstable">
-        <thead>
-        <tr>
-            <th colSpan="2">Generated cats</th>
-        </tr>
-        </thead>
-        {{#each cats}}
-            <tr>
-                <td>{{id}}</td>
-                <td>{{name}}</td>
-            </tr>
-        {{/each}}
-    </table>
+	<table class="responstable">
+		<thead>
+		<tr>
+			<th colSpan="2">Generated cats</th>
+		</tr>
+		</thead>
+		{{#each cats}}
+			<tr>
+				<td>{{id}}</td>
+				<td>{{name}}</td>
+			</tr>
+		{{/each}}
+	</table>
 </script>
 
 </body>
