@@ -5,6 +5,7 @@ import {createByType} from "../ComponentsFactories.js";
 import SimplePartComponentIllustrator from "../state-changes-handler/SimplePartComponentIllustrator.js";
 import AbstractContainerComponent from "./AbstractContainerComponent.js";
 import {addComponentIllustratorProvider} from "./options/AbstractComponentOptionsBuilder.js";
+import {addDebugger} from "./options/DebuggerOptionsBuilder.js";
 
 /**
  * @typedef {{[key: string]: AbstractContainerComponent}} ComponentsCollection
@@ -39,12 +40,13 @@ export default class SimpleContainerComponent extends AbstractContainerComponent
      */
     render(value) {
         super.render(value);
-        // PUPPETEER.animate(addDebugger({debuggerElemIdOrJQuery: "children-debugger"})
-        PUPPETEER.animate({
+        PUPPETEER.animate(addDebugger({debuggerElemIdOrJQuery: "children-debugger"}).to({
+            // PUPPETEER.animate({
             initialState: value ?? this.getState(),
             viewRemovalStrategy: USE_HTML,
             onRemoveViewHtml: "child component was removed!"
-        }, false, jQueryOf(this.config.elemIdOrJQuery), true);
+            // }, false, jQueryOf(this.config.elemIdOrJQuery), true);
+        }), false, jQueryOf(this.config.elemIdOrJQuery), true);
         // .forEach(c => this.components);
         return this;
     }

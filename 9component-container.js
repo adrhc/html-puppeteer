@@ -1,4 +1,4 @@
-import {addDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/options/DebuggerOptionsBuilder.js";
+import {addDebugger, withDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/options/DebuggerOptionsBuilder.js";
 import PUPPETEER from "./ro/go/adrhc/html-puppeteer/core/Puppeteer.js";
 import {generateCats} from "./ro/go/adrhc/app/Generators.js";
 import {namedBtn} from "./ro/go/adrhc/html-puppeteer/util/SelectorUtils.js";
@@ -32,8 +32,7 @@ class App {
 
 $(() => {
     // the puppeteer
-    // const component = PUPPETEER.animate(withDebugger({debuggerElemIdOrJQuery: "parent-debugger"}));
-    const component = PUPPETEER.animate();
+    const component = PUPPETEER.animate(withDebugger({debuggerElemIdOrJQuery: "parent-debugger"}));
 
     // the application using the html-puppeteer
     new App(component).run();
