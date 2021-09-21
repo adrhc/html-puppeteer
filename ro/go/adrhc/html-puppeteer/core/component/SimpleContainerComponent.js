@@ -42,7 +42,7 @@ export default class SimpleContainerComponent extends AbstractContainerComponent
         super.render(value);
         PUPPETEER.animate(addDebugger({debuggerElemIdOrJQuery: "children-debugger"}).to({
             // PUPPETEER.animate({
-            initialState: value ?? this.getState(),
+            parent: this,
             viewRemovalStrategy: USE_HTML,
             onRemoveViewHtml: "child component was removed!"
             // }, false, jQueryOf(this.config.elemIdOrJQuery), true);

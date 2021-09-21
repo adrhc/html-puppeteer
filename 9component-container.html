@@ -30,7 +30,7 @@
 	<div class="section" id="cats-debugger">No debugging data available yet!</div>
 	<div class="section title">Component's view (parent and its children)</div>
 	<div class="section flex-column fit-content bgc-aliceblue"
-	     data-initial-state='{"text": "this is the parent state displayed by its view (below is the child component)", "message": "The \"message\" child was <i>automatically</i> created!"}'
+	     data-initial-state='{"text": "this is the parent state displayed by its view (below is the child component)"}'
 	     data-template-id="parent-template"
 	     data-type="simple-container"
 	     id="parent-component"></div>
@@ -39,11 +39,12 @@
 <script id="parent-template" type="text/x-handlebars-template">
 	<div class="part parent">{{text}}</div>
 	<div class="part" data-part="message" data-type="simple" data-template-id="message-template"
+	     data-initial-state='The "message" child was <i>automatically</i> created!'
 	     data-view-removal-strategy="USE_HTML"
 	     data-on-remove-view-html='"message" child component was removed!'>
 		The "message" child is not available yet!
 	</div>
-	<div class="part" data-part="cats" data-template-id="table-template"
+	<div class="part" data-part="cats" data-template-id="cats-template"
 	     data-view-removal-strategy="USE_HTML"
 	     data-on-remove-view-html='"cats" child component was removed!'>
 		The "cats" child is not available yet!
@@ -51,10 +52,10 @@
 </script>
 
 <script id="message-template" type="text/x-handlebars-template">
-	{{#if message}}{{{message}}}{{else}}The "message" child is not available yet!{{/if}}
+	{{#if this}}{{{this}}}{{else}}The "message" child is not available yet!{{/if}}
 </script>
 
-<script id="table-template" type="text/x-handlebars-template">
+<script id="cats-template" type="text/x-handlebars-template">
 	<table class="responstable">
 		<thead>
 		<tr>
