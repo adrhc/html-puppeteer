@@ -7,7 +7,7 @@ import GlobalConfig from "./GlobalConfig.js";
 export function isNull(object, message) {
     if (object != null) {
         console.error(`isNull failed: ${message}`);
-        _alertOrThrow(message ? `${message}: null object!` : "null object!");
+        alertOrThrow(message ? `${message}: null object!` : "null object!");
     }
 }
 
@@ -18,7 +18,7 @@ export function isNull(object, message) {
 export function isNotNull(object, message) {
     if (object == null) {
         console.error(`isNotNull failed: ${message}`);
-        _alertOrThrow(message ? `${message}: null object!` : "null object!");
+        alertOrThrow(message ? `${message}: null object!` : "null object!");
     }
 }
 
@@ -31,7 +31,7 @@ export function isNotNull(object, message) {
 export function isTrue(expression, message) {
     if (expression !== true) {
         console.error(`isTrue failed: ${message}`);
-        _alertOrThrow(message ? message : `${this.constructor.name}.isTrue failed`);
+        alertOrThrow(message ? message : `${this.constructor.name}.isTrue failed`);
     }
 }
 
@@ -44,7 +44,7 @@ export function isTrue(expression, message) {
 export function isFalse(expression, message) {
     if (expression !== false) {
         console.error(`isFalse failed: ${message}`);
-        _alertOrThrow(message ? message : `${this.constructor.name}.isFalse failed`);
+        alertOrThrow(message ? message : `${this.constructor.name}.isFalse failed`);
     }
 }
 
@@ -55,10 +55,10 @@ export function isFalse(expression, message) {
 export function isNullOrEmpty(array, message) {
     if (array && !$.isArray(array)) {
         console.error(`isNullOrEmpty failed: ${message}`);
-        _alertOrThrow(`this is not an array:\n${JSON.stringify(array)}`);
+        alertOrThrow(`this is not an array:\n${JSON.stringify(array)}`);
     } else if (array && array.length !== 0) {
         console.error(`isNullOrEmpty failed: ${message}`);
-        _alertOrThrow(message ? message : `${this.constructor.name}.isNullOrEmpty failed`);
+        alertOrThrow(message ? message : `${this.constructor.name}.isNullOrEmpty failed`);
     }
 }
 
@@ -66,7 +66,7 @@ export function isNullOrEmpty(array, message) {
  * @param {string} exceptionMessage
  * @private
  */
-function _alertOrThrow(exceptionMessage) {
+export function alertOrThrow(exceptionMessage) {
     if (GlobalConfig.ALERT_ON_FAILED_ASSERTION) {
         alert(exceptionMessage);
     } else {

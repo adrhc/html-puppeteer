@@ -23,7 +23,7 @@ export default class AbstractTemplateView extends AbstractView {
     /**
      * @param {AbstractTemplateViewOptions} options
      */
-    constructor({$elem, elemIdOrJQuery, htmlTemplate, templateId} = {}) {
+    constructor({$elem, elemIdOrJQuery, htmlTemplate, templateId}) {
         super();
         this.$elem = $elem ?? this._createElem(elemIdOrJQuery);
         this.htmlTemplate = htmlTemplate ?? this._createTemplate(templateId)

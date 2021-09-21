@@ -31,10 +31,10 @@ export default class DebuggerOptionsBuilder extends AbstractComponentOptionsBuil
     _createDebuggerStateChangeHandler({showAsJson, debuggerElemIdOrJQuery, initialDebuggerMessage} = {}) {
         showAsJson = showAsJson ?? true;
         debuggerElemIdOrJQuery = debuggerElemIdOrJQuery ?? "debugger";
-        initialDebuggerMessage = initialDebuggerMessage ?? "debugger has no data";
         const simpleDebugger = new SimpleComponent({
             elemIdOrJQuery: debuggerElemIdOrJQuery,
-            initialState: initialDebuggerMessage
+            htmlTemplate: "{{#if this}}{{this}}{{else}}No debugging data available yet!{{/if}}"
+            // htmlTemplate: "{{this}}"
         }).render();
         return new CopyStatesChangeHandler(simpleDebugger, showAsJson);
     }
