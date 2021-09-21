@@ -3,20 +3,20 @@
 title HTML puppeteer - Classes Diagram
 
 abstract AbstractComponent {
+  -stateHolder
   #config
   #eventsBinder
   #stateInitializer
-  #stateHolder
   #domValuesReader
   #stateChangesHandlerAdapter
   #[initErrorsHandler]
   +render(values)
   +close()
   +syncState()
-  #doWithState(fn(stateHolder))
+  +doWithState(fn(stateHolder))
 }
 
-note right of AbstractComponent
+note top of AbstractComponent
   Contains methods
   usually doing these:
 
@@ -53,31 +53,31 @@ element's id could be <i>partName</i>.
 end note'/
 
 note left of AbstractComponent::"render(values)"
-- attaches the DOM
-event handlers
-- initializes the state
-  using <i>values</i> (if provided) 
-  otherwise the <i>stateInitializer</i>
-- handles state loading errors
+Attaches DOM event
+handlers, initializes the
+state using <i>values</i>
+(if provided, otherwise
+uses <i>stateInitializer</i>)
+and handles the state
+loading errors.
 end note
 
 note left of AbstractComponent::"close()"
-- clears the state
-- detaches DOM
-  event handlers
+Clears the state
+and detaches the
+DOM event handlers
 end note
 
 note left of AbstractComponent::syncState
 Synchronizes state with
-its visual representation
-Uses <i>StateSynchronizer</i>.
+its visual representation.
 end note
 
 note left of AbstractComponent::doWithState
-Allows for ad-hoc state changes.
-- <i>fn(stateHolder)</i>
-- <i>stateChangesHandlerAdapter</i>
-<i>.processStateChanges</i>
+Allows for state changes
+then passes the related
+state changes events to
+<i>StateChangesHandlerAdapter</i>.
 end note
 
 abstract AbstractContainerComponent extends AbstractComponent {
@@ -181,7 +181,7 @@ interface AbstractView {
 +remove()
 }
 
-note left of AbstractView::create
+note right of AbstractView::create
 Creates the DOM
 element to contain
 the <i>values</i> to display.
@@ -196,10 +196,10 @@ displayed values with
 the new ones.
 end note'/
 
-note left of AbstractView::remove
+/'note right of AbstractView::remove
 Removes the view's
 DOM element.
-end note
+end note'/
 
 abstract AbstractTemplateView implements AbstractView {
 $elem: jQuery<HTMLElement>
@@ -220,7 +220,7 @@ Defaults to:
 (aka creation) to
 <i>created(stateChange)</i>
 - map state modification
-to <i>modified(stateChange)</i>
+to <i>replaced(stateChange)</i>
 - map state part (aka section)
 modification to
 <i>partModified(stateChange)</i>
@@ -236,7 +236,7 @@ end note
 
 interface StateChangesHandler {
 +created(stateChange)
-+modified(stateChange)
++replaced(stateChange)
 +removed(stateChange)
 +changeOccurred(stateChange)
 }
@@ -253,7 +253,7 @@ abstract ComponentIllustrator implements StateChangesHandler {
 view: AbstractView
 }
 
-note bottom of ComponentIllustrator
+note top of ComponentIllustrator
 <i>created</i>, <i>replaced</i>, <i>removed</i>
 delegate to corresponding
 <i>view</i> methods.
@@ -261,13 +261,16 @@ delegate to corresponding
 end note
 
 class SimplePartComponentIllustrator extends ComponentIllustrator implements PartialStateChangesHandler {
-view: SimpleView
++partChangeOccurred(stateChange)
 }
 
-note top of SimplePartComponentIllustrator
-<i>partChangeOccurred()</i> delegates to
-<i>super.replaced(oldState, newState)</i>.
-The other <i>part</i> methods do nothing.
+note left of SimplePartComponentIllustrator::partChangeOccurred
+<i>partChangeOccurred()</i>
+delegates to <i>super.replaced()</i>
+with a StateChange containing
+the oldState and newState.
+The other <i>part*</i> methods
+do nothing.
 end note
 
 /'abstract PartsAllocator implements PartialStateChangesHandler {
@@ -334,9 +337,10 @@ AbstractComponent *-down- EventsBinder
 AbstractComponent *-down- StateHolder
 AbstractComponent *-down- StateInitializer
 AbstractComponent *-down- DomValuesReader
+AbstractComponent *-down- ErrorsHandler
 AbstractComponent *-up- StateChangesHandlerAdapter
 StateChangesHandlerAdapter *-up- "many" StateChangesHandler
-ComponentIllustrator *-up- AbstractView
+ComponentIllustrator *-- AbstractView
 'PartialStateChangesHandler -down-|> StateChangesHandler
 'PartsAllocator -down-|> PartialStateChangesHandler
 'StateChangesHandler -up-{ AbstractView : might use
@@ -347,16 +351,15 @@ StateSynchronizer -up-> ComponentIllustrator'/
 'SimplePartComponentIllustrator -down-> ComponentIllustrator
 'SimplePartComponentIllustrator -down-|> PartialStateChangesHandler
 'AbstractComponent *-up- StateSynchronizer
-AbstractComponent *-down- ErrorsHandler
 'AbstractComponent *-right- PartsAllocator
 'PartialStateHolder -up-|> StateHolder
-StateHolder *-down- StateChangesCollector
-StateChangesCollector *-down- "many" StateChange
+StateHolder *-- StateChangesCollector
+StateChangesCollector *-- "many" StateChange
 'ComponentIllustrator --|> StateChangesHandler
 'PartStateChange -down-> StateChange
 'PartsAllocator -down-> StateHolder
 'ValuesStateInitializer -up-|> StateInitializer
-StateChangesCollector *-down- StateChangeEnhancer
+StateChangesCollector *-- StateChangeEnhancer
 
 /'note as setElement
 <i>domElement</i>
