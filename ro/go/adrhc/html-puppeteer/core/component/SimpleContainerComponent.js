@@ -12,7 +12,7 @@ import {addDebugger} from "./options/DebuggerOptionsBuilder.js";
  */
 /**
  * @typedef {AbstractComponentOptions} SimpleContainerComponentOptions
- * @property {ComponentsCollection} components
+ * @property {ComponentsCollection} children
  */
 /**
  * @extends {AbstractContainerComponent}
@@ -21,7 +21,7 @@ export default class SimpleContainerComponent extends AbstractContainerComponent
     /**
      * @type {ComponentsCollection}
      */
-    components;
+    children;
 
     /**
      * @param {SimpleContainerComponentOptions} options
@@ -32,7 +32,24 @@ export default class SimpleContainerComponent extends AbstractContainerComponent
         super(addComponentIllustratorProvider(config =>
             (componentIllustrator ?? new SimplePartComponentIllustrator(config)))
             .to(restOfOptions));
-        this.components = restOfOptions.components ?? {};
+        this._resetChildren();
+    }
+
+    /**
+     * @protected
+     */
+    _resetChildren() {
+        this.children = this.config.children ?? {};
+    }
+
+    /**
+     * Completely replaces the component's state.
+     *
+     * @param {Bag=} newState
+     */
+    replaceState(newState) {
+        super.replaceState(newState);
+        this._animateChildren();
     }
 
     /**
@@ -41,6 +58,15 @@ export default class SimpleContainerComponent extends AbstractContainerComponent
      */
     render(value) {
         super.render(value);
+        this._animateChildren();
+        return this;
+    }
+
+    /**
+     * @protected
+     */
+    _animateChildren() {
+        this._resetChildren();
         animate(addDebugger({debuggerElemIdOrJQuery: "children-debugger"})
             .to({
                 // animate({
@@ -49,8 +75,7 @@ export default class SimpleContainerComponent extends AbstractContainerComponent
                 onRemoveViewHtml: "child component was removed!"
                 // }, false, jQueryOf(this.config.elemIdOrJQuery), true);
             }), false, jQueryOf(this.config.elemIdOrJQuery), true);
-        // .forEach(c => this.components);
-        return this;
+        // .forEach(c => this.children);
     }
 
     /**
@@ -62,9 +87,9 @@ export default class SimpleContainerComponent extends AbstractContainerComponent
      */
     create(partName, type, options, dontRender) {
         const $childElem = $(`[data-part="${partName}"]`, jQueryOf(this.config.elemIdOrJQuery));
-        this.components[partName] = createByType(type, {elemIdOrJQuery: $childElem, type, ...options});
+        this.children[partName] = createByType(type, {elemIdOrJQuery: $childElem, type, ...options});
         if (!dontRender) {
-            this.components[partName].render();
+            this.children[partName].render();
         }
     }
 
@@ -72,12 +97,12 @@ export default class SimpleContainerComponent extends AbstractContainerComponent
      * @param {PartName} partName
      */
     removeByName(partName) {
-        if (!this.components[partName]) {
+        if (!this.children[partName]) {
             console.error(`Trying to close missing child: ${partName}!`);
             return;
         }
-        this.components[partName].close();
-        delete this.components[partName];
+        this.children[partName].close();
+        delete this.children[partName];
     }
 
     /**
@@ -85,7 +110,7 @@ export default class SimpleContainerComponent extends AbstractContainerComponent
      * @param {PartName} toPartName
      */
     move(fromPartName, toPartName) {
-        const fromComponent = this.components[fromPartName]
+        const fromComponent = this.children[fromPartName]
         this.removeByName(fromPartName);
         this.create(toPartName, fromComponent.config.type, fromComponent.options);
     }

@@ -14,10 +14,15 @@ class App {
     createCatsChild() {
         return this.parent.create("cats", "simple",
             addDebugger({debuggerElemIdOrJQuery: "cats-debugger"})
-                .to({initialState: {cats: generateCats(2)}}));
+                .to({initialState: generateCats(2)}));
     }
 
     run() {
+        $(namedBtn("change-parent-state")).on("click", () => {
+            this.parent.replaceState(JSON.parse($("#parent-debugger").val()));
+            $('textarea').height(0);
+            $('textarea').height(getTotalHeight);
+        });
         $(namedBtn("create")).on("click", () => {
             this.createCatsChild();
             $(namedBtn("create")).attr('disabled', 'disabled');

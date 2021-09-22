@@ -24,6 +24,9 @@
 	</div>
 	<div class="section title">parent debugger</div>
 	<div class="section">
+		<div>
+			<button name="change-parent-state">Change (parent, aka "entire") state</button>
+		</div>
 		<textarea class="fill-available" id="parent-debugger">No debugging data available yet!</textarea>
 	</div>
 	<div class="section title">last automatically detected children state</div>
@@ -59,7 +62,8 @@
 	     data-on-remove-view-html='"message2" child component was removed!'>
 		The "message2" child is not available yet!
 	</div>
-	<div class="part thin-dashed-border" data-part="cats" data-template-id="cats-template"
+	<div class="part thin-dashed-border" data-part="cats" data-type="simple"
+	     data-template-id="cats-template"
 	     data-view-removal-strategy="USE_HTML"
 	     data-on-remove-view-html='"cats" child component was removed!'>
 		The "cats" child is not available yet!
@@ -81,7 +85,7 @@
 			<th colSpan="2">Generated cats</th>
 		</tr>
 		</thead>
-		{{#each cats}}
+		{{#each this}}
 			<tr>
 				<td>{{id}}</td>
 				<td>{{name}}</td>
