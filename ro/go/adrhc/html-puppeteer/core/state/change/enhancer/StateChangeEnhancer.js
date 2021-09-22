@@ -3,10 +3,10 @@
  */
 export default class StateChangeEnhancer {
     /**
-     * @param {StateChange<SCT, SCP>} stateChange
-     * @return {StateChange<SCT, SCP>}
+     * @param {PartStateChange<SCT, SCP>} partStateChange
+     * @return {PartStateChange<SCT, SCP>}
      */
-    enhance(stateChange) {
-        return stateChange;
+    enhance(partStateChange) {
+        return partStateChange;
     }
 }

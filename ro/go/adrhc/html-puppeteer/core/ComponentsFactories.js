@@ -1,5 +1,6 @@
 import SimpleComponent from "./component/SimpleComponent.js";
 import SimpleContainerComponent from "./component/SimpleContainerComponent.js";
+import {jQueryOf} from "../util/DomUtils.js";
 
 /**
  * @typedef {function(options: Bag): AbstractComponent} ComponentProviderFn
@@ -16,7 +17,7 @@ const COMPONENT_TYPES = {
 /**
  * @param {string} type
  * @param {{}=} options
- * @return {AbstractContainerComponent}
+ * @return {AbstractComponent}
  */
 export function createByType(type, options) {
     const component = COMPONENT_TYPES[type]?.(options);

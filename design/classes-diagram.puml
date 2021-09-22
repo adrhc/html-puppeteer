@@ -3,8 +3,8 @@
 title HTML puppeteer - Classes Diagram
 
 abstract AbstractComponent {
-  -partialStateHolder
-  #config
+  #stateHolder: PartialStateHolder
+  #config:
   #eventsBinder
   #stateInitializer
   #domValuesReader
@@ -16,7 +16,7 @@ abstract AbstractComponent {
   +syncState()
   +getState()
   +replaceState(newState)
-  +replacePart(newPart, \npreviousPartName, \nnewPartName, \ndontRecordStateEvents)
+  +replacePart(previousPartName, \nnewPart, newPartName
 }
 
 note top of AbstractComponent
@@ -87,10 +87,23 @@ note left of AbstractComponent::getState
 Returns a state copy.
 end note
 
-abstract AbstractContainerComponent extends AbstractComponent {
-  +create(statePartName, type, options, \ndontRender): AbstractComponent
-  +removeByName(statePartName)
-  +move(fromPartName, toPartName)
+/'abstract AbstractContainerComponent extends AbstractComponent {
+  +create(partName, partValue)
+  +remove(partName)
+  +replace(partName, partValue)
+  +move(partName, toPartName)
+}'/
+
+class SimpleContainerComponent extends AbstractComponent {
+#children: {partName: AbstractComponent}
++render(value)
++replaceState(newState)
++replacePart(previousPartName, \nnewPart, newPartName)
+#_processStateChange(partStateChange)
+#_createChildren()
+#_createChild(partName)
+#_removeChild(partName)
+#_initializeChildren()
 }
 
 abstract EventsBinder {
@@ -121,9 +134,9 @@ class ValueStateInitializer extends StateInitializer {
 }
 
 class StateChange {
+#changeType
 #previousState
 #newState
-#changeType
 }
 
 class PartStateChange extends StateChange {
@@ -149,7 +162,7 @@ interface StateChangesCollector {
 
 interface StateHolder {
 +get()
-+replace(newState, [dontRecordEvents])
++replace(newState, \n[dontRecordChanges])
 #stateChangesCollector
 }
 
@@ -162,7 +175,7 @@ end note'/
 
 interface PartialStateHolder extends StateHolder {
 +getPart(partName)
-+replacePart(newPart, \npreviousPartName, \nnewPartName, \n[dontRecordChanges])
++replacePart(\npreviousPartName, \nnewPart, \nnewPartName, \n[dontRecordChanges])
 }
 
 ' note left of PartialStateHolder::replacePart
@@ -206,12 +219,26 @@ Removes the view's
 DOM element.
 end note'/
 
-abstract AbstractTemplateView implements AbstractView {
-$elem: jQuery<HTMLElement>
-htmlTemplate: string
+class SimpleView implements AbstractView {
+#$elem: jQuery<HTMLElement>
+#onRemoveViewHtml
+#viewRemovalStrategy: \n\tREMOVE_ELEMENT |\n\tREMOVE_CONTENT |\n\tUSE_HTML
++create(values)
++replace(values)
++remove()
+#_createElem(elemIdOrJQuery)
 }
 
-class SimpleView extends AbstractTemplateView
+class AbstractTemplateView extends SimpleView {
+#htmlTemplate: string
+#viewRemovalStrategy: \n\tREMOVE_ELEMENT |\n\tREMOVE_CONTENT |\n\tUSE_HTML |\n\tUSE_THE_TEMPLATE
+#_createTemplate(templateId)
+}
+
+class SimpleTemplateView extends AbstractTemplateView {
++replace(values)
++remove()
+}
 
 class StateChangesHandlerAdapter {
 stateChangesHandlers

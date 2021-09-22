@@ -28,6 +28,15 @@ export class StateProcessor {
      */
     doWithState(stateUpdaterFn) {
         stateUpdaterFn(this.stateHolder);
+        this._processStateChanges();
+    }
+
+    /**
+     * Process existing, not yet processed, state changes
+     *
+     * @protected
+     */
+    _processStateChanges() {
         this.stateChangesHandlersInvoker.processStateChanges(this.stateHolder.stateChangesCollector);
     }
 }

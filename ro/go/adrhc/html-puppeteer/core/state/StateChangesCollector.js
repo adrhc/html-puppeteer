@@ -1,20 +1,20 @@
 import TypeStateChangeEnhancer from "./change/enhancer/TypeStateChangeEnhancer.js";
 
 /**
- * @template SCT, SCP
+ * @template SCT
  */
 export default class StateChangesCollector {
     /**
-     * @type {StateChangeEnhancer<SCT, SCP>}
+     * @type {StateChangeEnhancer<SCT>}
      */
     stateChangeEnhancer;
     /**
-     * @type {StateChange<SCT, SCP>[]}
+     * @type {StateChange<SCT>[]}
      */
     stateChanges = [];
 
     /**
-     * @param {StateChangeEnhancer<SCT, SCP>=} stateChangeEnhancer
+     * @param {StateChangeEnhancer<SCT>=} stateChangeEnhancer
      * @constructor
      */
     constructor(stateChangeEnhancer) {
@@ -22,10 +22,10 @@ export default class StateChangesCollector {
     }
 
     /**
-     * @param {StateChange<SCT, SCP>|undefined} stateChange
+     * @param {StateChange<SCT>|undefined} stateChange
      */
     collect(stateChange) {
-        const enhancedStateChange = this.stateChangeEnhancer.enhance(stateChange);
+        const enhancedStateChange = this.enhance(stateChange);
         if (!enhancedStateChange) {
             return undefined;
         }
@@ -34,14 +34,22 @@ export default class StateChangesCollector {
     }
 
     /**
-     * @return {StateChange<SCT, SCP>}
+     * @param {StateChange<SCT>|undefined} stateChange
+     * @return {StateChange<SCT>|undefined}
+     */
+    enhance(stateChange) {
+        return this.stateChangeEnhancer.enhance(stateChange);
+    }
+
+    /**
+     * @return {StateChange<SCT>}
      */
     consumeOne() {
         return this.stateChanges.shift();
     }
 
     /**
-     * @return {StateChange<SCT, SCP>[]}
+     * @return {StateChange<SCT>[]}
      */
     consumeAll() {
         const changes = this.stateChanges;

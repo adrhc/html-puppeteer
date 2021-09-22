@@ -16,35 +16,48 @@ export default class PartialStateHolder extends StateHolder {
     }
 
     /**
-     * @param {SCT=} newPart
-     * @param {PartName|undefined=} previousPartName
-     * @param {PartName|undefined=} newPartName
-     * @param {boolean=} dontRecordStateEvents
-     * @return {boolean|StateChange<SCT, SCP>}
+     * @return {{[key: string]: *}[]}
      */
-    replacePart(newPart, previousPartName,
+    getParts() {
+        if (this.currentState == null) {
+            return [];
+        }
+        return Object.entries(this.currentState);
+    }
+
+    /**
+     * @param {(PartName|undefined)=} previousPartName
+     * @param {SCT=} newPart
+     * @param {(PartName|undefined)=} newPartName
+     * @param {boolean=} dontRecordChanges
+     * @return {PartStateChange<SCT, SCP>[]}
+     */
+    replacePart(previousPartName, newPart,
                 newPartName = newPart != null ? previousPartName : undefined,
-                dontRecordStateEvents) {
+                dontRecordChanges) {
         isTrue(newPart != null || previousPartName != null);
         if (this._partsEqual(newPart, newPartName, previousPartName)) {
-            return false;
+            return [];
         }
 
         // currentState will be changed by _replacePart
-        const previousState = dontRecordStateEvents ? undefined : _.cloneDeep(this.currentState);
+        const previousState = _.cloneDeep(this.currentState);
 
-        const previousPart = this._replacePart(newPart, newPartName, previousPartName);
-
-        if (dontRecordStateEvents) {
-            return true;
-        }
+        const previousPart = this._replacePart(previousPartName, newPart, newPartName);
 
         // cloning because a subsequent partial change might alter the _currentState
         const newState = _.cloneDeep(this.currentState);
 
         // parts never change partially so there's no need to clone them
-        const stateChange = this._partialStateChangesOf(previousState, newState, previousPart, newPart, previousPartName, newPartName);
-        return this.collectStateChanges(stateChange);
+        const stateChanges = /** @type {StateChange[]} */ this
+            ._partialStateChangesOf(previousState, newState, previousPart, newPart,
+                previousPart == null ? undefined : previousPartName, newPartName);
+
+        if (dontRecordChanges) {
+            return /** @type {PartStateChange[]} */ this.enhanceStateChanges(stateChanges);
+        }
+
+        return /** @type {PartStateChange[]} */ this.collectStateChanges(stateChanges);
     }
 
     /**
@@ -54,7 +67,7 @@ export default class PartialStateHolder extends StateHolder {
      * @param {PartName|undefined=} newPartName
      * @param {SCT=} previousState
      * @param {SCT=} newState
-     * @return {StateChange<SCT, SCT>[]}
+     * @return {PartStateChange<SCT, SCP>[]}
      * @protected
      */
     _partialStateChangesOf(previousState, newState, previousPart, newPart, previousPartName, newPartName) {
@@ -74,13 +87,13 @@ export default class PartialStateHolder extends StateHolder {
     }
 
     /**
-     * @param {SCP} newPart
-     * @param {PartName|undefined} newPartName
-     * @param {PartName|undefined} previousPartName
+     * @param {(PartName|undefined)=} previousPartName
+     * @param {SCP=} newPart
+     * @param {(PartName|undefined)=} newPartName
      * @return {SCP} the previous part
      * @protected
      */
-    _replacePart(newPart, newPartName, previousPartName) {
+    _replacePart(previousPartName, newPart, newPartName) {
         isTrue(newPart == null && newPartName == null || newPart != null && newPartName != null);
         const previousItem = this.getPart(previousPartName);
         if (previousItem == null) {

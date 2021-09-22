@@ -1,5 +1,5 @@
 /**
- * @template SCT, SCP
+ * @template SCT
  */
 export default class StateChange {
     /**
@@ -7,19 +7,19 @@ export default class StateChange {
      */
     changeType;
     /**
-     * @type {SCT|SCP}
+     * @type {SCT}
      */
     newState;
     /**
-     * @type {SCT|SCP}
+     * @type {SCT}
      */
     previousState
 
     /**
      * previousPartName and newPartName could be the same (this in fact should be the usual case)
      *
-     * @param {SCT|SCP=} previousStateOrPart
-     * @param {SCT|SCP=} newStateOrPart
+     * @param {SCT=} previousStateOrPart
+     * @param {SCT=} newStateOrPart
      */
     constructor(previousStateOrPart, newStateOrPart) {
         this.previousState = previousStateOrPart;

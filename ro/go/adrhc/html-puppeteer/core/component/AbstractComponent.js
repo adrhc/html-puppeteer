@@ -3,8 +3,7 @@ import {applyExtraConfigurators} from "./configurator/ComponentConfigurator.js";
 import {StateProcessor} from "../state-processor/StateProcessor.js";
 
 /**
- * @typedef {Bag & ValueStateInitializerOptions & StateChangesHandlersInvoker & SimpleViewOptions} AbstractComponentOptions
- * @property {string=} elemIdOrJQuery
+ * @typedef {Bag & ValueStateInitializerOptions & StateChangesHandlersInvoker & SimplePartComponentIllustratorOptions} AbstractComponentOptions
  * @property {AbstractComponent=} parent
  * @property {PartialStateHolder=} stateHolder
  * @property {StateInitializer=} stateInitializer
@@ -17,6 +16,7 @@ import {StateProcessor} from "../state-processor/StateProcessor.js";
  * @typedef {AbstractComponentOptions & DataAttributes} ComponentConfigField
  */
 /**
+ * @template SCT, SCP
  * @abstract
  */
 export default class AbstractComponent extends StateProcessor {
@@ -58,7 +58,7 @@ export default class AbstractComponent extends StateProcessor {
     }
 
     /**
-     * @return {Bag}
+     * @return {SCT}
      */
     getState() {
         return _.cloneDeep(this.stateHolder.currentState);
@@ -75,7 +75,7 @@ export default class AbstractComponent extends StateProcessor {
     /**
      * Completely replaces the component's state.
      *
-     * @param {Bag=} newState
+     * @param {SCT=} newState
      */
     replaceState(newState) {
         this.doWithState(stateHolder => stateHolder.replace(newState));
@@ -84,14 +84,13 @@ export default class AbstractComponent extends StateProcessor {
     /**
      * Replaces a component's state part.
      *
-     * @param {Bag=} newPart
-     * @param {PartName|undefined=} previousPartName
-     * @param {PartName|undefined=} newPartName
-     * @param {boolean=} dontRecordStateEvents
+     * @param {PartName=} previousPartName
+     * @param {SCP=} newPart
+     * @param {PartName=} newPartName
      */
-    replacePart(newPart, previousPartName, newPartName, dontRecordStateEvents) {
+    replacePart(previousPartName, newPart, newPartName) {
         this.doWithState(partialStateHolder =>
-            partialStateHolder.replacePart(newPart, previousPartName, newPartName, dontRecordStateEvents));
+            partialStateHolder.replacePart(previousPartName, newPart, newPartName));
     }
 
     /**

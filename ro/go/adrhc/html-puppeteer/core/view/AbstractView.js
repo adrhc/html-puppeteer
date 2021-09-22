@@ -10,7 +10,7 @@ export default class AbstractView {
     replace(values) {}
 
     /**
-     * removes the DOM element
+     * handles REMOVED state change event
      */
     remove() {}
 }

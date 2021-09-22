@@ -1,10 +1,12 @@
-import StateChange from "../state/change/StateChange.js";
-import SimpleView from "../view/SimpleView.js";
+import SimpleTemplateView from "../view/SimpleTemplateView.js";
 import ComponentIllustrator from "./ComponentIllustrator.js";
 
 /**
- * @typedef {SimpleViewOptions} SimpleViewOptionsWithView
- * @property {SimpleView=} view
+ * @typedef {function(options: SimpleViewOptions): AbstractView} ViewProviderFn
+ */
+/**
+ * @typedef {SimpleViewOptions} SimplePartComponentIllustratorOptions
+ * @property {ViewProviderFn=} viewProviderFn
  */
 /**
  * @template SCT, SCP
@@ -13,21 +15,21 @@ import ComponentIllustrator from "./ComponentIllustrator.js";
  */
 export default class SimplePartComponentIllustrator extends ComponentIllustrator {
     /**
-     * @param {SimpleViewOptionsWithView} options
-     * @param {SimpleViewOptions=} viewConfig
+     * @param {SimplePartComponentIllustratorOptions} options
+     * @param {SimpleViewOptions=} options.viewConfig
      */
-    constructor({view, ...viewConfig}) {
+    constructor({viewProviderFn, ...viewConfig}) {
         super();
-        this.view = view ?? this._createView(viewConfig);
+        this.view = viewProviderFn ? viewProviderFn(viewConfig) : this._createView(viewConfig);
     }
 
     /**
      * @param {SimpleViewOptions} viewConfig
-     * @return {SimpleView}
+     * @return {SimpleTemplateView}
      * @protected
      */
     _createView(viewConfig) {
-        return new SimpleView(viewConfig);
+        return new SimpleTemplateView(viewConfig);
     }
 
     /**
@@ -62,6 +64,6 @@ export default class SimplePartComponentIllustrator extends ComponentIllustrator
      * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partChangeOccurred(partStateChange) {
-        super.replaced(new StateChange(partStateChange.previousState, partStateChange.newState))
+        // do nothing
     }
 }

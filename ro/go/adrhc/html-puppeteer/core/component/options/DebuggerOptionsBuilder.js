@@ -1,12 +1,11 @@
 import {AbstractComponentOptionsBuilder} from "./AbstractComponentOptionsBuilder.js";
 import SimpleComponent from "../SimpleComponent.js";
 import CopyStatesChangeHandler from "../../state-changes-handler/CopyStatesChangeHandler.js";
+import SimpleView from "../../view/SimpleView.js";
 
 /**
  * @typedef {Object} DebuggerOptions
- * @property {boolean=} showAsJson
  * @property {string} [debuggerElemIdOrJQuery="debugger"]
- * @property {string=} initialDebuggerMessage
  */
 export default class DebuggerOptionsBuilder extends AbstractComponentOptionsBuilder {
     /**
@@ -17,26 +16,22 @@ export default class DebuggerOptionsBuilder extends AbstractComponentOptionsBuil
      */
     addDebugger(debuggerOptions = {}) {
         const debuggerStateChangeHandler = this._createDebuggerStateChangeHandler(debuggerOptions);
-        return this.addStateChangeHandler(debuggerStateChangeHandler);
+        return /** @type {DebuggerOptionsBuilder} */ this.addStateChangeHandler(debuggerStateChangeHandler);
     }
 
     /**
-     * @param {Object=} debuggerOptions
-     * @param {boolean=} debuggerOptions.showAsJson
-     * @param {string=} debuggerOptions.debuggerElemIdOrJQuery
-     * @param {string=} debuggerOptions.initialDebuggerMessage
+     * @param {DebuggerOptions=} debuggerOptions
      * @return {CopyStatesChangeHandler}
      * @protected
      */
-    _createDebuggerStateChangeHandler({showAsJson, debuggerElemIdOrJQuery, initialDebuggerMessage} = {}) {
-        showAsJson = showAsJson ?? true;
+    _createDebuggerStateChangeHandler({debuggerElemIdOrJQuery} = {}) {
         debuggerElemIdOrJQuery = debuggerElemIdOrJQuery ?? "debugger";
         const simpleDebugger = new SimpleComponent({
+            viewProviderFn: (viewConfig) => new SimpleView(viewConfig),
             elemIdOrJQuery: debuggerElemIdOrJQuery,
             htmlTemplate: "{{#if this}}{{this}}{{else}}No debugging data available yet!{{/if}}"
-            // htmlTemplate: "{{this}}"
         }).render();
-        return new CopyStatesChangeHandler(simpleDebugger, showAsJson);
+        return new CopyStatesChangeHandler(simpleDebugger);
     }
 }
 

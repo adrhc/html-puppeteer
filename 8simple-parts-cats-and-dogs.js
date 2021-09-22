@@ -9,7 +9,7 @@ $(() => {
 
     // state changing actions (aka component's usage)
     withPeriodicallyGenerateDogsOrCats(part => {
-        component.replacePart(part.value, part.name);
+        component.replacePart(part.name, part.value);
         $('textarea').height(0);
         $('textarea').height(getTotalHeight);
     });

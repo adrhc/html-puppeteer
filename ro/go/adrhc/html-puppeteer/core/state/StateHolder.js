@@ -4,8 +4,8 @@ import StateChange from "./change/StateChange.js";
 /**
  * @template SCT
  * @typedef {Object} StateHolderOptions
- * @property {StateChangeEnhancer<SCT, SCT>=} stateChangeEnhancer
- * @property {StateChangesCollector<SCT, SCT>=} stateChangesCollector
+ * @property {StateChangeEnhancer<SCT>=} stateChangeEnhancer
+ * @property {StateChangesCollector<SCT>=} stateChangesCollector
  */
 export default class StateHolder {
     /**
@@ -34,13 +34,13 @@ export default class StateHolder {
     }
 
     /**
-     * @type {StateChangesCollector<SCT, SCT>}
+     * @type {StateChangesCollector<SCT>}
      * @protected
      */
     _stateChangesCollector;
 
     /**
-     * @return {StateChangesCollector<SCT, SCT>}
+     * @return {StateChangesCollector<SCT>}
      */
     get stateChangesCollector() {
         return this._stateChangesCollector;
@@ -59,23 +59,23 @@ export default class StateHolder {
     /**
      * @param {SCT=} newState
      * @param {boolean=} dontRecordChanges
-     * @return {StateChange<SCT, SCT>|boolean} the newly created StateChange or, if dontRecordChanges = true, whether a state change occurred
+     * @return {StateChange<SCT>[]} the newly created StateChange or, if dontRecordChanges = true, whether a state change occurred
      */
     replace(newState, dontRecordChanges) {
         if (this._currentStateEquals(newState)) {
-            return false;
+            return [];
         }
 
         const previousState = this._replaceImpl(newState);
-
-        if (dontRecordChanges) {
-            return true;
-        }
 
         // cloning because a subsequent partial change might alter the _currentState which now is newState
         const clonedNewState = _.cloneDeep(newState);
 
         const stateChanges = this._stateChangesOf(previousState, clonedNewState);
+
+        if (dontRecordChanges) {
+            return stateChanges;
+        }
 
         return this.collectStateChanges(stateChanges);
     }
@@ -83,7 +83,7 @@ export default class StateHolder {
     /**
      * @param {SCT=} previousState
      * @param {SCT=} newState
-     * @return {StateChange<SCT, SCT>[]}
+     * @return {StateChange<SCT>[]}
      * @protected
      */
     _stateChangesOf(previousState, newState) {
@@ -111,9 +111,18 @@ export default class StateHolder {
     }
 
     /**
-     * @return {StateChange<SCT, SCT>[]|undefined}
+     * @param {StateChange<SCT>[]=} stateChanges
+     * @return {StateChange<SCT>[]}
      */
-    collectStateChanges(stateChanges) {
+    collectStateChanges(stateChanges = []) {
         return stateChanges.map(sc => this.stateChangesCollector.collect(sc)).filter(it => it != null);
+    }
+
+    /**
+     * @param {StateChange<SCT>[]=} stateChanges
+     * @return {StateChange<SCT>[]}
+     */
+    enhanceStateChanges(stateChanges = []) {
+        return stateChanges.map(sc => this.stateChangesCollector.enhance(sc)).filter(it => it != null);
     }
 }

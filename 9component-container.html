@@ -19,6 +19,7 @@
 <div class="container">
 	<div class="section title">PeriodicallyStateChangingComponent</div>
 	<div class="section flex-center fill-available buttons">
+		<button name="generate-message1">Generate a value for "message1" child</button>
 		<button disabled name="remove">Close (aka remove) child</button>
 		<button name="create">Create and render the child</button>
 	</div>
@@ -29,14 +30,14 @@
 		</div>
 		<textarea class="fill-available" id="parent-debugger">No debugging data available yet!</textarea>
 	</div>
-	<div class="section title">last automatically detected children state</div>
-	<div class="section">
-		<textarea class="fill-available" id="children-debugger">No debugging data available yet!</textarea>
-	</div>
-	<div class="section title">"cats" child debugger</div>
-	<div class="section">
-		<textarea class="fill-available" id="cats-debugger">No debugging data available yet!</textarea>
-	</div>
+<!--	<div class="section title">last automatically detected children state</div>-->
+<!--	<div class="section">-->
+<!--		<textarea class="fill-available" id="children-debugger">No debugging data available yet!</textarea>-->
+<!--	</div>-->
+<!--	<div class="section title">"cats" child debugger</div>-->
+<!--	<div class="section">-->
+<!--		<textarea class="fill-available" id="cats-debugger">No debugging data available yet!</textarea>-->
+<!--	</div>-->
 	<div class="section title">Component's view (parent and its children)</div>
 	<div class="section flex-column fit-content bgc-aliceblue"
 	     data-initial-state='{"text": "this is the parent state displayed by its view (below is the child component)",
@@ -56,7 +57,7 @@
 		The "message1" child is not available yet!
 	</div>
 	<div class="part" data-part="message2" data-type="simple"
-	     data-initial-state='This "message2" initial state should NOT be visible! initial state should come from the parent'
+	     data-initial-state='This "message2" initial state should NOT be visible!<BR>initial state should come from the parent'
 	     data-template-id="message2-template"
 	     data-view-removal-strategy="USE_HTML"
 	     data-on-remove-view-html='"message2" child component was removed!'>

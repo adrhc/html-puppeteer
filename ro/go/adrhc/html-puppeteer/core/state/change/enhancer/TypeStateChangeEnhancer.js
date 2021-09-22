@@ -1,18 +1,17 @@
 import StateChangeEnhancer from "./StateChangeEnhancer.js";
 import {CREATED, RELOCATED, REMOVED, REPLACED} from "../StateChangeTypes.js";
-import {isFalse} from "../../../../util/AssertionUtils.js";
+import {isTrue} from "../../../../util/AssertionUtils.js";
 /**
  * @typedef {string,number|boolean} PartName
  */
 /**
  * @template SCT, SCP
- * @typedef {SCT|SCP} STATE_OR_PART
- * @extends {StateChangeEnhancer<SCT, SCP>}
+ * @extends {StateChangeEnhancer<SCT>}
  */
 export default class TypeStateChangeEnhancer extends StateChangeEnhancer {
     /**
-     * @param {StateChange<SCT, SCP>} stateChange
-     * @return {StateChange<SCT, SCP>}
+     * @param {PartStateChange<SCT, SCP>} stateChange
+     * @return {PartStateChange<SCT, SCP>}
      */
     enhance(stateChange) {
         if (stateChange) {
@@ -22,46 +21,49 @@ export default class TypeStateChangeEnhancer extends StateChangeEnhancer {
     }
 
     /**
-     * @param {StateChange<SCT, SCP>} change
+     * @param {PartStateChange<SCT, SCP>} change
      * @return {string}
      * @protected
      */
     _changeTypeOf(change) {
-        isFalse(change.previousState == null && change.newState == null);
-        if (this._isChangeTypeOfDelete(change.newState, change.newPartName)) {
+        isTrue((change.previousState ?? change.newState) != null);
+        if (change.previousPartName ?? change.newPartName != null) {
+            return this._partChangeTypeOf(change);
+        } else {
+            return this._totalChangeTypeOf(/** @type {StateChange} */ change);
+        }
+    }
+
+    /**
+     * @param {StateChange} change
+     * @return {string}
+     * @protected
+     */
+    _totalChangeTypeOf(change) {
+        if (this._isStatePristine(change.newState)) {
             return REMOVED;
-        } else if (this._isPristine(change.previousState, change.previousPartName)) {
+        } else if (this._isStatePristine(change.previousState)) {
             return CREATED;
-        } else if (change.previousPartName != null &&
-            change.newPartName != null &&
-            change.previousPartName !== change.newPartName) {
-            return RELOCATED;
         } else {
             return REPLACED;
         }
     }
 
     /**
-     * @param {STATE_OR_PART=} stateOrPart
-     * @param {PartName} partName
-     * @return {boolean}
+     * @param {PartStateChange<SCT, SCP>} change
+     * @return {string}
      * @protected
      */
-    _isChangeTypeOfDelete(stateOrPart, partName) {
-        return this._isPristine(stateOrPart, partName);
-    }
-
-    /**
-     * @param {STATE_OR_PART=} stateOrPart
-     * @param {PartName=} partName
-     * @return {boolean}
-     * @protected
-     */
-    _isPristine(stateOrPart, partName) {
-        if (partName) {
-            return this._isStatePartPristine(stateOrPart, partName);
+    _partChangeTypeOf(change) {
+        isTrue((change.previousPart ?? change.newPart) != null);
+        if (this._isPartPristine(change.newPart, change.newPartName)) {
+            return REMOVED;
+        } else if (this._isPartPristine(change.previousPart, change.previousPartName)) {
+            return CREATED;
+        } else if (change.previousPartName !== change.newPartName) {
+            return RELOCATED;
         } else {
-            return this._isStatePristine(stateOrPart);
+            return REPLACED;
         }
     }
 
@@ -71,7 +73,7 @@ export default class TypeStateChangeEnhancer extends StateChangeEnhancer {
      * @return {boolean}
      * @protected
      */
-    _isStatePartPristine(part, partName) {
+    _isPartPristine(part, partName) {
         return part == null;
     }
 

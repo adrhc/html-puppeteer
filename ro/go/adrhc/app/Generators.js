@@ -64,11 +64,12 @@ export function generateDogs(max) {
 function _generate(max, name) {
     const generation = _.random(1, 1000);
     const count = _.random(1, max);
-    const dogs = [];
+    const items = [];
     rangeIterator(1, count, (i) => {
-        dogs.push({id: i, name: `[generation=${generation}] ${name}${i}`});
+        const indexAndGeneration = `${i}${generation}`;
+        items.push({id: `${indexAndGeneration}`, name: `[generation=${generation}] ${name}${indexAndGeneration}`});
     });
-    return dogs;
+    return items;
 }
 
 /**

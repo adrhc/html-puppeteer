@@ -1,23 +1,22 @@
-import animate from "../Puppeteer.js";
-import {USE_HTML} from "../view/SimpleView.js";
-import {jQueryOf} from "../../util/DomUtils.js";
-import {createByType} from "../ComponentsFactories.js";
+import {$getChildElem, createComponent} from "../Puppeteer.js";
 import SimplePartComponentIllustrator from "../state-changes-handler/SimplePartComponentIllustrator.js";
-import AbstractContainerComponent from "./AbstractContainerComponent.js";
 import {addComponentIllustratorProvider} from "./options/AbstractComponentOptionsBuilder.js";
-import {addDebugger} from "./options/DebuggerOptionsBuilder.js";
+import {CREATED, RELOCATED, REMOVED, REPLACED} from "../state/change/StateChangeTypes.js";
+import {alertOrThrow} from "../../util/AssertionUtils.js";
+import AbstractComponent from "./AbstractComponent.js";
 
 /**
- * @typedef {{[key: string]: AbstractContainerComponent}} ComponentsCollection
+ * @typedef {{[key: string]: AbstractComponent}} ComponentsCollection
  */
 /**
  * @typedef {AbstractComponentOptions} SimpleContainerComponentOptions
  * @property {ComponentsCollection} children
  */
 /**
- * @extends {AbstractContainerComponent}
+ * @template SCT, SCP
+ * @extends {AbstractComponent}
  */
-export default class SimpleContainerComponent extends AbstractContainerComponent {
+export default class SimpleContainerComponent extends AbstractComponent {
     /**
      * @type {ComponentsCollection}
      */
@@ -32,24 +31,7 @@ export default class SimpleContainerComponent extends AbstractContainerComponent
         super(addComponentIllustratorProvider(config =>
             (componentIllustrator ?? new SimplePartComponentIllustrator(config)))
             .to(restOfOptions));
-        this._resetChildren();
-    }
-
-    /**
-     * @protected
-     */
-    _resetChildren() {
-        this.children = this.config.children ?? {};
-    }
-
-    /**
-     * Completely replaces the component's state.
-     *
-     * @param {Bag=} newState
-     */
-    replaceState(newState) {
-        super.replaceState(newState);
-        this._animateChildren();
+        this._initializeChildren();
     }
 
     /**
@@ -58,60 +40,114 @@ export default class SimpleContainerComponent extends AbstractContainerComponent
      */
     render(value) {
         super.render(value);
-        this._animateChildren();
+        this._createChildren();
         return this;
+    }
+
+    /**
+     * Completely replaces the component's state.
+     *
+     * @param {SCT=} newState
+     */
+    replaceState(newState) {
+        super.replaceState(newState);
+        this._createChildren();
+    }
+
+    /**
+     * Replaces a component's state part.
+     *
+     * @param {PartName=} previousPartName
+     * @param {SCP=} newPart
+     * @param {PartName=} newPartName
+     */
+    replacePart(previousPartName, newPart, newPartName) {
+        const stateChanges = this.stateHolder.replacePart(previousPartName, newPart, newPartName);
+        stateChanges.forEach(psc => this._processStateChange(psc));
+    }
+
+    /**
+     * @param {PartStateChange<SCT, SCP>} partStateChange
+     * @protected
+     */
+    _processStateChange(partStateChange) {
+        switch (partStateChange.changeType) {
+            case CREATED:
+                // the parent should create the DOM element for the child
+                this._processStateChanges();
+                this._createChild(partStateChange.newPartName);
+                break;
+            case REMOVED:
+                if (!this._removeChild(partStateChange.previousPartName)) {
+                    return;
+                }
+                // the parent should remove the child's DOM element
+                this._processStateChanges();
+                break;
+            case REPLACED:
+                this._processStateChanges();
+                this.children[partStateChange.previousPartName].replaceState(partStateChange.newPart);
+                break;
+            case RELOCATED:
+                this._removeChild(partStateChange.previousPartName);
+                // the parent should remove child's previous DOM element and create the new one
+                this._processStateChanges();
+                // the child will take its state from the parent (i.e. this component)
+                this._createChild(partStateChange.newPartName);
+                break;
+            default:
+                alertOrThrow(`Bad state change!\n${JSON.stringify(stateChange)}`);
+        }
+    }
+
+    /**
+     * Automatically detect, create and render children.
+     *
+     * @protected
+     */
+    _createChildren() {
+        this._initializeChildren();
+        this.stateHolder.getParts()
+            .filter(([, value]) => value != null)
+            .forEach(([name]) => {
+                this._createChild(name);
+            });
+    }
+
+    /**
+     * Create and render a child.
+     *
+     * @param {PartName} partName
+     * @protected
+     */
+    _createChild(partName) {
+        const $childElem = $getChildElem(partName, this.config.elemIdOrJQuery);
+        if (!$childElem.length) {
+            console.warn(`Missing child element for ${partName}; could be parent's state though.`);
+            return;
+        }
+        this.children[partName] = createComponent($childElem, {parent: this}).render();
+    }
+
+    /**
+     * @param {PartName} partName
+     * @return {boolean}
+     * @protected
+     */
+    _removeChild(partName) {
+        if (!this.children[partName]) {
+            console.error(`Trying to close missing child: ${partName}!`);
+            return false;
+        }
+        this.children[partName].close();
+        delete this.children[partName];
+        return true;
     }
 
     /**
      * @protected
      */
-    _animateChildren() {
-        this._resetChildren();
-        animate(addDebugger({debuggerElemIdOrJQuery: "children-debugger"})
-            .to({
-                // animate({
-                parent: this,
-                viewRemovalStrategy: USE_HTML,
-                onRemoveViewHtml: "child component was removed!"
-                // }, false, jQueryOf(this.config.elemIdOrJQuery), true);
-            }), false, jQueryOf(this.config.elemIdOrJQuery), true);
-        // .forEach(c => this.children);
-    }
-
-    /**
-     * @param {PartName} partName
-     * @param {string} type is the child component type
-     * @param {SimpleContainerComponentOptions=} options are the child component options
-     * @param {boolean=} dontRender
-     * @return {AbstractComponent}
-     */
-    create(partName, type, options, dontRender) {
-        const $childElem = $(`[data-part="${partName}"]`, jQueryOf(this.config.elemIdOrJQuery));
-        this.children[partName] = createByType(type, {elemIdOrJQuery: $childElem, type, ...options});
-        if (!dontRender) {
-            this.children[partName].render();
-        }
-    }
-
-    /**
-     * @param {PartName} partName
-     */
-    removeByName(partName) {
-        if (!this.children[partName]) {
-            console.error(`Trying to close missing child: ${partName}!`);
-            return;
-        }
-        this.children[partName].close();
-        delete this.children[partName];
-    }
-
-    /**
-     * @param {PartName} fromPartName
-     * @param {PartName} toPartName
-     */
-    move(fromPartName, toPartName) {
-        const fromComponent = this.children[fromPartName]
-        this.removeByName(fromPartName);
-        this.create(toPartName, fromComponent.config.type, fromComponent.options);
+    _initializeChildren() {
+        this.children = this.config.children ?? {};
     }
 }

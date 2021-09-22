@@ -1,15 +1,16 @@
 import GlobalConfig from "../util/GlobalConfig.js";
 import {createByType} from "./ComponentsFactories.js";
+import {jQueryOf} from "../util/DomUtils.js";
 
 /**
- * @param {{}=} componentsOptions
+ * @param {{}=} commonOptions
  * @param {jQuery<HTMLElement>=} parentComponentElem
  * @param {boolean=} dontRender
  * @param {boolean=} alwaysReturnArray
- * @return {AbstractComponent|AbstractComponent[]}
+ * @return {AbstractComponent|jQuery<AbstractComponent>}
  */
-export default function animate(componentsOptions, dontRender, parentComponentElem, alwaysReturnArray) {
-    const components = componentsOf(parentComponentElem, componentsOptions);
+export default function animate(commonOptions, dontRender, parentComponentElem, alwaysReturnArray) {
+    const components = createComponents(parentComponentElem, commonOptions);
     console.log("[Puppeteer.animate] components.length:", components.length);
     if (!dontRender) {
         renderComponents(components);
@@ -22,17 +23,32 @@ export default function animate(componentsOptions, dontRender, parentComponentEl
 
 /**
  * @param {jQuery<HTMLElement>=} parentComponentElem
- * @param {{}} componentsOptions
+ * @param {Bag} commonOptions
  * @return {AbstractComponent|AbstractComponent[]}
  * @protected
  */
-function componentsOf(parentComponentElem, componentsOptions) {
+function createComponents(parentComponentElem, commonOptions) {
     return $componentElementsOf(parentComponentElem)
         .map((index, el) => {
             const $el = $(el);
-            const type = componentTypeOf($el);
-            return instanceOf(type, $el, componentsOptions);
+            return createComponent($el, commonOptions);
         });
+}
+
+/**
+ * @param {jQuery<HTMLElement>=} $el
+ * @param {Bag} commonOptions
+ * @return {AbstractComponent}
+ */
+export function createComponent($el, commonOptions) {
+    const type = componentTypeOf($el);
+    const partName = componentPartOf($el);
+    const componentOptions = componentOptionsOf(partName, commonOptions);
+    return instanceOf($el, type, componentOptions);
+}
+
+function componentOptionsOf(partName, commonOptions) {
+    return _.defaults({}, commonOptions?.[partName], commonOptions);
 }
 
 /**
@@ -54,14 +70,24 @@ function componentTypeOf($el) {
 }
 
 /**
- * @param {string} type
  * @param {jQuery<HTMLElement>} $el
- * @param {{}} componentOptions
+ * @return {string}
+ * @protected
+ */
+function componentPartOf($el) {
+    return $el.data(GlobalConfig.DATA_PART);
+}
+
+/**
+ * @param {jQuery<HTMLElement>} $el
+ * @param {string} type
+ * @param {Bag} componentOptions
  * @return {AbstractComponent}
  * @protected
  */
-function instanceOf(type, $el, componentOptions = {}) {
-    return createByType(type, {elemIdOrJQuery: $el, ...componentOptions});
+function instanceOf($el, type, componentOptions = {}) {
+    const elemIdOrJQuery = GlobalConfig.ELEM_ID_OR_JQUERY;
+    return createByType(type, {...componentOptions, [elemIdOrJQuery]: $el});
 }
 
 /**
@@ -70,4 +96,8 @@ function instanceOf(type, $el, componentOptions = {}) {
  */
 function renderComponents($components) {
     $components.each((index, comp) => comp.render());
+}
+
+export function $getChildElem(partName, parentElemIdOrJQuery) {
+    return $(`[data-${GlobalConfig.DATA_PART}="${partName}"]`, jQueryOf(parentElemIdOrJQuery));
 }

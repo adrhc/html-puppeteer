@@ -17,7 +17,7 @@ function updateClockIntervalStatePart(stateHolder, clockStateChange) {
     const clockPreviousState = /** @type {ClockState} */ clockStateChange.previousState;
     const clockNewState = /** @type {ClockState} */ clockStateChange.newState;
     if (clockPreviousState?.interval !== clockNewState?.interval) {
-        stateHolder.replacePart(clockNewState?.interval, "interval");
+        stateHolder.replacePart("interval", clockNewState?.interval);
     }
 }
 
@@ -34,7 +34,7 @@ function stateAndClockStateChangeConsumer(stateHolder, clockStateChange) {
         updateClockIntervalStatePart(stateHolder, clockStateChange);
         // replace receiver component's "dogs" or "cats" state portion
         const part = generateDogsOrCats(1);
-        stateHolder.replacePart(part.value, part.name);
+        stateHolder.replacePart(part.name, part.value);
     }
     setTimeout(() => {
         $('textarea').height(0);
