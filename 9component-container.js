@@ -2,6 +2,7 @@ import {addDebugger, withDebugger} from "./ro/go/adrhc/html-puppeteer/core/compo
 import PUPPETEER from "./ro/go/adrhc/html-puppeteer/core/Puppeteer.js";
 import {generateCats} from "./ro/go/adrhc/app/Generators.js";
 import {namedBtn} from "./ro/go/adrhc/html-puppeteer/util/SelectorUtils.js";
+import {getTotalHeight} from "./ro/go/adrhc/html-puppeteer/util/DomUtils.js";
 
 class App {
     parent;
@@ -21,12 +22,16 @@ class App {
             this.createCatsChild();
             $(namedBtn("create")).attr('disabled', 'disabled');
             $(namedBtn("remove")).removeAttr('disabled');
+            $('textarea').height(getTotalHeight);
         });
         $(namedBtn("remove")).on("click", () => {
             this.parent.removeByName("cats");
             $(namedBtn("remove")).attr('disabled', 'disabled');
             $(namedBtn("create")).removeAttr('disabled');
+            $('#cats-debugger').height(0);
+            $('#cats-debugger').height(getTotalHeight);
         });
+        $('textarea').height(getTotalHeight);
     }
 }
 

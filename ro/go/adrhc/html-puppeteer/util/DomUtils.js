@@ -56,3 +56,7 @@ export function appendNamespaceTo(events, namespace) {
         return `${events}${namespace}`;
     }
 }
+
+export function getTotalHeight() {
+    return this.scrollHeight + "px";
+}
