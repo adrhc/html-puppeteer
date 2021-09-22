@@ -2,7 +2,7 @@ import SimpleComponent from "./component/SimpleComponent.js";
 import SimpleContainerComponent from "./component/SimpleContainerComponent.js";
 
 /**
- * @typedef {function(options: Bag): AbstractContainerComponent} ComponentProviderFn
+ * @typedef {function(options: Bag): AbstractComponent} ComponentProviderFn
  */
 
 /**

@@ -5,6 +5,7 @@ import PeriodicallyStateChangingComponent
 import {generateDogsOrCats} from "./ro/go/adrhc/app/Generators.js";
 import Scenario6EventsBinder from "./ro/go/adrhc/app/scenarios/6puppeteer+state-button/Scenario6EventsBinder.js";
 import {addClockDebugger} from "./ro/go/adrhc/app/components/periodically-state-changing/PeriodicallyStateChangingOptionsBuilder.js";
+import {getTotalHeight} from "./ro/go/adrhc/html-puppeteer/util/DomUtils.js";
 
 /**
  * Replaces the "interval" state portion on stateHolder with data from clockStateChange.
@@ -32,9 +33,13 @@ function stateAndClockStateChangeConsumer(stateHolder, clockStateChange) {
         // replace receiver component's "interval" state portion
         updateClockIntervalStatePart(stateHolder, clockStateChange);
         // replace receiver component's "dogs" or "cats" state portion
-        const part = generateDogsOrCats(3);
+        const part = generateDogsOrCats(1);
         stateHolder.replacePart(part.value, part.name);
     }
+    setTimeout(() => {
+        $('textarea').height(0);
+        $('textarea').height(getTotalHeight);
+    });
 }
 
 $(() => {
