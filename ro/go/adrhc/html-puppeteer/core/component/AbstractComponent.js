@@ -3,7 +3,7 @@ import {applyExtraConfigurators} from "./configurator/ComponentConfigurator.js";
 import {StateProcessor} from "../state-processor/StateProcessor.js";
 
 /**
- * @typedef {Bag & ValueStateInitializerOptions & StateChangesHandlersInvoker & SimplePartComponentIllustratorOptions} AbstractComponentOptions
+ * @typedef {Bag & ValueStateInitializerOptions & StateChangesHandlersInvoker & SimplePartsIllustratorOptions} AbstractComponentOptions
  * @property {AbstractComponent=} parent
  * @property {PartialStateHolder=} stateHolder
  * @property {StateInitializer=} stateInitializer

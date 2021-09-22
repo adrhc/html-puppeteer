@@ -1,4 +1,4 @@
-import SimplePartComponentIllustrator from "../state-changes-handler/SimplePartComponentIllustrator.js";
+import SimplePartsIllustrator from "../state-changes-handler/SimplePartsIllustrator.js";
 import AbstractComponent from "./AbstractComponent.js";
 import {addComponentIllustratorProvider} from "./options/AbstractComponentOptionsBuilder.js";
 
@@ -10,6 +10,6 @@ export default class SimpleComponent extends AbstractComponent {
      */
     constructor({componentIllustrator, ...restOfOptions} = {}) {
         super(addComponentIllustratorProvider(config =>
-            (componentIllustrator ?? new SimplePartComponentIllustrator(config))).to(restOfOptions));
+            (componentIllustrator ?? new SimplePartsIllustrator(config))).to(restOfOptions));
     }
 }

@@ -1,9 +1,9 @@
 import {$getChildElem, createComponent} from "../Puppeteer.js";
-import SimplePartComponentIllustrator from "../state-changes-handler/SimplePartComponentIllustrator.js";
 import {addComponentIllustratorProvider} from "./options/AbstractComponentOptionsBuilder.js";
 import {CREATED, RELOCATED, REMOVED, REPLACED} from "../state/change/StateChangeTypes.js";
 import {alertOrThrow} from "../../util/AssertionUtils.js";
 import AbstractComponent from "./AbstractComponent.js";
+import SimpleContainerIllustrator from "../state-changes-handler/SimpleContainerIllustrator.js";
 
 /**
  * @typedef {{[key: string]: AbstractComponent}} ComponentsCollection
@@ -29,7 +29,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
      */
     constructor({componentIllustrator, ...restOfOptions} = {}) {
         super(addComponentIllustratorProvider(config =>
-            (componentIllustrator ?? new SimplePartComponentIllustrator(config)))
+            (componentIllustrator ?? new SimpleContainerIllustrator(config)))
             .to(restOfOptions));
         this._initializeChildren();
     }

@@ -292,11 +292,11 @@ delegate to corresponding
 <i>changeOccurred</i> does nothing.
 end note
 
-class SimplePartComponentIllustrator extends ComponentIllustrator implements PartialStateChangesHandler {
+class SimplePartsIllustrator extends ComponentIllustrator implements PartialStateChangesHandler {
 +partChangeOccurred(stateChange)
 }
 
-note left of SimplePartComponentIllustrator
+note left of SimplePartsIllustrator
 By default will render
 (aka pass to <i>view</i>) the
 complete new state.
@@ -377,8 +377,8 @@ ComponentIllustrator *-- AbstractView
 /'StateSynchronizer *-down- DomValuesReader
 StateSynchronizer -up-> PartsAllocator
 StateSynchronizer -up-> ComponentIllustrator'/
-'SimplePartComponentIllustrator -down-> ComponentIllustrator
-'SimplePartComponentIllustrator -down-|> PartialStateChangesHandler
+'SimplePartsIllustrator -down-> ComponentIllustrator
+'SimplePartsIllustrator -down-|> PartialStateChangesHandler
 'AbstractComponent *-up- StateSynchronizer
 'AbstractComponent *-right- PartsAllocator
 'PartialStateHolder -up-|> StateHolder

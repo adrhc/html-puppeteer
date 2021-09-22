@@ -1,21 +1,17 @@
-import SimpleTemplateView from "../view/SimpleTemplateView.js";
 import ComponentIllustrator from "./ComponentIllustrator.js";
+import SimpleTemplateView from "../view/SimpleTemplateView.js";
 
 /**
- * @typedef {function(options: SimpleViewOptions): AbstractView} ViewProviderFn
- */
-/**
- * @typedef {SimpleViewOptions} SimplePartComponentIllustratorOptions
- * @property {ViewProviderFn=} viewProviderFn
+ * @typedef {SimpleViewOptions} SimpleContainerIllustratorOptions
  */
 /**
  * @template SCT, SCP
  * @extends {ComponentIllustrator}
  * @extends {PartialStateChangesHandler}
  */
-export default class SimplePartComponentIllustrator extends ComponentIllustrator {
+export default class SimpleContainerIllustrator extends ComponentIllustrator {
     /**
-     * @param {SimplePartComponentIllustratorOptions} options
+     * @param {SimpleContainerIllustratorOptions} options
      * @param {SimpleViewOptions=} options.viewConfig
      */
     constructor({viewProviderFn, ...viewConfig}) {
