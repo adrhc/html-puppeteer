@@ -21,7 +21,7 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
         super();
         this.options = options;
         this.dataAttributes = dataOf(this.options.elemIdOrJQuery) ?? {};
-        this.config = _.defaults(this.options, this.dataAttributes);
+        this.config = _.defaults({}, this.options, this.dataAttributes);
     }
 
     /**
@@ -69,8 +69,9 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
         if (component.stateInitializer == null) {
             const partName = component.config.part;
             const partValue = partName ? component.parent?.getState()?.[partName] : undefined;
-            const initialState = this.config.initialState ?? partValue;
-            if(initialState != null) {
+            // initialState priority: options.initialState, data-part, data-initial-state
+            const initialState = this.options.initialState ?? partValue ?? this.dataAttributes.initialState;
+            if (initialState != null) {
                 component.stateInitializer = new ValueStateInitializer(initialState);
             }
         }
