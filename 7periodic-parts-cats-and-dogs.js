@@ -1,4 +1,4 @@
-import PUPPETEER from "./ro/go/adrhc/html-puppeteer/core/Puppeteer.js";
+import animate from "./ro/go/adrhc/html-puppeteer/core/Puppeteer.js";
 import {registerComponentType} from "./ro/go/adrhc/html-puppeteer/core/ComponentsFactories.js";
 import PeriodicallyStateChangingComponent
     from "./ro/go/adrhc/app/components/periodically-state-changing/PeriodicallyStateChangingComponent.js";
@@ -41,7 +41,7 @@ $(() => {
     registerComponentType("periodically-state-changing",
         (options) => new PeriodicallyStateChangingComponent(options));
 
-    PUPPETEER.animate(addClockDebugger({debuggerElemIdOrJQuery: "clock-debugger"})
+    animate(addClockDebugger({debuggerElemIdOrJQuery: "clock-debugger"})
         .doPeriodicallyWithStateAndClock(stateAndClockStateChangeConsumer)
         .addDebugger({debuggerElemIdOrJQuery: "component-debugger"})
         .to({

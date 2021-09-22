@@ -1,4 +1,4 @@
-import PUPPETEER from "../Puppeteer.js";
+import animate from "../Puppeteer.js";
 import {USE_HTML} from "../view/SimpleView.js";
 import {jQueryOf} from "../../util/DomUtils.js";
 import {createByType} from "../ComponentsFactories.js";
@@ -41,9 +41,9 @@ export default class SimpleContainerComponent extends AbstractContainerComponent
      */
     render(value) {
         super.render(value);
-        PUPPETEER.animate(addDebugger({debuggerElemIdOrJQuery: "children-debugger"})
+        animate(addDebugger({debuggerElemIdOrJQuery: "children-debugger"})
             .to({
-                // PUPPETEER.animate({
+                // animate({
                 parent: this,
                 viewRemovalStrategy: USE_HTML,
                 onRemoveViewHtml: "child component was removed!"
