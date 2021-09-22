@@ -10,7 +10,7 @@
     margin-right: auto;
     border-bottom: 1px solid black;
     width: fit-content;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .title {
@@ -24,7 +24,7 @@
 }
 
 .section {
-    margin: 1rem auto;
+    margin: 0.5rem auto;
     text-align: center;
 }
 
