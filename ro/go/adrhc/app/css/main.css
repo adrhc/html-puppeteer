@@ -66,9 +66,15 @@
     background-color: aliceblue;
 }
 
-.part, .parent {
-    border-style: outset;
+.part {
     padding: .3rem;
+    border-style: dashed;
+    border-width: thin;
+    margin-bottom: .3rem;
+}
+
+.parent {
+    border-color: #167F92;
 }
 
 .thin-dashed-border {
