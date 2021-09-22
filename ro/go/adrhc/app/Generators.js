@@ -76,7 +76,7 @@ function _generate(max, name) {
  * @param {number=} [max=5]
  * @return {Bag}
  */
-export function generateAndAppendDogs(appendToObject, max = 5) {
+export function generateAndAppendDogs(appendToObject, max = 3) {
     appendToObject.dogs = generateDogs(max);
     return appendToObject;
 }
