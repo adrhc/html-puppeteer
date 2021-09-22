@@ -39,13 +39,13 @@ export default class AbstractComponent extends StateProcessor {
      */
     options;
     /**
-     * @type {StateInitializer}
-     */
-    stateInitializer;
-    /**
      * @type {AbstractComponent}
      */
     parent;
+    /**
+     * @type {StateInitializer}
+     */
+    stateInitializer;
 
     /**
      * @param {AbstractComponentOptions} options
