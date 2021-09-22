@@ -4,15 +4,21 @@ import {registerComponentType} from "./ro/go/adrhc/html-puppeteer/core/Component
 import PeriodicallyStateChangingComponent
     from "./ro/go/adrhc/app/components/periodically-state-changing/PeriodicallyStateChangingComponent.js";
 import {generateAndAppendDogs} from "./ro/go/adrhc/app/Generators.js";
+import {getTotalHeight} from "./ro/go/adrhc/html-puppeteer/util/DomUtils.js";
 
 $(() => {
     registerComponentType("periodically-state-changing",
         (options) => new PeriodicallyStateChangingComponent(options));
 
     animate(addDebugger().to({
-        stateGeneratorFn: (componentConfig, clockStateChange) =>
-            generateAndAppendDogs({
+        stateGeneratorFn: (componentConfig, clockStateChange) => {
+            setTimeout(() => {
+                $('textarea').height(0);
+                $('textarea').height(getTotalHeight);
+            });
+            return generateAndAppendDogs({
                 interval: (/** @type {ClockState} */ clockStateChange.newState)?.interval
-            })
+            }, 2);
+        }
     }));
 });
