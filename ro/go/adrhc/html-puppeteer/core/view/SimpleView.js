@@ -6,6 +6,10 @@ export const REMOVE_ELEMENT = "REMOVE_ELEMENT";
 export const REMOVE_CONTENT = "REMOVE_CONTENT";
 export const USE_HTML = "USE_HTML";
 
+export const RENDER_VAL = "val";
+export const RENDER_TEXT = "text";
+export const RENDER_HTML = "html";
+
 /**
  * @typedef {"REMOVE_ELEMENT"|"REMOVE_CONTENT"|"USE_HTML"} ViewRemovalStrategy
  */
@@ -13,6 +17,7 @@ export const USE_HTML = "USE_HTML";
  * @typedef {AbstractTemplateViewOptions} SimpleViewOptions
  * @property {string|jQuery<HTMLElement>} elemIdOrJQuery
  * @property {jQuery<HTMLElement>} $elem
+ * @property {ViewRemovalStrategy=} viewRenderStrategy
  * @property {ViewRemovalStrategy=} viewRemovalStrategy
  * @property {string=} onRemoveViewHtml
  */
@@ -33,9 +38,10 @@ export default class SimpleView extends AbstractView {
     /**
      * @param {SimpleViewOptions} options
      */
-    constructor({elemIdOrJQuery, $elem, viewRemovalStrategy, onRemoveViewHtml}) {
+    constructor({elemIdOrJQuery, $elem, viewRenderStrategy, viewRemovalStrategy, onRemoveViewHtml}) {
         super();
         this.$elem = $elem ?? this._createElem(elemIdOrJQuery);
+        this.viewRenderStrategy = viewRenderStrategy ?? (this.$elem.is("textarea") ? RENDER_VAL : RENDER_HTML);
         this.viewRemovalStrategy = viewRemovalStrategy ?? REMOVE_ELEMENT;
         this.onRemoveViewHtml = onRemoveViewHtml ?? "";
         isTrue(this.viewRemovalStrategy !== USE_HTML || !!this.onRemoveViewHtml);
@@ -60,7 +66,7 @@ export default class SimpleView extends AbstractView {
      * @param {*} values
      */
     replace(values) {
-        this.$elem.val(values != null ? JSON.stringify(values, undefined, 2) : "")
+        this.$elem[this.viewRenderStrategy](values != null ? JSON.stringify(values, undefined, 2) : "")
     }
 
     /**
