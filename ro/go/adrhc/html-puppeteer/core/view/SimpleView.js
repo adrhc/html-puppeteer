@@ -78,7 +78,7 @@ export default class SimpleView extends AbstractView {
                 this.$elem.remove();
                 break;
             case REMOVE_CONTENT:
-                this.$elem.html("");
+                this.replace("");
                 break;
             case USE_HTML:
                 this.$elem.html(this.removedPlaceholder);

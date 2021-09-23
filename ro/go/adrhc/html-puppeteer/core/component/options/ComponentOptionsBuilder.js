@@ -43,7 +43,6 @@ export class ComponentOptionsBuilder {
         }
         // prefer to keep the options value if the one from _options is missing
         options.viewProviderFn = this._options.viewProviderFn ?? options.viewProviderFn;
-        options.$elem = this._options.$elem ?? options.$elem;
         return options;
     }
 
@@ -126,15 +125,6 @@ export class ComponentOptionsBuilder {
      */
     withViewProvider(viewProviderFn) {
         this._options.viewProviderFn = viewProviderFn;
-        return this;
-    }
-
-    /**
-     * @param {jQuery<HTMLElement>} $elem
-     * @return {ComponentOptionsBuilder}
-     */
-    withViewElem($elem) {
-        this._options.$elem = $elem;
         return this;
     }
 }

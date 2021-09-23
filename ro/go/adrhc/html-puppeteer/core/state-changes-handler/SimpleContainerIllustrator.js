@@ -6,6 +6,7 @@ import {$childrenRoomOf} from "../Puppeteer.js";
 /**
  * @typedef {ComponentIllustratorOptions & AbstractTemplateViewOptions} SimpleContainerIllustratorOptions
  * @property {string|jQuery<HTMLElement>=} childrenRoom is the container's element having [data-children=""]
+ * property {string} childrenElemType
  */
 /**
  * @template SCT, SCP
@@ -14,13 +15,17 @@ import {$childrenRoomOf} from "../Puppeteer.js";
  */
 export default class SimpleContainerIllustrator extends ComponentIllustrator {
     /**
+     * @type {jQuery<HTMLElement>}
+     */
+    childrenRoom;
+
+    /**
      * @param {SimpleContainerIllustratorOptions} options
      * @param {SimpleContainerIllustratorOptions} options.restOfOptions
      */
-    constructor({elemIdOrJQuery, childrenRoom, ...restOfOptions}) {
-        super(withViewProvider(simpleTemplateViewProvider)
-            .withViewElem(childrenRoom ?? $childrenRoomOf(elemIdOrJQuery))
-            .to(restOfOptions));
+    constructor({childrenRoom, ...restOfOptions}) {
+        super(withViewProvider(simpleTemplateViewProvider).to(restOfOptions));
+        this.childrenRoom = childrenRoom ?? $childrenRoomOf(restOfOptions.elemIdOrJQuery);
     }
 
     /**

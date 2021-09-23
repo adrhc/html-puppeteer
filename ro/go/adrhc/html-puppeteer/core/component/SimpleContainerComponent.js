@@ -78,9 +78,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
                 this._createChild(partStateChange.newPartName);
                 break;
             case REMOVED:
-                if (!this._removeChild(partStateChange.previousPartName)) {
-                    return;
-                }
+                this._removeChild(partStateChange.previousPartName);
                 // the parent should remove the child's DOM element
                 this._processStateChanges();
                 break;
