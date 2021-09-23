@@ -12,7 +12,6 @@ import {encodeHTML, templateTextOf} from "../../util/HtmlUtils.js";
  */
 /**
  * @typedef {ComponentIllustratorOptions & AbstractTemplateViewOptions} SimpleContainerIllustratorOptions
- * @property {string|jQuery<HTMLElement>=} $childrenRoom is the container's element having [data-children=""]
  * @property {string=} frameTemplate
  * @property {string=} frameTemplateId
  * @property {boolean=} newChildrenGoLast
@@ -38,6 +37,10 @@ export default class SimpleContainerIllustrator extends ComponentIllustrator {
      */
     frameTemplate;
     /**
+     * @type {string|jQuery<HTMLElement>}
+     */
+    parentIdOrJQuery;
+    /**
      * @type {string}
      */
     place;
@@ -56,10 +59,18 @@ export default class SimpleContainerIllustrator extends ComponentIllustrator {
                     ...restOfOptions
                 }) {
         super(restOfOptions);
-        this.$childrenRoom = $childrenRoom ?? $childrenRoomOf(restOfOptions.elemIdOrJQuery);
+        this.parentIdOrJQuery = restOfOptions.elemIdOrJQuery;
         this.place = (newChildrenGoLast ?? false) ? "append" : "prepend";
         this.dontRemoveChildren = dontRemoveChildren ?? false;
         this.frameTemplate = frameTemplate ?? this._createTemplate(frameTemplateId, childrenFrameAttributes);
+    }
+
+    /**
+     * @param {StateChange} stateChange
+     */
+    created(stateChange) {
+        super.created(stateChange);
+        this.$childrenRoom = $childrenRoomOf(this.parentIdOrJQuery);
     }
 
     /**

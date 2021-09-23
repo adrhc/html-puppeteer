@@ -81,3 +81,12 @@ export function generateAndAppendDogs(appendToObject, max = 3) {
     appendToObject.dogs = generateDogs(max);
     return appendToObject;
 }
+
+/**
+ * @param {string=} prefix
+ * @param {string=} suffix
+ * @return {string}
+ */
+export function generateString(prefix = "", suffix = "") {
+    return `${prefix}${_.random(1, 1000)}${suffix}`;
+}

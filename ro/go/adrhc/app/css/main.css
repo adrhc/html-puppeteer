@@ -84,3 +84,20 @@ div[data-part], .parent {
 .bgc-aliceblue {
     background-color: aliceblue;
 }
+
+.scenario10 [data-part] {
+    display: flex;
+    justify-content: center;
+}
+
+.scenario10 [data-part] div:not(:first-child) {
+    margin-left: 0.5rem;
+}
+
+.scenario10 [data-part] label {
+    font-weight: bold;
+}
+
+.scenario10 [data-part="text"] {
+    display: none;
+}
