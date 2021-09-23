@@ -43,3 +43,11 @@ export function focus($elem) {
 export function encodeHTML(s) {
     return s.split('&').join('&amp;').split('<').join('&lt;').split('"').join('&quot;').split("'").join('&#39;');
 }
+
+/**
+ * @param {Object} object
+ * @return {string}
+ */
+export function dataAttributesOf(object) {
+    return Object.entries(object).map(([key, value]) => `data-${_.kebabCase(key)}="${encodeHTML(value)}"`).join(" ");
+}

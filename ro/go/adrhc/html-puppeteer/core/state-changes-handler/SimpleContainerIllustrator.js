@@ -2,7 +2,7 @@ import ComponentIllustrator from "./ComponentIllustrator.js";
 import {$childrenRoomOf} from "../Puppeteer.js";
 import {dataPart, dataPartSelectorOf, dataType} from "../../util/GlobalConfig.js";
 import {generateHtml} from "../../util/HtmlGenerator.js";
-import {encodeHTML, templateTextOf} from "../../util/HtmlUtils.js";
+import {dataAttributesOf, templateTextOf} from "../../util/HtmlUtils.js";
 
 /**
  * @typedef {Bag} ChildrenFrameAttributes
@@ -74,24 +74,34 @@ export default class SimpleContainerIllustrator extends ComponentIllustrator {
     }
 
     /**
+     * @param {StateChange} stateChange
+     */
+    replaced(stateChange) {
+        super.replaced(stateChange);
+        this.$childrenRoom = $childrenRoomOf(this.parentIdOrJQuery);
+    }
+
+    /**
      * @param {string=} frameTemplateId
      * @param {ChildrenFrameAttributes=} childrenFrameAttributes
      * @protected
      */
-    _createTemplate(frameTemplateId, {templateId, htmlTag = "div", componentType = "simple", ...rest}) {
+    _createTemplate(frameTemplateId, childrenFrameAttributes) {
         if (frameTemplateId) {
             return templateTextOf(frameTemplateId);
         } else {
-            /*const dataAttributes = Object.keys(rest)
-                .map(key => [key, `data-${_.kebabCase(key)}`])
-                .reduce((prev, curr) => {
-                    prev[curr[1]] = rest[curr[0]];
-                    return prev;
-                }, {});*/
-            const dataAttributes = Object.entries(rest).map(([key, value]) => `data-${_.kebabCase(key)}="${encodeHTML(value)}"`).join(" ");
-            // {{this}} will be the part name
-            return `<${htmlTag} ${dataPart()}="{{this}}" ${dataType()}="${componentType}" data-template-id="${templateId}" ${dataAttributes}></${htmlTag}>`;
+            return this._templateFromChildrenFrameAttributes(childrenFrameAttributes);
         }
+    }
+
+    /**
+     * @param {ChildrenFrameAttributes=} childrenFrameAttributes
+     * @return {string}
+     * @protected
+     */
+    _templateFromChildrenFrameAttributes({templateId, htmlTag = "div", componentType = "simple", ...rest}) {
+        // {{this}} will be the part name when the kid's frame will be created
+        return `<${htmlTag} ${dataPart()}="{{this}}" ${dataType()}="${componentType}" data-template-id="${templateId}" ${dataAttributesOf(rest)}></${htmlTag}>`;
     }
 
     /**

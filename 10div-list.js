@@ -10,16 +10,19 @@ class App {
      */
     index = 1;
     /**
-     * @type {number}
-     */
-    lastRemoved = 0;
-    /**
      * @type {SimpleContainerComponent}
      */
     parent;
 
     constructor(parent) {
         this.parent = parent;
+    }
+
+    _oldestKidId() {
+        return Object.values(this.parent.children)
+            .map(kid => kid.getState().id)
+            .filter(v => v != null)
+            .reduce((prev, curr) => prev <= curr ? prev : curr, 9999);
     }
 
     run() {
@@ -34,10 +37,8 @@ class App {
             $('textarea').height(getTotalHeight);
         });
         $(namedBtn("remove")).on("click", () => {
-            if (this.lastRemoved === this.index) {
-                return;
-            }
-            this.parent.replacePart(`kid${this.lastRemoved++}`);
+            const lastKidId = this._oldestKidId();
+            this.parent.replacePart(`kid${lastKidId}`);
             $('textarea').height(0);
             $('textarea').height(getTotalHeight);
         });
