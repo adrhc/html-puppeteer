@@ -1,9 +1,11 @@
 import ComponentIllustrator from "./ComponentIllustrator.js";
 import {simpleTemplateViewProvider} from "../view/SimpleTemplateView.js";
 import {withViewProvider} from "../component/options/ComponentOptionsBuilder.js";
+import {$childrenRoomOf} from "../Puppeteer.js";
 
 /**
- * @typedef {ComponentIllustratorOptions} SimpleContainerIllustratorOptions
+ * @typedef {ComponentIllustratorOptions & AbstractTemplateViewOptions} SimpleContainerIllustratorOptions
+ * @property {string|jQuery<HTMLElement>=} childrenRoom is the container's element having [data-children=""]
  */
 /**
  * @template SCT, SCP
@@ -13,9 +15,12 @@ import {withViewProvider} from "../component/options/ComponentOptionsBuilder.js"
 export default class SimpleContainerIllustrator extends ComponentIllustrator {
     /**
      * @param {SimpleContainerIllustratorOptions} options
+     * @param {SimpleContainerIllustratorOptions} options.restOfOptions
      */
-    constructor(options) {
-        super(withViewProvider(simpleTemplateViewProvider).to(options));
+    constructor({elemIdOrJQuery, childrenRoom, ...restOfOptions}) {
+        super(withViewProvider(simpleTemplateViewProvider)
+            .withViewElem(childrenRoom ?? $childrenRoomOf(elemIdOrJQuery))
+            .to(restOfOptions));
     }
 
     /**

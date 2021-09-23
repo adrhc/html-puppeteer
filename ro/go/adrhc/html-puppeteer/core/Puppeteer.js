@@ -1,6 +1,7 @@
 import GlobalConfig from "../util/GlobalConfig.js";
 import {createByType} from "./ComponentsFactories.js";
 import {jQueryOf} from "../util/DomUtils.js";
+import {isTrue} from "../util/AssertionUtils.js";
 
 /**
  * @param {{}=} commonOptions
@@ -100,4 +101,15 @@ function renderComponents($components) {
 
 export function $getChildElem(partName, parentElemIdOrJQuery) {
     return $(`[data-${GlobalConfig.DATA_PART}="${partName}"]`, jQueryOf(parentElemIdOrJQuery));
+}
+
+/**
+ * @param {string|jQuery<HTMLElement>} parentElemIdOrJQuery
+ * @return {jQuery<HTMLElement>}
+ */
+export function $childrenRoomOf(parentElemIdOrJQuery) {
+    const $parent = jQueryOf(parentElemIdOrJQuery);
+    const $childrenRoom = $parent.find('[data-children=""]');
+    isTrue($childrenRoom.length < 2);
+    return $childrenRoom.length ? $childrenRoom : $parent;
 }

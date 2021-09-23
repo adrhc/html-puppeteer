@@ -27,7 +27,7 @@ export class ComponentOptionsBuilder {
     }
 
     /**
-     * This is the equivalent of Builder.build()
+     * This is the equivalent of the build() method of a builder.
      *
      * @param {ComponentOptions=} options
      * @return {ComponentOptions}
@@ -41,7 +41,9 @@ export class ComponentOptionsBuilder {
             options.extraStateChangesHandlers = options.extraStateChangesHandlers ?? [];
             options.extraStateChangesHandlers.push(...this._options.extraStateChangesHandlers);
         }
+        // prefer to keep the options value if the one from _options is missing
         options.viewProviderFn = this._options.viewProviderFn ?? options.viewProviderFn;
+        options.$elem = this._options.$elem ?? options.$elem;
         return options;
     }
 
@@ -111,6 +113,7 @@ export class ComponentOptionsBuilder {
      * Useful when on has to also check the current this._options values.
      *
      * @param {BagConsumer} optionsConsumer
+     * @return {ComponentOptionsBuilder}
      */
     withOptionsConsumer(optionsConsumer) {
         optionsConsumer(this._options)
@@ -119,9 +122,19 @@ export class ComponentOptionsBuilder {
 
     /**
      * @param {ViewProviderFn} viewProviderFn
+     * @return {ComponentOptionsBuilder}
      */
     withViewProvider(viewProviderFn) {
         this._options.viewProviderFn = viewProviderFn;
+        return this;
+    }
+
+    /**
+     * @param {jQuery<HTMLElement>} $elem
+     * @return {ComponentOptionsBuilder}
+     */
+    withViewElem($elem) {
+        this._options.$elem = $elem;
         return this;
     }
 }
