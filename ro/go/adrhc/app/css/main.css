@@ -66,7 +66,7 @@
     background-color: aliceblue;
 }
 
-.part {
+div[data-part], .parent {
     padding: .3rem;
     border-style: dashed;
     border-width: thin;
@@ -74,12 +74,7 @@
 }
 
 .parent {
-    border-color: #167F92;
-}
-
-.thin-dashed-border {
-    border-style: dashed;
-    border-width: thin;
+    border-color: aqua;
 }
 
 .mb3 {

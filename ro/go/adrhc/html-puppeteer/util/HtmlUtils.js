@@ -39,3 +39,7 @@ export function focus($elem) {
     const value = $elem.val();
     $elem.focus().val("").val(value);
 }
+
+export function encodeHTML(s) {
+    return s.split('&').join('&amp;').split('<').join('&lt;').split('"').join('&quot;').split("'").join('&#39;');
+}

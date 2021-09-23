@@ -1,4 +1,4 @@
-import GlobalConfig from "../util/GlobalConfig.js";
+import GlobalConfig, {dataPartSelectorOf, dataTypeSelectorOf} from "../util/GlobalConfig.js";
 import {createByType} from "./ComponentsFactories.js";
 import {jQueryOf} from "../util/DomUtils.js";
 import {isTrue} from "../util/AssertionUtils.js";
@@ -42,6 +42,8 @@ function createComponents(parentComponentElem, commonOptions) {
  * @return {AbstractComponent}
  */
 export function createComponent($el, commonOptions) {
+    isTrue($el.length === 1,
+        `[createComponent] bad $el.length = ${$el.length}!`);
     const type = componentTypeOf($el);
     const partName = componentPartOf($el);
     const componentOptions = componentOptionsOf(partName, commonOptions);
@@ -58,7 +60,7 @@ function componentOptionsOf(partName, commonOptions) {
  * @protected
  */
 function $componentElementsOf(parentComponentElem) {
-    return $(`[data-${GlobalConfig.DATA_TYPE}]`, parentComponentElem);
+    return $(dataTypeSelectorOf(), parentComponentElem);
 }
 
 /**
@@ -100,7 +102,7 @@ function renderComponents($components) {
 }
 
 export function $getChildElem(partName, parentElemIdOrJQuery) {
-    return $(`[data-${GlobalConfig.DATA_PART}="${partName}"]`, jQueryOf(parentElemIdOrJQuery));
+    return $(dataPartSelectorOf(partName), jQueryOf(parentElemIdOrJQuery));
 }
 
 /**
