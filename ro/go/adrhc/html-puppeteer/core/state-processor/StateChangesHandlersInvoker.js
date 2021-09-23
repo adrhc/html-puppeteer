@@ -110,12 +110,12 @@ export default class StateChangesHandlersInvoker {
     }
 
     /**
-     * @param {StateChange} typedStateChange
+     * @param {StateChange|PartStateChange} typedStateChange
      * @return {boolean}
      * @protected
      */
     _isPartialChange(typedStateChange) {
-        return typedStateChange.previousPartName != null || typedStateChange.newPartName;
+        return typedStateChange.previousPartName != null || typedStateChange.newPartName != null;
     }
 
     /**
@@ -135,12 +135,4 @@ export default class StateChangesHandlersInvoker {
     _methodVerbOf(changeType) {
         return _.camelCase(changeType);
     }
-}
-
-/**
- * @param {StateChangesHandler} stateChangesHandler
- * @return {StateChangesHandlersInvoker}
- */
-export function stateChangesHandlersInvokerOf(stateChangesHandler) {
-    return new StateChangesHandlersInvoker({stateChangesHandlers: [stateChangesHandler]})
 }

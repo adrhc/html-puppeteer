@@ -1,13 +1,10 @@
-import SimpleTemplateView from "../view/SimpleTemplateView.js";
+import SimpleTemplateView, {simpleTemplateViewProvider} from "../view/SimpleTemplateView.js";
 import ComponentIllustrator from "./ComponentIllustrator.js";
 import StateChange from "../state/change/StateChange.js";
+import {withViewProvider} from "../component/options/ComponentOptionsBuilder.js";
 
 /**
- * @typedef {function(options: SimpleViewOptions): AbstractView} ViewProviderFn
- */
-/**
- * @typedef {SimpleViewOptions} SimplePartsIllustratorOptions
- * @property {ViewProviderFn=} viewProviderFn
+ * @typedef {ComponentIllustratorOptions} SimplePartsIllustratorOptions
  */
 /**
  * @template SCT, SCP
@@ -17,11 +14,9 @@ import StateChange from "../state/change/StateChange.js";
 export default class SimplePartsIllustrator extends ComponentIllustrator {
     /**
      * @param {SimplePartsIllustratorOptions} options
-     * @param {SimpleViewOptions=} options.viewConfig
      */
-    constructor({viewProviderFn, ...viewConfig}) {
-        super();
-        this.view = viewProviderFn ? viewProviderFn(viewConfig) : this._createView(viewConfig);
+    constructor(options) {
+        super(withViewProvider(options.viewProviderFn ?? simpleTemplateViewProvider).to(options));
     }
 
     /**

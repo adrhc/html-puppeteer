@@ -221,7 +221,7 @@ end note'/
 
 class SimpleView implements AbstractView {
 #$elem: jQuery<HTMLElement>
-#onRemoveViewHtml
+#removedPlaceholder
 #viewRemovalStrategy: \n\tREMOVE_ELEMENT |\n\tREMOVE_CONTENT |\n\tUSE_HTML
 +create(values)
 +replace(values)

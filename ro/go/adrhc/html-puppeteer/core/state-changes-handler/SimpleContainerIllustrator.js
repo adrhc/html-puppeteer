@@ -1,8 +1,9 @@
 import ComponentIllustrator from "./ComponentIllustrator.js";
-import SimpleTemplateView from "../view/SimpleTemplateView.js";
+import {simpleTemplateViewProvider} from "../view/SimpleTemplateView.js";
+import {withViewProvider} from "../component/options/ComponentOptionsBuilder.js";
 
 /**
- * @typedef {SimpleViewOptions} SimpleContainerIllustratorOptions
+ * @typedef {ComponentIllustratorOptions} SimpleContainerIllustratorOptions
  */
 /**
  * @template SCT, SCP
@@ -12,20 +13,9 @@ import SimpleTemplateView from "../view/SimpleTemplateView.js";
 export default class SimpleContainerIllustrator extends ComponentIllustrator {
     /**
      * @param {SimpleContainerIllustratorOptions} options
-     * @param {SimpleViewOptions=} options.viewConfig
      */
-    constructor({viewProviderFn, ...viewConfig}) {
-        super();
-        this.view = viewProviderFn ? viewProviderFn(viewConfig) : this._createView(viewConfig);
-    }
-
-    /**
-     * @param {SimpleViewOptions} viewConfig
-     * @return {SimpleTemplateView}
-     * @protected
-     */
-    _createView(viewConfig) {
-        return new SimpleTemplateView(viewConfig);
+    constructor(options) {
+        super(withViewProvider(simpleTemplateViewProvider).to(options));
     }
 
     /**

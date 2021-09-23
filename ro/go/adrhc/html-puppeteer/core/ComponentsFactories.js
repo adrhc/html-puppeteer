@@ -1,6 +1,5 @@
 import SimpleComponent from "./component/SimpleComponent.js";
 import SimpleContainerComponent from "./component/SimpleContainerComponent.js";
-import {jQueryOf} from "../util/DomUtils.js";
 
 /**
  * @typedef {function(options: Bag): AbstractComponent} ComponentProviderFn

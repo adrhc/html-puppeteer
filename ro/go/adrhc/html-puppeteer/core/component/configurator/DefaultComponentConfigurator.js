@@ -70,7 +70,8 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
             return;
         }
         const partName = component.config.part;
-        const partValue = partName ? component.parent?.getState()?.[partName] : undefined;
+        const parentState = component.parent?.getState();
+        const partValue = partName ? parentState?.[partName] : undefined;
         // initialState priority: options.initialState, data-part, data-initial-state
         const initialState = this.options.initialState ?? partValue ?? this.dataAttributes.initialState;
         if (initialState != null) {

@@ -1,4 +1,4 @@
-import {AbstractComponentOptionsBuilder} from "./AbstractComponentOptionsBuilder.js";
+import {ComponentOptionsBuilder} from "./ComponentOptionsBuilder.js";
 import SimpleComponent from "../SimpleComponent.js";
 import CopyStatesChangeHandler from "../../state-changes-handler/CopyStatesChangeHandler.js";
 import SimpleView from "../../view/SimpleView.js";
@@ -7,7 +7,7 @@ import SimpleView from "../../view/SimpleView.js";
  * @typedef {Object} DebuggerOptions
  * @property {string} [debuggerElemIdOrJQuery="debugger"]
  */
-export default class DebuggerOptionsBuilder extends AbstractComponentOptionsBuilder {
+export default class DebuggerOptionsBuilder extends ComponentOptionsBuilder {
     /**
      * creates then adds a debugger (CopyStatesChangeHandler) as an extra StateChangesHandler
      *
@@ -28,8 +28,7 @@ export default class DebuggerOptionsBuilder extends AbstractComponentOptionsBuil
         debuggerElemIdOrJQuery = debuggerElemIdOrJQuery ?? "debugger";
         const simpleDebugger = new SimpleComponent({
             viewProviderFn: (viewConfig) => new SimpleView(viewConfig),
-            elemIdOrJQuery: debuggerElemIdOrJQuery,
-            htmlTemplate: "{{#if this}}{{this}}{{else}}No debugging data available yet!{{/if}}"
+            elemIdOrJQuery: debuggerElemIdOrJQuery
         }).render();
         return new CopyStatesChangeHandler(simpleDebugger);
     }
@@ -39,7 +38,7 @@ export default class DebuggerOptionsBuilder extends AbstractComponentOptionsBuil
  * creates options with a debugger (CopyStatesChangeHandler) as an extra StateChangesHandler
  *
  * @param {DebuggerOptions=} debuggerOptions
- * @return {AbstractComponentOptions}
+ * @return {ComponentOptions}
  */
 export function withDebugger(debuggerOptions) {
     return addDebugger(debuggerOptions).options();

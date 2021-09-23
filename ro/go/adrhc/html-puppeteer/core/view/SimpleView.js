@@ -15,11 +15,11 @@ export const RENDER_HTML = "html";
  */
 /**
  * @typedef {AbstractTemplateViewOptions} SimpleViewOptions
- * @property {string|jQuery<HTMLElement>} elemIdOrJQuery
- * @property {jQuery<HTMLElement>} $elem
+ * @property {string|jQuery<HTMLElement>=} elemIdOrJQuery
+ * @property {jQuery<HTMLElement>=} $elem
  * @property {ViewRemovalStrategy=} viewRenderStrategy
  * @property {ViewRemovalStrategy=} viewRemovalStrategy
- * @property {string=} onRemoveViewHtml
+ * @property {string=} removedPlaceholder is the text or html to be used when the component is removed
  */
 export default class SimpleView extends AbstractView {
     /**
@@ -29,7 +29,7 @@ export default class SimpleView extends AbstractView {
     /**
      * @type {string}
      */
-    onRemoveViewHtml;
+    removedPlaceholder;
     /**
      * @type {ViewRemovalStrategy}
      */
@@ -38,13 +38,13 @@ export default class SimpleView extends AbstractView {
     /**
      * @param {SimpleViewOptions} options
      */
-    constructor({elemIdOrJQuery, $elem, viewRenderStrategy, viewRemovalStrategy, onRemoveViewHtml}) {
+    constructor({elemIdOrJQuery, $elem, viewRenderStrategy, viewRemovalStrategy, removedPlaceholder}) {
         super();
         this.$elem = $elem ?? this._createElem(elemIdOrJQuery);
         this.viewRenderStrategy = viewRenderStrategy ?? (this.$elem.is("textarea") ? RENDER_VAL : RENDER_HTML);
         this.viewRemovalStrategy = viewRemovalStrategy ?? REMOVE_ELEMENT;
-        this.onRemoveViewHtml = onRemoveViewHtml ?? "";
-        isTrue(this.viewRemovalStrategy !== USE_HTML || !!this.onRemoveViewHtml);
+        this.removedPlaceholder = removedPlaceholder ?? "";
+        isTrue(this.viewRemovalStrategy !== USE_HTML || !!this.removedPlaceholder);
     }
 
     /**
@@ -81,7 +81,7 @@ export default class SimpleView extends AbstractView {
                 this.$elem.html("");
                 break;
             case USE_HTML:
-                this.$elem.html(this.onRemoveViewHtml);
+                this.$elem.html(this.removedPlaceholder);
                 break;
             default:
                 alertOrThrow(`Bad viewRemovalStrategy! this.viewRemovalStrategy = ${this.viewRemovalStrategy}`);

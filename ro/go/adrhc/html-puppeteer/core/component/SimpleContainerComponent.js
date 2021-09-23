@@ -1,5 +1,5 @@
 import {$getChildElem, createComponent} from "../Puppeteer.js";
-import {addComponentIllustratorProvider} from "./options/AbstractComponentOptionsBuilder.js";
+import {addComponentIllustratorProvider} from "./options/ComponentOptionsBuilder.js";
 import {CREATED, RELOCATED, REMOVED, REPLACED} from "../state/change/StateChangeTypes.js";
 import {alertOrThrow} from "../../util/AssertionUtils.js";
 import AbstractComponent from "./AbstractComponent.js";
@@ -96,7 +96,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
                 this._createChild(partStateChange.newPartName);
                 break;
             default:
-                alertOrThrow(`Bad state change!\n${JSON.stringify(stateChange)}`);
+                alertOrThrow(`Bad state change!\n${JSON.stringify(partStateChange)}`);
         }
     }
 
