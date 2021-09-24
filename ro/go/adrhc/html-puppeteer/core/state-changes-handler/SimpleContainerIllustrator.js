@@ -6,13 +6,13 @@ import {dataAttributesOf, templateTextOf} from "../../util/HtmlUtils.js";
 
 /**
  * @typedef {Bag} ChildrenFrameAttributes
- * @property {string=} templateId
+ * @property {string=} templateId is used by child's component to populate its space (aka frame)
  * @property {string=} componentType
  * @property {string=} htmlTag
  */
 /**
  * @typedef {ComponentIllustratorOptions & AbstractTemplateViewOptions} SimpleContainerIllustratorOptions
- * @property {string=} frameTemplate
+ * @property {string=} frameTemplate is the element containing the data-type and data-part
  * @property {string=} frameTemplateId
  * @property {boolean=} newChildrenGoLast
  * @property {boolean=} dontRemoveChildren
