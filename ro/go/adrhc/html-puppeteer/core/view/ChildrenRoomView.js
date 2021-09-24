@@ -5,7 +5,7 @@ import {dataPart, dataPartSelectorOf, dataType} from "../../util/GlobalConfig.js
 import {generateHtml} from "../../util/HtmlGenerator.js";
 
 /**
- * @typedef {Bag} ChildrenFrameAttributes
+ * @typedef {Bag} ChildFrameAttributes
  * @property {string=} templateId is used by child's component to populate its space (aka frame)
  * @property {string=} componentType
  * @property {string=} htmlTag
@@ -17,7 +17,7 @@ import {generateHtml} from "../../util/HtmlGenerator.js";
  * @property {string=} frameTemplateId
  * @property {boolean=} newChildrenGoLast
  * @property {boolean=} dontRemoveChildren
- * @property {ChildrenFrameAttributes=} childrenFrameAttributes
+ * @property {ChildFrameAttributes=} childFrameAttributes
  */
 /**
  * @extends {AbstractView}
@@ -55,13 +55,13 @@ export default class ChildrenRoomView extends AbstractView {
                     frameTemplateId,
                     newChildrenGoLast,
                     dontRemoveChildren,
-                    childrenFrameAttributes = {},
+                    childFrameAttributes = {},
                 }) {
         super();
         this.parentIdOrJQuery = elemIdOrJQuery;
         this.place = (newChildrenGoLast ?? false) ? "append" : "prepend";
         this.dontRemoveChildren = dontRemoveChildren ?? false;
-        this.frameTemplate = frameTemplate ?? this._createTemplate(frameTemplateId, childrenFrameAttributes);
+        this.frameTemplate = frameTemplate ?? this._createTemplate(frameTemplateId, childFrameAttributes);
     }
 
     /**
@@ -109,23 +109,23 @@ export default class ChildrenRoomView extends AbstractView {
 
     /**
      * @param {string=} frameTemplateId
-     * @param {ChildrenFrameAttributes=} childrenFrameAttributes
+     * @param {ChildFrameAttributes=} childFrameAttributes
      * @protected
      */
-    _createTemplate(frameTemplateId, childrenFrameAttributes) {
+    _createTemplate(frameTemplateId, childFrameAttributes) {
         if (frameTemplateId) {
             return templateTextOf(frameTemplateId);
         } else {
-            return this._templateFromChildrenFrameAttributes(childrenFrameAttributes);
+            return this._templateFromChildFrameAttributes(childFrameAttributes);
         }
     }
 
     /**
-     * @param {ChildrenFrameAttributes=} childrenFrameAttributes
+     * @param {ChildFrameAttributes=} childFrameAttributes
      * @return {string}
      * @protected
      */
-    _templateFromChildrenFrameAttributes({templateId, htmlTag = "div", componentType = "simple", ...rest}) {
+    _templateFromChildFrameAttributes({templateId, htmlTag = "div", componentType = "simple", ...rest}) {
         // {{this}} will be the part name when the kid's frame will be created
         return `<${htmlTag} ${dataPart()}="{{this}}" ${dataType()}="${componentType}" data-template-id="${templateId}" ${dataAttributesOf(rest)}></${htmlTag}>`;
     }
