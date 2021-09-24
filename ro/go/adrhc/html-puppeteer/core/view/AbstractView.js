@@ -1,11 +1,11 @@
 export default class AbstractView {
     /**
-     * @param {{}} values
+     * @param {*} values
      */
     create(values) {}
 
     /**
-     * @param {{}} values
+     * @param {*} values
      */
     replace(values) {}
 

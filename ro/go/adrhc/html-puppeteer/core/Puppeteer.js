@@ -111,7 +111,7 @@ export function $getChildElem(partName, parentElemIdOrJQuery) {
  */
 export function $childrenRoomOf(parentElemIdOrJQuery) {
     const $parent = jQueryOf(parentElemIdOrJQuery);
-    const $childrenRoom = $parent.find(dataChildrenSelectorOf(GlobalConfig.DEFAULT_CHILDREN_ROOM));
+    const $childrenRoom = $parent.find(dataChildrenSelectorOf());
     isTrue($childrenRoom.length < 2);
     return $childrenRoom.length ? $childrenRoom : $parent;
 }
