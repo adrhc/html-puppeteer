@@ -31,7 +31,7 @@
 	</div>
 	<div class="section title">Component's view (parent and its children)</div>
 	<div class="section flex-column fit-content bgc-aliceblue"
-	     data-children-frame-attributes='{"templateId": "kid-template"}'
+	     data-frame-template-id="kid-frame-template"
 	     data-initial-state='{"kid0": {"id": 0, "name": "kid 0"},
 	     "text": "this is the parent state displayed by its view (below are the children)"}'
 	     data-template-id="parent-template"
@@ -43,11 +43,15 @@
 <script id="parent-template" type="text/x-handlebars-template">
 	<div class="parent">{{text}}</div>
 	<div class="mb3">kids could be on parent's top or left or anywhere else</div>
-	<div data-children="">
+	<div data-children>
 		{{#each this}}
 			<div class="kid" data-part="{{@key}}" data-type="simple" data-template-id="kid-template"></div>
 		{{/each}}
 	</div>
+</script>
+
+<script id="kid-frame-template" type="text/x-handlebars-template">
+	<div data-part="{{this}}" data-type="simple" data-template-id="kid-template"></div>
 </script>
 
 <script id="kid-template" type="text/x-handlebars-template">

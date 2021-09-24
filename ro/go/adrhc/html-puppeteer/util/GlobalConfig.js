@@ -1,5 +1,6 @@
 export default class GlobalConfig {
     static ALERT_ON_FAILED_ASSERTION = true;
+    static DATA_CHILDREN = "children";
     /**
      * the child "part" name in the parent's state
      */
@@ -8,6 +9,7 @@ export default class GlobalConfig {
      * the component type
      */
     static DATA_TYPE = "type";
+    static DEFAULT_CHILDREN_ROOM = "";
     static ELEM_ID_OR_JQUERY = "elemIdOrJQuery";
     static OWNER = "owner";
     static SERVER_ROOT = "";
@@ -19,6 +21,10 @@ export function dataType() {
 
 export function dataPart() {
     return `data-${GlobalConfig.DATA_PART}`;
+}
+
+export function dataChildren() {
+    return `data-${GlobalConfig.DATA_CHILDREN}`;
 }
 
 /**
@@ -37,4 +43,13 @@ export function dataTypeSelectorOf(type, useDoubleQuotes) {
 export function dataPartSelectorOf(partName, useDoubleQuotes) {
     const quote = useDoubleQuotes ? '"' : "'";
     return partName == null ? `[${dataPart()}]` : `[${dataPart()}=${quote}${partName}${quote}]`;
+}
+
+/**
+ * @param {string=} childrenRoomName
+ * @param {boolean=} useDoubleQuotes
+ */
+export function dataChildrenSelectorOf(childrenRoomName, useDoubleQuotes) {
+    const quote = useDoubleQuotes ? '"' : "'";
+    return childrenRoomName == null ? `[${dataChildren()}]` : `[${dataChildren()}=${quote}${childrenRoomName}${quote}]`;
 }

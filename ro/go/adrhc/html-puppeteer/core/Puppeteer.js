@@ -1,4 +1,4 @@
-import GlobalConfig, {dataPartSelectorOf, dataTypeSelectorOf} from "../util/GlobalConfig.js";
+import GlobalConfig, {dataChildrenSelectorOf, dataPartSelectorOf, dataTypeSelectorOf} from "../util/GlobalConfig.js";
 import {createByType} from "./ComponentsFactories.js";
 import {jQueryOf} from "../util/DomUtils.js";
 import {isTrue} from "../util/AssertionUtils.js";
@@ -111,7 +111,7 @@ export function $getChildElem(partName, parentElemIdOrJQuery) {
  */
 export function $childrenRoomOf(parentElemIdOrJQuery) {
     const $parent = jQueryOf(parentElemIdOrJQuery);
-    const $childrenRoom = $parent.find('[data-children=""]');
+    const $childrenRoom = $parent.find(dataChildrenSelectorOf(GlobalConfig.DEFAULT_CHILDREN_ROOM));
     isTrue($childrenRoom.length < 2);
     return $childrenRoom.length ? $childrenRoom : $parent;
 }
