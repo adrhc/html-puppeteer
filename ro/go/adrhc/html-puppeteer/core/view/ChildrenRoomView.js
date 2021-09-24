@@ -15,6 +15,7 @@ import {generateHtml} from "../../util/HtmlGenerator.js";
  * @property {string=} parentIdOrJQuery
  * @property {string=} frameTemplate is the element containing the data-type and data-part
  * @property {string=} frameTemplateId
+ * @property {string=} childTemplateId is a shortcut for ChildFrameAttributes.templateId
  * @property {boolean=} newChildrenGoLast
  * @property {boolean=} dontRemoveChildren
  * @property {ChildFrameAttributes=} childFrameAttributes
@@ -53,9 +54,10 @@ export default class ChildrenRoomView extends AbstractView {
                     elemIdOrJQuery,
                     frameTemplate,
                     frameTemplateId,
+                    childTemplateId,
                     newChildrenGoLast,
                     dontRemoveChildren,
-                    childFrameAttributes = {},
+                    childFrameAttributes = {templateId: childTemplateId},
                 }) {
         super();
         this.parentIdOrJQuery = elemIdOrJQuery;
