@@ -1,10 +1,8 @@
-import {withDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/options/DebuggerOptionsBuilder.js";
-import animate from "./ro/go/adrhc/html-puppeteer/core/Puppeteer.js";
-import {generateString} from "./ro/go/adrhc/app/Generators.js";
-import {namedBtn} from "./ro/go/adrhc/html-puppeteer/util/SelectorUtils.js";
-import {getTotalHeight} from "./ro/go/adrhc/html-puppeteer/util/DomUtils.js";
+import {namedBtn} from "../html-puppeteer/util/SelectorUtils.js";
+import {getTotalHeight} from "../html-puppeteer/util/DomUtils.js";
+import {generateString} from "./Generators.js";
 
-class App {
+export default class Scenario10App {
     /**
      * @type {number}
      */
@@ -49,11 +47,3 @@ class App {
         });
     }
 }
-
-$(() => {
-    // the puppeteer
-    const component = animate(withDebugger({debuggerElemIdOrJQuery: "parent-debugger"}));
-
-    // the application using the html-puppeteer
-    new App(component).run();
-});
