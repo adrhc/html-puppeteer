@@ -10,8 +10,8 @@ export default class GlobalConfig {
      */
     static DATA_TYPE = "type";
     static DEFAULT_CHILDREN_ROOM = "";
-    static ID_ATTR = "id";
     static ELEM_ID_OR_JQUERY = "elemIdOrJQuery";
+    static ID_ATTR = "id";
     static OWNER = "owner";
     static OWNER_ATTR = "owner";
     static SERVER_ROOT = "";

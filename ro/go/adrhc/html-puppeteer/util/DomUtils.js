@@ -1,4 +1,5 @@
-import {encodeHTML} from "./HtmlUtils.js";
+import {encodeHTML, uniqueId} from "./StringUtils.js";
+import GlobalConfig from "./GlobalConfig.js";
 
 /**
  * @param {string|jQuery<HTMLElement>} elemIdOrJQuery
@@ -101,4 +102,46 @@ export function attrsOf(el) {
 export function focus($elem) {
     const value = $elem.val();
     $elem.focus().val("").val(value);
+}
+
+/**
+ * @param {string} tmplId is the template html-element id
+ * @return {string} the template's html extracted from template html-element id (i.e. tmplId)
+ */
+export function templateTextOf(tmplId) {
+    if (!tmplId) {
+        return undefined;
+    }
+    const $tmpl = $(`#${tmplId}`);
+    if (!$tmpl.length) {
+        return undefined;
+    }
+    if ($tmpl[0].content) {
+        // use <template> when content encoding as HTML is not an issue
+        return $tmpl.html().trim();
+    } else {
+        // use <script> when don't wont the HTML encoding to be automatically applied
+        return $tmpl.text().trim();
+    }
+}
+
+/**
+ * @param {string} tmplId is the template html-element id
+ * @param {string} tmplHtml is the template's html
+ * @return {string} the template's html extracted from template html-element id or tmplHtml if null tmplId
+ */
+export function templateOf(tmplId, tmplHtml) {
+    if (tmplId) {
+        return templateTextOf(tmplId);
+    } else if (tmplHtml) {
+        return tmplHtml;
+    }
+}
+
+/**
+ * @param {string|jQuery<HTMLElement>=} elemIdOrJQuery
+ */
+export function idOf(elemIdOrJQuery) {
+    const $el = jQuery(elemIdOrJQuery);
+    return $el.attr(GlobalConfig.ID_ATTR) ?? uniqueId();
 }

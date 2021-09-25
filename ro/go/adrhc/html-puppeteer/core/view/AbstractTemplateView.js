@@ -1,4 +1,4 @@
-import {templateTextOf} from "../../util/HtmlUtils.js";
+import {templateTextOf} from "../../util/DomUtils.js";
 import {isTrue} from "../../util/AssertionUtils.js";
 import SimpleView from "./SimpleView.js";
 

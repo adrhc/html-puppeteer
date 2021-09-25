@@ -1,9 +1,10 @@
+import {StateProcessor} from "../state-processor/StateProcessor.js";
 import DefaultComponentConfigurator from "./configurator/DefaultComponentConfigurator.js";
 import {applyExtraConfigurators} from "./configurator/ComponentConfigurator.js";
-import {StateProcessor} from "../state-processor/StateProcessor.js";
 
 /**
  * @typedef {StateHolderOptions & ValueStateInitializerOptions & StateChangesHandlersInvokerOptions} AbstractComponentOptions
+ * @property {string|number|boolean=} id
  * @property {SimpleContainerComponent=} parent
  * @property {PartialStateHolder=} stateHolder
  * @property {StateInitializer=} stateInitializer
@@ -34,6 +35,10 @@ export default class AbstractComponent extends StateProcessor {
      * @type {EventsBinder}
      */
     eventsBinder;
+    /**
+     * @type {string}
+     */
+    id;
     /**
      * @type {AbstractComponentOptions}
      */

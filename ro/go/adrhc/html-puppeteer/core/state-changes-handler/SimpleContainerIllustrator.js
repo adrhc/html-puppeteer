@@ -3,7 +3,6 @@ import ChildrenRoomView from "../view/ChildrenRoomView.js";
 
 /**
  * @typedef {ChildrenRoomViewOptions & AbstractTemplateViewOptions & ComponentIllustratorOptions} SimpleContainerIllustratorOptions
- * @property {ChildrenRoomView} childrenRoomView
  */
 /**
  * @template SCT, SCP
@@ -19,10 +18,11 @@ export default class SimpleContainerIllustrator extends ComponentIllustrator {
     /**
      * @param {SimpleContainerIllustratorOptions} options
      * @param {SimpleContainerIllustratorOptions} options.restOfOptions
+     * @param {SimpleContainerIllustratorOptions} options.parentId
      */
-    constructor({childrenRoomView, ...restOfOptions}) {
+    constructor({parentId, ...restOfOptions}) {
         super(restOfOptions);
-        this.childrenRoomView = childrenRoomView ?? new ChildrenRoomView(restOfOptions);
+        this.childrenRoomView = new ChildrenRoomView({parentId, ...restOfOptions});
     }
 
     /**

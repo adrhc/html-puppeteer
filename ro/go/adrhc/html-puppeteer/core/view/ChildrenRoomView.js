@@ -1,9 +1,8 @@
 import AbstractView from "./AbstractView.js";
-import {$childrenRoomOf, idOf} from "../Puppeteer.js";
-import {templateTextOf} from "../../util/HtmlUtils.js";
+import {$childrenRoomOf} from "../Puppeteer.js";
+import {dataAttributesOf, jQueryOf, templateTextOf} from "../../util/DomUtils.js";
 import {dataPart, dataPartSelectorOf, dataType, ownerOf} from "../../util/GlobalConfig.js";
 import {generateHtml} from "../../util/HtmlGenerator.js";
-import {dataAttributesOf, jQueryOf} from "../../util/DomUtils.js";
 
 /**
  * @typedef {Bag} ChildFrameAttributes
@@ -13,7 +12,8 @@ import {dataAttributesOf, jQueryOf} from "../../util/DomUtils.js";
  */
 /**
  * @typedef {Object} ChildrenRoomViewOptions
- * @property {string|jQuery<HTMLElement>=} parentIdOrJQuery
+ * @property {string=} parentId
+ * @property {string|jQuery<HTMLElement>=} elemIdOrJQuery is the parent's element id or jQuery<HTMLElement>
  * @property {string=} frameTemplate is the element containing the data-type and data-part
  * @property {string=} frameTemplateId
  * @property {string=} childTemplateId is a shortcut for ChildFrameAttributes.templateId
@@ -44,7 +44,11 @@ export default class ChildrenRoomView extends AbstractView {
     /**
      * @type {string|jQuery<HTMLElement>}
      */
-    parentIdOrJQuery;
+    parentElem;
+    /**
+     * @type {string}
+     */
+    parentId;
     /**
      * specify where to place new kids (append|prepend)
      *
@@ -56,6 +60,7 @@ export default class ChildrenRoomView extends AbstractView {
      * @param {ChildrenRoomViewOptions} options
      */
     constructor({
+                    parentId,
                     elemIdOrJQuery,
                     frameTemplate,
                     frameTemplateId,
@@ -65,8 +70,8 @@ export default class ChildrenRoomView extends AbstractView {
                     childFrameAttributes = {templateId: childTemplateId},
                 }) {
         super();
-        this.parentIdOrJQuery = jQueryOf(elemIdOrJQuery);
-        this.owner = idOf(elemIdOrJQuery);
+        this.parentElem = jQueryOf(elemIdOrJQuery);
+        this.owner = parentId;
         this.place = (newChildrenGoLast ?? false) ? "append" : "prepend";
         this.dontRemoveChildren = dontRemoveChildren ?? false;
         this.frameTemplate = frameTemplate ?? this._createTemplate(frameTemplateId, childFrameAttributes);
@@ -76,7 +81,7 @@ export default class ChildrenRoomView extends AbstractView {
      * Announce that parent updated its view.
      */
     parentUpdated() {
-        this.$childrenRoom = $childrenRoomOf(this.parentIdOrJQuery);
+        this.$childrenRoom = $childrenRoomOf(this.parentElem);
     }
 
     /**

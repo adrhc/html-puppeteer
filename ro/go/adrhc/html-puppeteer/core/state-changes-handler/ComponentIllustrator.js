@@ -5,7 +5,7 @@ import {simpleTemplateViewProvider} from "../view/SimpleTemplateView.js";
  * @typedef {function(options: Bag): AbstractView} ViewProviderFn
  */
 /**
- * @typedef {Object} ComponentIllustratorOptions
+ * @typedef {AbstractView} ComponentIllustratorOptions
  * @property {ViewProviderFn=} viewProviderFn
  */
 /**

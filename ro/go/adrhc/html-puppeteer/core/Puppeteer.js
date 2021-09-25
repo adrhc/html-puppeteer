@@ -115,16 +115,3 @@ export function $childrenRoomOf(parentElemIdOrJQuery) {
     isTrue($childrenRoom.length < 2);
     return $childrenRoom.length ? $childrenRoom : $parent;
 }
-
-/**
- * @param {string|jQuery<HTMLElement>=} elemIdOrJQuery
- */
-export function idOf(elemIdOrJQuery) {
-    const $el = jQuery(elemIdOrJQuery);
-    return $el.attr(GlobalConfig.ID_ATTR) ?? newId();
-}
-
-export const newId = function* () {
-    let i = 0;
-    while (true) yield i++;
-};

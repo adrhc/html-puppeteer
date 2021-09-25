@@ -1,7 +1,7 @@
 import ComponentConfigurator from "../configurator/ComponentConfigurator.js";
 
 /**
- * @typedef {function(componentConfig: Bag)} ComponentIllustratorProviderFn
+ * @typedef {function(componentConfig: ComponentIllustratorOptions, parentId: string): ComponentIllustrator} ComponentIllustratorProviderFn
  */
 /**
  * @typedef {function(component: AbstractComponent): StateInitializer} StateInitializerProviderFn
@@ -88,7 +88,7 @@ export class ComponentOptionsBuilder {
      */
     addComponentIllustratorProvider(componentIllustratorProviderFn) {
         this.addConfiguratorFn((component) => {
-            const componentIllustrator = componentIllustratorProviderFn(component.config);
+            const componentIllustrator = componentIllustratorProviderFn(component.config, component.id);
             component.stateChangesHandlersInvoker.appendStateChangesHandlers(componentIllustrator);
         });
         return this;
@@ -137,6 +137,10 @@ export function withViewProvider(viewProviderFn) {
     return new ComponentOptionsBuilder().withViewProvider(viewProviderFn);
 }
 
+/**
+ * @param {ComponentIllustratorProviderFn} componentIllustratorProviderFn
+ * @return {ComponentOptionsBuilder}
+ */
 export function addComponentIllustratorProvider(componentIllustratorProviderFn) {
     return new ComponentOptionsBuilder().addComponentIllustratorProvider(componentIllustratorProviderFn);
 }
