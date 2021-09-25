@@ -49,9 +49,5 @@ export default class Scenario10App {
             const lastKidId = this._oldestKidId();
             this.parent.replacePart(`kid${lastKidId}`);
         });
-        $('textarea').on('input', function () {
-            this.style.height = "";
-            this.style.height = this.scrollHeight + "px";
-        });
     }
 }
