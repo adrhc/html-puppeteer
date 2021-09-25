@@ -66,6 +66,19 @@ export default class SimpleContainerComponent extends AbstractComponent {
     }
 
     /**
+     * Replaces some component's state parts; the parts should have no name change!.
+     *
+     * @param {{[name: PartName]: SCP}} parts
+     */
+    replaceParts(parts) {
+        if (parts[this.containerPart] != null) {
+            console.log("Container part present in multi parts update; replacing entire state!");
+            this.replaceState(parts);
+        }
+        super.replaceParts(parts);
+    }
+
+    /**
      * @param {PartStateChange<SCT, SCP>} partStateChange
      * @protected
      */

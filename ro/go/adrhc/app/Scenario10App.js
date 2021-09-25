@@ -38,8 +38,6 @@ export default class Scenario10App {
         });
         $(namedBtn("change-partial-state")).on("click", () => {
             const childrenState = JSON.parse($("#partial-state").val());
-            // removing the parent's view state
-            delete childrenState.text;
             this.parent.replaceParts(childrenState);
         });
         $(namedBtn("create")).on("click", () => {

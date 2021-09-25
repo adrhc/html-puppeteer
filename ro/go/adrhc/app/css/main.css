@@ -115,7 +115,3 @@ div[data-part], .parent {
     font-weight: bold;
 }
 
-/* hiding parent view state */
-.scenario10 [data-part="text"], .scenario12 [data-part="text"] {
-    display: none;
-}
