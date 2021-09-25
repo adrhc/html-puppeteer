@@ -1,10 +1,10 @@
 /**
- * @template SCT
+ * @template SCT, SCP
  * @interface
  */
 export default class StateInitializer {
     /**
-     * @param {StateHolder<SCT>} stateHolder
+     * @param {AbstractComponent<SCT, SCP>} component
      */
-    load(stateHolder) {}
+    load(component) {}
 }

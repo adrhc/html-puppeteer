@@ -4,6 +4,7 @@ import {CREATED, RELOCATED, REMOVED, REPLACED} from "../state/change/StateChange
 import {alertOrThrow} from "../../util/AssertionUtils.js";
 import AbstractComponent from "./AbstractComponent.js";
 import SimpleContainerIllustrator from "../state-changes-handler/SimpleContainerIllustrator.js";
+import {partsOf} from "../state/PartialStateHolder.js";
 
 /**
  * @typedef {{[key: string]: AbstractComponent}} ComponentsCollection
@@ -31,17 +32,6 @@ export default class SimpleContainerComponent extends AbstractComponent {
         super(withDefaults(restOfOptions)
             .addComponentIllustratorProvider(simpleContainerIllustratorProvider)
             .options());
-        this._initializeChildren();
-    }
-
-    /**
-     * @param {*=} value
-     * @return {this}
-     */
-    render(value) {
-        super.render(value);
-        this._createChildren();
-        return this;
     }
 
     /**
@@ -50,8 +40,9 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @param {SCT=} newState
      */
     replaceState(newState) {
-        super.replaceState(newState);
-        this._createChildren();
+        this.children = this.config.children ?? {};
+        super.replaceState(_.isArray(newState) ? [] : {});
+        partsOf(newState).forEach(([name, value]) => this.replacePart(name, value));
     }
 
     /**
@@ -108,20 +99,6 @@ export default class SimpleContainerComponent extends AbstractComponent {
     }
 
     /**
-     * Automatically detect, create and render children.
-     *
-     * @protected
-     */
-    _createChildren() {
-        this._initializeChildren();
-        this.stateHolder.getParts()
-            .filter(([, value]) => value != null)
-            .forEach(([name]) => {
-                this._createChild(name);
-            });
-    }
-
-    /**
      * Create and render a child.
      *
      * @param {PartName} partName
@@ -149,13 +126,6 @@ export default class SimpleContainerComponent extends AbstractComponent {
         this.children[partName].close();
         delete this.children[partName];
         return true;
-    }
-
-    /**
-     * @protected
-     */
-    _initializeChildren() {
-        this.children = this.config.children ?? {};
     }
 }
 

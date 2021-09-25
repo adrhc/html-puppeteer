@@ -4,7 +4,7 @@ import ComponentConfigurator from "../configurator/ComponentConfigurator.js";
  * @typedef {function(componentId: string, componentIllustratorOptions: ComponentIllustratorOptions): ComponentIllustrator} ComponentIllustratorProviderFn
  */
 /**
- * @typedef {function(component: AbstractComponent): StateInitializer} StateInitializerProviderFn
+ * @typedef {function(initialState: *): StateInitializer} StateInitializerProviderFn
  */
 
 /**
@@ -111,14 +111,14 @@ export class ComponentOptionsBuilder {
 
     /**
      * @param {StateInitializerProviderFn} stateInitializerProviderFn
-     * @param {boolean} useIfMissing
+     * @param {boolean=} overrideDefault
      * @return {ComponentOptionsBuilder}
      */
-    withStateInitializerFn(stateInitializerProviderFn, useIfMissing) {
+    withStateInitializerProvider(stateInitializerProviderFn, overrideDefault) {
+        if (!overrideDefault && this.defaults.stateInitializer) {
+            return this;
+        }
         return this.addConfiguratorFn((component) => {
-            if (useIfMissing && component.stateInitializer) {
-                return;
-            }
             component.stateInitializer = stateInitializerProviderFn(component);
         });
     }
@@ -191,15 +191,6 @@ export function addStateChangeHandler(stateChangesHandler) {
  */
 export function addConfigurator(configurator) {
     return new ComponentOptionsBuilder().addConfigurator(configurator);
-}
-
-/**
- * @param {StateInitializerProviderFn} stateInitializerProviderFn
- * @param {boolean} useIfMissing
- * @return {ComponentOptionsBuilder}
- */
-export function withStateInitializerFn(stateInitializerProviderFn, useIfMissing) {
-    return new ComponentOptionsBuilder().withStateInitializerFn(stateInitializerProviderFn, useIfMissing);
 }
 
 class FunctionComponentConfigurator extends ComponentConfigurator {

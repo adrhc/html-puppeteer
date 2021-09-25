@@ -19,10 +19,7 @@ export default class PartialStateHolder extends StateHolder {
      * @return {{[key: string]: *}[]}
      */
     getParts() {
-        if (this.currentState == null) {
-            return [];
-        }
-        return Object.entries(this.currentState);
+        return partsOf(this.currentState);
     }
 
     /**
@@ -35,7 +32,8 @@ export default class PartialStateHolder extends StateHolder {
     replacePart(previousPartName, newPart,
                 newPartName = newPart != null ? previousPartName : undefined,
                 dontRecordChanges) {
-        isTrue(newPart != null || previousPartName != null);
+        isTrue(newPart != null || previousPartName != null, "[PartialStateHolder] both old and new part name are missing!");
+        isTrue(this.currentState != null, "[PartialStateHolder] can't add partial state to missing parent state!")
         if (this._partsEqual(newPart, newPartName, previousPartName)) {
             return [];
         }
@@ -139,4 +137,11 @@ export default class PartialStateHolder extends StateHolder {
             this.currentState[partName] = part;
         }
     }
+}
+
+export function partsOf(value) {
+    if (value == null) {
+        return [];
+    }
+    return Object.entries(value);
 }

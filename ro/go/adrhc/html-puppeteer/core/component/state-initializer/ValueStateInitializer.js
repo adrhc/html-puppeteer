@@ -1,6 +1,7 @@
 import StateInitializer from "./StateInitializer.js";
 
 /**
+ * @template SCT, SCP
  * @typedef {Bag} ValueStateInitializerOptions
  * @property {*} initialState
  */
@@ -19,9 +20,9 @@ export default class ValueStateInitializer extends StateInitializer {
     }
 
     /**
-     * loads this.values into stateHolder
+     * @param {AbstractComponent<SCT, SCP>} component
      */
-    load(stateHolder) {
-        stateHolder.replace(this.value);
+    load(component) {
+        component.replaceState(this.value);
     }
 }

@@ -116,9 +116,7 @@ export default class AbstractComponent extends StateProcessor {
         if (value != null) {
             this.replaceState(value);
         } else {
-            this.doWithState((sh) => {
-                this.stateInitializer?.load(sh);
-            });
+            this.stateInitializer?.load(this);
         }
     }
 

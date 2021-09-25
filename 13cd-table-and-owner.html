@@ -63,13 +63,6 @@ PS: make sure to have a well formatted JSON!</textarea>
 			<th>Name</th>
 		</tr>
 		</thead>
-		{{#each this}}
-			<!--
-				"text" part is skipped with css.
-				Use owner="{{@root.owner}}" if the container is child of another.
-			-->
-			<tr data-part="{{@key}}" data-type="simple" data-template-id="kid-template" owner="parent-component"></tr>
-		{{/each}}
 	</table>
 </script>
 
