@@ -5,7 +5,7 @@ import {simpleTemplateViewProvider} from "../view/SimpleTemplateView.js";
  * @typedef {function(options: Bag): AbstractView} ViewProviderFn
  */
 /**
- * @typedef {AbstractView} ComponentIllustratorOptions
+ * @typedef {AbstractTemplateViewOptions} ComponentIllustratorOptions
  * @property {ViewProviderFn=} viewProviderFn
  */
 /**
@@ -22,11 +22,11 @@ export default class ComponentIllustrator extends StateChangesHandler {
 
     /**
      * @param {ComponentIllustratorOptions} options
-     * @param {AbstractView=} options.viewConfig
+     * @param {AbstractTemplateViewOptions=} restOfOptions
      */
-    constructor({view, viewProviderFn, ...viewConfig}) {
+    constructor({view, viewProviderFn, ...restOfOptions}) {
         super();
-        this.view = (viewProviderFn ?? simpleTemplateViewProvider)(viewConfig);
+        this.view = (viewProviderFn ?? simpleTemplateViewProvider)(restOfOptions);
     }
 
     /**

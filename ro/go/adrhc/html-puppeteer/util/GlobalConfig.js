@@ -12,7 +12,6 @@ export default class GlobalConfig {
     static DEFAULT_CHILDREN_ROOM = "";
     static ELEM_ID_OR_JQUERY = "elemIdOrJQuery";
     static ID_ATTR = "id";
-    static OWNER = "owner";
     static OWNER_ATTR = "owner";
     static SERVER_ROOT = "";
 }

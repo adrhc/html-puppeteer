@@ -8,7 +8,8 @@ export default class SimpleTemplateView extends AbstractTemplateView {
      * @param {{}} values
      */
     replace(values) {
-        this.$elem.html(generateHtml(this.htmlTemplate, values) ?? "")
+        const viewValues = this.viewValuesTransformerFn(values);
+        this.$elem.html(generateHtml(this.htmlTemplate, viewValues) ?? "")
     }
 
     /**

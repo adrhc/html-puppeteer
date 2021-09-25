@@ -11,10 +11,14 @@ export const RENDER_TEXT = "text";
 export const RENDER_HTML = "html";
 
 /**
+ * @typedef {function(values: *): *} ViewValuesTransformerFn
+ */
+/**
  * @typedef {"REMOVE_ELEMENT"|"REMOVE_CONTENT"|"USE_HTML"} ViewRemovalStrategy
  */
 /**
  * @typedef {AbstractTemplateViewOptions} SimpleViewOptions
+ * @property {ViewValuesTransformerFn=} viewValuesTransformerFn
  * @property {string|jQuery<HTMLElement>=} elemIdOrJQuery
  * @property {jQuery<HTMLElement>=} $elem
  * @property {ViewRemovalStrategy=} viewRenderStrategy
@@ -34,12 +38,24 @@ export default class SimpleView extends AbstractView {
      * @type {ViewRemovalStrategy}
      */
     viewRemovalStrategy;
+    /**
+     * @type {ViewValuesTransformerFn}
+     */
+    viewValuesTransformerFn;
 
     /**
      * @param {SimpleViewOptions} options
      */
-    constructor({elemIdOrJQuery, $elem, viewRenderStrategy, viewRemovalStrategy, removedPlaceholder}) {
+    constructor({
+                    viewValuesTransformerFn,
+                    elemIdOrJQuery,
+                    $elem,
+                    viewRenderStrategy,
+                    viewRemovalStrategy,
+                    removedPlaceholder
+                }) {
         super();
+        this.viewValuesTransformerFn = viewValuesTransformerFn ?? ((values) => values);
         this.$elem = $elem ?? jQueryOf(elemIdOrJQuery);
         this.viewRenderStrategy = viewRenderStrategy ?? (this.$elem.is("textarea") ? RENDER_VAL : RENDER_HTML);
         this.viewRemovalStrategy = viewRemovalStrategy ?? REMOVE_ELEMENT;
@@ -58,7 +74,8 @@ export default class SimpleView extends AbstractView {
      * @param {*} values
      */
     replace(values) {
-        this.$elem[this.viewRenderStrategy](values != null ? JSON.stringify(values, undefined, 2) : "")
+        const viewValues = this.viewValuesTransformerFn(values);
+        this.$elem[this.viewRenderStrategy](viewValues != null ? JSON.stringify({...viewValues}, undefined, 2) : "")
     }
 
     /**

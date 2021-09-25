@@ -28,8 +28,8 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @param {SimpleContainerComponentOptions} restOfOptions
      */
     constructor({componentIllustrator, ...restOfOptions} = {}) {
-        super(addComponentIllustratorProvider((options, parentId) =>
-            (componentIllustrator ?? new SimpleContainerIllustrator({parentId, ...options})))
+        super(addComponentIllustratorProvider((options, componentId) =>
+            (componentIllustrator ?? new SimpleContainerIllustrator({parentId: componentId, ...options})))
             .to(restOfOptions));
         this._initializeChildren();
     }

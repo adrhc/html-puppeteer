@@ -1,7 +1,7 @@
 import AbstractView from "./AbstractView.js";
 import {$childrenRoomOf} from "../Puppeteer.js";
 import {dataAttributesOf, jQueryOf, templateTextOf} from "../../util/DomUtils.js";
-import {dataPart, dataPartSelectorOf, dataType, ownerOf} from "../../util/GlobalConfig.js";
+import GlobalConfig, {dataPart, dataPartSelectorOf, dataType, ownerOf} from "../../util/GlobalConfig.js";
 import {generateHtml} from "../../util/HtmlGenerator.js";
 
 /**
@@ -74,7 +74,7 @@ export default class ChildrenRoomView extends AbstractView {
         this.owner = parentId;
         this.place = (newChildrenGoLast ?? false) ? "append" : "prepend";
         this.dontRemoveChildren = dontRemoveChildren ?? false;
-        this.frameTemplate = frameTemplate ?? this._createTemplate(frameTemplateId, childFrameAttributes);
+        this.frameTemplate = frameTemplate ?? this._createFrameTemplate(frameTemplateId, childFrameAttributes);
     }
 
     /**
@@ -85,14 +85,14 @@ export default class ChildrenRoomView extends AbstractView {
     }
 
     /**
-     * @param {PartName} name
+     * @param {PartName} partName
      */
-    create(name) {
-        if (this._childFrameExists(name)) {
+    create(partName) {
+        if (this._childFrameExists(partName)) {
             return;
         }
-        const kidHtmlContent = generateHtml(this.frameTemplate, name);
-        this.$childrenRoom[this.place](kidHtmlContent);
+        const kidFrame = generateHtml(this.frameTemplate, {partName, [GlobalConfig.OWNER_ATTR]: this.owner});
+        this.$childrenRoom[this.place](kidFrame);
     }
 
     /**
@@ -125,7 +125,7 @@ export default class ChildrenRoomView extends AbstractView {
      * @param {ChildFrameAttributes=} childFrameAttributes
      * @protected
      */
-    _createTemplate(frameTemplateId, childFrameAttributes) {
+    _createFrameTemplate(frameTemplateId, childFrameAttributes) {
         if (frameTemplateId) {
             return templateTextOf(frameTemplateId);
         } else {
@@ -140,6 +140,6 @@ export default class ChildrenRoomView extends AbstractView {
      */
     _templateFromChildFrameAttributes({templateId, htmlTag = "div", componentType = "simple", ...rest}) {
         // {{this}} will be the part name when the kid's frame will be created
-        return `<${htmlTag} ${ownerOf(this.owner)} ${dataPart()}="{{this}}" ${dataType()}="${componentType}" data-template-id="${templateId}" ${dataAttributesOf(rest)}></${htmlTag}>`;
+        return `<${htmlTag} ${ownerOf(this.owner)} ${dataPart()}="{{partName}}" ${dataType()}="${componentType}" data-template-id="${templateId}" ${dataAttributesOf(rest)}></${htmlTag}>`;
     }
 }

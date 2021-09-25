@@ -1,7 +1,7 @@
 import ComponentConfigurator from "../configurator/ComponentConfigurator.js";
 
 /**
- * @typedef {function(componentConfig: ComponentIllustratorOptions, parentId: string): ComponentIllustrator} ComponentIllustratorProviderFn
+ * @typedef {function(componentConfig: ComponentIllustratorOptions, componentId: string): ComponentIllustrator} ComponentIllustratorProviderFn
  */
 /**
  * @typedef {function(component: AbstractComponent): StateInitializer} StateInitializerProviderFn

@@ -18,5 +18,5 @@ export function dataBtn(value, owner) {
  * @return {string}
  */
 export function dataOwner(owner) {
-    return owner == null ? "" : `[data-${GlobalConfig.OWNER}='${name}']`;
+    return owner == null ? "" : `[data-${GlobalConfig.OWNER_ATTR}='${name}']`;
 }

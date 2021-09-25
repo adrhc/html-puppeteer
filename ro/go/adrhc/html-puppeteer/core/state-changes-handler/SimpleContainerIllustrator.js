@@ -1,8 +1,10 @@
-import ComponentIllustrator from "./ComponentIllustrator.js";
 import ChildrenRoomView from "../view/ChildrenRoomView.js";
+import GlobalConfig from "../../util/GlobalConfig.js";
+import ComponentIllustrator from "./ComponentIllustrator.js";
 
 /**
- * @typedef {ChildrenRoomViewOptions & AbstractTemplateViewOptions & ComponentIllustratorOptions} SimpleContainerIllustratorOptions
+ * @typedef {ComponentIllustratorOptions & ChildrenRoomViewOptions} SimpleContainerIllustratorOptions
+ * @property {string=} parentId
  */
 /**
  * @template SCT, SCP
@@ -17,12 +19,15 @@ export default class SimpleContainerIllustrator extends ComponentIllustrator {
 
     /**
      * @param {SimpleContainerIllustratorOptions} options
-     * @param {SimpleContainerIllustratorOptions} options.restOfOptions
-     * @param {SimpleContainerIllustratorOptions} options.parentId
+     * @param {ViewValuesTransformerFn} options.viewValuesTransformerFn
+     * @param {ComponentIllustratorOptions | ChildrenRoomViewOptions} options.restOfOptions
      */
-    constructor({parentId, ...restOfOptions}) {
-        super(restOfOptions);
-        this.childrenRoomView = new ChildrenRoomView({parentId, ...restOfOptions});
+    constructor({viewValuesTransformerFn, ...restOfOptions}) {
+        super(_.defaults(restOfOptions, {
+            viewValuesTransformerFn: viewValuesTransformerFn ??
+                ((values) => ({...values, [GlobalConfig.OWNER_ATTR]: restOfOptions.parentId}))
+        }));
+        this.childrenRoomView = new ChildrenRoomView(restOfOptions);
     }
 
     /**

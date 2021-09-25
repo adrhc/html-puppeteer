@@ -62,8 +62,9 @@ PS: make sure to have a well formatted JSON!</textarea>
 		</tr>
 		</thead>
 		{{#each this}}
+			<!-- simple logic to skip "text" and "owner" properties from "viewValues" -->
 			{{#if name}}
-				<tr data-part="{{@key}}" data-type="simple" data-template-id="kid-template" owner="parent-component"></tr>
+				<tr data-part="{{@key}}" data-type="simple" data-template-id="kid-template" owner="{{@root.owner}}"></tr>
 			{{/if}}
 		{{/each}}
 	</table>
