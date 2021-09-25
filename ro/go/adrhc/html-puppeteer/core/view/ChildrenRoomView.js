@@ -1,8 +1,9 @@
 import AbstractView from "./AbstractView.js";
 import {$childrenRoomOf} from "../Puppeteer.js";
-import {dataAttributesOf, templateTextOf} from "../../util/HtmlUtils.js";
+import {templateTextOf} from "../../util/HtmlUtils.js";
 import {dataPart, dataPartSelectorOf, dataType} from "../../util/GlobalConfig.js";
 import {generateHtml} from "../../util/HtmlGenerator.js";
+import {dataAttributesOf} from "../../util/DomUtils.js";
 
 /**
  * @typedef {Bag} ChildFrameAttributes

@@ -26,28 +26,12 @@ export function templateTextOf(tmplId) {
  */
 export function templateOf(tmplId, tmplHtml) {
     if (tmplId) {
-        return HtmlUtils.templateTextOf(tmplId);
+        return templateTextOf(tmplId);
     } else if (tmplHtml) {
         return tmplHtml;
     }
 }
 
-/**
- * @param {jQuery<HTMLElement>} $elem
- */
-export function focus($elem) {
-    const value = $elem.val();
-    $elem.focus().val("").val(value);
-}
-
 export function encodeHTML(s) {
     return s.split('&').join('&amp;').split('<').join('&lt;').split('"').join('&quot;').split("'").join('&#39;');
-}
-
-/**
- * @param {Object} object
- * @return {string}
- */
-export function dataAttributesOf(object) {
-    return Object.entries(object).map(([key, value]) => `data-${_.kebabCase(key)}="${encodeHTML(value)}"`).join(" ");
 }

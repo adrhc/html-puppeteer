@@ -1,3 +1,5 @@
+import {encodeHTML} from "./HtmlUtils.js";
+
 /**
  * @param {string|jQuery<HTMLElement>} elemIdOrJQuery
  * @return {jQuery<HTMLElement>}
@@ -57,6 +59,46 @@ export function appendNamespaceTo(events, namespace) {
     }
 }
 
+/**
+ * @return {string} total height of "this" DOM element
+ */
 export function getTotalHeight() {
     return this.scrollHeight + "px";
+}
+
+/**
+ * @param {Object} object
+ * @return {string}
+ */
+export function dataAttributesOf(object) {
+    return Object.entries(object).map(([key, value]) => `data-${_.kebabCase(key)}="${encodeHTML(value)}"`).join(" ");
+}
+
+/**
+ * @param {HTMLElement|jQueryOf<HTMLElement>} el
+ * @return {{}}
+ */
+export function attrsOf(el) {
+    if (el instanceof jQuery) {
+        el = el[0];
+    }
+    return el.getAttributeNames()
+        .reduce((obj, name) => ({
+            ...obj,
+            [name]: el.getAttribute(name)
+        }), {});
+}
+
+(function ($) {
+    $.fn.attrs = function () {
+        return attrsOf($(this)[0]);
+    }
+})(jQuery);
+
+/**
+ * @param {jQuery<HTMLElement>} $elem
+ */
+export function focus($elem) {
+    const value = $elem.val();
+    $elem.focus().val("").val(value);
 }
