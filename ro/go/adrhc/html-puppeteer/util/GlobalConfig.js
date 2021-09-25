@@ -32,9 +32,9 @@ export function dataChildren() {
  * @param {string=} owner
  * @param {boolean=} useDoubleQuotes
  */
-export function ownerOf(owner, useDoubleQuotes) {
+export function dataOwnerOf(owner, useDoubleQuotes) {
     const quote = useDoubleQuotes ? '"' : "'";
-    return owner == null ? `${GlobalConfig.OWNER_ATTR}` : `${GlobalConfig.OWNER_ATTR}=${quote}${owner}${quote}`;
+    return owner == null ? `data-${GlobalConfig.OWNER_ATTR}` : `data-${GlobalConfig.OWNER_ATTR}=${quote}${owner}${quote}`;
 }
 
 /**

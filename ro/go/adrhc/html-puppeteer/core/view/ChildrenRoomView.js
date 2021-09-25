@@ -1,7 +1,7 @@
 import AbstractView from "./AbstractView.js";
 import {$childrenRoomOf} from "../Puppeteer.js";
 import {dataAttributesOf, jQueryOf, templateTextOf} from "../../util/DomUtils.js";
-import GlobalConfig, {dataPart, dataPartSelectorOf, dataType, ownerOf} from "../../util/GlobalConfig.js";
+import GlobalConfig, {dataPart, dataPartSelectorOf, dataType, dataOwnerOf} from "../../util/GlobalConfig.js";
 import {generateHtml} from "../../util/HtmlGenerator.js";
 
 /**
@@ -138,6 +138,6 @@ export default class ChildrenRoomView extends AbstractView {
      */
     _frameTemplateFromChildFrameAttributes({templateId, htmlTag = "div", componentType = "simple", ...rest}) {
         // {{this}} will be the part name when the kid's frame will be created
-        return `<${htmlTag} ${ownerOf(this.componentId)} ${dataPart()}="{{partName}}" ${dataType()}="${componentType}" data-template-id="${templateId}" ${dataAttributesOf(rest)}></${htmlTag}>`;
+        return `<${htmlTag} ${dataOwnerOf(this.componentId)} ${dataPart()}="{{partName}}" ${dataType()}="${componentType}" data-template-id="${templateId}" ${dataAttributesOf(rest)}></${htmlTag}>`;
     }
 }

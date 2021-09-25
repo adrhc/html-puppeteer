@@ -12,6 +12,7 @@ import {partsOf} from "../state/PartialStateHolder.js";
 /**
  * @typedef {AbstractComponentOptions} SimpleContainerComponentOptions
  * @property {ComponentsCollection} children
+ * @property {PartName=} containerPart is the part managed directly by the container
  */
 /**
  * @template SCT, SCP
@@ -22,16 +23,21 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @type {ComponentsCollection}
      */
     children;
+    /**
+     * @type {PartName}
+     */
+    containerPart;
 
     /**
      * @param {SimpleContainerComponentOptions} options
-     * @param {ComponentIllustrator} options.componentIllustrator
-     * @param {SimpleContainerComponentOptions} restOfOptions
+     * @param {ComponentIllustrator} options.containerPart
+     * @param {AbstractComponentOptions} restOfOptions
      */
-    constructor({componentIllustrator, ...restOfOptions} = {}) {
+    constructor({containerPart, ...restOfOptions} = {}) {
         super(withDefaults(restOfOptions)
             .addComponentIllustratorProvider(simpleContainerIllustratorProvider)
             .options());
+        this.containerPart = this.config.containerPart;
     }
 
     /**
@@ -41,8 +47,10 @@ export default class SimpleContainerComponent extends AbstractComponent {
      */
     replaceState(newState) {
         this.children = this.config.children ?? {};
-        super.replaceState(_.isArray(newState) ? [] : {});
-        partsOf(newState).forEach(([name, value]) => this.replacePart(name, value));
+        const fullState = _.isArray(newState) ? [] : {};
+        fullState[this.containerPart] = newState[this.containerPart]
+        super.replaceState(fullState);
+        partsOf(newState).filter(([name]) => name !== this.containerPart).forEach(([name, value]) => this.replacePart(name, value));
     }
 
     /**

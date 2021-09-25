@@ -43,6 +43,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 	<div class="section title">Component's view (parent and its children)</div>
 	<div class="section flex-column fit-content bgc-aliceblue"
 	     data-child-template-id="kid-template"
+	     data-container-part="text"
 	     data-initial-state='{"kid0": {"id": 0, "name": "kid 0"},
 	     "text": "this is the parent state displayed by its view (below are the children)"}'
 	     data-template-id="parent-template"
@@ -56,7 +57,8 @@ PS: make sure to have a well formatted JSON!</textarea>
 	<div class="mb3">kids could be on parent's top or left or anywhere else</div>
 	<div class="flex-start" data-children>
 		{{#each this}}
-			<div data-part="{{@key}}" owner="parent-template" data-type="simple" data-template-id="kid-template"></div>
+			<div data-part="{{@key}}" data-owner="parent-template" data-type="simple"
+			     data-template-id="kid-template"></div>
 		{{/each}}
 	</div>
 </script>

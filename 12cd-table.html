@@ -43,6 +43,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 	<div class="section title">Component's view (parent and its children)</div>
 	<div class="section flex-column fit-content bgc-aliceblue"
 	     data-child-frame-attributes='{"templateId": "kid-template", "htmlTag": "tr"}'
+	     data-container-part="text"
 	     data-initial-state='{"kid0": {"id": 0, "name": "kid 0"},
 	     "text": "this is the parent state displayed by its view (below are the children)"}'
 	     data-template-id="parent-template"
@@ -62,7 +63,8 @@ PS: make sure to have a well formatted JSON!</textarea>
 		</tr>
 		</thead>
 		{{#each this}}
-			<tr data-part="{{@key}}" owner="parent-template" data-type="simple" data-template-id="kid-template"></tr>
+			<tr data-part="{{@key}}" data-owner="parent-template" data-type="simple"
+			    data-template-id="kid-template"></tr>
 		{{/each}}
 	</table>
 </script>
