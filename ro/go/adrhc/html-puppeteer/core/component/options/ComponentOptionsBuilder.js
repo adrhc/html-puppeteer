@@ -1,7 +1,7 @@
 import ComponentConfigurator from "../configurator/ComponentConfigurator.js";
 
 /**
- * @typedef {function(componentId: string, componentConfig: ComponentIllustratorOptions): ComponentIllustrator} ComponentIllustratorProviderFn
+ * @typedef {function(componentId: string, componentIllustratorOptions: ComponentIllustratorOptions): ComponentIllustrator} ComponentIllustratorProviderFn
  */
 /**
  * @typedef {function(component: AbstractComponent): StateInitializer} StateInitializerProviderFn
@@ -18,6 +18,17 @@ export class ComponentOptionsBuilder {
      * @type {Bag}
      */
     _options = {};
+    /**
+     * @type {Bag}
+     */
+    defaults;
+
+    /**
+     * @param {Bag} defaults
+     */
+    constructor(defaults = {}) {
+        this.defaults = defaults;
+    }
 
     /**
      * @return {ComponentOptions}
@@ -43,7 +54,7 @@ export class ComponentOptionsBuilder {
         }
         // prefer to keep the options value if the one from _options is missing
         options.viewProviderFn = this._options.viewProviderFn ?? options.viewProviderFn;
-        return options;
+        return _.defaults(this.defaults, options);
     }
 
     /**
@@ -84,9 +95,13 @@ export class ComponentOptionsBuilder {
 
     /**
      * @param {ComponentIllustratorProviderFn} componentIllustratorProviderFn
+     * @param {boolean=} addEvenWhenAComponentIllustratorExistsInDefaults
      * @return {ComponentOptionsBuilder}
      */
-    addComponentIllustratorProvider(componentIllustratorProviderFn) {
+    addComponentIllustratorProvider(componentIllustratorProviderFn, addEvenWhenAComponentIllustratorExistsInDefaults) {
+        if (!addEvenWhenAComponentIllustratorExistsInDefaults && this.defaults.componentIllustrator) {
+            return this;
+        }
         this.addConfiguratorFn((component) => {
             const componentIllustrator = componentIllustratorProviderFn(component.id, component.config);
             component.stateChangesHandlersInvoker.appendStateChangesHandlers(componentIllustrator);
@@ -127,6 +142,10 @@ export class ComponentOptionsBuilder {
         this._options.viewProviderFn = viewProviderFn;
         return this;
     }
+}
+
+export function withDefaults(options) {
+    return new ComponentOptionsBuilder({...options});
 }
 
 /**
