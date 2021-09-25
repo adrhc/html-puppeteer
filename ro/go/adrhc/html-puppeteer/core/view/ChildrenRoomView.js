@@ -12,7 +12,7 @@ import {generateHtml} from "../../util/HtmlGenerator.js";
  */
 /**
  * @typedef {Object} ChildrenRoomViewOptions
- * @property {string=} parentId
+ * @property {string=} componentId
  * @property {string|jQuery<HTMLElement>=} elemIdOrJQuery is the parent's element id or jQuery<HTMLElement>
  * @property {string=} frameTemplate is the element containing the data-type and data-part
  * @property {string=} frameTemplateId
@@ -30,6 +30,16 @@ export default class ChildrenRoomView extends AbstractView {
      */
     $childrenRoom;
     /**
+     * @type {jQuery<HTMLElement>}
+     */
+    $componentElem;
+    /**
+     * it's the child frame template id
+     *
+     * @type {string}
+     */
+    componentId;
+    /**
      * @type {boolean}
      */
     dontRemoveChildren;
@@ -37,18 +47,6 @@ export default class ChildrenRoomView extends AbstractView {
      * @type {string}
      */
     frameTemplate;
-    /**
-     * @type {string}
-     */
-    owner;
-    /**
-     * @type {string|jQuery<HTMLElement>}
-     */
-    parentElem;
-    /**
-     * @type {string}
-     */
-    parentId;
     /**
      * specify where to place new kids (append|prepend)
      *
@@ -60,7 +58,7 @@ export default class ChildrenRoomView extends AbstractView {
      * @param {ChildrenRoomViewOptions} options
      */
     constructor({
-                    parentId,
+                    componentId,
                     elemIdOrJQuery,
                     frameTemplate,
                     frameTemplateId,
@@ -70,8 +68,8 @@ export default class ChildrenRoomView extends AbstractView {
                     childFrameAttributes = {templateId: childTemplateId},
                 }) {
         super();
-        this.parentElem = jQueryOf(elemIdOrJQuery);
-        this.owner = parentId;
+        this.$componentElem = jQueryOf(elemIdOrJQuery);
+        this.componentId = componentId;
         this.place = (newChildrenGoLast ?? false) ? "append" : "prepend";
         this.dontRemoveChildren = dontRemoveChildren ?? false;
         this.frameTemplate = frameTemplate ?? this._createFrameTemplate(frameTemplateId, childFrameAttributes);
@@ -81,7 +79,7 @@ export default class ChildrenRoomView extends AbstractView {
      * Announce that parent updated its view.
      */
     parentUpdated() {
-        this.$childrenRoom = $childrenRoomOf(this.parentElem);
+        this.$childrenRoom = $childrenRoomOf(this.$componentElem);
     }
 
     /**
@@ -91,7 +89,7 @@ export default class ChildrenRoomView extends AbstractView {
         if (this._childFrameExists(partName)) {
             return;
         }
-        const kidFrame = generateHtml(this.frameTemplate, {partName, [GlobalConfig.OWNER_ATTR]: this.owner});
+        const kidFrame = generateHtml(this.frameTemplate, {partName, [GlobalConfig.OWNER_ATTR]: this.componentId});
         this.$childrenRoom[this.place](kidFrame);
     }
 
@@ -129,7 +127,7 @@ export default class ChildrenRoomView extends AbstractView {
         if (frameTemplateId) {
             return templateTextOf(frameTemplateId);
         } else {
-            return this._templateFromChildFrameAttributes(childFrameAttributes);
+            return this._frameTemplateFromChildFrameAttributes(childFrameAttributes);
         }
     }
 
@@ -138,8 +136,8 @@ export default class ChildrenRoomView extends AbstractView {
      * @return {string}
      * @protected
      */
-    _templateFromChildFrameAttributes({templateId, htmlTag = "div", componentType = "simple", ...rest}) {
+    _frameTemplateFromChildFrameAttributes({templateId, htmlTag = "div", componentType = "simple", ...rest}) {
         // {{this}} will be the part name when the kid's frame will be created
-        return `<${htmlTag} ${ownerOf(this.owner)} ${dataPart()}="{{partName}}" ${dataType()}="${componentType}" data-template-id="${templateId}" ${dataAttributesOf(rest)}></${htmlTag}>`;
+        return `<${htmlTag} ${ownerOf(this.componentId)} ${dataPart()}="{{partName}}" ${dataType()}="${componentType}" data-template-id="${templateId}" ${dataAttributesOf(rest)}></${htmlTag}>`;
     }
 }

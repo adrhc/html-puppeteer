@@ -101,10 +101,12 @@ div[data-part], .parent {
     justify-content: center;
 }
 
-.scenario10 [data-part]:not(:first-child) {
-    margin-left: 0.5rem;
+/* space between "badge" children */
+.scenario10 .flex-start [data-part]:not(:last-child) {
+    margin-right: 0.3rem;
 }
 
+/* Id and Name space */
 .scenario10 [data-part] div:not(:first-child) {
     margin-left: 0.5rem;
 }
@@ -113,6 +115,7 @@ div[data-part], .parent {
     font-weight: bold;
 }
 
-.scenario10 [data-part="text"] {
+/* hiding parent view state */
+.scenario10 [data-part="text"], .scenario12 [data-part="text"] {
     display: none;
 }

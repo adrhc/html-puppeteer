@@ -75,7 +75,7 @@ export default class SimpleView extends AbstractView {
      */
     replace(values) {
         const viewValues = this.viewValuesTransformerFn(values);
-        this.$elem[this.viewRenderStrategy](viewValues != null ? JSON.stringify({...viewValues}, undefined, 2) : "")
+        this.$elem[this.viewRenderStrategy](viewValues != null ? JSON.stringify(viewValues, undefined, 2) : "")
     }
 
     /**

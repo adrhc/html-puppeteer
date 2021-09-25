@@ -25,7 +25,7 @@
 	</div>
 	<div class="section title">parent debugger</div>
 	<div class="section">
-		<div>
+		<div class="mb3">
 			<button name="change-parent-state">Change parent state</button>
 		</div>
 		<textarea class="fill-available" id="parent-state-and-debugger">No debugging data available yet!</textarea>
@@ -40,7 +40,7 @@
 	<!--	</div>-->
 	<div class="section title">Component's view (parent and its children)</div>
 	<div class="section flex-column fit-content bgc-aliceblue"
-	     data-children-frame-attributes='{"templateId": "cats-template",
+	     data-child-frame-attributes='{"templateId": "cats-template",
 	     "viewRemovalStrategy": "USE_HTML", "removedPlaceholder": "\"cats\" child component was removed!"}'
 	     data-initial-state='{"text": "this is the parent state displayed by its view (below are the children)",
 	     "message2": "The \"message2\" child was <i>automatically</i> created!<BR>\"message2\" child is initialized from parent state"}'
@@ -76,11 +76,11 @@
 </script>
 
 <script id="message1-template" type="text/x-handlebars-template">
-	{{#if this}}{{{this}}}{{else}}The "message1" child is not available yet!{{/if}}
+	{{#if this}}{{{value}}}{{else}}The "message1" child is not available yet!{{/if}}
 </script>
 
 <script id="message2-template" type="text/x-handlebars-template">
-	{{#if this}}{{{this}}}{{else}}The "message2" child is not available yet!{{/if}}
+	{{#if this}}{{{value}}}{{else}}The "message2" child is not available yet!{{/if}}
 </script>
 
 <script id="cats-template" type="text/x-handlebars-template">
@@ -90,7 +90,7 @@
 			<th colSpan="2">Generated cats</th>
 		</tr>
 		</thead>
-		{{#each this}}
+		{{#each value}}
 			<tr>
 				<td>{{id}}</td>
 				<td>{{name}}</td>

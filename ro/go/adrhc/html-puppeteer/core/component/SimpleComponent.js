@@ -9,7 +9,7 @@ export default class SimpleComponent extends AbstractComponent {
      * @param {AbstractComponentOptions} restOfOptions
      */
     constructor({componentIllustrator, ...restOfOptions} = {}) {
-        super(addComponentIllustratorProvider(config =>
-            (componentIllustrator ?? new SimplePartsIllustrator(config))).to(restOfOptions));
+        super(addComponentIllustratorProvider((componentId, options) =>
+            (componentIllustrator ?? new SimplePartsIllustrator({componentId, ...options}))).to(restOfOptions));
     }
 }

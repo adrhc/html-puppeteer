@@ -1,17 +1,16 @@
 import ChildrenRoomView from "../view/ChildrenRoomView.js";
-import GlobalConfig from "../../util/GlobalConfig.js";
-import ComponentIllustrator from "./ComponentIllustrator.js";
+import SimplePartsIllustrator from "./SimplePartsIllustrator.js";
 
 /**
  * @typedef {ComponentIllustratorOptions & ChildrenRoomViewOptions} SimpleContainerIllustratorOptions
- * @property {string=} parentId
+ * @property {string=} componentId
  */
 /**
  * @template SCT, SCP
  * @extends {ComponentIllustrator}
  * @extends {PartialStateChangesHandler}
  */
-export default class SimpleContainerIllustrator extends ComponentIllustrator {
+export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
     /**
      * @type {ChildrenRoomView}
      */
@@ -20,13 +19,10 @@ export default class SimpleContainerIllustrator extends ComponentIllustrator {
     /**
      * @param {SimpleContainerIllustratorOptions} options
      * @param {ViewValuesTransformerFn} options.viewValuesTransformerFn
-     * @param {ComponentIllustratorOptions | ChildrenRoomViewOptions} options.restOfOptions
+     * @param {SimpleContainerIllustratorOptions} options.restOfOptions
      */
     constructor({viewValuesTransformerFn, ...restOfOptions}) {
-        super(_.defaults(restOfOptions, {
-            viewValuesTransformerFn: viewValuesTransformerFn ??
-                ((values) => ({...values, [GlobalConfig.OWNER_ATTR]: restOfOptions.parentId}))
-        }));
+        super(restOfOptions);
         this.childrenRoomView = new ChildrenRoomView(restOfOptions);
     }
 
@@ -66,5 +62,12 @@ export default class SimpleContainerIllustrator extends ComponentIllustrator {
     partRelocated(partStateChange) {
         this.childrenRoomView.remove(partStateChange.previousPartName);
         this.childrenRoomView.create(partStateChange.newPartName);
+    }
+
+    /**
+     * @param {PartStateChange<SCT, SCP>} partStateChange
+     */
+    partChangeOccurred(partStateChange) {
+        // do nothing
     }
 }

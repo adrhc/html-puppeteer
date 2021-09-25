@@ -62,17 +62,20 @@ PS: make sure to have a well formatted JSON!</textarea>
 		</tr>
 		</thead>
 		{{#each this}}
-			<!-- simple logic to skip "text" and "owner" properties from "viewValues" -->
-			{{#if name}}
-				<tr data-part="{{@key}}" data-type="simple" data-template-id="kid-template" owner="{{@root.owner}}"></tr>
-			{{/if}}
+			<!--
+				"text" part is skipped with css.
+				Use owner="{{@root.owner}}" if the container is child of another.
+			-->
+			<tr data-part="{{@key}}" data-type="simple" data-template-id="kid-template" owner="parent-component"></tr>
 		{{/each}}
 	</table>
 </script>
 
 <script id="kid-template" type="text/x-handlebars-template">
-	<td>{{id}}</td>
-	<td>{{name}}</td>
+	{{#with value}}
+		<td>{{id}}</td>
+		<td>{{name}}</td>
+	{{/with}}
 </script>
 
 </body>

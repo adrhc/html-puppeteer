@@ -56,16 +56,16 @@ PS: make sure to have a well formatted JSON!</textarea>
 	<div class="mb3">kids could be on parent's top or left or anywhere else</div>
 	<div class="flex-start" data-children>
 		{{#each this}}
-			<div data-part="{{@key}}" data-type="simple" data-template-id="kid-template"></div>
+			<div data-part="{{@key}}" owner="parent-template" data-type="simple" data-template-id="kid-template"></div>
 		{{/each}}
 	</div>
 </script>
 
 <script id="kid-template" type="text/x-handlebars-template">
-	{{#if this}}
+	{{#with value}}
 		<div><label>Id:</label> {{id}}</div>
 		<div><label>Name:</label> {{name}}</div>
-	{{else}}The child is not available yet!{{/if}}
+	{{/with}}
 </script>
 
 </body>

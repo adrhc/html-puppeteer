@@ -2,25 +2,25 @@
 <html lang="en">
 
 <head>
-    <title>HTML puppeteer</title>
-    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-    <script src="libraries/jquery-3.6.0.js"></script>
-    <script src="libraries/handlebars.min-v4.7.7.js"></script>
-    <!-- see https://github.com/lodash/lodash/wiki/FP-Guide#installation -->
-    <script src="libraries/lodash4_lodash.min.js_lodash.fp.min.js"></script>
-    <link href="ro/go/adrhc/app/css/main.css" rel="stylesheet">
+	<title>HTML puppeteer</title>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<script src="libraries/jquery-3.6.0.js"></script>
+	<script src="libraries/handlebars.min-v4.7.7.js"></script>
+	<!-- see https://github.com/lodash/lodash/wiki/FP-Guide#installation -->
+	<script src="libraries/lodash4_lodash.min.js_lodash.fp.min.js"></script>
+	<link href="ro/go/adrhc/app/css/main.css" rel="stylesheet">
 </head>
 
 <body>
 <script>const fp = _.noConflict()</script>
 <script src="1simpleComponent-text.js" type="module"></script>
 <div class="container">
-    <!-- the component -->
-    <div class="section title">SimpleComponent</div>
-    <div class="section" id="component" click1="1" click2="2">{{text}}</div>
-    <!-- debuggers -->
-    <div class="section title">Debugger (shows as JSON the state used above)</div>
-    <div class="section" id="debugger">No debugging data available yet!</div>
+	<!-- the component -->
+	<div class="section title">SimpleComponent</div>
+	<div class="section" id="component">{{text}}</div>
+	<!-- debuggers -->
+	<div class="section title">Debugger (shows as JSON the state used above)</div>
+	<div class="section" id="debugger">No debugging data available yet!</div>
 </div>
 </body>
 

@@ -62,16 +62,16 @@ PS: make sure to have a well formatted JSON!</textarea>
 		</tr>
 		</thead>
 		{{#each this}}
-			{{#if name}}
-				<tr data-part="{{@key}}" data-type="simple" data-template-id="kid-template"></tr>
-			{{/if}}
+			<tr data-part="{{@key}}" owner="parent-template" data-type="simple" data-template-id="kid-template"></tr>
 		{{/each}}
 	</table>
 </script>
 
 <script id="kid-template" type="text/x-handlebars-template">
-	<td>{{id}}</td>
-	<td>{{name}}</td>
+	{{#with value}}
+		<td>{{id}}</td>
+		<td>{{name}}</td>
+	{{/with}}
 </script>
 
 </body>

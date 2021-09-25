@@ -27,10 +27,13 @@ export default class PeriodicallyStateChangingComponent extends SimpleComponent 
      */
     constructor(options) {
         super(options);
-        this.config.stateGeneratorFn = this.config.stateGeneratorFn ??
+        const stateGeneratorFn = this.config.stateGeneratorFn ??
             PeriodicallyStateChangingComponent.DEFAULT_STATE_GENERATOR_FN;
         this.clockStateProcessor = this.config.clockStateProcessor ??
-            createClockStateProcessor(this,  /** @type {ClockStateProcessorOptions} */ this.config);
+            createClockStateProcessor(this, /** @type {ClockStateProcessorOptions} */ {
+                ...this.config,
+                stateGeneratorFn
+            });
     }
 
     /**

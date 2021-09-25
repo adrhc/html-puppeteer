@@ -27,7 +27,8 @@
 		<div>
 			<button name="change-parent-state">Change parent state</button>
 		</div>
-		<textarea class="fill-available" id="parent-state-and-debugger">No debugging data available yet!</textarea>
+		<textarea class="fill-available" id="parent-state-and-debugger"
+		          rows="10">No debugging data available yet!</textarea>
 	</div>
 	<div class="section title">Component's view (parent and its children)</div>
 	<!-- the container component -->
@@ -46,20 +47,20 @@
 	<div class="mb3">kids could be on parent's top or left or anywhere else</div>
 	<div data-children>
 		{{#each this}}
-			<div data-part="{{@key}}" data-type="simple" data-template-id="kid-template"></div>
+			<div data-part="{{@key}}" owner="parent-template" data-type="simple" data-template-id="kid-template"></div>
 		{{/each}}
 	</div>
 </script>
 
 <script id="kid-frame-template" type="text/x-handlebars-template">
-	<div data-part="{{this}}" data-type="simple" data-template-id="kid-template"></div>
+	<div data-part="{{partName}}" owner="{{owner}}" data-type="simple" data-template-id="kid-template"></div>
 </script>
 
 <script id="kid-template" type="text/x-handlebars-template">
-	{{#if this}}
+	{{#with value}}
 		<div><label>Id:</label> {{id}}</div>
 		<div><label>Name:</label> {{name}}</div>
-	{{else}}The child is not available yet!{{/if}}
+	{{/with}}
 </script>
 
 </body>

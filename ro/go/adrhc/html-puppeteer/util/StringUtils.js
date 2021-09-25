@@ -3,5 +3,5 @@ export function encodeHTML(s) {
 }
 
 export function uniqueId() {
-    return _.uniqueId();
+    return `id-${_.uniqueId()}`;
 }
