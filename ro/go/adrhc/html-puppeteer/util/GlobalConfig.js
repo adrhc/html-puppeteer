@@ -10,8 +10,10 @@ export default class GlobalConfig {
      */
     static DATA_TYPE = "type";
     static DEFAULT_CHILDREN_ROOM = "";
+    static ID_ATTR = "id";
     static ELEM_ID_OR_JQUERY = "elemIdOrJQuery";
     static OWNER = "owner";
+    static OWNER_ATTR = "owner";
     static SERVER_ROOT = "";
 }
 
@@ -25,6 +27,15 @@ export function dataPart() {
 
 export function dataChildren() {
     return `data-${GlobalConfig.DATA_CHILDREN}`;
+}
+
+/**
+ * @param {string=} owner
+ * @param {boolean=} useDoubleQuotes
+ */
+export function ownerOf(owner, useDoubleQuotes) {
+    const quote = useDoubleQuotes ? '"' : "'";
+    return owner == null ? `${GlobalConfig.OWNER_ATTR}` : `${GlobalConfig.OWNER_ATTR}=${quote}${owner}${quote}`;
 }
 
 /**

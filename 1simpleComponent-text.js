@@ -4,5 +4,4 @@ import {addDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/options/D
 $(() => {
     new SimpleComponent(addDebugger().to({elemIdOrJQuery: "component"}))
         .render({text: "Hello puppeteer!"});
-    console.log($("#component").attrs());
-})
+});

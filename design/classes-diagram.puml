@@ -226,7 +226,6 @@ class SimpleView implements AbstractView {
 +create(values)
 +replace(values)
 +remove()
-#_createElem(elemIdOrJQuery)
 }
 
 class AbstractTemplateView extends SimpleView {

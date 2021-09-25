@@ -1,9 +1,9 @@
 import AbstractView from "./AbstractView.js";
-import {$childrenRoomOf} from "../Puppeteer.js";
+import {$childrenRoomOf, idOf} from "../Puppeteer.js";
 import {templateTextOf} from "../../util/HtmlUtils.js";
-import {dataPart, dataPartSelectorOf, dataType} from "../../util/GlobalConfig.js";
+import {dataPart, dataPartSelectorOf, dataType, ownerOf} from "../../util/GlobalConfig.js";
 import {generateHtml} from "../../util/HtmlGenerator.js";
-import {dataAttributesOf} from "../../util/DomUtils.js";
+import {dataAttributesOf, jQueryOf} from "../../util/DomUtils.js";
 
 /**
  * @typedef {Bag} ChildFrameAttributes
@@ -13,7 +13,7 @@ import {dataAttributesOf} from "../../util/DomUtils.js";
  */
 /**
  * @typedef {Object} ChildrenRoomViewOptions
- * @property {string=} parentIdOrJQuery
+ * @property {string|jQuery<HTMLElement>=} parentIdOrJQuery
  * @property {string=} frameTemplate is the element containing the data-type and data-part
  * @property {string=} frameTemplateId
  * @property {string=} childTemplateId is a shortcut for ChildFrameAttributes.templateId
@@ -38,6 +38,10 @@ export default class ChildrenRoomView extends AbstractView {
      */
     frameTemplate;
     /**
+     * @type {string}
+     */
+    owner;
+    /**
      * @type {string|jQuery<HTMLElement>}
      */
     parentIdOrJQuery;
@@ -61,7 +65,8 @@ export default class ChildrenRoomView extends AbstractView {
                     childFrameAttributes = {templateId: childTemplateId},
                 }) {
         super();
-        this.parentIdOrJQuery = elemIdOrJQuery;
+        this.parentIdOrJQuery = jQueryOf(elemIdOrJQuery);
+        this.owner = idOf(elemIdOrJQuery);
         this.place = (newChildrenGoLast ?? false) ? "append" : "prepend";
         this.dontRemoveChildren = dontRemoveChildren ?? false;
         this.frameTemplate = frameTemplate ?? this._createTemplate(frameTemplateId, childFrameAttributes);
@@ -130,6 +135,6 @@ export default class ChildrenRoomView extends AbstractView {
      */
     _templateFromChildFrameAttributes({templateId, htmlTag = "div", componentType = "simple", ...rest}) {
         // {{this}} will be the part name when the kid's frame will be created
-        return `<${htmlTag} ${dataPart()}="{{this}}" ${dataType()}="${componentType}" data-template-id="${templateId}" ${dataAttributesOf(rest)}></${htmlTag}>`;
+        return `<${htmlTag} ${ownerOf(this.owner)} ${dataPart()}="{{this}}" ${dataType()}="${componentType}" data-template-id="${templateId}" ${dataAttributesOf(rest)}></${htmlTag}>`;
     }
 }
