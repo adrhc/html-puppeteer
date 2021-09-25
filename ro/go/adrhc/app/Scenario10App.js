@@ -35,31 +35,23 @@ export default class Scenario10App {
     run() {
         $(namedBtn("change-parent-state")).on("click", () => {
             this.parent.replaceState(JSON.parse($("#parent-state-and-debugger").val()));
-            // $('textarea').height(0);
-            // $('textarea').height(getTotalHeight);
         });
         $(namedBtn("change-partial-state")).on("click", () => {
             const childrenState = JSON.parse($("#partial-state").val());
             delete childrenState.text;
             this.parent.replaceParts(childrenState);
-            // $('textarea').height(0);
-            // $('textarea').height(getTotalHeight);
         });
         $(namedBtn("create")).on("click", () => {
             this.parent.replacePart(`kid${this.index}`,
                 {id: this.index++, name: generateString("name ")});
-            // $('textarea').height(getTotalHeight);
         });
         $(namedBtn("remove")).on("click", () => {
             const lastKidId = this._oldestKidId();
             this.parent.replacePart(`kid${lastKidId}`);
-            // $('textarea').height(0);
-            // $('textarea').height(getTotalHeight);
         });
         $('textarea').on('input', function () {
             this.style.height = "";
             this.style.height = this.scrollHeight + "px";
         });
-        // $('textarea').height(getTotalHeight);
     }
 }
