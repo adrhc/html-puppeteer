@@ -74,7 +74,7 @@
 
 div[data-part], .parent {
     padding: .3rem;
-    border-color: darkgreen;
+    border-color: firebrick;
     border-style: dashed;
     border-width: thin;
     margin-bottom: .3rem;
