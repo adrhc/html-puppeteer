@@ -12,10 +12,17 @@ export default class Scenario10App {
      */
     parent;
 
+    /**
+     * @param {SimpleContainerComponent} parent
+     */
     constructor(parent) {
         this.parent = parent;
     }
 
+    /**
+     * @return {*}
+     * @private
+     */
     _oldestKidId() {
         return Object.values(this.parent.children)
             .map(kid => kid.getState().id)
@@ -23,9 +30,23 @@ export default class Scenario10App {
             .reduce((prev, curr) => prev <= curr ? prev : curr, 9999);
     }
 
+    /**
+     * execute the application
+     */
     run() {
         $(namedBtn("change-parent-state")).on("click", () => {
-            this.parent.replaceState(JSON.parse($("#parent-debugger").val()));
+            this.parent.replaceState(JSON.parse($("#parent-state-and-debugger").val()));
+            $('textarea').height(0);
+            $('textarea').height(getTotalHeight);
+        });
+        $(namedBtn("change-partial-state")).on("click", () => {
+            const childrenState = JSON.parse($("#partial-state").val());
+            if (_.isArray(childrenState)) {
+                this.parent.replaceParts(childrenState);
+            } else {
+                const name = Object.keys(childrenState)[0];
+                this.parent.replacePart(name, childrenState[name]);
+            }
             $('textarea').height(0);
             $('textarea').height(getTotalHeight);
         });
@@ -40,10 +61,10 @@ export default class Scenario10App {
             $('textarea').height(0);
             $('textarea').height(getTotalHeight);
         });
-        $('textarea').height(getTotalHeight);
         $('textarea').on('input', function () {
             this.style.height = "";
             this.style.height = this.scrollHeight + "px";
         });
+        $('textarea').height(getTotalHeight);
     }
 }

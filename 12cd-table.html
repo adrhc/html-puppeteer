@@ -23,11 +23,21 @@
 		<button name="remove">Remove oldest child</button>
 	</div>
 	<div class="section title">parent debugger</div>
-	<div class="section">
+	<div class="section flex-center fill-available buttons">
 		<div>
 			<button name="change-parent-state">Change parent state</button>
+			<button name="change-partial-state">Change partial state</button>
 		</div>
-		<textarea class="fill-available" id="parent-debugger">No debugging data available yet!</textarea>
+	</div>
+	<div class="section">
+		<div class="flex-center">
+			<textarea class="fill-available" id="parent-state-and-debugger">No debugging data available yet!</textarea>
+			<textarea class="fill-available" id="partial-state">Write here some partial (aka child/slice) state, e.g.:
+{"kidX": {"id": X, "name": "kid X"}
+or
+[{"kidX": {"id": "X", "name": "kid X"}}, {"kidY": {"id": "Y", "name": "kid Y"}}]
+PS: make sure to have a well formatted JSON!</textarea>
+		</div>
 	</div>
 	<div class="section title">Component's view (parent and its children)</div>
 	<!-- the container component -->
