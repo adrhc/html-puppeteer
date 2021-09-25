@@ -9,7 +9,7 @@ If you like this solution, you might also want to check out the 1.0 version:
 From https://codepen.io/jordyvanraaij/pen/jlAqp
 */
 .responstable {
-    margin: 0.5rem 0;
+    margin: 0.2rem 0;
     width: 100%;
     overflow: hidden;
     background: #FFF;
@@ -73,7 +73,7 @@ From https://codepen.io/jordyvanraaij/pen/jlAqp
 @media (min-width: 480px) {
     .responstable th, .responstable td {
         display: table-cell;
-        padding: 1em;
+        padding: 0.3em;
     }
 }
 

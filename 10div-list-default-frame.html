@@ -22,6 +22,15 @@
 		<button name="create">Create a child (on top)</button>
 		<button name="remove">Remove oldest child</button>
 	</div>
+	<!-- debuggers -->
+	<div class="section title">parent debugger</div>
+	<div class="section">
+		<div class="mb3">
+			<button name="change-parent-state">Change parent state</button>
+		</div>
+		<textarea class="fill-available" id="parent-state-and-debugger"
+		          rows="10">No debugging data available yet!</textarea>
+	</div>
 	<!-- the component -->
 	<div class="section title">Component's view (parent and its children)</div>
 	<div class="section flex-column fit-content bgc-aliceblue"
@@ -31,14 +40,6 @@
 	     data-template-id="parent-template"
 	     data-type="simple-container"
 	     id="parent-component">
-	</div>
-	<!-- debuggers -->
-	<div class="section title">parent debugger</div>
-	<div class="section">
-		<div class="mb3">
-			<button name="change-parent-state">Change parent state</button>
-		</div>
-		<textarea class="fill-available" id="parent-state-and-debugger">No debugging data available yet!</textarea>
 	</div>
 </div>
 

@@ -27,16 +27,15 @@
 	<div class="section flex-center fill-available buttons">
 		<div>
 			<button name="change-parent-state">Change parent state</button>
-			<button name="change-partial-state">Change partial state</button>
+			<button name="change-partial-state">Change partial state (aka children)</button>
 		</div>
 	</div>
 	<div class="section">
 		<div class="flex-center">
-			<textarea class="fill-available" id="parent-state-and-debugger">No debugging data available yet!</textarea>
-			<textarea class="fill-available" id="partial-state">Write here some partial (aka child/slice) state, e.g.:
-{"kidX": {"id": X, "name": "kid X"}
-or
-[{"kidX": {"id": "X", "name": "kid X"}}, {"kidY": {"id": "Y", "name": "kid Y"}}]
+			<textarea class="fill-available" id="parent-state-and-debugger"
+			          rows="10">No debugging data available yet!</textarea>
+			<textarea class="fill-available" id="partial-state" rows="10">Write here some partial (aka child/slice) state, e.g.:
+{"kidX": {"id": "X", "name": "kid X"}, "kidY": {"id": "Y", "name": "kid Y"}}
 PS: make sure to have a well formatted JSON!</textarea>
 		</div>
 	</div>
