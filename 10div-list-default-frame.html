@@ -22,15 +22,8 @@
 		<button name="create">Create a child (on top)</button>
 		<button name="remove">Remove oldest child</button>
 	</div>
-	<div class="section title">parent debugger</div>
-	<div class="section">
-		<div>
-			<button name="change-parent-state">Change parent state</button>
-		</div>
-		<textarea class="fill-available" id="parent-state-and-debugger">No debugging data available yet!</textarea>
-	</div>
+	<!-- the component -->
 	<div class="section title">Component's view (parent and its children)</div>
-	<!-- the container component -->
 	<div class="section flex-column fit-content bgc-aliceblue"
 	     data-child-template-id="kid-template"
 	     data-initial-state='{"kid0": {"id": 0, "name": "kid 0"},
@@ -39,12 +32,20 @@
 	     data-type="simple-container"
 	     id="parent-component">
 	</div>
+	<!-- debuggers -->
+	<div class="section title">parent debugger</div>
+	<div class="section">
+		<div class="mb3">
+			<button name="change-parent-state">Change parent state</button>
+		</div>
+		<textarea class="fill-available" id="parent-state-and-debugger">No debugging data available yet!</textarea>
+	</div>
 </div>
 
 <script id="parent-template" type="text/x-handlebars-template">
 	<div class="parent">{{text}}</div>
 	<div class="mb3">kids could be on parent's top or left or anywhere else</div>
-	<div data-children>
+	<div class="flex-start" data-children>
 		{{#each this}}
 			<div data-part="{{@key}}" data-type="simple" data-template-id="kid-template"></div>
 		{{/each}}

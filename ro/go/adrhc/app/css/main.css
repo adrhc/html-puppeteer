@@ -28,6 +28,12 @@
     text-align: center;
 }
 
+.flex-start {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
 .flex-center {
     display: flex;
     justify-content: center;
@@ -81,6 +87,10 @@ div[data-part], .parent {
     margin-bottom: .3rem;
 }
 
+.ml3 {
+    margin-left: .3rem;
+}
+
 .bgc-aliceblue {
     background-color: aliceblue;
 }
@@ -88,6 +98,10 @@ div[data-part], .parent {
 .scenario10 [data-part] {
     display: flex;
     justify-content: center;
+}
+
+.scenario10 [data-part]:not(:first-child) {
+    margin-left: 0.5rem;
 }
 
 .scenario10 [data-part] div:not(:first-child) {
