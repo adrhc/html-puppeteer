@@ -67,6 +67,13 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
     /**
      * @param {PartStateChange<SCT, SCP>} partStateChange
      */
+    partReplaced(partStateChange) {
+        // do nothing
+    }
+
+    /**
+     * @param {PartStateChange<SCT, SCP>} partStateChange
+     */
     partChangeOccurred(partStateChange) {
         // do nothing
     }

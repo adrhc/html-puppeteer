@@ -1,7 +1,7 @@
 import {$getPartElem, createComponent} from "../Puppeteer.js";
 import {withDefaults} from "./options/ComponentOptionsBuilder.js";
 import {CREATED, RELOCATED, REMOVED, REPLACED} from "../state/change/StateChangeTypes.js";
-import {alertOrThrow} from "../../util/AssertionUtils.js";
+import {alertOrThrow, isFalse, isTrue} from "../../util/AssertionUtils.js";
 import AbstractComponent from "./AbstractComponent.js";
 import SimpleContainerIllustrator from "../state-changes-handler/SimpleContainerIllustrator.js";
 import {partsOf} from "../state/PartialStateHolder.js";
@@ -28,6 +28,10 @@ export default class SimpleContainerComponent extends AbstractComponent {
      */
     familyNames;
     /**
+     * @type {PartName[]}
+     */
+    familyOrStandingNames;
+    /**
      * @type {ComponentsCollection}
      */
     guests;
@@ -35,18 +39,22 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @type {boolean}
      */
     noGuests;
+    /**
+     * @type {PartName[]}
+     */
+    standingNames;
 
     /**
      * @param {SimpleContainerComponentOptions} options
-     * @param {ComponentIllustrator} options.familyNames
-     * @param {AbstractComponentOptions} restOfOptions
      */
-    constructor({familyNames, ...restOfOptions} = {}) {
-        super(withDefaults(restOfOptions)
+    constructor(options) {
+        super(withDefaults(options)
             .addComponentIllustratorProvider(simpleContainerIllustratorProvider)
             .options());
-        this.familyNames = this.config.familyNames?.split(",") ?? [];
         this.noGuests = this.config.noGuests ?? false;
+        this.standingNames = this.config.standingNames?.split(",") ?? [];
+        this.familyNames = this.config.familyNames?.split(",") ?? [];
+        this.familyOrStandingNames = [...this.familyNames, ...this.standingNames];
     }
 
     /**
@@ -57,48 +65,56 @@ export default class SimpleContainerComponent extends AbstractComponent {
     replaceState(newState) {
         this.guests = this.config.guests ?? {};
         this.family = this.config.family ?? {};
-        const familyState = this._familyStateFrom(newState);
-        // replacing the parent's content using its view only
-        // this should create guests seats
-        super.replaceState(familyState);
-        // scanning for family members and render them
-        this._createFamilyComponents(familyState);
-        // scanning for family members and render them
-        this._createGuestComponents(newState);
+        this.familyNames = this.config.familyNames?.split(",") ?? this._findFamilyNames(newState);
+        this.familyOrStandingNames = [...this.familyNames, ...this.standingNames];
+        const roomLayout = this._roomLayoutFor(newState);
+        // using parent's view only to render roomLayout; it'll create the family seats
+        super.replaceState(roomLayout);
+        // placing family members (seats are already created)
+        // Because only seats are created but not yet occupied
+        // there's not possible to find a data-part inside a
+        // seat (aka inside a container child component).
+        this._placeFamilyMembers(roomLayout);
+        // updating guests list (aka parts)
+        this._updateGuestsDetails(newState);
+    }
+
+    /**
+     * @param {SCT} newState
+     * @return {string[]}
+     * @protected
+     */
+    _findFamilyNames(newState) {
+        return partsOf(newState).map(([name]) => name)
+            .filter(name => this.noGuests || !this.standingNames.includes(name));
     }
 
     /**
      * @param {SCT} newState
      * @protected
      */
-    _createGuestComponents(newState) {
-        if (this.noGuests) {
-            return;
-        }
-        partsOf(newState).filter(([name]) => !this.familyNames.includes(name))
+    _updateGuestsDetails(newState) {
+        partsOf(newState)
+            .filter(([name]) => !this.familyNames.includes(name) && !this.standingNames.includes(name))
             .forEach(([name, value]) => this.replacePart(name, value, name));
     }
 
     /**
-     * @param {SCT} familyState
+     * @param {SCT} roomLayout
      * @protected
      */
-    _createFamilyComponents(familyState) {
-        Object.entries(familyState).forEach(([name, value]) => this._createAndRenderFamilyMember(name, value));
+    _placeFamilyMembers(roomLayout) {
+        this.familyNames.forEach(name => this._placeFamilyMember(name));
     }
 
     /**
      * @param {SCT=} newState new full/total state
      * @protected
      */
-    _familyStateFrom(newState) {
-        const familyState = _.isArray(newState) ? [] : {};
-        if (this.noGuests) {
-            partsOf(newState).forEach(([name, value]) => familyState[name] = value);
-        } else {
-            this.familyNames.forEach(name => familyState[name] = newState[name]);
-        }
-        return familyState;
+    _roomLayoutFor(newState) {
+        const roomLayout = _.isArray(newState) ? [] : {};
+        this.familyOrStandingNames.forEach(name => roomLayout[name] = newState[name]);
+        return roomLayout;
     }
 
     /**
@@ -107,68 +123,95 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @param {PartName=} newPartName
      */
     replacePart(previousPartName, newPart, newPartName) {
-        const stateChanges = this.stateHolder.replacePart(previousPartName, newPart, newPartName);
-        stateChanges.forEach(psc => this._processStateChange(psc));
-    }
-
-    /**
-     * @param {{[name: PartName]: SCP}[]} parts
-     * @protected
-     */
-    _isAnyFamilyNameIncludedIn(parts) {
-        return partsOf(parts).find(([name]) => this.familyNames.includes(name)) != null;
-    }
-
-    /**
-     * Replaces some component's state parts; the parts should have no name change!.
-     *
-     * @param {{[name: PartName]: SCP}[]} parts
-     */
-    replaceParts(parts) {
-        if (this.noGuests || this._isAnyFamilyNameIncludedIn(parts)) {
-            console.log("Family names present in multi parts update! merging missing guests then replacing the entire state");
-            this.noGuests || this._mergeGuestsInto(parts);
-            this.replaceState(parts);
-        }
-        super.replaceParts(parts);
-    }
-
-    /**
-     * @param {{[name: PartName]: SCP}[]} parts
-     * @protected
-     */
-    _mergeGuestsInto(parts) {
-        Object.entries(this.guests)
-            .filter(([name]) => parts[name] == null)
-            .forEach(([name, component]) => parts[name] = component.getState());
+        const seatChanges = this.stateHolder.replacePart(previousPartName, newPart, newPartName);
+        seatChanges.forEach(psc => {
+            isFalse(psc.changeType === RELOCATED &&
+                (this.familyOrStandingNames.includes(psc.previousPartName)
+                    || this.familyOrStandingNames.includes(psc.newPartName)),
+                "[SimpleContainerComponent.replacePart] Can't relocate a family or standing member!");
+            if (psc.changeType !== RELOCATED) {
+                if (this.familyNames.includes(psc.previousPartName)) {
+                    this._handleFamilyChange(psc);
+                    return;
+                } else if (this.standingNames.includes(psc.previousPartName)) {
+                    this._handleStandingChange(psc);
+                    return;
+                }
+            }
+            this._handleGuestChange(psc);
+        });
     }
 
     /**
      * @param {PartStateChange<SCT, SCP>} partStateChange
      * @protected
      */
-    _processStateChange(partStateChange) {
+    _handleFamilyChange(partStateChange) {
         switch (partStateChange.changeType) {
             case CREATED:
-                // the parent should create the DOM element for the child
-                this._processStateChanges();
-                this._createAndRenderGuest(partStateChange.newPartName);
+                // the parent creates the guest's seat (aka DOM element)
+                super._processStateChanges();
+                // the family component reads its state from the parent (i.e. this container component)
+                this._placeFamilyMember(partStateChange.newPartName);
                 break;
             case REMOVED:
-                this._removeChild(partStateChange.previousPartName);
-                // the parent should remove the child's DOM element
-                this._processStateChanges();
+                this.family[partStateChange.previousPartName].replaceState();
+                // the parent removes the guest's seat (aka DOM element)
+                super._processStateChanges();
                 break;
             case REPLACED:
-                this._processStateChanges();
+                // seat occupant changed its details; nothing should
+                // happen to the room layout but we have to consume
+                // the collected state changes
+                super._processStateChanges();
+                this.family[partStateChange.previousPartName].replaceState(partStateChange.newPart);
+                break;
+            default:
+                alertOrThrow(`Bad state change!\n${JSON.stringify(partStateChange)}`);
+        }
+    }
+
+    /**
+     * @param {PartStateChange<SCT, SCP>} partStateChange
+     * @protected
+     */
+    _handleStandingChange(partStateChange) {
+        const newState = _.clone(this.stateHolder.currentState ?? {});
+        // todo: should sync state with view?
+        Object.entries([...this.family, ...this.guests])
+            .forEach(([name, comp]) => newState[name] = comp.getState());
+    }
+
+    /**
+     * @param {PartStateChange<SCT, SCP>} partStateChange
+     * @protected
+     */
+    _handleGuestChange(partStateChange) {
+        switch (partStateChange.changeType) {
+            case CREATED:
+                // the parent creates the guest's seat (aka DOM element)
+                super._processStateChanges();
+                // the guest component reads its state from the parent (i.e. this container component)
+                this._placeGuest(partStateChange.newPartName);
+                break;
+            case REMOVED:
+                this._removeGuest(partStateChange.previousPartName);
+                // the parent removes the guest's seat (aka DOM element)
+                super._processStateChanges();
+                break;
+            case REPLACED:
+                // seat occupant changed its details; nothing should
+                // happen to the room layout but we have to consume
+                // the collected state changes
+                super._processStateChanges();
                 this.guests[partStateChange.previousPartName].replaceState(partStateChange.newPart);
                 break;
             case RELOCATED:
-                this._removeChild(partStateChange.previousPartName);
-                // the parent should remove child's previous DOM element and create the new one
-                this._processStateChanges();
-                // the child will take its state from the parent (i.e. this component)
-                this._createAndRenderGuest(partStateChange.newPartName);
+                this._removeGuest(partStateChange.previousPartName);
+                // the parent removes the guest's previous seat (aka DOM element) and create a new one
+                super._processStateChanges();
+                // the guest component reads its state from the parent (i.e. this container component)
+                this._placeGuest(partStateChange.newPartName);
                 break;
             default:
                 alertOrThrow(`Bad state change!\n${JSON.stringify(partStateChange)}`);
@@ -177,27 +220,18 @@ export default class SimpleContainerComponent extends AbstractComponent {
 
     /**
      * @param {PartName} partName
-     * @param {SCP} partValue
      * @protected
      */
-    _createAndRenderFamilyMember(partName, partValue) {
-        const component = this._createContainedComponent(partName);
-        if (!component) {
-            return;
-        }
-        this.family[partName] = component.render(partValue);
+    _placeFamilyMember(partName) {
+        this.family[partName] = this._placeIntoSeat(partName);
     }
 
     /**
      * @param {PartName} partName
      * @protected
      */
-    _createAndRenderGuest(partName) {
-        const component = this._createContainedComponent(partName);
-        if (!component) {
-            return;
-        }
-        this.guests[partName] = component.render();
+    _placeGuest(partName) {
+        this.guests[partName] = this._placeIntoSeat(partName);
     }
 
     /**
@@ -205,7 +239,18 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @return {AbstractComponent}
      * @protected
      */
-    _createContainedComponent(partName) {
+    _placeIntoSeat(partName) {
+        const component = this._createPartComponent(partName);
+        isTrue(component != null, "[_placeFamilyMember] the family seat should exist!")
+        return component.render();
+    }
+
+    /**
+     * @param {PartName} partName
+     * @return {AbstractComponent}
+     * @protected
+     */
+    _createPartComponent(partName) {
         const $childElem = $getPartElem(partName, this.config.elemIdOrJQuery);
         if (!$childElem.length) {
             console.warn(`Missing child element for ${partName}; could be parent's state though.`);
@@ -219,7 +264,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @return {boolean}
      * @protected
      */
-    _removeChild(partName) {
+    _removeGuest(partName) {
         if (!this.guests[partName]) {
             console.error(`Trying to close missing child: ${partName}!`);
             return false;

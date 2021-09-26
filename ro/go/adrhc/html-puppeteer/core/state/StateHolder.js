@@ -77,7 +77,7 @@ export default class StateHolder {
             return stateChanges;
         }
 
-        return this.collectStateChanges(stateChanges);
+        return this._collectStateChanges(stateChanges);
     }
 
     /**
@@ -113,16 +113,18 @@ export default class StateHolder {
     /**
      * @param {StateChange<SCT>[]=} stateChanges
      * @return {StateChange<SCT>[]}
+     * @protected
      */
-    collectStateChanges(stateChanges = []) {
+    _collectStateChanges(stateChanges = []) {
         return stateChanges.map(sc => this.stateChangesCollector.collect(sc)).filter(it => it != null);
     }
 
     /**
      * @param {StateChange<SCT>[]=} stateChanges
      * @return {StateChange<SCT>[]}
+     * @protected
      */
-    enhanceStateChanges(stateChanges = []) {
+    _enhanceStateChanges(stateChanges = []) {
         return stateChanges.map(sc => this.stateChangesCollector.enhance(sc)).filter(it => it != null);
     }
 }

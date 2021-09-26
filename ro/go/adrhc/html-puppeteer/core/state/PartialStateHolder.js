@@ -53,10 +53,10 @@ export default class PartialStateHolder extends StateHolder {
                 newPart == null ? undefined : newPartName);
 
         if (dontRecordChanges) {
-            return /** @type {PartStateChange[]} */ this.enhanceStateChanges(stateChanges);
+            return /** @type {PartStateChange[]} */ this._enhanceStateChanges(stateChanges);
         }
 
-        return /** @type {PartStateChange[]} */ this.collectStateChanges(stateChanges);
+        return /** @type {PartStateChange[]} */ this._collectStateChanges(stateChanges);
     }
 
     /**

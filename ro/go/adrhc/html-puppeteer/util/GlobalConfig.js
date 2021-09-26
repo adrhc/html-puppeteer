@@ -63,3 +63,7 @@ export function dataGuestsSelectorOf(guestsRoomName, useDoubleQuotes) {
     const quote = useDoubleQuotes ? '"' : "'";
     return guestsRoomName == null ? `[${dataGuests()}]` : `[${dataGuests()}=${quote}${guestsRoomName}${quote}]`;
 }
+
+export function partOf(elem) {
+    return $(el).data(GlobalConfig.DATA_PART);
+}
