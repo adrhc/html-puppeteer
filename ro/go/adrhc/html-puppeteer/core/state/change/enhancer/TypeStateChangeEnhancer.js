@@ -2,7 +2,7 @@ import StateChangeEnhancer from "./StateChangeEnhancer.js";
 import {CREATED, RELOCATED, REMOVED, REPLACED} from "../StateChangeTypes.js";
 import {isTrue} from "../../../../util/AssertionUtils.js";
 /**
- * @typedef {string,number|boolean} PartName
+ * @typedef {string|number|boolean} PartName
  */
 /**
  * @template SCT, SCP

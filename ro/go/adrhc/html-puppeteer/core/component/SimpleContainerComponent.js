@@ -7,7 +7,7 @@ import SimpleContainerIllustrator from "../state-changes-handler/SimpleContainer
 import {partsOf} from "../state/PartialStateHolder.js";
 
 /**
- * @typedef {{[key: string]: AbstractComponent}} ComponentsCollection
+ * @typedef {{[name: string]: AbstractComponent}} ComponentsCollection
  */
 /**
  * @typedef {AbstractComponentOptions} SimpleContainerComponentOptions
@@ -89,10 +89,21 @@ export default class SimpleContainerComponent extends AbstractComponent {
      */
     replaceParts(parts) {
         if (this._isAnyFamilyNameIncludedIn(parts)) {
-            console.log("Family names present in multi parts update; replacing entire state and resetting guests!");
+            console.log("Family names present in multi parts update! merging missing guests then replacing the entire state");
+            this._mergeGuestsInto(parts);
             this.replaceState(parts);
         }
         super.replaceParts(parts);
+    }
+
+    /**
+     * @param {{[name: PartName]: SCP}[]} parts
+     * @protected
+     */
+    _mergeGuestsInto(parts) {
+        Object.entries(this.guests)
+            .filter(([name]) => parts[name] == null)
+            .forEach(([name, component]) => parts[name] = component.getState());
     }
 
     /**
