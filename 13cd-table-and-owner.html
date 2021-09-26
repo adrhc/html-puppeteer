@@ -41,12 +41,14 @@ PS: make sure to have a well formatted JSON!</textarea>
 	</div>
 	<!-- the component -->
 	<div class="section title">Component's view (parent and its guests)</div>
+	<!--
+		message1 = null: will initialize from data-initial-state
+		message3 = "...": its parent state is missing and has no data-initial-state; its component will process no state changes at initialization
+	-->
 	<div class="section flex-column fit-content bgc-aliceblue"
 	     data-child-frame-attributes='{"templateId": "kid-template", "htmlTag": "tr"}'
 	     data-family-names="text,booth"
 	     data-initial-state='{"kid0": {"id": 0, "name": "kid 0"},
-	     <!-- message1: will initialize from data-initial-state -->
-	     <!-- message3: its parent state is missing and has no data-initial-state; its component will process no state changes at initialization  -->
 	     "booth": {"message1": null, "message2": "message2 child state is taken from parent"},
 	     "text": "this is the parent state displayed by its view"}'
 	     data-template-id="parent-template"
