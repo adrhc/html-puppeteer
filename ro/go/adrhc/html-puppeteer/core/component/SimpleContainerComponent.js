@@ -89,7 +89,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
      */
     replaceParts(parts) {
         if (this._isAnyFamilyNameIncludedIn(parts)) {
-            console.log("Family names present in multi parts update; replacing entire state!");
+            console.log("Family names present in multi parts update; replacing entire state and resetting guests!");
             this.replaceState(parts);
         }
         super.replaceParts(parts);
