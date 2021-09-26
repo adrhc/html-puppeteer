@@ -71,11 +71,17 @@ export default class SimpleContainerComponent extends AbstractComponent {
         // using parent's view only to render roomLayout; it'll create the family seats
         super.replaceState(roomLayout);
         // placing family members (seats are already created)
+        //
         // Because only seats are created but not yet occupied
         // there's not possible to find a data-part inside a
         // seat (aka inside a container child component).
         this._placeFamilyMembers(roomLayout);
         // updating guests list (aka parts)
+        //
+        // Some guests might find a seat (i.e. data-part)
+        // inside a family member ("container") seat. In
+        // such situations the usage of data-guests is
+        // mandatory.
         this._updateGuestsDetails(newState);
     }
 
@@ -130,10 +136,10 @@ export default class SimpleContainerComponent extends AbstractComponent {
                     || this.familyOrStandingNames.includes(psc.newPartName)),
                 "[SimpleContainerComponent.replacePart] Can't relocate a family or standing member!");
             if (psc.changeType !== RELOCATED) {
-                if (this.familyNames.includes(psc.previousPartName)) {
+                if (this.familyNames.includes(psc.previousPartName ?? psc.newPartName)) {
                     this._handleFamilyChange(psc);
                     return;
-                } else if (this.standingNames.includes(psc.previousPartName)) {
+                } else if (this.standingNames.includes(psc.previousPartName ?? psc.newPartName)) {
                     this._handleStandingChange(psc);
                     return;
                 }
@@ -176,10 +182,11 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @protected
      */
     _handleStandingChange(partStateChange) {
-        const newState = _.clone(this.stateHolder.currentState ?? {});
-        // todo: should sync state with view?
-        Object.entries([...this.family, ...this.guests])
-            .forEach(([name, comp]) => newState[name] = comp.getState());
+        this.stateHolder.cancelAllStateChanges();
+        // todo: should try to sync 1th the state with the view?
+        const newState = _.cloneDeep(this.stateHolder.currentState ?? {});
+        // forcing full redraw
+        this.replaceState(newState);
     }
 
     /**
