@@ -58,8 +58,12 @@ export default class SimpleContainerComponent extends AbstractComponent {
         this.guests = this.config.guests ?? {};
         this.family = this.config.family ?? {};
         const familyState = this._familyStateFrom(newState);
+        // replacing the parent's content using its view only
+        // this should create guests seats
         super.replaceState(familyState);
+        // scanning for family members and render them
         this._createFamilyComponents(familyState);
+        // scanning for family members and render them
         this._createGuestComponents(newState);
     }
 
@@ -123,7 +127,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
     replaceParts(parts) {
         if (this.noGuests || this._isAnyFamilyNameIncludedIn(parts)) {
             console.log("Family names present in multi parts update! merging missing guests then replacing the entire state");
-            this._mergeGuestsInto(parts);
+            this.noGuests || this._mergeGuestsInto(parts);
             this.replaceState(parts);
         }
         super.replaceParts(parts);

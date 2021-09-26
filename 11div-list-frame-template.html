@@ -14,7 +14,7 @@
 
 <body>
 <script>const fp = _.noConflict()</script>
-<script src="10div-list-default-frame.js" type="module"></script>
+<script src="10div-list-default-seat.js" type="module"></script>
 
 <div class="container scenario10">
 	<div class="section title">SimpleContainerComponent</div>
@@ -34,7 +34,7 @@
 	<!-- the container component -->
 	<div class="section flex-column fit-content bgc-aliceblue"
 	     data-family-names="text"
-	     data-frame-template-id="kid-frame-template"
+	     data-seat-template-id="kid-seat-template"
 	     data-initial-state='{"kid0": {"id": 0, "name": "kid 0"},
 	     "text": "this is the parent state displayed by its view (below are the guests)"}'
 	     data-template-id="parent-template"
@@ -49,7 +49,7 @@
 	<div data-guests></div>
 </script>
 
-<script id="kid-frame-template" type="text/x-handlebars-template">
+<script id="kid-seat-template" type="text/x-handlebars-template">
 	<div data-part="{{partName}}" data-owner="{{owner}}" data-type="simple" data-template-id="kid-template"></div>
 </script>
 

@@ -5,8 +5,8 @@ import GlobalConfig, {dataPart, dataPartSelectorOf, dataType, dataOwnerOf} from 
 import {generateHtml} from "../../util/HtmlGenerator.js";
 
 /**
- * @typedef {Bag} ChildFrameAttributes
- * @property {string=} templateId is used by child's component to populate its space (aka frame)
+ * @typedef {Bag} ChildSeatAttributes
+ * @property {string=} templateId is used by child's component to populate its space (aka seat)
  * @property {string=} componentType
  * @property {string=} htmlTag
  */
@@ -14,12 +14,12 @@ import {generateHtml} from "../../util/HtmlGenerator.js";
  * @typedef {Object} GuestsRoomViewOptions
  * @property {string=} componentId
  * @property {string|jQuery<HTMLElement>=} elemIdOrJQuery is the parent's element id or jQuery<HTMLElement>
- * @property {string=} frameTemplate is the element containing the data-type and data-part
- * @property {string=} frameTemplateId
- * @property {string=} childTemplateId is a shortcut for ChildFrameAttributes.templateId
+ * @property {string=} seatTemplate is the element containing the data-type and data-part
+ * @property {string=} seatTemplateId
+ * @property {string=} childTemplateId is a shortcut for ChildSeatAttributes.templateId
  * @property {boolean=} newGuestsGoLast
  * @property {boolean=} dontRemoveGuests
- * @property {ChildFrameAttributes=} childFrameAttributes
+ * @property {ChildSeatAttributes=} childSeatAttributes
  */
 /**
  * @extends {AbstractView}
@@ -34,7 +34,7 @@ export default class GuestsRoomView extends AbstractView {
      */
     $componentElem;
     /**
-     * it's the child frame template id
+     * it's the child seat template id
      *
      * @type {string}
      */
@@ -46,7 +46,7 @@ export default class GuestsRoomView extends AbstractView {
     /**
      * @type {string}
      */
-    frameTemplate;
+    seatTemplate;
     /**
      * specify where to place new kids (append|prepend)
      *
@@ -60,19 +60,19 @@ export default class GuestsRoomView extends AbstractView {
     constructor({
                     componentId,
                     elemIdOrJQuery,
-                    frameTemplate,
-                    frameTemplateId,
+                    seatTemplate,
+                    seatTemplateId,
                     childTemplateId,
                     newGuestsGoLast,
                     dontRemoveGuests,
-                    childFrameAttributes = {templateId: childTemplateId},
+                    childSeatAttributes = {templateId: childTemplateId},
                 }) {
         super();
         this.$componentElem = jQueryOf(elemIdOrJQuery);
         this.componentId = componentId;
         this.place = (newGuestsGoLast ?? false) ? "append" : "prepend";
         this.dontRemoveGuests = dontRemoveGuests ?? false;
-        this.frameTemplate = frameTemplate ?? this._createFrameTemplate(frameTemplateId, childFrameAttributes);
+        this.seatTemplate = seatTemplate ?? this._createSeatTemplate(seatTemplateId, childSeatAttributes);
     }
 
     /**
@@ -86,11 +86,11 @@ export default class GuestsRoomView extends AbstractView {
      * @param {PartName} partName
      */
     create(partName) {
-        if (this._childFrameExists(partName)) {
+        if (this._childSeatExists(partName)) {
             return;
         }
-        const kidFrame = generateHtml(this.frameTemplate, {partName, [GlobalConfig.OWNER_ATTR]: this.componentId});
-        this.$guestsRoom[this.place](kidFrame);
+        const kidSeat = generateHtml(this.seatTemplate, {partName, [GlobalConfig.OWNER_ATTR]: this.componentId});
+        this.$guestsRoom[this.place](kidSeat);
     }
 
     /**
@@ -105,8 +105,8 @@ export default class GuestsRoomView extends AbstractView {
      * @return {boolean}
      * @protected
      */
-    _childFrameExists(partName) {
-        return !!this._$childFrameByName(partName).length;
+    _childSeatExists(partName) {
+        return !!this._$childSeatByName(partName).length;
     }
 
     /**
@@ -114,30 +114,30 @@ export default class GuestsRoomView extends AbstractView {
      * @return {jQuery<HTMLElement>}
      * @protected
      */
-    _$childFrameByName(name) {
+    _$childSeatByName(name) {
         return this.$guestsRoom.children(dataPartSelectorOf(name));
     }
 
     /**
-     * @param {string=} frameTemplateId
-     * @param {ChildFrameAttributes=} childFrameAttributes
+     * @param {string=} seatTemplateId
+     * @param {ChildSeatAttributes=} childSeatAttributes
      * @protected
      */
-    _createFrameTemplate(frameTemplateId, childFrameAttributes) {
-        if (frameTemplateId) {
-            return templateTextOf(frameTemplateId);
+    _createSeatTemplate(seatTemplateId, childSeatAttributes) {
+        if (seatTemplateId) {
+            return templateTextOf(seatTemplateId);
         } else {
-            return this._frameTemplateFromChildFrameAttributes(childFrameAttributes);
+            return this._seatTemplateFromChildSeatAttributes(childSeatAttributes);
         }
     }
 
     /**
-     * @param {ChildFrameAttributes=} childFrameAttributes
+     * @param {ChildSeatAttributes=} childSeatAttributes
      * @return {string}
      * @protected
      */
-    _frameTemplateFromChildFrameAttributes({templateId, htmlTag = "div", componentType = "simple", ...rest}) {
-        // {{this}} will be the part name when the kid's frame will be created
+    _seatTemplateFromChildSeatAttributes({templateId, htmlTag = "div", componentType = "simple", ...rest}) {
+        // {{this}} will be the part name when the kid's seat will be created
         return `<${htmlTag} ${dataOwnerOf(this.componentId)} ${dataPart()}="{{partName}}" ${dataType()}="${componentType}" data-template-id="${templateId}" ${dataAttributesOf(rest)}></${htmlTag}>`;
     }
 }
