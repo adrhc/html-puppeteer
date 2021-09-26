@@ -55,12 +55,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 <script id="parent-template" type="text/x-handlebars-template">
 	<div class="parent">{{text}}</div>
 	<div class="mb3">kids could be on parent's top or left or anywhere else</div>
-	<div class="flex-start" data-guests>
-		{{#each this}}
-			<div data-part="{{@key}}" data-owner="parent-template" data-type="simple"
-			     data-template-id="kid-template"></div>
-		{{/each}}
-	</div>
+	<div class="flex-start" data-guests></div>
 </script>
 
 <script id="kid-template" type="text/x-handlebars-template">

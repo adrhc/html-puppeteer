@@ -46,12 +46,7 @@
 <script id="parent-template" type="text/x-handlebars-template">
 	<div class="parent">{{text}}</div>
 	<div class="mb3">kids could be on parent's top or left or anywhere else</div>
-	<div data-guests>
-		{{#each this}}
-			<div data-part="{{@key}}" data-owner="parent-template" data-type="simple"
-			     data-template-id="kid-template"></div>
-		{{/each}}
-	</div>
+	<div data-guests></div>
 </script>
 
 <script id="kid-frame-template" type="text/x-handlebars-template">
