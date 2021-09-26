@@ -91,8 +91,14 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @protected
      */
     _findFamilyNames(newState) {
-        return partsOf(newState).map(([name]) => name)
-            .filter(name => this.noGuests || !this.standingNames.includes(name));
+        if (this.noGuests) {
+            // all not standing are family
+            return partsOf(newState).map(([name]) => name)
+                .filter(name => !this.standingNames.includes(name));
+        } else {
+            // all parts are guests or standing
+            return [];
+        }
     }
 
     /**
