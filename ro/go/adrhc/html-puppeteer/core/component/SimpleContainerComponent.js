@@ -182,6 +182,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @protected
      */
     _handleStandingChange(partStateChange) {
+        // would try to find the related (missing) seat (i.e. data-part)
         this.stateHolder.cancelAllStateChanges();
         // todo: should try to sync 1th the state with the view?
         const newState = _.cloneDeep(this.stateHolder.currentState ?? {});
