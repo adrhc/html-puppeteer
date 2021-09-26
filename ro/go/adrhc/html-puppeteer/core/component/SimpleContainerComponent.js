@@ -49,7 +49,8 @@ export default class SimpleContainerComponent extends AbstractComponent {
         this.guests = this.config.guests ?? {};
         const fullState = this._familyStateFrom(newState);
         super.replaceState(fullState);
-        partsOf(newState).filter(([name]) => name !== this.familyNames).forEach(([name, value]) => this.replacePart(name, value));
+        partsOf(newState).filter(([name]) => !this.familyNames.includes(name))
+            .forEach(([name, value]) => this.replacePart(name, value));
     }
 
     /**
