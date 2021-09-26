@@ -1,6 +1,7 @@
 import {StateProcessor} from "../state-processor/StateProcessor.js";
 import DefaultComponentConfigurator from "./configurator/DefaultComponentConfigurator.js";
 import {applyExtraConfigurators} from "./configurator/ComponentConfigurator.js";
+import {partsOf} from "../state/PartialStateHolder.js";
 
 /**
  * @typedef {StateHolderOptions & ValueStateInitializerOptions & StateChangesHandlersInvokerOptions} AbstractComponentOptions
@@ -101,10 +102,10 @@ export default class AbstractComponent extends StateProcessor {
     /**
      * Replaces some component's state parts; the parts should have no name change!.
      *
-     * @param {{[name: PartName]: SCP} | SCP[]} parts
+     * @param {{[name: PartName]: SCP}[]} parts
      */
     replaceParts(parts) {
-        Object.entries(parts).forEach(([key, value]) => this.replacePart(key, value));
+        partsOf(parts).forEach(([key, value]) => this.replacePart(key, value));
     }
 
     /**

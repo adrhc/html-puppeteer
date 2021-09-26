@@ -20,13 +20,13 @@ import {partsOf} from "../state/PartialStateHolder.js";
  */
 export default class SimpleContainerComponent extends AbstractComponent {
     /**
+     * @type {PartName[]}
+     */
+    familyNames;
+    /**
      * @type {ComponentsCollection}
      */
     guests;
-    /**
-     * @type {PartName}
-     */
-    familyNames;
 
     /**
      * @param {SimpleContainerComponentOptions} options
@@ -37,7 +37,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
         super(withDefaults(restOfOptions)
             .addComponentIllustratorProvider(simpleContainerIllustratorProvider)
             .options());
-        this.familyNames = this.config.familyNames;
+        this.familyNames = this.config.familyNames?.split(",");
     }
 
     /**
@@ -47,10 +47,19 @@ export default class SimpleContainerComponent extends AbstractComponent {
      */
     replaceState(newState) {
         this.guests = this.config.guests ?? {};
-        const fullState = _.isArray(newState) ? [] : {};
-        fullState[this.familyNames] = newState[this.familyNames]
+        const fullState = this._familyStateFrom(newState);
         super.replaceState(fullState);
         partsOf(newState).filter(([name]) => name !== this.familyNames).forEach(([name, value]) => this.replacePart(name, value));
+    }
+
+    /**
+     * @param {SCT=} newState new full/total state
+     * @protected
+     */
+    _familyStateFrom(newState) {
+        const familyState = _.isArray(newState) ? [] : {};
+        this.familyNames.forEach(name => familyState[name] = newState[name]);
+        return familyState;
     }
 
     /**
@@ -66,13 +75,21 @@ export default class SimpleContainerComponent extends AbstractComponent {
     }
 
     /**
+     * @param {{[name: PartName]: SCP}[]} parts
+     * @protected
+     */
+    _isAnyFamilyNameIncludedIn(parts) {
+        return partsOf(parts).find(([name]) => this.familyNames.includes(name)) != null;
+    }
+
+    /**
      * Replaces some component's state parts; the parts should have no name change!.
      *
-     * @param {{[name: PartName]: SCP}} parts
+     * @param {{[name: PartName]: SCP}[]} parts
      */
     replaceParts(parts) {
-        if (parts[this.familyNames] != null) {
-            console.log("Container part present in multi parts update; replacing entire state!");
+        if (this._isAnyFamilyNameIncludedIn(parts)) {
+            console.log("Family names present in multi parts update; replacing entire state!");
             this.replaceState(parts);
         }
         super.replaceParts(parts);
