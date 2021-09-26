@@ -44,7 +44,8 @@ PS: make sure to have a well formatted JSON!</textarea>
 	<div class="section flex-column fit-content bgc-aliceblue"
 	     data-child-frame-attributes='{"templateId": "kid-template", "htmlTag": "tr"}'
 	     data-family-names="text,booth"
-	     data-initial-state='{"kid0": {"id": 0, "name": "kid 0"}, "booth": {"message1": "message1 child with state from parent"},
+	     data-initial-state='{"kid0": {"id": 0, "name": "kid 0"},
+	     "booth": {"message1": null, "message2": "message2 child state is taken from parent"},
 	     "text": "this is the parent state displayed by its view"}'
 	     data-template-id="parent-template"
 	     data-type="simple-container"
@@ -56,7 +57,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 	<!-- parent own view -->
 	<div class="parent">{{text}}</div>
 	<div data-part="booth" data-type="simple-container" class="flex-column fill-available"
-	     data-template-id="booth-template"></div>
+	     data-template-id="booth-template" data-no-guests="true"></div>
 	<div>kids could be on parent's top or left or anywhere else</div>
 	<!-- guests -->
 	<table class="responstable" data-guests>
@@ -70,19 +71,24 @@ PS: make sure to have a well formatted JSON!</textarea>
 </script>
 
 <script id="booth-template" type="text/x-handlebars-template">
-	<div class="mb3">this is a child container component</div>
+	<div class="mb3 title">this is a child container component</div>
 	{{#with value}}
 		<div data-part="message1" data-type="simple" data-owner="{{@root.owner}}"
 		     data-template-id="message1-template"
-		     data-initial-state='The "message1" child was <i>automatically</i> created!<BR>initial state is from <i>data-initial-state</i> attribute'
+		     data-initial-state='The "message1" child state is from <i>data-initial-state</i> attribute.'
 		     data-view-removal-strategy="USE_HTML"
 		     data-removed-placeholder='"message1" child component was removed!'>
-			The "message1" child is not available yet!
+			The "message1" child has no <i>data-initial-state</i> and its parent part is missing!
 		</div>
 		<div data-part="message2" data-type="simple" data-owner="{{@root.owner}}"
 		     data-template-id="message2-template"
 		     data-initial-state='This "message2" initial state should NOT be visible!<BR>initial state should come from the parent'>
-			The "message2" child is not available yet!
+			The "message2" child has no <i>data-initial-state</i> and its parent part is missing!
+		</div>
+		<div data-part="message3" data-type="simple" data-owner="{{@root.owner}}"
+		     data-template-id="message3-template"
+		     data-initial-state='This "message3" initial state should NOT be visible!<BR>initial state should come from the parent'>
+			The "message3" child has no <i>data-initial-state</i> and its parent part is missing!
 		</div>
 	{{/with}}
 </script>
@@ -93,6 +99,10 @@ PS: make sure to have a well formatted JSON!</textarea>
 
 <script id="message2-template" type="text/x-handlebars-template">
 	{{#if this}}{{{value}}}{{else}}The "message2" child is not available yet!{{/if}}
+</script>
+
+<script id="message3-template" type="text/x-handlebars-template">
+	{{#if this}}{{{value}}}{{else}}The "message3" child is not available yet!{{/if}}
 </script>
 
 <script id="kid-template" type="text/x-handlebars-template">

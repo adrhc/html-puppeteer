@@ -88,8 +88,6 @@ export default class AbstractComponent extends StateProcessor {
     }
 
     /**
-     * Replaces a component's state part.
-     *
      * @param {PartName=} previousPartName
      * @param {SCP=} newPart
      * @param {PartName=} newPartName

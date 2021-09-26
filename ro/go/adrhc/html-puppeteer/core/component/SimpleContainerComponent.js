@@ -31,6 +31,10 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @type {ComponentsCollection}
      */
     guests;
+    /**
+     * @type {boolean}
+     */
+    noGuests;
 
     /**
      * @param {SimpleContainerComponentOptions} options
@@ -42,6 +46,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
             .addComponentIllustratorProvider(simpleContainerIllustratorProvider)
             .options());
         this.familyNames = this.config.familyNames?.split(",") ?? [];
+        this.noGuests = this.config.noGuests ?? false;
     }
 
     /**
@@ -55,17 +60,27 @@ export default class SimpleContainerComponent extends AbstractComponent {
         const familyState = this._familyStateFrom(newState);
         super.replaceState(familyState);
         this._createFamilyComponents(familyState);
+        this._createGuestComponents(newState);
+    }
+
+    /**
+     * @param {SCT} newState
+     * @protected
+     */
+    _createGuestComponents(newState) {
+        if (this.noGuests) {
+            return;
+        }
         partsOf(newState).filter(([name]) => !this.familyNames.includes(name))
-            .forEach(([name, value]) => this.replacePart(name, value));
+            .forEach(([name, value]) => this.replacePart(name, value, name));
     }
 
     /**
      * @param {SCT} familyState
-     * @private
+     * @protected
      */
     _createFamilyComponents(familyState) {
-        this.familyNames.filter(name => familyState[name] != null)
-            .forEach(name => this._createAndRenderFamilyMember(name));
+        Object.entries(familyState).forEach(([name, value]) => this._createAndRenderFamilyMember(name, value));
     }
 
     /**
@@ -74,13 +89,15 @@ export default class SimpleContainerComponent extends AbstractComponent {
      */
     _familyStateFrom(newState) {
         const familyState = _.isArray(newState) ? [] : {};
-        this.familyNames.forEach(name => familyState[name] = newState[name]);
+        if (this.noGuests) {
+            partsOf(newState).forEach(([name, value]) => familyState[name] = value);
+        } else {
+            this.familyNames.forEach(name => familyState[name] = newState[name]);
+        }
         return familyState;
     }
 
     /**
-     * Replaces a component's state part.
-     *
      * @param {PartName=} previousPartName
      * @param {SCP=} newPart
      * @param {PartName=} newPartName
@@ -104,7 +121,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @param {{[name: PartName]: SCP}[]} parts
      */
     replaceParts(parts) {
-        if (this._isAnyFamilyNameIncludedIn(parts)) {
+        if (this.noGuests || this._isAnyFamilyNameIncludedIn(parts)) {
             console.log("Family names present in multi parts update! merging missing guests then replacing the entire state");
             this._mergeGuestsInto(parts);
             this.replaceState(parts);
@@ -156,14 +173,15 @@ export default class SimpleContainerComponent extends AbstractComponent {
 
     /**
      * @param {PartName} partName
+     * @param {SCP} partValue
      * @protected
      */
-    _createAndRenderFamilyMember(partName) {
+    _createAndRenderFamilyMember(partName, partValue) {
         const component = this._createContainedComponent(partName);
         if (!component) {
             return;
         }
-        this.family[partName] = component.render();
+        this.family[partName] = component.render(partValue);
     }
 
     /**

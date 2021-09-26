@@ -12,7 +12,7 @@ export default class PartialStateHolder extends StateHolder {
      * @return {SCP}
      */
     getPart(partName) {
-        return this.currentState[partName];
+        return this.currentState?.[partName];
     }
 
     /**
@@ -32,8 +32,8 @@ export default class PartialStateHolder extends StateHolder {
     replacePart(previousPartName, newPart,
                 newPartName = newPart != null ? previousPartName : undefined,
                 dontRecordChanges) {
-        isTrue(newPart != null || previousPartName != null, "[PartialStateHolder] both old and new part name are missing!");
-        isTrue(this.currentState != null, "[PartialStateHolder] can't add partial state to missing parent state!")
+        isTrue(this.currentState != null || newPart == null,
+            "[PartialStateHolder.replacePart] can't add partial state to missing parent state!")
         if (this._partsEqual(newPart, newPartName, previousPartName)) {
             return [];
         }
@@ -82,7 +82,7 @@ export default class PartialStateHolder extends StateHolder {
      */
     _partsEqual(newPart, newPartName, previousPartName) {
         const previousPart = this.getPart(previousPartName);
-        return newPart === previousPart;
+        return newPart == null && previousPart == null || newPart === previousPart;
     }
 
     /**
@@ -93,19 +93,26 @@ export default class PartialStateHolder extends StateHolder {
      * @protected
      */
     _replacePart(previousPartName, newPart, newPartName) {
-        isTrue(newPart == null && newPartName == null || newPart != null && newPartName != null);
         const previousItem = this.getPart(previousPartName);
         if (previousItem == null) {
             if (newPart == null) {
                 console.warn("both old and new items are null, nothing else to do");
                 return previousItem;
             }
+            isTrue(newPartName != null,
+                "[PartialStateHolder._replacePart] Can't insert empty new part name!");
             // old item doesn't exists, inserting the new one
             this._insertPart(newPart, newPartName);
         } else if (newPart == null) {
             // old item exists but the new one is null (i.e. old is removed)
+            isTrue(previousPartName != null,
+                "[PartialStateHolder._replacePart] Can't remove empty previous part name!");
             this._removePart(previousPartName);
         } else {
+            isTrue(previousPartName != null,
+                "[PartialStateHolder._replacePart] Can't remove empty previous part name!");
+            isTrue(newPartName != null,
+                "[PartialStateHolder._replacePart] Can't insert empty new part name!");
             // previousItem and newPart are not null
             this._removePart(previousPartName);
             this._insertPart(newPart, newPartName);
