@@ -101,7 +101,7 @@ div[data-part], .parent {
     justify-content: center;
 }
 
-/* space between "badge" children */
+/* space between "badge" guests */
 .scenario10 .flex-start [data-part]:not(:last-child) {
     margin-right: 0.3rem;
 }

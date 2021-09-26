@@ -27,7 +27,7 @@
 	<div class="section flex-center fill-available buttons">
 		<div>
 			<button name="change-parent-state">Change parent state</button>
-			<button name="change-partial-state">Change partial state (aka children)</button>
+			<button name="change-partial-state">Change partial state (aka guests)</button>
 		</div>
 	</div>
 	<div class="section">
@@ -40,12 +40,12 @@ PS: make sure to have a well formatted JSON!</textarea>
 		</div>
 	</div>
 	<!-- the component -->
-	<div class="section title">Component's view (parent and its children)</div>
+	<div class="section title">Component's view (parent and its guests)</div>
 	<div class="section flex-column fit-content bgc-aliceblue"
 	     data-child-frame-attributes='{"templateId": "kid-template", "htmlTag": "tr"}'
-	     data-container-part="text"
+	     data-family-names="text"
 	     data-initial-state='{"kid0": {"id": 0, "name": "kid 0"},
-	     "text": "this is the parent state displayed by its view (below are the children)"}'
+	     "text": "this is the parent state displayed by its view (below are the guests)"}'
 	     data-template-id="parent-template"
 	     data-type="simple-container"
 	     id="parent-component">
@@ -56,8 +56,8 @@ PS: make sure to have a well formatted JSON!</textarea>
 	<!-- parent own view -->
 	<div class="parent">{{text}}</div>
 	<div>kids could be on parent's top or left or anywhere else</div>
-	<!-- children -->
-	<table class="responstable" data-children>
+	<!-- guests -->
+	<table class="responstable" data-guests>
 		<thead>
 		<tr>
 			<th>Id</th>

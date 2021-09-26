@@ -1,5 +1,5 @@
 import AbstractView from "./AbstractView.js";
-import {$childrenRoomOf} from "../Puppeteer.js";
+import {$guestsRoomOf} from "../Puppeteer.js";
 import {dataAttributesOf, jQueryOf, templateTextOf} from "../../util/DomUtils.js";
 import GlobalConfig, {dataPart, dataPartSelectorOf, dataType, dataOwnerOf} from "../../util/GlobalConfig.js";
 import {generateHtml} from "../../util/HtmlGenerator.js";
@@ -11,24 +11,24 @@ import {generateHtml} from "../../util/HtmlGenerator.js";
  * @property {string=} htmlTag
  */
 /**
- * @typedef {Object} ChildrenRoomViewOptions
+ * @typedef {Object} GuestsRoomViewOptions
  * @property {string=} componentId
  * @property {string|jQuery<HTMLElement>=} elemIdOrJQuery is the parent's element id or jQuery<HTMLElement>
  * @property {string=} frameTemplate is the element containing the data-type and data-part
  * @property {string=} frameTemplateId
  * @property {string=} childTemplateId is a shortcut for ChildFrameAttributes.templateId
- * @property {boolean=} newChildrenGoLast
- * @property {boolean=} dontRemoveChildren
+ * @property {boolean=} newGuestsGoLast
+ * @property {boolean=} dontRemoveGuests
  * @property {ChildFrameAttributes=} childFrameAttributes
  */
 /**
  * @extends {AbstractView}
  */
-export default class ChildrenRoomView extends AbstractView {
+export default class GuestsRoomView extends AbstractView {
     /**
      * @type {jQuery<HTMLElement>}
      */
-    $childrenRoom;
+    $guestsRoom;
     /**
      * @type {jQuery<HTMLElement>}
      */
@@ -42,7 +42,7 @@ export default class ChildrenRoomView extends AbstractView {
     /**
      * @type {boolean}
      */
-    dontRemoveChildren;
+    dontRemoveGuests;
     /**
      * @type {string}
      */
@@ -55,7 +55,7 @@ export default class ChildrenRoomView extends AbstractView {
     place;
 
     /**
-     * @param {ChildrenRoomViewOptions} options
+     * @param {GuestsRoomViewOptions} options
      */
     constructor({
                     componentId,
@@ -63,15 +63,15 @@ export default class ChildrenRoomView extends AbstractView {
                     frameTemplate,
                     frameTemplateId,
                     childTemplateId,
-                    newChildrenGoLast,
-                    dontRemoveChildren,
+                    newGuestsGoLast,
+                    dontRemoveGuests,
                     childFrameAttributes = {templateId: childTemplateId},
                 }) {
         super();
         this.$componentElem = jQueryOf(elemIdOrJQuery);
         this.componentId = componentId;
-        this.place = (newChildrenGoLast ?? false) ? "append" : "prepend";
-        this.dontRemoveChildren = dontRemoveChildren ?? false;
+        this.place = (newGuestsGoLast ?? false) ? "append" : "prepend";
+        this.dontRemoveGuests = dontRemoveGuests ?? false;
         this.frameTemplate = frameTemplate ?? this._createFrameTemplate(frameTemplateId, childFrameAttributes);
     }
 
@@ -79,7 +79,7 @@ export default class ChildrenRoomView extends AbstractView {
      * Announce that parent updated its view.
      */
     parentUpdated() {
-        this.$childrenRoom = $childrenRoomOf(this.$componentElem);
+        this.$guestsRoom = $guestsRoomOf(this.$componentElem);
     }
 
     /**
@@ -90,14 +90,14 @@ export default class ChildrenRoomView extends AbstractView {
             return;
         }
         const kidFrame = generateHtml(this.frameTemplate, {partName, [GlobalConfig.OWNER_ATTR]: this.componentId});
-        this.$childrenRoom[this.place](kidFrame);
+        this.$guestsRoom[this.place](kidFrame);
     }
 
     /**
      * @param {PartName} name
      */
     remove(name) {
-        this.$childrenRoom.children(dataPartSelectorOf(name)).remove();
+        this.$guestsRoom.children(dataPartSelectorOf(name)).remove();
     }
 
     /**
@@ -115,7 +115,7 @@ export default class ChildrenRoomView extends AbstractView {
      * @protected
      */
     _$childFrameByName(name) {
-        return this.$childrenRoom.children(dataPartSelectorOf(name));
+        return this.$guestsRoom.children(dataPartSelectorOf(name));
     }
 
     /**

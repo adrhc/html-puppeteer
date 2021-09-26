@@ -95,15 +95,13 @@ end note
 }'/
 
 class SimpleContainerComponent extends AbstractComponent {
-#children: {partName: AbstractComponent}
+#guests: {partName: AbstractComponent}
 +render(value)
 +replaceState(newState)
 +replacePart(previousPartName, \nnewPart, newPartName)
 #_processStateChange(partStateChange)
-#_createChildren()
 #_createChild(partName)
 #_removeChild(partName)
-#_initializeChildren()
 }
 
 abstract EventsBinder {

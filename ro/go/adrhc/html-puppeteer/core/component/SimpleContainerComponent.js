@@ -11,8 +11,8 @@ import {partsOf} from "../state/PartialStateHolder.js";
  */
 /**
  * @typedef {AbstractComponentOptions} SimpleContainerComponentOptions
- * @property {ComponentsCollection} children
- * @property {PartName=} containerPart is the part managed directly by the container
+ * @property {ComponentsCollection} guests
+ * @property {PartName=} familyNames are the parts managed directly by the container or by other components not in guests room
  */
 /**
  * @template SCT, SCP
@@ -22,22 +22,22 @@ export default class SimpleContainerComponent extends AbstractComponent {
     /**
      * @type {ComponentsCollection}
      */
-    children;
+    guests;
     /**
      * @type {PartName}
      */
-    containerPart;
+    familyNames;
 
     /**
      * @param {SimpleContainerComponentOptions} options
-     * @param {ComponentIllustrator} options.containerPart
+     * @param {ComponentIllustrator} options.familyNames
      * @param {AbstractComponentOptions} restOfOptions
      */
-    constructor({containerPart, ...restOfOptions} = {}) {
+    constructor({familyNames, ...restOfOptions} = {}) {
         super(withDefaults(restOfOptions)
             .addComponentIllustratorProvider(simpleContainerIllustratorProvider)
             .options());
-        this.containerPart = this.config.containerPart;
+        this.familyNames = this.config.familyNames;
     }
 
     /**
@@ -46,11 +46,11 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @param {SCT=} newState
      */
     replaceState(newState) {
-        this.children = this.config.children ?? {};
+        this.guests = this.config.guests ?? {};
         const fullState = _.isArray(newState) ? [] : {};
-        fullState[this.containerPart] = newState[this.containerPart]
+        fullState[this.familyNames] = newState[this.familyNames]
         super.replaceState(fullState);
-        partsOf(newState).filter(([name]) => name !== this.containerPart).forEach(([name, value]) => this.replacePart(name, value));
+        partsOf(newState).filter(([name]) => name !== this.familyNames).forEach(([name, value]) => this.replacePart(name, value));
     }
 
     /**
@@ -71,7 +71,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @param {{[name: PartName]: SCP}} parts
      */
     replaceParts(parts) {
-        if (parts[this.containerPart] != null) {
+        if (parts[this.familyNames] != null) {
             console.log("Container part present in multi parts update; replacing entire state!");
             this.replaceState(parts);
         }
@@ -96,7 +96,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
                 break;
             case REPLACED:
                 this._processStateChanges();
-                this.children[partStateChange.previousPartName].replaceState(partStateChange.newPart);
+                this.guests[partStateChange.previousPartName].replaceState(partStateChange.newPart);
                 break;
             case RELOCATED:
                 this._removeChild(partStateChange.previousPartName);
@@ -122,7 +122,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
             console.warn(`Missing child element for ${partName}; could be parent's state though.`);
             return;
         }
-        this.children[partName] = createComponent($childElem, {parent: this}).render();
+        this.guests[partName] = createComponent($childElem, {parent: this}).render();
     }
 
     /**
@@ -131,12 +131,12 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @protected
      */
     _removeChild(partName) {
-        if (!this.children[partName]) {
+        if (!this.guests[partName]) {
             console.error(`Trying to close missing child: ${partName}!`);
             return false;
         }
-        this.children[partName].close();
-        delete this.children[partName];
+        this.guests[partName].close();
+        delete this.guests[partName];
         return true;
     }
 }

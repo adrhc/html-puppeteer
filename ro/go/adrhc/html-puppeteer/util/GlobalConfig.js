@@ -1,6 +1,6 @@
 export default class GlobalConfig {
     static ALERT_ON_FAILED_ASSERTION = true;
-    static DATA_CHILDREN = "children";
+    static DATA_CHILDREN = "guests";
     /**
      * the child "part" name in the parent's state
      */
@@ -24,7 +24,7 @@ export function dataPart() {
     return `data-${GlobalConfig.DATA_PART}`;
 }
 
-export function dataChildren() {
+export function dataGuests() {
     return `data-${GlobalConfig.DATA_CHILDREN}`;
 }
 
@@ -56,10 +56,10 @@ export function dataPartSelectorOf(partName, useDoubleQuotes) {
 }
 
 /**
- * @param {string=} childrenRoomName
+ * @param {string=} guestsRoomName
  * @param {boolean=} useDoubleQuotes
  */
-export function dataChildrenSelectorOf(childrenRoomName, useDoubleQuotes) {
+export function dataGuestsSelectorOf(guestsRoomName, useDoubleQuotes) {
     const quote = useDoubleQuotes ? '"' : "'";
-    return childrenRoomName == null ? `[${dataChildren()}]` : `[${dataChildren()}=${quote}${childrenRoomName}${quote}]`;
+    return guestsRoomName == null ? `[${dataGuests()}]` : `[${dataGuests()}=${quote}${guestsRoomName}${quote}]`;
 }

@@ -23,7 +23,7 @@ export default class Scenario10App {
      * @private
      */
     _oldestKidId() {
-        return Object.values(this.parent.children)
+        return Object.values(this.parent.guests)
             .map(kid => kid.getState().id)
             .filter(v => v != null)
             .reduce((prev, curr) => prev <= curr ? prev : curr, 9999);
@@ -37,8 +37,8 @@ export default class Scenario10App {
             this.parent.replaceState(JSON.parse($("#parent-state-and-debugger").val()));
         });
         $(namedBtn("change-partial-state")).on("click", () => {
-            const childrenState = JSON.parse($("#partial-state").val());
-            this.parent.replaceParts(childrenState);
+            const guestsState = JSON.parse($("#partial-state").val());
+            this.parent.replaceParts(guestsState);
         });
         $(namedBtn("create")).on("click", () => {
             this.parent.replacePart(`kid${this.index}`,

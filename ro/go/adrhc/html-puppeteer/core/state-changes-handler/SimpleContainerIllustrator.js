@@ -1,8 +1,8 @@
-import ChildrenRoomView from "../view/ChildrenRoomView.js";
+import GuestsRoomView from "../view/GuestsRoomView.js";
 import SimplePartsIllustrator from "./SimplePartsIllustrator.js";
 
 /**
- * @typedef {ComponentIllustratorOptions & ChildrenRoomViewOptions} SimpleContainerIllustratorOptions
+ * @typedef {ComponentIllustratorOptions & GuestsRoomViewOptions} SimpleContainerIllustratorOptions
  * @property {string=} componentId
  */
 /**
@@ -12,9 +12,9 @@ import SimplePartsIllustrator from "./SimplePartsIllustrator.js";
  */
 export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
     /**
-     * @type {ChildrenRoomView}
+     * @type {GuestsRoomView}
      */
-    childrenRoomView;
+    guestsRoomView;
 
     /**
      * @param {SimpleContainerIllustratorOptions} options
@@ -23,7 +23,7 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      */
     constructor({viewValuesTransformerFn, ...restOfOptions}) {
         super(restOfOptions);
-        this.childrenRoomView = new ChildrenRoomView(restOfOptions);
+        this.guestsRoomView = new GuestsRoomView(restOfOptions);
     }
 
     /**
@@ -31,7 +31,7 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      */
     created(stateChange) {
         super.created(stateChange);
-        this.childrenRoomView.parentUpdated()
+        this.guestsRoomView.parentUpdated()
     }
 
     /**
@@ -39,29 +39,29 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      */
     replaced(stateChange) {
         super.replaced(stateChange);
-        this.childrenRoomView.parentUpdated()
+        this.guestsRoomView.parentUpdated()
     }
 
     /**
      * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partRemoved(partStateChange) {
-        this.childrenRoomView.remove(partStateChange.previousPartName);
+        this.guestsRoomView.remove(partStateChange.previousPartName);
     }
 
     /**
      * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partCreated(partStateChange) {
-        this.childrenRoomView.create(partStateChange.newPartName);
+        this.guestsRoomView.create(partStateChange.newPartName);
     }
 
     /**
      * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partRelocated(partStateChange) {
-        this.childrenRoomView.remove(partStateChange.previousPartName);
-        this.childrenRoomView.create(partStateChange.newPartName);
+        this.guestsRoomView.remove(partStateChange.previousPartName);
+        this.guestsRoomView.create(partStateChange.newPartName);
     }
 
     /**
