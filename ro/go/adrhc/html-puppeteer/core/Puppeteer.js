@@ -101,7 +101,7 @@ function renderComponents($components) {
     $components.each((index, comp) => comp.render());
 }
 
-export function $getChildElem(partName, parentElemIdOrJQuery) {
+export function $getPartElem(partName, parentElemIdOrJQuery) {
     return $(dataPartSelectorOf(partName), jQueryOf(parentElemIdOrJQuery));
 }
 

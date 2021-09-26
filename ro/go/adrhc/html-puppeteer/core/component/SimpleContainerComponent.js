@@ -1,4 +1,4 @@
-import {$getChildElem, createComponent} from "../Puppeteer.js";
+import {$getPartElem, createComponent} from "../Puppeteer.js";
 import {withDefaults} from "./options/ComponentOptionsBuilder.js";
 import {CREATED, RELOCATED, REMOVED, REPLACED} from "../state/change/StateChangeTypes.js";
 import {alertOrThrow} from "../../util/AssertionUtils.js";
@@ -20,6 +20,10 @@ import {partsOf} from "../state/PartialStateHolder.js";
  */
 export default class SimpleContainerComponent extends AbstractComponent {
     /**
+     * @type {ComponentsCollection}
+     */
+    family;
+    /**
      * @type {PartName[]}
      */
     familyNames;
@@ -37,7 +41,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
         super(withDefaults(restOfOptions)
             .addComponentIllustratorProvider(simpleContainerIllustratorProvider)
             .options());
-        this.familyNames = this.config.familyNames?.split(",");
+        this.familyNames = this.config.familyNames?.split(",") ?? [];
     }
 
     /**
@@ -47,10 +51,21 @@ export default class SimpleContainerComponent extends AbstractComponent {
      */
     replaceState(newState) {
         this.guests = this.config.guests ?? {};
-        const fullState = this._familyStateFrom(newState);
-        super.replaceState(fullState);
+        this.family = this.config.family ?? {};
+        const familyState = this._familyStateFrom(newState);
+        super.replaceState(familyState);
+        this._createFamilyComponents(familyState);
         partsOf(newState).filter(([name]) => !this.familyNames.includes(name))
             .forEach(([name, value]) => this.replacePart(name, value));
+    }
+
+    /**
+     * @param {SCT} familyState
+     * @private
+     */
+    _createFamilyComponents(familyState) {
+        this.familyNames.filter(name => familyState[name] != null)
+            .forEach(name => this._createAndRenderFamilyMember(name));
     }
 
     /**
@@ -116,7 +131,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
             case CREATED:
                 // the parent should create the DOM element for the child
                 this._processStateChanges();
-                this._createChild(partStateChange.newPartName);
+                this._createAndRenderGuest(partStateChange.newPartName);
                 break;
             case REMOVED:
                 this._removeChild(partStateChange.previousPartName);
@@ -132,7 +147,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
                 // the parent should remove child's previous DOM element and create the new one
                 this._processStateChanges();
                 // the child will take its state from the parent (i.e. this component)
-                this._createChild(partStateChange.newPartName);
+                this._createAndRenderGuest(partStateChange.newPartName);
                 break;
             default:
                 alertOrThrow(`Bad state change!\n${JSON.stringify(partStateChange)}`);
@@ -140,18 +155,41 @@ export default class SimpleContainerComponent extends AbstractComponent {
     }
 
     /**
-     * Create and render a child.
-     *
      * @param {PartName} partName
      * @protected
      */
-    _createChild(partName) {
-        const $childElem = $getChildElem(partName, this.config.elemIdOrJQuery);
-        if (!$childElem.length) {
-            console.warn(`Missing child element for ${partName}; could be parent's state though.`);
+    _createAndRenderFamilyMember(partName) {
+        const component = this._createContainedComponent(partName);
+        if (!component) {
             return;
         }
-        this.guests[partName] = createComponent($childElem, {parent: this}).render();
+        this.family[partName] = component.render();
+    }
+
+    /**
+     * @param {PartName} partName
+     * @protected
+     */
+    _createAndRenderGuest(partName) {
+        const component = this._createContainedComponent(partName);
+        if (!component) {
+            return;
+        }
+        this.guests[partName] = component.render();
+    }
+
+    /**
+     * @param {PartName} partName
+     * @return {AbstractComponent}
+     * @protected
+     */
+    _createContainedComponent(partName) {
+        const $childElem = $getPartElem(partName, this.config.elemIdOrJQuery);
+        if (!$childElem.length) {
+            console.warn(`Missing child element for ${partName}; could be parent's state though.`);
+            return undefined;
+        }
+        return createComponent($childElem, {parent: this});
     }
 
     /**
