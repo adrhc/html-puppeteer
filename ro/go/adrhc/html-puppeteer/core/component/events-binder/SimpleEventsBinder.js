@@ -4,59 +4,58 @@ import {isTrue} from "../../../util/AssertionUtils.js";
 
 export default class SimpleEventsBinder extends EventsBinder {
     /**
-     * @type {boolean}
-     */
-    openEventAttached;
-    /**
      * @type {string}
      */
     owner;
 
+    /**
+     * @param {AbstractComponent=} component
+     */
     constructor(component) {
         super(component);
         this.owner = component.id;
     }
 
+    /**
+     * attach DOM event handlers
+     */
     attachEventHandlers() {
-        !this.openEventAttached && this._attachHandlerByDataAttrib("open", () => {
+        this._attachHandlerByDataAttrib("open", () => {
+            this._$elemOf("open").addClass("disabled");
+            this._$elemOf("close").removeClass("disabled");
             this.component.render();
         });
         this._attachHandlerByDataAttrib("close", () => {
+            this._$elemOf("close").addClass("disabled");
+            this._$elemOf("open").removeClass("disabled");
             this.component.close();
-        });
-        this.openEventAttached = true;
+        }, true);
     }
 
     /**
      * @param {string} dataAttribName
      * @param {function} fn
+     * @param {boolean=} oneTimeOnly
      * @protected
      */
-    _attachHandlerByDataAttrib(dataAttribName, fn) {
-        const $el = $(`${dataOwnerSelectorOf(this.owner)}[data-${dataAttribName}]`);
+    _attachHandlerByDataAttrib(dataAttribName, fn, oneTimeOnly) {
+        const $el = this._$elemOf(dataAttribName);
         if (!$el.length) {
             return;
         }
         const event = $el.data(dataAttribName);
         isTrue(!!event, "[SimpleEventsBinder] event can't be empty!");
-        $($el).on(event, fn);
+        // removing previous handler (if any) set by another component
+        $($el).off(event);
+        $($el)[oneTimeOnly ? "one" : "on"](event, fn);
     }
 
     /**
      * @param {string} dataAttribName
+     * @return {jQuery<HTMLElement>}
      * @protected
      */
-    _detachHandlerByDataAttrib(dataAttribName) {
-        const $el = $(`${dataOwnerSelectorOf(this.owner)}[data-${dataAttribName}]`);
-        if (!$el.length) {
-            return;
-        }
-        const event = $el.data(dataAttribName);
-        $el.off(event)
-    }
-
-    detachEventHandlers() {
-        // keep basic events otherwise "open" won't work
-        this._detachHandlerByDataAttrib("close");
+    _$elemOf(dataAttribName) {
+        return $(`${dataOwnerSelectorOf(this.owner)}[data-${dataAttribName}]`);
     }
 }

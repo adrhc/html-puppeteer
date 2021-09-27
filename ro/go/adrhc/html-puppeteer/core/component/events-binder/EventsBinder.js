@@ -11,7 +11,13 @@ export default class EventsBinder {
         this.component = component;
     }
 
+    /**
+     * attach DOM event handlers
+     */
     attachEventHandlers() {}
 
+    /**
+     * dettach DOM event handlers
+     */
     detachEventHandlers() {}
 }
