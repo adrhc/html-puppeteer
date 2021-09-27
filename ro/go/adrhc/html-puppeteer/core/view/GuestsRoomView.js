@@ -1,11 +1,11 @@
 import AbstractView from "./AbstractView.js";
 import {$guestsRoomOf} from "../Puppeteer.js";
 import {dataAttributesOf, jQueryOf, templateTextOf} from "../../util/DomUtils.js";
-import GlobalConfig, {dataPart, dataPartSelectorOf, dataType, dataOwnerOf} from "../../util/GlobalConfig.js";
+import GlobalConfig, {dataOwnerOf, dataPart, dataPartSelectorOf, dataType} from "../../util/GlobalConfig.js";
 import {generateHtml} from "../../util/HtmlGenerator.js";
 
 /**
- * @typedef {Bag} ChildSeatAttributes
+ * @typedef {Bag} SeatAttributes
  * @property {string=} templateId is used by child's component to populate its space (aka seat)
  * @property {string=} componentType
  * @property {string=} htmlTag
@@ -14,12 +14,13 @@ import {generateHtml} from "../../util/HtmlGenerator.js";
  * @typedef {Object} GuestsRoomViewOptions
  * @property {string=} componentId
  * @property {string|jQuery<HTMLElement>=} elemIdOrJQuery is the parent's element id or jQuery<HTMLElement>
- * @property {string=} seatTemplate is the element containing the data-type and data-part
+ * @property {string=} seatTemplate is the seat's HTML containing the data-type and data-part
  * @property {string=} seatTemplateId
- * @property {string=} childTemplateId is a shortcut for ChildSeatAttributes.templateId
+ * @property {string=} seatOccupantTemplateId is a shortcut for SeatAttributes.templateId
+ * @property {string=} seatOccupantHtmlTag is a shortcut for SeatAttributes.htmlTag
  * @property {boolean=} newGuestsGoLast
  * @property {boolean=} dontRemoveGuests
- * @property {ChildSeatAttributes=} childSeatAttributes
+ * @property {SeatAttributes=} childSeatAttributes
  */
 /**
  * @extends {AbstractView}
@@ -28,11 +29,11 @@ export default class GuestsRoomView extends AbstractView {
     /**
      * @type {jQuery<HTMLElement>}
      */
-    $guestsRoom;
+    $componentElem;
     /**
      * @type {jQuery<HTMLElement>}
      */
-    $componentElem;
+    $guestsRoom;
     /**
      * it's the child seat template id
      *
@@ -44,15 +45,15 @@ export default class GuestsRoomView extends AbstractView {
      */
     dontRemoveGuests;
     /**
-     * @type {string}
-     */
-    seatTemplate;
-    /**
      * specify where to place new kids (append|prepend)
      *
      * @type {string}
      */
     place;
+    /**
+     * @type {string}
+     */
+    seatTemplate;
 
     /**
      * @param {GuestsRoomViewOptions} options
@@ -62,10 +63,11 @@ export default class GuestsRoomView extends AbstractView {
                     elemIdOrJQuery,
                     seatTemplate,
                     seatTemplateId,
-                    childTemplateId,
+                    seatOccupantTemplateId,
+                    seatOccupantHtmlTag,
                     newGuestsGoLast,
                     dontRemoveGuests,
-                    childSeatAttributes = {templateId: childTemplateId},
+                    childSeatAttributes = {templateId: seatOccupantTemplateId, htmlTag: seatOccupantHtmlTag},
                 }) {
         super();
         this.$componentElem = jQueryOf(elemIdOrJQuery);
@@ -120,23 +122,23 @@ export default class GuestsRoomView extends AbstractView {
 
     /**
      * @param {string=} seatTemplateId
-     * @param {ChildSeatAttributes=} childSeatAttributes
+     * @param {SeatAttributes=} childSeatAttributes
      * @protected
      */
     _createSeatTemplate(seatTemplateId, childSeatAttributes) {
         if (seatTemplateId) {
             return templateTextOf(seatTemplateId);
         } else {
-            return this._seatTemplateFromChildSeatAttributes(childSeatAttributes);
+            return this._templateFromSeatAttributes(childSeatAttributes);
         }
     }
 
     /**
-     * @param {ChildSeatAttributes=} childSeatAttributes
+     * @param {SeatAttributes=} childSeatAttributes
      * @return {string}
      * @protected
      */
-    _seatTemplateFromChildSeatAttributes({templateId, htmlTag = "div", componentType = "simple", ...rest}) {
+    _templateFromSeatAttributes({templateId, htmlTag = "div", componentType = "simple", ...rest}) {
         // {{this}} will be the part name when the kid's seat will be created
         return `<${htmlTag} ${dataOwnerOf(this.componentId)} ${dataPart()}="{{partName}}" ${dataType()}="${componentType}" data-template-id="${templateId}" ${dataAttributesOf(rest)}></${htmlTag}>`;
     }
