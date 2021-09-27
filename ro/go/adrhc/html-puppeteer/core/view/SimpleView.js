@@ -1,5 +1,5 @@
 import AbstractView from "./AbstractView.js";
-import {alertOrThrow, isTrue} from "../../util/AssertionUtils.js";
+import {alertOrThrow} from "../../util/AssertionUtils.js";
 import {jQueryOf} from "../../util/DomUtils.js";
 
 export const REMOVE_ELEMENT = "REMOVE_ELEMENT";
@@ -60,7 +60,6 @@ export default class SimpleView extends AbstractView {
         this.viewRenderStrategy = viewRenderStrategy ?? (this.$elem.is("textarea") ? RENDER_VAL : RENDER_HTML);
         this.viewRemovalStrategy = viewRemovalStrategy ?? (removedPlaceholder != null ? USE_HTML : REMOVE_ELEMENT);
         this.removedPlaceholder = removedPlaceholder;
-        isTrue(this.viewRemovalStrategy !== USE_HTML || !!this.removedPlaceholder);
     }
 
     /**
@@ -87,7 +86,7 @@ export default class SimpleView extends AbstractView {
                 this.$elem.remove();
                 break;
             case REMOVE_CONTENT:
-                this.replace("");
+                this.$elem[this.viewRenderStrategy]("");
                 break;
             case USE_HTML:
                 this.$elem.html(this.removedPlaceholder);
