@@ -20,7 +20,7 @@
 	<div class="section title">SimpleContainerComponent</div>
 	<div class="section flex-center fill-available buttons">
 		<button data-create-guest="click" data-owner="parent-component">Create a child (on top)</button>
-		<button name="remove">Remove oldest child</button>
+		<!--<button name="remove">Remove oldest child</button>-->
 		<!--<button data-close="click" data-owner="message2">Close "message2"</button>
 		<button class="disabled" data-open="click" data-owner="message2">Open "message2"</button>-->
 		<button data-close="click" data-owner="parent-component">Close "parent-component"</button>
@@ -58,7 +58,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 	     data-removed-placeholder='The "parent-component" is closed!'
 	     data-room-parts="text"
 	     data-seat-occupant-html-tag="tr"
-	     data-seat-occupant-template-id="kid-template"
+	     data-seat-occupant-template-id="guest-template"
 	     data-template-id="parent-template"
 	     data-type="simple-container"
 	     id="parent-component">
@@ -79,6 +79,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 		<tr>
 			<th>Id</th>
 			<th>Name</th>
+			<th></th>
 		</tr>
 		</thead>
 	</table>
@@ -120,10 +121,13 @@ PS: make sure to have a well formatted JSON!</textarea>
 	{{#if this}}{{{value}}}{{else}}The "message3" child is not available yet!{{/if}}
 </script>
 
-<script id="kid-template" type="text/x-handlebars-template">
+<script id="guest-template" type="text/x-handlebars-template">
 	{{#with value}}
 		<td>{{id}}</td>
 		<td>{{name}}</td>
+		<td class="center">
+			<button data-owner="{{@root.owner}}" data-component-id="{{@root.componentId}}" data-remove-guest="click">Remove</button>
+		</td>
 	{{/with}}
 </script>
 

@@ -42,7 +42,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 	<!-- the component -->
 	<div class="section title">Component's view (parent and its guests)</div>
 	<div class="section flex-column fit-content bgc-aliceblue"
-	     data-seat-occupant-template-id="kid-template"
+	     data-seat-occupant-template-id="guest-template"
 	     data-room-parts="text"
 	     data-initial-state='{"kid0": {"id": 0, "name": "kid 0"},
 	     "text": "this is the parent state displayed by its view (below are the guests)"}'
@@ -58,7 +58,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 	<div class="flex-start" data-guests></div>
 </script>
 
-<script id="kid-template" type="text/x-handlebars-template">
+<script id="guest-template" type="text/x-handlebars-template">
 	{{#with value}}
 		<div><label>Id:</label> {{id}}</div>
 		<div><label>Name:</label> {{name}}</div>

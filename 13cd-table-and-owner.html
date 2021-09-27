@@ -52,7 +52,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 	     "booth": {"message1": null, "message2": "the state for \"message2\" is provided by the parent"},
 	     "text": "this is the parent state displayed by its view"}'
 	     data-seat-occupant-html-tag="tr"
-	     data-seat-occupant-template-id="kid-template"
+	     data-seat-occupant-template-id="guest-template"
 	     data-room-parts="text"
 	     data-template-id="parent-template"
 	     data-type="simple-container"
@@ -113,7 +113,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 	{{#if this}}{{{value}}}{{else}}The "message3" child is not available yet!{{/if}}
 </script>
 
-<script id="kid-template" type="text/x-handlebars-template">
+<script id="guest-template" type="text/x-handlebars-template">
 	{{#with value}}
 		<td>{{id}}</td>
 		<td>{{name}}</td>

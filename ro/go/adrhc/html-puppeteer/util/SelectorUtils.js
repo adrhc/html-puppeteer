@@ -37,6 +37,23 @@ export function dataGuestsSelectorOf(guestsRoomName, useDoubleQuotes) {
     return dataSelectorOf(GlobalConfig.DATA_GUESTS, guestsRoomName, useDoubleQuotes);
 }
 
+/**
+ * @param {string=} guestsRoomName
+ * @param {boolean=} useDoubleQuotes
+ */
+export function dataComponentIdSelectorOf(guestsRoomName, useDoubleQuotes) {
+    return dataSelectorOf(GlobalConfig.DATA_COMPONENT_ID, guestsRoomName, useDoubleQuotes, "");
+}
+
+/**
+ * @param {string=} idAttr
+ * @param {boolean=} useDoubleQuotes
+ */
+export function idAttrSelectorOf(idAttr, useDoubleQuotes) {
+    const quote = useDoubleQuotes ? '"' : "'";
+    return idAttr == null ? "" : `[${GlobalConfig.ID_ATTR}=${quote}${idAttr}${quote}]`;
+}
+
 export function dataSelectorOf(name, value, useDoubleQuotes, dataAttrForEmptyValue) {
     const quote = useDoubleQuotes ? '"' : "'";
     return value == null ? (dataAttrForEmptyValue ?? `[data-${name}]`) : `[data-${name}=${quote}${value}${quote}]`;

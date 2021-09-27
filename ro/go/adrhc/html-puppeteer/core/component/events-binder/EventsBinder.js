@@ -1,4 +1,4 @@
-import {dataOwnerSelectorOf} from "../../../util/SelectorUtils.js";
+import {dataOwnerSelectorOf, dataSelectorOf} from "../../../util/SelectorUtils.js";
 import {isTrue} from "../../../util/AssertionUtils.js";
 
 export default class EventsBinder {
@@ -8,13 +8,8 @@ export default class EventsBinder {
     _component;
 
     /**
-     * @return {AbstractComponent}
-     */
-    get component() {
-        return this._component;
-    }
-
-    /**
+     * The corresponding getter won't work in descendent classes!
+     *
      * @param {AbstractComponent=} component
      */
     set component(component) {
@@ -44,8 +39,8 @@ export default class EventsBinder {
      * @param {boolean=} oneTimeOnly specify whether to invoke the event once or multiple times
      * @protected
      */
-    _attachHandlerByDataAttrib(dataAttribName, fn, oneTimeOnly) {
-        const $el = this._$ownedElem(dataAttribName);
+    _attachChildEventsHandler(dataAttribName, fn, oneTimeOnly) {
+        const $el = this._$childrenHavingDataAttr(dataAttribName);
         if (!$el.length) {
             return;
         }
@@ -61,8 +56,8 @@ export default class EventsBinder {
      * @return {jQuery<HTMLElement>}
      * @protected
      */
-    _$ownedElem(dataAttribName) {
+    _$childrenHavingDataAttr(dataAttribName) {
         // [data-owner="componentId"][data-dataAttribName]
-        return $(`${dataOwnerSelectorOf(this.component.id)}[data-${dataAttribName}]`);
+        return $(`${dataOwnerSelectorOf(this._component.id)}${dataSelectorOf(dataAttribName)}`);
     }
 }

@@ -61,9 +61,9 @@ export default class SimplePartsIllustrator extends ComponentIllustrator {
 }
 
 function defaultViewValuesTransformerFn(componentId, parent) {
-    return parent ? ((value) => defaultViewValuesTransformerFnImpl(componentId, value)) : undefined;
+    return parent ? ((value) => defaultViewValuesTransformerFnImpl(parent.id, componentId, value)) : undefined;
 }
 
-function defaultViewValuesTransformerFnImpl(componentId, value) {
-    return {value, [GlobalConfig.DATA_OWNER]: componentId};
+function defaultViewValuesTransformerFnImpl(parentId, componentId, value) {
+    return {value, [GlobalConfig.DATA_OWNER]: parentId, [GlobalConfig.COMPONENT_ID]: componentId};
 }
