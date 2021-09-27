@@ -1,7 +1,7 @@
 import {ComponentOptionsBuilder} from "./ComponentOptionsBuilder.js";
 import SimpleComponent from "../SimpleComponent.js";
 import CopyStatesChangeHandler from "../../state-changes-handler/CopyStatesChangeHandler.js";
-import SimpleView, {REMOVE_CONTENT, USE_HTML} from "../../view/SimpleView.js";
+import SimpleView, {REMOVE_CONTENT} from "../../view/SimpleView.js";
 
 /**
  * @typedef {Object} DebuggerOptions

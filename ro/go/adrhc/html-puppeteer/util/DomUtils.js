@@ -1,5 +1,5 @@
 import {encodeHTML, uniqueId} from "./StringUtils.js";
-import GlobalConfig, {idAttrOf} from "./GlobalConfig.js";
+import {idAttrOf} from "./GlobalConfig.js";
 
 /**
  * @param {string|jQuery<HTMLElement>} elemIdOrJQuery
