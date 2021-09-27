@@ -4,18 +4,18 @@ import {dataComponentIdSelectorOf, dataSelectorOf, idAttrSelectorOf} from "../..
 
 export default class ContainerEventsBinder extends EventsBinder {
     /**
-     * Default event to bind to on children (e.g. for removing a guest component).
+     * Default event to bind to on children (for creating/removing a guest component).
      *
      * @type {string}
      */
-    guestsRemoveEvent;
+    createRemoveEventName;
 
     /**
      * @param {AbstractComponent=} component
      */
     set component(component) {
         this._component = component;
-        this.guestsRemoveEvent = component.config.guestsRemoveEvent ?? "click";
+        this.createRemoveEventName = component.config.guestsRemoveEvent ?? "click";
     }
 
     /**
@@ -30,7 +30,7 @@ export default class ContainerEventsBinder extends EventsBinder {
      */
     attachEventHandlers() {
         // <button data-owner="@root.owner" data-create-guest="click">
-        this._attachChildEventsHandler("create-guest", () => {
+        this._attachChildrenEventsHandler("create-guest", () => {
             this._component.replacePart(newGuestPartName(), this.initialGuestDetails);
         });
         // <button data-owner="@root.owner" data-component-id="@root.componentId" data-remove-guest="click">
@@ -51,8 +51,8 @@ export default class ContainerEventsBinder extends EventsBinder {
     _attachChildrenEventsHandler(dataAttribName, fn, oneTimeOnly) {
         const $parent = $(`${dataComponentIdSelectorOf(this._component.id)}, ${idAttrSelectorOf(this._component.id)}`);
         // removing previous handler (if any) set by another component
-        this._$childrenHavingDataAttr(dataAttribName).off(this.guestsRemoveEvent, dataSelectorOf(dataAttribName));
-        $parent.on(this.guestsRemoveEvent, dataSelectorOf(dataAttribName), fn);
+        this._$childrenHavingDataAttr(dataAttribName).off(this.createRemoveEventName, dataSelectorOf(dataAttribName));
+        $parent.on(this.createRemoveEventName, dataSelectorOf(dataAttribName), fn);
     }
 
     /**
@@ -60,6 +60,6 @@ export default class ContainerEventsBinder extends EventsBinder {
      */
     detachEventHandlers() {
         this._$childrenHavingDataAttr("create-guest").off();
-        this._$childrenHavingDataAttr("remove-guest").off(this.guestsRemoveEvent);
+        this._$childrenHavingDataAttr("remove-guest").off(this.createRemoveEventName);
     }
 }
