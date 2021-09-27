@@ -3,7 +3,6 @@ import ValueStateInitializer from "../state-initializer/ValueStateInitializer.js
 import {dataOf, idOf} from "../../../util/DomUtils.js";
 import PartialStateHolder from "../../state/PartialStateHolder.js";
 import StateChangesHandlersInvoker from "../../state-processor/StateChangesHandlersInvoker.js";
-import SimpleEventsBinder from "../events-binder/SimpleEventsBinder.js";
 
 export default class DefaultComponentConfigurator extends ComponentConfigurator {
     /**
@@ -56,7 +55,7 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
      * @protected
      */
     _setAndConfigureEventsBinder(component) {
-        component.eventsBinder = this.config.eventsBinder ?? new SimpleEventsBinder(component);
+        component.eventsBinder = this.config.eventsBinder;
         if (component.eventsBinder) {
             component.eventsBinder.component = component;
         }

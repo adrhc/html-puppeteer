@@ -6,6 +6,9 @@ import ComponentConfigurator from "../configurator/ComponentConfigurator.js";
 /**
  * @typedef {function(initialState: *): StateInitializer} StateInitializerProviderFn
  */
+/**
+ * @typedef {function(component: AbstractComponent): EventsBinder} EventsBinderProviderFn
+ */
 
 /**
  * @typedef {function(component: AbstractComponent)} ComponentConfiguratorFn
@@ -110,17 +113,17 @@ export class ComponentOptionsBuilder {
     }
 
     /**
-     * @param {StateInitializerProviderFn} stateInitializerProviderFn
+     * @param {EventsBinderProviderFn} eventsBinderProviderFn
      * @param {boolean=} overrideDefault
      * @return {ComponentOptionsBuilder}
      */
-    withStateInitializerProvider(stateInitializerProviderFn, overrideDefault) {
-        if (!overrideDefault && this.defaults.stateInitializer) {
+    withEventsBinder(eventsBinderProviderFn, overrideDefault) {
+        if (!overrideDefault && this.defaults.eventsBinder) {
             return this;
+        } else {
+            this.defaults.eventsBinder = eventsBinderProviderFn();
         }
-        return this.addConfiguratorFn((component) => {
-            component.stateInitializer = stateInitializerProviderFn(component);
-        });
+        return this;
     }
 
     /**
@@ -133,15 +136,6 @@ export class ComponentOptionsBuilder {
         optionsConsumer(this._options)
         return this;
     }
-
-    /**
-     * @param {ViewProviderFn} viewProviderFn
-     * @return {ComponentOptionsBuilder}
-     */
-    withViewProvider(viewProviderFn) {
-        this._options.viewProviderFn = viewProviderFn;
-        return this;
-    }
 }
 
 export function withDefaults(options) {
@@ -149,11 +143,12 @@ export function withDefaults(options) {
 }
 
 /**
- * @param {ViewProviderFn} viewProviderFn
+ * @param {EventsBinderProviderFn} eventsBinderProviderFn
+ * @param {boolean=} overrideDefault
  * @return {ComponentOptionsBuilder}
  */
-export function withViewProvider(viewProviderFn) {
-    return new ComponentOptionsBuilder().withViewProvider(viewProviderFn);
+export function withEventsBinder(eventsBinderProviderFn, overrideDefault) {
+    return new ComponentOptionsBuilder().withEventsBinder(eventsBinderProviderFn, overrideDefault);
 }
 
 /**

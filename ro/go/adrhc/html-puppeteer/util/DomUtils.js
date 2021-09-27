@@ -1,5 +1,5 @@
 import {encodeHTML, uniqueId} from "./StringUtils.js";
-import GlobalConfig from "./GlobalConfig.js";
+import GlobalConfig, {idAttrOf} from "./GlobalConfig.js";
 
 /**
  * @param {string|jQuery<HTMLElement>} elemIdOrJQuery
@@ -143,5 +143,5 @@ export function templateOf(tmplId, tmplHtml) {
  */
 export function idOf(elemIdOrJQuery) {
     const $el = jQuery(elemIdOrJQuery);
-    return $el.attr(GlobalConfig.ID_ATTR) ?? uniqueId();
+    return idAttrOf($el) ?? uniqueId();
 }

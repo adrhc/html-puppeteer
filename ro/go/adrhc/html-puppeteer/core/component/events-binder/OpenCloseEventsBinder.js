@@ -2,20 +2,7 @@ import EventsBinder from "./EventsBinder.js";
 import {dataOwnerSelectorOf} from "../../../util/SelectorUtils.js";
 import {isTrue} from "../../../util/AssertionUtils.js";
 
-export default class SimpleEventsBinder extends EventsBinder {
-    /**
-     * @type {string}
-     */
-    owner;
-
-    /**
-     * @param {AbstractComponent=} component
-     */
-    constructor(component) {
-        super(component);
-        this.owner = component.id;
-    }
-
+export default class OpenCloseEventsBinder extends EventsBinder {
     /**
      * attach DOM event handlers
      */
@@ -44,7 +31,7 @@ export default class SimpleEventsBinder extends EventsBinder {
             return;
         }
         const event = $el.data(dataAttribName);
-        isTrue(!!event, "[SimpleEventsBinder] event can't be empty!");
+        isTrue(!!event, "[OpenCloseEventsBinder] event can't be empty!");
         // removing previous handler (if any) set by another component
         $($el).off(event);
         $($el)[oneTimeOnly ? "one" : "on"](event, fn);
@@ -56,6 +43,6 @@ export default class SimpleEventsBinder extends EventsBinder {
      * @protected
      */
     _$elemOf(dataAttribName) {
-        return $(`${dataOwnerSelectorOf(this.owner)}[data-${dataAttribName}]`);
+        return $(`${dataOwnerSelectorOf(this.component.id)}[data-${dataAttribName}]`);
     }
 }

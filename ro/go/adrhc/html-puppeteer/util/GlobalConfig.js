@@ -34,3 +34,11 @@ export function dataOwnerOf(owner, useDoubleQuotes) {
     const quote = useDoubleQuotes ? '"' : "'";
     return `data-${GlobalConfig.DATA_OWNER}=${quote}${owner}${quote}`;
 }
+
+/**
+ * @param {jQuery<HTMLElement>} $elem
+ * @return {string|undefined}
+ */
+export function idAttrOf($elem) {
+    return $elem.attr(GlobalConfig.ID_ATTR);
+}

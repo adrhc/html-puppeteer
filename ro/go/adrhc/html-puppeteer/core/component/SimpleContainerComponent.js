@@ -239,6 +239,9 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @protected
      */
     _placeFamilyMember(partName) {
+        if (this.closed) {
+            return;
+        }
         this.family[partName] = this._placeIntoSeat(partName);
     }
 

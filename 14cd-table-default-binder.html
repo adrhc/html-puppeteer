@@ -14,7 +14,7 @@
 
 <body>
 <script>const fp = _.noConflict()</script>
-<script src="10div-list-default-seat.js" type="module"></script>
+<script src="14cd-table-default-binder.js" type="module"></script>
 
 <div class="container scenario12">
 	<div class="section title">SimpleContainerComponent</div>
@@ -23,8 +23,8 @@
 		<button name="remove">Remove oldest child</button>
 		<!--<button data-close="click" data-owner="message2">Close "message2"</button>
 		<button class="disabled" data-open="click" data-owner="message2">Open "message2"</button>-->
-		<button data-close="click" data-owner="booth">Close "booth"</button>
-		<button class="disabled" data-open="click" data-owner="booth">Open "booth"</button>
+		<button data-close="click" data-owner="parent-component">Close "parent-component"</button>
+		<button class="disabled" data-open="click" data-owner="parent-component">Open "parent-component"</button>
 	</div>
 	<!-- debuggers -->
 	<div class="section title">debuggers</div>
@@ -55,6 +55,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 	     data-initial-state='{"kid0": {"id": 0, "name": "kid 0"},
 	     "booth": {"message1": null, "message2": "the state for \"message2\" is provided by the parent"},
 	     "text": "this is the parent state displayed by its view"}'
+	     data-removed-placeholder='The "parent-component" is closed!'
 	     data-room-parts="text"
 	     data-seat-occupant-html-tag="tr"
 	     data-seat-occupant-template-id="kid-template"

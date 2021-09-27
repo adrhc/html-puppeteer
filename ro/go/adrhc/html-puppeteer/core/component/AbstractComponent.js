@@ -57,13 +57,10 @@ export default class AbstractComponent extends StateProcessor {
     stateInitializer;
 
     /**
-     * @param {AbstractComponentOptions} options
+     * @return {boolean}
      */
-    constructor(options) {
-        super(options.stateHolder, options.stateChangesHandlersInvoker);
-        const configurator = options.configurator ?? new DefaultComponentConfigurator(options);
-        configurator.configure(this);
-        applyExtraConfigurators(this);
+    get closed() {
+        return typeof this.stateHolder.currentState === "undefined";
     }
 
     /**
@@ -71,6 +68,16 @@ export default class AbstractComponent extends StateProcessor {
      */
     get partName() {
         return this.config[GlobalConfig.DATA_PART];
+    }
+
+    /**
+     * @param {AbstractComponentOptions} options
+     */
+    constructor(options) {
+        super(options.stateHolder, options.stateChangesHandlersInvoker);
+        const configurator = options.configurator ?? new DefaultComponentConfigurator(options);
+        configurator.configure(this);
+        applyExtraConfigurators(this);
     }
 
     /**
