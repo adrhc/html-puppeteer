@@ -6,7 +6,7 @@ export default class ContainerEventsBinder extends EventsBinder {
      * @return {*} initial part state for the a new guest (aka child component)
      */
     get initialGuestDetails() {
-        return _.clone(this.component.config.initialGuestDetails) ?? {};
+        return this.component.config.initialGuestDetailsProviderFn?.(this.component) ?? {};
     }
 
     /**

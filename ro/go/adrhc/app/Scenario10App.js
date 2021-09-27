@@ -4,10 +4,6 @@ import {uniqueId} from "../html-puppeteer/util/StringUtils.js";
 
 export default class Scenario10App {
     /**
-     * @type {number}
-     */
-    index = 1;
-    /**
      * @type {SimpleContainerComponent}
      */
     parent;
@@ -33,7 +29,7 @@ export default class Scenario10App {
         });
         $(namedBtn("create")).on("click", () => {
             const id = uniqueId();
-            this.parent.replacePart(id, {id: this.index++, name: generateString("name ")});
+            this.parent.replacePart(id, {id: Math.random(), name: generateString("name ")});
         });
         $(namedBtn("remove")).on("click", () => {
             const lastKidId = this._oldestKidId();
