@@ -15,7 +15,7 @@ export default class EventsBinder {
     }
 
     /**
-     * @param {AbstractComponent} component
+     * @param {AbstractComponent=} component
      */
     set component(component) {
         this._component = component;

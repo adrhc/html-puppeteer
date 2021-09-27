@@ -2,11 +2,12 @@ import {addDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/options/D
 import animate from "./ro/go/adrhc/html-puppeteer/core/Puppeteer.js";
 import Scenario10App from "./ro/go/adrhc/app/Scenario10App.js";
 import OpenCloseEventsBinder from "./ro/go/adrhc/html-puppeteer/core/component/events-binder/OpenCloseEventsBinder.js";
+import ContainerEventsBinder from "./ro/go/adrhc/html-puppeteer/core/component/events-binder/ContainerEventsBinder.js";
 
 $(() => {
     // the puppeteer
     const component = animate(addDebugger({debuggerElemIdOrJQuery: "main-debugger"})
-        .withEventsBinders((c) => new OpenCloseEventsBinder(c), ).options());
+        .withEventsBinders((c) => new OpenCloseEventsBinder(c), (c) => new ContainerEventsBinder(c)).options());
 
     // the application using the html-puppeteer
     new Scenario10App(component).run();
