@@ -37,6 +37,8 @@ export default class AbstractComponent extends StateProcessor {
      */
     eventsBinder;
     /**
+     * used as the GlobalConfig.DATA_OWNER
+     *
      * @type {string}
      */
     id;

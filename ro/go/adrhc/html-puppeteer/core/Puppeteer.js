@@ -1,4 +1,5 @@
-import GlobalConfig, {dataGuestsSelectorOf, dataPartSelectorOf, dataTypeSelectorOf} from "../util/GlobalConfig.js";
+import {dataPartSelectorOf, dataSelectorOf} from "../util/SelectorUtils.js";
+import GlobalConfig from "../util/GlobalConfig.js";
 import {createByType} from "./ComponentsFactories.js";
 import {jQueryOf} from "../util/DomUtils.js";
 import {isTrue} from "../util/AssertionUtils.js";
@@ -60,7 +61,7 @@ function componentOptionsOf(partName, commonOptions) {
  * @protected
  */
 function $componentElementsOf(parentComponentElem) {
-    return $(dataTypeSelectorOf(), parentComponentElem);
+    return $(dataSelectorOf(GlobalConfig.DATA_TYPE), parentComponentElem);
 }
 
 /**
@@ -111,7 +112,7 @@ export function $getPartElem(partName, parentElemIdOrJQuery) {
  */
 export function $guestsRoomOf(parentElemIdOrJQuery) {
     const $parent = jQueryOf(parentElemIdOrJQuery);
-    const $guestsRoom = $parent.find(dataGuestsSelectorOf());
+    const $guestsRoom = $parent.find(dataSelectorOf(GlobalConfig.DATA_GUESTS));
     isTrue($guestsRoom.length < 2);
     return $guestsRoom.length ? $guestsRoom : $parent;
 }

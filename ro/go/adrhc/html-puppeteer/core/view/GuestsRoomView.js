@@ -1,7 +1,8 @@
 import AbstractView from "./AbstractView.js";
 import {$guestsRoomOf} from "../Puppeteer.js";
 import {dataAttributesOf, jQueryOf, templateTextOf} from "../../util/DomUtils.js";
-import GlobalConfig, {dataOwnerOf, dataPart, dataPartSelectorOf, dataType} from "../../util/GlobalConfig.js";
+import GlobalConfig, {dataOwnerOf, dataPartOf, dataTypeOf} from "../../util/GlobalConfig.js";
+import {dataPartSelectorOf} from "../../util/SelectorUtils.js";
 import {generateHtml} from "../../util/HtmlGenerator.js";
 
 /**
@@ -91,7 +92,7 @@ export default class GuestsRoomView extends AbstractView {
         if (this._childSeatExists(partName)) {
             return;
         }
-        const kidSeat = generateHtml(this.seatTemplate, {partName, [GlobalConfig.OWNER_ATTR]: this.componentId});
+        const kidSeat = generateHtml(this.seatTemplate, {partName, [GlobalConfig.DATA_OWNER]: this.componentId});
         this.$guestsRoom[this.place](kidSeat);
     }
 
@@ -140,6 +141,6 @@ export default class GuestsRoomView extends AbstractView {
      */
     _templateFromSeatAttributes({templateId, htmlTag = "div", componentType = "simple", ...rest}) {
         // {{this}} will be the part name when the kid's seat will be created
-        return `<${htmlTag} ${dataOwnerOf(this.componentId)} ${dataPart()}="{{partName}}" ${dataType()}="${componentType}" data-template-id="${templateId}" ${dataAttributesOf(rest)}></${htmlTag}>`;
+        return `<${htmlTag} ${dataTypeOf(componentType)} ${dataOwnerOf(this.componentId)} ${dataPartOf("{{partName}}")} data-template-id="${templateId}" ${dataAttributesOf(rest)}></${htmlTag}>`;
     }
 }

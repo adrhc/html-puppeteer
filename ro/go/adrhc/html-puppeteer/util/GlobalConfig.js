@@ -1,6 +1,7 @@
 export default class GlobalConfig {
     static ALERT_ON_FAILED_ASSERTION = true;
-    static DATA_CHILDREN = "guests";
+    static DATA_GUESTS = "guests";
+    static DATA_OWNER = "owner";
     /**
      * the child "part" name in the parent's state
      */
@@ -12,20 +13,17 @@ export default class GlobalConfig {
     static DEFAULT_CHILDREN_ROOM = "";
     static ELEM_ID_OR_JQUERY = "elemIdOrJQuery";
     static ID_ATTR = "id";
-    static OWNER_ATTR = "owner";
     static SERVER_ROOT = "";
 }
 
-export function dataType() {
-    return `data-${GlobalConfig.DATA_TYPE}`;
+export function dataPartOf(partName, useDoubleQuotes) {
+    const quote = useDoubleQuotes ? '"' : "'";
+    return `data-${GlobalConfig.DATA_PART}=${quote}${partName}${quote}`;
 }
 
-export function dataPart() {
-    return `data-${GlobalConfig.DATA_PART}`;
-}
-
-export function dataGuests() {
-    return `data-${GlobalConfig.DATA_CHILDREN}`;
+export function dataTypeOf(type, useDoubleQuotes) {
+    const quote = useDoubleQuotes ? '"' : "'";
+    return `data-${GlobalConfig.DATA_TYPE}=${quote}${type}${quote}`;
 }
 
 /**
@@ -34,36 +32,5 @@ export function dataGuests() {
  */
 export function dataOwnerOf(owner, useDoubleQuotes) {
     const quote = useDoubleQuotes ? '"' : "'";
-    return owner == null ? `data-${GlobalConfig.OWNER_ATTR}` : `data-${GlobalConfig.OWNER_ATTR}=${quote}${owner}${quote}`;
-}
-
-/**
- * @param {string=} type
- * @param {boolean=} useDoubleQuotes
- */
-export function dataTypeSelectorOf(type, useDoubleQuotes) {
-    const quote = useDoubleQuotes ? '"' : "'";
-    return type == null ? `[${dataType()}]` : `[${dataType()}=${quote}${type}${quote}]`;
-}
-
-/**
- * @param {string=} partName
- * @param {boolean=} useDoubleQuotes
- */
-export function dataPartSelectorOf(partName, useDoubleQuotes) {
-    const quote = useDoubleQuotes ? '"' : "'";
-    return partName == null ? `[${dataPart()}]` : `[${dataPart()}=${quote}${partName}${quote}]`;
-}
-
-/**
- * @param {string=} guestsRoomName
- * @param {boolean=} useDoubleQuotes
- */
-export function dataGuestsSelectorOf(guestsRoomName, useDoubleQuotes) {
-    const quote = useDoubleQuotes ? '"' : "'";
-    return guestsRoomName == null ? `[${dataGuests()}]` : `[${dataGuests()}=${quote}${guestsRoomName}${quote}]`;
-}
-
-export function partOf(elem) {
-    return $(el).data(GlobalConfig.DATA_PART);
+    return `data-${GlobalConfig.DATA_OWNER}=${quote}${owner}${quote}`;
 }
