@@ -51,7 +51,7 @@ export default class ContainerEventsBinder extends EventsBinder {
     _attachChildrenEventsHandler(dataAttribName, fn, oneTimeOnly) {
         const $parent = $(`${dataComponentIdSelectorOf(this._component.id)}, ${idAttrSelectorOf(this._component.id)}`);
         // removing previous handler (if any) set by another component
-        this._$childrenHavingDataAttr(dataAttribName).off(this.createRemoveEventName, dataSelectorOf(dataAttribName));
+        $parent.off(this.createRemoveEventName, dataSelectorOf(dataAttribName));
         $parent.on(this.createRemoveEventName, dataSelectorOf(dataAttribName), fn);
     }
 
