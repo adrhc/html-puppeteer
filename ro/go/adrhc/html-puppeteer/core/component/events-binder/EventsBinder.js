@@ -5,13 +5,27 @@ export default class EventsBinder {
     /**
      * @type {AbstractComponent}
      */
-    component;
+    _component;
+
+    /**
+     * @return {AbstractComponent}
+     */
+    get component() {
+        return this._component;
+    }
+
+    /**
+     * @param {AbstractComponent} component
+     */
+    set component(component) {
+        this._component = component;
+    }
 
     /**
      * @param {AbstractComponent=} component
      */
     constructor(component) {
-        this.component = component;
+        this._component = component;
     }
 
     /**

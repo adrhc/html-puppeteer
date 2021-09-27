@@ -1,4 +1,5 @@
 import ComponentConfigurator from "../configurator/ComponentConfigurator.js";
+import EventsBinderGroup from "../events-binder/EventsBinderGroup.js";
 
 /**
  * @typedef {function(componentId: string, componentIllustratorOptions: ComponentIllustratorOptions): ComponentIllustrator} ComponentIllustratorProviderFn
@@ -7,7 +8,7 @@ import ComponentConfigurator from "../configurator/ComponentConfigurator.js";
  * @typedef {function(initialState: *): StateInitializer} StateInitializerProviderFn
  */
 /**
- * @typedef {function(component: AbstractComponent): EventsBinder} EventsBinderProviderFn
+ * @typedef {function(): EventsBinder} EventsBinderProviderFn
  */
 
 /**
@@ -121,6 +122,15 @@ export class ComponentOptionsBuilder {
         } else {
             this.defaults.eventsBinder = eventsBinderProviderFn();
         }
+        return this;
+    }
+
+    /**
+     * @param {EventsBinderProviderFn} eventsBinderProviderFns
+     * @return {ComponentOptionsBuilder}
+     */
+    withEventsBinders(...eventsBinderProviderFns) {
+        this.defaults.eventsBinder = new EventsBinderGroup(undefined, eventsBinderProviderFns.map(fn => fn()));
         return this;
     }
 

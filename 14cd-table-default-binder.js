@@ -6,7 +6,7 @@ import OpenCloseEventsBinder from "./ro/go/adrhc/html-puppeteer/core/component/e
 $(() => {
     // the puppeteer
     const component = animate(addDebugger({debuggerElemIdOrJQuery: "main-debugger"})
-        .withEventsBinder((c) => new OpenCloseEventsBinder(c)).options());
+        .withEventsBinders((c) => new OpenCloseEventsBinder(c), ).options());
 
     // the application using the html-puppeteer
     new Scenario10App(component).run();
