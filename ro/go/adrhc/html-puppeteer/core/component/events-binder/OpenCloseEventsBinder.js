@@ -33,8 +33,8 @@ export default class OpenCloseEventsBinder extends EventsBinder {
         const event = $el.data(dataAttribName);
         isTrue(!!event, "[OpenCloseEventsBinder] event can't be empty!");
         // removing previous handler (if any) set by another component
-        $($el).off(event);
-        $($el)[oneTimeOnly ? "one" : "on"](event, fn);
+        $el.off(event);
+        $el[oneTimeOnly ? "one" : "on"](event, fn);
     }
 
     /**
