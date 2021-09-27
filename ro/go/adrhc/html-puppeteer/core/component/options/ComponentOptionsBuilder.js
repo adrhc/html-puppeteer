@@ -55,8 +55,6 @@ export class ComponentOptionsBuilder {
             options.extraStateChangesHandlers = options.extraStateChangesHandlers ?? [];
             options.extraStateChangesHandlers.push(...this._options.extraStateChangesHandlers);
         }
-        // prefer to keep the options value if the one from _options is missing
-        options.viewProviderFn = this._options.viewProviderFn ?? options.viewProviderFn;
         return _.defaults(this.defaults, options);
     }
 
