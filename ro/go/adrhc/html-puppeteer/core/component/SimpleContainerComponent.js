@@ -42,7 +42,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
     /**
      * @type {PartName[]}
      */
-    standingNames;
+    roomParts;
 
     /**
      * @param {SimpleContainerComponentOptions} options
@@ -52,9 +52,9 @@ export default class SimpleContainerComponent extends AbstractComponent {
             .addComponentIllustratorProvider(simpleContainerIllustratorProvider)
             .options());
         this.noGuests = this.config.noGuests ?? false;
-        this.standingNames = this.config.standingNames?.split(",") ?? [];
+        this.roomParts = this.config.roomParts?.split(",") ?? [];
         this.familyNames = this.config.familyNames?.split(",") ?? [];
-        this.familyOrStandingNames = [...this.familyNames, ...this.standingNames];
+        this.familyOrStandingNames = [...this.familyNames, ...this.roomParts];
     }
 
     /**
@@ -66,7 +66,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
         this.guests = this.config.guests ?? {};
         this.family = this.config.family ?? {};
         this.familyNames = this.config.familyNames?.split(",") ?? this._findFamilyNames(newState);
-        this.familyOrStandingNames = [...this.familyNames, ...this.standingNames];
+        this.familyOrStandingNames = [...this.familyNames, ...this.roomParts];
         const roomLayout = this._roomLayoutFor(newState);
         // using parent's view only to render roomLayout; it'll create the family seats
         super.replaceState(roomLayout);
@@ -94,7 +94,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
         if (this.noGuests) {
             // all not standing are family
             return partsOf(newState).map(([name]) => name)
-                .filter(name => !this.standingNames.includes(name));
+                .filter(name => !this.roomParts.includes(name));
         } else {
             // all parts are guests or standing
             return [];
@@ -107,7 +107,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
      */
     _updateGuestsDetails(newState) {
         partsOf(newState)
-            .filter(([name]) => !this.familyNames.includes(name) && !this.standingNames.includes(name))
+            .filter(([name]) => !this.familyNames.includes(name) && !this.roomParts.includes(name))
             .forEach(([name, value]) => this.replacePart(name, value, name));
     }
 
@@ -145,7 +145,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
                 if (this.familyNames.includes(psc.previousPartName ?? psc.newPartName)) {
                     this._handleFamilyChange(psc);
                     return;
-                } else if (this.standingNames.includes(psc.previousPartName ?? psc.newPartName)) {
+                } else if (this.roomParts.includes(psc.previousPartName ?? psc.newPartName)) {
                     this._handleStandingChange(psc);
                     return;
                 }
