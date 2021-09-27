@@ -2,6 +2,7 @@ import {StateProcessor} from "../state-processor/StateProcessor.js";
 import DefaultComponentConfigurator from "./configurator/DefaultComponentConfigurator.js";
 import {applyExtraConfigurators} from "./configurator/ComponentConfigurator.js";
 import {partsOf} from "../state/PartialStateHolder.js";
+import GlobalConfig from "../../util/GlobalConfig.js";
 
 /**
  * @typedef {StateHolderOptions & ValueStateInitializerOptions & StateChangesHandlersInvokerOptions} AbstractComponentOptions
@@ -63,6 +64,13 @@ export default class AbstractComponent extends StateProcessor {
         const configurator = options.configurator ?? new DefaultComponentConfigurator(options);
         configurator.configure(this);
         applyExtraConfigurators(this);
+    }
+
+    /**
+     * @return {PartName} the part name inside parent's state (if any)
+     */
+    get partName() {
+        return this.config[GlobalConfig.DATA_PART];
     }
 
     /**

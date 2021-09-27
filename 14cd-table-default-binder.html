@@ -21,6 +21,10 @@
 	<div class="section flex-center fill-available buttons">
 		<button name="create">Create a child (on top)</button>
 		<button name="remove">Remove oldest child</button>
+		<!--<button data-close="click" data-owner="message2">Close "message2"</button>
+		<button data-open="click" data-owner="message2">Open "message2"</button>-->
+		<button data-close="click" data-owner="booth">Close "booth"</button>
+		<button data-open="click" data-owner="booth">Open "booth"</button>
 	</div>
 	<!-- debuggers -->
 	<div class="section title">debuggers</div>
@@ -51,9 +55,9 @@ PS: make sure to have a well formatted JSON!</textarea>
 	     data-initial-state='{"kid0": {"id": 0, "name": "kid 0"},
 	     "booth": {"message1": null, "message2": "the state for \"message2\" is provided by the parent"},
 	     "text": "this is the parent state displayed by its view"}'
+	     data-room-parts="text"
 	     data-seat-occupant-html-tag="tr"
 	     data-seat-occupant-template-id="kid-template"
-	     data-room-parts="text"
 	     data-template-id="parent-template"
 	     data-type="simple-container"
 	     id="parent-component">
@@ -65,7 +69,8 @@ PS: make sure to have a well formatted JSON!</textarea>
 	<div class="parent">{{text}}</div>
 	<!-- child container component -->
 	<div data-part="booth" data-type="simple-container" class="flex-column fill-available"
-	     data-template-id="booth-template" data-no-guests="true"></div>
+	     data-template-id="booth-template" data-no-guests="true" id="booth"
+	     data-removed-placeholder='The "booth" part is closed!'></div>
 	<div>kids could be on parent's top or left or anywhere else</div>
 	<!-- guests -->
 	<table class="responstable" data-guests>
@@ -79,18 +84,19 @@ PS: make sure to have a well formatted JSON!</textarea>
 </script>
 
 <script id="booth-template" type="text/x-handlebars-template">
-	<div class="mb3 title">this is a child container component</div>
+	<div class="mb3 title">this is a child (named "booth") container component</div>
 	{{#with value}}
 		<div data-part="message1" data-type="simple" data-owner="{{@root.owner}}"
 		     data-template-id="message1-template"
-		     data-initial-state='The "message1" child state is from <i>data-initial-state</i> attribute.'
+		     data-initial-state='The "message1" state is provided by <i>data-initial-state</i> attribute.'
 		     data-view-removal-strategy="USE_HTML"
 		     data-removed-placeholder='"message1" child component was removed!'>
 			The "message1" child has no <i>data-initial-state</i> and its parent part is missing!
 		</div>
 		<div data-part="message2" data-type="simple" data-owner="{{@root.owner}}"
-		     data-template-id="message2-template"
-		     data-initial-state='This "message2" initial state should NOT be visible!<BR>initial state should come from the parent'>
+		     data-template-id="message2-template" id="message2"
+		     data-initial-state='This "message2" initial state should NOT be visible!<BR>initial state should come from the parent'
+		     data-removed-placeholder='The "message2" part is closed!'>
 			The "message2" child has no <i>data-initial-state</i> and its parent part is missing!
 		</div>
 		<div data-part="message3" data-type="simple" data-owner="{{@root.owner}}"

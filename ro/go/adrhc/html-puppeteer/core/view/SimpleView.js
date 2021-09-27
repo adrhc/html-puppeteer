@@ -58,8 +58,8 @@ export default class SimpleView extends AbstractView {
         this.viewValuesTransformerFn = viewValuesTransformerFn ?? ((values) => values);
         this.$elem = $elem ?? jQueryOf(elemIdOrJQuery);
         this.viewRenderStrategy = viewRenderStrategy ?? (this.$elem.is("textarea") ? RENDER_VAL : RENDER_HTML);
-        this.viewRemovalStrategy = viewRemovalStrategy ?? REMOVE_ELEMENT;
-        this.removedPlaceholder = removedPlaceholder ?? "";
+        this.viewRemovalStrategy = viewRemovalStrategy ?? (removedPlaceholder != null ? USE_HTML : REMOVE_ELEMENT);
+        this.removedPlaceholder = removedPlaceholder;
         isTrue(this.viewRemovalStrategy !== USE_HTML || !!this.removedPlaceholder);
     }
 

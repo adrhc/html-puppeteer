@@ -75,7 +75,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
         // Because only seats are created but not yet occupied
         // there's not possible to find a data-part inside a
         // seat (aka inside a container child component).
-        this._placeFamilyMembers(roomLayout);
+        this._placeFamilyMembers();
         // updating guests list (aka parts)
         //
         // Some guests might find a seat (i.e. data-part)
@@ -112,10 +112,9 @@ export default class SimpleContainerComponent extends AbstractComponent {
     }
 
     /**
-     * @param {SCT} roomLayout
      * @protected
      */
-    _placeFamilyMembers(roomLayout) {
+    _placeFamilyMembers() {
         this.familyNames.forEach(name => this._placeFamilyMember(name));
     }
 
@@ -124,6 +123,9 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @protected
      */
     _roomLayoutFor(newState) {
+        if (newState == null) {
+            return newState;
+        }
         const roomLayout = _.isArray(newState) ? [] : {};
         this.familyOrStandingNames.forEach(name => roomLayout[name] = newState[name]);
         return roomLayout;
