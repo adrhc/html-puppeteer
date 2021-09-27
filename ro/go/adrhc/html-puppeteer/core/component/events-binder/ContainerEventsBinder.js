@@ -13,7 +13,7 @@ export default class ContainerEventsBinder extends EventsBinder {
      * attach DOM event handlers
      */
     attachEventHandlers() {
-        // <button data-owner="componentId" data-create-guest="click" data-guest-part="cats">
+        // <button data-owner="componentId" data-create-guest="click">
         this._attachHandlerByDataAttrib("create-guest", () => {
             this.component.replacePart(newGuestPartName(), this.initialGuestDetails);
         });
