@@ -126,11 +126,11 @@ export class ComponentOptionsBuilder {
     }
 
     /**
-     * @param {EventsBinderProviderFn} eventsBinderProviderFns
+     * @param {EventsBinder} eventsBinders
      * @return {ComponentOptionsBuilder}
      */
-    withEventsBinders(...eventsBinderProviderFns) {
-        this.defaults.eventsBinder = new EventsBinderGroup(undefined, eventsBinderProviderFns.map(fn => fn()));
+    withEventsBinders(...eventsBinders) {
+        this.defaults.eventsBinder = new EventsBinderGroup(undefined, eventsBinders);
         return this;
     }
 

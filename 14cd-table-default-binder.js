@@ -7,7 +7,8 @@ import ContainerEventsBinder from "./ro/go/adrhc/html-puppeteer/core/component/e
 $(() => {
     // the puppeteer
     const component = animate(addDebugger({debuggerElemIdOrJQuery: "main-debugger"})
-        .withEventsBinders((c) => new OpenCloseEventsBinder(c), (c) => new ContainerEventsBinder(c)).options());
+        .withEventsBinders(new OpenCloseEventsBinder(), new ContainerEventsBinder())
+        .options());
 
     // the application using the html-puppeteer
     new Scenario10App(component).run();
