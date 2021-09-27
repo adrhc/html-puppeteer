@@ -34,7 +34,7 @@ export default class Scenario10App {
      */
     run() {
         $(namedBtn("change-parent-state")).on("click", () => {
-            this.parent.replaceState(JSON.parse($("#parent-state-and-debugger").val()));
+            this.parent.replaceState(JSON.parse($("#main-debugger").val()));
         });
         $(namedBtn("change-partial-state")).on("click", () => {
             const guestsState = JSON.parse($("#partial-state").val());
