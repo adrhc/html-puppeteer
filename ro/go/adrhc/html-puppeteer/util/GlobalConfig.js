@@ -1,3 +1,5 @@
+import {uniqueId} from "./StringUtils.js";
+
 export default class GlobalConfig {
     static ALERT_ON_FAILED_ASSERTION = true;
     static DATA_GUESTS = "guests";
@@ -12,6 +14,7 @@ export default class GlobalConfig {
     static DATA_TYPE = "type";
     static DEFAULT_CHILDREN_ROOM = "";
     static ELEM_ID_OR_JQUERY = "elemIdOrJQuery";
+    static GUEST_DATA_PART = "guest-part";
     static ID_ATTR = "id";
     static SERVER_ROOT = "";
 }
@@ -41,4 +44,19 @@ export function dataOwnerOf(owner, useDoubleQuotes) {
  */
 export function idAttrOf($elem) {
     return $elem.attr(GlobalConfig.ID_ATTR);
+}
+
+/**
+ * @param {HTMLElement|jQuery<HTMLElement>} elem
+ * @return {string}
+ */
+export function guestPartOf(elem) {
+    return $(elem).data(GlobalConfig.GUEST_DATA_PART);
+}
+
+/**
+ * @return {string} a generated, unique guest part name
+ */
+export function newGuestPartName() {
+    return uniqueId();
 }
