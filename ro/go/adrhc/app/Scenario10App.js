@@ -32,16 +32,8 @@ export default class Scenario10App {
             this.parent.replacePart(id, {id: Math.random(), name: generateString("name ")});
         });
         $(namedBtn("remove")).on("click", () => {
-            const lastKidId = this._oldestKidId();
-            this.parent.replacePart(lastKidId);
+            const oldestKidId = Object.values(this.parent.guests)[0]?.partName;
+            this.parent.replacePart(oldestKidId);
         });
-    }
-
-    /**
-     * @return {*}
-     * @private
-     */
-    _oldestKidId() {
-        return Object.values(this.parent.guests)[0]?.partName;
     }
 }
