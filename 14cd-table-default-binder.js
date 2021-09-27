@@ -14,5 +14,5 @@ $(() => {
         }));
 
     // the application using the html-puppeteer
-    new Scenario14App(component).run();
+    new Scenario14App().run(component);
 });
