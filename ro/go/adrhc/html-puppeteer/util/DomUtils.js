@@ -1,4 +1,4 @@
-import {encodeHTML, uniqueId} from "./StringUtils.js";
+import {encodeHTML} from "./StringUtils.js";
 import {componentIdOf, idAttrOf} from "./GlobalConfig.js";
 
 /**

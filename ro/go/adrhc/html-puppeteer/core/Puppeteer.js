@@ -1,5 +1,5 @@
 import {dataPartSelectorOf, dataSelectorOf} from "../util/SelectorUtils.js";
-import GlobalConfig, {componentIdOf, idAttrOf} from "../util/GlobalConfig.js";
+import GlobalConfig from "../util/GlobalConfig.js";
 import {createByType} from "./ComponentFactories.js";
 import {idOf, jQueryOf} from "../util/DomUtils.js";
 import {isTrue} from "../util/AssertionUtils.js";

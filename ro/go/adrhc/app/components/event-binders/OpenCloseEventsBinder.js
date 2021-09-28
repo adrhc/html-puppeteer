@@ -1,4 +1,4 @@
-import EventsBinder from "./EventsBinder.js";
+import EventsBinder from "../../../html-puppeteer/core/component/events-binder/EventsBinder.js";
 
 export default class OpenCloseEventsBinder extends EventsBinder {
     /**

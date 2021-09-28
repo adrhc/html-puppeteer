@@ -4,6 +4,7 @@ import {alertOrThrow, isTrue} from "../../util/AssertionUtils.js";
 import {CREATED, RELOCATED, REMOVED, REPLACED} from "../state/change/StateChangeTypes.js";
 import {$getPartElem, createComponent} from "../Puppeteer.js";
 import ListContainerIllustrator from "../state-changes-handler/ListContainerIllustrator.js";
+import ContainerEventsBinder from "./events-binder/ContainerEventsBinder.js";
 
 /**
  * @typedef {{[name: string]: AbstractComponent}} ComponentsCollection
@@ -28,6 +29,7 @@ export default class ListContainerComponent extends AbstractComponent {
     constructor(options) {
         super(withDefaults(options)
             .addComponentIllustratorProvider(listContainerIllustratorProvider)
+            .withEventsBinders(new ContainerEventsBinder())
             .options());
     }
 

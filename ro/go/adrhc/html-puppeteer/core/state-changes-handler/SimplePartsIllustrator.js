@@ -65,5 +65,10 @@ function defaultViewValuesTransformerFn(componentId, parent, partName) {
 }
 
 function defaultViewValuesTransformerFnImpl(componentId, parentId, partName, value) {
-    return {value, [GlobalConfig.COMPONENT_ID]: componentId, [GlobalConfig.OWNER]: parentId, [GlobalConfig.PART]: partName};
+    return {
+        value,
+        [GlobalConfig.COMPONENT_ID]: componentId,
+        [GlobalConfig.OWNER]: parentId,
+        [GlobalConfig.PART]: partName
+    };
 }

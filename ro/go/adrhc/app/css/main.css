@@ -124,3 +124,7 @@ div[data-part], .parent {
     cursor: not-allowed;
     pointer-events: none;
 }
+
+.min-width-33-percent {
+    min-width: 33%;
+}

@@ -48,15 +48,7 @@ export class ComponentOptionsBuilder {
      * @return {ComponentOptions}
      */
     to(options = {}) {
-        if (this._options.extraConfigurators) {
-            options.extraConfigurators = options.extraConfigurators ?? [];
-            options.extraConfigurators.push(...this._options.extraConfigurators);
-        }
-        if (this._options.extraStateChangesHandlers) {
-            options.extraStateChangesHandlers = options.extraStateChangesHandlers ?? [];
-            options.extraStateChangesHandlers.push(...this._options.extraStateChangesHandlers);
-        }
-        return _.defaults(options, this.defaults);
+        return _.defaults({}, this._options, options, this.defaults);
     }
 
     /**
@@ -66,8 +58,14 @@ export class ComponentOptionsBuilder {
      * @return {ComponentOptionsBuilder}
      */
     addConfiguratorFn(componentConfiguratorFn) {
-        this._options.extraConfigurators = this._options.extraConfigurators ?? [];
-        this._options.extraConfigurators.push(new FunctionComponentConfigurator(componentConfiguratorFn));
+        const componentConfigurator = new FunctionComponentConfigurator(componentConfiguratorFn);
+        if (this._options.extraConfigurators) {
+            this._options.extraConfigurators.push(componentConfigurator);
+        } else if (this.defaults.extraConfigurators) {
+            this._options.extraConfigurators = [...this.defaults.extraConfigurators, componentConfigurator];
+        } else {
+            this._options.extraConfigurators = [componentConfigurator];
+        }
         return this;
     }
 
@@ -78,8 +76,13 @@ export class ComponentOptionsBuilder {
      * @return {ComponentOptionsBuilder}
      */
     addStateChangeHandler(stateChangesHandler) {
-        this._options.extraStateChangesHandlers = this._options.extraStateChangesHandlers ?? [];
-        this._options.extraStateChangesHandlers.push(stateChangesHandler);
+        if (this._options.extraStateChangesHandlers) {
+            this._options.extraStateChangesHandlers.push(stateChangesHandler);
+        } else if (this.defaults.extraStateChangesHandlers) {
+            this._options.extraStateChangesHandlers = [...this.defaults.extraStateChangesHandlers, stateChangesHandler];
+        } else {
+            this._options.extraStateChangesHandlers = [stateChangesHandler];
+        }
         return this;
     }
 
@@ -112,25 +115,16 @@ export class ComponentOptionsBuilder {
     }
 
     /**
-     * @param {EventsBinderProviderFn} eventsBinderProviderFn
-     * @param {boolean=} overrideDefault
-     * @return {ComponentOptionsBuilder}
-     */
-    withEventsBinder(eventsBinderProviderFn, overrideDefault) {
-        if (!overrideDefault && this.defaults.eventsBinder) {
-            return this;
-        } else {
-            this.defaults.eventsBinder = eventsBinderProviderFn();
-        }
-        return this;
-    }
-
-    /**
      * @param {EventsBinder} eventsBinders
      * @return {ComponentOptionsBuilder}
      */
     withEventsBinders(...eventsBinders) {
-        this.defaults.eventsBinder = new EventsBinderGroup(undefined, eventsBinders);
+        if (this._options.eventsBinder) {
+            eventsBinders = [...eventsBinders, this._options.eventsBinder];
+        } else if (this.defaults.eventsBinder) {
+            eventsBinders = [...eventsBinders, this.defaults.eventsBinder];
+        }
+        this._options.eventsBinder = new EventsBinderGroup(undefined, eventsBinders);
         return this;
     }
 
@@ -148,15 +142,6 @@ export class ComponentOptionsBuilder {
 
 export function withDefaults(options) {
     return new ComponentOptionsBuilder({...options});
-}
-
-/**
- * @param {EventsBinderProviderFn} eventsBinderProviderFn
- * @param {boolean=} overrideDefault
- * @return {ComponentOptionsBuilder}
- */
-export function withEventsBinder(eventsBinderProviderFn, overrideDefault) {
-    return new ComponentOptionsBuilder().withEventsBinder(eventsBinderProviderFn, overrideDefault);
 }
 
 /**
