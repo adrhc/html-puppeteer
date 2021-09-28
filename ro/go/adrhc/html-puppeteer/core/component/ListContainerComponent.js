@@ -86,18 +86,18 @@ export default class ListContainerComponent extends AbstractComponent {
     _handleItemChange(partStateChange) {
         switch (partStateChange.changeType) {
             case CREATED:
-                // the parent creates the item's seat (aka DOM element)
+                // the parent creates the item's shell (aka DOM element)
                 super._processStateChanges();
                 // the item component reads its state from the parent (i.e. this container component)
                 this._createItem(partStateChange.newPartName);
                 break;
             case REMOVED:
                 this._removeItem(partStateChange.previousPartName);
-                // the parent removes the item's seat (aka DOM element)
+                // the parent removes the item's shell (aka DOM element)
                 super._processStateChanges();
                 break;
             case REPLACED:
-                // seat occupant changed its details; nothing should
+                // shell occupant changed its details; nothing should
                 // happen to the room layout but we have to consume
                 // the collected state changes
                 super._processStateChanges();
@@ -105,7 +105,7 @@ export default class ListContainerComponent extends AbstractComponent {
                 break;
             case RELOCATED:
                 this._removeItem(partStateChange.previousPartName);
-                // the parent removes the item's previous seat (aka DOM element) and create a new one
+                // the parent removes the item's previous shell (aka DOM element) and create a new one
                 super._processStateChanges();
                 // the item component reads its state from the parent (i.e. this container component)
                 this._createItem(partStateChange.newPartName);
@@ -120,14 +120,14 @@ export default class ListContainerComponent extends AbstractComponent {
      * @protected
      */
     _createItem(partName) {
-        const $seat = $getPartElem(partName, this.config.elemIdOrJQuery);
-        if (!$seat.length) {
+        const $shell = $getPartElem(partName, this.config.elemIdOrJQuery);
+        if (!$shell.length) {
             console.warn(`Missing child element for ${partName}; could be parent's state though.`);
             return undefined;
         }
         // at this point the item component's id is available as data-GlobalConfig.COMPONENT_ID on $seat
-        const component = createComponent($seat, {parent: this});
-        isTrue(component != null, "[_createItem] the seat should exist!")
+        const component = createComponent($shell, {parent: this});
+        isTrue(component != null, "[_createItem] the child's shell should exist!")
         this.items[partName] = component.render();
     }
 
