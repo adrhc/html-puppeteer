@@ -11,7 +11,7 @@ import {uniqueId} from "../../../util/StringUtils.js";
 
 export default class ContainerEventsBinder extends EventsBinder {
     /**
-     * Default event to bind to on children (for creating/removing a guest component).
+     * Default event to bind to on children (for creating/removing a child component).
      *
      * @type {string}
      */
@@ -35,7 +35,7 @@ export default class ContainerEventsBinder extends EventsBinder {
     }
 
     /**
-     * @return {*} initial part state for the a new guest (aka child component)
+     * @return {*} initial part state for the a new child
      */
     get initialGuestDetails() {
         return this._component.config.itemProviderFn?.(this._component) ?? {};
