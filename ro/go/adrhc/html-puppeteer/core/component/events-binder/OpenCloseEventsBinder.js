@@ -6,15 +6,15 @@ export default class OpenCloseEventsBinder extends EventsBinder {
      */
     attachEventHandlers() {
         // <button data-open="click" data-owner="componentId">Open</button>
-        this._attachChildEventsHandler("open", () => {
-            this._$childrenHavingDataAttr("open").addClass("disabled");
-            this._$childrenHavingDataAttr("close").removeClass("disabled");
+        this._attachEventsHandlerOnOwnedHavingDataAttr("open", () => {
+            this._$ownedHavingDataAttr("open").addClass("disabled");
+            this._$ownedHavingDataAttr("close").removeClass("disabled");
             this._component.render();
         }, true);
         // <button data-close="click" data-owner="componentId">Close</button>
-        this._attachChildEventsHandler("close", () => {
-            this._$childrenHavingDataAttr("close").addClass("disabled");
-            this._$childrenHavingDataAttr("open").removeClass("disabled");
+        this._attachEventsHandlerOnOwnedHavingDataAttr("close", () => {
+            this._$ownedHavingDataAttr("close").addClass("disabled");
+            this._$ownedHavingDataAttr("open").removeClass("disabled");
             this._component.close();
         }, true);
     }

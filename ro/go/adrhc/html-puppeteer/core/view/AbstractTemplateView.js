@@ -1,4 +1,4 @@
-import {templateTextOf} from "../../util/DomUtils.js";
+import {templateOf} from "../../util/DomUtils.js";
 import {isTrue} from "../../util/AssertionUtils.js";
 import SimpleView from "./SimpleView.js";
 
@@ -19,20 +19,7 @@ export default class AbstractTemplateView extends SimpleView {
      */
     constructor({htmlTemplate, templateId, ...restOfOptions}) {
         super(restOfOptions);
-        this.htmlTemplate = htmlTemplate ?? this._createTemplate(templateId)
-        isTrue(!!this.htmlTemplate, `[AbstractTemplateView] HTML template not provided! elemId = ${this.$elem.attr("id")}, data-part = ${this.$elem.data("part")}`)
-    }
-
-    /**
-     * @param {string=} [templateId]
-     * @protected
-     */
-    _createTemplate(templateId) {
-        templateId = templateId ?? this.$elem.data("templateId");
-        if (templateId) {
-            return templateTextOf(templateId);
-        } else {
-            return this.$elem.text();
-        }
+        this.htmlTemplate = templateOf(htmlTemplate, templateId, this.$elem)
+        isTrue(this.htmlTemplate != null, `[AbstractTemplateView] HTML template not provided! elemId = ${this.$elem.attr("id")}, data-part = ${this.$elem.data("part")}`)
     }
 }

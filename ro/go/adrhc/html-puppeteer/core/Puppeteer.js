@@ -1,7 +1,7 @@
 import {dataPartSelectorOf, dataSelectorOf} from "../util/SelectorUtils.js";
-import GlobalConfig, {idAttrOf} from "../util/GlobalConfig.js";
+import GlobalConfig, {componentIdOf, idAttrOf} from "../util/GlobalConfig.js";
 import {createByType} from "./ComponentFactories.js";
-import {jQueryOf} from "../util/DomUtils.js";
+import {idOf, jQueryOf} from "../util/DomUtils.js";
 import {isTrue} from "../util/AssertionUtils.js";
 
 /**
@@ -46,7 +46,7 @@ export function createComponent($el, commonOptions) {
     isTrue($el.length === 1,
         `[createComponent] bad $el.length = ${$el.length}!`);
     const type = componentTypeOf($el);
-    const componentId = idAttrOf($el);
+    const componentId = idOf($el);
     const componentOptions = componentOptionsOf(componentId, commonOptions);
     return instanceOf($el, type, componentOptions);
 }
@@ -94,7 +94,7 @@ function renderComponents($components) {
 }
 
 export function $getPartElem(partName, parentElemIdOrJQuery) {
-    return $(dataPartSelectorOf(partName), jQueryOf(parentElemIdOrJQuery));
+    return jQueryOf(parentElemIdOrJQuery).children(dataPartSelectorOf(partName));
 }
 
 /**

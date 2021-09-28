@@ -30,6 +30,14 @@ export function dataOwnerSelectorOf(owner, useDoubleQuotes) {
 }
 
 /**
+ * @param {string=} ownerOwner
+ * @param {boolean=} useDoubleQuotes
+ */
+export function dataOwnerOwnerSelectorOf(ownerOwner, useDoubleQuotes) {
+    return dataSelectorOf(GlobalConfig.DATA_OWNER_OWNER, ownerOwner, useDoubleQuotes, "");
+}
+
+/**
  * @param {string=} guestsRoomName
  * @param {boolean=} useDoubleQuotes
  */

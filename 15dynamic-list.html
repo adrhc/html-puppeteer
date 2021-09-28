@@ -47,13 +47,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 		message2: its parent state is not null hence it'll use it despite the fact that it has data-initial-state attribute
 		message3: its parent state is missing so its component is not created
 	-->
-	<div class="section flex-column fit-content bgc-aliceblue"
-	     data-initial-state='{"kid0": {"id": 0, "name": "kid 0"}'
-	     data-removed-placeholder='The "parent-component" is closed!'
-	     data-seat-occupant-html-tag="tr"
-	     data-seat-occupant-template-id="list-item-template"
-	     data-type="list-container"
-	     id="parent-component">
+	<div class="section fit-content">
 		<table class="responstable">
 			<thead>
 			<tr>
@@ -64,6 +58,13 @@ PS: make sure to have a well formatted JSON!</textarea>
 				</th>
 			</tr>
 			</thead>
+			<tbody data-initial-state='{"kid0": {"id": 0, "name": "kid 0"}}'
+			       data-removed-placeholder='<tr><td colspan="3">The "parent-component" is closed!</td></tr>>'
+			       data-seat-occupant-html-tag="tr"
+			       data-seat-occupant-template-id="list-item-template"
+			       data-type="list-container"
+			       id="parent-component">
+			</tbody>
 		</table>
 	</div>
 </div>
@@ -73,7 +74,9 @@ PS: make sure to have a well formatted JSON!</textarea>
 		<td>{{id}}</td>
 		<td>{{name}}</td>
 		<td class="center">
-			<button data-owner="{{@root.owner}}" data-component-id="{{@root.componentId}}" data-remove-guest="click">Remove</button>
+			<button data-owner-owner="{{@root.owner}}" data-owner="{{@root.componentId}}" data-remove-guest>
+				Remove
+			</button>
 		</td>
 	{{/with}}
 </script>

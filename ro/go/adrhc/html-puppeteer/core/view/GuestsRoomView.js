@@ -1,9 +1,16 @@
 import AbstractView from "./AbstractView.js";
 import {$guestsRoomOf} from "../Puppeteer.js";
-import {dataAttributesOf, jQueryOf, templateTextOf} from "../../util/DomUtils.js";
-import GlobalConfig, {dataOwnerOf, dataPartOf, dataTypeOf} from "../../util/GlobalConfig.js";
+import {contentOfElemId, dataAttributesOf, jQueryOf} from "../../util/DomUtils.js";
+import GlobalConfig, {
+    componentIdOf,
+    dataComponentIdOf,
+    dataOwnerOf,
+    dataPartOf,
+    dataTypeOf
+} from "../../util/GlobalConfig.js";
 import {dataPartSelectorOf} from "../../util/SelectorUtils.js";
 import {generateHtml} from "../../util/HtmlGenerator.js";
+import {uniqueId} from "../../util/StringUtils.js";
 
 /**
  * @typedef {Bag} SeatAttributes
@@ -13,7 +20,7 @@ import {generateHtml} from "../../util/HtmlGenerator.js";
  */
 /**
  * @typedef {Object} GuestsRoomViewOptions
- * @property {string=} componentId
+ * @property {string} componentId
  * @property {string|jQuery<HTMLElement>=} elemIdOrJQuery is the parent's element id or jQuery<HTMLElement>
  * @property {string=} seatTemplate is the seat's HTML containing the data-type and data-part
  * @property {string=} seatTemplateId
@@ -36,15 +43,15 @@ export default class GuestsRoomView extends AbstractView {
      */
     $guestsRoom;
     /**
+     * @type {boolean}
+     */
+    dontRemoveGuests;
+    /**
      * it's the child seat template id
      *
      * @type {string}
      */
-    componentId;
-    /**
-     * @type {boolean}
-     */
-    dontRemoveGuests;
+    parentId;
     /**
      * specify where to place new kids (append|prepend)
      *
@@ -68,11 +75,11 @@ export default class GuestsRoomView extends AbstractView {
                     seatOccupantHtmlTag,
                     newGuestsGoLast,
                     dontRemoveGuests,
-                    childSeatAttributes = {templateId: seatOccupantTemplateId, htmlTag: seatOccupantHtmlTag},
+                    childSeatAttributes = {templateId: seatOccupantTemplateId, htmlTag: seatOccupantHtmlTag}
                 }) {
         super();
         this.$componentElem = jQueryOf(elemIdOrJQuery);
-        this.componentId = componentId;
+        this.parentId = componentId;
         this.place = (newGuestsGoLast ?? false) ? "append" : "prepend";
         this.dontRemoveGuests = dontRemoveGuests ?? false;
         this.seatTemplate = seatTemplate ?? this._createSeatTemplate(seatTemplateId, childSeatAttributes);
@@ -87,13 +94,21 @@ export default class GuestsRoomView extends AbstractView {
 
     /**
      * @param {PartName} partName
+     * @return {Bag} the view's values
      */
     create(partName) {
+        const viewValues = {
+            [GlobalConfig.PART]: partName,
+            [GlobalConfig.OWNER]: this.parentId,
+        };
         if (this._childSeatExists(partName)) {
-            return;
+            viewValues[GlobalConfig.COMPONENT_ID] = this._seatIdOf(partName);
+            return viewValues;
         }
-        const kidSeat = generateHtml(this.seatTemplate, {partName, [GlobalConfig.DATA_OWNER]: this.componentId});
+        viewValues[GlobalConfig.COMPONENT_ID] = uniqueId();
+        const kidSeat = generateHtml(this.seatTemplate, viewValues);
         this.$guestsRoom[this.place](kidSeat);
+        return viewValues;
     }
 
     /**
@@ -113,6 +128,15 @@ export default class GuestsRoomView extends AbstractView {
     }
 
     /**
+     * @param {PartName} partName
+     * @return {string|undefined}
+     * @protected
+     */
+    _seatIdOf(partName) {
+        return componentIdOf(this._$childSeatByName(partName));
+    }
+
+    /**
      * @param {PartName} name
      * @return {jQuery<HTMLElement>}
      * @protected
@@ -128,7 +152,7 @@ export default class GuestsRoomView extends AbstractView {
      */
     _createSeatTemplate(seatTemplateId, childSeatAttributes) {
         if (seatTemplateId) {
-            return templateTextOf(seatTemplateId);
+            return contentOfElemId(seatTemplateId);
         } else {
             return this._templateFromSeatAttributes(childSeatAttributes);
         }
@@ -140,7 +164,6 @@ export default class GuestsRoomView extends AbstractView {
      * @protected
      */
     _templateFromSeatAttributes({templateId, htmlTag = "div", componentType = "simple", ...rest}) {
-        // {{this}} will be the part name when the kid's seat will be created
-        return `<${htmlTag} ${dataTypeOf(componentType)} ${dataOwnerOf(this.componentId)} ${dataPartOf("{{partName}}")} data-template-id="${templateId}" ${dataAttributesOf(rest)}></${htmlTag}>`;
+        return `<${htmlTag} ${dataTypeOf(componentType)} ${dataOwnerOf(this.parentId)} ${dataPartOf(`{{${GlobalConfig.PART}}}`)} ${dataComponentIdOf(`{{${GlobalConfig.COMPONENT_ID}}}`)} data-template-id="${templateId}" ${dataAttributesOf(rest)}></${htmlTag}>`;
     }
 }

@@ -53,7 +53,7 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partCreated(partStateChange) {
-        this.guestsRoomView.create(partStateChange.newPartName);
+        return this.guestsRoomView.create(partStateChange.newPartName);
     }
 
     /**
@@ -61,7 +61,7 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      */
     partRelocated(partStateChange) {
         this.guestsRoomView.remove(partStateChange.previousPartName);
-        this.guestsRoomView.create(partStateChange.newPartName);
+        return this.guestsRoomView.create(partStateChange.newPartName);
     }
 
     /**

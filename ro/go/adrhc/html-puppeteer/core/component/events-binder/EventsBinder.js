@@ -39,8 +39,8 @@ export default class EventsBinder {
      * @param {boolean=} oneTimeOnly specify whether to invoke the event once or multiple times
      * @protected
      */
-    _attachChildEventsHandler(dataAttribName, fn, oneTimeOnly) {
-        const $el = this._$childrenHavingDataAttr(dataAttribName);
+    _attachEventsHandlerOnOwnedHavingDataAttr(dataAttribName, fn, oneTimeOnly) {
+        const $el = this._$ownedHavingDataAttr(dataAttribName);
         if (!$el.length) {
             return;
         }
@@ -56,7 +56,7 @@ export default class EventsBinder {
      * @return {jQuery<HTMLElement>}
      * @protected
      */
-    _$childrenHavingDataAttr(dataAttribName) {
+    _$ownedHavingDataAttr(dataAttribName) {
         // [data-owner="componentId"][data-dataAttribName]
         return $(`${dataOwnerSelectorOf(this._component.id)}${dataSelectorOf(dataAttribName)}`);
     }

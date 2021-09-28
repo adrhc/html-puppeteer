@@ -2,8 +2,8 @@ import {addDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/options/D
 import animate from "./ro/go/adrhc/html-puppeteer/core/Puppeteer.js";
 import OpenCloseEventsBinder from "./ro/go/adrhc/html-puppeteer/core/component/events-binder/OpenCloseEventsBinder.js";
 import ContainerEventsBinder from "./ro/go/adrhc/html-puppeteer/core/component/events-binder/ContainerEventsBinder.js";
-import {generateString} from "./ro/go/adrhc/app/Generators.js";
 import Scenario14App from "./ro/go/adrhc/app/Scenario14App.js";
+import {generateString} from "./ro/go/adrhc/app/Generators.js";
 
 $(() => {
     // the puppeteer

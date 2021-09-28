@@ -24,19 +24,21 @@ export class StateProcessor {
     /**
      * Offers the state for manipulation then execute the state changes handlers.
      *
+     * @return {[]}
      * @param {StateUpdaterFn} stateUpdaterFn
      */
     doWithState(stateUpdaterFn) {
         stateUpdaterFn(this.stateHolder);
-        this._processStateChanges();
+        return this._processStateChanges();
     }
 
     /**
      * Process existing, not yet processed, state changes
      *
+     * @return {[]}
      * @protected
      */
     _processStateChanges() {
-        this.stateChangesHandlersInvoker.processStateChanges(this.stateHolder.stateChangesCollector);
+        return this.stateChangesHandlersInvoker.processStateChanges(this.stateHolder.stateChangesCollector);
     }
 }

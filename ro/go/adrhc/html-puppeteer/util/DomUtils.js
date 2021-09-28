@@ -1,5 +1,5 @@
 import {encodeHTML, uniqueId} from "./StringUtils.js";
-import {idAttrOf} from "./GlobalConfig.js";
+import {componentIdOf, idAttrOf} from "./GlobalConfig.js";
 
 /**
  * @param {string|jQuery<HTMLElement>} elemIdOrJQuery
@@ -108,20 +108,24 @@ export function focus($elem) {
  * @param {string} tmplId is the template html-element id
  * @return {string} the template's html extracted from template html-element id (i.e. tmplId)
  */
-export function templateTextOf(tmplId) {
+export function contentOfElemId(tmplId) {
     if (!tmplId) {
         return undefined;
     }
     const $tmpl = $(`#${tmplId}`);
-    if (!$tmpl.length) {
+    return contentOfElem($tmpl);
+}
+
+function contentOfElem($elem) {
+    if (!$elem.length) {
         return undefined;
     }
-    if ($tmpl[0].content) {
-        // use <template> when content encoding as HTML is not an issue
-        return $tmpl.html().trim();
+    if ($elem[0] instanceof HTMLScriptElement) {
+        // <script id="..." type="text/x-handlebars-template">
+        return $elem.text().trim();
     } else {
-        // use <script> when don't wont the HTML encoding to be automatically applied
-        return $tmpl.text().trim();
+        // use when content encoding as HTML is not an issue
+        return $elem.html().trim();
     }
 }
 
@@ -130,11 +134,13 @@ export function templateTextOf(tmplId) {
  * @param {string} tmplHtml is the template's html
  * @return {string} the template's html extracted from template html-element id or tmplHtml if null tmplId
  */
-export function templateOf(tmplId, tmplHtml) {
-    if (tmplId) {
-        return templateTextOf(tmplId);
-    } else if (tmplHtml) {
+export function templateOf(tmplHtml, tmplId, $elem) {
+    if (tmplHtml != null) {
         return tmplHtml;
+    } else if (tmplId) {
+        return contentOfElemId(tmplId);
+    } else {
+        return contentOfElem($elem);
     }
 }
 
@@ -142,6 +148,6 @@ export function templateOf(tmplId, tmplHtml) {
  * @param {string|jQuery<HTMLElement>=} elemIdOrJQuery
  */
 export function idOf(elemIdOrJQuery) {
-    const $el = jQuery(elemIdOrJQuery);
-    return idAttrOf($el) ?? uniqueId();
+    const $el = jQueryOf(elemIdOrJQuery);
+    return idAttrOf($el) ?? componentIdOf($el);
 }

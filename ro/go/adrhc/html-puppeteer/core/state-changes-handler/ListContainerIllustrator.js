@@ -1,9 +1,9 @@
 import GuestsRoomView from "../view/GuestsRoomView.js";
 import SimplePartsIllustrator from "./SimplePartsIllustrator.js";
+import {withDefaults} from "../component/options/ComponentOptionsBuilder.js";
 
 /**
  * @typedef {ComponentIllustratorOptions & GuestsRoomViewOptions} ListContainerIllustratorOptions
- * @property {string=} componentId
  */
 /**
  * @template SCT, SCP
@@ -22,7 +22,9 @@ export default class ListContainerIllustrator extends SimplePartsIllustrator {
      * @param {ListContainerIllustratorOptions} options.restOfOptions
      */
     constructor({viewValuesTransformerFn, ...restOfOptions}) {
-        super(restOfOptions);
+        super(withDefaults({
+            htmlTemplate: restOfOptions.htmlTemplate ?? (restOfOptions.templateId ? undefined : "")
+        }).to(restOfOptions));
         this.guestsRoomView = new GuestsRoomView(restOfOptions);
     }
 
@@ -53,7 +55,7 @@ export default class ListContainerIllustrator extends SimplePartsIllustrator {
      * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partCreated(partStateChange) {
-        this.guestsRoomView.create(partStateChange.newPartName);
+        return this.guestsRoomView.create(partStateChange.newPartName);
     }
 
     /**
@@ -61,7 +63,7 @@ export default class ListContainerIllustrator extends SimplePartsIllustrator {
      */
     partRelocated(partStateChange) {
         this.guestsRoomView.remove(partStateChange.previousPartName);
-        this.guestsRoomView.create(partStateChange.newPartName);
+        return this.guestsRoomView.create(partStateChange.newPartName);
     }
 
     /**

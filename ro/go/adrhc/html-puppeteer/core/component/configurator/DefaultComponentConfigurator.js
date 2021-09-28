@@ -3,8 +3,17 @@ import ValueStateInitializer from "../state-initializer/ValueStateInitializer.js
 import {dataOf, idOf} from "../../../util/DomUtils.js";
 import PartialStateHolder from "../../state/PartialStateHolder.js";
 import StateChangesHandlersInvoker from "../../state-processor/StateChangesHandlersInvoker.js";
+import {uniqueId} from "../../../util/StringUtils.js";
 
+/**
+ * @typedef {DataAttributes & AbstractComponentOptions} DefaultComponentConfiguratorConfigField
+ * @property {AbstractComponent} parent
+ */
 export default class DefaultComponentConfigurator extends ComponentConfigurator {
+    /**
+     * @type {DefaultComponentConfiguratorConfigField}
+     */
+    config;
     /**
      * @type {DataAttributes}
      */
@@ -31,7 +40,7 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
      */
     configure(component) {
         this._setOptionsDataAttributesAndConfig(component);
-        component.id = idOf(this.config.elemIdOrJQuery);
+        component.id = idOf(this.config.elemIdOrJQuery) ?? uniqueId();
         component.parent = this.config.parent;
         component.stateHolder = this.config.stateHolder ?? new PartialStateHolder(this.config);
         component.stateChangesHandlersInvoker =

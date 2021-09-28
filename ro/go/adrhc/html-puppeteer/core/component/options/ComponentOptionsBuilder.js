@@ -56,7 +56,7 @@ export class ComponentOptionsBuilder {
             options.extraStateChangesHandlers = options.extraStateChangesHandlers ?? [];
             options.extraStateChangesHandlers.push(...this._options.extraStateChangesHandlers);
         }
-        return _.defaults(this.defaults, options);
+        return _.defaults(options, this.defaults);
     }
 
     /**

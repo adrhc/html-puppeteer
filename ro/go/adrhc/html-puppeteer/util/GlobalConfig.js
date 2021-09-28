@@ -1,9 +1,8 @@
-import {uniqueId} from "./StringUtils.js";
-
 export default class GlobalConfig {
     static ALERT_ON_FAILED_ASSERTION = true;
+
     /**
-     * Used when rendering the component or at least it's shell (aka "seat").
+     * Used when rendering the component's shell.
      */
     static COMPONENT_ID = "componentId";
     /**
@@ -19,6 +18,10 @@ export default class GlobalConfig {
      */
     static DATA_OWNER = "owner";
     /**
+     * It's the owner of an owner.
+     */
+    static DATA_OWNER_OWNER = "owner-owner";
+    /**
      * the child "part" name in the parent's state
      */
     static DATA_PART = "part";
@@ -29,6 +32,8 @@ export default class GlobalConfig {
     static DEFAULT_CHILDREN_ROOM = "";
     static ELEM_ID_OR_JQUERY = "elemIdOrJQuery";
     static ID_ATTR = "id";
+    static OWNER = "owner";
+    static PART = "part";
     static SERVER_ROOT = "";
 }
 
@@ -52,6 +57,15 @@ export function dataOwnerOf(owner, useDoubleQuotes) {
 }
 
 /**
+ * @param {string=} componentId
+ * @param {boolean=} useDoubleQuotes
+ */
+export function dataComponentIdOf(componentId, useDoubleQuotes) {
+    const quote = useDoubleQuotes ? '"' : "'";
+    return `data-${GlobalConfig.DATA_COMPONENT_ID}=${quote}${componentId}${quote}`;
+}
+
+/**
  * Used to extract a manually set component id.
  *
  * @param {jQuery<HTMLElement>} $elem
@@ -62,8 +76,25 @@ export function idAttrOf($elem) {
 }
 
 /**
- * @return {string} a generated, unique guest part name
+ * @param {jQuery<HTMLElement>} $elem
+ * @return {string|undefined}
  */
-export function newGuestPartName() {
-    return uniqueId();
+export function ownerOf($elem) {
+    return $elem.data(GlobalConfig.DATA_OWNER);
+}
+
+/**
+ * @param {jQuery<HTMLElement>} $elem
+ * @return {string|undefined}
+ */
+export function ownerOwnerOf($elem) {
+    return $elem.data(GlobalConfig.DATA_OWNER_OWNER);
+}
+
+/**
+ * @param {jQuery<HTMLElement>} $elem
+ * @return {string|undefined}
+ */
+export function componentIdOf($elem) {
+    return $elem.data(GlobalConfig.DATA_COMPONENT_ID);
 }

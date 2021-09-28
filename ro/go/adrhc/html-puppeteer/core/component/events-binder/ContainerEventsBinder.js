@@ -1,6 +1,13 @@
 import EventsBinder from "./EventsBinder.js";
-import GlobalConfig, {newGuestPartName} from "../../../util/GlobalConfig.js";
-import {dataComponentIdSelectorOf, dataSelectorOf, idAttrSelectorOf} from "../../../util/SelectorUtils.js";
+import {ownerOf} from "../../../util/GlobalConfig.js";
+import {
+    dataComponentIdSelectorOf,
+    dataOwnerOwnerSelectorOf,
+    dataSelectorOf,
+    idAttrSelectorOf
+} from "../../../util/SelectorUtils.js";
+import {idOf} from "../../../util/DomUtils.js";
+import {uniqueId} from "../../../util/StringUtils.js";
 
 export default class ContainerEventsBinder extends EventsBinder {
     /**
@@ -9,6 +16,15 @@ export default class ContainerEventsBinder extends EventsBinder {
      * @type {string}
      */
     createRemoveEventName;
+
+    /**
+     * @return {jQuery<HTMLElement>}
+     * @protected
+     */
+    get $container() {
+        const parentId = this._component.id;
+        return $(`${idAttrSelectorOf(parentId)}, ${dataComponentIdSelectorOf(parentId)}`);
+    }
 
     /**
      * @param {AbstractComponent=} component
@@ -29,15 +45,15 @@ export default class ContainerEventsBinder extends EventsBinder {
      * attach DOM event handlers
      */
     attachEventHandlers() {
-        // <button data-owner="@root.owner" data-create-guest="click">
-        this._attachChildrenEventsHandler("create-guest", () => {
-            this._component.replacePart(newGuestPartName(), this.initialGuestDetails);
+        this._attachEventsHandlerOnOwnedHavingDataAttr("create-guest", () => {
+            // <button data-owner="@root.owner" data-create-guest="click">
+            this._component.replacePart(uniqueId(), this.initialGuestDetails);
         });
-        // <button data-owner="@root.owner" data-component-id="@root.componentId" data-remove-guest="click">
-        this._attachChildrenEventsHandler("remove-guest", (ev) => {
-            const guestId = $(ev.target).data(GlobalConfig.COMPONENT_ID);
-            const guestPartName = Object.values((/** @type {SimpleContainerComponent} */ this._component).guests)
-                .find(it => it.id === guestId).partName;
+        this._attachChildrenEventsHandlerInsideParent("remove-guest", (ev) => {
+            // <button data-owner-owner="parent-component" data-owner="child-id" data-remove-guest="click">
+            const $elem = $(ev.target);
+            const childId = idOf($elem) ?? ownerOf($elem);
+            const guestPartName = (/** @type {ListContainerComponent} */ this._component).getItemById(childId).partName;
             this._component.replacePart(guestPartName);
         });
     }
@@ -45,21 +61,32 @@ export default class ContainerEventsBinder extends EventsBinder {
     /**
      * @param {string} dataAttribName
      * @param {function} fn is the event handler
-     * @param {boolean=} oneTimeOnly specify whether to invoke the event once or multiple times
      * @protected
      */
-    _attachChildrenEventsHandler(dataAttribName, fn, oneTimeOnly) {
-        const $parent = $(`${dataComponentIdSelectorOf(this._component.id)}, ${idAttrSelectorOf(this._component.id)}`);
+    _attachChildrenEventsHandlerInsideParent(dataAttribName, fn) {
+        // <div data-owner="parent-component-id" data-part="kid0" data-component-id="child-component-id">
+        // <button data-owner-owner="parent-component-id" data-owner="child-id" data-remove-guest="click">
+        const itemSelector = this._$ownerOwnedHavingDataAttrSelector(dataAttribName);
         // removing previous handler (if any) set by another component
-        $parent.off(this.createRemoveEventName, dataSelectorOf(dataAttribName));
-        $parent.on(this.createRemoveEventName, dataSelectorOf(dataAttribName), fn);
+        this.$container.off(this.createRemoveEventName, itemSelector);
+        this.$container.on(this.createRemoveEventName, itemSelector, fn);
     }
 
     /**
      * detach DOM event handlers
      */
     detachEventHandlers() {
-        this._$childrenHavingDataAttr("create-guest").off();
-        this._$childrenHavingDataAttr("remove-guest").off(this.createRemoveEventName);
+        this._$ownedHavingDataAttr("create-guest").off(this.createRemoveEventName);
+        $(this._$ownerOwnedHavingDataAttrSelector("remove-guest")).off(this.createRemoveEventName);
+    }
+
+    /**
+     * @param {string} dataAttribName
+     * @return {string}
+     * @protected
+     */
+    _$ownerOwnedHavingDataAttrSelector(dataAttribName) {
+        // [data-owner-owner="parent-component-id"][data-dataAttribName]
+        return `${dataOwnerOwnerSelectorOf(this._component.id)}${dataSelectorOf(dataAttribName)}`;
     }
 }

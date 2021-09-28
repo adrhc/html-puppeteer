@@ -32,6 +32,14 @@ export default class ListContainerComponent extends AbstractComponent {
     }
 
     /**
+     * @param {string} itemId
+     * @return {AbstractComponent|undefined}
+     */
+    getItemById(itemId) {
+        return Object.values(this.items).find(it => it.id === itemId);
+    }
+
+    /**
      * Completely replaces the component's state.
      *
      * @param {SCT=} newState
@@ -65,7 +73,7 @@ export default class ListContainerComponent extends AbstractComponent {
     replacePart(previousPartName, newPart, newPartName) {
         const seatChanges = this.stateHolder.replacePart(previousPartName, newPart, newPartName);
         seatChanges.forEach(psc => {
-            this._handleGuestChange(psc);
+            this._handleItemChange(psc);
         });
     }
 
@@ -73,17 +81,17 @@ export default class ListContainerComponent extends AbstractComponent {
      * @param {PartStateChange<SCT, SCP>} partStateChange
      * @protected
      */
-    _handleGuestChange(partStateChange) {
+    _handleItemChange(partStateChange) {
         switch (partStateChange.changeType) {
             case CREATED:
-                // the parent creates the guest's seat (aka DOM element)
+                // the parent creates the item's seat (aka DOM element)
                 super._processStateChanges();
-                // the guest component reads its state from the parent (i.e. this container component)
-                this._placeGuest(partStateChange.newPartName);
+                // the item component reads its state from the parent (i.e. this container component)
+                this._createItem(partStateChange.newPartName);
                 break;
             case REMOVED:
-                this._removeGuest(partStateChange.previousPartName);
-                // the parent removes the guest's seat (aka DOM element)
+                this._removeItem(partStateChange.previousPartName);
+                // the parent removes the item's seat (aka DOM element)
                 super._processStateChanges();
                 break;
             case REPLACED:
@@ -91,14 +99,14 @@ export default class ListContainerComponent extends AbstractComponent {
                 // happen to the room layout but we have to consume
                 // the collected state changes
                 super._processStateChanges();
-                this.items[partStateChange.previousPartName].replaceState(partStateChange.newPart);
+                this._replaceItemState(partStateChange.previousPartName, partStateChange.newPart);
                 break;
             case RELOCATED:
-                this._removeGuest(partStateChange.previousPartName);
-                // the parent removes the guest's previous seat (aka DOM element) and create a new one
+                this._removeItem(partStateChange.previousPartName);
+                // the parent removes the item's previous seat (aka DOM element) and create a new one
                 super._processStateChanges();
-                // the guest component reads its state from the parent (i.e. this container component)
-                this._placeGuest(partStateChange.newPartName);
+                // the item component reads its state from the parent (i.e. this container component)
+                this._createItem(partStateChange.newPartName);
                 break;
             default:
                 alertOrThrow(`Bad state change!\n${JSON.stringify(partStateChange)}`);
@@ -109,33 +117,25 @@ export default class ListContainerComponent extends AbstractComponent {
      * @param {PartName} partName
      * @protected
      */
-    _placeGuest(partName) {
-        this.items[partName] = this._placeIntoSeat(partName);
-    }
-
-    /**
-     * @param {PartName} partName
-     * @return {AbstractComponent}
-     * @protected
-     */
-    _placeIntoSeat(partName) {
-        const component = this._createPartComponent(partName);
-        isTrue(component != null, "[_placeIntoSeat] the seat should exist!")
-        return component.render();
-    }
-
-    /**
-     * @param {PartName} partName
-     * @return {AbstractComponent}
-     * @protected
-     */
-    _createPartComponent(partName) {
-        const $childElem = $getPartElem(partName, this.config.elemIdOrJQuery);
-        if (!$childElem.length) {
+    _createItem(partName) {
+        const $seat = $getPartElem(partName, this.config.elemIdOrJQuery);
+        if (!$seat.length) {
             console.warn(`Missing child element for ${partName}; could be parent's state though.`);
             return undefined;
         }
-        return createComponent($childElem, {parent: this});
+        // at this point the item component's id is available as data-GlobalConfig.COMPONENT_ID on $seat
+        const component = createComponent($seat, {parent: this});
+        isTrue(component != null, "[_createItem] the seat should exist!")
+        this.items[partName] = component.render();
+    }
+
+    /**
+     * @param {PartName} itemName
+     * @param {SCP} newStateValue
+     * @protected
+     */
+    _replaceItemState(itemName, newStateValue) {
+        this.items[itemName].replaceState(newStateValue);
     }
 
     /**
@@ -143,7 +143,7 @@ export default class ListContainerComponent extends AbstractComponent {
      * @return {boolean}
      * @protected
      */
-    _removeGuest(partName) {
+    _removeItem(partName) {
         if (!this.items[partName]) {
             console.error(`Trying to close missing child: ${partName}!`);
             return false;
@@ -154,6 +154,11 @@ export default class ListContainerComponent extends AbstractComponent {
     }
 }
 
-function listContainerIllustratorProvider(componentId, componentIllustratorOptions) {
-    return new ListContainerIllustrator({componentId, ...componentIllustratorOptions});
+/**
+ * @param {string} componentId
+ * @param {ListContainerIllustratorOptions} componentConfig
+ * @return {ListContainerIllustrator}
+ */
+function listContainerIllustratorProvider(componentId, componentConfig) {
+    return new ListContainerIllustrator({componentId, ...componentConfig});
 }

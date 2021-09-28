@@ -65,34 +65,41 @@ export default class StateChangesHandlersInvoker {
 
     /**
      * @param {StateChangesCollector} stateChangesCollector
+     * @return {[]}
+     * @return
      */
     processStateChanges(stateChangesCollector) {
-        stateChangesCollector.consumeAll().forEach(sc => this._processStateChange(sc))
+        return stateChangesCollector.consumeAll()
+            .flatMap(sc => this._processStateChange(sc));
     }
 
     /**
      * @param {StateChange} typedStateChange
+     * @return {[]}
      * @protected
      */
     _processStateChange(typedStateChange) {
         const methodName = this._methodNameOf(typedStateChange);
-        this.stateChangesHandlers.forEach(sch => this._invokeStateChangesHandler(sch, methodName, typedStateChange))
+        return this.stateChangesHandlers
+            .flatMap(sch => this._invokeStateChangesHandler(sch, methodName, typedStateChange));
     }
 
     /**
      * @param {StateChangesHandler} stateChangesHandler
      * @param {string} methodName
      * @param {StateChange} typedStateChange
+     * @return {[]}
      * @protected
      */
     _invokeStateChangesHandler(stateChangesHandler, methodName, typedStateChange) {
-        stateChangesHandler?.[methodName]?.(typedStateChange);
+        const result = [stateChangesHandler?.[methodName]?.(typedStateChange)];
         if (this.captureAllChangesMethod != null) {
-            stateChangesHandler[this.captureAllChangesMethod]?.(typedStateChange);
+            result.push(stateChangesHandler[this.captureAllChangesMethod]?.(typedStateChange));
         }
         if (this.captureAllPartChangesMethod != null && this._isPartialChange(typedStateChange)) {
-            stateChangesHandler[this.captureAllPartChangesMethod]?.(typedStateChange);
+            result.push(stateChangesHandler[this.captureAllPartChangesMethod]?.(typedStateChange));
         }
+        return result.filter(notEmpty);
     }
 
     /**
@@ -135,4 +142,13 @@ export default class StateChangesHandlersInvoker {
     _methodVerbOf(changeType) {
         return _.camelCase(changeType);
     }
+}
+
+
+/**
+ * @param {*} value
+ * @return {boolean}
+ */
+function notEmpty(value) {
+    return value != null && (_.isArray(value) && !value.length || value !== {})
 }
