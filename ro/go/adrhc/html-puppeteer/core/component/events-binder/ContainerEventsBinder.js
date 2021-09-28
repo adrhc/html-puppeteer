@@ -15,7 +15,7 @@ export default class ContainerEventsBinder extends EventsBinder {
      *
      * @type {string}
      */
-    createRemoveEventName;
+    eventName;
 
     /**
      * @return {jQuery<HTMLElement>}
@@ -31,7 +31,7 @@ export default class ContainerEventsBinder extends EventsBinder {
      */
     set component(component) {
         this._component = component;
-        this.createRemoveEventName = component.config.guestsRemoveEvent ?? "click";
+        this.eventName = component.config.guestsRemoveEvent ?? "click";
     }
 
     /**
@@ -68,16 +68,16 @@ export default class ContainerEventsBinder extends EventsBinder {
         // <button data-owner-owner="parent-component-id" data-owner="child-id" data-remove-guest="click">
         const itemSelector = this._$ownerOwnedHavingDataAttrSelector(dataAttribName);
         // removing previous handler (if any) set by another component
-        this.$container.off(this.createRemoveEventName, itemSelector);
-        this.$container.on(this.createRemoveEventName, itemSelector, fn);
+        this.$container.off(this.eventName, itemSelector);
+        this.$container.on(this.eventName, itemSelector, fn);
     }
 
     /**
      * detach DOM event handlers
      */
     detachEventHandlers() {
-        this._$ownedHavingDataAttr("create-guest").off(this.createRemoveEventName);
-        $(this._$ownerOwnedHavingDataAttrSelector("remove-guest")).off(this.createRemoveEventName);
+        this._$ownedHavingDataAttr("create-guest").off(this.eventName);
+        $(this._$ownerOwnedHavingDataAttrSelector("remove-guest")).off(this.eventName);
     }
 
     /**
