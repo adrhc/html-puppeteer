@@ -10,7 +10,7 @@ $(() => {
     const component = animate(addDebugger({debuggerElemIdOrJQuery: "main-debugger"})
         .withEventsBinders(new OpenCloseEventsBinder(), new ContainerEventsBinder())
         .to({
-            initialGuestDetailsProviderFn: () => ({id: Math.random(), name: generateString("name ")})
+            itemProviderFn: () => ({id: Math.random(), name: generateString("name ")})
         }));
 
     // the application using the html-puppeteer

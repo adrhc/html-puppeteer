@@ -1,5 +1,5 @@
 import animate from "./ro/go/adrhc/html-puppeteer/core/Puppeteer.js";
-import {registerComponentType} from "./ro/go/adrhc/html-puppeteer/core/ComponentsFactories.js";
+import {registerComponentType} from "./ro/go/adrhc/html-puppeteer/core/ComponentFactories.js";
 import PeriodicallyStateChangingComponent
     from "./ro/go/adrhc/app/components/periodically-state-changing/PeriodicallyStateChangingComponent.js";
 import {generateDogsOrCats} from "./ro/go/adrhc/app/Generators.js";

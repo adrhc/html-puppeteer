@@ -22,7 +22,7 @@ export default class ContainerEventsBinder extends EventsBinder {
      * @return {*} initial part state for the a new guest (aka child component)
      */
     get initialGuestDetails() {
-        return this._component.config.initialGuestDetailsProviderFn?.(this._component) ?? {};
+        return this._component.config.itemProviderFn?.(this._component) ?? {};
     }
 
     /**
