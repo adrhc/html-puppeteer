@@ -48,25 +48,12 @@ export class ComponentOptionsBuilder {
      * @return {ComponentOptions}
      */
     to(options = {}) {
-        return _.defaults({}, this._options, options, this.defaults);
-    }
-
-    /**
-     * adds extra defaults related ComponentConfigurator
-     *
-     * @param {ComponentConfiguratorFn} componentConfiguratorFn
-     * @return {ComponentOptionsBuilder}
-     */
-    addConfiguratorFn(componentConfiguratorFn) {
-        const componentConfigurator = new FunctionComponentConfigurator(componentConfiguratorFn);
-        if (this._options.extraConfigurators) {
-            this._options.extraConfigurators.push(componentConfigurator);
-        } else if (this.defaults.extraConfigurators) {
-            this._options.extraConfigurators = [...this.defaults.extraConfigurators, componentConfigurator];
-        } else {
-            this._options.extraConfigurators = [componentConfigurator];
-        }
-        return this;
+        const extraConfigurators = [
+            ...(this.options.extraConfigurators ?? []), // these come from "this"
+            ...(this._options.extraConfigurators ?? []), // these are added by "this"
+            ...(this.defaults.extraConfigurators ?? []), // these come from the descendant class
+        ];
+        return _.defaults({}, {extraConfigurators}, this._options, options, this.defaults);
     }
 
     /**
@@ -87,14 +74,28 @@ export class ComponentOptionsBuilder {
     }
 
     /**
+     * adds extra defaults related ComponentConfigurator
+     *
+     * @param {ComponentConfiguratorFn} componentConfiguratorFn
+     * @return {ComponentOptionsBuilder}
+     */
+    addConfiguratorFn(componentConfiguratorFn) {
+        this.addConfigurator(new FunctionComponentConfigurator(componentConfiguratorFn));
+        return this;
+    }
+
+    /**
      * adds an extra ComponentConfigurator
      *
      * @param {ComponentConfigurator} componentConfigurator
      * @return {ComponentOptionsBuilder}
      */
     addConfigurator(componentConfigurator) {
-        this._options.extraConfigurators = this._options.extraConfigurators ?? [];
-        this._options.extraConfigurators.push(componentConfigurator);
+        if (this._options.extraConfigurators) {
+            this._options.extraConfigurators.push(componentConfigurator);
+        } else {
+            this._options.extraConfigurators = [componentConfigurator];
+        }
         return this;
     }
 

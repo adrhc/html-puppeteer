@@ -11,9 +11,9 @@ export function pushNotNull(array, ...values) {
 /**
  * @param {[]} array
  * @param {*} item
- * @param {number} index
+ * @param {number} [index=0]
  */
-export function insert(array, item, index) {
+export function insert(array, item, index = 0) {
     if (array.length === index) {
         array.push(item);
     } else {
