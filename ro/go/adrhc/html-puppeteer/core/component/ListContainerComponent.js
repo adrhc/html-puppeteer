@@ -2,7 +2,7 @@ import AbstractComponent from "./AbstractComponent.js";
 import {withDefaults} from "./options/ComponentOptionsBuilder.js";
 import ListContainerIllustrator from "../state-changes-handler/ListContainerIllustrator.js";
 import ContainerEventsBinder from "./events-binder/ContainerEventsBinder.js";
-import ChildrenGroup from "./ChildrenGroup.js";
+import ChildrenComponents from "./ChildrenComponents.js";
 
 /**
  * @typedef {AbstractComponentOptions} ListContainerComponentOptions
@@ -13,7 +13,7 @@ import ChildrenGroup from "./ChildrenGroup.js";
  * @extends {AbstractComponent}
  */
 export default class ListContainerComponent extends AbstractComponent {
-    childrenGroup = new ChildrenGroup(this);
+    childrenComponents = new ChildrenComponents(this);
 
     /**
      * @param {ListContainerComponentOptions} options
@@ -45,7 +45,7 @@ export default class ListContainerComponent extends AbstractComponent {
      * @return {AbstractComponent|undefined}
      */
     getItemById(itemId) {
-        return this.childrenGroup.getItemById(itemId);
+        return this.childrenComponents.getItemById(itemId);
     }
 
     /**

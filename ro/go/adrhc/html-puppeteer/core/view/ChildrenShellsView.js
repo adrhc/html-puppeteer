@@ -26,7 +26,7 @@ import {uniqueId} from "../../util/StringUtils.js";
 /**
  * @extends {AbstractView}
  */
-export default class GuestsRoomView extends AbstractView {
+export default class ChildrenShellsView extends AbstractView {
     /**
      * @type {jQuery<HTMLElement>}
      */

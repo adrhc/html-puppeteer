@@ -1,4 +1,4 @@
-import GuestsRoomView from "../view/GuestsRoomView.js";
+import ChildrenShellsView from "../view/ChildrenShellsView.js";
 import SimplePartsIllustrator from "./SimplePartsIllustrator.js";
 import {withDefaults} from "../component/options/ComponentOptionsBuilder.js";
 
@@ -16,15 +16,15 @@ export default class ListContainerIllustrator extends SimplePartsIllustrator {
      */
     container;
     /**
-     * @type {GuestsRoomView}
+     * @type {ChildrenShellsView}
      */
-    guestsRoomView;
+    childrenShellsView;
 
     /**
-     * @type {ChildrenGroup}
+     * @type {ChildrenComponents}
      */
-    get childrenGroup() {
-        return this.container.childrenGroup;
+    get childrenComponents() {
+        return this.container.childrenComponents;
     }
 
     /**
@@ -35,7 +35,7 @@ export default class ListContainerIllustrator extends SimplePartsIllustrator {
             htmlTemplate: component.config.htmlTemplate ?? (component.config.templateId ? undefined : "")
         }).to(_.cloneDeep(component.config)));
         this.container = component;
-        this.guestsRoomView = new GuestsRoomView({componentId: component.id, ...component.config});
+        this.childrenShellsView = new ChildrenShellsView({componentId: component.id, ...component.config});
     }
 
     /**
@@ -56,23 +56,23 @@ export default class ListContainerIllustrator extends SimplePartsIllustrator {
      * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partCreated(partStateChange) {
-        this.guestsRoomView.create(partStateChange.newPartName);
-        this.childrenGroup.createItem(partStateChange.newPartName);
+        this.childrenShellsView.create(partStateChange.newPartName);
+        this.childrenComponents.createItem(partStateChange.newPartName);
     }
 
     /**
      * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partRemoved(partStateChange) {
-        this.childrenGroup.removeItem(partStateChange.previousPartName);
-        this.guestsRoomView.remove(partStateChange.previousPartName);
+        this.childrenComponents.removeItem(partStateChange.previousPartName);
+        this.childrenShellsView.remove(partStateChange.previousPartName);
     }
 
     /**
      * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partReplaced(partStateChange) {
-        this.childrenGroup.replaceItemState(partStateChange.previousPartName, partStateChange.newPart);
+        this.childrenComponents.replaceItemState(partStateChange.previousPartName, partStateChange.newPart);
     }
 
     /**

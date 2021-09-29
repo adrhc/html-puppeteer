@@ -1,4 +1,4 @@
-import GuestsRoomView from "../view/GuestsRoomView.js";
+import ChildrenShellsView from "../view/ChildrenShellsView.js";
 import SimplePartsIllustrator from "./SimplePartsIllustrator.js";
 
 /**
@@ -12,7 +12,7 @@ import SimplePartsIllustrator from "./SimplePartsIllustrator.js";
  */
 export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
     /**
-     * @type {GuestsRoomView}
+     * @type {ChildrenShellsView}
      */
     guestsRoomView;
 
@@ -23,7 +23,7 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      */
     constructor({viewValuesTransformerFn, ...restOfOptions}) {
         super(restOfOptions);
-        this.guestsRoomView = new GuestsRoomView(restOfOptions);
+        this.guestsRoomView = new ChildrenShellsView(restOfOptions);
     }
 
     /**

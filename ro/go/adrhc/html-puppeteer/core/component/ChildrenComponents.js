@@ -7,7 +7,7 @@ import {isTrue} from "../../util/AssertionUtils.js";
 /**
  * @template SCT, SCP
  */
-export default class ChildrenGroup {
+export default class ChildrenComponents {
     /**
      * @type {string|jQuery<HTMLElement>}
      */
