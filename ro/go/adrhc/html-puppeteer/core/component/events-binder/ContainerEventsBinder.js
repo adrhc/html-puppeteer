@@ -1,12 +1,6 @@
 import EventsBinder from "./EventsBinder.js";
-import {ownerOf} from "../../../util/GlobalConfig.js";
-import {
-    dataComponentIdSelectorOf,
-    dataOwnerOwnerSelectorOf,
-    dataSelectorOf,
-    idAttrSelectorOf
-} from "../../../util/SelectorUtils.js";
-import {idOf} from "../../../util/DomUtils.js";
+import {childIdOf} from "../../../util/GlobalConfig.js";
+import {dataComponentIdSelectorOf, idAttrSelectorOf} from "../../../util/SelectorUtils.js";
 import {uniqueId} from "../../../util/StringUtils.js";
 
 export default class ContainerEventsBinder extends EventsBinder {
@@ -31,7 +25,7 @@ export default class ContainerEventsBinder extends EventsBinder {
      */
     set component(component) {
         this._component = component;
-        this.eventName = component.config.guestsRemoveEvent ?? "click";
+        this.eventName = component.config.childEvent ?? "click";
     }
 
     /**
@@ -45,14 +39,14 @@ export default class ContainerEventsBinder extends EventsBinder {
      * attach DOM event handlers
      */
     attachEventHandlers() {
-        this._attachEventsHandlerOnOwnedHavingDataAttr("create-guest", () => {
-            // <button data-owner="@root.owner" data-create-guest="click">
+        this._attachEventsHandlerOnOwnedHavingDataAttr("create-child", () => {
+            // <button data-owner="parent-component" data-create-child="click">
             this._component.replacePart(uniqueId(), this.initialGuestDetails);
         });
-        this._attachChildrenEventsHandlerInsideParent("remove-guest", (ev) => {
-            // <button data-owner-owner="parent-component" data-owner="child-id" data-remove-guest="click">
+        this._attachEventsHandlerOnOwnedHavingDataAttrInsideParent("remove-child", (ev) => {
+            // <button data-owner="parent-component" data-remove-child="click" data-child-id="childId">
             const $elem = $(ev.target);
-            const childId = idOf($elem) ?? ownerOf($elem);
+            const childId = childIdOf($elem);
             const guestPartName = (/** @type {SimpleContainerComponent} */ this._component).getItemById(childId).partName;
             this._component.replacePart(guestPartName);
         });
@@ -63,10 +57,8 @@ export default class ContainerEventsBinder extends EventsBinder {
      * @param {function} fn is the event handler
      * @protected
      */
-    _attachChildrenEventsHandlerInsideParent(dataAttribName, fn) {
-        // <div data-owner="parent-component-id" data-part="kid0" data-component-id="child-component-id">
-        // <button data-owner-owner="parent-component-id" data-owner="child-id" data-remove-guest="click">
-        const itemSelector = this._$ownerOwnedHavingDataAttrSelector(dataAttribName);
+    _attachEventsHandlerOnOwnedHavingDataAttrInsideParent(dataAttribName, fn) {
+        const itemSelector = this._$ownedHavingDataAttrSelector(dataAttribName);
         // removing previous handler (if any) set by another component
         this.$container.off(this.eventName, itemSelector);
         this.$container.on(this.eventName, itemSelector, fn);
@@ -76,17 +68,16 @@ export default class ContainerEventsBinder extends EventsBinder {
      * detach DOM event handlers
      */
     detachEventHandlers() {
-        this._$ownedHavingDataAttr("create-guest").off(this.eventName);
-        $(this._$ownerOwnedHavingDataAttrSelector("remove-guest")).off(this.eventName);
+        this._detachEventsHandlerOnOwnedHavingDataAttr("create-child", this.eventName);
+        this._detachEventsHandlerOnOwnedHavingDataAttrInsideParent("create-child");
     }
 
     /**
      * @param {string} dataAttribName
-     * @return {string}
      * @protected
      */
-    _$ownerOwnedHavingDataAttrSelector(dataAttribName) {
-        // [data-owner-owner="parent-component-id"][data-dataAttribName]
-        return `${dataOwnerOwnerSelectorOf(this._component.id)}${dataSelectorOf(dataAttribName)}`;
+    _detachEventsHandlerOnOwnedHavingDataAttrInsideParent(dataAttribName) {
+        const itemSelector = this._$ownedHavingDataAttrSelector(dataAttribName);
+        this.$container.off(this.eventName, itemSelector);
     }
 }

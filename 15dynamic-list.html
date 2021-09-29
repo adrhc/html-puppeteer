@@ -54,7 +54,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 				<th>Id</th>
 				<th>Name</th>
 				<th class="center">
-					<button data-create-guest="click" data-owner="parent-component">Add (on top)</button>
+					<button data-create-child="click" data-owner="parent-component">Add (on top)</button>
 				</th>
 			</tr>
 			</thead>
@@ -74,7 +74,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 		<td>{{id}}</td>
 		<td>{{name}}</td>
 		<td class="center">
-			<button data-owner-owner="{{@root.owner}}" data-owner="{{@root.componentId}}" data-remove-guest>
+			<button data-child-id="{{@root.componentId}}" data-owner="{{@root.owner}}" data-remove-child>
 				Remove
 			</button>
 		</td>

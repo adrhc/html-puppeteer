@@ -5,6 +5,7 @@ export default class GlobalConfig {
      * Used when rendering the component's shell.
      */
     static COMPONENT_ID = "componentId";
+    static DATA_CHILD_ID = "child-id";
     /**
      * Used to find the HTML element of a component having its id generated (works with the manually set too).
      */
@@ -17,10 +18,6 @@ export default class GlobalConfig {
      * @type {string}
      */
     static DATA_OWNER = "owner";
-    /**
-     * It's the owner of an owner.
-     */
-    static DATA_OWNER_OWNER = "owner-owner";
     /**
      * the child "part" name in the parent's state
      */
@@ -87,8 +84,8 @@ export function ownerOf($elem) {
  * @param {jQuery<HTMLElement>} $elem
  * @return {string|undefined}
  */
-export function ownerOwnerOf($elem) {
-    return $elem.data(GlobalConfig.DATA_OWNER_OWNER);
+export function childIdOf($elem) {
+    return $elem.data(GlobalConfig.DATA_CHILD_ID);
 }
 
 /**

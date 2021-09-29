@@ -53,11 +53,29 @@ export default class EventsBinder {
 
     /**
      * @param {string} dataAttribName
+     * @param {string} eventName
+     * @protected
+     */
+    _detachEventsHandlerOnOwnedHavingDataAttr(dataAttribName, eventName) {
+        this._$ownedHavingDataAttr(dataAttribName).off(eventName);
+    }
+
+    /**
+     * @param {string} dataAttribName
      * @return {jQuery<HTMLElement>}
      * @protected
      */
     _$ownedHavingDataAttr(dataAttribName) {
+        return $(`${this._$ownedHavingDataAttrSelector(dataAttribName)}`);
+    }
+
+    /**
+     * @param {string} dataAttribName
+     * @return {string}
+     * @protected
+     */
+    _$ownedHavingDataAttrSelector(dataAttribName) {
         // [data-owner="componentId"][data-dataAttribName]
-        return $(`${dataOwnerSelectorOf(this._component.id)}${dataSelectorOf(dataAttribName)}`);
+        return `${dataOwnerSelectorOf(this._component.id)}${dataSelectorOf(dataAttribName)}`;
     }
 }
