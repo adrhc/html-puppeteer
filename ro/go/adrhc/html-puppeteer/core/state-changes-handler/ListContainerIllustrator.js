@@ -16,7 +16,7 @@ export default class ListContainerIllustrator extends SimplePartsIllustrator {
      */
     childrenShellsView;
     /**
-     * @type {ListContainerComponent}
+     * @type {SimpleContainerComponent}
      */
     container;
 
@@ -28,7 +28,7 @@ export default class ListContainerIllustrator extends SimplePartsIllustrator {
     }
 
     /**
-     * @param {ListContainerComponent} component
+     * @param {SimpleContainerComponent} component
      */
     constructor(component) {
         super(withDefaults({

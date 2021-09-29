@@ -53,7 +53,7 @@ export default class ContainerEventsBinder extends EventsBinder {
             // <button data-owner-owner="parent-component" data-owner="child-id" data-remove-guest="click">
             const $elem = $(ev.target);
             const childId = idOf($elem) ?? ownerOf($elem);
-            const guestPartName = (/** @type {ListContainerComponent} */ this._component).getItemById(childId).partName;
+            const guestPartName = (/** @type {SimpleContainerComponent} */ this._component).getItemById(childId).partName;
             this._component.replacePart(guestPartName);
         });
     }

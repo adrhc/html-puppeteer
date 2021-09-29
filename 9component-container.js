@@ -6,7 +6,7 @@ import {getTotalHeight} from "./ro/go/adrhc/html-puppeteer/util/DomUtils.js";
 
 class App {
     /**
-     * @type {SimpleContainerComponent}
+     * @type {ComplexContainerComponent}
      */
     parent;
 

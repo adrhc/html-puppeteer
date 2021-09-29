@@ -4,12 +4,12 @@ import {uniqueId} from "../html-puppeteer/util/StringUtils.js";
 
 export default class Scenario10App {
     /**
-     * @type {SimpleContainerComponent}
+     * @type {ComplexContainerComponent}
      */
     parent;
 
     /**
-     * @param {SimpleContainerComponent} parent
+     * @param {ComplexContainerComponent} parent
      */
     constructor(parent) {
         this.parent = parent;

@@ -1,6 +1,6 @@
 import SimpleComponent from "./component/SimpleComponent.js";
+import ComplexContainerComponent from "./component/ComplexContainerComponent.js";
 import SimpleContainerComponent from "./component/SimpleContainerComponent.js";
-import ListContainerComponent from "./component/ListContainerComponent.js";
 
 /**
  * @typedef {function(options: Bag): AbstractComponent} ComponentProviderFn
@@ -11,8 +11,8 @@ import ListContainerComponent from "./component/ListContainerComponent.js";
  */
 const COMPONENT_TYPES = {
     "simple": (options) => new SimpleComponent(options),
-    "list-container": (options) => new ListContainerComponent(options),
-    "simple-container": (options) => new SimpleContainerComponent(options)
+    "list-container": (options) => new SimpleContainerComponent(options),
+    "simple-container": (options) => new ComplexContainerComponent(options)
 };
 
 /**
