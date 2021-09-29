@@ -36,7 +36,7 @@ export default class ListContainerComponent extends AbstractComponent {
         // initializing the container state with [] or {} depending on the newState
         // the container's view will kick in to render its static content (if any)
         this._replaceContainerStateOnly(newState);
-        // updating items (aka parts) state
+        // each newState's field is considered a "part"
         this.replaceParts(newState);
     }
 
