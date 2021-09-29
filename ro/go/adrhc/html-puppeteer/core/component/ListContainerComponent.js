@@ -20,7 +20,8 @@ export default class ListContainerComponent extends AbstractComponent {
      */
     constructor(options) {
         super(withDefaults(options)
-            .addComponentIllustratorProvider(listContainerIllustratorProvider)
+            .addComponentIllustratorProvider((c) =>
+                new ListContainerIllustrator(/** @type {ListContainerComponent} */c))
             .withEventsBinders(new ContainerEventsBinder())
             .options());
     }
@@ -32,10 +33,9 @@ export default class ListContainerComponent extends AbstractComponent {
      */
     replaceState(newState) {
         this.items = this.config.items ?? {};
-        // it's about whether the parent state is an Array or Object (i.e. Map)
-        const roomLayout = this._roomStructureFor(newState);
-        // using parent's view (only) to render the component's layout
-        super.replaceState(roomLayout);
+        // initializing the container state with [] or {} depending on the newState
+        // the container's view will kick in to render its static content (if any)
+        this._replaceContainerStateOnly(newState);
         // updating items (aka parts) state
         this.replaceParts(newState);
     }
@@ -49,21 +49,14 @@ export default class ListContainerComponent extends AbstractComponent {
     }
 
     /**
-     * @param {SCT=} newState new full/total state
+     * @param {SCT=} newState
      * @protected
      */
-    _roomStructureFor(newState) {
+    _replaceContainerStateOnly(newState) {
         if (newState == null) {
-            return newState;
+            super.replaceState(newState);
+        } else {
+            super.replaceState(_.isArray(newState) ? [] : {});
         }
-        return _.isArray(newState) ? [] : {};
     }
-}
-
-/**
- * @param {ListContainerComponent} component
- * @return {ListContainerIllustrator}
- */
-function listContainerIllustratorProvider(component) {
-    return new ListContainerIllustrator(component);
 }
