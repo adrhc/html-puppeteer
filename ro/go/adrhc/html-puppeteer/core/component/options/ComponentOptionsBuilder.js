@@ -52,19 +52,23 @@ export class ComponentOptionsBuilder {
      * @return {ComponentOptions}
      */
     to(options = {}) {
+        // extraStateChangesHandlers
         const extraStateChangesHandlers = [
             ...(this.options.extraStateChangesHandlers ?? []), // these come from "this"
             ...(this._options.extraStateChangesHandlers ?? []), // these are added by "this"
             ...(this.defaults.extraStateChangesHandlers ?? []), // these come from the descendant class
         ];
+        // extraConfigurators
         const extraConfigurators = [
             ...(this.options.extraConfigurators ?? []), // these come from "this"
             ...(this._options.extraConfigurators ?? []), // these are added by "this"
             ...(this.defaults.extraConfigurators ?? []), // these come from the descendant class
         ];
+        // events binders
         const eventsBinders = pushNotNullMissing([],
             this._options.eventsBinder, this._options.eventsBinder, this.defaults.eventsBinder);
         const eventsBinder = eventsBinders.length > 1 ? new EventsBinderGroup(undefined, eventsBinders) : eventsBinders[0];
+        // final options
         return _.defaults({
             extraConfigurators,
             extraStateChangesHandlers,
