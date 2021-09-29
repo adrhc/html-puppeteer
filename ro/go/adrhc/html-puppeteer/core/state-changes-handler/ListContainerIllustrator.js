@@ -74,7 +74,7 @@ export default class ListContainerIllustrator extends SimplePartsIllustrator {
      * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partReplaced(partStateChange) {
-        this.replaceItemState(partStateChange.previousPartName, partStateChange.newPart);
+        this.childrenGroup.replaceItemState(partStateChange.previousPartName, partStateChange.newPart);
     }
 
     /**
