@@ -1,7 +1,7 @@
 import AbstractView from "./AbstractView.js";
 import {jQueryOf} from "../../util/DomUtils.js";
 import GlobalConfig from "../../util/GlobalConfig.js";
-import {dataPartSelectorOf} from "../../util/SelectorUtils.js";
+import {dataOwnerSelectorOf, dataPartSelectorOf} from "../../util/SelectorUtils.js";
 import {generateHtml} from "../../util/HtmlGenerator.js";
 import {uniqueId} from "../../util/StringUtils.js";
 import shellTemplateOf, {shellTemplateOptionsAreEmpty} from "./ChildShellTemplate.js";
@@ -72,11 +72,12 @@ export default class ChildrenShellsView extends AbstractView {
      * @param {PartName} partName
      */
     create(partName) {
-        if (this._childSeatExists(partName)) {
-            return;
+        const $shell = this._$shellElemOf(partName);
+        if ($shell) {
+            return $shell;
         }
         isFalse(this.persistentShells,
-            `Can't have persistent shells while also a shell template!\n${this.shellTemplate}`);
+            `Can't have persistent shells while also a shell template!\nMake sure to have ${dataOwnerSelectorOf(partName)} on the "${partName}" persistent shell!`);
         const viewValues = {
             [GlobalConfig.PART]: partName,
             [GlobalConfig.OWNER]: this.parentId,
@@ -84,6 +85,7 @@ export default class ChildrenShellsView extends AbstractView {
         };
         const kidSeat = generateHtml(this.shellTemplate, viewValues);
         this.$containerElem[this.place](kidSeat);
+        return this._$shellElemOf(partName);
     }
 
     /**
@@ -104,10 +106,47 @@ export default class ChildrenShellsView extends AbstractView {
 
     /**
      * @param {string} partName
-     * @return {boolean}
+     * @return {jQuery<HTMLElement>|undefined}
      * @protected
      */
-    _childSeatExists(partName) {
-        return !!this.$containerElem.children(dataPartSelectorOf(partName)).length;
+    _$shellElemOf(partName) {
+        if (this.persistentShells) {
+            const $childByPartName = this._$shellByPartName(partName);
+            return $childByPartName ? $childByPartName : this._$shellByOwnerAndPartName(partName);
+        } else {
+            return this._$shellByPartName(partName);
+        }
+    }
+
+    /**
+     * @param {string} partName
+     * @return {jQuery<HTMLElement>|undefined}
+     * @protected
+     */
+    _$shellByOwnerAndPartName(partName) {
+        const byOwnerAndPartNameSelector = `${dataOwnerSelectorOf(this.parentId)}${dataPartSelectorOf(partName)}`
+        return this._elemForSelector(byOwnerAndPartNameSelector, "find");
+    }
+
+    /**
+     * @param {string} partName
+     * @return {jQuery<HTMLElement>|undefined}
+     * @protected
+     */
+    _$shellByPartName(partName) {
+        const childByPartNameSelector = dataPartSelectorOf(partName);
+        return this._elemForSelector(childByPartNameSelector, "children");
+    }
+
+    /**
+     * @param {string} selector
+     * @param {"children" | "find"} searchWith
+     * @return {jQuery<HTMLElement>|undefined}
+     * @protected
+     */
+    _elemForSelector(selector, searchWith) {
+        const $child = this.$containerElem[searchWith](selector);
+        isFalse($child.length > 1, `Found ${$child.length} of ${selector}!`);
+        return $child.length ? $child : undefined;
     }
 }

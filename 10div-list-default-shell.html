@@ -69,12 +69,14 @@ PS: make sure to have a well formatted JSON!</textarea>
 	<div class="mb3">kids could be on parent's top or left or anywhere else</div>
 	<div class="flex-start"
 	     data-removed-placeholder='The "cats" is closed!'
-	     data-shell-occupant-template-id="cats-template"
+	     data-shell-occupant-template-id="cats-row-template"
 	     data-type="simple-container"
-	     data-part="cats"></div>
+	     data-part="cats">
+		The "cats" child is not available yet!
+	</div>
 </script>
 
-<script id="cats-template" type="text/x-handlebars-template">
+<script id="cats-row-template" type="text/x-handlebars-template">
 	{{#with value}}
 		<div><label>Id:</label> {{id}}</div>
 		<div><label>Name:</label> {{name}}</div>

@@ -56,8 +56,8 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partCreated(partStateChange) {
-        this.childrenShellsView.create(partStateChange.newPartName);
-        this.childrenComponents.createItem(partStateChange.newPartName);
+        const $shell = this.childrenShellsView.create(partStateChange.newPartName);
+        this.childrenComponents.createItem(partStateChange.newPartName, $shell);
     }
 
     /**

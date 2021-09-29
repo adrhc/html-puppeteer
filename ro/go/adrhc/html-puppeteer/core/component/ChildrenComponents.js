@@ -32,11 +32,11 @@ export default class ChildrenComponents {
 
     /**
      * @param {PartName} partName
+     * @param {jQuery<HTMLElement>} $shell
      */
-    createItem(partName) {
-        const $shell = $getPartElem(partName, this.elemIdOrJQuery);
+    createItem(partName, $shell) {
         if (!$shell.length) {
-            console.warn(`Missing child element for ${partName}; could be parent's state though.`);
+            console.warn(`Missing child element for ${partName}!`);
             return undefined;
         }
         // at this point the item component's id is available as data-GlobalConfig.COMPONENT_ID on $shell
