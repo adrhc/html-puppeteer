@@ -6,8 +6,7 @@ import StateChangesHandlersInvoker from "../../state-processor/StateChangesHandl
 import {uniqueId} from "../../../util/StringUtils.js";
 
 /**
- * @typedef {DataAttributes & AbstractComponentOptions} DefaultComponentConfiguratorConfigField
- * @property {AbstractComponent} parent
+ * @typedef {AbstractComponentOptions & DataAttributes} DefaultComponentConfiguratorConfigField
  */
 export default class DefaultComponentConfigurator extends ComponentConfigurator {
     /**

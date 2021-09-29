@@ -2,7 +2,7 @@ import StateInitializer from "./StateInitializer.js";
 
 /**
  * @template SCT, SCP
- * @typedef {Bag} ValueStateInitializerOptions
+ * @typedef {Object} ValueStateInitializerOptions
  * @property {*} initialState
  */
 export default class ValueStateInitializer extends StateInitializer {

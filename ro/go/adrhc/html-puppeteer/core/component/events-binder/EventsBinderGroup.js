@@ -24,6 +24,13 @@ export default class EventsBinderGroup extends EventsBinder {
     }
 
     /**
+     * @param {EventsBinder} eventsBinders
+     */
+    addEventsBinder(...eventsBinders) {
+        this.eventsBinders.push(...eventsBinders);
+    }
+
+    /**
      * attach DOM event handlers
      */
     attachEventHandlers() {

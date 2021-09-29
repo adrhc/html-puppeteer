@@ -1,6 +1,10 @@
 import ComponentConfigurator from "../configurator/ComponentConfigurator.js";
 import EventsBinderGroup from "../events-binder/EventsBinderGroup.js";
+import {pushNotNullMissing} from "../../../util/ArrayUtils.js";
 
+/**
+ * @typedef {function(options: ComponentOptions)} ComponentOptionsConsumer
+ */
 /**
  * @typedef {function(component: AbstractComponent): ComponentIllustrator} ComponentIllustratorProviderFn
  */
@@ -19,16 +23,16 @@ import EventsBinderGroup from "../events-binder/EventsBinderGroup.js";
  */
 export class ComponentOptionsBuilder {
     /**
-     * @type {Bag}
+     * @type {ComponentOptions}
      */
     _options = {};
     /**
-     * @type {Bag}
+     * @type {ComponentOptions}
      */
     defaults;
 
     /**
-     * @param {Bag} defaults
+     * @param {ComponentOptions} defaults will be added after this._options (only for array types, e.g. extraConfigurators).
      */
     constructor(defaults = {}) {
         this.defaults = defaults;
@@ -42,18 +46,30 @@ export class ComponentOptionsBuilder {
     }
 
     /**
-     * This is the equivalent of the build() method of a builder.
+     * this._options will be added after "options" param (only for array types, e.g. extraConfigurators)
      *
      * @param {ComponentOptions=} options
      * @return {ComponentOptions}
      */
     to(options = {}) {
+        const extraStateChangesHandlers = [
+            ...(this.options.extraStateChangesHandlers ?? []), // these come from "this"
+            ...(this._options.extraStateChangesHandlers ?? []), // these are added by "this"
+            ...(this.defaults.extraStateChangesHandlers ?? []), // these come from the descendant class
+        ];
         const extraConfigurators = [
             ...(this.options.extraConfigurators ?? []), // these come from "this"
             ...(this._options.extraConfigurators ?? []), // these are added by "this"
             ...(this.defaults.extraConfigurators ?? []), // these come from the descendant class
         ];
-        return _.defaults({}, {extraConfigurators}, this._options, options, this.defaults);
+        const eventsBinders = pushNotNullMissing([],
+            this._options.eventsBinder, this._options.eventsBinder, this.defaults.eventsBinder);
+        const eventsBinder = eventsBinders.length > 1 ? new EventsBinderGroup(undefined, eventsBinders) : eventsBinders[0];
+        return _.defaults({
+            extraConfigurators,
+            extraStateChangesHandlers,
+            eventsBinder
+        }, this._options, options, this.defaults);
     }
 
     /**
@@ -65,8 +81,6 @@ export class ComponentOptionsBuilder {
     addStateChangeHandler(stateChangesHandler) {
         if (this._options.extraStateChangesHandlers) {
             this._options.extraStateChangesHandlers.push(stateChangesHandler);
-        } else if (this.defaults.extraStateChangesHandlers) {
-            this._options.extraStateChangesHandlers = [...this.defaults.extraStateChangesHandlers, stateChangesHandler];
         } else {
             this._options.extraStateChangesHandlers = [stateChangesHandler];
         }
@@ -121,18 +135,17 @@ export class ComponentOptionsBuilder {
      */
     withEventsBinders(...eventsBinders) {
         if (this._options.eventsBinder) {
-            eventsBinders = [...eventsBinders, this._options.eventsBinder];
-        } else if (this.defaults.eventsBinder) {
-            eventsBinders = [...eventsBinders, this.defaults.eventsBinder];
+            this._options.eventsBinder.addEventsBinder(...eventsBinders);
+        } else {
+            this._options.eventsBinder = new EventsBinderGroup(undefined, eventsBinders);
         }
-        this._options.eventsBinder = new EventsBinderGroup(undefined, eventsBinders);
         return this;
     }
 
     /**
      * Useful when on has to also check the current this._options values.
      *
-     * @param {BagConsumer} optionsConsumer
+     * @param {ComponentOptionsConsumer} optionsConsumer
      * @return {ComponentOptionsBuilder}
      */
     withOptionsConsumer(optionsConsumer) {

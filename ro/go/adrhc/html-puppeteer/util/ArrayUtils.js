@@ -10,6 +10,16 @@ export function pushNotNull(array, ...values) {
 
 /**
  * @param {[]} array
+ * @param {*} values
+ * @return {[]}
+ */
+export function pushNotNullMissing(array, ...values) {
+    values.filter(v => v != null && array.indexOf(v) === -1).forEach(v => array.push(v));
+    return array;
+}
+
+/**
+ * @param {[]} array
  * @param {*} item
  * @param {number} [index=0]
  */
