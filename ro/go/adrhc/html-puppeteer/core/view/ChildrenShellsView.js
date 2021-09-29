@@ -96,6 +96,6 @@ export default class ChildrenShellsView extends AbstractView {
      * @protected
      */
     _childSeatExists(partName) {
-        return !!this.$containerElem.children(dataPartSelectorOf(name)).length;
+        return !!this.$containerElem.children(dataPartSelectorOf(partName)).length;
     }
 }

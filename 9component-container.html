@@ -30,11 +30,11 @@
 		<div class="mb3">
 			<button name="change-parent-state">Change parent state</button>
 		</div>
-		<textarea class="fill-available" id="main-debugger">No debugging data available yet!</textarea>
+		<textarea class="fill-available" id="main-debugger" rows="10">No debugging data available yet!</textarea>
 	</div>
 	<!-- the component -->
 	<div class="section title">Component's view</div>
-	<div class="section flex-column fit-content bgc-aliceblue"
+	<!--<div class="section flex-column fit-content bgc-aliceblue"
 	     data-shell-attributes='{"templateId": "cats-template"}'
 	     data-dont-remove-guests="true"
 	     data-family-names="message1,message2,cats"
@@ -43,12 +43,18 @@
 	     data-new-guests-go-last="true"
 	     data-room-parts="text"
 	     data-template-id="parent-template"
+	     data-type="complex-container"
+	     id="parent-component"></div>-->
+	<div data-initial-state='{"message1": null,
+	     "message2": "The \"message2\" child was <i>automatically</i> created!<BR>\"message2\" child is initialized from parent state",
+	     "cats": [{"id": 0, "name": "cat 0"}]}'
+	     data-template-id="parent-template"
+	     data-removed-placeholder='The "parent-component" is closed!'
 	     data-type="simple-container"
 	     id="parent-component"></div>
 </div>
 
 <script id="parent-template" type="text/x-handlebars-template">
-	<div class="parent">{{text}}</div>
 	<div data-part="message1" data-type="simple"
 	     data-template-id="message1-template"
 	     data-initial-state='The "message1" child was <i>automatically</i> created!<BR>initial state is from <i>data-initial-state</i> attribute'

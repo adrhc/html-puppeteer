@@ -11,8 +11,8 @@ import SimpleContainerComponent from "./component/SimpleContainerComponent.js";
  */
 const COMPONENT_TYPES = {
     "simple": (options) => new SimpleComponent(options),
-    "list-container": (options) => new SimpleContainerComponent(options),
-    "simple-container": (options) => new ComplexContainerComponent(options)
+    "simple-container": (options) => new SimpleContainerComponent(options),
+    "complex-container": (options) => new ComplexContainerComponent(options)
 };
 
 /**
