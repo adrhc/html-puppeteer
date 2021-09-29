@@ -1,9 +1,9 @@
 import ChildrenShellsView from "../view/ChildrenShellsView.js";
 import SimplePartsIllustrator from "./SimplePartsIllustrator.js";
+import {withDefaults} from "../component/options/ComponentOptionsBuilder.js";
 
 /**
  * @typedef {ComponentIllustratorOptions & GuestsRoomViewOptions} SimpleContainerIllustratorOptions
- * @property {string=} componentId
  */
 /**
  * @template SCT, SCP
@@ -14,16 +14,28 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
     /**
      * @type {ChildrenShellsView}
      */
-    guestsRoomView;
+    childrenShellsView;
+    /**
+     * @type {SimpleContainerComponent}
+     */
+    container;
 
     /**
-     * @param {SimpleContainerIllustratorOptions} options
-     * @param {ViewValuesTransformerFn} options.viewValuesTransformerFn
-     * @param {SimpleContainerIllustratorOptions} options.restOfOptions
+     * @type {ChildrenComponents}
      */
-    constructor({viewValuesTransformerFn, ...restOfOptions}) {
-        super(restOfOptions);
-        this.guestsRoomView = new ChildrenShellsView(restOfOptions);
+    get childrenComponents() {
+        return this.container.childrenComponents;
+    }
+
+    /**
+     * @param {SimpleContainerComponent} component
+     */
+    constructor(component) {
+        super(withDefaults({
+            htmlTemplate: component.config.htmlTemplate ?? (component.config.templateId ? undefined : "")
+        }).to(_.cloneDeep(component.config)));
+        this.container = component;
+        this.childrenShellsView = new ChildrenShellsView({componentId: component.id, ...component.config});
     }
 
     /**
@@ -31,7 +43,6 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      */
     created(stateChange) {
         super.created(stateChange);
-        this.guestsRoomView.parentUpdated()
     }
 
     /**
@@ -39,36 +50,39 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      */
     replaced(stateChange) {
         super.replaced(stateChange);
-        this.guestsRoomView.parentUpdated()
-    }
-
-    /**
-     * @param {PartStateChange<SCT, SCP>} partStateChange
-     */
-    partRemoved(partStateChange) {
-        this.guestsRoomView.remove(partStateChange.previousPartName);
     }
 
     /**
      * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partCreated(partStateChange) {
-        return this.guestsRoomView.create(partStateChange.newPartName);
+        this.childrenShellsView.create(partStateChange.newPartName);
+        this.childrenComponents.createItem(partStateChange.newPartName);
     }
 
     /**
      * @param {PartStateChange<SCT, SCP>} partStateChange
      */
-    partRelocated(partStateChange) {
-        this.guestsRoomView.remove(partStateChange.previousPartName);
-        return this.guestsRoomView.create(partStateChange.newPartName);
+    partRemoved(partStateChange) {
+        this.childrenComponents.removeItem(partStateChange.previousPartName);
+        this.childrenShellsView.remove(partStateChange.previousPartName);
     }
 
     /**
      * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partReplaced(partStateChange) {
-        // do nothing
+        // parent state changed (a part of it) hence we force the child to update
+        // its state using its logic of getting its state from parent state's part
+        this.childrenComponents.updateFromParent(partStateChange.previousPartName);
+    }
+
+    /**
+     * @param {PartStateChange<SCT, SCP>} partStateChange
+     */
+    partRelocated(partStateChange) {
+        this.partRemoved(partStateChange);
+        this.partCreated(partStateChange);
     }
 
     /**

@@ -3,14 +3,14 @@ import {withDefaults} from "./options/ComponentOptionsBuilder.js";
 import {CREATED, RELOCATED, REMOVED, REPLACED} from "../state/change/StateChangeTypes.js";
 import {alertOrThrow, isFalse, isTrue} from "../../util/AssertionUtils.js";
 import AbstractComponent from "./AbstractComponent.js";
-import SimpleContainerIllustrator from "../state-changes-handler/SimpleContainerIllustrator.js";
+import ComplexContainerIllustrator from "../state-changes-handler/ComplexContainerIllustrator.js";
 import {partsOf} from "../state/PartialStateHolder.js";
 
 /**
  * @typedef {{[name: string]: AbstractComponent}} ComponentsCollection
  */
 /**
- * @typedef {AbstractComponentOptions} SimpleContainerComponentOptions
+ * @typedef {AbstractComponentOptions} ComplexContainerComponentOptions
  * @property {ComponentsCollection} guests
  * @property {PartName=} familyNames are the parts managed directly by the container or by other components not in guests room
  */
@@ -45,7 +45,7 @@ export default class ComplexContainerComponent extends AbstractComponent {
     roomParts;
 
     /**
-     * @param {SimpleContainerComponentOptions} options
+     * @param {ComplexContainerComponentOptions} options
      */
     constructor(options) {
         super(withDefaults(options)
@@ -295,5 +295,5 @@ export default class ComplexContainerComponent extends AbstractComponent {
 }
 
 function simpleContainerIllustratorProvider(component) {
-    return new SimpleContainerIllustrator({componentId: component.id, ...component.config});
+    return new ComplexContainerIllustrator({componentId: component.id, ...component.config});
 }

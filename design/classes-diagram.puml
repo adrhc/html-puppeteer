@@ -95,13 +95,48 @@ end note
 }'/
 
 class SimpleContainerComponent extends AbstractComponent {
-#guests: {partName: AbstractComponent}
-+render(value)
+#childrenComponents: ChildrenComponents
+#stateChangesHandlersInvoker=[SimpleContainerIllustrator]
 +replaceState(newState)
-+replacePart(previousPartName, \nnewPart, newPartName)
-#_processStateChange(partStateChange)
-#_createChild(partName)
-#_removeChild(partName)
++getItemById(itemId): AbstractComponent
+#replaceContainerStateOnly(newState)
+}
+
+SimpleContainerComponent *- ChildrenComponents
+
+class SimpleContainerIllustrator extends SimplePartsIllustrator {
+#childrenComponents: ChildrenComponents
+#childrenShellsView: ChildrenShellsView
++created(stateChange)
++replaced(stateChange)
++partCreated(partStateChange)
++partRemoved(partStateChange)
++partReplaced(partStateChange)
++partRelocated(partStateChange)
++partChangeOccurred(partStateChange)
+}
+
+SimpleContainerIllustrator -> ChildrenComponents
+SimpleContainerIllustrator *- ChildrenShellsView
+
+class ChildrenShellsView extends AbstractView {
+#$containerElem
+#parentId
+#place: "append" | "prepend"
+#shellTemplate
+#childSeatExists(partName)
++create(partName)
++remove(partName)
+}
+
+class ChildrenComponents {
+#elemIdOrJQuery
+#items: {partName: AbstractComponent}
+#parent: AbstractComponent
++createItem(partName)
++updateFromParent(itemName)
++removeItem(partName)
++getItemById(itemId)
 }
 
 abstract EventsBinder {

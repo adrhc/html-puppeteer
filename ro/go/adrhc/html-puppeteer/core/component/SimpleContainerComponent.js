@@ -1,6 +1,6 @@
 import AbstractComponent from "./AbstractComponent.js";
 import {withDefaults} from "./options/ComponentOptionsBuilder.js";
-import ListContainerIllustrator from "../state-changes-handler/ListContainerIllustrator.js";
+import SimpleContainerIllustrator from "../state-changes-handler/SimpleContainerIllustrator.js";
 import ContainerEventsBinder from "./events-binder/ContainerEventsBinder.js";
 import ChildrenComponents from "./ChildrenComponents.js";
 
@@ -21,7 +21,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
     constructor(options) {
         super(withDefaults(options)
             .addComponentIllustratorProvider((c) =>
-                new ListContainerIllustrator(/** @type {SimpleContainerComponent} */c))
+                new SimpleContainerIllustrator(/** @type {SimpleContainerComponent} */c))
             .withEventsBinders(new ContainerEventsBinder())
             .options());
     }
