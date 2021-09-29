@@ -94,16 +94,6 @@ end note
   +move(partName, toPartName)
 }'/
 
-class SimpleContainerComponent extends AbstractComponent {
-#childrenComponents: ChildrenComponents
-#stateChangesHandlersInvoker=[SimpleContainerIllustrator]
-+replaceState(newState)
-+getItemById(itemId): AbstractComponent
-#replaceContainerStateOnly(newState)
-}
-
-SimpleContainerComponent *- ChildrenComponents
-
 class SimpleContainerIllustrator extends SimplePartsIllustrator {
 #childrenComponents: ChildrenComponents
 #childrenShellsView: ChildrenShellsView
@@ -221,6 +211,16 @@ an empty object should be
 treated as "use empty for
 all part's fields".
 end note
+
+class SimpleContainerComponent extends AbstractComponent {
+#childrenComponents: ChildrenComponents
+#stateChangesHandlersInvoker=[SimpleContainerIllustrator]
++replaceState(newState)
++getItemById(itemId): AbstractComponent
+#replaceContainerStateOnly(newState)
+}
+
+SimpleContainerComponent *- ChildrenComponents
 
 interface ErrorsHandler {
 +accept(error)
@@ -389,11 +389,6 @@ abstract DomValuesReader {
   {abstract}+extractDomValues()
 }
 
-/'note right of DomValuesReader::extractDomValues
-Extracts the input
-value from view.
-end note'/
-
 AbstractComponent *-down- EventsBinder
 AbstractComponent *-down- StateHolder
 AbstractComponent *-down- StateInitializer
@@ -402,33 +397,8 @@ AbstractComponent *-down- ErrorsHandler
 AbstractComponent *-up- StateChangesHandlerAdapter
 StateChangesHandlerAdapter *-up- "many" StateChangesHandler
 ComponentIllustrator *-- AbstractView
-'PartialStateChangesHandler -down-|> StateChangesHandler
-'PartsAllocator -down-|> PartialStateChangesHandler
-'StateChangesHandler -up-{ AbstractView : might use
-'DomValuesReader *-up- AbstractView
-/'StateSynchronizer *-down- DomValuesReader
-StateSynchronizer -up-> PartsAllocator
-StateSynchronizer -up-> ComponentIllustrator'/
-'SimplePartsIllustrator -down-> ComponentIllustrator
-'SimplePartsIllustrator -down-|> PartialStateChangesHandler
-'AbstractComponent *-up- StateSynchronizer
-'AbstractComponent *-right- PartsAllocator
-'PartialStateHolder -up-|> StateHolder
 StateHolder *-- StateChangesCollector
 StateChangesCollector *-- "many" StateChange
-'ComponentIllustrator --|> StateChangesHandler
-'PartStateChange -down-> StateChange
-'PartsAllocator -down-> StateHolder
-'ValueStateInitializer -up-|> StateInitializer
 StateChangesCollector *-- StateChangeEnhancer
-
-/'note as setElement
-<i>domElement</i>
-is the component's
-(root) DOM element
-end note
-
-ComponentIllustrator .. setElement
-setElement .. DomValuesReader'/
 
 @enduml
