@@ -153,4 +153,11 @@ export default class AbstractComponent extends StateProcessor {
         this.eventsBinder?.detachEventHandlers();
         this.replaceState();
     }
+
+    /**
+     * @param {StateChangesHandler} stateChangesHandlers
+     */
+    appendStateChangesHandlers(...stateChangesHandlers) {
+        this.stateChangesHandlersInvoker.appendStateChangesHandlers(...stateChangesHandlers);
+    }
 }

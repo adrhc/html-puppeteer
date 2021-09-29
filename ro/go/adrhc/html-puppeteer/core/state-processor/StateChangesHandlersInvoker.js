@@ -3,7 +3,6 @@ import {pushNotNull} from "../../util/ArrayUtils.js";
 /**
  * @typedef {Object} StateChangesHandlersField
  * @property {ComponentIllustrator=} componentIllustrator
- * @property {PartsAllocator=} partsAllocator
  * @property {StateChangesHandler[]=} extraStateChangesHandlers
  */
 /**
@@ -49,18 +48,17 @@ export default class StateChangesHandlersInvoker {
      */
     _createStateChangesInvokers({
                                     componentIllustrator,
-                                    partsAllocator,
                                     extraStateChangesHandlers,
                                 }) {
         extraStateChangesHandlers = extraStateChangesHandlers ?? [];
-        return pushNotNull([], componentIllustrator, partsAllocator, ...extraStateChangesHandlers);
+        return pushNotNull([], componentIllustrator, ...extraStateChangesHandlers);
     }
 
     /**
-     * @param {StateChangesHandler} stateChangesHandler
+     * @param {StateChangesHandler} stateChangesHandlers
      */
-    appendStateChangesHandlers(...stateChangesHandler) {
-        stateChangesHandler?.forEach(sch => pushNotNull(this.stateChangesHandlers, sch));
+    appendStateChangesHandlers(...stateChangesHandlers) {
+        pushNotNull(this.stateChangesHandlers, ...stateChangesHandlers);
     }
 
     /**

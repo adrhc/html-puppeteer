@@ -294,6 +294,6 @@ export default class SimpleContainerComponent extends AbstractComponent {
     }
 }
 
-function simpleContainerIllustratorProvider(componentId, componentIllustratorOptions) {
-    return new SimpleContainerIllustrator({componentId, ...componentIllustratorOptions});
+function simpleContainerIllustratorProvider(component) {
+    return new SimpleContainerIllustrator({componentId: component.id, ...component.config});
 }

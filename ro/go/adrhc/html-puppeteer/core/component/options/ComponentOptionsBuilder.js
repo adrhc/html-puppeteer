@@ -2,7 +2,7 @@ import ComponentConfigurator from "../configurator/ComponentConfigurator.js";
 import EventsBinderGroup from "../events-binder/EventsBinderGroup.js";
 
 /**
- * @typedef {function(componentId: string, componentIllustratorOptions: ComponentIllustratorOptions): ComponentIllustrator} ComponentIllustratorProviderFn
+ * @typedef {function(component: AbstractComponent): ComponentIllustrator} ComponentIllustratorProviderFn
  */
 /**
  * @typedef {function(initialState: *): StateInitializer} StateInitializerProviderFn
@@ -108,8 +108,8 @@ export class ComponentOptionsBuilder {
             return this;
         }
         this.addConfiguratorFn((component) => {
-            const componentIllustrator = componentIllustratorProviderFn(component.id, component.config);
-            component.stateChangesHandlersInvoker.appendStateChangesHandlers(componentIllustrator);
+            const componentIllustrator = componentIllustratorProviderFn(component);
+            component.appendStateChangesHandlers(componentIllustrator);
         });
         return this;
     }

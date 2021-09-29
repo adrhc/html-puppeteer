@@ -1,10 +1,10 @@
 /**
  * @param {[]} array
- * @param {*} value
+ * @param {*} values
  * @return {[]}
  */
-export function pushNotNull(array, ...value) {
-    value.filter(v => v != null).forEach(v => array.push(v));
+export function pushNotNull(array, ...values) {
+    values.filter(v => v != null).forEach(v => array.push(v));
     return array;
 }
 
