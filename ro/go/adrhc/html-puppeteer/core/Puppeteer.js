@@ -92,7 +92,3 @@ function instanceOf($el, type, componentOptions = {}) {
 function renderComponents($components) {
     $components.each((index, comp) => comp.render());
 }
-
-export function $getPartElem(partName, parentElemIdOrJQuery) {
-    return jQueryOf(parentElemIdOrJQuery).children(dataPartSelectorOf(partName));
-}

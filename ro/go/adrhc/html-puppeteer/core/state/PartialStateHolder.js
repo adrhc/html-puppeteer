@@ -1,6 +1,6 @@
 import StateHolder from "./StateHolder.js";
 import {isTrue} from "../../util/AssertionUtils.js";
-import {insert, removeByIndex} from "../../util/ArrayUtils.js";
+import {updateOrInsert, removeByIndex} from "../../util/ArrayUtils.js";
 import PartStateChange from "./change/PartStateChange.js";
 
 /**
@@ -139,16 +139,21 @@ export default class PartialStateHolder extends StateHolder {
      */
     _insertPart(part, partName) {
         if (_.isArray(this.currentState)) {
-            insert(this.currentState, part, partName);
+            updateOrInsert(this.currentState, part, partName);
         } else {
             this.currentState[partName] = part;
         }
     }
 }
 
-export function partsOf(value) {
+/**
+ * @param {*} value
+ * @param {boolean=} reversePartsOrder
+ * @return {[string, *][]}
+ */
+export function partsOf(value, reversePartsOrder) {
     if (value == null) {
         return [];
     }
-    return Object.entries(value);
+    return reversePartsOrder ? Object.entries(value).reverse() : Object.entries(value);
 }

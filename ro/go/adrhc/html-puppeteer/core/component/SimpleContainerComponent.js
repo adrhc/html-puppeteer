@@ -3,10 +3,10 @@ import {withDefaults} from "./options/ComponentOptionsBuilder.js";
 import SimpleContainerIllustrator from "../state-changes-handler/SimpleContainerIllustrator.js";
 import ContainerEventsBinder from "./events-binder/ContainerEventsBinder.js";
 import ChildrenComponents from "./ChildrenComponents.js";
+import {partsOf} from "../state/PartialStateHolder.js";
 
 /**
  * @typedef {AbstractComponentOptions} SimpleContainerComponentOptions
- * @property {ComponentsCollection} items
  */
 /**
  * @template SCT, SCP
@@ -14,6 +14,10 @@ import ChildrenComponents from "./ChildrenComponents.js";
  */
 export default class SimpleContainerComponent extends AbstractComponent {
     childrenComponents = new ChildrenComponents(this);
+    /**
+     * @type {boolean}
+     */
+    newGuestsGoLast;
 
     /**
      * @param {SimpleContainerComponentOptions} options
@@ -24,6 +28,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
                 new SimpleContainerIllustrator(/** @type {SimpleContainerComponent} */c))
             .withEventsBinders(new ContainerEventsBinder())
             .options());
+        this.newGuestsGoLast = this.config.newGuestsGoLast;
     }
 
     /**
@@ -32,12 +37,22 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @param {SCT=} newState
      */
     replaceState(newState) {
-        this.items = this.config.items ?? {};
+        this.childrenComponents.removeAll();
         // initializing the container state with [] or {} depending on the newState
         // the container's view will kick in to render its static content (if any)
         this._replaceContainerStateOnly(newState);
         // each newState's field is considered a "part"
         this.replaceParts(newState);
+    }
+
+    /**
+     * Replaces some component's state parts; the parts should have no name change!.
+     *
+     * @param {{[name: PartName]: SCP}[]|SCT} parts
+     */
+    replaceParts(parts) {
+        partsOf(parts, !this.newGuestsGoLast)
+            .forEach(([key, value]) => this.replacePart(key, value));
     }
 
     /**

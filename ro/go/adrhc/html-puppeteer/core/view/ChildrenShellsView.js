@@ -63,7 +63,7 @@ export default class ChildrenShellsView extends AbstractView {
         super();
         this.parentId = componentId;
         this.$containerElem = jQueryOf(elemIdOrJQuery);
-        this.place = (newGuestsGoLast ?? false) ? "append" : "prepend";
+        this.place = newGuestsGoLast ? "append" : "prepend";
         this.persistentShells = persistentShells ?? shellTemplateOptionsAreEmpty(restOfOptions);
         this.shellTemplate = shellTemplateOf(componentId, restOfOptions);
     }

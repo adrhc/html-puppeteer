@@ -1,10 +1,12 @@
-import {$getPartElem, createComponent} from "../Puppeteer.js";
+import {createComponent} from "../Puppeteer.js";
 import {withDefaults} from "./options/ComponentOptionsBuilder.js";
 import {CREATED, RELOCATED, REMOVED, REPLACED} from "../state/change/StateChangeTypes.js";
 import {alertOrThrow, isFalse, isTrue} from "../../util/AssertionUtils.js";
 import AbstractComponent from "./AbstractComponent.js";
 import ComplexContainerIllustrator from "../state-changes-handler/ComplexContainerIllustrator.js";
 import {partsOf} from "../state/PartialStateHolder.js";
+import {jQueryOf} from "../../util/DomUtils.js";
+import {dataPartSelectorOf} from "../../util/SelectorUtils.js";
 
 /**
  * @typedef {{[name: string]: AbstractComponent}} ComponentsCollection
@@ -292,6 +294,10 @@ export default class ComplexContainerComponent extends AbstractComponent {
         delete this.guests[partName];
         return true;
     }
+}
+
+function $getPartElem(partName, parentElemIdOrJQuery) {
+    return jQueryOf(parentElemIdOrJQuery).children(dataPartSelectorOf(partName));
 }
 
 function simpleContainerIllustratorProvider(component) {

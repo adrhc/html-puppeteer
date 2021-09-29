@@ -1,4 +1,4 @@
-import {$getPartElem, createComponent} from "../Puppeteer.js";
+import {createComponent} from "../Puppeteer.js";
 import {isTrue} from "../../util/AssertionUtils.js";
 import {childStateOf} from "./configurator/DefaultComponentConfigurator.js";
 
@@ -46,10 +46,10 @@ export default class ChildrenComponents {
     }
 
     /**
-     * @param {PartName} itemName
+     * @param {PartName} partName
      */
-    updateFromParent(itemName) {
-        this.items[itemName].replaceState(childStateOf(itemName, this.parent));
+    updateFromParent(partName) {
+        this.items[partName].replaceState(childStateOf(partName, this.parent));
     }
 
     /**
@@ -64,6 +64,13 @@ export default class ChildrenComponents {
         this.items[partName].close();
         delete this.items[partName];
         return true;
+    }
+
+    /**
+     * close and remove each item
+     */
+    removeAll() {
+        Object.keys(this.items).forEach(partName => this.removeItem(partName));
     }
 
     /**

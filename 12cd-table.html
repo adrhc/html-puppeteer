@@ -41,15 +41,6 @@ PS: make sure to have a well formatted JSON!</textarea>
 	</div>
 	<!-- the component -->
 	<div class="section title">Component's view</div>
-	<!--<div class="section flex-column fit-content bgc-aliceblue"
-	     data-initial-state='{"kid0": {"id": 0, "name": "kid 0"},
-	     "text": "this is the parent state displayed by its view (below are the guests)"}'
-	     data-shell-attributes='{"templateId": "guest-template", "htmlTag": "tr"}'
-	     data-room-parts="text"
-	     data-template-id="parent-template"
-	     data-type="complex-container"
-	     id="parent-component">
-	</div>-->
 	<div class="section fit-content min-width-33-percent" data-initial-state='{"message1": null,
 	     "message2": "The \"message2\" child was <i>automatically</i> created!<BR>\"message2\" child is initialized from parent state",
 	     "cats": [{"id": 0, "name": "cat 0"}]}'
@@ -81,8 +72,9 @@ PS: make sure to have a well formatted JSON!</textarea>
 		</tr>
 		</thead>
 		<tbody data-removed-placeholder='<tr><td colspan="2">The "parent-component" is closed!</td></tr>'
-		       data-shell-occupant-html-tag="tr" data-owner="parent-component"
+		       data-shell-occupant-html-tag="tr"
 		       data-shell-occupant-template-id="cats-row-template"
+		       data-owner="parent-component"
 		       data-type="simple-container"
 		       data-part="cats">
 		</tbody>
