@@ -54,13 +54,13 @@ export class ComponentOptionsBuilder {
     to(options = {}) {
         // extraStateChangesHandlers
         const extraStateChangesHandlers = [
-            ...(this.options.extraStateChangesHandlers ?? []), // these come from "this"
+            ...(options.extraStateChangesHandlers ?? []), // these come from "this"
             ...(this._options.extraStateChangesHandlers ?? []), // these are added by "this"
             ...(this.defaults.extraStateChangesHandlers ?? []), // these come from the descendant class
         ];
         // extraConfigurators
         const extraConfigurators = [
-            ...(this.options.extraConfigurators ?? []), // these come from "this"
+            ...(options.extraConfigurators ?? []), // these come from "this"
             ...(this._options.extraConfigurators ?? []), // these are added by "this"
             ...(this.defaults.extraConfigurators ?? []), // these come from the descendant class
         ];
