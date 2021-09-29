@@ -1,13 +1,6 @@
 import AbstractView from "./AbstractView.js";
-import {$guestsRoomOf} from "../Puppeteer.js";
 import {contentOfElemId, dataAttributesOf, jQueryOf} from "../../util/DomUtils.js";
-import GlobalConfig, {
-    componentIdOf,
-    dataComponentIdOf,
-    dataOwnerOf,
-    dataPartOf,
-    dataTypeOf
-} from "../../util/GlobalConfig.js";
+import GlobalConfig, {dataComponentIdOf, dataOwnerOf, dataPartOf, dataTypeOf} from "../../util/GlobalConfig.js";
 import {dataPartSelectorOf} from "../../util/SelectorUtils.js";
 import {generateHtml} from "../../util/HtmlGenerator.js";
 import {uniqueId} from "../../util/StringUtils.js";
@@ -37,15 +30,7 @@ export default class GuestsRoomView extends AbstractView {
     /**
      * @type {jQuery<HTMLElement>}
      */
-    $componentElem;
-    /**
-     * @type {jQuery<HTMLElement>}
-     */
-    $guestsRoom;
-    /**
-     * @type {boolean}
-     */
-    dontRemoveGuests;
+    $containerElem;
     /**
      * it's the child seat template id
      *
@@ -69,53 +54,41 @@ export default class GuestsRoomView extends AbstractView {
     constructor({
                     componentId,
                     elemIdOrJQuery,
+                    newGuestsGoLast,
                     seatTemplate,
                     seatTemplateId,
                     seatOccupantTemplateId,
                     seatOccupantHtmlTag,
-                    newGuestsGoLast,
-                    dontRemoveGuests,
                     childSeatAttributes = {templateId: seatOccupantTemplateId, htmlTag: seatOccupantHtmlTag}
                 }) {
         super();
-        this.$componentElem = jQueryOf(elemIdOrJQuery);
         this.parentId = componentId;
+        this.$containerElem = jQueryOf(elemIdOrJQuery);
         this.place = (newGuestsGoLast ?? false) ? "append" : "prepend";
-        this.dontRemoveGuests = dontRemoveGuests ?? false;
         this.seatTemplate = seatTemplate ?? this._createSeatTemplate(seatTemplateId, childSeatAttributes);
     }
 
     /**
-     * Announce that parent updated its view.
-     */
-    parentUpdated() {
-        this.$guestsRoom = $guestsRoomOf(this.$componentElem);
-    }
-
-    /**
      * @param {PartName} partName
-     * @return {Bag} the view's values
      */
     create(partName) {
+        if (this._childSeatExists(partName)) {
+            return;
+        }
         const viewValues = {
             [GlobalConfig.PART]: partName,
             [GlobalConfig.OWNER]: this.parentId,
+            [GlobalConfig.COMPONENT_ID]: uniqueId(),
         };
-        if (this._childSeatExists(partName)) {
-            viewValues[GlobalConfig.COMPONENT_ID] = this._seatIdOf(partName);
-            return viewValues;
-        }
-        viewValues[GlobalConfig.COMPONENT_ID] = uniqueId();
         const kidSeat = generateHtml(this.seatTemplate, viewValues);
-        this.$guestsRoom[this.place](kidSeat);
-        return viewValues;
+        this.$containerElem[this.place](kidSeat);
     }
 
     /**
      * @param {PartName} name
      */
     remove(name) {
-        this.$guestsRoom.children(dataPartSelectorOf(name)).remove();
+        this.$containerElem.children(dataPartSelectorOf(name)).remove();
     }
 
     /**
@@ -124,25 +97,7 @@ export default class GuestsRoomView extends AbstractView {
      * @protected
      */
     _childSeatExists(partName) {
-        return !!this._$childSeatByName(partName).length;
-    }
-
-    /**
-     * @param {PartName} partName
-     * @return {string|undefined}
-     * @protected
-     */
-    _seatIdOf(partName) {
-        return componentIdOf(this._$childSeatByName(partName));
-    }
-
-    /**
-     * @param {PartName} name
-     * @return {jQuery<HTMLElement>}
-     * @protected
-     */
-    _$childSeatByName(name) {
-        return this.$guestsRoom.children(dataPartSelectorOf(name));
+        return !!this.$containerElem.children(dataPartSelectorOf(name)).length;
     }
 
     /**

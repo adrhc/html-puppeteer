@@ -96,14 +96,3 @@ function renderComponents($components) {
 export function $getPartElem(partName, parentElemIdOrJQuery) {
     return jQueryOf(parentElemIdOrJQuery).children(dataPartSelectorOf(partName));
 }
-
-/**
- * @param {string|jQuery<HTMLElement>} parentElemIdOrJQuery
- * @return {jQuery<HTMLElement>}
- */
-export function $guestsRoomOf(parentElemIdOrJQuery) {
-    const $parent = jQueryOf(parentElemIdOrJQuery);
-    const $guestsRoom = $parent.find(dataSelectorOf(GlobalConfig.DATA_GUESTS));
-    isTrue($guestsRoom.length < 2);
-    return $guestsRoom.length ? $guestsRoom : $parent;
-}

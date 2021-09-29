@@ -43,7 +43,6 @@ export default class ListContainerIllustrator extends SimplePartsIllustrator {
      */
     created(stateChange) {
         super.created(stateChange);
-        this.guestsRoomView.parentUpdated()
     }
 
     /**
@@ -51,7 +50,6 @@ export default class ListContainerIllustrator extends SimplePartsIllustrator {
      */
     replaced(stateChange) {
         super.replaced(stateChange);
-        this.guestsRoomView.parentUpdated();
     }
 
     /**
