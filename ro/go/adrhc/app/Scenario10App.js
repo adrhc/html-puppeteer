@@ -1,8 +1,12 @@
 import {namedBtn} from "../html-puppeteer/util/SelectorUtils.js";
 import {generateString} from "./Generators.js";
-import {updateOrInsert, removeByIndex} from "../html-puppeteer/util/ArrayUtils.js";
+import {removeByIndex, updateOrInsert} from "../html-puppeteer/util/ArrayUtils.js";
 
 export default class Scenario10App {
+    /**
+     * @type {boolean}
+     */
+    haveDogs;
     /**
      * @type {ComplexContainerComponent}
      */
@@ -11,8 +15,9 @@ export default class Scenario10App {
     /**
      * @param {ComplexContainerComponent} parent
      */
-    constructor(parent) {
+    constructor(parent, haveDogs) {
         this.parent = parent;
+        this.haveDogs = haveDogs;
     }
 
     /**
@@ -28,14 +33,32 @@ export default class Scenario10App {
             this.parent.replaceParts(guestsState);
         });
         $(namedBtn("create")).on("click", () => {
-            const cats = this.parent.getPart("cats") ?? [];
-            updateOrInsert(cats, {id: Math.random(), name: generateString("name ")})
-            this.parent.replacePart("cats", cats);
+            this._createOneAtIndex0("cats");
+            this._createOneAtIndex0("dogs");
         });
         $(namedBtn("remove")).on("click", () => {
-            const cats = this.parent.getPart("cats") ?? [];
-            removeByIndex(cats, cats.length - 1);
-            this.parent.replacePart("cats", cats);
+            this._removeLast("cats");
+            this._removeLast("dogs");
         });
+    }
+
+    /**
+     * @param {string} partName
+     * @protected
+     */
+    _removeLast(partName) {
+        const items = this.parent.getPart(partName) ?? [];
+        removeByIndex(items, items.length - 1);
+        this.parent.replacePart(partName, items);
+    }
+
+    /**
+     * @param {string} partName
+     * @protected
+     */
+    _createOneAtIndex0(partName) {
+        const items = this.parent.getPart(partName) ?? [];
+        updateOrInsert(items, {id: Math.random(), name: generateString("name ")});
+        this.parent.replacePart(partName, items);
     }
 }

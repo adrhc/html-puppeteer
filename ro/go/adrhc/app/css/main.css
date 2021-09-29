@@ -80,12 +80,19 @@ td.center, th.center {
     border-color: aqua !important;
 }
 
-div[data-part], .child {
+.child {
+    border-color: firebrick !important;
+}
+
+div[data-part] {
     border-color: firebrick;
 }
 
 div[data-part], .parent {
-    padding: .3rem;
+    padding-left: .3rem;
+    padding-right: .3rem;
+    margin-bottom: .3rem !important;
+    margin-top: .3rem !important;
     border-style: dashed;
     border-width: thin;
 }
@@ -123,6 +130,10 @@ div[data-part], .parent {
 .scenario10 [data-part] label,
 .scenario12 [data-part] label {
     font-weight: bold;
+}
+
+.scenario12 table {
+    padding: .1rem .2rem .2rem;
 }
 
 .disabled {
