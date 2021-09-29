@@ -6,7 +6,7 @@ export default class Scenario6EventsBinder extends EventsBinder {
      * attach DOM event handlers
      */
     attachEventHandlers() {
-        const clock = /** @type {PeriodicallyStateChangingComponent} */ this.component;
+        const clock = /** @type {PeriodicallyStateChangingComponent} */ this._component;
         $(namedBtn("start")).on("click.Scenario6EventsBinder", () => clock.startClock());
         $(namedBtn("stop")).on("click.Scenario6EventsBinder", () => clock.stopClock());
         $(namedBtn("change")).on("click.Scenario6EventsBinder", () => {
