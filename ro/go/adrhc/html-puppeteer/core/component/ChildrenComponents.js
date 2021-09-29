@@ -48,7 +48,7 @@ export default class ChildrenComponents {
     /**
      * @param {PartName} itemName
      */
-    updateItemStateFromParent(itemName) {
+    parentStateChangedFor(itemName) {
         this.items[itemName].replaceState(childStateOf(itemName, this.parent));
     }
 
