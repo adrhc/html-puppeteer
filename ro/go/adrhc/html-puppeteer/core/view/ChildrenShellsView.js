@@ -4,7 +4,8 @@ import GlobalConfig from "../../util/GlobalConfig.js";
 import {dataPartSelectorOf} from "../../util/SelectorUtils.js";
 import {generateHtml} from "../../util/HtmlGenerator.js";
 import {uniqueId} from "../../util/StringUtils.js";
-import shellTemplateOf from "./ChildShellTemplate.js";
+import shellTemplateOf, {shellTemplateOptionsAreEmpty} from "./ChildShellTemplate.js";
+import {isFalse} from "../../util/AssertionUtils.js";
 
 /**
  * @typedef {Bag} SeatAttributes
@@ -13,10 +14,11 @@ import shellTemplateOf from "./ChildShellTemplate.js";
  * @property {string=} htmlTag
  */
 /**
- * @typedef {ChildShellTemplateOptions} GuestsRoomViewOptions
+ * @typedef {ChildShellTemplateOptions} ChildrenShellsViewOptions
  * @property {string} componentId
  * @property {string|jQuery<HTMLElement>=} elemIdOrJQuery is the parent's element id or jQuery<HTMLElement>
  * @property {boolean=} newGuestsGoLast
+ * @property {boolean=} persistentShells
  */
 /**
  * @extends {AbstractView}
@@ -33,6 +35,10 @@ export default class ChildrenShellsView extends AbstractView {
      */
     parentId;
     /**
+     * @type {boolean}
+     */
+    persistentShells;
+    /**
      * specify where to place new kids (append|prepend)
      *
      * @type {string}
@@ -44,19 +50,21 @@ export default class ChildrenShellsView extends AbstractView {
     shellTemplate;
 
     /**
-     * @param {GuestsRoomViewOptions} options
+     * @param {ChildrenShellsViewOptions} options
      * @param {ChildShellTemplateOptions} options.restOfOptions
      */
     constructor({
                     componentId,
                     elemIdOrJQuery,
                     newGuestsGoLast,
+                    persistentShells,
                     ...restOfOptions
                 }) {
         super();
         this.parentId = componentId;
         this.$containerElem = jQueryOf(elemIdOrJQuery);
         this.place = (newGuestsGoLast ?? false) ? "append" : "prepend";
+        this.persistentShells = persistentShells ?? shellTemplateOptionsAreEmpty(restOfOptions);
         this.shellTemplate = shellTemplateOf(componentId, restOfOptions);
     }
 
@@ -67,6 +75,8 @@ export default class ChildrenShellsView extends AbstractView {
         if (this._childSeatExists(partName)) {
             return;
         }
+        isFalse(this.persistentShells,
+            `Can't have persistent shells while also a shell template!\n${this.shellTemplate}`);
         const viewValues = {
             [GlobalConfig.PART]: partName,
             [GlobalConfig.OWNER]: this.parentId,
@@ -80,7 +90,9 @@ export default class ChildrenShellsView extends AbstractView {
      * @param {PartName} name
      */
     remove(name) {
-        this.$containerElem.children(dataPartSelectorOf(name)).remove();
+        if (!this.persistentShells) {
+            this.$containerElem.children(dataPartSelectorOf(name)).remove();
+        }
     }
 
     /**

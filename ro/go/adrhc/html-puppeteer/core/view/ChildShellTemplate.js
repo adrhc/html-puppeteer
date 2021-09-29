@@ -49,3 +49,10 @@ function createSeatTemplate(parentId, shellTemplateId, childSeatAttributes) {
 function templateFromSeatAttributes(parentId, {templateId, htmlTag = "div", componentType = "simple", ...rest}) {
     return `<${htmlTag} ${dataTypeOf(componentType)} ${dataOwnerOf(parentId)} ${dataPartOf(`{{${GlobalConfig.PART}}}`)} ${dataComponentIdOf(`{{${GlobalConfig.COMPONENT_ID}}}`)} data-template-id="${templateId}" ${dataAttributesOf(rest)}></${htmlTag}>`;
 }
+
+/**
+ * @param {ChildShellTemplateOptions} options
+ */
+export function shellTemplateOptionsAreEmpty({shellTemplate, shellTemplateId}) {
+    return shellTemplate == null && shellTemplateId == null;
+}

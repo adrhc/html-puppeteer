@@ -2,7 +2,7 @@ import ChildrenShellsView from "../view/ChildrenShellsView.js";
 import SimplePartsIllustrator from "./SimplePartsIllustrator.js";
 
 /**
- * @typedef {ComponentIllustratorOptions & GuestsRoomViewOptions} ComplexContainerIllustratorOptions
+ * @typedef {ComponentIllustratorOptions & ChildrenShellsViewOptions} ComplexContainerIllustratorOptions
  * @property {string=} componentId
  */
 /**

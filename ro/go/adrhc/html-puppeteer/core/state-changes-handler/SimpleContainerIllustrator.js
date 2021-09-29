@@ -3,7 +3,7 @@ import SimplePartsIllustrator from "./SimplePartsIllustrator.js";
 import {withDefaults} from "../component/options/ComponentOptionsBuilder.js";
 
 /**
- * @typedef {ComponentIllustratorOptions & GuestsRoomViewOptions} SimpleContainerIllustratorOptions
+ * @typedef {ComponentIllustratorOptions & ChildrenShellsViewOptions} SimpleContainerIllustratorOptions
  */
 /**
  * @template SCT, SCP
