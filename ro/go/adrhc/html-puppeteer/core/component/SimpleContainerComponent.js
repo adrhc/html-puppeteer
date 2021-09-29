@@ -68,18 +68,18 @@ export default class SimpleContainerComponent extends AbstractComponent {
         this.familyNames = this.config.familyNames?.split(",") ?? this._findFamilyNames(newState);
         this.familyOrStandingNames = [...this.familyNames, ...this.roomParts];
         const roomLayout = this._roomLayoutFor(newState);
-        // using parent's view only to render roomLayout; it'll create the family seats
+        // using parent's view only to render roomLayout; it'll create the family shells
         super.replaceState(roomLayout);
-        // placing family members (seats are already created)
+        // placing family members (shells are already created)
         //
-        // Because only seats are created but not yet occupied
+        // Because only shells are created but not yet occupied
         // there's not possible to find a data-part inside a
-        // seat (aka inside a container child component).
+        // shell (aka inside a container child component).
         this._placeFamilyMembers();
         // updating guests list (aka parts)
         //
-        // Some guests might find a seat (i.e. data-part)
-        // inside a family member ("container") seat. In
+        // Some guests might find a shell (i.e. data-part)
+        // inside a family member ("container") shell. In
         // such situations the usage of data-guests is
         // mandatory.
         this._updateGuestsDetails(newState);
@@ -137,8 +137,8 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @param {PartName=} newPartName
      */
     replacePart(previousPartName, newPart, newPartName) {
-        const seatChanges = this.stateHolder.replacePart(previousPartName, newPart, newPartName);
-        seatChanges.forEach(psc => {
+        const shellChanges = this.stateHolder.replacePart(previousPartName, newPart, newPartName);
+        shellChanges.forEach(psc => {
             isFalse(psc.changeType === RELOCATED &&
                 (this.familyOrStandingNames.includes(psc.previousPartName)
                     || this.familyOrStandingNames.includes(psc.newPartName)),
@@ -163,18 +163,18 @@ export default class SimpleContainerComponent extends AbstractComponent {
     _handleFamilyChange(partStateChange) {
         switch (partStateChange.changeType) {
             case CREATED:
-                // the parent creates the guest's seat (aka DOM element)
+                // the parent creates the guest's shell (aka DOM element)
                 super._processStateChanges();
                 // the family component reads its state from the parent (i.e. this container component)
                 this._placeFamilyMember(partStateChange.newPartName);
                 break;
             case REMOVED:
                 this.family[partStateChange.previousPartName].replaceState();
-                // the parent removes the guest's seat (aka DOM element)
+                // the parent removes the guest's shell (aka DOM element)
                 super._processStateChanges();
                 break;
             case REPLACED:
-                // seat occupant changed its details; nothing should
+                // shell occupant changed its details; nothing should
                 // happen to the room layout but we have to consume
                 // the collected state changes
                 super._processStateChanges();
@@ -190,7 +190,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @protected
      */
     _handleStandingChange(partStateChange) {
-        // would try to find the related (missing) seat (i.e. data-part)
+        // would try to find the related (missing) shell (i.e. data-part)
         this.stateHolder.cancelAllStateChanges();
         // todo: should try to sync 1th the state with the view?
         const newState = _.cloneDeep(this.stateHolder.currentState ?? {});
@@ -205,18 +205,18 @@ export default class SimpleContainerComponent extends AbstractComponent {
     _handleGuestChange(partStateChange) {
         switch (partStateChange.changeType) {
             case CREATED:
-                // the parent creates the guest's seat (aka DOM element)
+                // the parent creates the guest's shell (aka DOM element)
                 super._processStateChanges();
                 // the guest component reads its state from the parent (i.e. this container component)
                 this._placeGuest(partStateChange.newPartName);
                 break;
             case REMOVED:
                 this._removeGuest(partStateChange.previousPartName);
-                // the parent removes the guest's seat (aka DOM element)
+                // the parent removes the guest's shell (aka DOM element)
                 super._processStateChanges();
                 break;
             case REPLACED:
-                // seat occupant changed its details; nothing should
+                // shell occupant changed its details; nothing should
                 // happen to the room layout but we have to consume
                 // the collected state changes
                 super._processStateChanges();
@@ -224,7 +224,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
                 break;
             case RELOCATED:
                 this._removeGuest(partStateChange.previousPartName);
-                // the parent removes the guest's previous seat (aka DOM element) and create a new one
+                // the parent removes the guest's previous shell (aka DOM element) and create a new one
                 super._processStateChanges();
                 // the guest component reads its state from the parent (i.e. this container component)
                 this._placeGuest(partStateChange.newPartName);
@@ -260,7 +260,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
      */
     _placeIntoSeat(partName) {
         const component = this._createPartComponent(partName);
-        isTrue(component != null, "[_placeFamilyMember] the family seat should exist!")
+        isTrue(component != null, "[_placeFamilyMember] the family shell should exist!")
         return component.render();
     }
 

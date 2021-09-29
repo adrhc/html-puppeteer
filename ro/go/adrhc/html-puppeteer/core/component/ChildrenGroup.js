@@ -38,7 +38,7 @@ export default class ChildrenGroup {
             console.warn(`Missing child element for ${partName}; could be parent's state though.`);
             return undefined;
         }
-        // at this point the item component's id is available as data-GlobalConfig.COMPONENT_ID on $seat
+        // at this point the item component's id is available as data-GlobalConfig.COMPONENT_ID on $shell
         const component = createComponent($shell, {parent: this.parent});
         isTrue(component != null, "[_createItem] the child's shell should exist!")
         this.items[partName] = component.render();
