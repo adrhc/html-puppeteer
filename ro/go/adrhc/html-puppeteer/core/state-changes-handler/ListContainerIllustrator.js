@@ -12,13 +12,13 @@ import {withDefaults} from "../component/options/ComponentOptionsBuilder.js";
  */
 export default class ListContainerIllustrator extends SimplePartsIllustrator {
     /**
-     * @type {ListContainerComponent}
-     */
-    container;
-    /**
      * @type {ChildrenShellsView}
      */
     childrenShellsView;
+    /**
+     * @type {ListContainerComponent}
+     */
+    container;
 
     /**
      * @type {ChildrenComponents}
