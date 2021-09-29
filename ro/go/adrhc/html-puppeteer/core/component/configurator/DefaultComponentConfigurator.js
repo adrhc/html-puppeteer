@@ -79,15 +79,22 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
         if (component.stateInitializer != null) {
             return;
         }
-        // determine the parent's part to use to initialize component
-        // config.part is taken from data-part (see GlobalConfig.DATA_PART)
-        const partName = component.config.part;
-        const parentState = component.parent?.getState();
-        const partValue = partName ? parentState?.[partName] : undefined;
         // initialState priority: options.initialState, data-part, data-initial-state
-        const initialState = this.options.initialState ?? partValue ?? this.dataAttributes.initialState;
+        const initialState = this.options.initialState ??
+            childStateOf(this.config.part, component.parent) ?? this.dataAttributes.initialState;
         if (initialState != null) {
             component.stateInitializer = new ValueStateInitializer(initialState);
         }
     }
+}
+
+/**
+ * @param {PartName} partName
+ * @param {AbstractComponent} parentComponent
+ * @return {*}
+ */
+export function childStateOf(partName, parentComponent) {
+    // determine the parent's part to use to initialize component
+    // config.part is taken from data-part (see GlobalConfig.DATA_PART)
+    return parentComponent?.getPart(partName);
 }

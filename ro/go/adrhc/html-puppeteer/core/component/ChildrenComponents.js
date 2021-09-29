@@ -1,5 +1,6 @@
 import {$getPartElem, createComponent} from "../Puppeteer.js";
 import {isTrue} from "../../util/AssertionUtils.js";
+import {childStateOf} from "./configurator/DefaultComponentConfigurator.js";
 
 /**
  * @typedef {{[name: string]: AbstractComponent}} ComponentsCollection
@@ -46,10 +47,9 @@ export default class ChildrenComponents {
 
     /**
      * @param {PartName} itemName
-     * @param {SCP} newStateValue
      */
-    replaceItemState(itemName, newStateValue) {
-        this.items[itemName].replaceState(newStateValue);
+    updateItemStateFromParent(itemName) {
+        this.items[itemName].replaceState(childStateOf(itemName, this.parent));
     }
 
     /**

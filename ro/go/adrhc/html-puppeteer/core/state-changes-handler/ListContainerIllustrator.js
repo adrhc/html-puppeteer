@@ -74,7 +74,7 @@ export default class ListContainerIllustrator extends SimplePartsIllustrator {
     partReplaced(partStateChange) {
         // parent state changed (a part of it) hence we force the child to
         // update its state using its logic of getting its part from state
-        this.partRelocated(partStateChange);
+        this.childrenComponents.updateItemStateFromParent(partStateChange.previousPartName);
     }
 
     /**
