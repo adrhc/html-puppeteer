@@ -100,22 +100,26 @@ div[data-part], .parent {
     background-color: aliceblue;
 }
 
-.scenario10 [data-part="cats"] [data-type] {
+.scenario10 [data-part="cats"] [data-type],
+.scenario12 [data-part="cats"] [data-type] {
     display: flex;
     justify-content: center;
 }
 
 /* space between "badge" items */
-.scenario10 .flex-start [data-part="cats"] [data-type]:not(:last-child) {
+.scenario10 .flex-start [data-part="cats"] [data-type]:not(:last-child),
+.scenario12 .flex-start [data-part="cats"] [data-type]:not(:last-child) {
     margin-right: 0.3rem;
 }
 
 /* Id and Name space */
-.scenario10 [data-part] div:not(:first-child) {
+.scenario10 [data-part] div:not(:first-child),
+.scenario12 [data-part] div:not(:first-child) {
     margin-left: 0.5rem;
 }
 
-.scenario10 [data-part] label {
+.scenario10 [data-part] label,
+.scenario12 [data-part] label {
     font-weight: bold;
 }
 

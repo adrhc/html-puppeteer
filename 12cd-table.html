@@ -65,7 +65,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 	     data-removed-placeholder='"message2" child component was removed!'>
 		The "message2" child is not available yet!
 	</div>
-	<table class="responstable">
+	<!--<table class="responstable">
 		<thead>
 		<tr>
 			<th colSpan="2">Generated cats</th>
@@ -78,7 +78,15 @@ PS: make sure to have a well formatted JSON!</textarea>
 		       data-type="simple-container"
 		       data-part="cats">
 		</tbody>
-	</table>
+	</table>-->
+	<div class="flex-start"
+	     data-removed-placeholder='The "cats" is closed!'
+	     data-shell-occupant-template-id="cats-row-template2"
+	     data-owner="parent-component"
+	     data-type="simple-container"
+	     data-part="cats">
+		The "cats" child is not available yet!
+	</div>
 </script>
 
 <!--
@@ -98,6 +106,13 @@ PS: make sure to have a well formatted JSON!</textarea>
 	{{#with value}}
 		<td>{{id}}</td>
 		<td>{{name}}</td>
+	{{/with}}
+</script>
+
+<script id="cats-row-template2" type="text/x-handlebars-template">
+	{{#with value}}
+		<div><label>Id:</label> {{id}}</div>
+		<div><label>Name:</label> {{name}}</div>
 	{{/with}}
 </script>
 
