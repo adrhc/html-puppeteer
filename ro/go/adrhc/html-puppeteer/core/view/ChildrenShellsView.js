@@ -84,6 +84,13 @@ export default class ChildrenShellsView extends AbstractView {
     }
 
     /**
+     * @param {*} values
+     */
+    replace(values) {
+        // do nothing
+    }
+
+    /**
      * @param {string} partName
      * @return {boolean}
      * @protected
