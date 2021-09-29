@@ -88,11 +88,10 @@ div[data-part], .parent {
     padding: .3rem;
     border-style: dashed;
     border-width: thin;
-    margin-bottom: .3rem;
 }
 
 .mb3 {
-    margin-bottom: .3rem;
+    margin-bottom: .3rem !important;
 }
 
 .ml3 {
@@ -104,14 +103,14 @@ div[data-part], .parent {
 }
 
 .scenario10 [data-part="cats"] [data-type],
-.scenario12 [data-part="cats"] [data-type] {
+.scenario12 [data-part="dogs"] [data-type] {
     display: flex;
     justify-content: center;
 }
 
 /* space between "badge" items */
 .scenario10 .flex-start [data-part="cats"] [data-type]:not(:last-child),
-.scenario12 .flex-start [data-part="cats"] [data-type]:not(:last-child) {
+.scenario12 .flex-start [data-part="dogs"] [data-type]:not(:last-child) {
     margin-right: 0.3rem;
 }
 
