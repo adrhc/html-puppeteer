@@ -144,16 +144,17 @@ note bottom of EventsBinder
 end note
 
 abstract StateInitializer {
-+load(stateHolder)
++load(component)
 }
 
 note bottom of StateInitializer
-sets stateHolder state
+sets component's state
 (from e.g. a repository)
 end note
 
 class ValueStateInitializer extends StateInitializer {
 #value
++load(component)
 }
 
 class StateChange {
