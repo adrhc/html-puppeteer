@@ -1,6 +1,6 @@
 import {namedBtn} from "../html-puppeteer/util/SelectorUtils.js";
 import {generateString} from "./Generators.js";
-import {uniqueId} from "../html-puppeteer/util/StringUtils.js";
+import {insert, removeByIndex} from "../html-puppeteer/util/ArrayUtils.js";
 
 export default class Scenario10App {
     /**
@@ -28,12 +28,14 @@ export default class Scenario10App {
             this.parent.replaceParts(guestsState);
         });
         $(namedBtn("create")).on("click", () => {
-            const id = uniqueId();
-            this.parent.replacePart(id, {id: Math.random(), name: generateString("name ")});
+            const cats = this.parent.getPart("cats") ?? [];
+            insert(cats, {id: Math.random(), name: generateString("name ")})
+            this.parent.replacePart("cats", cats);
         });
         $(namedBtn("remove")).on("click", () => {
-            const oldestKidId = Object.values(this.parent.guests)[0]?.partName;
-            this.parent.replacePart(oldestKidId);
+            const cats = this.parent.getPart("cats") ?? [];
+            removeByIndex(cats, cats.length - 1);
+            this.parent.replacePart("cats", cats);
         });
     }
 }

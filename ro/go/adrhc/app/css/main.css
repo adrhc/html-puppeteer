@@ -100,13 +100,13 @@ div[data-part], .parent {
     background-color: aliceblue;
 }
 
-.scenario10 [data-part] {
+.scenario10 [data-part="cats"] [data-type] {
     display: flex;
     justify-content: center;
 }
 
 /* space between "badge" items */
-.scenario10 .flex-start [data-part]:not(:last-child) {
+.scenario10 .flex-start [data-part="cats"] [data-type]:not(:last-child) {
     margin-right: 0.3rem;
 }
 

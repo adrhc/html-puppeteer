@@ -53,6 +53,15 @@ function templateFromSeatAttributes(parentId, {templateId, htmlTag = "div", comp
 /**
  * @param {ChildShellTemplateOptions} options
  */
-export function shellTemplateOptionsAreEmpty({shellTemplate, shellTemplateId}) {
-    return shellTemplate == null && shellTemplateId == null;
+export function shellTemplateOptionsAreEmpty({
+                                                 shellTemplate,
+                                                 shellTemplateId,
+                                                 shellOccupantTemplateId,
+                                                 shellOccupantHtmlTag,
+                                                 childSeatAttributes = {
+                                                     templateId: shellOccupantTemplateId,
+                                                     htmlTag: shellOccupantHtmlTag
+                                                 }
+                                             }) {
+    return shellTemplate == null && shellTemplateId == null && childSeatAttributes.templateId == null;
 }
