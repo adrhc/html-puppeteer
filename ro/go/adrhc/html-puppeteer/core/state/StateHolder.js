@@ -9,15 +9,14 @@ import StateChange from "./change/StateChange.js";
  */
 export default class StateHolder {
     /**
-     * @type {Bag}
-     */
-    config;
-
-    /**
      * @type {SCT}
      * @protected
      */
     _currentState;
+    /**
+     * @type {Bag}
+     */
+    config;
 
     /**
      * @type {StateChangesCollector<SCT>}
@@ -30,20 +29,6 @@ export default class StateHolder {
      */
     get stateChangesCollector() {
         return this._stateChangesCollector;
-    }
-
-    /**
-     * @return {boolean}
-     */
-    hasNull() {
-        return this._currentState == null;
-    }
-
-    /**
-     * @return {boolean}
-     */
-    hasUndefined() {
-        return typeof this._currentState === "undefined";
     }
 
     /**
@@ -61,6 +46,20 @@ export default class StateHolder {
     constructor({stateChangeEnhancer, stateChangesCollector, ...restOfOptions}) {
         this.config = restOfOptions;
         this._stateChangesCollector = stateChangesCollector ?? new StateChangesCollector(stateChangeEnhancer);
+    }
+
+    /**
+     * @return {boolean}
+     */
+    hasNull() {
+        return this._currentState == null;
+    }
+
+    /**
+     * @return {boolean}
+     */
+    hasUndefined() {
+        return typeof this._currentState === "undefined";
     }
 
     /**
