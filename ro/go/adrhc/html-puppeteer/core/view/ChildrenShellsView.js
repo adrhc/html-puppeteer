@@ -1,11 +1,12 @@
 import AbstractView from "./AbstractView.js";
 import {jQueryOf} from "../../util/DomUtils.js";
 import GlobalConfig from "../../util/GlobalConfig.js";
-import {dataOwnerSelectorOf, dataPartSelectorOf} from "../../util/SelectorUtils.js";
+import {dataOwnerSelectorOf} from "../../util/SelectorUtils.js";
 import {generateHtml} from "../../util/HtmlGenerator.js";
 import {uniqueId} from "../../util/StringUtils.js";
 import shellTemplateOf, {shellTemplateOptionsAreEmpty} from "./ChildShellTemplate.js";
 import {isFalse} from "../../util/AssertionUtils.js";
+import ChildrenShellFinder from "./ChildrenShellFinder.js";
 
 /**
  * @typedef {Bag} SeatAttributes
@@ -28,6 +29,10 @@ export default class ChildrenShellsView extends AbstractView {
      * @type {jQuery<HTMLElement>}
      */
     $containerElem;
+    /**
+     * @type {ChildrenShellFinder}
+     */
+    childrenShellFinder;
     /**
      * it's the child shell template id
      *
@@ -61,10 +66,11 @@ export default class ChildrenShellsView extends AbstractView {
                     ...restOfOptions
                 }) {
         super();
+        this.persistentShells = persistentShells ?? shellTemplateOptionsAreEmpty(restOfOptions);
+        this.childrenShellFinder = new ChildrenShellFinder(componentId, elemIdOrJQuery, this.persistentShells);
         this.parentId = componentId;
         this.$containerElem = jQueryOf(elemIdOrJQuery);
         this.place = newGuestsGoLast ? "append" : "prepend";
-        this.persistentShells = persistentShells ?? shellTemplateOptionsAreEmpty(restOfOptions);
         this.shellTemplate = shellTemplateOf(componentId, restOfOptions);
     }
 
@@ -72,7 +78,7 @@ export default class ChildrenShellsView extends AbstractView {
      * @param {PartName} partName
      */
     create(partName) {
-        const $shell = this._$shellElemOf(partName);
+        const $shell = this.childrenShellFinder.$shellElemOf(partName);
         if ($shell) {
             return $shell;
         }
@@ -85,15 +91,15 @@ export default class ChildrenShellsView extends AbstractView {
         };
         const kidSeat = generateHtml(this.shellTemplate, viewValues);
         this.$containerElem[this.place](kidSeat);
-        return this._$shellElemOf(partName);
+        return this.childrenShellFinder.$shellElemOf(partName);
     }
 
     /**
-     * @param {PartName} name
+     * @param {PartName} partName
      */
-    remove(name) {
+    remove(partName) {
         if (!this.persistentShells) {
-            this.$containerElem.children(dataPartSelectorOf(name)).remove();
+            this.childrenShellFinder.$shellElemOf(partName).remove();
         }
     }
 
@@ -102,51 +108,5 @@ export default class ChildrenShellsView extends AbstractView {
      */
     replace(values) {
         // do nothing
-    }
-
-    /**
-     * @param {string} partName
-     * @return {jQuery<HTMLElement>|undefined}
-     * @protected
-     */
-    _$shellElemOf(partName) {
-        if (this.persistentShells) {
-            const $childByPartName = this._$shellByPartName(partName);
-            return $childByPartName ? $childByPartName : this._$shellByOwnerAndPartName(partName);
-        } else {
-            return this._$shellByPartName(partName);
-        }
-    }
-
-    /**
-     * @param {string} partName
-     * @return {jQuery<HTMLElement>|undefined}
-     * @protected
-     */
-    _$shellByOwnerAndPartName(partName) {
-        const byOwnerAndPartNameSelector = `${dataOwnerSelectorOf(this.parentId)}${dataPartSelectorOf(partName)}`
-        return this._elemForSelector(byOwnerAndPartNameSelector, "find");
-    }
-
-    /**
-     * @param {string} partName
-     * @return {jQuery<HTMLElement>|undefined}
-     * @protected
-     */
-    _$shellByPartName(partName) {
-        const childByPartNameSelector = dataPartSelectorOf(partName);
-        return this._elemForSelector(childByPartNameSelector, "children");
-    }
-
-    /**
-     * @param {string} selector
-     * @param {"children" | "find"} searchWith
-     * @return {jQuery<HTMLElement>|undefined}
-     * @protected
-     */
-    _elemForSelector(selector, searchWith) {
-        const $child = this.$containerElem[searchWith](selector);
-        isFalse($child.length > 1, `Found ${$child.length} of ${selector}!`);
-        return $child.length ? $child : undefined;
     }
 }
