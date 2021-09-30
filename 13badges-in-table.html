@@ -41,9 +41,12 @@ PS: make sure to have a well formatted JSON!</textarea>
 	</div>
 	<!-- the component -->
 	<div class="section title">Component's view</div>
-	<div class="section parent fit-content min-width-33-percent" data-initial-state='{"message1": null,
-	     "message2": "The \"message2\" child was <i>automatically</i> created!<BR>\"message2\" child is initialized from parent state",
-	     "cats": [{"id": 0, "dogs": [{"id": 0, "name": "dog 0"}]}]}'
+	<div class="section parent fit-content min-width-33-percent"
+	     data-initial-state='{
+		     "message1": null,
+		     "message2": "The \"message2\" child was <i>automatically</i> created!<BR>\"message2\" child is initialized from parent state",
+		     "cats": [{"id": 0, "dogs": [{"id": 0, "name": "dog 0"}]}]
+	     }'
 	     data-removed-placeholder='The "parent-component" is closed!'
 	     data-template-id="parent-template"
 	     data-type="simple-container"
@@ -111,21 +114,6 @@ PS: make sure to have a well formatted JSON!</textarea>
 		<div><label>Id:</label> {{id}}</div>
 		<div><label>Name:</label> {{name}}</div>
 	{{/with}}
-</script>
-
-<script id="cat-id-template" type="text/x-handlebars-template">{{value}}</script>
-
-<!--
-	can't be placed in the parent's content because it'll be evaluated
-	when parent.view.create() runs which evaluates also any child template
-	{{...}} which destroys the child template.
--->
-<script id="message1-template" type="text/x-handlebars-template">
-	{{#if this}}{{{value}}}{{else}}The "message1" child is not available yet!{{/if}}
-</script>
-
-<script id="message2-template" type="text/x-handlebars-template">
-	{{#if this}}{{{value}}}{{else}}The "message2" child is not available yet!{{/if}}
 </script>
 
 </body>
