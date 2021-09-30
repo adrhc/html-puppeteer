@@ -44,7 +44,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 	<div class="section parent fit-content min-width-33-percent"
 	     data-initial-state='{
 		     "message1": null,
-		     "message2": "The \"message2\" child was <i>automatically</i> created!<BR>\"message2\" child is initialized from parent state",
+		     "message2": "The \"message2\" child state comes from the parent&apos;s state.",
 		     "cats": [{"id": 0, "dogs": [{"id": 0, "name": "dog 0"}]}]
 	     }'
 	     data-removed-placeholder='The "parent-component" is closed!'
@@ -58,12 +58,12 @@ PS: make sure to have a well formatted JSON!</textarea>
 <script id="parent-template" type="text/x-handlebars-template">
 	<!-- level 1 children don't need data-owner -->
 	<div class="mb3" data-part="message1" data-type="value"
-	     data-initial-state='The "message1" child was <i>automatically</i> created!<BR>initial state is from <i>data-initial-state</i> attribute'
+	     data-initial-state='This "message1" initial state should NOT be visible!<BR>initial state should come from the parent.'
 	     data-removed-placeholder='"message1" child component was removed!'>
 		The "message1" child is not available yet!
 	</div>
 	<div class="mb3" data-part="message2" data-type="value"
-	     data-initial-state='This "message2" initial state should NOT be visible!<BR>initial state should come from the parent'
+	     data-initial-state='This "message2" initial state should NOT be visible!<BR>initial state should come from the parent.'
 	     data-removed-placeholder='"message2" child component was removed!'>
 		The "message2" child is not available yet!
 	</div>
