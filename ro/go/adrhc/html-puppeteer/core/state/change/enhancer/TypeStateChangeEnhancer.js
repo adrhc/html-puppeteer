@@ -74,7 +74,7 @@ export default class TypeStateChangeEnhancer extends StateChangeEnhancer {
      * @protected
      */
     _isPartPristine(part, partName) {
-        return part == null;
+        return this._isStatePristine(part);
     }
 
     /**

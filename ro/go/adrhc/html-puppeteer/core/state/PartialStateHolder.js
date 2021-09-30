@@ -49,8 +49,7 @@ export default class PartialStateHolder extends StateHolder {
         // parts never change partially so there's no need to clone them
         const stateChanges = /** @type {StateChange[]} */ this
             ._partialStateChangesOf(previousState, newState, previousPart, newPart,
-                previousPart == null ? undefined : previousPartName,
-                newPart == null ? undefined : newPartName);
+                previousPart == null ? undefined : previousPartName, newPartName);
 
         if (dontRecordChanges) {
             return /** @type {PartStateChange[]} */ this._enhanceStateChanges(stateChanges);
