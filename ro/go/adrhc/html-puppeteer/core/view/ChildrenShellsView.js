@@ -9,12 +9,6 @@ import {isFalse} from "../../util/AssertionUtils.js";
 import ChildrenShellFinder from "./ChildrenShellFinder.js";
 
 /**
- * @typedef {Bag} SeatAttributes
- * @property {string=} templateId is used by child's component to populate its space (aka shell)
- * @property {string=} componentType
- * @property {string=} htmlTag
- */
-/**
  * @typedef {ChildShellTemplateOptions} ChildrenShellsViewOptions
  * @property {string} componentId
  * @property {string|jQuery<HTMLElement>=} elemIdOrJQuery is the parent's element id or jQuery<HTMLElement>
