@@ -84,6 +84,14 @@ export function ownerOf($elem) {
  * @param {jQuery<HTMLElement>} $elem
  * @return {string|undefined}
  */
+export function partOf($elem) {
+    return $elem.data(GlobalConfig.DATA_PART);
+}
+
+/**
+ * @param {jQuery<HTMLElement>} $elem
+ * @return {string|undefined}
+ */
 export function childIdOf($elem) {
     return $elem.data(GlobalConfig.DATA_CHILD_ID);
 }

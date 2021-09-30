@@ -1,5 +1,6 @@
 import SimpleComponent from "./component/SimpleComponent.js";
 import SimpleContainerComponent from "./component/SimpleContainerComponent.js";
+import ValueComponent from "./component/ValueComponent.js";
 
 /**
  * @typedef {function(options: Bag): AbstractComponent} ComponentProviderFn
@@ -10,6 +11,7 @@ import SimpleContainerComponent from "./component/SimpleContainerComponent.js";
  */
 const COMPONENT_TYPES = {
     "simple": (options) => new SimpleComponent(options),
+    "value": (options) => new ValueComponent(options),
     "simple-container": (options) => new SimpleContainerComponent(options),
 };
 
