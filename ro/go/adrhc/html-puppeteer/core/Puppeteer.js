@@ -1,7 +1,7 @@
-import {dataPartSelectorOf, dataSelectorOf} from "../util/SelectorUtils.js";
+import {dataSelectorOf} from "../util/SelectorUtils.js";
 import GlobalConfig from "../util/GlobalConfig.js";
 import {createByType} from "./ComponentFactories.js";
-import {idOf, jQueryOf} from "../util/DomUtils.js";
+import {idOf} from "../util/DomUtils.js";
 import {isTrue} from "../util/AssertionUtils.js";
 
 /**
@@ -81,8 +81,7 @@ function componentTypeOf($el) {
  * @protected
  */
 function instanceOf($el, type, componentOptions = {}) {
-    const elemIdOrJQuery = GlobalConfig.ELEM_ID_OR_JQUERY;
-    return createByType(type, {...componentOptions, [elemIdOrJQuery]: $el});
+    return createByType(type, {...componentOptions, [GlobalConfig.ELEM_ID_OR_JQUERY]: $el});
 }
 
 /**

@@ -1,6 +1,6 @@
 import StateHolder from "./StateHolder.js";
 import {isTrue} from "../../util/AssertionUtils.js";
-import {updateOrInsert, removeByIndex} from "../../util/ArrayUtils.js";
+import {removeByIndex, updateOrInsert} from "../../util/ArrayUtils.js";
 import PartStateChange from "./change/PartStateChange.js";
 
 /**

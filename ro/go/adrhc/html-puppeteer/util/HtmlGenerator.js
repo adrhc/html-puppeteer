@@ -10,3 +10,12 @@ export function generateHtml(htmlTemplate, values) {
     const template = Handlebars.compile(htmlTemplate);
     return template(values);
 }
+
+/**
+ * @param {string} string
+ * @param {boolean=} escapeHtml
+ * @return {string}
+ */
+export function handlebarsWrap(string, escapeHtml) {
+    return escapeHtml ? `{{${string}}}` : `{{{${string}}}}`;
+}
