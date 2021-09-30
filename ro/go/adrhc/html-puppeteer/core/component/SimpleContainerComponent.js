@@ -37,6 +37,8 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @param {SCT=} newState
      */
     replaceState(newState) {
+        // this must happen before container redraw to give
+        // a chance to the children to close themselves
         this.childrenComponents.removeAll();
         // initializing the container state with [] or {} depending on the newState
         // the container's view will kick in to render its static content (if any)

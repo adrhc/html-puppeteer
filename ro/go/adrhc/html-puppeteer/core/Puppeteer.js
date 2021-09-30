@@ -11,7 +11,7 @@ import {isTrue} from "../util/AssertionUtils.js";
  * @param {boolean=} alwaysReturnArray
  * @return {AbstractComponent|jQuery<AbstractComponent>}
  */
-export default function animate(commonOptions, dontRender, parentComponentElem, alwaysReturnArray) {
+export default function animate(commonOptions, {parentComponentElem, dontRender, alwaysReturnArray} = {}) {
     const components = createComponents(parentComponentElem, commonOptions);
     console.log("[Puppeteer.animate] components.length:", components.length);
     if (!dontRender) {
@@ -20,13 +20,13 @@ export default function animate(commonOptions, dontRender, parentComponentElem, 
     if (components.length === 1 && !alwaysReturnArray) {
         return components[0];
     }
-    return components;
+    return components.toArray();
 }
 
 /**
  * @param {jQuery<HTMLElement>=} parentComponentElem
  * @param {Bag} commonOptions
- * @return {AbstractComponent|AbstractComponent[]}
+ * @return {jQuery<AbstractComponent>}
  * @protected
  */
 function createComponents(parentComponentElem, commonOptions) {
