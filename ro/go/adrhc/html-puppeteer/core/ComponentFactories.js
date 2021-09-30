@@ -1,5 +1,4 @@
 import SimpleComponent from "./component/SimpleComponent.js";
-import ComplexContainerComponent from "./component/ComplexContainerComponent.js";
 import SimpleContainerComponent from "./component/SimpleContainerComponent.js";
 
 /**
@@ -12,7 +11,6 @@ import SimpleContainerComponent from "./component/SimpleContainerComponent.js";
 const COMPONENT_TYPES = {
     "simple": (options) => new SimpleComponent(options),
     "simple-container": (options) => new SimpleContainerComponent(options),
-    "complex-container": (options) => new ComplexContainerComponent(options)
 };
 
 /**

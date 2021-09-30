@@ -5,7 +5,7 @@ import Scenario10App from "./Scenario10App.js";
 
 export default class Scenario13App extends Scenario10App {
     /**
-     * @type {ComplexContainerComponent}
+     * @type {SimpleContainerComponent}
      */
     parent;
 

@@ -8,7 +8,7 @@ import GlobalConfig from "../../util/GlobalConfig.js";
  * @typedef {StateHolderOptions & ValueStateInitializerOptions & StateChangesHandlersInvokerOptions} AbstractComponentOptions
  * @property {string} elemIdOrJQuery
  * @property {string|number|boolean=} id
- * @property {ComplexContainerComponent=} parent
+ * @property {SimpleContainerComponent=} parent
  * @property {PartialStateHolder=} stateHolder
  * @property {StateInitializer=} stateInitializer
  * @property {StateChangesHandlersInvoker=} stateChangesHandlersInvoker
