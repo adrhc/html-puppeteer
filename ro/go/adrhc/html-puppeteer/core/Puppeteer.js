@@ -6,7 +6,7 @@ import {isTrue} from "../util/AssertionUtils.js";
 
 /**
  * @param {{}=} commonOptions
- * @param {string|jQuery<HTMLElement>=} parentComponentElem
+ * @param {string|jQuery<HTMLElement>=} parentComponentElem A DOM Element, Document, jQuery or selector to use as context
  * @param {boolean=} dontRender
  * @param {boolean=} alwaysReturnArray
  * @return {AbstractComponent|jQuery[]}

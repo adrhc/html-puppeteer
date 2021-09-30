@@ -5,12 +5,11 @@ import {createComponent} from "./ro/go/adrhc/html-puppeteer/core/Puppeteer.js";
 
 $(() => {
     // the puppeteer
-    // const component = createComponent($("#parent-component"),
-    //     withDebugger({debuggerElemIdOrJQuery: "main-debugger"})).render();
-
-    const component = new SimpleContainerComponent(
-        addDebugger({debuggerElemIdOrJQuery: "main-debugger"})
-            .to({elemIdOrJQuery: "parent-component"})).render();
+    const component = createComponent($("#parent-component"),
+        withDebugger({debuggerElemIdOrJQuery: "main-debugger"})).render();
+    // const component = new SimpleContainerComponent(
+    //     addDebugger({debuggerElemIdOrJQuery: "main-debugger"})
+    //         .to({elemIdOrJQuery: "parent-component"})).render();
 
     // the application using the html-puppeteer
     new Scenario13App(component, {innerPart: "dogs"}).run();
