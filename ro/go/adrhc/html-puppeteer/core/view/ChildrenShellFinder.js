@@ -1,6 +1,7 @@
-import {dataOwnerSelectorOf, dataPartSelectorOf} from "../../util/SelectorUtils.js";
+import {dataOwnerSelectorOf, dataPartSelectorOf, dataSelectorOf} from "../../util/SelectorUtils.js";
 import {isFalse} from "../../util/AssertionUtils.js";
 import {jQueryOf} from "../../util/DomUtils.js";
+import GlobalConfig from "../../util/GlobalConfig.js";
 
 export default class ChildrenShellFinder {
     /**
@@ -27,6 +28,15 @@ export default class ChildrenShellFinder {
         this.parentId = parentId;
         this.$containerElem = jQueryOf(elemIdOrJQuery);
         this.persistentShells = persistentShells;
+    }
+
+    /**
+     * @return {jQuery<HTMLElement>[]}
+     */
+    $ownedComponentShells() {
+        const ownedComponents = $(`${dataOwnerSelectorOf(this.parentId)}${dataSelectorOf(GlobalConfig.DATA_PART)}`).toArray();
+        const children = this.$containerElem.children(`${dataSelectorOf(GlobalConfig.DATA_PART)}`).toArray();
+        return _.concat(children, ownedComponents);
     }
 
     /**

@@ -39,7 +39,7 @@ function createComponents(parentComponentElem, commonOptions) {
 
 /**
  * @param {jQuery<HTMLElement>=} $el
- * @param {Bag} commonOptions
+ * @param {Bag=} commonOptions
  * @return {AbstractComponent}
  */
 export function createComponent($el, commonOptions) {
