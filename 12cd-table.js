@@ -7,5 +7,5 @@ $(() => {
     const component = animate(withDebugger({debuggerElemIdOrJQuery: "main-debugger"}));
 
     // the application using the html-puppeteer
-    new Scenario10App(component, true).run();
+    new Scenario10App(component, {haveDogs:true}).run();
 });

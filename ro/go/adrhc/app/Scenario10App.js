@@ -16,7 +16,7 @@ export default class Scenario10App {
      * @param {SimpleContainerComponent} parent
      * @param {boolean=} haveDogs
      */
-    constructor(parent, haveDogs) {
+    constructor(parent, {haveDogs} = {}) {
         this.parent = parent;
         this.haveDogs = haveDogs;
     }

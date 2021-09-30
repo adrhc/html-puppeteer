@@ -5,9 +5,18 @@ import Scenario10App from "./Scenario10App.js";
 
 export default class Scenario13App extends Scenario10App {
     /**
-     * @type {SimpleContainerComponent}
+     * @type {string}
      */
-    parent;
+    innerPart;
+
+    /**
+     * @param {SimpleContainerComponent} parent
+     * @param {string} innerPart
+     */
+    constructor(parent, {innerPart}) {
+        super(parent);
+        this.innerPart = innerPart;
+    }
 
     /**
      * execute the application
@@ -15,7 +24,7 @@ export default class Scenario13App extends Scenario10App {
     run() {
         this._createParentStateChangingButtons();
         $(namedBtn("create")).on("click", () => {
-            this._createOneAtIndex0("cats", "dogs");
+            this._createOneAtIndex0("cats");
         });
         $(namedBtn("remove")).on("click", () => {
             this._removeLast("cats");
@@ -24,14 +33,13 @@ export default class Scenario13App extends Scenario10App {
 
     /**
      * @param {string} partName
-     * @param {string} innerPart
      * @protected
      */
-    _createOneAtIndex0(partName, innerPart) {
+    _createOneAtIndex0(partName) {
         const items = this.parent.getPart(partName) ?? [];
         const newItem = {
-            id: `${partName}-Math.random()}`,
-            dogs: {id: `${innerPart}-${Math.random()}`, name: generateString("name ")}
+            id: `${partName}-${Math.random()}`,
+            dogs: [{id: `${this.innerPart}-${Math.random()}`, name: generateString("name ")}]
         };
         updateOrInsert(items, newItem);
         this.parent.replacePart(partName, items);
