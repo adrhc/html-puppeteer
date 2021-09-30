@@ -25,14 +25,7 @@ export default class Scenario10App {
      * execute the application
      */
     run() {
-        $(namedBtn("change-parent-state")).on("click",
-            () => {
-                this.parent.replaceState(JSON.parse($("#main-debugger").val()));
-            });
-        $(namedBtn("change-partial-state")).on("click", () => {
-            const guestsState = JSON.parse($("#partial-state").val());
-            this.parent.replaceParts(guestsState);
-        });
+        this._createParentStateChangingButtons();
         $(namedBtn("create")).on("click", () => {
             this._createOneAtIndex0("cats");
             if (this.haveDogs) {
@@ -44,6 +37,20 @@ export default class Scenario10App {
             if (this.haveDogs) {
                 this._removeLast("dogs");
             }
+        });
+    }
+
+    /**
+     * @protected
+     */
+    _createParentStateChangingButtons() {
+        $(namedBtn("change-parent-state")).on("click",
+            () => {
+                this.parent.replaceState(JSON.parse($("#main-debugger").val()));
+            });
+        $(namedBtn("change-partial-state")).on("click", () => {
+            const guestsState = JSON.parse($("#partial-state").val());
+            this.parent.replaceParts(guestsState);
         });
     }
 
