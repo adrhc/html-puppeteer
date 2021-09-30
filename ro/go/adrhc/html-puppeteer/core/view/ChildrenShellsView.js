@@ -83,7 +83,7 @@ export default class ChildrenShellsView extends AbstractView {
             return $shell;
         }
         isFalse(this.persistentShells,
-            `Can't have persistent shells while also a shell template!\nMake sure to have ${dataOwnerSelectorOf(partName)} on the "${partName}" persistent shell!`);
+            `Can't have persistent shells while also a shell template!\nMake sure to have ${dataOwnerSelectorOf(this.parentId)} on the "${partName}" persistent shell!`);
         const viewValues = {
             [GlobalConfig.PART]: partName,
             [GlobalConfig.OWNER]: this.parentId,
