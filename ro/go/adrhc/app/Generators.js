@@ -39,7 +39,7 @@ export function generateDogsOrCats(max) {
  * @return {Cats}
  */
 export function generateCats(max) {
-    return _generate(max, "cat");
+    return generateIdNameBags(max, "cat");
 }
 
 /**
@@ -47,7 +47,7 @@ export function generateCats(max) {
  * @return {Dogs}
  */
 export function generateDogs(max) {
-    return _generate(max, "dog");
+    return generateIdNameBags(max, "dog");
 }
 
 /**
@@ -61,7 +61,7 @@ export function generateDogs(max) {
  * @param {string} name
  * @return {Bag[]}
  */
-function _generate(max, name) {
+export function generateIdNameBags(max, name) {
     const generation = _.random(1, 1000);
     const count = _.random(1, max);
     const items = [];
