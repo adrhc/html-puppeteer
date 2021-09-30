@@ -36,7 +36,7 @@ export default class ChildrenShellFinder {
     $ownedComponentShells() {
         const ownedComponents = $(`${dataOwnerSelectorOf(this.parentId)}${dataSelectorOf(GlobalConfig.DATA_PART)}`).toArray();
         const children = this.$containerElem.children(`${dataSelectorOf(GlobalConfig.DATA_PART)}`).toArray();
-        return _.concat(children, ownedComponents);
+        return [...new Set([...ownedComponents, ...children])]
     }
 
     /**
