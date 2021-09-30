@@ -85,7 +85,7 @@ export default class AbstractComponent extends StateProcessor {
      * @return {SCT}
      */
     getState() {
-        return _.cloneDeep(this.stateHolder?.currentState);
+        return this.stateHolder?.currentState;
     }
 
     /**
@@ -93,7 +93,7 @@ export default class AbstractComponent extends StateProcessor {
      * @return {*}
      */
     getPart(partName) {
-        return _.cloneDeep(this.stateHolder?.getPart(partName));
+        return this.stateHolder?.getPart(partName);
     }
 
     /**

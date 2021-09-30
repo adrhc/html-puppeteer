@@ -32,19 +32,19 @@ export default class PartialStateHolder extends StateHolder {
     replacePart(previousPartName, newPart,
                 newPartName = newPart != null ? previousPartName : undefined,
                 dontRecordChanges) {
-        isTrue(this.currentState != null || newPart == null,
+        isTrue(this._currentState != null || newPart == null,
             "[PartialStateHolder.replacePart] can't add partial state to missing parent state!")
         if (this._partsEqual(newPart, newPartName, previousPartName)) {
             return [];
         }
 
         // currentState will be changed by _replacePart
-        const previousState = _.cloneDeep(this.currentState);
+        const previousState = this.currentState;
 
         const previousPart = this._replacePart(previousPartName, newPart, newPartName);
 
         // cloning because a subsequent partial change might alter the _currentState
-        const newState = _.cloneDeep(this.currentState);
+        const newState = this.currentState;
 
         // parts never change partially so there's no need to clone them
         const stateChanges = /** @type {StateChange[]} */ this
@@ -124,10 +124,10 @@ export default class PartialStateHolder extends StateHolder {
      * @protected
      */
     _removePart(partName) {
-        if (_.isArray(this.currentState)) {
-            removeByIndex(this.currentState, partName);
+        if (_.isArray(this._currentState)) {
+            removeByIndex(this._currentState, partName);
         } else {
-            delete this.currentState[partName];
+            delete this._currentState[partName];
         }
     }
 
@@ -137,10 +137,10 @@ export default class PartialStateHolder extends StateHolder {
      * @protected
      */
     _insertPart(part, partName) {
-        if (_.isArray(this.currentState)) {
-            updateOrInsert(this.currentState, part, partName);
+        if (_.isArray(this._currentState)) {
+            updateOrInsert(this._currentState, part, partName);
         } else {
-            this.currentState[partName] = part;
+            this._currentState[partName] = part;
         }
     }
 }

@@ -23,7 +23,7 @@ export default class StateHolder {
      * @return {SCT}
      */
     get currentState() {
-        return this._currentState;
+        return _.cloneDeep(this._currentState);
     }
 
     /**
