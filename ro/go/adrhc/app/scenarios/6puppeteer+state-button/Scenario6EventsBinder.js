@@ -16,7 +16,7 @@ export default class Scenario6EventsBinder extends EventsBinder {
             }
             const {interval, stopped} = JSON.parse(json);
             clock.clockStateProcessor.doWithState(clockState => {
-                const newState = _.defaults({interval, stopped}, clockState.currentState)
+                const newState = _.defaults({interval, stopped}, clockState.stateCopy)
                 clockState.replace(newState);
             })
         });

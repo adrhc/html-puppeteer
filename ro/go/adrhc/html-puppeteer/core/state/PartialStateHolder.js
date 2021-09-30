@@ -9,17 +9,19 @@ import PartStateChange from "./change/PartStateChange.js";
 export default class PartialStateHolder extends StateHolder {
     /**
      * @param {PartName} partName
+     * @param {boolean=} dontClone
      * @return {SCP}
      */
-    getPart(partName) {
-        return this.currentState?.[partName];
+    getPart(partName, dontClone) {
+        const part = this._currentState?.[partName];
+        return dontClone || part == null ? part : _.cloneDeep(part);
     }
 
     /**
      * @return {{[key: string]: *}[]}
      */
     getParts() {
-        return partsOf(this.currentState);
+        return partsOf(this.stateCopy);
     }
 
     /**
@@ -39,14 +41,15 @@ export default class PartialStateHolder extends StateHolder {
         }
 
         // currentState will be changed by _replacePart
-        const previousState = this.currentState;
+        const previousState = this.stateCopy;
 
+        // parts never change partially so there's no need to clone them
         const previousPart = this._replacePart(previousPartName, newPart, newPartName);
 
         // cloning because a subsequent partial change might alter the _currentState
-        const newState = this.currentState;
+        // which now is newState hence the stateChanges below might be altered too
+        const newState = this.stateCopy;
 
-        // parts never change partially so there's no need to clone them
         const stateChanges = /** @type {StateChange[]} */ this
             ._partialStateChangesOf(previousState, newState, previousPart, newPart,
                 previousPart == null ? undefined : previousPartName, newPartName);
@@ -80,7 +83,7 @@ export default class PartialStateHolder extends StateHolder {
      * @protected
      */
     _partsEqual(newPart, newPartName, previousPartName) {
-        const previousPart = this.getPart(previousPartName);
+        const previousPart = this.getPart(previousPartName, true);
         return newPart == null && previousPart == null || newPart === previousPart;
     }
 
@@ -92,7 +95,7 @@ export default class PartialStateHolder extends StateHolder {
      * @protected
      */
     _replacePart(previousPartName, newPart, newPartName) {
-        const previousItem = this.getPart(previousPartName);
+        const previousItem = this.getPart(previousPartName, true);
         if (previousItem == null) {
             if (newPart == null) {
                 console.warn("both old and new items are null, nothing else to do");

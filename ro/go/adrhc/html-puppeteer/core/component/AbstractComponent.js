@@ -61,7 +61,7 @@ export default class AbstractComponent extends StateProcessor {
      * @return {boolean}
      */
     get closed() {
-        return typeof this.stateHolder.currentState === "undefined";
+        return this.stateHolder.hasUndefined();
     }
 
     /**
@@ -85,7 +85,7 @@ export default class AbstractComponent extends StateProcessor {
      * @return {SCT}
      */
     getState() {
-        return this.stateHolder?.currentState;
+        return this.stateHolder.stateCopy;
     }
 
     /**

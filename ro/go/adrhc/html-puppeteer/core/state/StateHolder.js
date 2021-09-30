@@ -20,20 +20,6 @@ export default class StateHolder {
     _currentState;
 
     /**
-     * @return {SCT}
-     */
-    get currentState() {
-        return _.cloneDeep(this._currentState);
-    }
-
-    /**
-     * @param {SCT} currentState
-     */
-    set currentState(currentState) {
-        this._currentState = currentState;
-    }
-
-    /**
      * @type {StateChangesCollector<SCT>}
      * @protected
      */
@@ -44,6 +30,27 @@ export default class StateHolder {
      */
     get stateChangesCollector() {
         return this._stateChangesCollector;
+    }
+
+    /**
+     * @return {boolean}
+     */
+    hasNull() {
+        return this._currentState == null;
+    }
+
+    /**
+     * @return {boolean}
+     */
+    hasUndefined() {
+        return typeof this._currentState === "undefined";
+    }
+
+    /**
+     * @return {SCT}
+     */
+    get stateCopy() {
+        return this._currentState == null ? this._currentState : _.cloneDeep(this._currentState);
     }
 
     /**
@@ -68,7 +75,8 @@ export default class StateHolder {
 
         const previousState = this._replaceImpl(newState);
 
-        // cloning because a subsequent partial change might alter the _currentState which now is newState
+        // cloning because a subsequent partial change might alter the _currentState
+        // which now is newState hence the stateChanges below might be altered too
         const clonedNewState = _.cloneDeep(newState);
 
         const stateChanges = this._stateChangesOf(previousState, clonedNewState);

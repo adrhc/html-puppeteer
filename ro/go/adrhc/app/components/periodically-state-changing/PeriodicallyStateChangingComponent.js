@@ -48,7 +48,7 @@ export default class PeriodicallyStateChangingComponent extends SimpleComponent 
      */
     startClock() {
         this.clockStateProcessor.doWithState((clockState) => {
-            const state = clockState.currentState;
+            const state = clockState.stateCopy;
             clockState.replace({...state, stopped: false});
         })
     }
@@ -58,7 +58,7 @@ export default class PeriodicallyStateChangingComponent extends SimpleComponent 
      */
     stopClock() {
         this.clockStateProcessor.doWithState((clockState) => {
-            const state = clockState.currentState;
+            const state = clockState.stateCopy;
             clockState.replace({...state, stopped: true});
         })
     }
