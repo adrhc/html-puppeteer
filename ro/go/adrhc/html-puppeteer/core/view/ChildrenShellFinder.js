@@ -31,15 +31,19 @@ export default class ChildrenShellFinder {
 
     /**
      * @param {string} partName
+     * @param {boolean} findMany
      * @return {jQuery<HTMLElement>|undefined}
      */
-    $shellElemOf(partName) {
+    $shellElemOf(partName, findMany) {
+        let $elem;
         if (this.persistentShells) {
             const $childByPartName = this._$shellByPartName(partName);
-            return $childByPartName ? $childByPartName : this._$shellByOwnerAndPartName(partName);
+            $elem = $childByPartName ? $childByPartName : this._$shellByOwnerAndPartName(partName);
         } else {
-            return this._$shellByPartName(partName);
+            $elem = this._$shellByPartName(partName);
         }
+        isFalse(!findMany && $elem?.length > 1, `Found ${$elem?.length} of ${partName}!`);
+        return $elem;
     }
 
     /**
@@ -70,7 +74,6 @@ export default class ChildrenShellFinder {
      */
     _elemForSelector(selector, searchWith) {
         const $child = this.$containerElem[searchWith](selector);
-        isFalse($child.length > 1, `Found ${$child.length} of ${selector}!`);
         return $child.length ? $child : undefined;
     }
 }
