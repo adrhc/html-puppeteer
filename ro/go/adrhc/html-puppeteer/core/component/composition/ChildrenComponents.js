@@ -1,6 +1,7 @@
 import animate, {createComponent} from "../../Puppeteer.js";
 import {isTrue} from "../../../util/AssertionUtils.js";
 import {childStateOf} from "../configurator/DefaultComponentConfigurator.js";
+import {jQueryOf} from "../../../util/DomUtils.js";
 
 /**
  * @typedef {{[name: string]: AbstractComponent}} ComponentsCollection
@@ -36,7 +37,7 @@ export default class ChildrenComponents {
     autodetectChildren() {
         this.items = {};
         animate({parent: this.parent}, {
-            parentComponentElem: $(this.elemIdOrJQuery), alwaysReturnArray: true
+            parentComponentElem: jQueryOf(this.elemIdOrJQuery), alwaysReturnArray: true
         }).forEach(c => this.items[c.partName] = c);
     }
 
