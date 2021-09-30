@@ -53,6 +53,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 </div>
 
 <script id="parent-template" type="text/x-handlebars-template">
+	<!-- level 1 children don't need data-owner -->
 	<div class="mb3" data-part="message1" data-type="simple"
 	     data-template-id="message1-template"
 	     data-initial-state='The "message1" child was <i>automatically</i> created!<BR>initial state is from <i>data-initial-state</i> attribute'
@@ -73,6 +74,11 @@ PS: make sure to have a well formatted JSON!</textarea>
 			<th colSpan="2">Generated cats</th>
 		</tr>
 		</thead>
+		<!--
+			Level more than 1 children needs data-owner to be set.
+			Can't use @root.componentId (the container's id) if
+			the parent doesn't have a parent because won't be set.
+		-->
 		<tbody data-removed-placeholder='<tr><td colspan="2">The "parent-component" is closed!</td></tr>'
 		       data-shell-occupant-type="simple-container"
 		       data-shell-occupant-html-tag="tr"
@@ -80,8 +86,40 @@ PS: make sure to have a well formatted JSON!</textarea>
 		       data-owner="parent-component"
 		       data-type="simple-container"
 		       data-part="cats">
+		<tr>
+			<td colspan="2">The "cats" child is not available yet!</td>
+		</tr>
 		</tbody>
 	</table>
+</script>
+
+<script id="cats-row-template" type="text/x-handlebars-template">
+	<!-- we are in a simple-container hence root.componentId is the container's id -->
+	<td data-type="simple" data-owner="{{@root.componentId}}" data-part="id"
+	    data-template-id="cat-id-template">
+		The cat's "id" is not available yet!
+	</td>
+	<td>
+		<div class="flex-start parent"
+		     data-owner="{{@root.componentId}}"
+		     data-removed-placeholder='The "dogs" is closed!'
+		     data-shell-occupant-template-id="dogs-row-template"
+		     data-type="simple-container"
+		     data-part="dogs">
+			The "dogs" child is not available yet!
+		</div>
+	</td>
+</script>
+
+<script id="dogs-row-template" type="text/x-handlebars-template">
+	{{#with value}}
+		<div><label>Id:</label> {{id}}</div>
+		<div><label>Name:</label> {{name}}</div>
+	{{/with}}
+</script>
+
+<script id="cat-id-template" type="text/x-handlebars-template">
+	{{#with value}}{{value}}{{/with}}
 </script>
 
 <!--
@@ -95,29 +133,6 @@ PS: make sure to have a well formatted JSON!</textarea>
 
 <script id="message2-template" type="text/x-handlebars-template">
 	{{#if this}}{{{value}}}{{else}}The "message2" child is not available yet!{{/if}}
-</script>
-
-<script id="cats-row-template" type="text/x-handlebars-template">
-	{{#with value}}
-		<td>{{id}}</td>
-		<td>
-			<div class="flex-start parent"
-			     data-removed-placeholder='The "dogs" is closed!'
-			     data-shell-occupant-template-id="dogs-row-template"
-			     data-owner="cats"
-			     data-type="simple-container"
-			     data-part="dogs">
-				The "dogs" child is not available yet!
-			</div>
-		</td>
-	{{/with}}
-</script>
-
-<script id="dogs-row-template" type="text/x-handlebars-template">
-	{{#with value}}
-		<div><label>Id:</label> {{id}}</div>
-		<div><label>Name:</label> {{name}}</div>
-	{{/with}}
 </script>
 
 </body>

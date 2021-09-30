@@ -3,10 +3,10 @@ import {jQueryOf} from "../../util/DomUtils.js";
 import GlobalConfig from "../../util/GlobalConfig.js";
 import {dataOwnerSelectorOf} from "../../util/SelectorUtils.js";
 import {generateHtml} from "../../util/HtmlGenerator.js";
-import {uniqueId} from "../../util/StringUtils.js";
 import shellTemplateOf, {shellTemplateOptionsAreEmpty} from "./ChildShellTemplate.js";
 import {isFalse} from "../../util/AssertionUtils.js";
 import ChildrenShellFinder from "./ChildrenShellFinder.js";
+import {newIdImpl} from "../component/configurator/DefaultComponentConfigurator.js";
 
 /**
  * @typedef {ChildShellTemplateOptions} ChildrenShellsViewOptions
@@ -81,7 +81,7 @@ export default class ChildrenShellsView extends AbstractView {
         const viewValues = {
             [GlobalConfig.PART]: partName,
             [GlobalConfig.OWNER]: this.parentId,
-            [GlobalConfig.COMPONENT_ID]: uniqueId(),
+            [GlobalConfig.COMPONENT_ID]: newIdImpl(partName, this.parentId),
         };
         const kidSeat = generateHtml(this.shellTemplate, viewValues);
         this.$containerElem[this.place](kidSeat);

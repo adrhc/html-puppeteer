@@ -72,6 +72,9 @@ export function getTotalHeight() {
  * @return {string}
  */
 export function dataAttributesOf(object) {
+    if (object == null) {
+        return "";
+    }
     return Object.entries(object).map(([key, value]) => `data-${_.kebabCase(key)}="${encodeHTML(value)}"`).join(" ");
 }
 

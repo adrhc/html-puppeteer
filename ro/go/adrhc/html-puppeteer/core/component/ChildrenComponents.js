@@ -41,7 +41,7 @@ export default class ChildrenComponents {
         }
         // at this point the item component's id is available as data-GlobalConfig.COMPONENT_ID on $shell
         const component = createComponent($shell, {parent: this.parent});
-        isTrue(component != null, "[_createItem] the child's shell should exist!")
+        isTrue(component != null, "[createItem] the child's shell must exist!")
         this.items[partName] = component.render();
     }
 

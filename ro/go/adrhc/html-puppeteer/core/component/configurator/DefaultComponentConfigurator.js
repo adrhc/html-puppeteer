@@ -5,12 +5,9 @@ import PartialStateHolder from "../../state/PartialStateHolder.js";
 import StateChangesHandlersInvoker from "../../state-processor/StateChangesHandlersInvoker.js";
 import {uniqueId} from "../../../util/StringUtils.js";
 
-/**
- * @typedef {AbstractComponentOptions & DataAttributes} DefaultComponentConfiguratorConfigField
- */
 export default class DefaultComponentConfigurator extends ComponentConfigurator {
     /**
-     * @type {DefaultComponentConfiguratorConfigField}
+     * @type {ComponentConfigField}
      */
     config;
     /**
@@ -39,7 +36,7 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
      */
     configure(component) {
         this._setOptionsDataAttributesAndConfig(component);
-        component.id = idOf(this.config.elemIdOrJQuery) ?? uniqueId();
+        component.id = idOf(this.config.elemIdOrJQuery) ?? newIdOf(this.config);
         component.parent = this.config.parent;
         component.stateHolder = this.config.stateHolder ?? new PartialStateHolder(this.config);
         component.stateChangesHandlersInvoker =
@@ -96,4 +93,19 @@ export function childStateOf(partName, parentComponent) {
     // determine the parent's part to use to initialize component
     // config.part is taken from data-part (see GlobalConfig.DATA_PART)
     return parentComponent?.getPart(partName);
+}
+
+/**
+ * @param {ComponentConfigField} componentConfig
+ */
+export function newIdOf(componentConfig) {
+    return newIdImpl(componentConfig?.part, componentConfig?.parent?.id)
+}
+
+/**
+ * @param {string} partName
+ * @param {string} parentId
+ */
+export function newIdImpl(partName, parentId) {
+    return uniqueId(partName == null ? undefined : `${parentId}-${partName}`)
 }

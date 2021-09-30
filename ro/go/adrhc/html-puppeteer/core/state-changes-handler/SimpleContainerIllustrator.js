@@ -32,6 +32,8 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      */
     constructor(component) {
         super(withDefaults({
+            componentId: component.id,
+            // default container's template is "" (when both htmlTemplate or templateId are not available)
             htmlTemplate: component.config.htmlTemplate ?? (component.config.templateId ? undefined : "")
         }).to(_.cloneDeep(component.config)));
         this.container = component;
