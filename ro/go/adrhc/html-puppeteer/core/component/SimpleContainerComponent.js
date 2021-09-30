@@ -2,7 +2,7 @@ import AbstractComponent from "./AbstractComponent.js";
 import {withDefaults} from "./options/ComponentOptionsBuilder.js";
 import SimpleContainerIllustrator from "../state-changes-handler/SimpleContainerIllustrator.js";
 import ContainerEventsBinder from "./events-binder/ContainerEventsBinder.js";
-import ChildrenComponents from "./ChildrenComponents.js";
+import ChildrenComponents from "./composition/ChildrenComponents.js";
 import {partsOf} from "../state/PartialStateHolder.js";
 
 /**

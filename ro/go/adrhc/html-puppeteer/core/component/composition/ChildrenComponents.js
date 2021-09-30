@@ -1,6 +1,6 @@
-import {createComponent} from "../Puppeteer.js";
-import {isTrue} from "../../util/AssertionUtils.js";
-import {childStateOf} from "./configurator/DefaultComponentConfigurator.js";
+import {createComponent} from "../../Puppeteer.js";
+import {isTrue} from "../../../util/AssertionUtils.js";
+import {childStateOf} from "../configurator/DefaultComponentConfigurator.js";
 
 /**
  * @typedef {{[name: string]: AbstractComponent}} ComponentsCollection
