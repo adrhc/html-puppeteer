@@ -14,6 +14,7 @@ export default class Scenario10App {
 
     /**
      * @param {ComplexContainerComponent} parent
+     * @param {boolean=} haveDogs
      */
     constructor(parent, haveDogs) {
         this.parent = parent;
@@ -34,11 +35,15 @@ export default class Scenario10App {
         });
         $(namedBtn("create")).on("click", () => {
             this._createOneAtIndex0("cats");
-            this._createOneAtIndex0("dogs");
+            if (this.haveDogs) {
+                this._createOneAtIndex0("dogs");
+            }
         });
         $(namedBtn("remove")).on("click", () => {
             this._removeLast("cats");
-            this._removeLast("dogs");
+            if (this.haveDogs) {
+                this._removeLast("dogs");
+            }
         });
     }
 
