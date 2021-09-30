@@ -6,10 +6,10 @@ import {isTrue} from "../util/AssertionUtils.js";
 
 /**
  * @param {{}=} commonOptions
- * @param {jQuery<HTMLElement>=} parentComponentElem
+ * @param {string|jQuery<HTMLElement>=} parentComponentElem
  * @param {boolean=} dontRender
  * @param {boolean=} alwaysReturnArray
- * @return {AbstractComponent|jQuery<AbstractComponent>}
+ * @return {AbstractComponent|jQuery[]}
  */
 export default function animate(commonOptions, {parentComponentElem, dontRender, alwaysReturnArray} = {}) {
     const components = createComponents(parentComponentElem, commonOptions);
