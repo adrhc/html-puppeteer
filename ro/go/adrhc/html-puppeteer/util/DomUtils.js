@@ -120,7 +120,7 @@ export function contentOfElemId(tmplId) {
 }
 
 function contentOfElem($elem) {
-    if (!$elem.length) {
+    if (!$elem?.length) {
         return undefined;
     }
     if ($elem[0] instanceof HTMLScriptElement) {
@@ -135,9 +135,10 @@ function contentOfElem($elem) {
 /**
  * @param {string} tmplId is the template html-element id
  * @param {string} tmplHtml is the template's html
+ * @param {jQuery<HTMLElement>} $elem
  * @return {string} the template's html extracted from template html-element id or tmplHtml if null tmplId
  */
-export function templateOf(tmplHtml, tmplId, $elem) {
+export function templateOf($elem, tmplHtml, tmplId) {
     if (tmplHtml != null) {
         return tmplHtml;
     } else if (tmplId) {

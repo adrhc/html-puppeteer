@@ -31,7 +31,7 @@ export default class GlobalConfig {
     static ID_ATTR = "id";
     static OWNER = "owner";
     static PART = "part";
-    static SERVER_ROOT = "";
+    static VIEW_VALUE_FIELD = "value";
 }
 
 export function dataPartOf(partName, useDoubleQuotes) {

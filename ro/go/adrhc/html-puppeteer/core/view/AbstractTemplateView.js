@@ -19,7 +19,7 @@ export default class AbstractTemplateView extends SimpleView {
      */
     constructor({htmlTemplate, templateId, ...restOfOptions}) {
         super(restOfOptions);
-        this.htmlTemplate = templateOf(htmlTemplate, templateId, this.$elem)
+        this.htmlTemplate = templateOf(this.$elem, htmlTemplate, templateId);
         isTrue(this.htmlTemplate != null, `[AbstractTemplateView] HTML template not provided! elemId = ${this.$elem.attr("id")}, data-part = ${this.$elem.data("part")}`)
     }
 }
