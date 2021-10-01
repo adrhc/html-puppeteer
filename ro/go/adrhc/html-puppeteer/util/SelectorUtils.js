@@ -30,14 +30,6 @@ export function dataOwnerSelectorOf(owner, useDoubleQuotes) {
 }
 
 /**
- * @param {string=} ownerOwner
- * @param {boolean=} useDoubleQuotes
- */
-export function dataOwnerOwnerSelectorOf(ownerOwner, useDoubleQuotes) {
-    return dataSelectorOf(GlobalConfig.DATA_OWNER_OWNER, ownerOwner, useDoubleQuotes, "");
-}
-
-/**
  * @param {string=} guestsRoomName
  * @param {boolean=} useDoubleQuotes
  */
@@ -60,6 +52,14 @@ export function dataComponentIdSelectorOf(guestsRoomName, useDoubleQuotes) {
 export function idAttrSelectorOf(idAttr, useDoubleQuotes) {
     const quote = useDoubleQuotes ? '"' : "'";
     return idAttr == null ? "" : `[${GlobalConfig.ID_ATTR}=${quote}${idAttr}${quote}]`;
+}
+
+export function dataTypeSelector() {
+    return dataSelectorOf(GlobalConfig.DATA_TYPE);
+}
+
+export function dataPartSelector() {
+    return dataSelectorOf(GlobalConfig.DATA_PART);
 }
 
 export function dataSelectorOf(name, value, useDoubleQuotes, dataAttrForEmptyValue) {

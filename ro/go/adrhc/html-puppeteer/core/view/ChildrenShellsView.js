@@ -72,7 +72,7 @@ export default class ChildrenShellsView extends AbstractView {
      * @param {PartName} partName
      */
     create(partName) {
-        const $shell = this.childrenShellFinder.$shellElemOf(partName);
+        const $shell = this.childrenShellFinder.$childShellByName(partName);
         if ($shell) {
             return $shell;
         }
@@ -85,7 +85,7 @@ export default class ChildrenShellsView extends AbstractView {
         };
         const kidSeat = generateHtml(this.shellTemplate, viewValues);
         this.$containerElem[this.place](kidSeat);
-        return this.childrenShellFinder.$shellElemOf(partName);
+        return this.childrenShellFinder.$childShellByName(partName);
     }
 
     /**
@@ -93,7 +93,7 @@ export default class ChildrenShellsView extends AbstractView {
      */
     remove(partName) {
         if (!this.persistentShells) {
-            this.childrenShellFinder.$shellElemOf(partName).remove();
+            this.childrenShellFinder.$childShellByName(partName).remove();
         }
     }
 

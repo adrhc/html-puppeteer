@@ -1,7 +1,5 @@
-import {dataOwnerSelectorOf, dataPartSelectorOf, dataSelectorOf} from "../../util/SelectorUtils.js";
-import {isFalse} from "../../util/AssertionUtils.js";
+import {dataOwnerSelectorOf, dataPartSelector, dataPartSelectorOf, dataTypeSelector} from "../../util/SelectorUtils.js";
 import {jQueryOf} from "../../util/DomUtils.js";
-import GlobalConfig from "../../util/GlobalConfig.js";
 
 export default class ChildrenShellFinder {
     /**
@@ -31,28 +29,24 @@ export default class ChildrenShellFinder {
     }
 
     /**
+     * @param {PartName=} partName
      * @return {jQuery<HTMLElement>[]}
      */
-    $ownedComponentShells() {
-        const ownedComponents = $(`${dataOwnerSelectorOf(this.parentId)}${dataSelectorOf(GlobalConfig.DATA_PART)}`).toArray();
-        const children = this.$containerElem.children(`${dataSelectorOf(GlobalConfig.DATA_PART)}`).toArray();
-        return [...new Set([...ownedComponents, ...children])]
+    $childrenShells(partName) {
+        return this.$containerElem
+            .find(`${partName == null ? dataPartSelector() : dataPartSelectorOf(partName)}`)
+            .toArray()
+            .map(shell => [shell, $(shell).parents(dataTypeSelector())])
+            .filter(([, $parents]) => $parents[0] === this.$containerElem[0])
+            .map(([shell]) => $(shell));
     }
 
     /**
      * @param {PartName} partName
      * @return {jQuery<HTMLElement>|undefined}
      */
-    $shellElemOf(partName) {
-        let $elem;
-        if (this.persistentShells) {
-            const $childByPartName = this._$shellByPartName(partName);
-            $elem = $childByPartName ? $childByPartName : this._$shellByOwnerAndPartName(partName);
-        } else {
-            $elem = this._$shellByPartName(partName);
-        }
-        isFalse($elem?.length > 1, `Found ${$elem?.length} of ${partName}!`);
-        return $elem;
+    $childShellByName(partName) {
+        return this.$childrenShells(partName)[0];
     }
 
     /**

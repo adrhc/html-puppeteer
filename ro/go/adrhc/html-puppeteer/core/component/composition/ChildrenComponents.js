@@ -37,8 +37,8 @@ export default class ChildrenComponents {
      */
     autodetectChildren() {
         this.items = {};
-        this.childrenShellFinder.$ownedComponentShells()
-            .map(elem => createComponent($(elem), {parent: this.parent}))
+        this.childrenShellFinder.$childrenShells()
+            .map($elem => createComponent($elem, {parent: this.parent}))
             .forEach(c => this.items[c.partName] = c.render());
     }
 
