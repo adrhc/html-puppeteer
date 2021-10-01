@@ -2,6 +2,7 @@ import SimpleComponent from "./component/SimpleComponent.js";
 import SimpleContainerComponent from "./component/SimpleContainerComponent.js";
 import ValueComponent from "./component/ValueComponent.js";
 import StaticContainerComponent from "./component/StaticContainerComponent.js";
+import DynamicContainerComponent from "./component/DynamicContainerComponent.js";
 
 /**
  * @typedef {function(options: AbstractComponentOptions): AbstractComponent} ComponentProviderFn
@@ -15,6 +16,7 @@ const COMPONENT_TYPES = {
     "value": (/** @type {ValueComponentOptions} */ options) => new ValueComponent(options),
     "simple-container": (options) => new SimpleContainerComponent(options),
     "static-container": (options) => new StaticContainerComponent(options),
+    "dyna-container": (options) => new DynamicContainerComponent(options),
 };
 
 /**

@@ -10,6 +10,7 @@ import {isTrue} from "../../util/AssertionUtils.js";
 /**
  * @typedef {ChildShellTemplateOptions} ChildrenShellsViewOptions
  * @property {string} componentId
+ * @property {string=} parentHtml
  * @property {string|jQuery<HTMLElement>} elemIdOrJQuery is the parent's element id or jQuery<HTMLElement>
  * @property {boolean=} newGuestsGoLast
  */
@@ -52,6 +53,7 @@ export default class ChildrenShellsView extends AbstractView {
      */
     constructor({
                     componentId,
+                    parentHtml,
                     elemIdOrJQuery,
                     newGuestsGoLast,
                     ...restOfOptions
@@ -61,7 +63,7 @@ export default class ChildrenShellsView extends AbstractView {
         this.$containerElem = jQueryOf(elemIdOrJQuery);
         this.place = newGuestsGoLast ? "append" : "prepend";
         this.childrenShellFinder = new ChildrenShellFinder(componentId, elemIdOrJQuery);
-        this.shellTemplate = areShellTemplateOptionsEmpty(restOfOptions) ? undefined : createShellTemplate(componentId, restOfOptions);
+        this.shellTemplate = areShellTemplateOptionsEmpty(restOfOptions) ? parentHtml : createShellTemplate(componentId, restOfOptions);
     }
 
     /**

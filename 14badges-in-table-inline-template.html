@@ -81,14 +81,14 @@ PS: make sure to have a well formatted JSON!</textarea>
 			       data-removed-placeholder='<tr><td colspan="2">The "parent-component" is closed!</td></tr>'
 			       data-shell-occupant-html-tag="tr"
 			       data-shell-occupant-template-id="cats-row-template"
-			       data-shell-occupant-type="simple-container"
-			       data-type="simple-container"></tbody>
+			       data-shell-occupant-type="static-container"
+			       data-type="dyna-container"></tbody>
 		</table>
 	</div>
 </div>
 
 <script id="cats-row-template" type="text/x-handlebars-template">
-	<!-- we are in a simple-container hence root.componentId is the container's id -->
+	<!-- we are in a container hence root.componentId is the container's id -->
 	<td data-type="value" data-part="id">
 		The cat's "id" is not available yet!
 	</td>
@@ -96,7 +96,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 		<div class="flex-start parent"
 		     data-removed-placeholder='The "dogs" is closed!'
 		     data-shell-occupant-template-id="dogs-row-template"
-		     data-type="simple-container"
+		     data-type="dyna-container"
 		     data-part="dogs"></div>
 	</td>
 </script>
