@@ -14,7 +14,7 @@ export function dataBtn(value, owner) {
 }
 
 /**
- * @param {string=} partName
+ * @param {PartName=} partName
  * @param {boolean=} useDoubleQuotes
  */
 export function dataPartSelectorOf(partName, useDoubleQuotes) {

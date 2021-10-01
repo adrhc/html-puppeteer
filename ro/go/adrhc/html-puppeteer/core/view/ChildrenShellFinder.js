@@ -40,7 +40,7 @@ export default class ChildrenShellFinder {
     }
 
     /**
-     * @param {string} partName
+     * @param {PartName} partName
      * @param {boolean} findMany
      * @return {jQuery<HTMLElement>|undefined}
      */
@@ -57,7 +57,7 @@ export default class ChildrenShellFinder {
     }
 
     /**
-     * @param {string} partName
+     * @param {PartName} partName
      * @return {jQuery<HTMLElement>|undefined}
      * @protected
      */
@@ -67,7 +67,7 @@ export default class ChildrenShellFinder {
     }
 
     /**
-     * @param {string} partName
+     * @param {PartName} partName
      * @return {jQuery<HTMLElement>|undefined}
      * @protected
      */
