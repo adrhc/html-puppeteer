@@ -11,6 +11,7 @@ import GlobalConfig, {dataComponentIdOf, dataOwnerOf, dataPartOf, dataTypeOf} fr
 
 /**
  * @typedef {Object} ChildShellTemplateOptions
+ * @property {boolean=} noShellTemplate
  * @property {string=} shellTemplate is the shell's HTML containing the data-type and data-part
  * @property {string=} shellTemplateId
  * @property {string=} shellOccupantTemplate is a shortcut for ShellAttributes.template
@@ -24,6 +25,7 @@ import GlobalConfig, {dataComponentIdOf, dataOwnerOf, dataPartOf, dataTypeOf} fr
  * @param {ChildShellTemplateOptions} options
  */
 export function areShellTemplateOptionsEmpty({
+                                                 noShellTemplate,
                                                  shellTemplate,
                                                  shellTemplateId,
                                                  shellOccupantTemplate,
@@ -37,7 +39,8 @@ export function areShellTemplateOptionsEmpty({
                                                      type: shellOccupantType
                                                  }
                                              }) {
-    return shellTemplate == null && shellTemplateId == null && childShellAttributes.template == null && childShellAttributes.templateId == null;
+    return noShellTemplate || shellTemplate == null && shellTemplateId == null &&
+        childShellAttributes.template == null && childShellAttributes.templateId == null;
 }
 
 /**
