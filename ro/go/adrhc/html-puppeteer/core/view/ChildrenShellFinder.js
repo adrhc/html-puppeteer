@@ -12,24 +12,18 @@ export default class ChildrenShellFinder {
      * @type {string}
      */
     parentId;
-    /**
-     * @type {boolean}
-     */
-    persistentShells;
 
     /**
      * @param {string} parentId
      * @param {string|jQuery<HTMLElement>} elemIdOrJQuery
-     * @param {boolean=} persistentShells
      */
-    constructor(parentId, elemIdOrJQuery, persistentShells) {
+    constructor(parentId, elemIdOrJQuery) {
         this.parentId = parentId;
         this.$containerElem = jQueryOf(elemIdOrJQuery);
-        this.persistentShells = persistentShells;
     }
 
     /**
-     * @param {OptionalPartName} partName
+     * @param {OptionalPartName=} partName
      * @return {jQuery<HTMLElement>[]}
      */
     $childrenShells(partName) {

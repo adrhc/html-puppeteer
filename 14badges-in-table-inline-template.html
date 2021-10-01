@@ -61,7 +61,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 			The "message1" child is not available yet!
 		</div>
 		<div class="mb3"
-		     data-initial-state='This "message2" initial state should NOT be visible!<BR>initial state should come from the parent.'
+		     data-initial-state='This "message2" initial state should only briefly be visible!<BR>initial state should come from the parent.'
 		     data-part="message2"
 		     data-removed-placeholder='"message2" child component was removed!'
 		     data-type="value">
@@ -90,12 +90,11 @@ PS: make sure to have a well formatted JSON!</textarea>
 
 <script id="cats-row-template" type="text/x-handlebars-template">
 	<!-- we are in a simple-container hence root.componentId is the container's id -->
-	<td data-type="value" data-owner="{{@root.componentId}}" data-part="id">
+	<td data-type="value" data-part="id">
 		The cat's "id" is not available yet!
 	</td>
 	<td>
 		<div class="flex-start parent"
-		     data-owner="{{@root.componentId}}"
 		     data-removed-placeholder='The "dogs" is closed!'
 		     data-shell-occupant-template-id="dogs-row-template"
 		     data-type="simple-container"

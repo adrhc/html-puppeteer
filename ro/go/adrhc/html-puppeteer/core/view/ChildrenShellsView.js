@@ -1,8 +1,8 @@
 import AbstractView from "./AbstractView.js";
-import {jQueryOf} from "../../util/DomUtils.js";
+import {jQueryOf, templateOf$Elem} from "../../util/DomUtils.js";
 import GlobalConfig from "../../util/GlobalConfig.js";
 import {generateHtml} from "../../util/HtmlGenerator.js";
-import shellTemplateOf, {shellTemplateOptionsAreEmpty} from "./ChildShellTemplate.js";
+import createShellTemplate, {areShellTemplateOptionsEmpty} from "./ChildShellTemplate.js";
 import {isFalse} from "../../util/AssertionUtils.js";
 import ChildrenShellFinder from "./ChildrenShellFinder.js";
 import {newIdImpl} from "../component/configurator/DefaultComponentConfigurator.js";
@@ -10,9 +10,8 @@ import {newIdImpl} from "../component/configurator/DefaultComponentConfigurator.
 /**
  * @typedef {ChildShellTemplateOptions} ChildrenShellsViewOptions
  * @property {string} componentId
- * @property {string|jQuery<HTMLElement>=} elemIdOrJQuery is the parent's element id or jQuery<HTMLElement>
+ * @property {string|jQuery<HTMLElement>} elemIdOrJQuery is the parent's element id or jQuery<HTMLElement>
  * @property {boolean=} newGuestsGoLast
- * @property {boolean=} persistentShells
  */
 /**
  * @extends {AbstractView}
@@ -27,15 +26,15 @@ export default class ChildrenShellsView extends AbstractView {
      */
     childrenShellFinder;
     /**
+     * @type {boolean}
+     */
+    emptyShellTemplate;
+    /**
      * it's the child shell template id
      *
      * @type {string}
      */
     parentId;
-    /**
-     * @type {boolean}
-     */
-    persistentShells;
     /**
      * specify where to place new kids (append|prepend)
      *
@@ -55,16 +54,17 @@ export default class ChildrenShellsView extends AbstractView {
                     componentId,
                     elemIdOrJQuery,
                     newGuestsGoLast,
-                    persistentShells,
                     ...restOfOptions
                 }) {
         super();
-        this.persistentShells = persistentShells ?? shellTemplateOptionsAreEmpty(restOfOptions);
-        this.childrenShellFinder = new ChildrenShellFinder(componentId, elemIdOrJQuery, this.persistentShells);
+        const shellTemplateFromContainerContent = templateOf$Elem(jQueryOf(elemIdOrJQuery));
+        this.emptyShellTemplate = areShellTemplateOptionsEmpty(restOfOptions);
+        this.childrenShellFinder = new ChildrenShellFinder(componentId, elemIdOrJQuery);
         this.parentId = componentId;
         this.$containerElem = jQueryOf(elemIdOrJQuery);
         this.place = newGuestsGoLast ? "append" : "prepend";
-        this.shellTemplate = shellTemplateOf(componentId, restOfOptions);
+        this.shellTemplate = this.emptyShellTemplate ?
+            shellTemplateFromContainerContent : createShellTemplate(componentId, restOfOptions);
     }
 
     /**
@@ -75,15 +75,15 @@ export default class ChildrenShellsView extends AbstractView {
         if ($shell) {
             return $shell;
         }
-        isFalse(this.persistentShells,
-            `"${partName}" persistent shell is missing from "${this.parentId}"!\n\nparent content is:\n${this.$containerElem.html()}\nparent text is:\n${this.$containerElem.text()}`);
+        isFalse(this.emptyShellTemplate,
+            `"${partName}" shell is missing from "${this.parentId}"!\n\nparent content is:\n${this.$containerElem.html()}\nparent text is:\n${this.$containerElem.text()}`);
         const viewValues = {
             [GlobalConfig.PART]: partName,
             [GlobalConfig.OWNER]: this.parentId,
             [GlobalConfig.COMPONENT_ID]: newIdImpl(partName, this.parentId),
         };
-        const kidSeat = generateHtml(this.shellTemplate, viewValues);
-        this.$containerElem[this.place](kidSeat);
+        const kidShell = generateHtml(this.shellTemplate, viewValues);
+        this.$containerElem[this.place](kidShell);
         return this.childrenShellFinder.$childShellByName(partName);
     }
 
@@ -91,7 +91,7 @@ export default class ChildrenShellsView extends AbstractView {
      * @param {PartName} partName
      */
     remove(partName) {
-        if (!this.persistentShells) {
+        if (!this.emptyShellTemplate) {
             this.childrenShellFinder.$childShellByName(partName).remove();
         }
     }
