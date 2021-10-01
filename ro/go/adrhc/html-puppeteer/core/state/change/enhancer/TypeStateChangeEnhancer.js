@@ -5,6 +5,9 @@ import {isTrue} from "../../../../util/AssertionUtils.js";
  * @typedef {string|number|boolean} PartName
  */
 /**
+ * @typedef {PartName|undefined|null} OptionalPartName
+ */
+/**
  * @template SCT, SCP
  * @extends {StateChangeEnhancer<SCT>}
  */

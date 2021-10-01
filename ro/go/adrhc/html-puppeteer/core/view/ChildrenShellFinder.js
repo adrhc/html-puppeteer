@@ -29,7 +29,7 @@ export default class ChildrenShellFinder {
     }
 
     /**
-     * @param {PartName=} partName
+     * @param {OptionalPartName} partName
      * @return {jQuery<HTMLElement>[]}
      */
     $childrenShells(partName) {
