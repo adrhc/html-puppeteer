@@ -1,6 +1,7 @@
 import ChildrenShellsView from "../view/ChildrenShellsView.js";
 import SimplePartsIllustrator from "./SimplePartsIllustrator.js";
 import {withDefaults} from "../component/options/ComponentOptionsBuilder.js";
+import {isTrue} from "../../util/AssertionUtils.js";
 
 /**
  * @typedef {ComponentIllustratorOptions & ChildrenShellsViewOptions} SimpleContainerIllustratorOptions
@@ -59,6 +60,8 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      */
     partCreated(partStateChange) {
         const $shell = this.childrenShellsView.create(partStateChange.newPartName);
+        isTrue($shell != null,
+            `$shell is null!\n\n${JSON.stringify(partStateChange)}`)
         this.childrenComponents.createItem(partStateChange.newPartName, $shell);
     }
 
