@@ -12,7 +12,7 @@ export default class ValueComponent extends SimpleComponent {
      * @param {ValueComponentOptions} options
      */
     constructor(options) {
-        super({htmlTemplate: htmlTemplateOf(options), ...options});
+        super({...options, htmlTemplate: htmlTemplateOf(options)});
     }
 }
 

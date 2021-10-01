@@ -75,7 +75,10 @@ export function dataAttributesOf(object) {
     if (object == null) {
         return "";
     }
-    return Object.entries(object).map(([key, value]) => `data-${_.kebabCase(key)}="${encodeHTML(value)}"`).join(" ");
+    return Object.entries(object)
+        .filter(([key, value]) => typeof key === "string" &&
+            (value == null || typeof value === "string" || typeof value === "number" || typeof value === "boolean"))
+        .map(([key, value]) => `data-${_.kebabCase(key)}="${encodeHTML(value)}"`).join(" ");
 }
 
 /**
@@ -108,17 +111,41 @@ export function focus($elem) {
 }
 
 /**
- * @param {string} tmplId is the template html-element id
- * @return {string} the template's html extracted from template html-element id (i.e. tmplId)
+ * @param {string} templateId
+ * @return {string|undefined}
  */
-export function contentOfElemId(tmplId) {
-    if (!tmplId) {
-        return undefined;
-    }
-    const $tmpl = $(`#${tmplId}`);
-    return contentOfElem($tmpl);
+export function templateOfTemplateId(templateId) {
+    return templateOf({templateId});
 }
 
+/**
+ * @param {jQuery<HTMLElement>} $elem
+ * @return {string|undefined}
+ */
+export function templateOf$Elem($elem) {
+    return templateOf({$elem});
+}
+
+/**
+ * @param {string=} htmlTemplate is the template's html
+ * @param {string=} templateId is the template html-element id
+ * @param {jQuery<HTMLElement>=} $elem
+ * @return {string|undefined} the template's html extracted from template html-element id or htmlTemplate if null templateId
+ */
+export function templateOf({htmlTemplate, templateId, $elem}) {
+    if (htmlTemplate != null) {
+        return htmlTemplate;
+    } else if (templateId) {
+        return contentOfElem(jQueryOf(templateId));
+    } else {
+        return contentOfElem($elem);
+    }
+}
+
+/**
+ * @param {jQuery<HTMLElement>} $elem
+ * @return {string|undefined}
+ */
 function contentOfElem($elem) {
     if (!$elem?.length) {
         return undefined;
@@ -129,22 +156,6 @@ function contentOfElem($elem) {
     } else {
         // use when content encoding as HTML is not an issue
         return $elem.html().trim();
-    }
-}
-
-/**
- * @param {string} tmplId is the template html-element id
- * @param {string} tmplHtml is the template's html
- * @param {jQuery<HTMLElement>} $elem
- * @return {string} the template's html extracted from template html-element id or tmplHtml if null tmplId
- */
-export function templateOf($elem, tmplHtml, tmplId) {
-    if (tmplHtml != null) {
-        return tmplHtml;
-    } else if (tmplId) {
-        return contentOfElemId(tmplId);
-    } else {
-        return contentOfElem($elem);
     }
 }
 
