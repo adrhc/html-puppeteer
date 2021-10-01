@@ -97,20 +97,6 @@ PS: make sure to have a well formatted JSON!</textarea>
 	</div>
 </div>
 
-<script id="cats-row-template" type="text/x-handlebars-template">
-	<!-- we are in a container hence root.componentId is the container's id -->
-	<td data-type="value" data-part="id">
-		The cat's "id" is not available yet!
-	</td>
-	<td>
-		<div class="flex-start parent"
-		     data-removed-placeholder='The "dogs" is closed!'
-		     data-shell-occupant-template-id="dogs-row-template"
-		     data-type="dyna-container"
-		     data-part="dogs"></div>
-	</td>
-</script>
-
 <script id="dogs-row-template" type="text/x-handlebars-template">
 	{{#with value}}
 		<div><label>Id:</label> {{id}}</div>
