@@ -130,6 +130,11 @@ div[data-part], .parent {
 .scenario10 [data-part] label,
 .scenario12 [data-part] label {
     font-weight: bold;
+    display: inline;
+}
+
+p[data-part] {
+    display: inline !important;
 }
 
 .scenario12 table {

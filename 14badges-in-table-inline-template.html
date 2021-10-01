@@ -88,21 +88,20 @@ PS: make sure to have a well formatted JSON!</textarea>
 					<div class="flex-start parent"
 					     data-part="dogs"
 					     data-removed-placeholder='The "dogs" is closed!'
-					     data-shell-occupant-template-id="dogs-row-template"
-					     data-type="dyna-container"></div>
+					     data-type="dyna-container">
+						<div data-type="static-container">
+							<div><label>Id:</label>
+								<p data-part="id" data-type="value"></p></div>
+							<div><label>Name:</label>
+								<p data-part="name" data-type="value"></p></div>
+						</div>
+					</div>
 				</td>
 			</tr>
 			</tbody>
 		</table>
 	</div>
 </div>
-
-<script id="dogs-row-template" type="text/x-handlebars-template">
-	{{#with value}}
-		<div><label>Id:</label> {{id}}</div>
-		<div><label>Name:</label> {{name}}</div>
-	{{/with}}
-</script>
 
 </body>
 
