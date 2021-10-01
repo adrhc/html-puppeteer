@@ -1,7 +1,6 @@
 import AbstractView from "./AbstractView.js";
 import {jQueryOf} from "../../util/DomUtils.js";
 import GlobalConfig from "../../util/GlobalConfig.js";
-import {dataOwnerSelectorOf} from "../../util/SelectorUtils.js";
 import {generateHtml} from "../../util/HtmlGenerator.js";
 import shellTemplateOf, {shellTemplateOptionsAreEmpty} from "./ChildShellTemplate.js";
 import {isFalse} from "../../util/AssertionUtils.js";
@@ -77,7 +76,7 @@ export default class ChildrenShellsView extends AbstractView {
             return $shell;
         }
         isFalse(this.persistentShells,
-            `Can't have persistent shells while their related DOM element is missing!\nMake sure to have ${dataOwnerSelectorOf(this.parentId)} on the "${partName}" persistent shell!\n\nparent content is:\n${this.$containerElem.html()}\nparent text is:\n${this.$containerElem.text()}`);
+            `"${partName}" persistent shell is missing from "${this.parentId}"!\n\nparent content is:\n${this.$containerElem.html()}\nparent text is:\n${this.$containerElem.text()}`);
         const viewValues = {
             [GlobalConfig.PART]: partName,
             [GlobalConfig.OWNER]: this.parentId,
