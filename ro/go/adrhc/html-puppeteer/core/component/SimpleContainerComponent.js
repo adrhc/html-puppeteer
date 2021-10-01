@@ -39,7 +39,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
     replaceState(newState) {
         // this must happen before container redraw to give
         // a chance to the children to close themselves
-        this.childrenComponents.removeAll();
+        this.childrenComponents.disconnectAll();
         // initializing the container state with [] or {} depending on the newState
         // the container's view will kick in to render its static content (if any)
         this._replaceContainerStateOnly(newState);
@@ -75,5 +75,21 @@ export default class SimpleContainerComponent extends AbstractComponent {
         } else {
             super.replaceState(_.isArray(newState) ? [] : {});
         }
+    }
+
+    /**
+     * set state to undefined
+     */
+    close() {
+        this.childrenComponents.removeAll();
+        super.close();
+    }
+
+    /**
+     * Detach event handlers.
+     */
+    disconnect() {
+        this.childrenComponents.disconnectAll();
+        super.disconnect();
     }
 }

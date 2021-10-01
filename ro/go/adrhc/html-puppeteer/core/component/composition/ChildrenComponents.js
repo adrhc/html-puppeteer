@@ -90,6 +90,13 @@ export default class ChildrenComponents {
     }
 
     /**
+     * Detach event handlers.
+     */
+    disconnectAll() {
+        Object.values(this.items).forEach(child => child.disconnect());
+    }
+
+    /**
      * @param {string} itemId
      * @return {AbstractComponent|undefined}
      */

@@ -150,8 +150,15 @@ export default class AbstractComponent extends StateProcessor {
      * set state to undefined
      */
     close() {
-        this.eventsBinder?.detachEventHandlers();
+        this.disconnect();
         this.replaceState();
+    }
+
+    /**
+     * Detach event handlers.
+     */
+    disconnect() {
+        this.eventsBinder?.detachEventHandlers();
     }
 
     /**

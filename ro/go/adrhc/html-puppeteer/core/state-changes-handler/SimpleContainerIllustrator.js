@@ -51,6 +51,7 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      */
     replaced(stateChange) {
         super.replaced(stateChange);
+        this.childrenComponents.autodetectChildren();
     }
 
     /**
