@@ -41,10 +41,9 @@ export default class ChildrenShellFinder {
 
     /**
      * @param {PartName} partName
-     * @param {boolean} findMany
      * @return {jQuery<HTMLElement>|undefined}
      */
-    $shellElemOf(partName, findMany) {
+    $shellElemOf(partName) {
         let $elem;
         if (this.persistentShells) {
             const $childByPartName = this._$shellByPartName(partName);
@@ -52,7 +51,7 @@ export default class ChildrenShellFinder {
         } else {
             $elem = this._$shellByPartName(partName);
         }
-        isFalse(!findMany && $elem?.length > 1, `Found ${$elem?.length} of ${partName}!`);
+        isFalse($elem?.length > 1, `Found ${$elem?.length} of ${partName}!`);
         return $elem;
     }
 
