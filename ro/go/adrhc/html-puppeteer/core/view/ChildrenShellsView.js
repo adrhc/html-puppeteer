@@ -1,11 +1,11 @@
 import AbstractView from "./AbstractView.js";
 import {jQueryOf} from "../../util/DomUtils.js";
 import GlobalConfig from "../../util/GlobalConfig.js";
-import {generateHtml} from "../../util/HtmlGenerator.js";
 import createShellTemplate, {areShellTemplateOptionsEmpty} from "./ChildShellTemplate.js";
 import ChildrenShellFinder from "./ChildrenShellFinder.js";
 import {newIdImpl} from "../component/configurator/DefaultComponentConfigurator.js";
 import {isTrue} from "../../util/AssertionUtils.js";
+import {generateHtml} from "../../util/HtmlGenerator.js";
 
 /**
  * @typedef {ChildShellTemplateOptions} ChildrenShellsViewOptions
@@ -43,6 +43,10 @@ export default class ChildrenShellsView extends AbstractView {
      */
     place;
     /**
+     * @type {boolean}
+     */
+    shellFromParentHtml;
+    /**
      * @type {string}
      */
     shellTemplate;
@@ -63,7 +67,8 @@ export default class ChildrenShellsView extends AbstractView {
         this.$containerElem = jQueryOf(elemIdOrJQuery);
         this.place = newGuestsGoLast ? "append" : "prepend";
         this.childrenShellFinder = new ChildrenShellFinder(componentId, elemIdOrJQuery);
-        this.shellTemplate = areShellTemplateOptionsEmpty(restOfOptions) ? parentHtml : createShellTemplate(componentId, restOfOptions);
+        this.shellFromParentHtml = areShellTemplateOptionsEmpty(restOfOptions);
+        this.shellTemplate = this.shellFromParentHtml ? parentHtml?.trim() : createShellTemplate(componentId, restOfOptions);
     }
 
     /**
@@ -76,14 +81,40 @@ export default class ChildrenShellsView extends AbstractView {
         }
         isTrue(this.shellTemplate != null,
             `"${partName}" shell is missing from "${this.parentId}"!\n\n"${this.parentId}" content is:\n${this.$containerElem.html()}\n"${this.parentId}" text is:\n${this.$containerElem.text()}`);
+        const kidShell = this.createShell(partName);
+        this.$containerElem[this.place](kidShell);
+        return this.childrenShellFinder.$childShellByName(partName);
+    }
+
+    /**
+     * @param {PartName} partName
+     * @return {string}
+     * @protected
+     */
+    createShell(partName) {
         const viewValues = {
             [GlobalConfig.PART]: partName,
             [GlobalConfig.OWNER]: this.parentId,
             [GlobalConfig.COMPONENT_ID]: newIdImpl(partName, this.parentId),
         };
-        const kidShell = generateHtml(this.shellTemplate, viewValues);
-        this.$containerElem[this.place](kidShell);
-        return this.childrenShellFinder.$childShellByName(partName);
+        let shellTemplate = this.shellTemplate;
+        if (this.shellFromParentHtml) {
+            shellTemplate = this.setPartOwnerIdToShellTemplate(viewValues);
+        }
+        return generateHtml(shellTemplate, viewValues);
+    }
+
+    /**
+     * @param {Bag} partOwnerIdValues
+     * @return {string}
+     * @protected
+     */
+    setPartOwnerIdToShellTemplate(partOwnerIdValues) {
+        const $shell = $(this.shellTemplate);
+        isTrue($shell.length === 1,
+            `$shell template from parent is ${$shell?.length ? "too crowded" : "empty"}! should have exactly one element!`)
+        Object.keys(partOwnerIdValues).forEach(key => $shell.attr(`data-${key}`, partOwnerIdValues[key]));
+        return $shell[0].outerHTML;
     }
 
     /**
