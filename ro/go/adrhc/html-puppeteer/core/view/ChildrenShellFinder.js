@@ -26,20 +26,38 @@ export default class ChildrenShellFinder {
      */
     $childrenShells(partName) {
         if (this.containerIsComponent) {
-            return this.$containerElem
-                .find(`${partName == null ? dataPartSelector() : dataPartSelectorOf(partName)}`)
-                .toArray()
-                .map(shell => [shell, $(shell).parents(dataTypeSelector())])
-                .filter(([, $parents]) => $parents[0] === this.$containerElem[0])
-                .map(([shell]) => $(shell));
+            return this.$containerChildrenShells(partName);
         } else {
-            return this.$containerElem
-                .find(`${partName == null ? dataTypeSelector() : dataPartSelectorOf(partName)}`)
-                .toArray()
-                .map(shell => [shell, $(shell).parents(dataTypeSelector())])
-                .filter(([shell, $parents]) => !$parents.length)
-                .map(([shell]) => $(shell));
+            return this.$childrenShellsForContainerElem(partName);
         }
+    }
+
+    /**
+     * @param {OptionalPartName=} partName
+     * @return {jQuery<HTMLElement>[]}
+     * @protected
+     */
+    $childrenShellsForContainerElem(partName) {
+        return this.$containerElem
+            .find(`${partName == null ? dataTypeSelector() : dataPartSelectorOf(partName)}`)
+            .toArray()
+            .map(shell => [shell, $(shell).parents(dataTypeSelector())])
+            .filter(([shell, $parents]) => !$parents.length)
+            .map(([shell]) => $(shell));
+    }
+
+    /**
+     * @param {OptionalPartName=} partName
+     * @return {jQuery<HTMLElement>[]}
+     * @protected
+     */
+    $containerChildrenShells(partName) {
+        return this.$containerElem
+            .find(`${partName == null ? dataPartSelector() : dataPartSelectorOf(partName)}`)
+            .toArray()
+            .map(shell => [shell, $(shell).parents(dataTypeSelector())])
+            .filter(([, $parents]) => $parents[0] === this.$containerElem[0])
+            .map(([shell]) => $(shell));
     }
 
     /**
