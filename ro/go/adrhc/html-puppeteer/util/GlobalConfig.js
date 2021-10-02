@@ -76,6 +76,14 @@ export function idAttrOf($elem) {
  * @param {jQuery<HTMLElement>} $elem
  * @return {string|undefined}
  */
+export function typeOf($elem) {
+    return $elem.data(GlobalConfig.DATA_TYPE);
+}
+
+/**
+ * @param {jQuery<HTMLElement>} $elem
+ * @return {string|undefined}
+ */
 export function ownerOf($elem) {
     return $elem.data(GlobalConfig.DATA_OWNER);
 }

@@ -1,11 +1,11 @@
 import Scenario13App from "./ro/go/adrhc/app/Scenario13App.js";
+import animate from "./ro/go/adrhc/html-puppeteer/core/Puppeteer.js";
 import {withDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/options/DebuggerOptionsBuilder.js";
-import {createComponent} from "./ro/go/adrhc/html-puppeteer/core/Puppeteer.js";
 
 $(() => {
     // the puppeteer
-    const component = createComponent($("#parent-component"),
-        withDebugger({debuggerElemIdOrJQuery: "main-debugger"})).render();
+    const component = animate(withDebugger({debuggerElemIdOrJQuery: "main-debugger"}));
+
 
     // the application using the html-puppeteer
     new Scenario13App(component, {innerPart: "dogs"}).run();

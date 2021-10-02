@@ -9,7 +9,8 @@ export function jQueryOf(elemIdOrJQuery) {
     if (elemIdOrJQuery instanceof jQuery) {
         return elemIdOrJQuery;
     } else {
-        return elemIdOrJQuery == null ? undefined : $(`#${elemIdOrJQuery}`);
+        const $elem = $(elemIdOrJQuery);
+        return $elem.length ? $elem : $(`#${elemIdOrJQuery}`);
     }
 }
 

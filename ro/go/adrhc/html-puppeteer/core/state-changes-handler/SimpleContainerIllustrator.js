@@ -22,7 +22,7 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
     container;
 
     /**
-     * @type {ChildrenComponents}
+     * @type {ChildrenNursery}
      */
     get childrenComponents() {
         return this.container.childrenComponents;
@@ -44,7 +44,7 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      */
     created(stateChange) {
         super.created(stateChange);
-        this.childrenComponents.autodetectChildren();
+        this.childrenComponents.summonChildren();
     }
 
     /**
@@ -52,7 +52,7 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      */
     replaced(stateChange) {
         super.replaced(stateChange);
-        this.childrenComponents.autodetectChildren();
+        this.childrenComponents.summonChildren();
     }
 
     /**
@@ -62,7 +62,7 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
         const $shell = this.childrenShellsView.create(partStateChange.newPartName);
         isTrue($shell != null,
             `$shell is null!\n\n${JSON.stringify(partStateChange)}`)
-        this.childrenComponents.createItem(partStateChange.newPartName, $shell);
+        this.childrenComponents.createOrUpdateChild(partStateChange.newPartName, $shell);
     }
 
     /**
