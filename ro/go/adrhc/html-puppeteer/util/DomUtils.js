@@ -9,7 +9,7 @@ export function jQueryOf(elemIdOrJQuery) {
     if (elemIdOrJQuery instanceof jQuery) {
         return elemIdOrJQuery;
     } else {
-        return $(`#${elemIdOrJQuery}`);
+        return elemIdOrJQuery == null ? undefined : $(`#${elemIdOrJQuery}`);
     }
 }
 

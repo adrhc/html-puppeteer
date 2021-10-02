@@ -6,19 +6,11 @@ export default class ChildrenShellFinder {
      * @type {jQuery<HTMLElement>}
      */
     $containerElem;
-    /**
-     * it's the child shell template id
-     *
-     * @type {string}
-     */
-    parentId;
 
     /**
-     * @param {string} parentId
      * @param {string|jQuery<HTMLElement>} elemIdOrJQuery
      */
-    constructor(parentId, elemIdOrJQuery) {
-        this.parentId = parentId;
+    constructor(elemIdOrJQuery) {
         this.$containerElem = jQueryOf(elemIdOrJQuery);
     }
 
