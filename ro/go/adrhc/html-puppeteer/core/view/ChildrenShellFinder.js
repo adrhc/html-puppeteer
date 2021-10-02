@@ -42,7 +42,7 @@ export default class ChildrenShellFinder {
             .find(`${partName == null ? dataTypeSelector() : dataPartSelectorOf(partName)}`)
             .toArray()
             .map(shell => [shell, $(shell).parents(dataTypeSelector())])
-            .filter(([shell, $parents]) => !$parents.length)
+            .filter(([, $parents]) => !$parents.length)
             .map(([shell]) => $(shell));
     }
 
