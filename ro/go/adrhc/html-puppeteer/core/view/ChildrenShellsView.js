@@ -27,10 +27,6 @@ export default class ChildrenShellsView extends AbstractView {
      */
     childrenShellFinder;
     /**
-     * @type {boolean}
-     */
-    emptyShellTemplate;
-    /**
      * it's the child shell template id
      *
      * @type {string}
@@ -121,7 +117,7 @@ export default class ChildrenShellsView extends AbstractView {
      * @param {PartName} partName
      */
     remove(partName) {
-        if (!this.emptyShellTemplate) {
+        if (this.shellTemplate != null) {
             this.childrenShellFinder.$childShellByName(partName).remove();
         }
     }
