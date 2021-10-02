@@ -41,7 +41,7 @@ export default class ChildrenShellsView extends AbstractView {
     /**
      * @type {boolean}
      */
-    shellFromParentHtml;
+    shellIsParentHtml;
     /**
      * @type {string}
      */
@@ -63,8 +63,8 @@ export default class ChildrenShellsView extends AbstractView {
         this.$containerElem = jQueryOf(elemIdOrJQuery);
         this.place = newGuestsGoLast ? "append" : "prepend";
         this.childrenShellFinder = new ChildrenShellFinder(componentId, elemIdOrJQuery);
-        this.shellFromParentHtml = areShellTemplateOptionsEmpty(restOfOptions);
-        this.shellTemplate = this.shellFromParentHtml ? parentHtml?.trim() : createShellTemplate(componentId, restOfOptions);
+        this.shellIsParentHtml = areShellTemplateOptionsEmpty(restOfOptions);
+        this.shellTemplate = this.shellIsParentHtml ? parentHtml?.trim() : createShellTemplate(componentId, restOfOptions);
     }
 
     /**
@@ -94,7 +94,7 @@ export default class ChildrenShellsView extends AbstractView {
             [GlobalConfig.COMPONENT_ID]: newIdImpl(partName, this.parentId),
         };
         let shellTemplate = this.shellTemplate;
-        if (this.shellFromParentHtml) {
+        if (this.shellIsParentHtml) {
             shellTemplate = this.setPartOwnerIdToShellTemplate(viewValues);
         }
         return generateHtml(shellTemplate, viewValues);
