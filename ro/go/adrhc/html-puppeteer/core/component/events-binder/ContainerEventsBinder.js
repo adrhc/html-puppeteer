@@ -5,11 +5,13 @@ import {uniqueId} from "../../../util/StringUtils.js";
 
 export default class ContainerEventsBinder extends EventsBinder {
     /**
-     * Default event to bind to on children (for creating/removing a child component).
-     *
      * @type {string}
      */
-    eventName;
+    createEvent;
+    /**
+     * @type {string}
+     */
+    removeEvent;
 
     /**
      * @return {jQuery<HTMLElement>}
@@ -25,7 +27,8 @@ export default class ContainerEventsBinder extends EventsBinder {
      */
     set component(component) {
         this._component = component;
-        this.eventName = component.config.childEvent ?? "click";
+        this.createEvent = component.config.createEvent ?? "click";
+        this.removeEvent = component.config.removeEvent ?? "click";
     }
 
     /**
@@ -39,11 +42,11 @@ export default class ContainerEventsBinder extends EventsBinder {
      * attach DOM event handlers
      */
     attachEventHandlers() {
-        this._attachEventsHandlerOnOwnedHavingDataAttr("create-child", () => {
+        this._attachEventsHandlerOnOwnedHavingDataAttr("create-child", this.createEvent, () => {
             // <button data-owner="parent-component" data-create-child="click">
             this._component.replacePart(uniqueId(), this.initialGuestDetails);
         });
-        this._attachEventsHandlerOnOwnedHavingDataAttrInsideParent("remove-child", (ev) => {
+        this._attachEventsHandlerOnOwnedHavingDataAttrInsideParent("remove-child", this.removeEvent, (ev) => {
             // <button data-owner="parent-component" data-remove-child="click" data-child-id="childId">
             const $elem = $(ev.target);
             const childId = childIdOf($elem);
@@ -54,14 +57,15 @@ export default class ContainerEventsBinder extends EventsBinder {
 
     /**
      * @param {string} dataAttribName
+     * @param {string} eventName
      * @param {function} fn is the event handler
      * @protected
      */
-    _attachEventsHandlerOnOwnedHavingDataAttrInsideParent(dataAttribName, fn) {
+    _attachEventsHandlerOnOwnedHavingDataAttrInsideParent(dataAttribName, eventName, fn) {
         const itemSelector = this._$ownedHavingDataAttrSelector(dataAttribName);
         // removing previous handler (if any) set by another component
-        this.$container.off(this.eventName, itemSelector);
-        this.$container.on(this.eventName, itemSelector, fn);
+        this.$container.off(eventName, itemSelector);
+        this.$container.on(eventName, itemSelector, fn);
     }
 
     /**
@@ -78,6 +82,6 @@ export default class ContainerEventsBinder extends EventsBinder {
      */
     _detachEventsHandlerOnOwnedHavingDataAttrInsideParent(dataAttribName) {
         const itemSelector = this._$ownedHavingDataAttrSelector(dataAttribName);
-        this.$container.off(this.eventName, itemSelector);
+        this.$container.off(this.createEvent, itemSelector);
     }
 }

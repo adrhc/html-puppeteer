@@ -35,16 +35,17 @@ export default class EventsBinder {
 
     /**
      * @param {string} dataAttribName
+     * @param {string} eventName
      * @param {function} fn is the event handler
      * @param {boolean=} oneTimeOnly specify whether to invoke the event once or multiple times
      * @protected
      */
-    _attachEventsHandlerOnOwnedHavingDataAttr(dataAttribName, fn, oneTimeOnly) {
+    _attachEventsHandlerOnOwnedHavingDataAttr(dataAttribName, eventName, fn, oneTimeOnly) {
         const $el = this._$ownedHavingDataAttr(dataAttribName);
         if (!$el.length) {
             return;
         }
-        const event = $el.data(dataAttribName);
+        const event = eventName ?? $el.data(dataAttribName);
         isTrue(!!event, "[OpenCloseEventsBinder] event can't be empty!");
         // removing previous handler (if any) set by another component
         $el.off(event);
