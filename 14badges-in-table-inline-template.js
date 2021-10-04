@@ -6,7 +6,6 @@ $(() => {
     // the puppeteer
     const component = animate(withDebugger({debuggerElemIdOrJQuery: "main-debugger"}));
 
-
     // the application using the html-puppeteer
     new Scenario13App(component, {innerPart: "dogs"}).run();
 });
