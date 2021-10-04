@@ -1,6 +1,5 @@
 import {createComponent} from "../../Puppeteer.js";
 import {isTrue} from "../../../util/AssertionUtils.js";
-import {childStateOf} from "../configurator/DefaultComponentConfigurator.js";
 import ChildrenShellFinder from "../../view/ChildrenShellFinder.js";
 
 /**
@@ -86,7 +85,7 @@ export default class ChildrenNursery {
      * @param {PartName} partName
      */
     updateFromParent(partName) {
-        this.children[partName].replaceState(childStateOf(partName, this.parent));
+        this.children[partName].replaceFromParent();
     }
 
     /**

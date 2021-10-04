@@ -3,6 +3,7 @@ import DefaultComponentConfigurator from "./configurator/DefaultComponentConfigu
 import {applyExtraConfigurators} from "./configurator/ComponentConfigurator.js";
 import {partsOf} from "../state/PartialStateHolder.js";
 import GlobalConfig from "../../util/GlobalConfig.js";
+import {isTrue} from "../../util/AssertionUtils.js";
 
 /**
  * @typedef {StateHolderOptions & ValueStateInitializerOptions & StateChangesHandlersInvokerOptions} AbstractComponentOptions
@@ -65,7 +66,7 @@ export default class AbstractComponent extends StateProcessor {
     }
 
     /**
-     * @return {PartName} the part name inside parent's state (if any)
+     * @return {OptionalPartName} the part name inside parent's state (if any)
      */
     get partName() {
         return this.config[GlobalConfig.DATA_PART];
@@ -79,6 +80,17 @@ export default class AbstractComponent extends StateProcessor {
         const configurator = options.configurator ?? new DefaultComponentConfigurator(options);
         configurator.configure(this);
         applyExtraConfigurators(this);
+    }
+
+    /**
+     * updates the state by getting it from parent
+     */
+    replaceFromParent() {
+        isTrue(this.partName != null,
+            `partName is null! componentId = ${this.id}`);
+        isTrue(this.parent != null,
+            `parent is null! partName = ${this.partName}, componentId = ${this.id}`);
+        this.replaceState(this.parent.getPart(this.partName));
     }
 
     /**

@@ -20,7 +20,7 @@ export default class SimplePartsIllustrator extends ComponentIllustrator {
     constructor({viewValuesTransformerFn, ...restOfOptions}) {
         super(_.defaults(restOfOptions, {
             viewValuesTransformerFn: viewValuesTransformerFn ??
-                defaultViewValuesTransformerFn(restOfOptions.componentId, restOfOptions.parent, restOfOptions.part)
+                defaultViewValuesTransformerFn(restOfOptions.componentId, restOfOptions.parent?.id, restOfOptions.part)
         }));
     }
 
@@ -60,8 +60,8 @@ export default class SimplePartsIllustrator extends ComponentIllustrator {
     }
 }
 
-function defaultViewValuesTransformerFn(componentId, parent, partName) {
-    return parent ? ((value) => defaultViewValuesTransformerFnImpl(componentId, parent.id, partName, value)) : undefined;
+function defaultViewValuesTransformerFn(componentId, parentId, partName) {
+    return parentId != null ? ((value) => defaultViewValuesTransformerFnImpl(componentId, parentId, partName, value)) : undefined;
 }
 
 function defaultViewValuesTransformerFnImpl(componentId, parentId, partName, value) {

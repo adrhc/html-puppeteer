@@ -13,7 +13,7 @@ export default class PartialStateHolder extends StateHolder {
      * @return {SCP}
      */
     getPart(partName, dontClone) {
-        const part = this._currentState?.[partName];
+        const part = _.get(this._currentState, partName);
         return dontClone || part == null ? part : _.cloneDeep(part);
     }
 

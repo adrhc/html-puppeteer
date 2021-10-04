@@ -4,6 +4,7 @@ import {dataOf, idOf} from "../../../util/DomUtils.js";
 import PartialStateHolder from "../../state/PartialStateHolder.js";
 import StateChangesHandlersInvoker from "../../state-processor/StateChangesHandlersInvoker.js";
 import {uniqueId} from "../../../util/StringUtils.js";
+import ChildStateInitializer from "../state-initializer/ChildStateInitializer.js";
 
 export default class DefaultComponentConfigurator extends ComponentConfigurator {
     /**
@@ -76,23 +77,14 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
             return;
         }
         // initialState priority: options.initialState, data-part, data-initial-state
-        const initialState = this.options.initialState ??
-            childStateOf(this.config.part, component.parent) ?? this.dataAttributes.initialState;
-        if (initialState != null) {
-            component.stateInitializer = new ValueStateInitializer(initialState);
+        if (this.options.initialState != null) {
+            component.stateInitializer = new ValueStateInitializer(this.options.initialState);
+        } else if (component.partName != null) {
+            component.stateInitializer = new ChildStateInitializer();
+        } else if (this.dataAttributes.initialState != null) {
+            component.stateInitializer = new ValueStateInitializer(this.dataAttributes.initialState);
         }
     }
-}
-
-/**
- * @param {PartName} partName
- * @param {AbstractComponent} parentComponent
- * @return {*}
- */
-export function childStateOf(partName, parentComponent) {
-    // determine the parent's part to use to initialize component
-    // config.part is taken from data-part (see GlobalConfig.DATA_PART)
-    return parentComponent?.getPart(partName);
 }
 
 /**
