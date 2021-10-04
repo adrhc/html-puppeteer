@@ -45,6 +45,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 	     data-initial-state='{
 		     "message1": null,
 		     "message2": "The \"message2\" child state comes from the parent&apos;s state.",
+		     "inners": {"innerProperty1": "innerProperty1 value in \"inners\" object"},
 		     "cats": [{"id": 0, "dogs": [{"id": 0, "name": "dog 0"}]}]
 	     }'
 	     data-removed-placeholder='The "parent-component" is closed!'
@@ -67,6 +68,11 @@ PS: make sure to have a well formatted JSON!</textarea>
 		     data-type="value">
 			The "message2" child is not available yet!
 		</div>
+		<x data-part="inners" data-type="static-container">
+			<div class="mb3" data-part="innerProperty1" data-type="value">
+				The "innerProperty1" child is not available yet!
+			</div>
+		</x>
 		<table class="responstable">
 			<thead>
 			<tr>
@@ -100,8 +106,8 @@ PS: make sure to have a well formatted JSON!</textarea>
 			</tr>
 			</tbody>
 		</table>
+		</x>
 	</div>
-</div>
 
 </body>
 
