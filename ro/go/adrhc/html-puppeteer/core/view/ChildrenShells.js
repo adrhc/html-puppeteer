@@ -1,4 +1,3 @@
-import AbstractView from "./AbstractView.js";
 import {jQueryOf} from "../../util/DomUtils.js";
 import GlobalConfig from "../../util/GlobalConfig.js";
 import createShellTemplate, {areShellTemplateOptionsEmpty} from "./ChildShellTemplate.js";
@@ -8,16 +7,13 @@ import {isTrue} from "../../util/AssertionUtils.js";
 import {generateHtml} from "../../util/HtmlGenerator.js";
 
 /**
- * @typedef {ChildShellTemplateOptions} ChildrenShellsViewOptions
+ * @typedef {ChildShellTemplateOptions} ChildrenShellsOptions
  * @property {string} componentId
  * @property {string=} parentHtml
  * @property {string|jQuery<HTMLElement>} elemIdOrJQuery is the parent's element id or jQuery<HTMLElement>
  * @property {boolean=} newGuestsGoLast
  */
-/**
- * @extends {AbstractView}
- */
-export default class ChildrenShellsView extends AbstractView {
+export default class ChildrenShells {
     /**
      * @type {jQuery<HTMLElement>}
      */
@@ -48,7 +44,7 @@ export default class ChildrenShellsView extends AbstractView {
     shellTemplate;
 
     /**
-     * @param {ChildrenShellsViewOptions} options
+     * @param {ChildrenShellsOptions} options
      * @param {ChildShellTemplateOptions} options.restOfOptions
      */
     constructor({
@@ -58,7 +54,6 @@ export default class ChildrenShellsView extends AbstractView {
                     newGuestsGoLast,
                     ...restOfOptions
                 }) {
-        super();
         this.parentId = componentId;
         this.$containerElem = jQueryOf(elemIdOrJQuery);
         this.place = newGuestsGoLast ? "append" : "prepend";
@@ -70,7 +65,7 @@ export default class ChildrenShellsView extends AbstractView {
     /**
      * @param {PartName} partName
      */
-    create(partName) {
+    getOrCreateShell(partName) {
         const $shell = this.childrenShellFinder.$childShellByName(partName);
         if ($shell) {
             return $shell;
@@ -95,37 +90,30 @@ export default class ChildrenShellsView extends AbstractView {
         };
         let shellTemplate = this.shellTemplate;
         if (this.shellIsParentHtml) {
-            shellTemplate = this.setPartOwnerIdToShellTemplate(viewValues);
+            shellTemplate = this.setPartOwnerAndIdToShellTemplate(viewValues);
         }
         return generateHtml(shellTemplate, viewValues);
     }
 
     /**
-     * @param {Bag} partOwnerIdValues
+     * @param {Bag} partOwnerAndId
      * @return {string}
      * @protected
      */
-    setPartOwnerIdToShellTemplate(partOwnerIdValues) {
+    setPartOwnerAndIdToShellTemplate(partOwnerAndId) {
         const $shell = $(this.shellTemplate);
         isTrue($shell.length === 1,
             `$shell template from parent is ${$shell?.length ? "too crowded" : "empty"}! should have exactly one element!`)
-        Object.keys(partOwnerIdValues).forEach(key => $shell.attr(`data-${key}`, partOwnerIdValues[key]));
+        Object.keys(partOwnerAndId).forEach(key => $shell.attr(`data-${key}`, partOwnerAndId[key]));
         return $shell[0].outerHTML;
     }
 
     /**
      * @param {PartName} partName
      */
-    remove(partName) {
+    removeShell(partName) {
         if (this.shellTemplate != null) {
             this.childrenShellFinder.$childShellByName(partName).remove();
         }
-    }
-
-    /**
-     * @param {*} values
-     */
-    replace(values) {
-        // do nothing
     }
 }

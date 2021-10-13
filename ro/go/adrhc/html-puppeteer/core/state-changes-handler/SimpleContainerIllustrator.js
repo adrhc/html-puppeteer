@@ -1,10 +1,10 @@
-import ChildrenShellsView from "../view/ChildrenShellsView.js";
+import ChildrenShells from "../view/ChildrenShells.js";
 import SimplePartsIllustrator from "./SimplePartsIllustrator.js";
 import {withDefaults} from "../component/options/ComponentOptionsBuilder.js";
 import {isTrue} from "../../util/AssertionUtils.js";
 
 /**
- * @typedef {ComponentIllustratorOptions & ChildrenShellsViewOptions} SimpleContainerIllustratorOptions
+ * @typedef {ComponentIllustratorOptions & ChildrenShellsOptions} SimpleContainerIllustratorOptions
  */
 /**
  * @template SCT, SCP
@@ -13,9 +13,9 @@ import {isTrue} from "../../util/AssertionUtils.js";
  */
 export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
     /**
-     * @type {ChildrenShellsView}
+     * @type {ChildrenShells}
      */
-    childrenShellsView;
+    childrenShells;
     /**
      * @type {SimpleContainerComponent}
      */
@@ -36,7 +36,7 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
             componentId: component.id,
         }).to(component.config));
         this.container = component;
-        this.childrenShellsView = new ChildrenShellsView({componentId: component.id, ...component.config});
+        this.childrenShells = new ChildrenShells({componentId: component.id, ...component.config});
     }
 
     /**
@@ -59,7 +59,7 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partCreated(partStateChange) {
-        const $shell = this.childrenShellsView.create(partStateChange.newPartName);
+        const $shell = this.childrenShells.getOrCreateShell(partStateChange.newPartName);
         isTrue($shell != null,
             `$shell is null!\n\n${JSON.stringify(partStateChange)}`)
         this.childrenComponents.createOrUpdateChild(partStateChange.newPartName, $shell);
@@ -70,7 +70,7 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      */
     partRemoved(partStateChange) {
         this.childrenComponents.removeItem(partStateChange.previousPartName);
-        this.childrenShellsView.remove(partStateChange.previousPartName);
+        this.childrenShells.removeShell(partStateChange.previousPartName);
     }
 
     /**

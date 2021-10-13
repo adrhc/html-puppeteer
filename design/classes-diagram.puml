@@ -96,7 +96,7 @@ end note
 
 class SimpleContainerIllustrator extends SimplePartsIllustrator {
 #childrenComponents: ChildrenComponents
-#childrenShellsView: ChildrenShellsView
+#childrenShells: ChildrenShells
 +created(stateChange)
 +replaced(stateChange)
 +partCreated(partStateChange)
@@ -107,16 +107,17 @@ class SimpleContainerIllustrator extends SimplePartsIllustrator {
 }
 
 SimpleContainerIllustrator -> ChildrenComponents
-SimpleContainerIllustrator *- ChildrenShellsView
+SimpleContainerIllustrator *- ChildrenShells
 
-class ChildrenShellsView extends AbstractView {
+class ChildrenShells {
 #$containerElem
 #parentId
 #place: "append" | "prepend"
 #shellTemplate
-#childSeatExists(partName)
-+create(partName)
-+remove(partName)
+#setPartOwnerAndIdToShellTemplate(partOwnerAndId)
+#createShell(partName)
++getOrCreateShell(partName)
++removeShell(partName)
 }
 
 class ChildrenComponents {
