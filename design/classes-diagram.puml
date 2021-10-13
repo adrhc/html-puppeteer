@@ -106,8 +106,8 @@ class SimpleContainerIllustrator extends SimplePartsIllustrator {
 +partChangeOccurred(partStateChange)
 }
 
-SimpleContainerIllustrator -> ChildrenComponents
-SimpleContainerIllustrator *- ChildrenShells
+SimpleContainerIllustrator -down-> ChildrenComponents
+SimpleContainerIllustrator *-down- ChildrenShells
 
 class ChildrenShells {
 #$containerElem
@@ -222,7 +222,7 @@ class SimpleContainerComponent extends AbstractComponent {
 #replaceContainerStateOnly(newState)
 }
 
-SimpleContainerComponent *- ChildrenComponents
+SimpleContainerComponent *-down- ChildrenComponents
 
 interface ErrorsHandler {
 +accept(error)
