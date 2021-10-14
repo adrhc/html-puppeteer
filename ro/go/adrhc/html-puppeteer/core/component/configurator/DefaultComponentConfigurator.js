@@ -76,11 +76,11 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
         if (component.stateInitializer != null) {
             return;
         }
-        // initialState priority: options.initialState, data-part, data-initial-state
-        if (this.options.initialState != null) {
+        // initialState priority: child state from parent, options.initialState, data-initial-state
+        if (component.partName != null) {
+            component.stateInitializer = new ChildStateInitializer(this.options.initialState ?? this.dataAttributes.initialState);
+        } else if (this.options.initialState != null) {
             component.stateInitializer = new ValueStateInitializer(this.options.initialState);
-        } else if (component.partName != null) {
-            component.stateInitializer = new ChildStateInitializer();
         } else if (this.dataAttributes.initialState != null) {
             component.stateInitializer = new ValueStateInitializer(this.dataAttributes.initialState);
         }

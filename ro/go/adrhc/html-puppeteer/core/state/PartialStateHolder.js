@@ -18,6 +18,14 @@ export default class PartialStateHolder extends StateHolder {
     }
 
     /**
+     * @param  {PartName} partName
+     * @return {boolean}
+     */
+    hasNullPart(partName) {
+        return _.get(this._currentState, partName) == null;
+    }
+
+    /**
      * @return {{[key: string]: *}[]}
      */
     getParts() {
