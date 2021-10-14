@@ -22,7 +22,7 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
     container;
 
     /**
-     * @type {ChildrenNursery}
+     * @type {ChildrenComponents}
      */
     get childrenComponents() {
         return this.container.childrenComponents;

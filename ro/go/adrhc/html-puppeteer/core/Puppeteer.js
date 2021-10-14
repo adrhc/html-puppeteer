@@ -2,7 +2,7 @@ import GlobalConfig, {typeOf} from "../util/GlobalConfig.js";
 import {createByType} from "./ComponentFactories.js";
 import {idOf} from "../util/DomUtils.js";
 import {isTrue} from "../util/AssertionUtils.js";
-import ChildrenNursery from "./component/composition/ChildrenNursery.js";
+import ChildrenComponents from "./component/composition/ChildrenComponents.js";
 
 /**
  * @param {ChildrenNurseryOptions} options
@@ -11,7 +11,7 @@ import ChildrenNursery from "./component/composition/ChildrenNursery.js";
  * @return {AbstractComponent|AbstractComponent[]}
  */
 export default function animate({alwaysReturnArray, ...restOfOptions} = {}) {
-    const childrenNursery = new ChildrenNursery(restOfOptions);
+    const childrenNursery = new ChildrenComponents(restOfOptions);
     const components = childrenNursery.summonChildren();
     const partNames = Object.keys(components);
     console.log(`[Puppeteer.animate] childrenNursery created ${partNames.length} components`);

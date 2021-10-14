@@ -2,7 +2,7 @@ import AbstractComponent from "./AbstractComponent.js";
 import {withDefaults} from "./options/ComponentOptionsBuilder.js";
 import SimpleContainerIllustrator from "../state-changes-handler/SimpleContainerIllustrator.js";
 import ContainerEventsBinder from "./events-binder/ContainerEventsBinder.js";
-import ChildrenNursery from "./composition/ChildrenNursery.js";
+import ChildrenComponents from "./composition/ChildrenComponents.js";
 import {partsOf} from "../state/PartialStateHolder.js";
 
 /**
@@ -13,7 +13,7 @@ import {partsOf} from "../state/PartialStateHolder.js";
  * @extends {AbstractComponent}
  */
 export default class SimpleContainerComponent extends AbstractComponent {
-    childrenComponents = new ChildrenNursery({parent: this});
+    childrenComponents = new ChildrenComponents({parent: this});
     /**
      * @type {boolean}
      */

@@ -13,7 +13,7 @@ import ChildrenShellFinder from "../../view/ChildrenShellFinder.js";
 /**
  * @template SCT, SCP
  */
-export default class ChildrenNursery {
+export default class ChildrenComponents {
     /**
      * @type {ComponentsCollection}
      */
