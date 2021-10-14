@@ -23,6 +23,6 @@ export default class ValueStateInitializer extends StateInitializer {
      * @param {AbstractComponent<SCT, SCP>} component
      */
     load(component) {
-        component.replaceState(this.value);
+        component.replaceState(_.cloneDeep(this.value));
     }
 }
