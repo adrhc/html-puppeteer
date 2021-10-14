@@ -81,7 +81,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * set state to undefined
      */
     close() {
-        this.childrenComponents.closeAll();
+        this.childrenComponents.removeAll();
         super.close();
     }
 

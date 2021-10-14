@@ -105,7 +105,7 @@ export default class ChildrenComponents {
     /**
      * close and remove each item
      */
-    closeAll() {
+    removeAll() {
         Object.keys(this.children).forEach(partName => this.removeItem(partName));
     }
 
