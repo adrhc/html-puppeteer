@@ -5,16 +5,16 @@ import {isTrue} from "../util/AssertionUtils.js";
 import ChildrenComponents from "./component/composition/ChildrenComponents.js";
 
 /**
- * @param {ChildrenNurseryOptions} options
+ * @param {ChildrenComponentsOptions} options
  * @param {boolean=} options.alwaysReturnArray
- * @param {ChildrenNurseryOptions=} options.restOfOptions
+ * @param {ChildrenComponentsOptions=} options.restOfOptions
  * @return {AbstractComponent|AbstractComponent[]}
  */
 export default function animate({alwaysReturnArray, ...restOfOptions} = {}) {
-    const childrenNursery = new ChildrenComponents(restOfOptions);
-    const components = childrenNursery.summonChildren();
+    const childrenComponents = new ChildrenComponents(restOfOptions);
+    const components = childrenComponents.summonChildren();
     const partNames = Object.keys(components);
-    console.log(`[Puppeteer.animate] childrenNursery created ${partNames.length} components`);
+    console.log(`[Puppeteer.animate] childrenComponents created ${partNames.length} components`);
     if (partNames.length === 1 && !alwaysReturnArray) {
         return components[partNames[0]];
     }

@@ -3,7 +3,7 @@ import {isTrue} from "../../../util/AssertionUtils.js";
 import ChildrenShellFinder from "../../view/ChildrenShellFinder.js";
 
 /**
- * @typedef {Object} ChildrenNurseryOptions
+ * @typedef {Object} ChildrenComponentsOptions
  * @property {string|jQuery<HTMLElement>} elemIdOrJQuery
  * @property {SimpleContainerComponent} parent
  */
@@ -36,7 +36,7 @@ export default class ChildrenComponents {
     parent;
 
     /**
-     * @param {ChildrenNurseryOptions} options
+     * @param {ChildrenComponentsOptions} options
      * @param {string|jQuery<HTMLElement>=} options.elemIdOrJQuery
      * @param {AbstractComponent=} options.parent
      * @param {Object=} options.childrenSummoningOptions
@@ -105,15 +105,16 @@ export default class ChildrenComponents {
     /**
      * close and remove each item
      */
-    removeAll() {
+    closeAndRemoveAll() {
         Object.keys(this.children).forEach(partName => this.removeItem(partName));
     }
 
     /**
-     * Detach event handlers.
+     * Detach event handlers then remove all children.
      */
-    disconnectAll() {
+    disconnectAndRemoveAll() {
         Object.values(this.children).forEach(child => child.disconnect());
+        this.children = {};
     }
 
     /**
