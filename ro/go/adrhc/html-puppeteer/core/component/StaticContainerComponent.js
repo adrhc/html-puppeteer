@@ -1,10 +1,9 @@
 import SimpleContainerComponent from "./SimpleContainerComponent.js";
 
-/**
- * No children will be dynamically created hence there's no need for shell template.
- */
 export default class StaticContainerComponent extends SimpleContainerComponent {
     /**
+     * No children will be dynamically created hence there's no need for a shell template.
+     *
      * @param {SimpleContainerComponentOptions} options
      */
     constructor(options) {
