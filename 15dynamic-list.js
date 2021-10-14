@@ -8,6 +8,6 @@ $(() => {
     animate(addDebugger({debuggerElemIdOrJQuery: "main-debugger"})
         .withEventsBinders(new StateChangeEventsBinder(), new OpenCloseEventsBinder())
         .to({
-            itemProviderFn: () => ({id: Math.random(), name: generateString("name ")})
+            childStateProviderFn: () => ({id: Math.random(), name: generateString("name ")})
         }));
 });

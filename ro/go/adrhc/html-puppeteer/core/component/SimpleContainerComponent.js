@@ -5,7 +5,7 @@ import ContainerEventsBinder from "./events-binder/ContainerEventsBinder.js";
 import ChildrenComponents from "./composition/ChildrenComponents.js";
 
 /**
- * @typedef {AbstractComponentOptions & ChildrenComponentsOptions & SimpleContainerIllustratorOptions} SimpleContainerComponentOptions
+ * @typedef {AbstractComponentOptions & ContainerEventsBinderOptions & ChildrenComponentsOptions & SimpleContainerIllustratorOptions} SimpleContainerComponentOptions
  */
 /**
  * @template SCT, SCP
@@ -26,11 +26,19 @@ export default class SimpleContainerComponent extends AbstractComponent {
     }
 
     /**
-     * @param {string} itemId
+     * @param {string} childId
      * @return {AbstractComponent|undefined}
      */
-    getChildById(itemId) {
-        return this.childrenComponents.getItemById(itemId);
+    getChildById(childId) {
+        return this.childrenComponents.getItemById(childId);
+    }
+
+    /**
+     * @param {string} childId
+     */
+    removeChildById(childId) {
+        const partName = this.childrenComponents.getItemById(childId).partName;
+        this.replacePart(partName);
     }
 
     /**

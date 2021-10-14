@@ -3,7 +3,17 @@ import {childIdOf} from "../../../util/GlobalConfig.js";
 import {dataComponentIdSelectorOf, idAttrSelectorOf} from "../../../util/SelectorUtils.js";
 import {uniqueId} from "../../../util/StringUtils.js";
 
+/**
+ * @typedef {Object} ContainerEventsBinderOptions
+ * @property {string} createEvent
+ * @property {string} removeEvent
+ * @property {function(component: SimpleContainerComponent): *} childStateProviderFn
+ */
 export default class ContainerEventsBinder extends EventsBinder {
+    /**
+     * @type {function(component: SimpleContainerComponent): *}
+     */
+    childStateProviderFn;
     /**
      * @type {string}
      */
@@ -29,6 +39,7 @@ export default class ContainerEventsBinder extends EventsBinder {
         this._component = component;
         this.createEvent = component.config.createEvent ?? "click";
         this.removeEvent = component.config.removeEvent ?? "click";
+        this.childStateProviderFn = component.config.childStateProviderFn ?? (() => {});
     }
 
     /**
@@ -39,26 +50,18 @@ export default class ContainerEventsBinder extends EventsBinder {
     }
 
     /**
-     * @return {*} initial part state for the a new child
-     */
-    get initialGuestDetails() {
-        return this._component.config.itemProviderFn?.(this._component) ?? {};
-    }
-
-    /**
      * attach DOM event handlers
      */
     attachEventHandlers() {
         this._attachEventsHandlerOnOwnedHavingDataAttr("create-child", this.createEvent, () => {
             // <button data-owner="parent-component" data-create-child="click">
-            this._component.replacePart(uniqueId(), this.initialGuestDetails);
+            this._component.replacePart(uniqueId(), this.childStateProviderFn(this.containerComponent));
         });
         this._attachEventsHandlerOnOwnedHavingDataAttrInsideParent("remove-child", this.removeEvent, (ev) => {
             // <button data-owner="parent-component" data-remove-child="click" data-child-id="childId">
             const $elem = $(ev.target);
             const childId = childIdOf($elem);
-            const partName = this.containerComponent.getChildById(childId).partName;
-            this._component.replacePart(partName);
+            this.containerComponent.removeChildById(childId);
         });
     }
 
