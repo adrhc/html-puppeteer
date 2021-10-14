@@ -17,7 +17,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
     /**
      * @type {boolean}
      */
-    newGuestsGoLast;
+    newChildrenGoLast;
 
     /**
      * @param {SimpleContainerComponentOptions} options
@@ -28,7 +28,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
                 new SimpleContainerIllustrator(/** @type {SimpleContainerComponent} */c))
             .withEventsBinders(new ContainerEventsBinder())
             .options());
-        this.newGuestsGoLast = this.config.newGuestsGoLast;
+        this.newChildrenGoLast = this.config.newChildrenGoLast;
     }
 
     /**
@@ -54,7 +54,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @param {{[name: PartName]: SCP}[]|SCT} parts
      */
     replaceParts(parts) {
-        partsOf(parts, !this.newGuestsGoLast)
+        partsOf(parts, !this.newChildrenGoLast)
             .forEach(([key, value]) => this.replacePart(key, value));
     }
 
