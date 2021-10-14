@@ -23,19 +23,19 @@ export default class ContainerEventsBinder extends EventsBinder {
     }
 
     /**
-     * @return {SimpleContainerComponent}
-     */
-    get containerComponent() {
-        return /** @type {SimpleContainerComponent} */ this._component;
-    }
-
-    /**
      * @param {AbstractComponent=} component
      */
     set component(component) {
         this._component = component;
         this.createEvent = component.config.createEvent ?? "click";
         this.removeEvent = component.config.removeEvent ?? "click";
+    }
+
+    /**
+     * @return {SimpleContainerComponent}
+     */
+    get containerComponent() {
+        return /** @type {SimpleContainerComponent} */ this._component;
     }
 
     /**

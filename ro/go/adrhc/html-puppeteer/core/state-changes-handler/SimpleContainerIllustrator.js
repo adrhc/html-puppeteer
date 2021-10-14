@@ -2,6 +2,7 @@ import ChildrenShells from "../view/ChildrenShells.js";
 import SimplePartsIllustrator from "./SimplePartsIllustrator.js";
 import {withDefaults} from "../component/options/ComponentOptionsBuilder.js";
 import {isTrue} from "../../util/AssertionUtils.js";
+import {partsOf} from "../state/PartialStateHolder.js";
 
 /**
  * @typedef {ComponentIllustratorOptions & ChildrenShellsOptions} SimpleContainerIllustratorOptions
@@ -20,6 +21,10 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      * @type {SimpleContainerComponent}
      */
     container;
+    /**
+     * @type {boolean}
+     */
+    newChildrenGoLast;
 
     /**
      * @type {ChildrenComponents}
@@ -36,6 +41,7 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
             componentId: component.id,
         }).to(component.config));
         this.container = component;
+        this.newChildrenGoLast = component.config.newChildrenGoLast;
         this.childrenShells = new ChildrenShells({componentId: component.id, ...component.config});
     }
 
@@ -43,32 +49,53 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      * @param {StateChange<SCT>} stateChange
      */
     created(stateChange) {
-        // this must happen before container redraw to give a
-        // chance to the children to unbind their event handlers;
-        // their view will be automatically destroyed when
-        // the parent redraws itself
-        this.childrenComponents.disconnectAndRemoveChildren();
-        // the parent redraws itself
-        super.created(stateChange);
-        this.childrenComponents.createChildrenForExistingShells();
+        this._createdOrReplaced(stateChange);
     }
 
     /**
      * @param {StateChange<SCT>} stateChange
      */
     replaced(stateChange) {
-        super.replaced(stateChange);
+        this._createdOrReplaced(stateChange, true);
+    }
+
+    /**
+     * @param {StateChange<SCT>} stateChange
+     * @param {boolean=} replaced
+     * @protected
+     */
+    _createdOrReplaced(stateChange, replaced) {
+        // this must happen before container redraw to give a
+        // chance to the children to unbind their event handlers;
+        // their view will be automatically destroyed when
+        // the parent redraws itself
+        this.childrenComponents.disconnectAndRemoveChildren();
+        // the parent redraws itself
+        super[replaced ? "replaced" : "created"](stateChange);
+        // create children for existing (static) shells
         this.childrenComponents.createChildrenForExistingShells();
+        // create children for not existing (dynamic) shells
+        partsOf(stateChange.newState, !this.newChildrenGoLast)
+            .filter(([key]) => this.childrenComponents.getChildByPartName(key) == null)
+            .forEach(([key]) => this._partCreatedImpl(key));
     }
 
     /**
      * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partCreated(partStateChange) {
-        const $shell = this.childrenShells.getOrCreateShell(partStateChange.newPartName);
+        this._partCreatedImpl(partStateChange.newPartName);
+    }
+
+    /**
+     * @param {PartName} newPartName
+     * @protected
+     */
+    _partCreatedImpl(newPartName) {
+        const $shell = this.childrenShells.getOrCreateShell(newPartName);
         isTrue($shell != null,
-            `$shell is null!\n\n${JSON.stringify(partStateChange)}`)
-        this.childrenComponents.createOrUpdateChild(partStateChange.newPartName, $shell);
+            `$shell is null for part named ${newPartName}!`)
+        this.childrenComponents.createOrUpdateChild(newPartName, $shell);
     }
 
     /**

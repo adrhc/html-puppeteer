@@ -128,4 +128,12 @@ export default class ChildrenComponents {
     getItemById(itemId) {
         return Object.values(this.children).find(it => it.id === itemId);
     }
+
+    /**
+     * @param {PartName} partName
+     * @return {AbstractComponent}
+     */
+    getChildByPartName(partName) {
+        return this.children[partName];
+    }
 }

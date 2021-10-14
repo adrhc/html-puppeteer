@@ -5,7 +5,7 @@ import ContainerEventsBinder from "./events-binder/ContainerEventsBinder.js";
 import ChildrenComponents from "./composition/ChildrenComponents.js";
 
 /**
- * @typedef {AbstractComponentOptions} SimpleContainerComponentOptions
+ * @typedef {AbstractComponentOptions & ChildrenComponentsOptions & SimpleContainerIllustratorOptions} SimpleContainerComponentOptions
  */
 /**
  * @template SCT, SCP
