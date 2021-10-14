@@ -37,7 +37,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * set state to undefined
      */
     close() {
-        this.childrenComponents.closeAndRemoveAll();
+        this.childrenComponents.closeAndRemoveChildren();
         super.close();
     }
 
@@ -45,7 +45,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * Detach event handlers.
      */
     disconnect() {
-        this.childrenComponents.disconnectAndRemoveAll();
+        this.childrenComponents.disconnectAndRemoveChildren();
         super.disconnect();
     }
 }

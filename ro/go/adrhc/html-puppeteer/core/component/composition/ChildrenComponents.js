@@ -50,11 +50,15 @@ export default class ChildrenComponents {
     }
 
     /**
-     * Detect, instantiates, stores and renders all parent's components.
+     * - purge this.children collection
+     * - detect existing shells
+     * - create the components corresponding to shells
+     * - store the components into this.children collection
+     * - render all children
      *
      * @return {ComponentsCollection}
      */
-    summonChildren() {
+    createChildrenForExistingShells() {
         this.children = {};
         this.childrenShellFinder.$childrenShells()
             .map($elem => createComponent($elem, {parent: this.parent, ...this.childrenSummoningOptions}))
@@ -92,7 +96,7 @@ export default class ChildrenComponents {
      * @param {PartName} partName
      * @return {boolean}
      */
-    removeItem(partName) {
+    closeAndRemoveChild(partName) {
         if (!this.children[partName]) {
             console.error(`Trying to close missing child: ${partName}!`);
             return false;
@@ -105,14 +109,14 @@ export default class ChildrenComponents {
     /**
      * close and remove each item
      */
-    closeAndRemoveAll() {
-        Object.keys(this.children).forEach(partName => this.removeItem(partName));
+    closeAndRemoveChildren() {
+        Object.keys(this.children).forEach(partName => this.closeAndRemoveChild(partName));
     }
 
     /**
      * Detach event handlers then remove all children.
      */
-    disconnectAndRemoveAll() {
+    disconnectAndRemoveChildren() {
         Object.values(this.children).forEach(child => child.disconnect());
         this.children = {};
     }

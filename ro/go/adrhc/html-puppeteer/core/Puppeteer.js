@@ -12,7 +12,7 @@ import ChildrenComponents from "./component/composition/ChildrenComponents.js";
  */
 export default function animate({alwaysReturnArray, ...restOfOptions} = {}) {
     const childrenComponents = new ChildrenComponents(restOfOptions);
-    const components = childrenComponents.summonChildren();
+    const components = childrenComponents.createChildrenForExistingShells();
     const partNames = Object.keys(components);
     console.log(`[Puppeteer.animate] childrenComponents created ${partNames.length} components`);
     if (partNames.length === 1 && !alwaysReturnArray) {

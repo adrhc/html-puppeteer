@@ -47,10 +47,10 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
         // chance to the children to unbind their event handlers;
         // their view will be automatically destroyed when
         // the parent redraws itself
-        this.childrenComponents.disconnectAndRemoveAll();
+        this.childrenComponents.disconnectAndRemoveChildren();
         // the parent redraws itself
         super.created(stateChange);
-        this.childrenComponents.summonChildren();
+        this.childrenComponents.createChildrenForExistingShells();
     }
 
     /**
@@ -58,7 +58,7 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      */
     replaced(stateChange) {
         super.replaced(stateChange);
-        this.childrenComponents.summonChildren();
+        this.childrenComponents.createChildrenForExistingShells();
     }
 
     /**
@@ -75,7 +75,7 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      * @param {PartStateChange<SCT, SCP>} partStateChange
      */
     partRemoved(partStateChange) {
-        this.childrenComponents.removeItem(partStateChange.previousPartName);
+        this.childrenComponents.closeAndRemoveChild(partStateChange.previousPartName);
         // the shell might actually be removed already by the closing child
         this.childrenShells.removeShell(partStateChange.previousPartName);
     }
