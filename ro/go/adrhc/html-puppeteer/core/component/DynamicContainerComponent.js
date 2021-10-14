@@ -18,13 +18,14 @@ export default class DynamicContainerComponent extends SimpleContainerComponent 
 
     /**
      * ChildrenShells have the chance to use parentHtml for children shells.
-     * We have to set htmlTemplate to "" to avoid the drawing of the parentHtml
-     * which now is a candidate to be children shell template.
+     * We have to set htmlTemplate to something not null (by default "") to
+     * avoid the drawing of the parent's html which by now is a candidate
+     * for the children shell template.
      *
      * @param {SimpleContainerComponentOptions} options
      */
     constructor(options) {
-        super({parentHtml: jQueryOf(options.elemIdOrJQuery).html(), ...options, htmlTemplate: ""});
+        super({parentHtml: jQueryOf(options.elemIdOrJQuery).html(), htmlTemplate: "", ...options});
         this.newChildrenGoLast = this.config.newChildrenGoLast;
     }
 
