@@ -11,7 +11,7 @@ import {generateHtml} from "../../util/HtmlGenerator.js";
  * @property {string} componentId
  * @property {string=} parentHtml
  * @property {string|jQuery<HTMLElement>} elemIdOrJQuery is the parent's element id or jQuery<HTMLElement>
- * @property {boolean=} newGuestsGoLast
+ * @property {boolean=} newChildrenGoLast
  */
 export default class ChildrenShells {
     /**
@@ -51,12 +51,12 @@ export default class ChildrenShells {
                     componentId,
                     parentHtml,
                     elemIdOrJQuery,
-                    newGuestsGoLast,
+                    newChildrenGoLast,
                     ...restOfOptions
                 }) {
         this.parentId = componentId;
         this.$containerElem = jQueryOf(elemIdOrJQuery);
-        this.place = newGuestsGoLast ? "append" : "prepend";
+        this.place = newChildrenGoLast ? "append" : "prepend";
         this.childrenShellFinder = new ChildrenShellFinder(elemIdOrJQuery);
         this.shellIsParentHtml = areShellTemplateOptionsEmpty(restOfOptions);
         this.shellTemplate = this.shellIsParentHtml ? parentHtml?.trim() : createShellTemplate(componentId, restOfOptions);
@@ -113,7 +113,7 @@ export default class ChildrenShells {
      */
     removeShell(partName) {
         if (this.shellTemplate != null) {
-            this.childrenShellFinder.$childShellByName(partName).remove();
+            this.childrenShellFinder.$childShellByName(partName)?.remove();
         }
     }
 }

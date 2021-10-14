@@ -70,6 +70,7 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      */
     partRemoved(partStateChange) {
         this.childrenComponents.removeItem(partStateChange.previousPartName);
+        // the shell might actually be removed already by the closing child
         this.childrenShells.removeShell(partStateChange.previousPartName);
     }
 
