@@ -43,6 +43,12 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
      * @param {StateChange<SCT>} stateChange
      */
     created(stateChange) {
+        // this must happen before container redraw to give a
+        // chance to the children to unbind their event handlers;
+        // their view will be automatically destroyed when
+        // the parent redraws itself
+        this.childrenComponents.disconnectAndRemoveAll();
+        // the parent redraws itself
         super.created(stateChange);
         this.childrenComponents.summonChildren();
     }

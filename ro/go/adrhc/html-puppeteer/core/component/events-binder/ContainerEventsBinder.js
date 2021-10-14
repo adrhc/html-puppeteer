@@ -23,6 +23,13 @@ export default class ContainerEventsBinder extends EventsBinder {
     }
 
     /**
+     * @return {SimpleContainerComponent}
+     */
+    get containerComponent() {
+        return /** @type {SimpleContainerComponent} */ this._component;
+    }
+
+    /**
      * @param {AbstractComponent=} component
      */
     set component(component) {
@@ -50,8 +57,8 @@ export default class ContainerEventsBinder extends EventsBinder {
             // <button data-owner="parent-component" data-remove-child="click" data-child-id="childId">
             const $elem = $(ev.target);
             const childId = childIdOf($elem);
-            const guestPartName = (/** @type {SimpleContainerComponent} */ this._component).getItemById(childId).partName;
-            this._component.replacePart(guestPartName);
+            const partName = this.containerComponent.getChildById(childId).partName;
+            this._component.replacePart(partName);
         });
     }
 
