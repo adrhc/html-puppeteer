@@ -65,6 +65,15 @@ export default class ChildrenShells {
     /**
      * @param {PartName} partName
      */
+    removeShell(partName) {
+        if (this.shellTemplate != null) {
+            this.childrenShellFinder.$childShellByName(partName)?.remove();
+        }
+    }
+
+    /**
+     * @param {PartName} partName
+     */
     getOrCreateShell(partName) {
         const $shell = this.childrenShellFinder.$childShellByName(partName);
         if ($shell) {
@@ -72,7 +81,7 @@ export default class ChildrenShells {
         }
         isTrue(this.shellTemplate != null,
             `"${partName}" shell is missing from "${this.parentId}"!\n\n"${this.parentId}" content is:\n${this.$containerElem.html()}\n"${this.parentId}" text is:\n${this.$containerElem.text()}`);
-        const kidShell = this.createShell(partName);
+        const kidShell = this._createShell(partName);
         this.$containerElem[this.place](kidShell);
         return this.childrenShellFinder.$childShellByName(partName);
     }
@@ -82,7 +91,7 @@ export default class ChildrenShells {
      * @return {string}
      * @protected
      */
-    createShell(partName) {
+    _createShell(partName) {
         const viewValues = {
             [GlobalConfig.PART]: partName,
             [GlobalConfig.OWNER]: this.parentId,
@@ -90,7 +99,7 @@ export default class ChildrenShells {
         };
         let shellTemplate = this.shellTemplate;
         if (this.shellIsParentHtml) {
-            shellTemplate = this.setPartOwnerAndIdToShellTemplate(viewValues);
+            shellTemplate = this._setPartOwnerAndIdToShellTemplate(viewValues);
         }
         return generateHtml(shellTemplate, viewValues);
     }
@@ -100,20 +109,11 @@ export default class ChildrenShells {
      * @return {string}
      * @protected
      */
-    setPartOwnerAndIdToShellTemplate(partOwnerAndId) {
+    _setPartOwnerAndIdToShellTemplate(partOwnerAndId) {
         const $shell = $(this.shellTemplate);
         isTrue($shell.length === 1,
             `$shell template from parent is ${$shell?.length ? "too crowded" : "empty"}! should have exactly one element!`)
         Object.keys(partOwnerAndId).forEach(key => $shell.attr(`data-${key}`, partOwnerAndId[key]));
         return $shell[0].outerHTML;
-    }
-
-    /**
-     * @param {PartName} partName
-     */
-    removeShell(partName) {
-        if (this.shellTemplate != null) {
-            this.childrenShellFinder.$childShellByName(partName)?.remove();
-        }
     }
 }
