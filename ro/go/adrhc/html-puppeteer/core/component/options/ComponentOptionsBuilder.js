@@ -19,7 +19,7 @@ import {pushNotNullMissing} from "../../../util/ArrayUtils.js";
  * @typedef {function(component: AbstractComponent)} ComponentConfiguratorFn
  */
 /**
- * @typedef {SimpleContainerComponentOptions & DebuggerOptions} ComponentOptions
+ * @typedef {ComponentConfigField | SimpleContainerComponentOptions & DebuggerOptions} ComponentOptions
  */
 export class ComponentOptionsBuilder {
     /**
