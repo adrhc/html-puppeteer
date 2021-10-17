@@ -67,14 +67,18 @@ export class ComponentOptionsBuilder {
             ...(this.descendantComponentClassOptions.extraConfigurators ?? [])
         ];
         // events binders
-        const eventsBinders = pushNotNullMissing([],
-            currentConstructorOptions.eventsBinder, this.builderOptions.eventsBinder, this.descendantComponentClassOptions.eventsBinder);
+        const eventsBinders = pushNotNullMissing([], currentConstructorOptions.eventsBinder,
+            this.builderOptions.eventsBinder, this.descendantComponentClassOptions.eventsBinder);
         const eventsBinder = eventsBinders.length > 1 ? new EventsBinderGroup(undefined, eventsBinders) : eventsBinders[0];
+        const eventsBinderProvider = eventsBinder ? (component) => {
+            eventsBinder.component = component;
+            return eventsBinder;
+        } : undefined;
         // final options
         return _.defaults({
             extraConfigurators,
             extraStateChangesHandlers,
-            eventsBinder
+            eventsBinderProvider
         }, this.builderOptions, currentConstructorOptions, this.descendantComponentClassOptions);
     }
 
