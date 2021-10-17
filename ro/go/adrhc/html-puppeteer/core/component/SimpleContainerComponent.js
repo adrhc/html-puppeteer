@@ -19,8 +19,8 @@ export default class SimpleContainerComponent extends AbstractComponent {
      */
     constructor(options) {
         super(withDefaults(options)
-            .addComponentIllustratorProvider((c) =>
-                new SimpleContainerIllustrator(/** @type {SimpleContainerComponent} */c))
+            .addComponentIllustratorProvider((container) =>
+                new SimpleContainerIllustrator(/** @type {SimpleContainerComponent} */ container))
             .withEventsBinders(new ContainerEventsBinder())
             .options());
     }
