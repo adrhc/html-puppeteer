@@ -25,17 +25,19 @@ export class ComponentOptionsBuilder {
     /**
      * @type {ComponentOptions}
      */
-    _options = {};
+    builderOptions = {};
     /**
+     * these should come from the descendant class
+     *
      * @type {ComponentOptions}
      */
-    defaults;
+    descendantComponentClassOptions;
 
     /**
-     * @param {ComponentOptions} defaults will be added after this._options (only for array types, e.g. extraConfigurators).
+     * @param {ComponentOptions} descendantComponentClassOptions will be added after this.builderOptions (only for array types, e.g. extraConfigurators).
      */
-    constructor(defaults = {}) {
-        this.defaults = defaults;
+    constructor(descendantComponentClassOptions = {}) {
+        this.descendantComponentClassOptions = descendantComponentClassOptions;
     }
 
     /**
@@ -46,34 +48,34 @@ export class ComponentOptionsBuilder {
     }
 
     /**
-     * this._options will be added after "options" param (only for array types, e.g. extraConfigurators)
+     * this.builderOptions will be added after "options" param (only for array types, e.g. extraConfigurators)
      *
-     * @param {ComponentOptions=} options
+     * @param {ComponentOptions=} currentConstructorOptions could be any constructor in a component class hierarchy
      * @return {ComponentOptions}
      */
-    to(options = {}) {
+    to(currentConstructorOptions = {}) {
         // extraStateChangesHandlers
         const extraStateChangesHandlers = [
-            ...(options.extraStateChangesHandlers ?? []), // these come from "this"
-            ...(this._options.extraStateChangesHandlers ?? []), // these are added by "this"
-            ...(this.defaults.extraStateChangesHandlers ?? []), // these come from the descendant class
+            ...(currentConstructorOptions.extraStateChangesHandlers ?? []),
+            ...(this.builderOptions.extraStateChangesHandlers ?? []),
+            ...(this.descendantComponentClassOptions.extraStateChangesHandlers ?? [])
         ];
         // extraConfigurators
         const extraConfigurators = [
-            ...(options.extraConfigurators ?? []), // these come from "this"
-            ...(this._options.extraConfigurators ?? []), // these are added by "this"
-            ...(this.defaults.extraConfigurators ?? []), // these come from the descendant class
+            ...(currentConstructorOptions.extraConfigurators ?? []),
+            ...(this.builderOptions.extraConfigurators ?? []),
+            ...(this.descendantComponentClassOptions.extraConfigurators ?? [])
         ];
         // events binders
         const eventsBinders = pushNotNullMissing([],
-            this._options.eventsBinder, this._options.eventsBinder, this.defaults.eventsBinder);
+            currentConstructorOptions.eventsBinder, this.builderOptions.eventsBinder, this.descendantComponentClassOptions.eventsBinder);
         const eventsBinder = eventsBinders.length > 1 ? new EventsBinderGroup(undefined, eventsBinders) : eventsBinders[0];
         // final options
         return _.defaults({
             extraConfigurators,
             extraStateChangesHandlers,
             eventsBinder
-        }, this._options, options, this.defaults);
+        }, this.builderOptions, currentConstructorOptions, this.descendantComponentClassOptions);
     }
 
     /**
@@ -83,10 +85,10 @@ export class ComponentOptionsBuilder {
      * @return {ComponentOptionsBuilder}
      */
     addStateChangeHandler(stateChangesHandler) {
-        if (this._options.extraStateChangesHandlers) {
-            this._options.extraStateChangesHandlers.push(stateChangesHandler);
+        if (this.builderOptions.extraStateChangesHandlers) {
+            this.builderOptions.extraStateChangesHandlers.push(stateChangesHandler);
         } else {
-            this._options.extraStateChangesHandlers = [stateChangesHandler];
+            this.builderOptions.extraStateChangesHandlers = [stateChangesHandler];
         }
         return this;
     }
@@ -109,10 +111,10 @@ export class ComponentOptionsBuilder {
      * @return {ComponentOptionsBuilder}
      */
     addConfigurator(componentConfigurator) {
-        if (this._options.extraConfigurators) {
-            this._options.extraConfigurators.push(componentConfigurator);
+        if (this.builderOptions.extraConfigurators) {
+            this.builderOptions.extraConfigurators.push(componentConfigurator);
         } else {
-            this._options.extraConfigurators = [componentConfigurator];
+            this.builderOptions.extraConfigurators = [componentConfigurator];
         }
         return this;
     }
@@ -123,7 +125,7 @@ export class ComponentOptionsBuilder {
      * @return {ComponentOptionsBuilder}
      */
     addComponentIllustratorProvider(componentIllustratorProviderFn, addEvenWhenAComponentIllustratorExistsInDefaults) {
-        if (!addEvenWhenAComponentIllustratorExistsInDefaults && this.defaults.componentIllustrator) {
+        if (!addEvenWhenAComponentIllustratorExistsInDefaults && this.descendantComponentClassOptions.componentIllustrator) {
             return this;
         }
         this.addConfiguratorFn((component) => {
@@ -138,22 +140,22 @@ export class ComponentOptionsBuilder {
      * @return {ComponentOptionsBuilder}
      */
     withEventsBinders(...eventsBinders) {
-        if (this._options.eventsBinder) {
-            this._options.eventsBinder.addEventsBinder(...eventsBinders);
+        if (this.builderOptions.eventsBinder) {
+            this.builderOptions.eventsBinder.addEventsBinder(...eventsBinders);
         } else {
-            this._options.eventsBinder = new EventsBinderGroup(undefined, eventsBinders);
+            this.builderOptions.eventsBinder = new EventsBinderGroup(undefined, eventsBinders);
         }
         return this;
     }
 
     /**
-     * Useful when on has to also check the current this._options values.
+     * Useful when on has to also check the current this.builderOptions values.
      *
      * @param {ComponentOptionsConsumer} optionsConsumer
      * @return {ComponentOptionsBuilder}
      */
     withOptionsConsumer(optionsConsumer) {
-        optionsConsumer(this._options)
+        optionsConsumer(this.builderOptions)
         return this;
     }
 }
