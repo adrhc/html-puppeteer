@@ -17,7 +17,7 @@ import {isTrue} from "../../util/AssertionUtils.js";
  * @property {StateInitializer=} stateInitializer
  * @property {StateChangesHandlersInvoker=} stateChangesHandlersInvoker
  * @property {EventsBinder=} eventsBinder
- * @property {EventsBinderProviderFn=} eventsBinderProvider
+ * @property {EventsBinderProviderFn=} eventsBinderProvider has priority against eventsBinder (usually is the opposite)
  * @property {ComponentConfigurator=} configurator
  * @property {ComponentConfigurator[]=} extraConfigurators
  */
