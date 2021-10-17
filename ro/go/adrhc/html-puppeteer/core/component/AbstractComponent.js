@@ -6,6 +6,9 @@ import GlobalConfig from "../../util/GlobalConfig.js";
 import {isTrue} from "../../util/AssertionUtils.js";
 
 /**
+ * @typedef {function(component: AbstractComponent): EventsBinder} EventsBinderProviderFn
+ */
+/**
  * @typedef {StateHolderOptions & ValueStateInitializerOptions & StateChangesHandlersInvokerOptions} AbstractComponentOptions
  * @property {string} elemIdOrJQuery
  * @property {string|number|boolean=} id
@@ -14,6 +17,7 @@ import {isTrue} from "../../util/AssertionUtils.js";
  * @property {StateInitializer=} stateInitializer
  * @property {StateChangesHandlersInvoker=} stateChangesHandlersInvoker
  * @property {EventsBinder=} eventsBinder
+ * @property {EventsBinderProviderFn=} eventsBinderProvider
  * @property {ComponentConfigurator=} configurator
  * @property {ComponentConfigurator[]=} extraConfigurators
  */

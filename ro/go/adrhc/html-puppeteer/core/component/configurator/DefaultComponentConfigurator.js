@@ -61,8 +61,10 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
      * @protected
      */
     _setAndConfigureEventsBinder(component) {
-        component.eventsBinder = this.config.eventsBinder;
-        if (component.eventsBinder) {
+        if (this.config.eventsBinderProvider) {
+            component.eventsBinder = this.config.eventsBinderProvider(component);
+        } else if (this.config.eventsBinder) {
+            component.eventsBinder = this.config.eventsBinder;
             component.eventsBinder.component = component;
         }
     }
