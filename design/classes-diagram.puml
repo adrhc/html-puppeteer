@@ -17,7 +17,7 @@ abstract AbstractComponent {
   +close()
   +closed(): boolean
   +constructor(options)
-  +disconnect(): detach event handlers
+  +disconnect()
   +getPart(partName)
   +getState()
   +partName(): string
