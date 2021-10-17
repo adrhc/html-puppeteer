@@ -15,8 +15,9 @@ export default class DebuggerOptionsBuilder extends ComponentOptionsBuilder {
      * @return {DebuggerOptionsBuilder}
      */
     addDebugger(debuggerOptions = {}) {
-        const debuggerStateChangeHandler = this._createDebuggerStateChangeHandler(debuggerOptions);
-        return /** @type {DebuggerOptionsBuilder} */ this.addStateChangeHandler(debuggerStateChangeHandler);
+        const debuggerStateChangesHandler = this._createDebuggerStateChangesHandler(debuggerOptions);
+        this.addStateChangesHandler(debuggerStateChangesHandler);
+        return this;
     }
 
     /**
@@ -24,14 +25,13 @@ export default class DebuggerOptionsBuilder extends ComponentOptionsBuilder {
      * @return {CopyStatesChangeHandler}
      * @protected
      */
-    _createDebuggerStateChangeHandler({debuggerElemIdOrJQuery} = {}) {
-        debuggerElemIdOrJQuery = debuggerElemIdOrJQuery ?? "debugger";
-        const simpleDebugger = new SimpleComponent({
+    _createDebuggerStateChangesHandler({debuggerElemIdOrJQuery} = {}) {
+        const debuggerComponent = new SimpleComponent({
             viewProviderFn: (viewConfig) => new SimpleView(viewConfig),
             viewRemovalStrategy: REMOVE_CONTENT,
-            elemIdOrJQuery: debuggerElemIdOrJQuery
+            elemIdOrJQuery: debuggerElemIdOrJQuery ?? "debugger"
         }).render();
-        return new CopyStatesChangeHandler(simpleDebugger);
+        return new CopyStatesChangeHandler(debuggerComponent);
     }
 }
 

@@ -10,7 +10,7 @@ class PeriodicallyStateChangingOptionsBuilder extends DebuggerOptionsBuilder {
     addClockDebugger(debuggerOptions = {}) {
         return this.withOptionsConsumer((options) => {
             options.clockExtraStateChangesHandlers = options.clockExtraStateChangesHandlers ?? [];
-            options.clockExtraStateChangesHandlers.push(this._createDebuggerStateChangeHandler(debuggerOptions));
+            options.clockExtraStateChangesHandlers.push(this._createDebuggerStateChangesHandler(debuggerOptions));
         });
     }
 

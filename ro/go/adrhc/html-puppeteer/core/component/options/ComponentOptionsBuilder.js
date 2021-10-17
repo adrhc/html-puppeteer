@@ -1,12 +1,12 @@
-import ComponentConfigurator from "../configurator/ComponentConfigurator.js";
 import EventsBinderGroup from "../events-binder/EventsBinderGroup.js";
 import {pushNotNullMissing} from "../../../util/ArrayUtils.js";
+import {FunctionComponentConfigurator} from "./FunctionComponentConfigurator.js";
 
 /**
- * @typedef {function(options: ComponentOptions)} ComponentOptionsConsumer
+ * @typedef {function(options: AbstractComponent): StateChangesHandler} StateChangesHandlerProviderFn
  */
 /**
- * @typedef {function(component: AbstractComponent): ComponentIllustrator} ComponentIllustratorProviderFn
+ * @typedef {function(options: ComponentOptions)} ComponentOptionsConsumer
  */
 /**
  * @typedef {function(initialState: *): StateInitializer} StateInitializerProviderFn
@@ -84,7 +84,7 @@ export class ComponentOptionsBuilder {
      * @param {StateChangesHandler} stateChangesHandler
      * @return {ComponentOptionsBuilder}
      */
-    addStateChangeHandler(stateChangesHandler) {
+    addStateChangesHandler(stateChangesHandler) {
         if (this.builderOptions.extraStateChangesHandlers) {
             this.builderOptions.extraStateChangesHandlers.push(stateChangesHandler);
         } else {
@@ -94,14 +94,23 @@ export class ComponentOptionsBuilder {
     }
 
     /**
+     * @param {StateChangesHandlerProviderFn} stateChangesHandlerProvider
+     */
+    addStateChangesHandlerProvider(stateChangesHandlerProvider) {
+        return this.addConfiguratorProvider((component) => {
+            const stateChangesHandler = stateChangesHandlerProvider(component);
+            component.appendStateChangesHandlers(stateChangesHandler);
+        });
+    }
+
+    /**
      * adds extra defaults related ComponentConfigurator
      *
      * @param {ComponentConfiguratorFn} componentConfiguratorFn
      * @return {ComponentOptionsBuilder}
      */
-    addConfiguratorFn(componentConfiguratorFn) {
-        this.addConfigurator(new FunctionComponentConfigurator(componentConfiguratorFn));
-        return this;
+    addConfiguratorProvider(componentConfiguratorFn) {
+        return this.addConfigurator(new FunctionComponentConfigurator(componentConfiguratorFn));
     }
 
     /**
@@ -116,22 +125,6 @@ export class ComponentOptionsBuilder {
         } else {
             this.builderOptions.extraConfigurators = [componentConfigurator];
         }
-        return this;
-    }
-
-    /**
-     * @param {ComponentIllustratorProviderFn} componentIllustratorProviderFn
-     * @param {boolean=} addEvenWhenAComponentIllustratorExistsInDefaults
-     * @return {ComponentOptionsBuilder}
-     */
-    addComponentIllustratorProvider(componentIllustratorProviderFn, addEvenWhenAComponentIllustratorExistsInDefaults) {
-        if (!addEvenWhenAComponentIllustratorExistsInDefaults && this.descendantComponentClassOptions.componentIllustrator) {
-            return this;
-        }
-        this.addConfiguratorFn((component) => {
-            const componentIllustrator = componentIllustratorProviderFn(component);
-            component.appendStateChangesHandlers(componentIllustrator);
-        });
         return this;
     }
 
@@ -155,7 +148,7 @@ export class ComponentOptionsBuilder {
      * @return {ComponentOptionsBuilder}
      */
     withOptionsConsumer(optionsConsumer) {
-        optionsConsumer(this.builderOptions)
+        optionsConsumer(this.builderOptions);
         return this;
     }
 }
@@ -165,11 +158,11 @@ export function withDefaults(options) {
 }
 
 /**
- * @param {ComponentIllustratorProviderFn} componentIllustratorProviderFn
+ * @param {StateChangesHandlerProviderFn} stateChangesHandlerProviderFn
  * @return {ComponentOptionsBuilder}
  */
-export function addComponentIllustratorProvider(componentIllustratorProviderFn) {
-    return new ComponentOptionsBuilder().addComponentIllustratorProvider(componentIllustratorProviderFn);
+export function addStateChangesHandlerProvider(stateChangesHandlerProviderFn) {
+    return new ComponentOptionsBuilder().addStateChangesHandlerProvider(stateChangesHandlerProviderFn);
 }
 
 /**
@@ -178,8 +171,8 @@ export function addComponentIllustratorProvider(componentIllustratorProviderFn) 
  * @param {ComponentConfiguratorFn} componentConfiguratorFn
  * @return {ComponentOptionsBuilder}
  */
-export function addConfiguratorFn(componentConfiguratorFn) {
-    return new ComponentOptionsBuilder().addConfiguratorFn(componentConfiguratorFn);
+export function addConfiguratorProvider(componentConfiguratorFn) {
+    return new ComponentOptionsBuilder().addConfiguratorProvider(componentConfiguratorFn);
 }
 
 /**
@@ -188,8 +181,8 @@ export function addConfiguratorFn(componentConfiguratorFn) {
  * @param {StateChangesHandler} stateChangesHandler
  * @return {ComponentOptionsBuilder}
  */
-export function addStateChangeHandler(stateChangesHandler) {
-    return new ComponentOptionsBuilder().addStateChangeHandler(stateChangesHandler);
+export function addStateChangesHandler(stateChangesHandler) {
+    return new ComponentOptionsBuilder().addStateChangesHandler(stateChangesHandler);
 }
 
 /**
@@ -199,17 +192,4 @@ export function addStateChangeHandler(stateChangesHandler) {
  */
 export function addConfigurator(configurator) {
     return new ComponentOptionsBuilder().addConfigurator(configurator);
-}
-
-class FunctionComponentConfigurator extends ComponentConfigurator {
-    componentConfiguratorFn;
-
-    constructor(componentConfiguratorFn) {
-        super();
-        this.componentConfiguratorFn = componentConfiguratorFn;
-    }
-
-    configure(component) {
-        this.componentConfiguratorFn(component);
-    }
 }

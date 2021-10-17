@@ -19,7 +19,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
      */
     constructor(options) {
         super(withDefaults(options)
-            .addComponentIllustratorProvider((container) =>
+            .addStateChangesHandlerProvider((container) =>
                 new SimpleContainerIllustrator(/** @type {SimpleContainerComponent} */ container))
             .withEventsBinders(new ContainerEventsBinder())
             .options());
