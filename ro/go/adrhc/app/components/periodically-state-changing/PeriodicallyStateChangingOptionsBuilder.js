@@ -8,10 +8,11 @@ class PeriodicallyStateChangingOptionsBuilder extends DebuggerOptionsBuilder {
      * @return {PeriodicallyStateChangingOptionsBuilder}
      */
     addClockDebugger(debuggerOptions = {}) {
-        return this.withOptionsConsumer((options) => {
+        this.withOptionsConsumer((options) => {
             options.clockExtraStateChangesHandlers = options.clockExtraStateChangesHandlers ?? [];
             options.clockExtraStateChangesHandlers.push(this._createDebuggerStateChangesHandler(debuggerOptions));
         });
+        return this;
     }
 
     /**
@@ -19,23 +20,23 @@ class PeriodicallyStateChangingOptionsBuilder extends DebuggerOptionsBuilder {
      * @return {PeriodicallyStateChangingOptionsBuilder}
      */
     doPeriodicallyWithStateAndClock(doWithStateAndClockFn) {
-        this._options.doWithStateAndClockFn = doWithStateAndClockFn;
+        this.builderOptions.doWithStateAndClockFn = doWithStateAndClockFn;
         return this;
     }
 
     /**
-     * @param {PeriodicallyStateChangingOptions=} options
+     * @param {PeriodicallyStateChangingOptions=} currentConstructorOptions
      * @return {PeriodicallyStateChangingOptions}
      */
-    to(options = {}) {
-        if (this._options.clockExtraStateChangesHandlers) {
-            options.clockExtraStateChangesHandlers = options.clockExtraStateChangesHandlers ?? [];
-            options.clockExtraStateChangesHandlers.push(...this._options.clockExtraStateChangesHandlers);
-        }
-        if (this._options.doWithStateAndClockFn) {
-            options.doWithStateAndClockFn = this._options.doWithStateAndClockFn;
-        }
-        return super.to(options);
+    to(currentConstructorOptions = {}) {
+        const clockExtraStateChangesHandlers = [
+            ...(currentConstructorOptions.clockExtraStateChangesHandlers ?? []),
+            ...(this.builderOptions.clockExtraStateChangesHandlers ?? []),
+            ...(this.descendantComponentClassOptions.clockExtraStateChangesHandlers ?? [])
+        ];
+        const doWithStateAndClockFn = this.descendantComponentClassOptions.doWithStateAndClockFn ??
+            this.builderOptions.doWithStateAndClockFn ?? currentConstructorOptions.doWithStateAndClockFn;
+        return super.to({...currentConstructorOptions, clockExtraStateChangesHandlers, doWithStateAndClockFn});
     }
 }
 

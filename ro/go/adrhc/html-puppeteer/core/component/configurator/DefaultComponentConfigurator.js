@@ -42,8 +42,9 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
         component.stateHolder = this.config.stateHolder ?? new PartialStateHolder(this.config);
         component.stateChangesHandlersInvoker =
             this.config.stateChangesHandlersInvoker ?? new StateChangesHandlersInvoker(this.config);
-        this._setAndConfigureStateInitializer(component);
-        this._setAndConfigureEventsBinder(component);
+        // very special case for eventsBinder: the provider has priority
+        component.eventsBinder = this.config.eventsBinderProvider?.(component) ?? this.config.eventsBinder;
+        component.stateInitializer = this.config.stateInitializer ?? this._createStateInitializer(component);
     }
 
     /**
@@ -58,30 +59,14 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
 
     /**
      * @param {AbstractComponent} component
+     * @return {StateInitializer}
      * @protected
      */
-    _setAndConfigureEventsBinder(component) {
-        if (this.config.eventsBinderProvider) {
-            component.eventsBinder = this.config.eventsBinderProvider(component);
-        } else if (this.config.eventsBinder) {
-            component.eventsBinder = this.config.eventsBinder;
-            component.eventsBinder.component = component;
-        }
-    }
-
-    /**
-     * @param {AbstractComponent} component
-     * @protected
-     */
-    _setAndConfigureStateInitializer(component) {
-        component.stateInitializer = this.config.stateInitializer;
-        if (component.stateInitializer != null) {
-            return;
-        }
+    _createStateInitializer(component) {
         if (component.partName != null) {
-            component.stateInitializer = new ChildStateInitializer(this.config.initialState);
+            return new ChildStateInitializer(this.config.initialState);
         } else if (this.config.initialState != null) {
-            component.stateInitializer = new ValueStateInitializer(this.config.initialState);
+            return new ValueStateInitializer(this.config.initialState);
         }
     }
 }
