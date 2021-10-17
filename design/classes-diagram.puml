@@ -29,7 +29,7 @@ abstract AbstractComponent {
   +stateIsNull(): boolean
 }
 
-note top of AbstractComponent
+/'note top of AbstractComponent
   Contains methods
   usually doing these:
 
@@ -37,7 +37,7 @@ note top of AbstractComponent
   - analyze the event
   - change the state using
   <i>doWithState(fn(stateHolder))</i>
-end note
+end note'/
 
 /'  State changing methods
   might use <i>syncState()</i>.
