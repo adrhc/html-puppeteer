@@ -3,20 +3,30 @@
 title HTML puppeteer - Classes Diagram
 
 abstract AbstractComponent {
-  #stateHolder: PartialStateHolder
-  #config:
+  #config = options + dataAttributes
+  #dataAttributes
   #eventsBinder
+  #id
+  #options
+  #parent
+  #stateChangesHandlersInvoker
+  #stateHolder: PartialStateHolder
   #stateInitializer
-  #domValuesReader
-  #stateChangesHandlerAdapter
-  #[initErrorsHandler]
   #doWithState(fn(partialStateHolder))
-  +render(value)
+  +appendStateChangesHandlers(\nstateChangesHandlers)
   +close()
-  +syncState()
+  +closed(): boolean
+  +constructor(options)
+  +disconnect(): detach event handlers
+  +getPart(partName)
   +getState()
+  +partName(): string
+  +render(value)
+  +replaceFromParent()
+  +replacePart(previousPartName, \nnewPart, newPartName)
+  +replaceParts(parts)
   +replaceState(newState)
-  +replacePart(previousPartName, \nnewPart, newPartName
+  +stateIsNull(): boolean
 }
 
 note top of AbstractComponent
@@ -27,10 +37,11 @@ note top of AbstractComponent
   - analyze the event
   - change the state using
   <i>doWithState(fn(stateHolder))</i>
-
-  State changing methods
-  might use <i>syncState()</i>.
 end note
+
+/'  State changing methods
+  might use <i>syncState()</i>.
+end note'/
 
 /'note left of AbstractComponent::constructor
 <i>config</i> parameter is used
@@ -59,7 +70,26 @@ note left of AbstractComponent::doWithState
 Applies (using <i>fn</i>)) the state
 changes then passes
 the related events to
-<i>StateChangesHandlerAdapter</i>.
+<i>StateChangesHandlersInvoker</i>.
+end note
+
+note left of AbstractComponent::"close()"
+Clears the state
+and <i>disconnect()</i>.
+end note
+
+note left of AbstractComponent::"disconnect()"
+Detaches the DOM
+event handlers.
+end note
+
+/'note left of AbstractComponent::syncState
+Synchronizes state with
+its visual representation.
+end note'/
+
+note left of AbstractComponent::getState
+Returns a state copy.
 end note
 
 note left of AbstractComponent::"render(value)"
@@ -70,21 +100,6 @@ state using <i>value</i>
 uses <i>stateInitializer</i>)
 and handles the state
 loading errors.
-end note
-
-note left of AbstractComponent::"close()"
-Clears the state
-and detaches the
-DOM event handlers
-end note
-
-note left of AbstractComponent::syncState
-Synchronizes state with
-its visual representation.
-end note
-
-note left of AbstractComponent::getState
-Returns a state copy.
 end note
 
 /'abstract AbstractContainerComponent extends AbstractComponent {
@@ -274,13 +289,13 @@ class SimpleTemplateView extends AbstractTemplateView {
 +remove()
 }
 
-class StateChangesHandlerAdapter {
+class StateChangesHandlersInvoker {
 stateChangesHandlers
 +addHandler(stateChangesHandler)
 +processStateChanges(stateChanges)
 }
 
-/'note left of StateChangesHandlerAdapter::handlerMappingRules
+/'note left of StateChangesHandlersInvoker::handlerMappingRules
 Defaults to:
 - map state initialization
 (aka creation) to
@@ -294,8 +309,8 @@ modification to
 <i>partRemoved(stateChange)</i>
 end note'/
 
-' note left of StateChangesHandlerAdapter::processStateChanges
-note top of StateChangesHandlerAdapter
+' note left of StateChangesHandlersInvoker::processStateChanges
+note top of StateChangesHandlersInvoker
 Conveys state changes
 to the suitable handlers.
 end note
@@ -396,8 +411,8 @@ AbstractComponent *-down- StateHolder
 AbstractComponent *-down- StateInitializer
 AbstractComponent *-down- DomValuesReader
 AbstractComponent *-down- ErrorsHandler
-AbstractComponent *-up- StateChangesHandlerAdapter
-StateChangesHandlerAdapter *-up- "many" StateChangesHandler
+AbstractComponent *-up- StateChangesHandlersInvoker
+StateChangesHandlersInvoker *-up- "many" StateChangesHandler
 ComponentIllustrator *-- AbstractView
 StateHolder *-- StateChangesCollector
 StateChangesCollector *-- "many" StateChange
