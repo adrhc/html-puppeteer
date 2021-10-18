@@ -27,10 +27,17 @@ export default class BasicContainerComponent extends AbstractComponent {
     childrenShells;
 
     /**
-     * @type {boolean}
+     * @return {boolean}
      */
     get newChildrenGoLast() {
         return this.config.newChildrenGoLast;
+    }
+
+    /**
+     * @return {PartialStateHolder}
+     */
+    get partialStateHolder() {
+        return /** @type {PartialStateHolder} */ this.stateHolder;
     }
 
     /**
@@ -75,7 +82,7 @@ export default class BasicContainerComponent extends AbstractComponent {
         // create shell and children for missing (dynamic) shells skipping existing children (having static shells)
         partsOf(newState, !this.newChildrenGoLast)
             .filter(([key]) => this.childrenComponents.getChildByPartName(key) == null)
-            .filter(([key]) => !this.stateHolder.hasEmptyPart(key))
+            .filter(([key]) => !this.partialStateHolder.hasEmptyPart(key))
             .forEach(([key]) => this._createOrUpdateChild(key));
     }
 
@@ -83,14 +90,15 @@ export default class BasicContainerComponent extends AbstractComponent {
      * @param {PartName=} previousPartName
      * @param {SCP=} newPart
      * @param {PartName=} newPartName
+     * @param {boolean=} dontRecordChanges
      */
-    replacePart(previousPartName, newPart, newPartName) {
+    replacePart(previousPartName, newPart, newPartName, dontRecordChanges) {
         const partName = newPartName ?? previousPartName;
         if (stateIsEmpty(newPart)) {
             this._removeChild(partName);
-            this._replacePartImpl(previousPartName, newPart, newPartName);
+            this._replacePartImpl(previousPartName, newPart, newPartName, dontRecordChanges);
         } else {
-            this._replacePartImpl(previousPartName, newPart, newPartName);
+            this._replacePartImpl(previousPartName, newPart, newPartName, dontRecordChanges);
             this._createOrUpdateChild(partName);
         }
     }
@@ -100,7 +108,7 @@ export default class BasicContainerComponent extends AbstractComponent {
      * @return {*}
      */
     getPart(partName) {
-        return this.stateHolder?.getPart(partName);
+        return this.partialStateHolder.getPart(partName);
     }
 
     /**
@@ -163,10 +171,11 @@ export default class BasicContainerComponent extends AbstractComponent {
      * @param {PartName=} previousPartName
      * @param {SCP=} newPart
      * @param {PartName=} newPartName
+     * @param {boolean=} dontRecordChanges
      * @protected
      */
-    _replacePartImpl(previousPartName, newPart, newPartName) {
+    _replacePartImpl(previousPartName, newPart, newPartName, dontRecordChanges) {
         this.doWithState(partialStateHolder =>
-            partialStateHolder.replacePart(previousPartName, newPart, newPartName));
+            partialStateHolder.replacePart(previousPartName, newPart, newPartName, dontRecordChanges));
     }
 }
