@@ -125,20 +125,4 @@ export default class StateHolder {
     _collectStateChanges(stateChanges = []) {
         return stateChanges.map(sc => this.stateChangesCollector.collect(sc)).filter(it => it != null);
     }
-
-    /**
-     * @param {StateChange<SCT>[]=} stateChanges
-     * @return {StateChange<SCT>[]}
-     * @protected
-     */
-    _enhanceStateChanges(stateChanges = []) {
-        return stateChanges.map(sc => this.stateChangesCollector.enhance(sc)).filter(it => it != null);
-    }
-
-    /**
-     * @return {StateChange<SCT>[]}
-     */
-    cancelAllStateChanges() {
-        return this.stateChangesCollector.consumeAll();
-    }
 }

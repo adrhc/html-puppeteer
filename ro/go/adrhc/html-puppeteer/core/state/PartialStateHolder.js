@@ -154,6 +154,15 @@ export default class PartialStateHolder extends StateHolder {
             this._currentState[partName] = part;
         }
     }
+
+    /**
+     * @param {StateChange<SCT>[]=} stateChanges
+     * @return {StateChange<SCT>[]}
+     * @protected
+     */
+    _enhanceStateChanges(stateChanges = []) {
+        return stateChanges.map(sc => this.stateChangesCollector.enhance(sc)).filter(it => it != null);
+    }
 }
 
 /**
