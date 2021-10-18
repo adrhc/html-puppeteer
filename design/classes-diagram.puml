@@ -17,20 +17,16 @@ abstract AbstractComponent {
   +close()
   +constructor(options)
   +disconnect()
-  +getPart(partName)
   +getStateCopy()
   +partName()
   +render(value)
   +replaceFromParent()
-  +replacePart(previousPartName, \nnewPart, newPartName)
-  +replaceParts(parts)
   +replaceState(newState)
   +stateIsEmpty(): boolean
 }
 
 note left of AbstractComponent::config
-constructor <i>options</i>
-(come first) + <i>dataAttributes</i>
+constructor <i>options</i> + <i>dataAttributes</i>
 end note
 
 note left of AbstractComponent::options
@@ -54,18 +50,12 @@ Detaches the DOM
 event handlers.
 end note
 
-note left of AbstractComponent::getState
-Returns a state copy.
-end note
-
 note left of AbstractComponent::"render(value)"
 Attaches DOM event
 handlers, initializes the
 state using <i>value</i>
 (if provided, otherwise
-uses <i>stateInitializer</i>)
-and handles the state
-loading errors.
+uses <i>stateInitializer</i>).
 end note
 
 class ChildrenShells {
@@ -201,8 +191,10 @@ class BasicContainerComponent extends AbstractComponent {
   +close()
   +constructor(options)
   +disconnect()
+  +getPart(partName)
   +replacePart(previousPartName, newPart, newPartName)
   +replacePartByChildId(childId, newPart, newPartName)
+  +replaceParts(parts)
   +replaceState(newState)
 }
 
