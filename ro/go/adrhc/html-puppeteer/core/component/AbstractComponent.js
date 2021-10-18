@@ -63,13 +63,6 @@ export default class AbstractComponent extends StateProcessor {
     stateInitializer;
 
     /**
-     * @return {boolean}
-     */
-    get closed() {
-        return this.stateHolder.hasUndefined();
-    }
-
-    /**
      * @return {OptionalPartName} the part name inside parent's state (if any)
      */
     get partName() {

@@ -15,7 +15,6 @@ abstract AbstractComponent {
   #doWithState(stateUpdaterFn)
   +appendStateChangesHandlers(\nstateChangesHandlers)
   +close()
-  +closed(): boolean
   +constructor(options)
   +disconnect()
   +getPart(partName)
