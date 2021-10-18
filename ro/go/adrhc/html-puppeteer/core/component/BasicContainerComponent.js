@@ -45,7 +45,7 @@ export default class BasicContainerComponent extends AbstractComponent {
     }
 
     /**
-     * Completely replaces the component's state.
+     * Completely replaces the component's state and creates the children.
      *
      * @param {SCT=} newState
      */
@@ -62,21 +62,43 @@ export default class BasicContainerComponent extends AbstractComponent {
         // create shell and children for missing (dynamic) shells skipping existing children (having static shells)
         partsOf(newState, !this.newChildrenGoLast)
             .filter(([key]) => this.childrenComponents.getChildByPartName(key) == null)
-            .forEach(([key]) => this._partCreatedImpl(key));
+            .filter(([key]) => !this.stateHolder.hasEmptyPart(key))
+            .forEach(([key]) => this._createOrUpdateChild(key));
     }
 
+    /**
+     * @param {PartName=} previousPartName
+     * @param {SCP=} newPart
+     * @param {PartName=} newPartName
+     */
     replacePart(previousPartName, newPart, newPartName) {
-
+        super.replacePart(previousPartName, newPart, newPartName);
+        const partName = newPartName ?? previousPartName;
+        if (this.stateHolder.hasEmptyPart(partName)) {
+            this._removeChild(partName);
+        } else {
+            this._createOrUpdateChild(partName);
+        }
     }
 
     /**
      * @param {PartName} partName
      * @protected
      */
-    _replacePartImpl(partName) {
+    _createOrUpdateChild(partName) {
         const $shell = this.childrenShells.getOrCreateShell(partName);
         isTrue($shell != null,
             `$shell is null for part named ${partName}!`)
         this.childrenComponents.createOrUpdateChild(partName, $shell);
+    }
+
+    /**
+     * @param {PartName} partName
+     * @protected
+     */
+    _removeChild(partName) {
+        this.childrenComponents.closeAndRemoveChild(partName);
+        // the shell might actually be removed already by the closing child
+        this.childrenShells.removeShell(partName);
     }
 }

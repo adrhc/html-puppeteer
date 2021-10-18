@@ -48,6 +48,7 @@ export default class ChildrenComponents {
         this.parent = parent;
         this.dontRenderChildren = dontRenderChildren;
         this.childrenCreationCommonOptions = childrenCreationCommonOptions;
+        // Puppeteer.anime() will provide an empty parent
         const elemIdOrJQuery = parent?.config.elemIdOrJQuery ?? document;
         this.childrenShellFinder = childrenShellFinder ?? new ChildrenShellFinder(elemIdOrJQuery);
     }

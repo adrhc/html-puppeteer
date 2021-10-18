@@ -51,15 +51,8 @@ export default class StateHolder {
     /**
      * @return {boolean}
      */
-    hasNull() {
-        return this._currentState == null;
-    }
-
-    /**
-     * @return {boolean}
-     */
-    hasUndefined() {
-        return typeof this._currentState === "undefined";
+    isEmpty() {
+        return stateIsEmpty(this._currentState);
     }
 
     /**
@@ -125,4 +118,8 @@ export default class StateHolder {
     _collectStateChanges(stateChanges = []) {
         return stateChanges.map(sc => this._stateChangesCollector.collect(sc)).filter(it => it != null);
     }
+}
+
+export function stateIsEmpty(state) {
+    return state == null;
 }

@@ -100,8 +100,8 @@ export default class AbstractComponent extends StateProcessor {
     /**
      * @return {boolean}
      */
-    stateIsNull() {
-        return this.stateHolder.hasNull();
+    stateIsEmpty() {
+        return this.stateHolder.isEmpty();
     }
 
     /**

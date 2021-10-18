@@ -26,7 +26,7 @@ function updateClockIntervalStatePart(stateHolder, clockStateChange) {
  * @param {StateChange} clockStateChange
  */
 function stateAndClockStateChangeConsumer(stateHolder, clockStateChange) {
-    if (stateHolder.hasNull()) {
+    if (stateHolder.isEmpty()) {
         // set the stateHolder initial value (i.e. the clock's interval)
         stateHolder.replace({interval: stateHolder.config.interval});
     } else {

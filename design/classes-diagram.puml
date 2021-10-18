@@ -25,7 +25,7 @@ abstract AbstractComponent {
   +replacePart(previousPartName, \nnewPart, newPartName)
   +replaceParts(parts)
   +replaceState(newState)
-  +stateIsNull(): boolean
+  +stateIsEmpty(): boolean
 }
 
 /'note top of AbstractComponent
@@ -235,8 +235,7 @@ interface StateHolder {
 #_stateChangesOf(previousState,\nnewState): StateChange[]
 '/
 +constructor({stateChangeAugmenter,\nstateChangesCollector, ...restOfOptions})
-+hasNull(): boolean
-+hasUndefined(): boolean
++isEmpty(): boolean
 +replace(newState,\n[dontRecordChanges]): StateChange[]
 +stateChangesCollector()
 +stateCopy()
@@ -252,7 +251,7 @@ end note'/
 interface PartialStateHolder extends StateHolder {
 +getPart(partName, [dontClone])
 +getParts(): {[key: string]: *}[]
-+hasNullPart(partName): boolean
++hasEmptyPart(partName): boolean
 +replacePart(\npreviousPartName, \nnewPart, newPartName, \n[dontRecordChanges])
 }
 
