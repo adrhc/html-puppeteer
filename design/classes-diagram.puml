@@ -144,13 +144,20 @@ class ChildrenShells {
 }
 
 class ChildrenComponents {
-#elemIdOrJQuery
-#items: {partName: AbstractComponent}
+#children: {partName: AbstractComponent}
+#childrenCreationCommonOptions
+#childrenShellFinder: ChildrenShellFinder
+#dontRender: boolean
 #parent: AbstractComponent
-+createItem(partName)
-+updateFromParent(itemName)
-+removeItem(partName)
-+getItemById(itemId)
++closeAndRemoveChild(partName)
++closeAndRemoveChildren()
++constructor(options)
++createChildrenForExistingShells()
++createOrUpdateChild(partName, $shell)
++disconnectAndRemoveChildren()
++getChildById(itemId)
++getChildByPartName(partName)
++updateFromParent(partName)
 }
 
 SimpleContainerIllustrator -down-> ChildrenComponents
@@ -255,7 +262,7 @@ class SimpleContainerComponent extends AbstractComponent {
 #childrenComponents: ChildrenComponents
 #stateChangesHandlersInvoker=[SimpleContainerIllustrator]
 +replaceState(newState)
-+getItemById(itemId): AbstractComponent
++getChildById(itemId): AbstractComponent
 #replaceContainerStateOnly(newState)
 }
 

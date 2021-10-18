@@ -21,15 +21,15 @@ export default class ChildrenComponents {
     /**
      * @type {Object}
      */
-    childrenSummoningOptions
+    childrenCreationCommonOptions
+    /**
+     * @type {ChildrenShellFinder}
+     */
+    childrenShellFinder;
     /**
      * @type {boolean}
      */
     dontRender;
-    /**
-     * @type {string|jQuery<HTMLElement>}
-     */
-    elemIdOrJQuery;
     /**
      * @type {AbstractComponent}
      */
@@ -39,14 +39,14 @@ export default class ChildrenComponents {
      * @param {ChildrenComponentsOptions} options
      * @param {string|jQuery<HTMLElement>=} options.elemIdOrJQuery
      * @param {AbstractComponent=} options.parent
-     * @param {Object=} options.childrenSummoningOptions
+     * @param {Object=} options.childrenCreationCommonOptions
      */
-    constructor({elemIdOrJQuery, parent, dontRender, ...childrenSummoningOptions}) {
+    constructor({elemIdOrJQuery, parent, dontRender, ...childrenCreationCommonOptions}) {
         this.parent = parent;
         this.dontRender = dontRender;
-        this.elemIdOrJQuery = elemIdOrJQuery ?? parent?.config.elemIdOrJQuery ?? document;
-        this.childrenSummoningOptions = childrenSummoningOptions;
-        this.childrenShellFinder = new ChildrenShellFinder(this.elemIdOrJQuery);
+        elemIdOrJQuery = elemIdOrJQuery ?? parent?.config.elemIdOrJQuery ?? document;
+        this.childrenCreationCommonOptions = childrenCreationCommonOptions;
+        this.childrenShellFinder = new ChildrenShellFinder(elemIdOrJQuery);
     }
 
     /**
@@ -61,7 +61,7 @@ export default class ChildrenComponents {
     createChildrenForExistingShells() {
         this.children = {};
         this.childrenShellFinder.$childrenShells()
-            .map($elem => createComponent($elem, {parent: this.parent, ...this.childrenSummoningOptions}))
+            .map($elem => createComponent($elem, {parent: this.parent, ...this.childrenCreationCommonOptions}))
             .forEach(c => this.children[c.partName ?? c.id] = c.render());
         return {...this.children};
     }
@@ -125,7 +125,7 @@ export default class ChildrenComponents {
      * @param {string} itemId
      * @return {AbstractComponent|undefined}
      */
-    getItemById(itemId) {
+    getChildById(itemId) {
         return Object.values(this.children).find(it => it.id === itemId);
     }
 

@@ -31,7 +31,7 @@ export default class SimpleContainerComponent extends AbstractComponent {
      * @param {PartName=} newPartName
      */
     replacePartByChildId(childId, newPart, newPartName) {
-        const partName = this.childrenComponents.getItemById(childId).partName;
+        const partName = this.childrenComponents.getChildById(childId).partName;
         this.replacePart(partName, newPart, newPartName);
     }
 
