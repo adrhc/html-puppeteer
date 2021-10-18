@@ -3,7 +3,7 @@
 title HTML puppeteer - Classes Diagram
 
 abstract AbstractComponent {
-  #config = options + dataAttributes
+  #config
   #dataAttributes
   #eventsBinder
   #id
@@ -66,9 +66,18 @@ using the state; e.g. dom
 element's id could be <i>partName</i>.
 end note'/
 
+note left of AbstractComponent::config
+constructor <i>options</i>
+(come first) + <i>dataAttributes</i>
+end note
+
+note left of AbstractComponent::options
+constructor <i>options</i>
+end note
+
 note left of AbstractComponent::doWithState
-Applies (using <i>fn</i>)) the state
-changes then passes
+Applies (using <i>fn</i>)) the
+state changes then passes
 the related events to
 <i>StateChangesHandlersInvoker</i>.
 end note
@@ -201,9 +210,18 @@ interface StateChangesCollector {
 }
 
 interface StateHolder {
-+get()
-+replace(newState, \n[dontRecordChanges])
-#stateChangesCollector
+#_currentState
+#_stateChangesCollector
+#_collectStateChanges(\nstateChanges): StateChange[]
+#_currentStateEquals(\nanotherState): boolean
+#_replaceImpl(newState): previousState
+#_stateChangesOf(previousState,\nnewState): StateChange[]
++constructor({stateChangeEnhancer,\nstateChangesCollector, ...restOfOptions})
++hasNull(): boolean
++hasUndefined(): boolean
++replace(newState,\n[dontRecordChanges]): StateChange[]
++stateChangesCollector():\nStateChangesCollector
++stateCopy(): {}
 }
 
 /'note left of StateHolder::replace
