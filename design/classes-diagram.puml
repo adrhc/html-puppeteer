@@ -28,79 +28,37 @@ abstract AbstractComponent {
   +stateIsEmpty(): boolean
 }
 
-/'note top of AbstractComponent
-  Contains methods
-  usually doing these:
-
-  - receive a (DOM) event
-  - analyze the event
-  - change the state using
-  <i>doWithState(fn(stateHolder))</i>
-end note'/
-
-/'  State changing methods
-  might use <i>syncState()</i>.
-end note'/
-
-/'note left of AbstractComponent::constructor
-<i>config</i> parameter is used
-to set/initialize any field.
-
-If too complex <i>config</i> could
-actually be a <i>configurer</i> class.
-
-An important <i>config</i> attribute
-is the component's DOM element
-which usually will already exist.
-end note'/
-
-/'note left of AbstractComponent::domElement
-Is the component's DOM element
-which for parent/root components
-will usually already exist.
-Part owner components on the
-other hand should be able to
-create and identify it by only
-using the state; e.g. dom
-element's id could be <i>partName</i>.
-end note'/
-
-note left of AbstractComponent::config
+note right of AbstractComponent::config
 constructor <i>options</i>
 (come first) + <i>dataAttributes</i>
 end note
 
-note left of AbstractComponent::options
+note right of AbstractComponent::options
 constructor <i>options</i>
 end note
 
-note left of AbstractComponent::doWithState
+note right of AbstractComponent::doWithState
 Applies (using <i>stateUpdaterFn</i>)
 the state changes then
 passes the related events to
 <i>StateChangesHandlersInvoker</i>.
 end note
 
-note left of AbstractComponent::"close()"
+note right of AbstractComponent::"close()"
 Clears the state
 and <i>disconnect()</i>.
 end note
 
-note left of AbstractComponent::"disconnect()"
+note right of AbstractComponent::"disconnect()"
 Detaches the DOM
 event handlers.
 end note
 
-/'note left of AbstractComponent::syncState
-Synchronizes state with
-its visual representation.
-end note'/
-
-note left of AbstractComponent::getState
+note right of AbstractComponent::getState
 Returns a state copy.
 end note
 
-note left of AbstractComponent::"render(value)"
+note right of AbstractComponent::"render(value)"
 Attaches DOM event
 handlers, initializes the
 state using <i>value</i>
@@ -109,27 +67,6 @@ uses <i>stateInitializer</i>)
 and handles the state
 loading errors.
 end note
-
-/'abstract AbstractContainerComponent extends AbstractComponent {
-  +create(partName, partValue)
-  +remove(partName)
-  +replace(partName, partValue)
-  +move(partName, toPartName)
-}'/
-
-class SimpleContainerIllustrator extends SimplePartsIllustrator {
-#childrenShells: ChildrenShells
-#container: BasicContainerComponent
-#newChildrenGoLast: boolean
-+constructor(container)
-+created(stateChange)
-+partChangeOccurred(partStateChange)
-+partCreated(partStateChange)
-+partRelocated(partStateChange)
-+partRemoved(partStateChange)
-+partReplaced(partStateChange)
-+replaced(stateChange)
-}
 
 class ChildrenShells {
 #$containerElem: jQuery<HTMLElement>
@@ -159,9 +96,6 @@ class ChildrenComponents {
 +getChildByPartName(partName)
 +updateFromParent(partName)
 }
-
-SimpleContainerIllustrator -down-> ChildrenComponents
-SimpleContainerIllustrator *-down- ChildrenShells
 
 abstract EventsBinder {
   component: AbstractComponent
@@ -267,16 +201,18 @@ missing but the whole exists.
 end note
 
 class BasicContainerComponent extends AbstractComponent {
-#childrenComponents: ChildrenComponents
-+close()
-+constructor(options)
-+disconnect()
-+replacePartByChildId(childId, newPart, newPartName)
-
-+replaceState()
+  #childrenComponents: ChildrenComponents
+  #childrenShells: ChildrenShells
+  +close()
+  +constructor(options)
+  +disconnect()
+  +replacePart(previousPartName, newPart, newPartName)
+  +replacePartByChildId(childId, newPart, newPartName)
+  +replaceState(newState)
 }
 
-BasicContainerComponent *-down- ChildrenComponents
+BasicContainerComponent *-- ChildrenComponents
+BasicContainerComponent *-- ChildrenShells
 
 /'interface ErrorsHandler {
 +accept(error)
@@ -382,7 +318,7 @@ abstract ComponentIllustrator implements StateChangesHandler {
 
 note top of ComponentIllustrator
 <i>created</i>, <i>replaced</i>, <i>removed</i>
-delegate to the
+methods delegate to the
 corresponding <i>view</i> methods.
 <i>changeOccurred</i> does nothing.
 end note

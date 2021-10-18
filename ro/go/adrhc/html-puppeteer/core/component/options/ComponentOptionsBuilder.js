@@ -19,7 +19,7 @@ import {FunctionComponentConfigurator} from "./FunctionComponentConfigurator.js"
  * @typedef {function(component: AbstractComponent)} ComponentConfiguratorFn
  */
 /**
- * @typedef {ComponentConfigField | SimpleContainerComponentOptions & DebuggerOptions} ComponentOptions
+ * @typedef {ComponentConfigField | BasicContainerComponentOptions & DebuggerOptions} ComponentOptions
  */
 export class ComponentOptionsBuilder {
     /**

@@ -4,7 +4,7 @@ import ChildrenShellFinder from "../../view/ChildrenShellFinder.js";
 
 /**
  * @typedef {Object} ChildrenComponentsOptions
- * @property {SimpleContainerComponent=} parent
+ * @property {BasicContainerComponent=} parent
  * @property {ChildrenShellFinder=} childrenShellFinder
  * @property {boolean=} dontRenderChildren
  * @property {Bag=} childrenCreationCommonOptions

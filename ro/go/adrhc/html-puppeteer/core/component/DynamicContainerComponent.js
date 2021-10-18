@@ -12,7 +12,7 @@ export default class DynamicContainerComponent extends BasicContainerComponent {
      * avoid the drawing of the parent's html which by now is a candidate
      * for the children shell template.
      *
-     * @param {SimpleContainerComponentOptions} options
+     * @param {BasicContainerComponentOptions} options
      */
     constructor(options) {
         super({parentHtml: jQueryOf(options.elemIdOrJQuery).html(), htmlTemplate: "", ...options});

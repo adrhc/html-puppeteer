@@ -10,7 +10,7 @@ export default class Scenario13App extends Scenario10App {
     innerPart;
 
     /**
-     * @param {SimpleContainerComponent} parent
+     * @param {BasicContainerComponent} parent
      * @param {string} innerPart
      */
     constructor(parent, {innerPart}) {

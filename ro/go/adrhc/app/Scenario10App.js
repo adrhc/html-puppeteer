@@ -8,12 +8,12 @@ export default class Scenario10App {
      */
     haveDogs;
     /**
-     * @type {SimpleContainerComponent}
+     * @type {BasicContainerComponent}
      */
     parent;
 
     /**
-     * @param {SimpleContainerComponent} parent
+     * @param {BasicContainerComponent} parent
      * @param {boolean=} haveDogs
      */
     constructor(parent, {haveDogs} = {}) {

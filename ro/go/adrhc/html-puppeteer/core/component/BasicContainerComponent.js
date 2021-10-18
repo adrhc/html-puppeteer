@@ -10,7 +10,7 @@ import IgnorePartChangesIllustrator from "../state-changes-handler/IgnorePartCha
 import ContainerEventsBinder from "./events-binder/ContainerEventsBinder.js";
 
 /**
- * @typedef {AbstractComponentOptions & ContainerEventsBinderOptions & ChildrenComponentsOptions & SimpleContainerIllustratorOptions} BasicContainerComponentOptions
+ * @typedef {AbstractComponentOptions & ContainerEventsBinderOptions & ChildrenComponentsOptions} BasicContainerComponentOptions
  */
 /**
  * @template SCT, SCP
