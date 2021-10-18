@@ -161,7 +161,7 @@ export default class PartialStateHolder extends StateHolder {
      * @protected
      */
     _enhanceStateChanges(stateChanges = []) {
-        return stateChanges.map(sc => this.stateChangesCollector.enhance(sc)).filter(it => it != null);
+        return stateChanges.map(sc => this._stateChangesCollector.enhance(sc)).filter(it => it != null);
     }
 }
 

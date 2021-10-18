@@ -123,6 +123,6 @@ export default class StateHolder {
      * @protected
      */
     _collectStateChanges(stateChanges = []) {
-        return stateChanges.map(sc => this.stateChangesCollector.collect(sc)).filter(it => it != null);
+        return stateChanges.map(sc => this._stateChangesCollector.collect(sc)).filter(it => it != null);
     }
 }
