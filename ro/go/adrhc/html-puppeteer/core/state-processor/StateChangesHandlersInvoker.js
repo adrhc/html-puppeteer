@@ -7,24 +7,24 @@ import {pushNotNull} from "../../util/ArrayUtils.js";
  */
 /**
  * @typedef {StateChangesHandlersField} StateChangesHandlersInvokerOptions
- * @property {string=} captureAllChangesMethod
- * @property {string=} captureAllPartChangesMethod
- * @property {string=} partChangeMethodPrefix
+ * @property {string=} handleAllChangesMethodName
+ * @property {string=} handleAllPartChangesMethodName
+ * @property {string=} partChangeMethodNamePrefix
  * @property {StateChangesHandler[]=} stateChangesHandlers
  */
 export default class StateChangesHandlersInvoker {
     /**
      * @type {string}
      */
-    captureAllChangesMethod;
+    handleAllChangesMethodName;
     /**
      * @type {string}
      */
-    captureAllPartChangesMethod;
+    handleAllPartChangesMethodName;
     /**
      * @type {string}
      */
-    partChangeMethodPrefix;
+    partChangeMethodNamePrefix;
     /**
      * @type {StateChangesHandler[]}
      */
@@ -34,9 +34,9 @@ export default class StateChangesHandlersInvoker {
      * @param {StateChangesHandlersInvokerOptions} options
      */
     constructor(options) {
-        this.partChangeMethodPrefix = options.partChangeMethodPrefix ?? "part";
-        this.captureAllChangesMethod = options.captureAllChangesMethod ?? "changeOccurred";
-        this.captureAllPartChangesMethod = options.captureAllPartChangesMethod ?? "partChangeOccurred";
+        this.partChangeMethodNamePrefix = options.partChangeMethodNamePrefix ?? "part";
+        this.handleAllChangesMethodName = options.handleAllChangesMethodName ?? "changeOccurred";
+        this.handleAllPartChangesMethodName = options.handleAllPartChangesMethodName ?? "partChangeOccurred";
         this.stateChangesHandlers = options.stateChangesHandlers ??
             this._createStateChangesInvokers(options);
     }
@@ -91,11 +91,11 @@ export default class StateChangesHandlersInvoker {
      */
     _invokeStateChangesHandler(stateChangesHandler, methodName, typedStateChange) {
         const result = [stateChangesHandler?.[methodName]?.(typedStateChange)];
-        if (this.captureAllChangesMethod != null) {
-            result.push(stateChangesHandler[this.captureAllChangesMethod]?.(typedStateChange));
+        if (this.handleAllChangesMethodName != null) {
+            result.push(stateChangesHandler[this.handleAllChangesMethodName]?.(typedStateChange));
         }
-        if (this.captureAllPartChangesMethod != null && this._isPartialChange(typedStateChange)) {
-            result.push(stateChangesHandler[this.captureAllPartChangesMethod]?.(typedStateChange));
+        if (this.handleAllPartChangesMethodName != null && this._isPartialChange(typedStateChange)) {
+            result.push(stateChangesHandler[this.handleAllPartChangesMethodName]?.(typedStateChange));
         }
         return result.filter(notEmpty);
     }
@@ -108,7 +108,7 @@ export default class StateChangesHandlersInvoker {
     _methodNameOf(typedStateChange) {
         if (this._isPartialChange(typedStateChange)) {
             const suffix = this._partMethodVerbOf(typedStateChange.changeType);
-            return `${this.partChangeMethodPrefix}${suffix}`;
+            return `${this.partChangeMethodNamePrefix}${suffix}`;
         } else {
             return this._methodVerbOf(typedStateChange.changeType);
         }
