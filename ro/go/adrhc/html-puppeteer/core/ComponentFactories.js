@@ -3,6 +3,7 @@ import SimpleContainerComponent from "./component/SimpleContainerComponent.js";
 import ValueComponent from "./component/ValueComponent.js";
 import StaticContainerComponent from "./component/StaticContainerComponent.js";
 import DynamicContainerComponent from "./component/DynamicContainerComponent.js";
+import BasicContainerComponent from "./component/BasicContainerComponent.js";
 
 /**
  * @typedef {function(options: AbstractComponentOptions): AbstractComponent} ComponentProviderFn
@@ -13,10 +14,11 @@ import DynamicContainerComponent from "./component/DynamicContainerComponent.js"
  */
 const COMPONENT_TYPES = {
     "simple": (options) => new SimpleComponent(options),
-    "value": (/** @type {ValueComponentOptions} */ options) => new ValueComponent(options),
-    "simple-container": (options) => new SimpleContainerComponent(options),
-    "static-container": (options) => new StaticContainerComponent(options),
-    "dyna-container": (options) => new DynamicContainerComponent(options),
+    "value": (options) => new ValueComponent(options),
+    "simple-container": (options) => new SimpleContainerComponent(/** @type {SimpleContainerComponentOptions} */ options),
+    "static-container": (options) => new StaticContainerComponent(/** @type {SimpleContainerComponentOptions} */ options),
+    "dyna-container": (options) => new DynamicContainerComponent(/** @type {SimpleContainerComponentOptions} */ options),
+    "basic-container": (options) => new BasicContainerComponent(/** @type {BasicContainerComponentOptions} */ options),
 };
 
 /**
