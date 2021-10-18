@@ -8,7 +8,6 @@ import GlobalConfig from "../../util/GlobalConfig.js";
  */
 /**
  * @template SCT, SCP
- * @extends {ComponentIllustrator}
  * @extends {PartialStateChangesHandler}
  */
 export default class SimplePartsIllustrator extends ComponentIllustrator {

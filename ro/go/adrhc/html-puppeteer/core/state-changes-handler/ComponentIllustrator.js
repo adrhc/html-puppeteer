@@ -10,9 +10,6 @@ import {simpleTemplateViewProvider} from "../view/SimpleTemplateView.js";
  */
 /**
  * @template SCT, SCP
- *
- * @extends {StateChangesHandler}
- * @abstract
  */
 export default class ComponentIllustrator extends StateChangesHandler {
     /**

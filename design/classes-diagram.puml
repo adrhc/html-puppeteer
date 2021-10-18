@@ -94,7 +94,7 @@ abstract EventsBinder {
   {abstract}+detachEventHandlers()
 }
 
-note bottom of EventsBinder
+note top of EventsBinder
   Contains handlers for DOM events.
   Usual handler processing:
   - capture only intended events
@@ -295,7 +295,7 @@ interface PartialStateChangesHandler extends StateChangesHandler {
 +partReplaced(stateChange)
 }
 
-abstract ComponentIllustrator implements StateChangesHandler {
+class ComponentIllustrator implements StateChangesHandler {
 #view: AbstractView
 +constructor({view, viewProviderFn, ...restOfOptions})
 +created(stateChange)

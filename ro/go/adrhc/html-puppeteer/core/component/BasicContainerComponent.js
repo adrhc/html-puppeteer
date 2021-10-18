@@ -5,9 +5,9 @@ import ChildrenShells from "../view/ChildrenShells.js";
 import ChildrenShellFinder from "../view/ChildrenShellFinder.js";
 import {stateIsEmpty} from "../state/StateHolder.js";
 import AbstractComponent from "./AbstractComponent.js";
-import IgnorePartChangesIllustrator from "../state-changes-handler/IgnorePartChangesIllustrator.js";
 import ContainerEventsBinder from "./events-binder/ContainerEventsBinder.js";
 import {withDefaults} from "./options/ComponentOptionsBuilder.js";
+import ComponentIllustrator from "../state-changes-handler/ComponentIllustrator.js";
 
 /**
  * @typedef {AbstractComponentOptions & ContainerEventsBinderOptions & ChildrenComponentsOptions} BasicContainerComponentOptions
@@ -51,7 +51,7 @@ export default class BasicContainerComponent extends AbstractComponent {
         super(withDefaults(restOfOptions)
             .withStateHolderProvider(c => new PartialStateHolder(c.config))
             .addStateChangesHandlerProvider((component) =>
-                (componentIllustrator ?? new IgnorePartChangesIllustrator(component.config)))
+                (componentIllustrator ?? new ComponentIllustrator(component.config)))
             .addEventsBinders(new ContainerEventsBinder())
             .options());
         const childrenShellFinder = new ChildrenShellFinder(this.config.elemIdOrJQuery);
