@@ -34,15 +34,15 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
     }
 
     /**
-     * @param {SimpleContainerComponent} component
+     * @param {SimpleContainerComponent} container
      */
-    constructor(component) {
+    constructor(container) {
         super(withDefaults({
-            componentId: component.id,
-        }).to(component.config));
-        this.container = component;
-        this.newChildrenGoLast = component.config.newChildrenGoLast;
-        this.childrenShells = new ChildrenShells({componentId: component.id, ...component.config});
+            componentId: container.id,
+        }).to(container.config));
+        this.container = container;
+        this.newChildrenGoLast = container.config.newChildrenGoLast;
+        this.childrenShells = new ChildrenShells({componentId: container.id, ...container.config});
     }
 
     /**

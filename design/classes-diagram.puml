@@ -118,15 +118,17 @@ end note
 }'/
 
 class SimpleContainerIllustrator extends SimplePartsIllustrator {
-#childrenComponents: ChildrenComponents
 #childrenShells: ChildrenShells
+#container: SimpleContainerComponent
+#newChildrenGoLast: boolean
++constructor(container)
 +created(stateChange)
-+replaced(stateChange)
++partChangeOccurred(partStateChange)
 +partCreated(partStateChange)
++partRelocated(partStateChange)
 +partRemoved(partStateChange)
 +partReplaced(partStateChange)
-+partRelocated(partStateChange)
-+partChangeOccurred(partStateChange)
++replaced(stateChange)
 }
 
 SimpleContainerIllustrator -down-> ChildrenComponents
@@ -302,13 +304,12 @@ class SimpleView implements AbstractView {
 
 class AbstractTemplateView extends SimpleView {
 #htmlTemplate: string
-#viewRemovalStrategy: \n\tREMOVE_ELEMENT |\n\tREMOVE_CONTENT |\n\tUSE_HTML |\n\tUSE_THE_TEMPLATE
-#_createTemplate(templateId)
++constructor({htmlTemplate,\ntemplateId, ...restOfOptions})
 }
 
 class SimpleTemplateView extends AbstractTemplateView {
-+replace(values)
 +remove()
++replace(values)
 }
 
 class StateChangesHandlersInvoker {
