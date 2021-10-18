@@ -4,6 +4,7 @@ import ChildrenComponents from "./composition/ChildrenComponents.js";
 import {isTrue} from "../../util/AssertionUtils.js";
 import ChildrenShells from "../view/ChildrenShells.js";
 import ChildrenShellFinder from "../view/ChildrenShellFinder.js";
+import {stateIsEmpty} from "../state/StateHolder.js";
 
 /**
  * @typedef {AbstractComponentOptions & ContainerEventsBinderOptions & ChildrenComponentsOptions & SimpleContainerIllustratorOptions} BasicContainerComponentOptions
@@ -72,13 +73,40 @@ export default class BasicContainerComponent extends AbstractComponent {
      * @param {PartName=} newPartName
      */
     replacePart(previousPartName, newPart, newPartName) {
-        super.replacePart(previousPartName, newPart, newPartName);
         const partName = newPartName ?? previousPartName;
-        if (this.stateHolder.hasEmptyPart(partName)) {
+        if (stateIsEmpty(newPart)) {
             this._removeChild(partName);
+            super.replacePart(previousPartName, newPart, newPartName);
         } else {
+            super.replacePart(previousPartName, newPart, newPartName);
             this._createOrUpdateChild(partName);
         }
+    }
+
+    /**
+     * @param {string} childId
+     * @param {SCP=} newPart
+     * @param {PartName=} newPartName
+     */
+    replacePartByChildId(childId, newPart, newPartName) {
+        const partName = this.childrenComponents.getChildById(childId).partName;
+        this.replacePart(partName, newPart, newPartName);
+    }
+
+    /**
+     * set state to undefined
+     */
+    close() {
+        this.childrenComponents.closeAndRemoveChildren();
+        super.close();
+    }
+
+    /**
+     * Detach event handlers.
+     */
+    disconnect() {
+        this.childrenComponents.disconnectAndRemoveChildren();
+        super.disconnect();
     }
 
     /**
