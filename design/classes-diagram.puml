@@ -28,37 +28,37 @@ abstract AbstractComponent {
   +stateIsEmpty(): boolean
 }
 
-note right of AbstractComponent::config
+note left of AbstractComponent::config
 constructor <i>options</i>
 (come first) + <i>dataAttributes</i>
 end note
 
-note right of AbstractComponent::options
+note left of AbstractComponent::options
 constructor <i>options</i>
 end note
 
-note right of AbstractComponent::doWithState
+note left of AbstractComponent::doWithState
 Applies (using <i>stateUpdaterFn</i>)
 the state changes then
 passes the related events to
 <i>StateChangesHandlersInvoker</i>.
 end note
 
-note right of AbstractComponent::"close()"
+note left of AbstractComponent::"close()"
 Clears the state
 and <i>disconnect()</i>.
 end note
 
-note right of AbstractComponent::"disconnect()"
+note left of AbstractComponent::"disconnect()"
 Detaches the DOM
 event handlers.
 end note
 
-note right of AbstractComponent::getState
+note left of AbstractComponent::getState
 Returns a state copy.
 end note
 
-note right of AbstractComponent::"render(value)"
+note left of AbstractComponent::"render(value)"
 Attaches DOM event
 handlers, initializes the
 state using <i>value</i>
@@ -115,11 +115,6 @@ end note
 abstract StateInitializer {
 {abstract}+load(component)
 }
-
-/'note bottom of StateInitializer
-sets component's state
-(from e.g. a repository)
-end note'/
 
 class ValueStateInitializer extends StateInitializer {
 #value
@@ -338,68 +333,13 @@ By default will render
 complete new state.
 end note
 
-/'abstract PartsAllocator implements PartialStateChangesHandler {
-parts: Map<partName, AbstractComponent>
-stateSynchronizer
-#createNewOwners(stateChange)
-#removeMissingOwners(stateChange)
-#{abstract}createOwner(partName, part)
-}
-
-note top of PartsAllocator
-Contains methods usually doing these:
-- analyze the state changes
-- manage the state parts owners
-end note
-
-note left of PartsAllocator::createNewOwners
-- iterates the state parts
-- creates new part owning components
-- calls <i>newOwner.render(part)</i>
-end note
-
-note left of PartsAllocator::removeMissingOwners
-- iterates the state parts
-- closes then removes
-  the <i>parts</i> no longer
-  found in iterator
-end note
-
-class StateSynchronizer {
-  #stateHolder
-  #domValuesReader
-  #partOwners: Map<partName, AbstractComponent>
-  +syncState()
-  +viewUpdated(view)
-  +partOwnersUpdated(partOwners)
-  #syncStateWithView()
-  #syncStateWithPartOwners()
-}
-
-note left of StateSynchronizer::syncState
-Updates (silently) the
-state using view's value
-and part owners state.
-end note
-
-note left of StateSynchronizer::syncStateWithPartOwners
-It'll call <i>syncState()</i> on
-part owners components
-before reading their state.
-end note'/
-
-/'abstract DomValuesReader {
-  view: AbstractView
-  {abstract}+extractDomValues()
-}'/
-
-AbstractComponent *-down- EventsBinder
-AbstractComponent *-down- StateHolder
-AbstractComponent *-down- StateInitializer
+AbstractComponent *-- EventsBinder
+AbstractComponent *-- StateHolder
+AbstractComponent *-- StateInitializer
 'AbstractComponent *-down- DomValuesReader
 'AbstractComponent *-down- ErrorsHandler
-AbstractComponent *-up- StateChangesHandlersInvoker
-StateChangesHandlersInvoker *-up- "many" StateChangesHandler
+AbstractComponent *-- StateChangesHandlersInvoker
+StateChangesHandlersInvoker *-- "many" StateChangesHandler
 ComponentIllustrator *-- AbstractView
 StateHolder *-- StateChangesCollector
 StateChangesCollector *-- "many" StateChange
