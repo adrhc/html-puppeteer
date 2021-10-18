@@ -17,6 +17,9 @@ export const RENDER_HTML = "html";
  * @typedef {"REMOVE_ELEMENT"|"REMOVE_CONTENT"|"USE_HTML"} ViewRemovalStrategy
  */
 /**
+ * @typedef {"RENDER_VAL"|"RENDER_TEXT"|"RENDER_HTML"} ViewRenderStrategy
+ */
+/**
  * @typedef {AbstractTemplateViewOptions} SimpleViewOptions
  * @property {ViewValuesTransformerFn=} viewValuesTransformerFn
  * @property {string|jQuery<HTMLElement>=} elemIdOrJQuery
@@ -38,6 +41,10 @@ export default class SimpleView extends AbstractView {
      * @type {ViewRemovalStrategy}
      */
     viewRemovalStrategy;
+    /**
+     * @type {ViewRenderStrategy}
+     */
+    viewRenderStrategy;
     /**
      * @type {ViewValuesTransformerFn}
      */

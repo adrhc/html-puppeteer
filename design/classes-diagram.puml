@@ -264,8 +264,8 @@ interface ErrorsHandler {
 
 interface AbstractView {
 +create(value)
-+replace(value)
 +remove()
++replace(value)
 }
 
 /'note right of AbstractView::create
@@ -292,9 +292,12 @@ class SimpleView implements AbstractView {
 #$elem: jQuery<HTMLElement>
 #removedPlaceholder
 #viewRemovalStrategy: \n\tREMOVE_ELEMENT |\n\tREMOVE_CONTENT |\n\tUSE_HTML
+#viewRenderStrategy: \n\tRENDER_VAL |\n\tRENDER_TEXT |\n\tRENDER_HTML
+#viewValuesTransformerFn
++constructor(options)
 +create(values)
-+replace(values)
 +remove()
++replace(values)
 }
 
 class AbstractTemplateView extends SimpleView {
@@ -343,26 +346,35 @@ interface StateChangesHandler {
 }
 
 interface PartialStateChangesHandler extends StateChangesHandler {
++partChangeOccurred(stateChange)
 +partCreated(stateChange)
 +partRelocated(stateChange)
 +partRemoved(stateChange)
 +partReplaced(stateChange)
-+partChangeOccurred(stateChange)
 }
 
 abstract ComponentIllustrator implements StateChangesHandler {
-view: AbstractView
+#view: AbstractView
++constructor({view, viewProviderFn, ...restOfOptions})
++created(stateChange)
++removed(stateChange)
++replaced(stateChange)
 }
 
 note top of ComponentIllustrator
 <i>created</i>, <i>replaced</i>, <i>removed</i>
-delegate to corresponding
-<i>view</i> methods.
+delegate to the
+corresponding <i>view</i> methods.
 <i>changeOccurred</i> does nothing.
 end note
 
 class SimplePartsIllustrator extends ComponentIllustrator implements PartialStateChangesHandler {
-+partChangeOccurred(stateChange)
++constructor({viewValuesTransformerFn, ...restOfOptions})
++partChangeOccurred(partStateChange)
++partCreated(partStateChange)
++partRelocated(partStateChange)
++partRemoved(partStateChange)
++partReplaced(partStateChange)
 }
 
 note left of SimplePartsIllustrator
