@@ -260,10 +260,10 @@ end note
 
 class SimpleContainerComponent extends AbstractComponent {
 #childrenComponents: ChildrenComponents
-#stateChangesHandlersInvoker=[SimpleContainerIllustrator]
-+replaceState(newState)
-+getChildById(itemId): AbstractComponent
-#replaceContainerStateOnly(newState)
++close()
++constructor(options)
++disconnect()
++replacePartByChildId(childId, newPart, newPartName)
 }
 
 SimpleContainerComponent *-down- ChildrenComponents
