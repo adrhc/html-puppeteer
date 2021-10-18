@@ -1,10 +1,10 @@
-import AbstractComponent from "./AbstractComponent.js";
 import {partsOf} from "../state/PartialStateHolder.js";
 import ChildrenComponents from "./composition/ChildrenComponents.js";
 import {isTrue} from "../../util/AssertionUtils.js";
 import ChildrenShells from "../view/ChildrenShells.js";
 import ChildrenShellFinder from "../view/ChildrenShellFinder.js";
 import {stateIsEmpty} from "../state/StateHolder.js";
+import SimpleComponent from "./SimpleComponent.js";
 
 /**
  * @typedef {AbstractComponentOptions & ContainerEventsBinderOptions & ChildrenComponentsOptions & SimpleContainerIllustratorOptions} BasicContainerComponentOptions
@@ -13,7 +13,7 @@ import {stateIsEmpty} from "../state/StateHolder.js";
  * @template SCT, SCP
  * @extends {AbstractComponent}
  */
-export default class BasicContainerComponent extends AbstractComponent {
+export default class BasicContainerComponent extends SimpleComponent {
     /**
      * @type {ChildrenComponents}
      */
@@ -22,10 +22,13 @@ export default class BasicContainerComponent extends AbstractComponent {
      * @type {ChildrenShells}
      */
     childrenShells;
+
     /**
      * @type {boolean}
      */
-    newChildrenGoLast;
+    get newChildrenGoLast() {
+        return this.config.newChildrenGoLast;
+    }
 
     /**
      * @param {BasicContainerComponentOptions} options
