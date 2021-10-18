@@ -10,9 +10,9 @@ abstract AbstractComponent {
   #options
   #parent
   #stateChangesHandlersInvoker
-  #stateHolder: PartialStateHolder
+  #stateHolder
   #stateInitializer
-  #doWithState(fn(partialStateHolder))
+  #doWithState(stateUpdaterFn)
   +appendStateChangesHandlers(\nstateChangesHandlers)
   +close()
   +closed(): boolean
@@ -20,7 +20,7 @@ abstract AbstractComponent {
   +disconnect()
   +getPart(partName)
   +getState()
-  +partName(): string
+  +partName()
   +render(value)
   +replaceFromParent()
   +replacePart(previousPartName, \nnewPart, newPartName)
@@ -76,9 +76,9 @@ constructor <i>options</i>
 end note
 
 note left of AbstractComponent::doWithState
-Applies (using <i>fn</i>)) the
-state changes then passes
-the related events to
+Applies (using <i>stateUpdaterFn</i>)
+the state changes then
+passes the related events to
 <i>StateChangesHandlersInvoker</i>.
 end note
 
@@ -220,8 +220,8 @@ interface StateHolder {
 +hasNull(): boolean
 +hasUndefined(): boolean
 +replace(newState,\n[dontRecordChanges]): StateChange[]
-+stateChangesCollector():\nStateChangesCollector
-+stateCopy(): {}
++stateChangesCollector()
++stateCopy()
 }
 
 /'note left of StateHolder::replace
