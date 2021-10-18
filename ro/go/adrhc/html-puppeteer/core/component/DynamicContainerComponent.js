@@ -1,11 +1,11 @@
-import SimpleContainerComponent from "./SimpleContainerComponent.js";
 import {jQueryOf} from "../../util/DomUtils.js";
+import BasicContainerComponent from "./BasicContainerComponent.js";
 
 /**
  * @template SCT, SCP
  * @extends {AbstractComponent}
  */
-export default class DynamicContainerComponent extends SimpleContainerComponent {
+export default class DynamicContainerComponent extends BasicContainerComponent {
     /**
      * ChildrenShells have the chance to use parentHtml for children shells.
      * We have to set htmlTemplate to something not null (by default "") to
