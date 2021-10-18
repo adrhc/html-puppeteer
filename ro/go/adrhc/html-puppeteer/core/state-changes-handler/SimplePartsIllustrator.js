@@ -15,12 +15,15 @@ export default class SimplePartsIllustrator extends ComponentIllustrator {
     /**
      * @param {SimplePartsIllustratorOptions} options
      * @param {ViewValuesTransformerFn} options.viewValuesTransformerFn
+     * @param {string} options.componentId
+     * @param {AbstractComponent=} options.parent
+     * @param {PartName=} options.part
      * @param {ComponentIllustratorOptions} options.restOfOptions
      */
-    constructor({viewValuesTransformerFn, ...restOfOptions}) {
+    constructor({viewValuesTransformerFn, componentId, parent, part, ...restOfOptions}) {
         super(_.defaults(restOfOptions, {
             viewValuesTransformerFn: viewValuesTransformerFn ??
-                defaultViewValuesTransformerFn(restOfOptions.componentId, restOfOptions.parent?.id, restOfOptions.part)
+                defaultViewValuesTransformerFn(componentId, parent?.id, part)
         }));
     }
 

@@ -4,7 +4,9 @@ import {isTrue} from "../../util/AssertionUtils.js";
 import ChildrenShells from "../view/ChildrenShells.js";
 import ChildrenShellFinder from "../view/ChildrenShellFinder.js";
 import {stateIsEmpty} from "../state/StateHolder.js";
-import SimpleComponent from "./SimpleComponent.js";
+import AbstractComponent from "./AbstractComponent.js";
+import {addStateChangesHandlerProvider} from "./options/ComponentOptionsBuilder.js";
+import IgnorePartChangesIllustrator from "../state-changes-handler/IgnorePartChangesIllustrator.js";
 
 /**
  * @typedef {AbstractComponentOptions & ContainerEventsBinderOptions & ChildrenComponentsOptions & SimpleContainerIllustratorOptions} BasicContainerComponentOptions
@@ -13,7 +15,7 @@ import SimpleComponent from "./SimpleComponent.js";
  * @template SCT, SCP
  * @extends {AbstractComponent}
  */
-export default class BasicContainerComponent extends SimpleComponent {
+export default class BasicContainerComponent extends AbstractComponent {
     /**
      * @type {ChildrenComponents}
      */
@@ -32,12 +34,15 @@ export default class BasicContainerComponent extends SimpleComponent {
 
     /**
      * @param {BasicContainerComponentOptions} options
+     * @param {ComponentIllustrator=} options.componentIllustrator
      * @param {boolean=} options.dontRenderChildren
      * @param {Bag=} options.childrenCreationCommonOptions
      * @param {AbstractComponentOptions=} restOfOptions
      */
-    constructor({dontRenderChildren, childrenCreationCommonOptions, ...restOfOptions}) {
-        super(restOfOptions);
+    constructor({componentIllustrator, dontRenderChildren, childrenCreationCommonOptions, ...restOfOptions}) {
+        super(addStateChangesHandlerProvider((component) =>
+            (componentIllustrator ?? new IgnorePartChangesIllustrator(component.config)))
+            .to(restOfOptions));
         const childrenShellFinder = new ChildrenShellFinder(this.config.elemIdOrJQuery);
         this.childrenShells = new ChildrenShells({componentId: this.id, childrenShellFinder, ...this.config});
         this.childrenComponents = new ChildrenComponents({
