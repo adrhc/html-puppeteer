@@ -10,6 +10,7 @@ import {generateHtml} from "../../util/HtmlGenerator.js";
  * @typedef {ChildShellTemplateOptions} ChildrenShellsOptions
  * @property {string} componentId
  * @property {string=} parentHtml
+ * @property {ChildrenShellFinder=} childrenShellFinder
  * @property {string|jQuery<HTMLElement>} elemIdOrJQuery is the parent's element id or jQuery<HTMLElement>
  * @property {boolean=} newChildrenGoLast
  */
@@ -50,6 +51,7 @@ export default class ChildrenShells {
     constructor({
                     componentId,
                     parentHtml,
+                    childrenShellFinder,
                     elemIdOrJQuery,
                     newChildrenGoLast,
                     ...restOfOptions
@@ -57,7 +59,7 @@ export default class ChildrenShells {
         this.parentId = componentId;
         this.$containerElem = jQueryOf(elemIdOrJQuery);
         this.place = newChildrenGoLast ? "append" : "prepend";
-        this.childrenShellFinder = new ChildrenShellFinder(elemIdOrJQuery);
+        this.childrenShellFinder = childrenShellFinder ?? new ChildrenShellFinder(elemIdOrJQuery);
         this.shellIsParentHtml = areShellTemplateOptionsEmpty(restOfOptions);
         this.shellTemplate = this.shellIsParentHtml ? parentHtml?.trim() : createShellTemplate(componentId, restOfOptions);
     }

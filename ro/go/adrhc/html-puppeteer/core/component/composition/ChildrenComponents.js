@@ -4,8 +4,10 @@ import ChildrenShellFinder from "../../view/ChildrenShellFinder.js";
 
 /**
  * @typedef {Object} ChildrenComponentsOptions
- * @property {string|jQuery<HTMLElement>} elemIdOrJQuery
- * @property {SimpleContainerComponent} parent
+ * @property {SimpleContainerComponent=} parent
+ * @property {ChildrenShellFinder=} childrenShellFinder
+ * @property {boolean=} dontRenderChildren
+ * @property {Bag=} childrenCreationCommonOptions
  */
 /**
  * @typedef {{[name: string]: AbstractComponent}} ComponentsCollection
@@ -29,7 +31,7 @@ export default class ChildrenComponents {
     /**
      * @type {boolean}
      */
-    dontRender;
+    dontRenderChildren;
     /**
      * @type {AbstractComponent}
      */
@@ -37,16 +39,17 @@ export default class ChildrenComponents {
 
     /**
      * @param {ChildrenComponentsOptions} options
-     * @param {string|jQuery<HTMLElement>=} options.elemIdOrJQuery
      * @param {AbstractComponent=} options.parent
+     * @param {ChildrenShellFinder=} options.childrenShellFinder
+     * @param {boolean=} options.dontRenderChildren
      * @param {Object=} options.childrenCreationCommonOptions
      */
-    constructor({elemIdOrJQuery, parent, dontRender, ...childrenCreationCommonOptions}) {
+    constructor({parent, childrenShellFinder, dontRenderChildren, childrenCreationCommonOptions}) {
         this.parent = parent;
-        this.dontRender = dontRender;
-        elemIdOrJQuery = elemIdOrJQuery ?? parent?.config.elemIdOrJQuery ?? document;
+        this.dontRenderChildren = dontRenderChildren;
         this.childrenCreationCommonOptions = childrenCreationCommonOptions;
-        this.childrenShellFinder = new ChildrenShellFinder(elemIdOrJQuery);
+        const elemIdOrJQuery = parent?.config.elemIdOrJQuery ?? document;
+        this.childrenShellFinder = childrenShellFinder ?? new ChildrenShellFinder(elemIdOrJQuery);
     }
 
     /**
@@ -82,7 +85,7 @@ export default class ChildrenComponents {
         // at this point the item component's id is available as data-GlobalConfig.COMPONENT_ID on $shell
         const component = createComponent($shell, {parent: this.parent});
         isTrue(component != null, "[createOrUpdateChild] the child's shell must exist!")
-        this.children[partName] = this.dontRender ? component : component.render();
+        this.children[partName] = this.dontRenderChildren ? component : component.render();
     }
 
     /**

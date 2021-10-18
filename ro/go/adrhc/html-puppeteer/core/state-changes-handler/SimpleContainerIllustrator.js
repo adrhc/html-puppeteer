@@ -74,7 +74,7 @@ export default class SimpleContainerIllustrator extends SimplePartsIllustrator {
         super[replaced ? "replaced" : "created"](stateChange);
         // create children for existing (static) shells
         this.childrenComponents.createChildrenForExistingShells();
-        // create shell and children for missing (dynamic) shells but existing parts (not having static shells)
+        // create shell and children for missing (dynamic) shells skipping existing children (having static shells)
         partsOf(stateChange.newState, !this.newChildrenGoLast)
             .filter(([key]) => this.childrenComponents.getChildByPartName(key) == null)
             .forEach(([key]) => this._partCreatedImpl(key));

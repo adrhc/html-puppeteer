@@ -119,7 +119,7 @@ end note
 
 class SimpleContainerIllustrator extends SimplePartsIllustrator {
 #childrenShells: ChildrenShells
-#container: SimpleContainerComponent
+#container: BasicContainerComponent
 #newChildrenGoLast: boolean
 +constructor(container)
 +created(stateChange)
@@ -267,15 +267,17 @@ treated as: the part's are
 missing but the whole exists.
 end note
 
-class SimpleContainerComponent extends AbstractComponent {
+class BasicContainerComponent extends AbstractComponent {
 #childrenComponents: ChildrenComponents
 +close()
 +constructor(options)
 +disconnect()
 +replacePartByChildId(childId, newPart, newPartName)
+
++replaceState()
 }
 
-SimpleContainerComponent *-down- ChildrenComponents
+BasicContainerComponent *-down- ChildrenComponents
 
 /'interface ErrorsHandler {
 +accept(error)
