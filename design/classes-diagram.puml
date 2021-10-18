@@ -18,7 +18,7 @@ abstract AbstractComponent {
   +constructor(options)
   +disconnect()
   +getPart(partName)
-  +getState()
+  +getStateCopy()
   +partName()
   +render(value)
   +replaceFromParent()

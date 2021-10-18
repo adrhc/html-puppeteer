@@ -1,10 +1,10 @@
 import ComponentConfigurator from "./ComponentConfigurator.js";
 import ValueStateInitializer from "../state-initializer/ValueStateInitializer.js";
 import {dataOf, idOf} from "../../../util/DomUtils.js";
-import PartialStateHolder from "../../state/PartialStateHolder.js";
 import StateChangesHandlersInvoker from "../../state-processor/StateChangesHandlersInvoker.js";
 import {uniqueId} from "../../../util/StringUtils.js";
 import ChildStateInitializer from "../state-initializer/ChildStateInitializer.js";
+import StateHolder from "../../state/StateHolder.js";
 
 export default class DefaultComponentConfigurator extends ComponentConfigurator {
     /**
@@ -39,7 +39,7 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
         this._setOptionsDataAttributesAndConfig(component);
         component.id = idOf(this.config.elemIdOrJQuery) ?? newIdOf(this.config);
         component.parent = this.config.parent;
-        component.stateHolder = this.config.stateHolder ?? new PartialStateHolder(this.config);
+        component.stateHolder = this.config.stateHolder ?? new StateHolder(this.config);
         component.stateChangesHandlersInvoker =
             this.config.stateChangesHandlersInvoker ?? new StateChangesHandlersInvoker(this.config);
         // very special case for eventsBinder: the provider has priority

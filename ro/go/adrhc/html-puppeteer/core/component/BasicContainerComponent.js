@@ -1,13 +1,13 @@
-import {partsOf} from "../state/PartialStateHolder.js";
+import PartialStateHolder, {partsOf} from "../state/PartialStateHolder.js";
 import ChildrenComponents from "./composition/ChildrenComponents.js";
 import {isTrue} from "../../util/AssertionUtils.js";
 import ChildrenShells from "../view/ChildrenShells.js";
 import ChildrenShellFinder from "../view/ChildrenShellFinder.js";
 import {stateIsEmpty} from "../state/StateHolder.js";
 import AbstractComponent from "./AbstractComponent.js";
-import {addStateChangesHandlerProvider} from "./options/ComponentOptionsBuilder.js";
 import IgnorePartChangesIllustrator from "../state-changes-handler/IgnorePartChangesIllustrator.js";
 import ContainerEventsBinder from "./events-binder/ContainerEventsBinder.js";
+import {withDefaults} from "./options/ComponentOptionsBuilder.js";
 
 /**
  * @typedef {AbstractComponentOptions & ContainerEventsBinderOptions & ChildrenComponentsOptions} BasicContainerComponentOptions
@@ -41,10 +41,12 @@ export default class BasicContainerComponent extends AbstractComponent {
      * @param {AbstractComponentOptions=} restOfOptions
      */
     constructor({componentIllustrator, dontRenderChildren, childrenCreationCommonOptions, ...restOfOptions}) {
-        super(addStateChangesHandlerProvider((component) =>
-            (componentIllustrator ?? new IgnorePartChangesIllustrator(component.config)))
-            .withEventsBinders(new ContainerEventsBinder())
-            .to(restOfOptions));
+        super(withDefaults(restOfOptions)
+            .withStateHolderProvider(c => new PartialStateHolder(c.config))
+            .addStateChangesHandlerProvider((component) =>
+                (componentIllustrator ?? new IgnorePartChangesIllustrator(component.config)))
+            .addEventsBinders(new ContainerEventsBinder())
+            .options());
         const childrenShellFinder = new ChildrenShellFinder(this.config.elemIdOrJQuery);
         this.childrenShells = new ChildrenShells({componentId: this.id, childrenShellFinder, ...this.config});
         this.childrenComponents = new ChildrenComponents({
@@ -86,11 +88,28 @@ export default class BasicContainerComponent extends AbstractComponent {
         const partName = newPartName ?? previousPartName;
         if (stateIsEmpty(newPart)) {
             this._removeChild(partName);
-            super.replacePart(previousPartName, newPart, newPartName);
+            this._replacePartImpl(previousPartName, newPart, newPartName);
         } else {
-            super.replacePart(previousPartName, newPart, newPartName);
+            this._replacePartImpl(previousPartName, newPart, newPartName);
             this._createOrUpdateChild(partName);
         }
+    }
+
+    /**
+     * @param {PartName} partName
+     * @return {*}
+     */
+    getPart(partName) {
+        return this.stateHolder?.getPart(partName);
+    }
+
+    /**
+     * Replaces some component's state parts; the parts should have no name change!.
+     *
+     * @param {{[name: PartName]: SCP}[]|SCT} parts
+     */
+    replaceParts(parts) {
+        partsOf(parts).forEach(([key, value]) => this.replacePart(key, value));
     }
 
     /**
@@ -138,5 +157,16 @@ export default class BasicContainerComponent extends AbstractComponent {
         this.childrenComponents.closeAndRemoveChild(partName);
         // the shell might actually be removed already by the closing child
         this.childrenShells.removeShell(partName);
+    }
+
+    /**
+     * @param {PartName=} previousPartName
+     * @param {SCP=} newPart
+     * @param {PartName=} newPartName
+     * @protected
+     */
+    _replacePartImpl(previousPartName, newPart, newPartName) {
+        this.doWithState(partialStateHolder =>
+            partialStateHolder.replacePart(previousPartName, newPart, newPartName));
     }
 }

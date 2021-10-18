@@ -3,6 +3,9 @@ import {pushNotNullMissing} from "../../../util/ArrayUtils.js";
 import {FunctionComponentConfigurator} from "./FunctionComponentConfigurator.js";
 
 /**
+ * @typedef {function(options: AbstractComponent): (StateHolder)} StateHolderProviderFn
+ */
+/**
  * @typedef {function(options: AbstractComponent): StateChangesHandler} StateChangesHandlerProviderFn
  */
 /**
@@ -136,13 +139,20 @@ export class ComponentOptionsBuilder {
      * @param {EventsBinder} eventsBinders
      * @return {ComponentOptionsBuilder}
      */
-    withEventsBinders(...eventsBinders) {
+    addEventsBinders(...eventsBinders) {
         if (this.builderOptions.eventsBinder) {
             this.builderOptions.eventsBinder.addEventsBinder(...eventsBinders);
         } else {
             this.builderOptions.eventsBinder = new EventsBinderGroup(undefined, eventsBinders);
         }
         return this;
+    }
+
+    /**
+     * @param {StateHolderProviderFn} stateHolderProvider
+     */
+    withStateHolderProvider(stateHolderProvider) {
+        return this.addConfiguratorProvider(component => component.stateHolder = stateHolderProvider(component));
     }
 
     /**

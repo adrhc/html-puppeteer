@@ -6,7 +6,7 @@ import StateChangeEventsBinder from "./ro/go/adrhc/app/components/event-binders/
 
 $(() => {
     animate(addDebugger({debuggerElemIdOrJQuery: "main-debugger"})
-        .withEventsBinders(new StateChangeEventsBinder(), new OpenCloseEventsBinder())
+        .addEventsBinders(new StateChangeEventsBinder(), new OpenCloseEventsBinder())
         .to({
             childStateProviderFn: () => ({id: Math.random(), name: generateString("name ")})
         }));

@@ -1,7 +1,6 @@
 import {StateProcessor} from "../state-processor/StateProcessor.js";
 import DefaultComponentConfigurator from "./configurator/DefaultComponentConfigurator.js";
 import {applyExtraConfigurators} from "./configurator/ComponentConfigurator.js";
-import {partsOf} from "../state/PartialStateHolder.js";
 import GlobalConfig from "../../util/GlobalConfig.js";
 import {isTrue} from "../../util/AssertionUtils.js";
 
@@ -13,7 +12,7 @@ import {isTrue} from "../../util/AssertionUtils.js";
  * @property {string} elemIdOrJQuery
  * @property {string|number|boolean=} id
  * @property {BasicContainerComponent=} parent
- * @property {PartialStateHolder=} stateHolder
+ * @property {StateHolder=} stateHolder
  * @property {StateInitializer=} stateInitializer
  * @property {StateChangesHandlersInvoker=} stateChangesHandlersInvoker
  * @property {EventsBinder=} eventsBinder
@@ -54,7 +53,7 @@ export default class AbstractComponent extends StateProcessor {
      */
     options;
     /**
-     * @type {AbstractComponent}
+     * @type {BasicContainerComponent}
      */
     parent;
     /**
@@ -93,7 +92,7 @@ export default class AbstractComponent extends StateProcessor {
     /**
      * @return {SCT}
      */
-    getState() {
+    getStateCopy() {
         return this.stateHolder.stateCopy;
     }
 
@@ -105,39 +104,12 @@ export default class AbstractComponent extends StateProcessor {
     }
 
     /**
-     * @param {PartName} partName
-     * @return {*}
-     */
-    getPart(partName) {
-        return this.stateHolder?.getPart(partName);
-    }
-
-    /**
      * Completely replaces the component's state.
      *
      * @param {SCT=} newState
      */
     replaceState(newState) {
         this.doWithState(stateHolder => stateHolder.replace(newState));
-    }
-
-    /**
-     * @param {PartName=} previousPartName
-     * @param {SCP=} newPart
-     * @param {PartName=} newPartName
-     */
-    replacePart(previousPartName, newPart, newPartName) {
-        this.doWithState(partialStateHolder =>
-            partialStateHolder.replacePart(previousPartName, newPart, newPartName));
-    }
-
-    /**
-     * Replaces some component's state parts; the parts should have no name change!.
-     *
-     * @param {{[name: PartName]: SCP}[]|SCT} parts
-     */
-    replaceParts(parts) {
-        partsOf(parts).forEach(([key, value]) => this.replacePart(key, value));
     }
 
     /**
