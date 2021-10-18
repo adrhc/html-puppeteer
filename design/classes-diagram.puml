@@ -131,16 +131,14 @@ class SimpleContainerIllustrator extends SimplePartsIllustrator {
 +replaced(stateChange)
 }
 
-SimpleContainerIllustrator -down-> ChildrenComponents
-SimpleContainerIllustrator *-down- ChildrenShells
-
 class ChildrenShells {
-#$containerElem
-#parentId
+#$containerElem: jQuery<HTMLElement>
+#childrenShellFinder: ChildrenShellFinder
+#parentId: string
 #place: "append" | "prepend"
-#shellTemplate
-#setPartOwnerAndIdToShellTemplate(partOwnerAndId)
-#createShell(partName)
+#shellIsParentHtml: boolean
+#shellTemplate: string
++constructor(options)
 +getOrCreateShell(partName)
 +removeShell(partName)
 }
@@ -154,6 +152,9 @@ class ChildrenComponents {
 +removeItem(partName)
 +getItemById(itemId)
 }
+
+SimpleContainerIllustrator -down-> ChildrenComponents
+SimpleContainerIllustrator *-down- ChildrenShells
 
 abstract EventsBinder {
   component: AbstractComponent
