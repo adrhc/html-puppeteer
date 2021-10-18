@@ -4,7 +4,7 @@ import StateChange from "./change/StateChange.js";
 /**
  * @template SCT
  * @typedef {Object} StateHolderOptions
- * @property {StateChangeEnhancer<SCT>=} stateChangeEnhancer
+ * @property {StateChangeAugmenter<SCT>=} stateChangeAugmenter
  * @property {StateChangesCollector<SCT>=} stateChangesCollector
  */
 export default class StateHolder {
@@ -43,9 +43,9 @@ export default class StateHolder {
      * @param {Bag=} restOfOptions
      * @constructor
      */
-    constructor({stateChangeEnhancer, stateChangesCollector, ...restOfOptions}) {
+    constructor({stateChangeAugmenter, stateChangesCollector, ...restOfOptions}) {
         this.config = restOfOptions;
-        this._stateChangesCollector = stateChangesCollector ?? new StateChangesCollector(stateChangeEnhancer);
+        this._stateChangesCollector = stateChangesCollector ?? new StateChangesCollector(stateChangeAugmenter);
     }
 
     /**

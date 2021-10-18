@@ -195,14 +195,14 @@ class PartStateChange extends StateChange {
 #newPart
 }
 
-'interface StateChangeEnhancer<T extends StateChange> {
-interface StateChangeEnhancer {
-+enhance(stateChange): T
+'interface StateChangeAugmenter<T extends StateChange> {
+interface StateChangeAugmenter {
++augment(stateChange): T
 }
 
 interface StateChangesCollector {
 #stateChanges
-#stateChangeEnhancer
+#stateChangeAugmenter
 +collect(stateChange)
 +collect(stateChanges)
 +consumeOne(): StateChange
@@ -216,7 +216,7 @@ interface StateHolder {
 #_currentStateEquals(\nanotherState): boolean
 #_replaceImpl(newState): previousState
 #_stateChangesOf(previousState,\nnewState): StateChange[]
-+constructor({stateChangeEnhancer,\nstateChangesCollector, ...restOfOptions})
++constructor({stateChangeAugmenter,\nstateChangesCollector, ...restOfOptions})
 +hasNull(): boolean
 +hasUndefined(): boolean
 +replace(newState,\n[dontRecordChanges]): StateChange[]
@@ -434,6 +434,6 @@ StateChangesHandlersInvoker *-up- "many" StateChangesHandler
 ComponentIllustrator *-- AbstractView
 StateHolder *-- StateChangesCollector
 StateChangesCollector *-- "many" StateChange
-StateChangesCollector *-- StateChangeEnhancer
+StateChangesCollector *-- StateChangeAugmenter
 
 @enduml

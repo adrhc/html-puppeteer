@@ -1,4 +1,4 @@
-import StateChangeEnhancer from "./StateChangeEnhancer.js";
+import StateChangeAugmenter from "./StateChangeAugmenter.js";
 import {CREATED, RELOCATED, REMOVED, REPLACED} from "../StateChangeTypes.js";
 import {isTrue} from "../../../../util/AssertionUtils.js";
 /**
@@ -9,14 +9,14 @@ import {isTrue} from "../../../../util/AssertionUtils.js";
  */
 /**
  * @template SCT, SCP
- * @extends {StateChangeEnhancer<SCT>}
+ * @extends {StateChangeAugmenter<SCT>}
  */
-export default class TypeStateChangeEnhancer extends StateChangeEnhancer {
+export default class TypeStateChangeAugmenter extends StateChangeAugmenter {
     /**
      * @param {PartStateChange<SCT, SCP>} stateChange
      * @return {PartStateChange<SCT, SCP>}
      */
-    enhance(stateChange) {
+    augment(stateChange) {
         if (stateChange) {
             stateChange.changeType = stateChange.changeType ?? this._changeTypeOf(stateChange);
         }

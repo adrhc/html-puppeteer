@@ -1,12 +1,12 @@
 /**
  * @template SCT, SCP
  */
-export default class StateChangeEnhancer {
+export default class StateChangeAugmenter {
     /**
      * @param {PartStateChange<SCT, SCP>} partStateChange
      * @return {PartStateChange<SCT, SCP>}
      */
-    enhance(partStateChange) {
+    augment(partStateChange) {
         return partStateChange;
     }
 }

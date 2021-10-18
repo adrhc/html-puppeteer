@@ -63,7 +63,7 @@ export default class PartialStateHolder extends StateHolder {
                 previousPart == null ? undefined : previousPartName, newPartName);
 
         if (dontRecordChanges) {
-            return /** @type {PartStateChange[]} */ this._enhanceStateChanges(stateChanges);
+            return /** @type {PartStateChange[]} */ this._augmentStateChanges(stateChanges);
         }
 
         return /** @type {PartStateChange[]} */ this._collectStateChanges(stateChanges);
@@ -160,8 +160,8 @@ export default class PartialStateHolder extends StateHolder {
      * @return {StateChange<SCT>[]}
      * @protected
      */
-    _enhanceStateChanges(stateChanges = []) {
-        return stateChanges.map(sc => this._stateChangesCollector.enhance(sc)).filter(it => it != null);
+    _augmentStateChanges(stateChanges = []) {
+        return stateChanges.map(sc => this._stateChangesCollector.augment(sc)).filter(it => it != null);
     }
 }
 

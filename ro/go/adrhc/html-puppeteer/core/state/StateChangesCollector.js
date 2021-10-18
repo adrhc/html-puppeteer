@@ -1,44 +1,44 @@
-import TypeStateChangeEnhancer from "./change/enhancer/TypeStateChangeEnhancer.js";
+import TypeStateChangeAugmenter from "./change/augmenter/TypeStateChangeAugmenter.js";
 
 /**
  * @template SCT
  */
 export default class StateChangesCollector {
     /**
-     * @type {StateChangeEnhancer<SCT>}
+     * @type {StateChangeAugmenter<SCT>}
      */
-    stateChangeEnhancer;
+    stateChangeAugmenter;
     /**
      * @type {StateChange<SCT>[]}
      */
     stateChanges = [];
 
     /**
-     * @param {StateChangeEnhancer<SCT>=} stateChangeEnhancer
+     * @param {StateChangeAugmenter<SCT>=} stateChangeAugmenter
      * @constructor
      */
-    constructor(stateChangeEnhancer) {
-        this.stateChangeEnhancer = stateChangeEnhancer ?? new TypeStateChangeEnhancer();
+    constructor(stateChangeAugmenter) {
+        this.stateChangeAugmenter = stateChangeAugmenter ?? new TypeStateChangeAugmenter();
     }
 
     /**
      * @param {StateChange<SCT>|undefined} stateChange
      */
     collect(stateChange) {
-        const enhancedStateChange = this.enhance(stateChange);
-        if (!enhancedStateChange) {
+        const augmentedStateChange = this.augment(stateChange);
+        if (!augmentedStateChange) {
             return undefined;
         }
-        this.stateChanges.push(enhancedStateChange);
-        return enhancedStateChange;
+        this.stateChanges.push(augmentedStateChange);
+        return augmentedStateChange;
     }
 
     /**
      * @param {StateChange<SCT>|undefined} stateChange
      * @return {StateChange<SCT>|undefined}
      */
-    enhance(stateChange) {
-        return this.stateChangeEnhancer.enhance(stateChange);
+    augment(stateChange) {
+        return this.stateChangeAugmenter.augment(stateChange);
     }
 
     /**
