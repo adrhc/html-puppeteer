@@ -165,6 +165,7 @@ SimpleContainerIllustrator *-down- ChildrenShells
 
 abstract EventsBinder {
   component: AbstractComponent
+  +constructor(component)
   {abstract}+attachEventHandlers()
   {abstract}+detachEventHandlers()
 }
@@ -178,16 +179,20 @@ note bottom of EventsBinder
 end note
 
 abstract StateInitializer {
-+load(component)
+{abstract}+load(component)
 }
 
-note bottom of StateInitializer
+/'note bottom of StateInitializer
 sets component's state
 (from e.g. a repository)
-end note
+end note'/
 
 class ValueStateInitializer extends StateInitializer {
 #value
++load(component)
+}
+
+class ChildStateInitializer extends ValueStateInitializer {
 +load(component)
 }
 
@@ -268,9 +273,9 @@ class SimpleContainerComponent extends AbstractComponent {
 
 SimpleContainerComponent *-down- ChildrenComponents
 
-interface ErrorsHandler {
+/'interface ErrorsHandler {
 +accept(error)
-}
+}'/
 
 interface AbstractView {
 +create(value)
@@ -442,16 +447,16 @@ part owners components
 before reading their state.
 end note'/
 
-abstract DomValuesReader {
+/'abstract DomValuesReader {
   view: AbstractView
   {abstract}+extractDomValues()
-}
+}'/
 
 AbstractComponent *-down- EventsBinder
 AbstractComponent *-down- StateHolder
 AbstractComponent *-down- StateInitializer
-AbstractComponent *-down- DomValuesReader
-AbstractComponent *-down- ErrorsHandler
+'AbstractComponent *-down- DomValuesReader
+'AbstractComponent *-down- ErrorsHandler
 AbstractComponent *-up- StateChangesHandlersInvoker
 StateChangesHandlersInvoker *-up- "many" StateChangesHandler
 ComponentIllustrator *-- AbstractView
