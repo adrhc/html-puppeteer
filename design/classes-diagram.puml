@@ -211,10 +211,12 @@ interface StateChangesCollector {
 interface StateHolder {
 #_currentState
 #_stateChangesCollector
+/'
 #_collectStateChanges(\nstateChanges): StateChange[]
 #_currentStateEquals(\nanotherState): boolean
 #_replaceImpl(newState): previousState
 #_stateChangesOf(previousState,\nnewState): StateChange[]
+'/
 +constructor({stateChangeAugmenter,\nstateChangesCollector, ...restOfOptions})
 +hasNull(): boolean
 +hasUndefined(): boolean
