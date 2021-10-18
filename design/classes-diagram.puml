@@ -248,8 +248,10 @@ the changes using
 end note'/
 
 interface PartialStateHolder extends StateHolder {
-+getPart(partName)
-+replacePart(\npreviousPartName, \nnewPart, \nnewPartName, \n[dontRecordChanges])
++getPart(partName, [dontClone])
++getParts(): {[key: string]: *}[]
++hasNullPart(partName): boolean
++replacePart(\npreviousPartName, \nnewPart, newPartName, \n[dontRecordChanges])
 }
 
 ' note left of PartialStateHolder::replacePart
@@ -259,8 +261,8 @@ value should be treated as
 "completelly remove the
 associated objects" while
 an empty object should be
-treated as "use empty for
-all part's fields".
+treated as: the part's are
+missing but the whole exists.
 end note
 
 class SimpleContainerComponent extends AbstractComponent {
