@@ -103,11 +103,11 @@ export default class PartialStateHolder extends StateHolder {
      * @protected
      */
     _replacePart(previousPartName, newPart, newPartName) {
-        const previousItem = this.getPart(previousPartName, true);
-        if (previousItem == null) {
+        const previousPart = this.getPart(previousPartName, true);
+        if (previousPart == null) {
             if (newPart == null) {
                 console.warn("both old and new items are null, nothing else to do");
-                return previousItem;
+                return previousPart;
             }
             isTrue(newPartName != null,
                 "[PartialStateHolder._replacePart] Can't insert empty new part name!");
@@ -118,7 +118,12 @@ export default class PartialStateHolder extends StateHolder {
             isTrue(previousPartName != null,
                 "[PartialStateHolder._replacePart] Can't remove empty previous part name!");
             this._removePart(previousPartName);
+        } else if (previousPartName === newPartName) {
+            // this is an update
+            // handles inner parts too, e.g. _currentState[inner1.inner11] = newPart
+            _.set(this._currentState, newPartName, newPart);
         } else {
+            // this is a relocation, e.g. _currentState[3] moved to _currentState[4]
             isTrue(previousPartName != null,
                 "[PartialStateHolder._replacePart] Can't remove empty previous part name!");
             isTrue(newPartName != null,
@@ -127,7 +132,7 @@ export default class PartialStateHolder extends StateHolder {
             this._removePart(previousPartName);
             this._insertPart(newPart, newPartName);
         }
-        return previousItem;
+        return previousPart;
     }
 
     /**
