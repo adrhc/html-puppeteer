@@ -1,5 +1,5 @@
-import {dataOwnerSelectorOf, dataSelectorOf} from "../../../util/SelectorUtils.js";
 import {isTrue} from "../../../util/AssertionUtils.js";
+import {css} from "../../../helper/CSSSelectorBuilder.js";
 
 export default class EventsBinder {
     /**
@@ -67,16 +67,19 @@ export default class EventsBinder {
      * @protected
      */
     _$ownedHavingDataAttr(dataAttribName) {
-        return $(`${this._$ownedHavingDataAttrSelector(dataAttribName)}`);
+        return $(`${this._ownedHavingDataAttrCssSelector(dataAttribName)}`);
     }
 
     /**
-     * @param {string} dataAttribName
+     * @param {string} dataAttributeName
      * @return {string}
      * @protected
      */
-    _$ownedHavingDataAttrSelector(dataAttribName) {
-        // [data-owner="componentId"][data-dataAttribName]
-        return `${dataOwnerSelectorOf(this._component.id)}${dataSelectorOf(dataAttribName)}`;
+    _ownedHavingDataAttrCssSelector(dataAttributeName) {
+        // [data-owner="componentId"][data-dataAttributeName]
+        // return `${dataOwnerSelectorOf(this._component.id)}${dataSelectorOf(dataAttributeName)}`;
+        // return css().withOwner(this._component.id).withDataAttributeName(dataAttributeName).selector();
+        // return css({owner: this._component.id, dataAttributeName}).selector();
+        return css().owner(this._component.id).dataAttributeName(dataAttributeName).selector();
     }
 }

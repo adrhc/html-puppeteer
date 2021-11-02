@@ -72,10 +72,10 @@ export default class ContainerEventsBinder extends EventsBinder {
      * @protected
      */
     _attachEventsHandlerOnOwnedHavingDataAttrInsideParent(dataAttribName, eventName, fn) {
-        const itemSelector = this._$ownedHavingDataAttrSelector(dataAttribName);
+        const cssSelector = this._ownedHavingDataAttrCssSelector(dataAttribName);
         // removing previous handler (if any) set by another component
-        this.$container.off(eventName, itemSelector);
-        this.$container.on(eventName, itemSelector, fn);
+        this.$container.off(eventName, cssSelector);
+        this.$container.on(eventName, cssSelector, fn);
     }
 
     /**
@@ -91,7 +91,7 @@ export default class ContainerEventsBinder extends EventsBinder {
      * @protected
      */
     _detachEventsHandlerOnOwnedHavingDataAttrInsideParent(dataAttribName) {
-        const itemSelector = this._$ownedHavingDataAttrSelector(dataAttribName);
-        this.$container.off(this.createEvent, itemSelector);
+        const cssSelector = this._ownedHavingDataAttrCssSelector(dataAttribName);
+        this.$container.off(this.createEvent, cssSelector);
     }
 }
