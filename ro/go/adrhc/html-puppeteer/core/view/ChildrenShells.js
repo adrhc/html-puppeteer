@@ -11,7 +11,7 @@ import {generateHtml} from "../../util/HtmlGenerator.js";
  * @property {string} componentId
  * @property {string=} parentHtml
  * @property {ChildrenShellFinder=} childrenShellFinder
- * @property {string|jQuery<HTMLElement>} elemIdOrJQuery is the parent's element id or jQuery<HTMLElement>
+ * @property {ElemIdOrJQuery} elemIdOrJQuery is the parent's element id or jQuery<HTMLElement>
  * @property {boolean=} newChildrenGoLast
  */
 export default class ChildrenShells {
