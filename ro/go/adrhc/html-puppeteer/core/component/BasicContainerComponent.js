@@ -81,8 +81,8 @@ export default class BasicContainerComponent extends AbstractComponent {
         this.childrenComponents.createChildrenForExistingShells();
         // create shell and children for missing (dynamic) shells skipping existing children (having static shells)
         partsOf(newState, !this.newChildrenGoLast)
-            .filter(([key]) => this.childrenComponents.getChildByPartName(key) == null)
             .filter(([key]) => !this.partialStateHolder.hasEmptyPart(key))
+            .filter(([key]) => this.childrenComponents.getChildByPartName(key) == null)
             .forEach(([key]) => this._createOrUpdateChild(key));
     }
 

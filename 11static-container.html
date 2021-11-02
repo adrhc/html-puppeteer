@@ -37,7 +37,8 @@
 	     data-initial-state='{
 		     "message1": null,
 		     "message2": "The \"message2\" child state comes from the parent&apos;s state.",
-		     "missingShell": {"innerProperty1": "innerProperty1 value in \"inners\" object"}
+		     "missingShell": "missing shell: this message should not be visible",
+		     "inners": {"innerProperty1": "innerProperty1 value in \"inners\" object"}
 	     }'
 	     data-removed-placeholder='The "parent-component" is closed!'
 	     data-type="static-container"
@@ -60,9 +61,9 @@
 		     data-type="value">
 			The "message2" child is not available yet!
 		</div>
-		<!--<div class="mb3" data-part="inners.innerProperty1" data-type="value">
-			The "missingShell.innerProperty1" child is not available yet!
-		</div>-->
+		<div class="mb3" data-part="inners.innerProperty1" data-type="value">
+			The "inners.innerProperty1" child is not available yet!
+		</div>
 	</div>
 </div>
 
