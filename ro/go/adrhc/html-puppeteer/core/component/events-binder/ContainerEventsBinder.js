@@ -55,7 +55,7 @@ export default class ContainerEventsBinder extends EventsBinder {
     attachEventHandlers() {
         this._attachEventsHandlerOnOwnedHavingDataAttr("create-child", this.createEvent, () => {
             // <button data-owner="parent-component" data-create-child="click">
-            this._component.replacePart(uniqueId(), this.childStateProviderFn(this.containerComponent));
+            this.containerComponent.replacePart(uniqueId(), this.childStateProviderFn(this.containerComponent));
         });
         this._attachEventsHandlerOnOwnedHavingDataAttrInsideParent("remove-child", this.removeEvent, (ev) => {
             // <button data-owner="parent-component" data-remove-child="click" data-child-id="childId">
