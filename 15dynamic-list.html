@@ -70,6 +70,10 @@ PS: make sure to have a well formatted JSON!</textarea>
 		<td>{{id}}</td>
 		<td>{{name}}</td>
 		<td class="center">
+			<!--
+				@root.componentId is the current component's id; here the current component is <tr>
+				@root.owner is the parent's id; here the parent component is <tbody>
+			-->
 			<button data-child-id="{{@root.componentId}}" data-owner="{{@root.owner}}" data-remove-child>
 				Remove
 			</button>

@@ -57,7 +57,7 @@ export default class ContainerEventsBinder extends EventsBinder {
             // <button data-owner="parent-component" data-create-child="click">
             this.containerComponent.replacePart(uniqueId(), this.childStateProviderFn(this.containerComponent));
         });
-        this._attachEventsHandlerOnOwnedHavingDataAttrInsideParent("remove-child", this.removeEvent, (ev) => {
+        this._attachContainerEventsHandlerToOwnedHavingDataAttr("remove-child", this.removeEvent, (ev) => {
             // <button data-owner="parent-component" data-remove-child="click" data-child-id="childId">
             const $elem = $(ev.target);
             const childId = childIdOf($elem);
@@ -71,7 +71,7 @@ export default class ContainerEventsBinder extends EventsBinder {
      * @param {function} fn is the event handler
      * @protected
      */
-    _attachEventsHandlerOnOwnedHavingDataAttrInsideParent(dataAttribName, eventName, fn) {
+    _attachContainerEventsHandlerToOwnedHavingDataAttr(dataAttribName, eventName, fn) {
         const cssSelector = this._ownedHavingDataAttrCssSelector(dataAttribName);
         // removing previous handler (if any) set by another component
         this.$container.off(eventName, cssSelector);
@@ -83,14 +83,14 @@ export default class ContainerEventsBinder extends EventsBinder {
      */
     detachEventHandlers() {
         this._detachEventsHandlerFromOwnedHavingDataAttr("create-child", this.eventName);
-        this._detachEventsHandlerOnOwnedHavingDataAttrInsideParent("create-child");
+        this._detachContainerEventsHandlerFromOwnedHavingDataAttr("create-child");
     }
 
     /**
      * @param {string} dataAttribName
      * @protected
      */
-    _detachEventsHandlerOnOwnedHavingDataAttrInsideParent(dataAttribName) {
+    _detachContainerEventsHandlerFromOwnedHavingDataAttr(dataAttribName) {
         const cssSelector = this._ownedHavingDataAttrCssSelector(dataAttribName);
         this.$container.off(this.createEvent, cssSelector);
     }
