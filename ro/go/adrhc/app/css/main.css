@@ -150,3 +150,7 @@ p[data-part] {
 .min-width-33-percent {
     min-width: 33%;
 }
+
+.scenario11 textarea {
+    margin: 0 5rem;
+}

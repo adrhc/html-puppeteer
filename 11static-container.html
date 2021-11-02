@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>HTML puppeteer</title>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<script src="libraries/jquery-3.6.0.js"></script>
+	<script src="libraries/handlebars.min-v4.7.7.js"></script>
+	<!-- see https://github.com/lodash/lodash/wiki/FP-Guide#installation -->
+	<script src="libraries/lodash4_lodash.min.js_lodash.fp.min.js"></script>
+	<link href="ro/go/adrhc/app/css/main.css" rel="stylesheet">
+	<link href="ro/go/adrhc/app/css/responstable.css" rel="stylesheet">
+</head>
+
+<body>
+<script>const fp = _.noConflict()</script>
+<script src="14badges-in-table-inline-template.js" type="module"></script>
+
+<div class="container scenario11">
+	<div class="section title">StaticContainerComponent</div>
+	<!-- debuggers -->
+	<div class="section title">debuggers</div>
+	<div class="section">
+		<div class="flex-center">
+			<textarea class="fill-available" id="main-debugger" readonly rows="10">
+{
+     "message1": null,
+     "message2": "The \"message2\" child state comes from the parent&apos;s state."
+}
+			</textarea>
+		</div>
+	</div>
+	<!-- the component -->
+	<div class="section title">Component's view</div>
+	<div class="section parent fit-content min-width-33-percent"
+	     data-initial-state='{
+		     "message1": null,
+		     "message2": "The \"message2\" child state comes from the parent&apos;s state."
+	     }'
+	     data-removed-placeholder='The "parent-component" is closed!'
+	     data-type="static-container"
+	     id="parent-component">
+		<!-- level 1 children don't need data-owner -->
+		<div class="mb3" data-part="message0" data-type="value">
+			The "message0" child is not available yet!
+		</div>
+		<div class="mb3"
+		     data-initial-state='The "message1" parent state is missing, using data attribute based state initialization.'
+		     data-part="message1"
+		     data-removed-placeholder='"message1" child component was removed!'
+		     data-type="value">
+			The "message1" child is not available yet!
+		</div>
+		<div class="mb3"
+		     data-initial-state='This "message2" initial state should only briefly be visible!<BR>initial state should come from the parent.'
+		     data-part="message2"
+		     data-removed-placeholder='"message2" child component was removed!'
+		     data-type="value">
+			The "message2" child is not available yet!
+		</div>
+		<!--<div class="mb3" data-part="inners.innerProperty1" data-type="value">
+			The "inners.innerProperty1" child is not available yet!
+		</div>-->
+	</div>
+</div>
+
+</body>
+
+</html>
