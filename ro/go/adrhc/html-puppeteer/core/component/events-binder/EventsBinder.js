@@ -37,11 +37,11 @@ export default class EventsBinder {
     /**
      * @param {string} dataAttribName
      * @param {string} eventName
-     * @param {function} fn is the event handler
+     * @param {function(ev: Event)} fn is the event handler
      * @param {boolean=} oneTimeOnly specify whether to invoke the event once or multiple times
      * @protected
      */
-    _attachEventsHandlerOnOwnedHavingDataAttr(dataAttribName, eventName, fn, oneTimeOnly) {
+    _attachEventsHandlerToOwnedHavingDataAttr(dataAttribName, eventName, fn, oneTimeOnly) {
         const $el = this._$ownedHavingDataAttr(dataAttribName);
         if (!$el.length) {
             return;
@@ -59,7 +59,7 @@ export default class EventsBinder {
      * @param {string} eventName
      * @protected
      */
-    _detachEventsHandlerOnOwnedHavingDataAttr(dataAttribName, eventName) {
+    _detachEventsHandlerFromOwnedHavingDataAttr(dataAttribName, eventName) {
         this._$ownedHavingDataAttr(dataAttribName).off(eventName);
     }
 
