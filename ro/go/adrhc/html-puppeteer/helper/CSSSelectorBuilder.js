@@ -3,7 +3,7 @@ import {dataOwnerSelectorOf, dataSelectorOf} from "../util/SelectorUtils.js";
 /**
  * @typedef {Bag} CSSSelectorBuilderOptions
  * @property {string} owner is the component id used as *owner* on a DOM element
- * @property {string} dataAttributeName
+ * @property {string} dataAttrName
  */
 export class CSSSelectorBuilder {
     /**
@@ -22,9 +22,9 @@ export class CSSSelectorBuilder {
     /**
      * @param {CSSSelectorBuilderOptions} options
      */
-    constructor({owner, dataAttributeName} = {}) {
+    constructor({owner, dataAttrName} = {}) {
         this.componentId = owner;
-        this.dataAttribute = dataAttributeName;
+        this.dataAttribute = dataAttrName;
     }
 
     owner(componentId) {
@@ -44,7 +44,7 @@ export class CSSSelectorBuilder {
      * @param {string} dataAttributeName
      * @return {CSSSelectorBuilder}
      */
-    dataAttributeName(dataAttributeName) {
+    dataAttrName(dataAttributeName) {
         this.dataAttribute = dataAttributeName;
         return this;
     }
@@ -54,7 +54,7 @@ export class CSSSelectorBuilder {
      * @return {CSSSelectorBuilder}
      */
     withDataAttributeName(dataAttributeName) {
-        return this.dataAttributeName(dataAttributeName);
+        return this.dataAttrName(dataAttributeName);
     }
 
     /**
