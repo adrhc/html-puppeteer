@@ -81,7 +81,7 @@ export default class EventsBinder {
      * @protected
      */
     _$ownedHavingDataAttr(dataAttrName) {
-        return $(`${this._ownedHavingDataAttrSelector(dataAttrName)}`);
+        return $(this._ownedHavingDataAttrSelector(dataAttrName));
     }
 
     /**
