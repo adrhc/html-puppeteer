@@ -18,6 +18,13 @@ export default class EventsBinder {
     }
 
     /**
+     * @return {string}
+     */
+    get componentId() {
+        return this._component.id;
+    }
+
+    /**
      * @param {AbstractComponent=} component
      */
     constructor(component) {
@@ -35,8 +42,8 @@ export default class EventsBinder {
     detachEventHandlers() {}
 
     /**
-     * Attaches the "eventName" handler (i.e. "fn"), possibly once (see oneTimeOnly), to the
-     * elements having this._component.id as "owner" and dataAttrName as a data-attribute name.
+     * Attaches the "eventName" handler (i.e. "fn"), possibly once (see oneTimeOnly),
+     * to the elements selected with [data-owner=this.componentId][data-dataAttrName].
      *
      * @param {string} dataAttrName
      * @param {string} eventName
@@ -58,8 +65,7 @@ export default class EventsBinder {
     }
 
     /**
-     * Detaches the "eventName" handler applied on elements having
-     * this._component.id as "owner" and dataAttrName as a data-attribute name.
+     * Detaches the "eventName" handler applied on elements selected with [data-owner=this.componentId][data-dataAttrName].
      *
      * @param {string} dataAttrName
      * @param {string} eventName
@@ -71,23 +77,23 @@ export default class EventsBinder {
 
     /**
      * @param {string} dataAttrName
-     * @return {jQuery<HTMLElement>} the element(s) having this._component.id as "owner" and dataAttrName as a data-attribute name
+     * @return {jQuery<HTMLElement>} the element(s) selected with [data-owner=this.componentId][data-dataAttrName]
      * @protected
      */
     _$ownedHavingDataAttr(dataAttrName) {
-        return $(`${this._ownedHavingDataAttrCssSelector(dataAttrName)}`);
+        return $(`${this._ownedHavingDataAttrSelector(dataAttrName)}`);
     }
 
     /**
      * @param {string} dataAttrName
-     * @return {string} a CSS selector referring the elements having this._component.id as "owner" and dataAttrName as a data-attribute name
+     * @return {string} the CSS selector [data-owner=this.componentId][data-dataAttrName]
      * @protected
      */
-    _ownedHavingDataAttrCssSelector(dataAttrName) {
+    _ownedHavingDataAttrSelector(dataAttrName) {
         // [data-owner="componentId"][data-dataAttrName]
         // return `${dataOwnerSelectorOf(this._component.id)}${dataSelectorOf(dataAttrName)}`;
         // return css().withOwner(this._component.id).withDataAttributeName(dataAttrName).selector();
         // return css({owner: this._component.id, dataAttrName}).selector();
-        return css().owner(this._component.id).dataAttrName(dataAttrName).selector();
+        return css().owner(this.componentId).dataAttrName(dataAttrName).selector();
     }
 }
