@@ -26,7 +26,7 @@ export default class StaticContainerComponent extends BasicContainerComponent {
     constructor({elemIdOrJQuery, childrenShellFinder, ...restOfOptions}) {
         super({...restOfOptions, elemIdOrJQuery, childrenShellFinder, ignoreShellTemplateOptions: true});
         this.childrenShellFinder = childrenShellFinder ?? new ChildrenShellFinder(elemIdOrJQuery);
-        this.ignoreMissingShells = this.config.ignoreMissingShells;
+        this.ignoreMissingShells = this.config.ignoreMissingShells ?? true;
     }
 
     /**

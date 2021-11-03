@@ -21,7 +21,7 @@ export function enable(...$elems) {
  * @return {*}
  */
 export function jsonParsedValOf(elemIdOrJQuery) {
-    return JSON.parse(valOf(elemIdOrJQuery))
+    return JSON.parse(valOf(elemIdOrJQuery)?.trim())
 }
 
 /**

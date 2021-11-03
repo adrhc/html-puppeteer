@@ -14,26 +14,39 @@
 
 <body>
 <script>const fp = _.noConflict()</script>
-<script src="14badges-in-table-inline-template.js" type="module"></script>
+<script src="animate-on-ready-document.js" type="module"></script>
 
-<div class="container scenario11">
+<div class="container">
 	<div class="section title">StaticContainerComponent</div>
-	<!-- debuggers -->
+	<!-- open/close buttons -->
+	<div class="section flex-center fill-available buttons">
+		<button data-close="click" data-owner="parent-component">Close "parent-component"</button>
+		<button class="disabled" data-open="click" data-owner="parent-component">Open "parent-component"</button>
+	</div>
 	<div class="section title">debuggers</div>
+	<!-- state changing buttons -->
+	<div class="section flex-center fill-available buttons">
+		<div>
+			<button name="change-parent-state">Change entire state</button>
+			<button name="change-partial-state">Change partial state</button>
+		</div>
+	</div>
+	<!-- state input fields and debuggers -->
 	<div class="section">
 		<div class="flex-center">
-			<textarea class="fill-available" id="main-debugger" readonly rows="10">
-{
-     "message1": null,
-     "message2": "The \"message2\" child state comes from the parent&apos;s state."
-}
-			</textarea>
+			<textarea class="fill-available" id="main-debugger"
+			          rows="10">No debugging data available yet!</textarea>
+			<textarea class="fill-available" id="partial-state" rows="10">
+Write here some partial (aka child/slice) state, e.g.:
+
+{"kidX": {"id": "X", "name": "kid X"}, "kidY": {"id": "Y", "name": "kid Y"}}
+
+PS: make sure to have a well formatted JSON!</textarea>
 		</div>
 	</div>
 	<!-- the component -->
 	<div class="section title">Component's view</div>
 	<div class="section parent fit-content min-width-33-percent"
-	     data-ignore-missing-shells="true"
 	     data-initial-state='{
 		     "message1": null,
 		     "message2": "The \"message2\" child state comes from the parent&apos;s state.",
