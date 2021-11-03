@@ -1,4 +1,4 @@
-import {jQueryOf} from "../../util/DomUtils.js";
+import {jQueryOf} from "../../util/Utils.js";
 import BasicContainerComponent from "./BasicContainerComponent.js";
 
 /**

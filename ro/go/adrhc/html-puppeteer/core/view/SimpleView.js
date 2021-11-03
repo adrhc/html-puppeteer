@@ -1,6 +1,6 @@
 import AbstractView from "./AbstractView.js";
 import {alertOrThrow} from "../../util/AssertionUtils.js";
-import {jQueryOf} from "../../util/DomUtils.js";
+import {jQueryOf} from "../../util/Utils.js";
 
 export const REMOVE_ELEMENT = "REMOVE_ELEMENT";
 export const REMOVE_CONTENT = "REMOVE_CONTENT";

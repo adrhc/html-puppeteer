@@ -1,21 +1,25 @@
 import {encodeHTML} from "./StringUtils.js";
 import {componentIdOf, idAttrOf} from "./GlobalConfig.js";
+import {$of, jQueryOf} from "./Utils.js";
 
 /**
- * @param {string|jQuery<HTMLElement>} elemIdOrJQuery
- * @return {jQuery<HTMLElement>}
+ * @param {ElemIdOrJQuery} elemIdOrJQuery
+ * @return {*}
  */
-export function jQueryOf(elemIdOrJQuery) {
-    if (elemIdOrJQuery instanceof jQuery) {
-        return elemIdOrJQuery;
-    } else {
-        const $elem = $(elemIdOrJQuery);
-        return $elem.length ? $elem : $(`#${elemIdOrJQuery}`);
-    }
+export function jsonParsedValOf(elemIdOrJQuery) {
+    return JSON.parse(valOf(elemIdOrJQuery))
 }
 
 /**
- * @param {string|jQuery<HTMLElement>} elemIdOrJQuery
+ * @param {ElemIdOrJQuery} elemIdOrJQuery
+ * @return {string|number|[]}
+ */
+export function valOf(elemIdOrJQuery) {
+    return $of("partial-state").val();
+}
+
+/**
+ * @param {ElemIdOrJQuery} elemIdOrJQuery
  * @return {Object.<string, string>}
  */
 export function dataOf(elemIdOrJQuery) {
@@ -26,30 +30,18 @@ export function dataOf(elemIdOrJQuery) {
 }
 
 /**
- * Evaluation order: tmplHtml then tmplId.
- *
- * @param {string} tmplId
- * @param {string} tmplHtml
- * @return {Object<string, string>}
- */
-export function dataOfTemplateOrHtml(tmplId, tmplHtml) {
-    const html = tmplHtml ?? HtmlUtils.templateTextOf(tmplId);
-    return html ? dataOf($(html)) : undefined;
-}
-
-/**
- * @param {jQueryOf<HTMLElement>} $elem
- * @return {undefined|*}
+ * @param {jQuery<HTMLElement>} $elem
+ * @return {string|undefined}
  */
 export function htmlIncludingSelfOf($elem) {
-    if (!$elem || !$elem.length) {
+    if ($elem == null || !$elem.length) {
         return undefined;
     }
     return $elem.prop('outerHTML');
 }
 
 /**
- * @param {string,string[]} events
+ * @param {string|string[]} events
  * @param {string} namespace
  * @return {string}
  */
@@ -83,7 +75,7 @@ export function dataAttributesOf(object) {
 }
 
 /**
- * @param {HTMLElement|jQueryOf<HTMLElement>} el
+ * @param {HTMLElement|jQuery<HTMLElement>} el
  * @return {{}}
  */
 export function attrsOf(el) {

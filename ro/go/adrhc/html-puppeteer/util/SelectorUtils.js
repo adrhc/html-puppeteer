@@ -1,6 +1,21 @@
 import GlobalConfig from "./GlobalConfig.js";
 
-export function namedBtn(name, owner) {
+/**
+ * @param {string} name
+ * @param {string=} owner
+ * @return {jQuery<HTMLElement>}
+ */
+export function $btnOf(name, owner) {
+    const selector = btnSelectorOf(name, owner);
+    return !selector ? undefined : $(selector);
+}
+
+/**
+ * @param {string} name
+ * @param {string=} owner
+ * @return {string}
+ */
+export function btnSelectorOf(name, owner) {
     return name == null ? "" : `${dataOwnerSelectorOf(owner)}[name='${name}']`;
 }
 

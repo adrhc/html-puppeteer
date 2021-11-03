@@ -28,8 +28,7 @@ export default class ContainerEventsBinder extends EventsBinder {
      * @protected
      */
     get $container() {
-        const parentId = this._component.id;
-        return $(`${idAttrSelectorOf(parentId)}, ${dataComponentIdSelectorOf(parentId)}`);
+        return $(`${idAttrSelectorOf(this.componentId)}, ${dataComponentIdSelectorOf(this.componentId)}`);
     }
 
     /**

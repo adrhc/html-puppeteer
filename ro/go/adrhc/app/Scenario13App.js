@@ -1,4 +1,4 @@
-import {namedBtn} from "../html-puppeteer/util/SelectorUtils.js";
+import {btnSelectorOf} from "../html-puppeteer/util/SelectorUtils.js";
 import {generateIdNameBags} from "./Generators.js";
 import {updateOrInsert} from "../html-puppeteer/util/ArrayUtils.js";
 import Scenario10App from "./Scenario10App.js";
@@ -23,10 +23,10 @@ export default class Scenario13App extends Scenario10App {
      */
     run() {
         this._createParentStateChangingButtons();
-        $(namedBtn("create")).on("click", () => {
+        $(btnSelectorOf("create")).on("click", () => {
             this._createOneAtIndex0("cats");
         });
-        $(namedBtn("remove")).on("click", () => {
+        $(btnSelectorOf("remove")).on("click", () => {
             this._removeLast("cats");
         });
     }

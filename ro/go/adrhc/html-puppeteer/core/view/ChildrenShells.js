@@ -1,4 +1,4 @@
-import {jQueryOf} from "../../util/DomUtils.js";
+import {jQueryOf} from "../../util/Utils.js";
 import GlobalConfig from "../../util/GlobalConfig.js";
 import createShellTemplate, {areShellTemplateOptionsEmpty} from "./ChildShellTemplate.js";
 import ChildrenShellFinder from "./ChildrenShellFinder.js";

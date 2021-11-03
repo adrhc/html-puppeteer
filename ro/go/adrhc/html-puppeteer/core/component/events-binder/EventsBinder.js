@@ -1,6 +1,6 @@
 import {isTrue} from "../../../util/AssertionUtils.js";
 import {css} from "../../../helper/CSSSelectorBuilder.js";
-import {whenEvents} from "../../../helper/DomEventHandlerBuilder.js";
+import {when} from "../../../helper/DomEventHandlerBuilder.js";
 
 export default class EventsBinder {
     /**
@@ -61,7 +61,7 @@ export default class EventsBinder {
         // removing previous handler (if any) set by another component
         $el.off(event);
         // $el[oneTimeOnly ? "one" : "on"](event, fn);
-        whenEvents(event).occurOn($el).use(fn).toHandle();
+        when(event).occurOn($el).do(fn);
     }
 
     /**

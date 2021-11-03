@@ -1,4 +1,4 @@
-import {namedBtn} from "../html-puppeteer/util/SelectorUtils.js";
+import {btnSelectorOf} from "../html-puppeteer/util/SelectorUtils.js";
 import {generateString} from "./Generators.js";
 import {removeByIndex, updateOrInsert} from "../html-puppeteer/util/ArrayUtils.js";
 
@@ -26,13 +26,13 @@ export default class Scenario10App {
      */
     run() {
         this._createParentStateChangingButtons();
-        $(namedBtn("create")).on("click", () => {
+        $(btnSelectorOf("create")).on("click", () => {
             this._createOneAtIndex0("cats");
             if (this.haveDogs) {
                 this._createOneAtIndex0("dogs");
             }
         });
-        $(namedBtn("remove")).on("click", () => {
+        $(btnSelectorOf("remove")).on("click", () => {
             this._removeLast("cats");
             if (this.haveDogs) {
                 this._removeLast("dogs");
@@ -44,11 +44,11 @@ export default class Scenario10App {
      * @protected
      */
     _createParentStateChangingButtons() {
-        $(namedBtn("change-parent-state")).on("click",
+        $(btnSelectorOf("change-parent-state")).on("click",
             () => {
                 this.parent.replaceState(JSON.parse($("#main-debugger").val()));
             });
-        $(namedBtn("change-partial-state")).on("click", () => {
+        $(btnSelectorOf("change-partial-state")).on("click", () => {
             const guestsState = JSON.parse($("#partial-state").val());
             this.parent.replaceParts(guestsState);
         });

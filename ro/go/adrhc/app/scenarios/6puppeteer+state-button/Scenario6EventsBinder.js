@@ -1,5 +1,5 @@
 import EventsBinder from "../../../html-puppeteer/core/component/events-binder/EventsBinder.js";
-import {namedBtn} from "../../../html-puppeteer/util/SelectorUtils.js";
+import {btnSelectorOf} from "../../../html-puppeteer/util/SelectorUtils.js";
 
 export default class Scenario6EventsBinder extends EventsBinder {
     /**
@@ -7,9 +7,9 @@ export default class Scenario6EventsBinder extends EventsBinder {
      */
     attachEventHandlers() {
         const clock = /** @type {PeriodicallyStateChangingComponent} */ this._component;
-        $(namedBtn("start")).on("click.Scenario6EventsBinder", () => clock.startClock());
-        $(namedBtn("stop")).on("click.Scenario6EventsBinder", () => clock.stopClock());
-        $(namedBtn("change")).on("click.Scenario6EventsBinder", () => {
+        $(btnSelectorOf("start")).on("click.Scenario6EventsBinder", () => clock.startClock());
+        $(btnSelectorOf("stop")).on("click.Scenario6EventsBinder", () => clock.stopClock());
+        $(btnSelectorOf("change")).on("click.Scenario6EventsBinder", () => {
             const json = $("input[name='clock-state']").val();
             if (!json.trim()) {
                 return;
@@ -26,7 +26,7 @@ export default class Scenario6EventsBinder extends EventsBinder {
      * detach DOM event handlers
      */
     detachEventHandlers() {
-        $(namedBtn("start")).off(".Scenario6EventsBinder");
-        $(namedBtn("stop")).off(".Scenario6EventsBinder");
+        $(btnSelectorOf("start")).off(".Scenario6EventsBinder");
+        $(btnSelectorOf("stop")).off(".Scenario6EventsBinder");
     }
 }

@@ -1,6 +1,6 @@
 import SimpleComponent from "./SimpleComponent.js";
 import GlobalConfig, {partOf} from "../../util/GlobalConfig.js";
-import {jQueryOf} from "../../util/DomUtils.js";
+import {jQueryOf} from "../../util/Utils.js";
 import {handlebarsWrap} from "../../util/HtmlGenerator.js";
 
 /**

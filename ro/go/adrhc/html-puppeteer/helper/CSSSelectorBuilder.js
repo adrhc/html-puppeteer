@@ -7,17 +7,17 @@ import {dataOwnerSelectorOf, dataSelectorOf} from "../util/SelectorUtils.js";
  */
 export class CSSSelectorBuilder {
     /**
-     * @type {string}
-     * @protected
-     */
-    dataAttribute;
-    /**
      * Is the component id used as *owner* on a DOM element.
      *
      * @type {string}
      * @protected
      */
     componentId;
+    /**
+     * @type {string}
+     * @protected
+     */
+    dataAttribute;
 
     /**
      * @param {CSSSelectorBuilderOptions} options
@@ -63,6 +63,10 @@ export class CSSSelectorBuilder {
     selector() {
         // [data-owner="componentId"][data-dataAttribName]
         return `${dataOwnerSelectorOf(this.componentId)}${dataSelectorOf(this.dataAttribute)}`;
+    }
+
+    $elem() {
+        return $(this.selector());
     }
 }
 

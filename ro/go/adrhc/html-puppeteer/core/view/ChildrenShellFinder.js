@@ -1,5 +1,5 @@
 import {dataPartSelector, dataPartSelectorOf, dataTypeSelector} from "../../util/SelectorUtils.js";
-import {jQueryOf} from "../../util/DomUtils.js";
+import {jQueryOf} from "../../util/Utils.js";
 import {typeOf} from "../../util/GlobalConfig.js";
 
 export default class ChildrenShellFinder {

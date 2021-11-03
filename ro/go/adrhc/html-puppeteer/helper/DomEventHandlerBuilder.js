@@ -1,4 +1,5 @@
 import {isTrue} from "../util/AssertionUtils.js";
+import {btnSelectorOf} from "../util/SelectorUtils.js";
 
 export class DomEventHandlerBuilder {
     /**
@@ -32,34 +33,40 @@ export class DomEventHandlerBuilder {
     }
 
     /**
-     * @param {jQuery<HTMLElement>} $elem
+     * @param {string|jQuery<HTMLElement>} $elemOrSelector
      * @return {DomEventHandlerBuilder}
      */
-    occurOn($elem) {
-        this.$elem = $elem;
+    occurOn($elemOrSelector) {
+        this.$elem = typeof $elemOrSelector === "string" ? $($elemOrSelector) : $elemOrSelector;
         return this;
+    }
+
+    /**
+     * @param {string} name
+     * @param {string=} owner
+     * @return {DomEventHandlerBuilder}
+     */
+    occurOnBtn(name, owner) {
+        return this.occurOn(btnSelectorOf(name, owner));
     }
 
     /**
      * @param {function(ev: Event)} fn
      * @return {DomEventHandlerBuilder}
      */
-    use(fn) {
+    do(fn) {
         this.fn = fn;
+        this.$elem[this.oneTimeOnly ? "one" : "on"](this.events, this.fn);
         return this;
     }
 
     /**
-     * @param {boolean=} once
+     * @param {boolean=} [once=true]
      * @return {DomEventHandlerBuilder}
      */
-    times(once) {
+    once(once = true) {
         this.oneTimeOnly = once;
         return this;
-    }
-
-    toHandle() {
-        this.$elem[this.oneTimeOnly ? "one" : "on"](this.events, this.fn);
     }
 }
 
@@ -67,7 +74,7 @@ export class DomEventHandlerBuilder {
  * @param {string} events
  * @return {DomEventHandlerBuilder}
  */
-export function whenEvents(...events) {
+export function when(...events) {
     isTrue(!!events?.length, "[DomEventHandlerBuilder] events can't be empty!");
     return new DomEventHandlerBuilder().whenEvents(events);
 }
