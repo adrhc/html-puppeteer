@@ -56,7 +56,7 @@ export default class ContainerEventsBinder extends EventsBinder {
             // <button data-owner="parent-component" data-create-child="click">
             this.containerComponent.replacePart(uniqueId(), this.childStateProviderFn(this.containerComponent));
         });
-        this._attachContainerEventsHandlerToOwnedHavingDataAttr("remove-child", this.removeEvent, (ev) => {
+        this._attachEventsHandlerToOwnedChildrenHavingDataAttr("remove-child", this.removeEvent, (ev) => {
             // <button data-owner="parent-component" data-remove-child="click" data-child-id="childId">
             const $elem = $(ev.target);
             const childId = childIdOf($elem);
@@ -73,7 +73,7 @@ export default class ContainerEventsBinder extends EventsBinder {
      * @param {function} fn is the event handler
      * @protected
      */
-    _attachContainerEventsHandlerToOwnedHavingDataAttr(dataAttribName, eventName, fn) {
+    _attachEventsHandlerToOwnedChildrenHavingDataAttr(dataAttribName, eventName, fn) {
         const cssSelector = this._ownedHavingDataAttrSelector(dataAttribName);
         // removing previous handler (if any) set by another component
         this.$container.off(eventName, cssSelector);
@@ -85,7 +85,7 @@ export default class ContainerEventsBinder extends EventsBinder {
      */
     detachEventHandlers() {
         this._detachEventsHandlerFromOwnedHavingDataAttr("create-child", this.eventName);
-        this._detachContainerEventsHandlerFromOwnedHavingDataAttr("create-child");
+        this._detachEventsHandlerFromOwnedChildrenHavingDataAttr("create-child");
     }
 
     /**
@@ -95,7 +95,7 @@ export default class ContainerEventsBinder extends EventsBinder {
      * @param {string} dataAttribName
      * @protected
      */
-    _detachContainerEventsHandlerFromOwnedHavingDataAttr(dataAttribName) {
+    _detachEventsHandlerFromOwnedChildrenHavingDataAttr(dataAttribName) {
         const cssSelector = this._ownedHavingDataAttrSelector(dataAttribName);
         this.$container.off(this.createEvent, cssSelector);
     }
