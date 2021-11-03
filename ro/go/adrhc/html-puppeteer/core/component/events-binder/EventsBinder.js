@@ -35,6 +35,9 @@ export default class EventsBinder {
     detachEventHandlers() {}
 
     /**
+     * Attaches the "eventName" handler (i.e. "fn"), possibly once (see oneTimeOnly), to the
+     * elements having this._component.id as "owner" and dataAttributeName as a data-attribute name.
+     *
      * @param {string} dataAttribName
      * @param {string} eventName
      * @param {function(ev: Event)} fn is the event handler
@@ -55,6 +58,9 @@ export default class EventsBinder {
     }
 
     /**
+     * Detaches the "eventName" handler applied on elements having
+     * this._component.id as "owner" and dataAttributeName as a data-attribute name.
+     *
      * @param {string} dataAttribName
      * @param {string} eventName
      * @protected
@@ -65,7 +71,7 @@ export default class EventsBinder {
 
     /**
      * @param {string} dataAttribName
-     * @return {jQuery<HTMLElement>}
+     * @return {jQuery<HTMLElement>} the element(s) having this._component.id as "owner" and dataAttributeName as a data-attribute name
      * @protected
      */
     _$ownedHavingDataAttr(dataAttribName) {
@@ -74,7 +80,7 @@ export default class EventsBinder {
 
     /**
      * @param {string} dataAttributeName
-     * @return {string}
+     * @return {string} a CSS selector referring the elements having this._component.id as "owner" and dataAttributeName as a data-attribute name
      * @protected
      */
     _ownedHavingDataAttrCssSelector(dataAttributeName) {

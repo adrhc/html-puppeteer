@@ -87,6 +87,9 @@ export default class ContainerEventsBinder extends EventsBinder {
     }
 
     /**
+     * Detaches the events handler applied on this.$container for a selector
+     * referring elements having a specific "owner" value and data-attribute name.
+     *
      * @param {string} dataAttribName
      * @protected
      */
