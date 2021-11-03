@@ -3,6 +3,20 @@ import {componentIdOf, idAttrOf} from "./GlobalConfig.js";
 import {$of, jQueryOf} from "./Utils.js";
 
 /**
+ * @param {jQuery} $elems
+ */
+export function disable(...$elems) {
+    $elems.forEach(it => it.attr('disabled', 'disabled'));
+}
+
+/**
+ * @param {jQuery} $elems
+ */
+export function enable(...$elems) {
+    $elems.forEach(it => it.removeAttr('disabled'));
+}
+
+/**
  * @param {ElemIdOrJQuery} elemIdOrJQuery
  * @return {*}
  */
