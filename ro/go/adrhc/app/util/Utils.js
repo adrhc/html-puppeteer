@@ -3,7 +3,7 @@ import StateChangeEventsBinder from "../components/event-binders/StateChangeEven
 import OpenCloseEventsBinder from "../components/event-binders/OpenCloseEventsBinder.js";
 import animate from "../../html-puppeteer/core/Puppeteer.js";
 
-function debuggingOptionsOf(debuggerElemIdOrJQuery = "MAIN-DEBUGGER") {
+function debuggingOptionsOf(debuggerElemIdOrJQuery = "main-debugger") {
     return addDebugger({debuggerElemIdOrJQuery})
         .addEventsBinders(new StateChangeEventsBinder(), new OpenCloseEventsBinder())
         .options();

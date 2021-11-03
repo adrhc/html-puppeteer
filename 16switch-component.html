@@ -30,36 +30,15 @@
 	<!-- the component -->
 	<div class="section title">Component's view</div>
 	<div class="section parent fit-content min-width-33-percent"
-	     data-initial-state='{
-		     "message1": null,
-		     "message2": "The \"message2\" child state comes from the parent&apos;s state.",
-		     "missingShell": "missing shell: this message should not be visible",
-		     "inners": {"innerProperty1": "innerProperty1 value in \"inners\" object"}
-	     }'
+	     data-initial-state="part1"
 	     data-removed-placeholder='The "MAIN" component is closed!'
-	     data-type="static-container"
+	     data-type="switcher"
 	     id="MAIN">
 		<!-- level 1 children don't need data-owner -->
-		<div class="mb3" data-part="message0" data-type="value">
-			The "message0" child is not available yet!
-		</div>
-		<div class="mb3"
-		     data-initial-state='The "message1" parent state is missing, using data attribute based state initialization.'
-		     data-part="message1"
-		     data-removed-placeholder='"message1" child component was removed!'
-		     data-type="value">
-			The "message1" child is not available yet!
-		</div>
-		<div class="mb3"
-		     data-initial-state='This "message2" initial state should only briefly be visible!<BR>initial state should come from the parent.'
-		     data-part="message2"
-		     data-removed-placeholder='"message2" child component was removed!'
-		     data-type="value">
-			The "message2" child is not available yet!
-		</div>
-		<div class="mb3" data-part="inners.innerProperty1" data-type="value">
-			The "inners.innerProperty1" child is not available yet!
-		</div>
+		<div class="mb3" data-initial-state="part1 activated!" data-part="part1" data-removed-placeholder=""
+		     data-type="value"></div>
+		<div class="mb3" data-initial-state="part2 activated!" data-part="part2" data-removed-placeholder=""
+		     data-type="value"></div>
 	</div>
 </div>
 

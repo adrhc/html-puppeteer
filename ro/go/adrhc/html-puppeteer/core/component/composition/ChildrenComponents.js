@@ -67,7 +67,7 @@ export default class ChildrenComponents {
         this.children = {};
         this.childrenShellFinder.$childrenShells()
             .map($elem => createComponent($elem, {parent: this.parent, ...this.childrenCreationCommonOptions}))
-            .forEach(c => this.children[c.partName ?? c.id] = c.render());
+            .forEach(c => this.children[c.partName ?? c.id] = this.dontRenderChildren ? c : c.render());
         return {...this.children};
     }
 
@@ -85,7 +85,7 @@ export default class ChildrenComponents {
             return;
         }
         // at this point the item component's id is available as data-GlobalConfig.COMPONENT_ID on $shell
-        const component = createComponent($shell, {parent: this.parent});
+        const component = createComponent($shell, {parent: this.parent, ...this.childrenCreationCommonOptions});
         isTrue(component != null, "[createOrUpdateChild] the child's shell must exist!")
         this.children[partName] = this.dontRenderChildren ? component : component.render();
     }

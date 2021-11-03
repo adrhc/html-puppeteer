@@ -29,7 +29,7 @@ export function jsonParsedValOf(elemIdOrJQuery) {
  * @return {string|number|[]}
  */
 export function valOf(elemIdOrJQuery) {
-    return $of("partial-state").val();
+    return $of(elemIdOrJQuery).val();
 }
 
 /**

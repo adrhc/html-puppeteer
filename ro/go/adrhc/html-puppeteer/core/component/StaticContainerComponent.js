@@ -23,8 +23,9 @@ export default class StaticContainerComponent extends BasicContainerComponent {
     /**
      * No children will be dynamically created hence there's no need for a shell template.
      *
-     * @param {ElemIdOrJQuery} elemIdOrJQuery
-     * @param {ChildrenShellFinder} childrenShellFinder
+     * @param {StaticContainerComponentOptions} options
+     * @param {ElemIdOrJQuery} options.elemIdOrJQuery
+     * @param {ChildrenShellFinder} options.childrenShellFinder
      * @param {BasicContainerComponentOptions} restOfOptions
      */
     constructor({elemIdOrJQuery, childrenShellFinder, ...restOfOptions}) {
