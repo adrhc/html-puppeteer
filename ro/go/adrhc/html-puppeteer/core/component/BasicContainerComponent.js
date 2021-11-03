@@ -105,10 +105,11 @@ export default class BasicContainerComponent extends AbstractComponent {
 
     /**
      * @param {PartName} partName
+     * @param {boolean=} dontClone
      * @return {*}
      */
-    getPart(partName) {
-        return this.partialStateHolder.getPart(partName);
+    getPart(partName, dontClone) {
+        return this.partialStateHolder.getPart(partName, dontClone);
     }
 
     /**

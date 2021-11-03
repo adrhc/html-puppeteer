@@ -6,6 +6,10 @@ import ChildrenShellFinder from "../view/ChildrenShellFinder.js";
  * @typedef {BasicContainerComponentOptions} StaticContainerComponentOptions
  * @property {boolean=} ignoreMissingShells
  */
+/**
+ * @template SCT, SCP
+ * @extends {BasicContainerComponent}
+ */
 export default class StaticContainerComponent extends BasicContainerComponent {
     /**
      * @type {ChildrenShellFinder}

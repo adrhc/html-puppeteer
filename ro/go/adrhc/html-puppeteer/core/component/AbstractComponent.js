@@ -92,6 +92,13 @@ export default class AbstractComponent extends StateProcessor {
     /**
      * @return {SCT}
      */
+    getMutableState() {
+        return this.stateHolder.mutableState;
+    }
+
+    /**
+     * @return {SCT}
+     */
     getStateCopy() {
         return this.stateHolder.stateCopy;
     }

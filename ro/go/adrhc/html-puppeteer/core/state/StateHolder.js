@@ -34,6 +34,13 @@ export default class StateHolder {
     /**
      * @return {SCT}
      */
+    get mutableState() {
+        return this._currentState;
+    }
+
+    /**
+     * @return {SCT}
+     */
     get stateCopy() {
         return this._currentState == null ? this._currentState : _.cloneDeep(this._currentState);
     }
