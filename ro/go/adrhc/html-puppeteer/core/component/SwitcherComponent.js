@@ -15,13 +15,30 @@ export default class SwitcherComponent extends StaticContainerComponent {
     }
 
     /**
-     * @param {PartName} partName
+     * @param {StaticContainerComponentOptions} options
+     */
+    constructor(options) {
+        super({...options, dontRenderChildren: true});
+    }
+
+    /**
+     * Completely replaces the component's state and creates the children.
+     *
+     * @param {SCT=} newState
+     */
+    replaceState(newState) {
+        super.replaceState(newState);
+        this.switchTo(newState);
+    }
+
+    /**
+     * @param {SCT|PartName} partName
      */
     switchTo(partName) {
         const activeComponent = this.getActiveComponent();
-        const activeState = activeComponent.getStateCopy();
+        const activeState = activeComponent?.getStateCopy();
         const switchToComponent = this.childrenComponents.getChildByPartName(partName);
-        activeComponent.close();
+        activeComponent?.close();
         switchToComponent.render(activeState);
     }
 

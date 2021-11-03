@@ -11,6 +11,8 @@ import ComponentIllustrator from "../state-changes-handler/ComponentIllustrator.
 
 /**
  * @typedef {AbstractComponentOptions & ContainerEventsBinderOptions & ChildrenComponentsOptions} BasicContainerComponentOptions
+ * @property {boolean=} dontRenderChildren
+ * @property {Bag=} childrenCreationCommonOptions
  */
 /**
  * @template SCT, SCP
