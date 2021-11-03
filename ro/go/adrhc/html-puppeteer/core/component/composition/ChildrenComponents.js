@@ -94,7 +94,9 @@ export default class ChildrenComponents {
      */
     _createComponent($shell, partName = partOf($shell)) {
         const component = createComponent($shell, {parent: this.parent, ...this.childrenCreationCommonOptions});
-        isTrue(component != null, "[createOrUpdateChild] the child's shell must exist!")
+        isTrue(component != null, "[ChildrenComponents] the child's shell must exist!");
+        isTrue(partName != null || this.parent == null,
+            "[ChildrenComponents] partName is missing while having a parent!");
         this.children[partName ?? component.id] = this.dontRenderChildren ? component : component.render();
     }
 
