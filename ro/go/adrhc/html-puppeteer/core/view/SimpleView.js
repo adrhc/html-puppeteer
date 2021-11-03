@@ -76,7 +76,7 @@ export default class SimpleView extends AbstractView {
             viewRenderStrategy ?? (this.$elem.is("textarea") ? RENDER_VAL : RENDER_HTML));
         this.viewRemovalStrategy = viewRemovalStrategy ?? (removedPlaceholder != null ? USE_HTML : REMOVE_ELEMENT);
         this.removedPlaceholder = removedPlaceholder;
-        this._execLazySetup(true);
+        this.$elem.length && this._execLazySetup(true);
     }
 
     /**
