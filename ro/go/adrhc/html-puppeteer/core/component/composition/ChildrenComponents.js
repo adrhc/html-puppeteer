@@ -1,6 +1,7 @@
 import {createComponent} from "../../Puppeteer.js";
 import {isTrue} from "../../../util/AssertionUtils.js";
 import ChildrenShellFinder from "../../view/ChildrenShellFinder.js";
+import {partOf} from "../../../util/GlobalConfig.js";
 
 /**
  * @typedef {Object} ChildrenComponentsOptions
@@ -65,17 +66,15 @@ export default class ChildrenComponents {
      */
     createChildrenForExistingShells() {
         this.children = {};
-        this.childrenShellFinder.$childrenShells()
-            .map($elem => createComponent($elem, {parent: this.parent, ...this.childrenCreationCommonOptions}))
-            .forEach(c => this.children[c.partName ?? c.id] = this.dontRenderChildren ? c : c.render());
+        this.childrenShellFinder.$childrenShells().forEach($shell => this._createComponent($shell));
         return {...this.children};
     }
 
     /**
-     * @param {PartName} partName
      * @param {jQuery<HTMLElement>} $shell
+     * @param {OptionalPartName=} partName
      */
-    createOrUpdateChild(partName, $shell) {
+    createOrUpdateChild($shell, partName = partOf($shell)) {
         if (!$shell.length) {
             console.warn(`Missing child element for ${partName}!`);
             return;
@@ -85,9 +84,18 @@ export default class ChildrenComponents {
             return;
         }
         // at this point the item component's id is available as data-GlobalConfig.COMPONENT_ID on $shell
+        this._createComponent($shell, partName);
+    }
+
+    /**
+     * @param {jQuery<HTMLElement>} $shell
+     * @param {OptionalPartName=} partName
+     * @protected
+     */
+    _createComponent($shell, partName = partOf($shell)) {
         const component = createComponent($shell, {parent: this.parent, ...this.childrenCreationCommonOptions});
         isTrue(component != null, "[createOrUpdateChild] the child's shell must exist!")
-        this.children[partName] = this.dontRenderChildren ? component : component.render();
+        this.children[partName ?? component.id] = this.dontRenderChildren ? component : component.render();
     }
 
     /**

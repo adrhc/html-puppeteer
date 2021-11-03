@@ -44,6 +44,6 @@ export default class StaticContainerComponent extends BasicContainerComponent {
             isTrue(this.ignoreMissingShells, `$shell is null for part named ${partName}!`);
             return;
         }
-        this.childrenComponents.createOrUpdateChild(partName, $shell);
+        this.childrenComponents.createOrUpdateChild($shell);
     }
 }

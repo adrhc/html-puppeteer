@@ -155,7 +155,7 @@ export default class BasicContainerComponent extends AbstractComponent {
         const $shell = this.childrenShells.getOrCreateShell(partName);
         isTrue($shell != null,
             `$shell is null for part named ${partName}!`)
-        this.childrenComponents.createOrUpdateChild(partName, $shell);
+        this.childrenComponents.createOrUpdateChild($shell);
     }
 
     /**
