@@ -6,12 +6,13 @@ import ChildrenComponents from "./component/composition/ChildrenComponents.js";
 
 /**
  * @param {ChildrenComponentsOptions} options
+ * @param {ElemIdOrJQuery=} componentsHolder is the place inside which to search for components
  * @param {boolean=} options.alwaysReturnArray
  * @param {ChildrenComponentsOptions=} options.childrenCreationCommonOptions
  * @return {AbstractComponent|AbstractComponent[]}
  */
-export default function animate({alwaysReturnArray, ...childrenCreationCommonOptions} = {}) {
-    const childrenComponents = new ChildrenComponents({childrenCreationCommonOptions});
+export default function animate({componentsHolder, alwaysReturnArray, ...childrenCreationCommonOptions} = {}) {
+    const childrenComponents = new ChildrenComponents({componentsHolder, childrenCreationCommonOptions});
     const components = childrenComponents.createChildrenForExistingShells();
     const partNames = Object.keys(components);
     console.log(`[Puppeteer.animate] childrenComponents created ${partNames.length} components`);

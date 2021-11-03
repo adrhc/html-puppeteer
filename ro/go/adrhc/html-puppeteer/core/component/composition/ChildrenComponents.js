@@ -4,6 +4,7 @@ import ChildrenShellFinder from "../../view/ChildrenShellFinder.js";
 
 /**
  * @typedef {Object} ChildrenComponentsOptions
+ * @property {ElemIdOrJQuery=} componentsHolder is the place inside which to search for components
  * @property {BasicContainerComponent=} parent
  * @property {ChildrenShellFinder=} childrenShellFinder
  * @property {boolean=} dontRenderChildren
@@ -44,12 +45,12 @@ export default class ChildrenComponents {
      * @param {boolean=} options.dontRenderChildren
      * @param {Object=} options.childrenCreationCommonOptions
      */
-    constructor({parent, childrenShellFinder, dontRenderChildren, childrenCreationCommonOptions}) {
+    constructor({componentsHolder, parent, childrenShellFinder, dontRenderChildren, childrenCreationCommonOptions}) {
         this.parent = parent;
         this.dontRenderChildren = dontRenderChildren;
         this.childrenCreationCommonOptions = childrenCreationCommonOptions;
-        // Puppeteer.anime() will provide an empty parent
-        const elemIdOrJQuery = parent?.config.elemIdOrJQuery ?? document;
+        // Puppeteer.anime() will provide an empty parent and elemIdOrJQuery
+        const elemIdOrJQuery = componentsHolder ?? parent?.config.elemIdOrJQuery ?? document;
         this.childrenShellFinder = childrenShellFinder ?? new ChildrenShellFinder(elemIdOrJQuery);
     }
 

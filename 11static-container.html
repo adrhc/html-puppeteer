@@ -14,36 +14,19 @@
 
 <body>
 <script>const fp = _.noConflict()</script>
-<script src="animate-on-ready-document.js" type="module"></script>
+<script src="animate-MAIN.js" type="module"></script>
 
 <div class="container">
 	<div class="section title">StaticContainerComponent</div>
-	<!-- open/close buttons -->
-	<div class="section flex-center fill-available buttons">
-		<button data-close="click" data-owner="parent-component">Close "parent-component"</button>
-		<button class="disabled" data-open="click" data-owner="parent-component">Open "parent-component"</button>
-	</div>
-	<div class="section title">debuggers</div>
-	<!-- state changing buttons -->
-	<div class="section flex-center fill-available buttons">
-		<div>
-			<button name="change-parent-state">Change entire state</button>
-			<button name="change-partial-state">Change partial state</button>
-		</div>
-	</div>
-	<!-- state input fields and debuggers -->
-	<div class="section">
-		<div class="flex-center">
-			<textarea class="fill-available" id="main-debugger"
-			          rows="10">No debugging data available yet!</textarea>
-			<textarea class="fill-available" id="partial-state" rows="10">
-Write here some partial (aka child/slice) state, e.g.:
 
-{"kidX": {"id": "X", "name": "kid X"}, "kidY": {"id": "Y", "name": "kid Y"}}
+	<!--
+		Debugger element must be placed before the component to work.
+		The debugger component (see DebuggerOptionsBuilder._createDebuggerStateChangesHandler)
+		will be created with the MAIN component (below); at that moment its DOM element must
+		exist (see .
+	-->
+	<p data-initial-state="{}" data-template-id="debugger-component" data-type="simple"></p>
 
-PS: make sure to have a well formatted JSON!</textarea>
-		</div>
-	</div>
 	<!-- the component -->
 	<div class="section title">Component's view</div>
 	<div class="section parent fit-content min-width-33-percent"
@@ -53,9 +36,9 @@ PS: make sure to have a well formatted JSON!</textarea>
 		     "missingShell": "missing shell: this message should not be visible",
 		     "inners": {"innerProperty1": "innerProperty1 value in \"inners\" object"}
 	     }'
-	     data-removed-placeholder='The "parent-component" is closed!'
+	     data-removed-placeholder='The "MAIN" component is closed!'
 	     data-type="static-container"
-	     id="parent-component">
+	     id="MAIN">
 		<!-- level 1 children don't need data-owner -->
 		<div class="mb3" data-part="message0" data-type="value">
 			The "message0" child is not available yet!
@@ -79,6 +62,36 @@ PS: make sure to have a well formatted JSON!</textarea>
 		</div>
 	</div>
 </div>
+
+<script id="debugger-component" type="text/x-handlebars-template">
+	<!-- open/close buttons -->
+	<div class="section flex-center fill-available buttons">
+		<button data-close="click" data-owner="MAIN">Close "MAIN"</button>
+		<button class="disabled" data-open="click" data-owner="MAIN">Open "MAIN"</button>
+	</div>
+	<div class="section title">debuggers</div>
+	<!-- state changing buttons -->
+	<div class="section flex-center fill-available buttons">
+		<div>
+			<button name="change-parent-state">Change entire state</button>
+			<button name="change-partial-state">Change partial state</button>
+		</div>
+	</div>
+	<!-- state input fields and debuggers -->
+	<div class="section">
+		<div class="flex-center">
+			<!-- see ro/go/adrhc/app/util/Utils.js for "main-debugger" -->
+			<textarea class="fill-available" id="MAIN-DEBUGGER"
+			          rows="10">No debugging data available yet!</textarea>
+			<textarea class="fill-available" id="partial-state" rows="10">
+Write here some partial (aka child/slice) state, e.g.:
+
+{"kidX": {"id": "X", "name": "kid X"}, "kidY": {"id": "Y", "name": "kid Y"}}
+
+PS: make sure to have a well formatted JSON!</textarea>
+		</div>
+	</div>
+</script>
 
 </body>
 

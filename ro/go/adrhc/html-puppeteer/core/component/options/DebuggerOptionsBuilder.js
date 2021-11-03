@@ -26,12 +26,12 @@ export default class DebuggerOptionsBuilder extends ComponentOptionsBuilder {
      * @protected
      */
     _createDebuggerStateChangesHandler({debuggerElemIdOrJQuery} = {}) {
-        const debuggerComponent = new SimpleComponent({
+        const debuggerComponentFactory = () => new SimpleComponent({
             viewProviderFn: (viewConfig) => new SimpleView(viewConfig),
             viewRemovalStrategy: REMOVE_CONTENT,
-            elemIdOrJQuery: debuggerElemIdOrJQuery ?? "debugger"
-        }).render();
-        return new CopyStatesChangeHandler(debuggerComponent);
+            elemIdOrJQuery: debuggerElemIdOrJQuery
+        });
+        return new CopyStatesChangeHandler({receiverComponentFn: debuggerComponentFactory});
     }
 }
 
