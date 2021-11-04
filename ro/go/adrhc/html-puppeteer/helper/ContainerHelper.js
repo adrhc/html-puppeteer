@@ -1,6 +1,7 @@
 import ChildrenComponents from "../core/component/composition/ChildrenComponents.js";
 import ChildrenShells from "../core/view/ChildrenShells.js";
 import ChildrenShellFinder from "../core/view/ChildrenShellFinder.js";
+import {partsOf} from "../core/state/PartialStateHolder.js";
 
 /**
  * @typedef {Object} ChildrenCreationCommonOptions
@@ -82,9 +83,17 @@ export default class ContainerHelper {
  * @param {*=} newPart
  * @param {PartName=} newPartName
  * @param {boolean=} dontRecordChanges
- * @return {ReplacePartFn}
  */
 export function replacePart(previousPartName, newPart, newPartName, dontRecordChanges) {
     this.doWithState(partialStateHolder =>
         partialStateHolder.replacePart(previousPartName, newPart, newPartName, dontRecordChanges));
+}
+
+/**
+ * Replaces some component's state parts; the parts should have no name change!.
+ *
+ * @param {{[name: PartName]: *}} parts
+ */
+export function replaceParts(parts) {
+    partsOf(parts).forEach(([key, value]) => this.replacePart(key, value));
 }

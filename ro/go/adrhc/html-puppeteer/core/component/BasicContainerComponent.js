@@ -4,7 +4,7 @@ import {stateIsEmpty} from "../state/StateHolder.js";
 import AbstractComponent from "./AbstractComponent.js";
 import {withDefaults} from "./options/ComponentOptionsBuilder.js";
 import ComponentIllustrator from "../state-changes-handler/ComponentIllustrator.js";
-import ContainerHelper, {replacePart} from "../../helper/ContainerHelper.js";
+import ContainerHelper, {replacePart, replaceParts} from "../../helper/ContainerHelper.js";
 
 /**
  * @typedef {AbstractComponentOptions & ContainerEventsBinderOptions & ChildrenComponentsOptions} BasicContainerComponentOptions
@@ -27,6 +27,10 @@ export default class BasicContainerComponent extends AbstractComponent {
      * @type {ChildrenShells}
      */
     childrenShells;
+    /**
+     * @type {ReplacePartsFn}
+     */
+    replaceParts;
     /**
      * @type {ReplacePartFn}
      */
@@ -62,6 +66,7 @@ export default class BasicContainerComponent extends AbstractComponent {
         this.childrenShells = helper.childrenShellsOf(childrenShellFinder);
         this.childrenComponents = helper.childrenComponentsOf(childrenShellFinder);
         this.statePartReplace = replacePart.bind(this);
+        this.replaceParts = replaceParts.bind(this);
     }
 
     /**
@@ -107,15 +112,6 @@ export default class BasicContainerComponent extends AbstractComponent {
      */
     getPart(partName, dontClone) {
         return this.partialStateHolder.getPart(partName, dontClone);
-    }
-
-    /**
-     * Replaces some component's state parts; the parts should have no name change!.
-     *
-     * @param {{[name: PartName]: SCP}[]|SCT} parts
-     */
-    replaceParts(parts) {
-        partsOf(parts).forEach(([key, value]) => this.replacePart(key, value));
     }
 
     /**

@@ -1,6 +1,7 @@
 export default class GlobalConfig {
+    /* switch component */
+    static ACTIVE_NAME_KEY = "status"
     static ALERT_ON_FAILED_ASSERTION = true;
-
     /**
      * Used when rendering the component's shell.
      */
@@ -32,8 +33,6 @@ export default class GlobalConfig {
     static OWNER = "owner";
     static PART = "part";
     static VIEW_VALUE_FIELD = "value";
-    /* switch component */
-    static ACTIVE_NAME_KEY = "status"
 }
 
 export function dataPartOf(partName, useDoubleQuotes) {

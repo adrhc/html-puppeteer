@@ -2,9 +2,9 @@ import {USE_CSS} from "../view/SimpleView.js";
 import GlobalConfig from "../../util/GlobalConfig.js";
 import AbstractComponent from "./AbstractComponent.js";
 import {withDefaults} from "./options/ComponentOptionsBuilder.js";
-import PartialStateHolder, {partsOf} from "../state/PartialStateHolder.js";
+import PartialStateHolder from "../state/PartialStateHolder.js";
 import ComponentIllustrator from "../state-changes-handler/ComponentIllustrator.js";
-import ContainerHelper, {replacePart} from "../../helper/ContainerHelper.js";
+import ContainerHelper, {replacePart, replaceParts} from "../../helper/ContainerHelper.js";
 /**
  * @typedef {AbstractComponentOptions & ContainerEventsBinderOptions & ChildrenComponentsOptions} SwitcherComponentOptions
  * @property {boolean=} dontRenderChildren
@@ -58,6 +58,10 @@ export default class SwitcherComponent extends AbstractComponent {
      */
     childrenComponents;
     /**
+     * @type {ReplacePartsFn}
+     */
+    replaceParts;
+    /**
      * @type {ReplacePartFn}
      */
     statePartReplace;
@@ -105,6 +109,7 @@ export default class SwitcherComponent extends AbstractComponent {
         this.activeValueKey = this.config.activeValueKey;
         this.valueKeyIsActiveName = this.config.valueKeyIsActiveName ?? true;
         this.statePartReplace = replacePart.bind(this);
+        this.replaceParts = replaceParts.bind(this);
     }
 
     /**
@@ -158,15 +163,6 @@ export default class SwitcherComponent extends AbstractComponent {
             // replacing partially only if the child is capable to perform partial changes (aka: has replacePart method)
             this.activeComponent?.replacePart?.(previousPartName, newPart, newPartName, dontRecordChanges);
         }
-    }
-
-    /**
-     * Replaces some component's state parts; the parts should have no name change!.
-     *
-     * @param {{[name: PartName]: SCP}[]|SCT} parts
-     */
-    replaceParts(parts) {
-        partsOf(parts).forEach(([key, value]) => this.replacePart(key, value));
     }
 
     /**

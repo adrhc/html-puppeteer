@@ -14,3 +14,7 @@
 /**
  * @typedef {function(previousPartName?: OptionalPartName, newPart?: *, newPartName?: OptionalPartName, dontRecordChanges?: boolean)} ReplacePartFn
  */
+
+/**
+ * @typedef {function(parts?: {[name: PartName]: *})} ReplacePartsFn
+ */
