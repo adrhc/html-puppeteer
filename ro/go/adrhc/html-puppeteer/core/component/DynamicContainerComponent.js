@@ -1,5 +1,7 @@
 import {jQueryOf} from "../../util/Utils.js";
 import BasicContainerComponent from "./BasicContainerComponent.js";
+import {withDefaults} from "./options/ComponentOptionsBuilder.js";
+import ContainerEventsBinder from "./events-binder/ContainerEventsBinder.js";
 
 /**
  * @template SCT, SCP
@@ -15,6 +17,9 @@ export default class DynamicContainerComponent extends BasicContainerComponent {
      * @param {BasicContainerComponentOptions} options
      */
     constructor(options) {
-        super({parentHtml: jQueryOf(options.elemIdOrJQuery).html(), htmlTemplate: "", ...options});
+        super(withDefaults({
+            parentHtml: jQueryOf(options.elemIdOrJQuery).html(),
+            htmlTemplate: "", ...options
+        }).addEventsBinders(new ContainerEventsBinder()).options());
     }
 }

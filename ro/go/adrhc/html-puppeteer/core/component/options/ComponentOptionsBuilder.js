@@ -73,10 +73,14 @@ export class ComponentOptionsBuilder {
         const eventsBinders = pushNotNullMissing([], currentConstructorOptions.eventsBinder,
             this.builderOptions.eventsBinder, this.descendantComponentClassOptions.eventsBinder);
         const eventsBinder = eventsBinders.length > 1 ? new EventsBinderGroup(undefined, eventsBinders) : eventsBinders[0];
-        const eventsBinderProvider = eventsBinder ? (component) => {
-            eventsBinder.component = component;
-            return eventsBinder;
-        } : undefined;
+        const eventsBinderProvider = (component) => {
+            const eventsBinders = pushNotNullMissing([],
+                currentConstructorOptions.eventsBinderProvider,
+                this.descendantComponentClassOptions.eventsBinderProvider)
+                .map(evbProvider => evbProvider(component));
+            eventsBinder && eventsBinders.push(eventsBinder);
+            return eventsBinders.length ? new EventsBinderGroup(component, eventsBinders) : undefined;
+        }
         // final options
         return _.defaults({
             extraConfigurators,

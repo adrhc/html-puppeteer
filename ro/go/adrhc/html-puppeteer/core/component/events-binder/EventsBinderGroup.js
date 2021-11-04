@@ -4,14 +4,22 @@ export default class EventsBinderGroup extends EventsBinder {
     /**
      * @type {EventsBinder[]}
      */
-    eventsBinders;
+    _eventsBinders;
+
+    /**
+     * @param {EventsBinder[]} eventsBinders
+     */
+    set eventsBinders(eventsBinders) {
+        this._eventsBinders = eventsBinders;
+        this._component && this._eventsBinders.forEach(it => it.component = this._component);
+    }
 
     /**
      * @param {AbstractComponent} component
      */
     set component(component) {
         super.component = component;
-        this.eventsBinders.forEach(it => it.component = component);
+        component && this._eventsBinders.forEach(it => it.component = component);
     }
 
     /**
@@ -27,20 +35,20 @@ export default class EventsBinderGroup extends EventsBinder {
      * @param {EventsBinder} eventsBinders
      */
     addEventsBinder(...eventsBinders) {
-        this.eventsBinders.push(...eventsBinders);
+        this._eventsBinders.push(...eventsBinders);
     }
 
     /**
      * attach DOM event handlers
      */
     attachEventHandlers() {
-        this.eventsBinders.forEach(it => it.attachEventHandlers());
+        this._eventsBinders.forEach(it => it.attachEventHandlers());
     }
 
     /**
      * detach DOM event handlers
      */
     detachEventHandlers() {
-        this.eventsBinders.reverse().forEach(it => it.detachEventHandlers());
+        this._eventsBinders.reverse().forEach(it => it.detachEventHandlers());
     }
 }

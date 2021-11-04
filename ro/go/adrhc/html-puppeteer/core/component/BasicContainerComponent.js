@@ -5,7 +5,6 @@ import ChildrenShells from "../view/ChildrenShells.js";
 import ChildrenShellFinder from "../view/ChildrenShellFinder.js";
 import {stateIsEmpty} from "../state/StateHolder.js";
 import AbstractComponent from "./AbstractComponent.js";
-import ContainerEventsBinder from "./events-binder/ContainerEventsBinder.js";
 import {withDefaults} from "./options/ComponentOptionsBuilder.js";
 import ComponentIllustrator from "../state-changes-handler/ComponentIllustrator.js";
 
@@ -57,7 +56,6 @@ export default class BasicContainerComponent extends AbstractComponent {
             // why ComponentIllustrator is used instead of SimplePartsIllustrator
             .addStateChangesHandlerProvider((component) =>
                 (componentIllustrator ?? new ComponentIllustrator(component.config)))
-            .addEventsBinders(new ContainerEventsBinder())
             .options());
         const childrenShellFinder = this.config.childrenShellFinder ?? new ChildrenShellFinder(this.config.elemIdOrJQuery);
         this.childrenShells = new ChildrenShells({

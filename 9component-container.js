@@ -1,8 +1,8 @@
 import {withDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/options/DebuggerOptionsBuilder.js";
 import animate from "./ro/go/adrhc/html-puppeteer/core/Puppeteer.js";
 import {generateCats} from "./ro/go/adrhc/app/Generators.js";
-import {btnSelectorOf} from "./ro/go/adrhc/html-puppeteer/util/SelectorUtils.js";
-import {getTotalHeight} from "./ro/go/adrhc/html-puppeteer/util/DomUtils.js";
+import {$btnOf, btnSelectorOf} from "./ro/go/adrhc/html-puppeteer/util/SelectorUtils.js";
+import {activate, deactivate, getTotalHeight} from "./ro/go/adrhc/html-puppeteer/util/DomUtils.js";
 
 class App {
     /**
@@ -27,14 +27,14 @@ class App {
         });
         $(btnSelectorOf("create")).on("click", () => {
             this.parent.replacePart("cats", generateCats(1));
-            $(btnSelectorOf("create")).attr("disabled", "disabled");
-            $(btnSelectorOf("remove")).removeAttr('disabled');
+            deactivate($btnOf("create"));
+            activate($btnOf("remove"));
             $('textarea').height(getTotalHeight);
         });
         $(btnSelectorOf("remove")).on("click", () => {
             this.parent.replacePart("cats");
-            $(btnSelectorOf("remove")).attr("disabled", "disabled");
-            $(btnSelectorOf("create")).removeAttr('disabled');
+            deactivate($btnOf("remove"));
+            activate($btnOf("create"));
             $('textarea').height(0);
             $('textarea').height(getTotalHeight);
         });
