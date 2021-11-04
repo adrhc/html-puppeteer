@@ -10,3 +10,7 @@
 /**
  * @typedef {string|jQuery<HTMLElement>} ElemIdOrJQuery
  */
+
+/**
+ * @typedef {function(previousPartName?: OptionalPartName, newPart?: *, newPartName?: OptionalPartName, dontRecordChanges?: boolean)} ReplacePartFn
+ */

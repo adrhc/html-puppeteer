@@ -1,7 +1,19 @@
-import StaticContainerComponent from "./StaticContainerComponent.js";
 import {USE_CSS} from "../view/SimpleView.js";
 import GlobalConfig from "../../util/GlobalConfig.js";
-
+import AbstractComponent from "./AbstractComponent.js";
+import {withDefaults} from "./options/ComponentOptionsBuilder.js";
+import PartialStateHolder, {partsOf} from "../state/PartialStateHolder.js";
+import ComponentIllustrator from "../state-changes-handler/ComponentIllustrator.js";
+import ContainerHelper, {replacePart} from "../../helper/ContainerHelper.js";
+/**
+ * @typedef {AbstractComponentOptions & ContainerEventsBinderOptions & ChildrenComponentsOptions} SwitcherComponentOptions
+ * @property {boolean=} dontRenderChildren
+ * @property {ViewRemovalStrategy=} childrenRemovalStrategy
+ * @property {string=} childrenRemovedPlaceholder
+ * @property {string=} childrenRemovedCss
+ * @property {ChildrenCreationCommonOptions} childrenCreationCommonOptions
+ * @property {ChildrenShellFinder=} childrenShellFinder
+ */
 /**
  * @template SCT,SCP
  *
@@ -32,10 +44,7 @@ import GlobalConfig from "../../util/GlobalConfig.js";
  * @property {string=} activeValueKey is the partName where the active-component's value is stored by SwitcherComponent
  * @property {boolean=} [valueKeyIsActiveName=true] indicates that each active-component name is the activeNameKey's value; e.g. activeNameKey="editable" means that replacePart("editable", newState) should set newState into both SwitcherComponent (partial replace) and the active-component (complete replace)
  */
-/**
- * @extends {StaticContainerComponent}
- */
-export default class SwitcherComponent extends StaticContainerComponent {
+export default class SwitcherComponent extends AbstractComponent {
     /**
      * @type {string}
      */
@@ -44,6 +53,14 @@ export default class SwitcherComponent extends StaticContainerComponent {
      * @type {string}
      */
     activeValueKey;
+    /**
+     * @type {ChildrenComponents}
+     */
+    childrenComponents;
+    /**
+     * @type {ReplacePartFn}
+     */
+    statePartReplace;
     /**
      * @type {boolean}
      */
@@ -65,15 +82,29 @@ export default class SwitcherComponent extends StaticContainerComponent {
     }
 
     /**
-     * @param {StaticContainerComponentOptions} options
-     * @param {ViewRemovalStrategy} options.childrenRemovalStrategy
-     * @param {StaticContainerComponentOptions=} restOfOptions
+     * @return {PartialStateHolder}
      */
-    constructor({childrenRemovalStrategy, ...restOfOptions}) {
-        super({childrenRemovalStrategy: USE_CSS, ...restOfOptions});
+    get partialStateHolder() {
+        return /** @type {PartialStateHolder} */ this.stateHolder;
+    }
+
+    /**
+     * @param {SwitcherComponentOptions} options
+     */
+    constructor(options) {
+        super(withDefaults({childrenRemovalStrategy: USE_CSS, ...options, ignoreShellTemplateOptions: true})
+            .withStateHolderProvider(c => new PartialStateHolder(c.config))
+            // partial changes are not changing the container's view - that's
+            // why ComponentIllustrator is used instead of SimplePartsIllustrator
+            .addStateChangesHandlerProvider((component) =>
+                (component.config.componentIllustrator ?? new ComponentIllustrator(component.config)))
+            .options());
+        const helper = new ContainerHelper(this);
+        this.childrenComponents = helper.createChildrenComponents();
         this.activeNameKey = this.config.activeNameKey ?? GlobalConfig.ACTIVE_NAME_KEY;
         this.activeValueKey = this.config.activeValueKey;
         this.valueKeyIsActiveName = this.config.valueKeyIsActiveName ?? true;
+        this.statePartReplace = replacePart.bind(this);
     }
 
     /**
@@ -82,9 +113,11 @@ export default class SwitcherComponent extends StaticContainerComponent {
      * @param {SCT=} newState
      */
     replaceState(newState) {
+        this.childrenComponents.disconnectAndRemoveChildren();
         super.replaceState(newState);
+        this.childrenComponents.createChildrenForExistingShells();
         this.childrenComponents.closeChildren();
-        this._switchToForNewState();
+        this._switchForNewState();
     }
 
     /**
@@ -100,7 +133,7 @@ export default class SwitcherComponent extends StaticContainerComponent {
             this._switchToImpl(newPart, this.activeComponent?.getMutableState());
             return;
         }
-        this._replacePartImpl(previousPartName, newPart, newPartName, dontRecordChanges);
+        this.statePartReplace(previousPartName, newPart, newPartName, dontRecordChanges);
         // active name not changed
         if (this.valueKeyIsActiveName) {
             // active value is the state part pointed by the active name, e.g. switcherState["editable"]
@@ -128,9 +161,27 @@ export default class SwitcherComponent extends StaticContainerComponent {
     }
 
     /**
+     * Replaces some component's state parts; the parts should have no name change!.
+     *
+     * @param {{[name: PartName]: SCP}[]|SCT} parts
+     */
+    replaceParts(parts) {
+        partsOf(parts).forEach(([key, value]) => this.replacePart(key, value));
+    }
+
+    /**
+     * @param {PartName} partName
+     * @param {boolean=} dontClone
+     * @return {*}
+     */
+    getPart(partName, dontClone) {
+        return this.partialStateHolder.getPart(partName, dontClone);
+    }
+
+    /**
      * @protected
      */
-    _switchToForNewState() {
+    _switchForNewState() {
         const stateCopy = this.getStateCopy();
         const activeName = stateCopy?.[this.activeNameKey];
         this._switchToImpl(activeName, this._activeValueFromState(stateCopy));
@@ -143,7 +194,7 @@ export default class SwitcherComponent extends StaticContainerComponent {
     _switchToImpl(newActiveName, newActiveValue) {
         this.activeComponent?.close();
         const switchToComponent = this.childrenComponents.getChildByPartName(newActiveName);
-        this._replacePartImpl(this.activeNameKey, newActiveName);
+        this.statePartReplace(this.activeNameKey, newActiveName);
         switchToComponent?.render(newActiveValue);
     }
 

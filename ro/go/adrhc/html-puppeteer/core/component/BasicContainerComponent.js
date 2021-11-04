@@ -1,12 +1,10 @@
 import PartialStateHolder, {partsOf} from "../state/PartialStateHolder.js";
-import ChildrenComponents from "./composition/ChildrenComponents.js";
 import {isTrue} from "../../util/AssertionUtils.js";
-import ChildrenShells from "../view/ChildrenShells.js";
-import ChildrenShellFinder from "../view/ChildrenShellFinder.js";
 import {stateIsEmpty} from "../state/StateHolder.js";
 import AbstractComponent from "./AbstractComponent.js";
 import {withDefaults} from "./options/ComponentOptionsBuilder.js";
 import ComponentIllustrator from "../state-changes-handler/ComponentIllustrator.js";
+import ContainerHelper from "../../helper/ContainerHelper.js";
 
 /**
  * @typedef {AbstractComponentOptions & ContainerEventsBinderOptions & ChildrenComponentsOptions} BasicContainerComponentOptions
@@ -14,7 +12,7 @@ import ComponentIllustrator from "../state-changes-handler/ComponentIllustrator.
  * @property {ViewRemovalStrategy=} childrenRemovalStrategy
  * @property {string=} childrenRemovedPlaceholder
  * @property {string=} childrenRemovedCss
- * @property {Bag=} childrenCreationCommonOptions
+ * @property {ChildrenCreationCommonOptions} childrenCreationCommonOptions
  */
 /**
  * @template SCT, SCP
@@ -46,32 +44,19 @@ export default class BasicContainerComponent extends AbstractComponent {
 
     /**
      * @param {BasicContainerComponentOptions} options
-     * @param {ComponentIllustrator=} options.componentIllustrator
-     * @param {AbstractComponentOptions=} restOfOptions
      */
-    constructor({componentIllustrator, ...restOfOptions}) {
-        super(withDefaults(restOfOptions)
+    constructor(options) {
+        super(withDefaults(options)
             .withStateHolderProvider(c => new PartialStateHolder(c.config))
             // partial changes are not changing the container's view - that's
             // why ComponentIllustrator is used instead of SimplePartsIllustrator
             .addStateChangesHandlerProvider((component) =>
-                (componentIllustrator ?? new ComponentIllustrator(component.config)))
+                (component.config.componentIllustrator ?? new ComponentIllustrator(component.config)))
             .options());
-        const childrenShellFinder = this.config.childrenShellFinder ?? new ChildrenShellFinder(this.config.elemIdOrJQuery);
-        this.childrenShells = new ChildrenShells({
-            componentId: this.id, childrenShellFinder, ...this.config
-        });
-        const childrenCreationCommonOptions = _.defaults({}, this.config.childrenCreationCommonOptions, {
-            viewRemovalStrategy: this.config.childrenRemovalStrategy,
-            removedPlaceholder: this.config.childrenRemovedPlaceholder,
-            removedCss: this.config.childrenRemovedCss,
-        });
-        this.childrenComponents = new ChildrenComponents({
-            parent: this,
-            childrenShellFinder,
-            dontRenderChildren: this.config.dontRenderChildren,
-            childrenCreationCommonOptions
-        });
+        const helper = new ContainerHelper(this);
+        const childrenShellFinder = helper.createChildrenShellFinder();
+        this.childrenShells = helper.childrenShellsOf(childrenShellFinder);
+        this.childrenComponents = helper.childrenComponentsOf(childrenShellFinder);
     }
 
     /**
@@ -89,8 +74,18 @@ export default class BasicContainerComponent extends AbstractComponent {
         super.replaceState(newState);
         // create children for existing (static) shells
         this.childrenComponents.createChildrenForExistingShells();
-        // create shell and children for missing (dynamic) shells skipping existing children (having static shells)
-        partsOf(newState, !this.newChildrenGoLast)
+        // create dynamic children
+        this._createShellsAndChildren();
+    }
+
+    /**
+     * Creates the children and shells for parts not already having the related child created.
+     *
+     * @protected
+     */
+    _createShellsAndChildren() {
+        const state = this.getMutableState();
+        partsOf(state, !this.newChildrenGoLast)
             .filter(([key]) => !this.partialStateHolder.hasEmptyPart(key))
             .filter(([key]) => this.childrenComponents.getChildByPartName(key) == null)
             .forEach(([key]) => this._createOrUpdateChild(key));

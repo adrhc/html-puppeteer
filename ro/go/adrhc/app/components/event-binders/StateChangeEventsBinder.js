@@ -36,8 +36,10 @@ export default class StateChangeEventsBinder extends EventsBinder {
     _replaceParts(parts) {
         if (typeof this._component.replaceParts === "function") {
             this._component.replaceParts(parts);
+        } else if (typeof this._component.replacePart === "function") {
+            partsOf(parts).forEach(([key, value]) => this._component.replacePart(key, value));
         } else {
-            partsOf(parts).forEach(([key, value]) => this.replacePart(key, value));
+            alert(`this._component cant do partial replace! config:\n${JSON.stringify(this._component.config)}`);
         }
     }
 }
