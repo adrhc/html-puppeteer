@@ -4,7 +4,7 @@ import {stateIsEmpty} from "../state/StateHolder.js";
 import AbstractComponent from "./AbstractComponent.js";
 import {withDefaults} from "./options/ComponentOptionsBuilder.js";
 import ComponentIllustrator from "../state-changes-handler/ComponentIllustrator.js";
-import ContainerHelper from "../../helper/ContainerHelper.js";
+import ContainerHelper, {replacePart} from "../../helper/ContainerHelper.js";
 
 /**
  * @typedef {AbstractComponentOptions & ContainerEventsBinderOptions & ChildrenComponentsOptions} BasicContainerComponentOptions
@@ -27,6 +27,10 @@ export default class BasicContainerComponent extends AbstractComponent {
      * @type {ChildrenShells}
      */
     childrenShells;
+    /**
+     * @type {ReplacePartFn}
+     */
+    statePartReplace;
 
     /**
      * @return {boolean}
@@ -57,6 +61,7 @@ export default class BasicContainerComponent extends AbstractComponent {
         const childrenShellFinder = helper.createChildrenShellFinder();
         this.childrenShells = helper.childrenShellsOf(childrenShellFinder);
         this.childrenComponents = helper.childrenComponentsOf(childrenShellFinder);
+        this.statePartReplace = replacePart.bind(this);
     }
 
     /**
@@ -79,19 +84,6 @@ export default class BasicContainerComponent extends AbstractComponent {
     }
 
     /**
-     * Creates the children and shells for parts not already having the related child created.
-     *
-     * @protected
-     */
-    _createShellsAndChildren() {
-        const state = this.getMutableState();
-        partsOf(state, !this.newChildrenGoLast)
-            .filter(([key]) => !this.partialStateHolder.hasEmptyPart(key))
-            .filter(([key]) => this.childrenComponents.getChildByPartName(key) == null)
-            .forEach(([key]) => this._createOrUpdateChild(key));
-    }
-
-    /**
      * @param {PartName=} previousPartName
      * @param {SCP=} newPart
      * @param {PartName=} newPartName
@@ -101,9 +93,9 @@ export default class BasicContainerComponent extends AbstractComponent {
         const partName = newPartName ?? previousPartName;
         if (stateIsEmpty(newPart)) {
             this._removeChild(partName);
-            this._replacePartImpl(previousPartName, newPart, newPartName, dontRecordChanges);
+            this.statePartReplace(previousPartName, newPart, newPartName, dontRecordChanges);
         } else {
-            this._replacePartImpl(previousPartName, newPart, newPartName, dontRecordChanges);
+            this.statePartReplace(previousPartName, newPart, newPartName, dontRecordChanges);
             this._createOrUpdateChild(partName);
         }
     }
@@ -153,6 +145,19 @@ export default class BasicContainerComponent extends AbstractComponent {
     }
 
     /**
+     * Creates the children and shells for parts not already having the related child created.
+     *
+     * @protected
+     */
+    _createShellsAndChildren() {
+        const state = this.getMutableState();
+        partsOf(state, !this.newChildrenGoLast)
+            .filter(([key]) => !this.partialStateHolder.hasEmptyPart(key))
+            .filter(([key]) => this.childrenComponents.getChildByPartName(key) == null)
+            .forEach(([key]) => this._createOrUpdateChild(key));
+    }
+
+    /**
      * @param {PartName} partName
      * @protected
      */
@@ -171,17 +176,5 @@ export default class BasicContainerComponent extends AbstractComponent {
         this.childrenComponents.closeAndRemoveChild(partName);
         // the shell might actually be removed already by the closing child
         this.childrenShells.removeShell(partName);
-    }
-
-    /**
-     * @param {PartName=} previousPartName
-     * @param {SCP=} newPart
-     * @param {PartName=} newPartName
-     * @param {boolean=} dontRecordChanges
-     * @protected
-     */
-    _replacePartImpl(previousPartName, newPart, newPartName, dontRecordChanges) {
-        this.doWithState(partialStateHolder =>
-            partialStateHolder.replacePart(previousPartName, newPart, newPartName, dontRecordChanges));
     }
 }

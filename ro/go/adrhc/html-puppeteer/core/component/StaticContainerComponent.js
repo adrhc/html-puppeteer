@@ -43,9 +43,9 @@ export default class StaticContainerComponent extends BasicContainerComponent {
         const partName = newPartName ?? previousPartName;
         if (stateIsEmpty(newPart)) {
             this.childrenComponents.getChildByPartName(partName).close();
-            this._replacePartImpl(previousPartName, newPart, newPartName, dontRecordChanges);
+            this.statePartReplace(previousPartName, newPart, newPartName, dontRecordChanges);
         } else {
-            this._replacePartImpl(previousPartName, newPart, newPartName, dontRecordChanges);
+            this.statePartReplace(previousPartName, newPart, newPartName, dontRecordChanges);
             this._createOrUpdateChild(partName);
         }
     }
