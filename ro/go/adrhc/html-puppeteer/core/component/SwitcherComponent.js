@@ -5,7 +5,7 @@ import {USE_CSS} from "../view/SimpleView.js";
  * @template SCT,SCP
  *
  * @typedef {Object} SCT
- * @property {OptionalPartName=} activePart
+ * @property {OptionalPartName=} activeName
  * @property {SCP=} partValue
  */
 /**
@@ -39,8 +39,8 @@ export default class SwitcherComponent extends StaticContainerComponent {
      * @return {AbstractComponent}
      */
     get activeComponent() {
-        const activePart = this.activeName;
-        return this.childrenComponents.getChildByPartName(activePart);
+        const activeName = this.activeName;
+        return this.childrenComponents.getChildByPartName(activeName);
     }
 
     /**
@@ -67,8 +67,8 @@ export default class SwitcherComponent extends StaticContainerComponent {
     replaceState(newState) {
         super.replaceState(newState);
         this.childrenComponents.closeChildren();
-        if (newState?.activePart != null) {
-            this.switchTo(newState.activePart, newState.partValue);
+        if (newState?.activeName != null) {
+            this.switchTo(newState.activeName, newState.partValue);
         }
     }
 
