@@ -6,13 +6,16 @@ import PartialStateHolder from "../state/PartialStateHolder.js";
 import ComponentIllustrator from "../state-changes-handler/ComponentIllustrator.js";
 import ContainerHelper, {replacePart, replaceParts} from "../../helper/ContainerHelper.js";
 /**
- * @typedef {AbstractComponentOptions & ContainerEventsBinderOptions & ChildrenComponentsOptions} SwitcherComponentOptions
+ * @typedef {AbstractComponentOptions & ChildrenComponentsOptions} SwitcherComponentOptions
  * @property {boolean=} dontRenderChildren
  * @property {ViewRemovalStrategy=} childrenRemovalStrategy
  * @property {string=} childrenRemovedPlaceholder
  * @property {string=} childrenRemovedCss
  * @property {ChildrenCreationCommonOptions} childrenCreationCommonOptions
  * @property {ChildrenShellFinder=} childrenShellFinder
+ * @property {string=} activeNameKey is the partName storing the active-component name (i.e. the name equal to children's "data-part" in html)
+ * @property {string=} activeValueKey is the partName where the active-component's value is stored by SwitcherComponent
+ * @property {boolean=} [valueKeyIsActiveName=true] indicates that each active-component name is the activeNameKey's value; e.g. activeNameKey="editable" means that replacePart("editable", newState) should set newState into both SwitcherComponent (partial replace) and the active-component (complete replace)
  */
 /**
  * @template SCT,SCP
@@ -38,11 +41,6 @@ import ContainerHelper, {replacePart, replaceParts} from "../../helper/Container
  * Any partial state change on SwitcherComponent is a partial state change
  * on active-component too. A complete state change on SwitcherComponent
  * should translate into a complete state change on active-component too.
- *
- * @typedef {Object} SwitcherComponentOptions
- * @property {string=} activeNameKey is the partName storing the active-component name (i.e. the name equal to children's "data-part" in html)
- * @property {string=} activeValueKey is the partName where the active-component's value is stored by SwitcherComponent
- * @property {boolean=} [valueKeyIsActiveName=true] indicates that each active-component name is the activeNameKey's value; e.g. activeNameKey="editable" means that replacePart("editable", newState) should set newState into both SwitcherComponent (partial replace) and the active-component (complete replace)
  */
 export default class SwitcherComponent extends AbstractComponent {
     /**

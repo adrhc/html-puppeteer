@@ -7,7 +7,7 @@ import ComponentIllustrator from "../state-changes-handler/ComponentIllustrator.
 import ContainerHelper, {replacePart, replaceParts} from "../../helper/ContainerHelper.js";
 
 /**
- * @typedef {AbstractComponentOptions & ContainerEventsBinderOptions & ChildrenComponentsOptions} BasicContainerComponentOptions
+ * @typedef {AbstractComponentOptions & ChildrenComponentsOptions} BasicContainerComponentOptions
  * @property {boolean=} dontRenderChildren
  * @property {ViewRemovalStrategy=} childrenRemovalStrategy
  * @property {string=} childrenRemovedPlaceholder
@@ -85,7 +85,7 @@ export default class BasicContainerComponent extends AbstractComponent {
         // create children for existing (static) shells
         this.childrenComponents.createChildrenForExistingShells();
         // create dynamic children
-        this._createShellsAndChildren();
+        this._createMissingShellsAndChildren();
     }
 
     /**
@@ -145,7 +145,7 @@ export default class BasicContainerComponent extends AbstractComponent {
      *
      * @protected
      */
-    _createShellsAndChildren() {
+    _createMissingShellsAndChildren() {
         const state = this.getMutableState();
         partsOf(state, !this.newChildrenGoLast)
             .filter(([key]) => !this.partialStateHolder.hasEmptyPart(key))

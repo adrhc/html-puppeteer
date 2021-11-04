@@ -4,6 +4,9 @@ import {withDefaults} from "./options/ComponentOptionsBuilder.js";
 import ContainerEventsBinder from "./events-binder/ContainerEventsBinder.js";
 
 /**
+ * @typedef {BasicContainerComponentOptions & ContainerEventsBinderOptions} DynamicContainerComponentOptions
+ */
+/**
  * @template SCT, SCP
  * @extends {AbstractComponent}
  */
