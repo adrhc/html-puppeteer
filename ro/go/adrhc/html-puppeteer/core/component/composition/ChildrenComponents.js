@@ -129,6 +129,13 @@ export default class ChildrenComponents {
     }
 
     /**
+     * close all children
+     */
+    closeChildren() {
+        Object.keys(this.children).forEach(partName => this.children[partName].close());
+    }
+
+    /**
      * Detach event handlers then remove all children.
      */
     disconnectAndRemoveChildren() {

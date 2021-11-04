@@ -109,6 +109,10 @@ div[data-part], .parent {
     background-color: aliceblue;
 }
 
+.bgc-antiquewhite {
+    background-color: antiquewhite;
+}
+
 .scenario10 [data-part="cats"] [data-type],
 .scenario12 [data-part="dogs"] [data-type] {
     display: flex;

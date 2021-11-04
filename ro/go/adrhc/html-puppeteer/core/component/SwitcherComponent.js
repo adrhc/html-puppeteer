@@ -1,16 +1,30 @@
 import StaticContainerComponent from "./StaticContainerComponent.js";
-import {USE_CSS} from "../view/SimpleView.js";
+import {REMOVE_CONTENT, USE_CSS} from "../view/SimpleView.js";
 
 /**
- * @template SCT, SCP
+ * @template SCT,SCP
+ *
+ * @typedef {Object} SCT
+ * @property {PartName} activePart
+ * @property {SCP} partValue
+ */
+/**
  * @extends {StaticContainerComponent}
  */
 export default class SwitcherComponent extends StaticContainerComponent {
     /**
-     * @return {SCT}
+     * @return {AbstractComponent}
+     */
+    get activeComponent() {
+        const activePartName = this.activePartName;
+        return this.childrenComponents.getChildByPartName(activePartName);
+    }
+
+    /**
+     * @return {PartName}
      */
     get activePartName() {
-        return this.getMutableState();
+        return this.getPart("activePart", true);
     }
 
     /**
@@ -19,7 +33,7 @@ export default class SwitcherComponent extends StaticContainerComponent {
      * @param {StaticContainerComponentOptions=} restOfOptions
      */
     constructor({childrenRemovalStrategy, ...restOfOptions}) {
-        super({childrenRemovalStrategy: USE_CSS, ...restOfOptions});
+        super({childrenRemovalStrategy: USE_CSS, viewRemovalStrategy: REMOVE_CONTENT, ...restOfOptions});
     }
 
     /**
@@ -27,27 +41,36 @@ export default class SwitcherComponent extends StaticContainerComponent {
      *
      * @param {SCT=} newState
      */
-    replaceState(newState) {
+    replaceState(newState = {}) {
         super.replaceState(newState);
-        this.switchTo(newState);
+        this.childrenComponents.closeChildren();
+        this.switchTo(newState.activePart, newState.partValue);
+    }
+
+    /**
+     * @param {PartName=} previousPartName
+     * @param {SCP|PartName=} newPart
+     * @param {PartName=} newPartName
+     * @param {boolean=} dontRecordChanges
+     */
+    replacePart(previousPartName, newPart, newPartName = previousPartName, dontRecordChanges) {
+        if (newPartName === "activePart") {
+            this.switchTo(newPart);
+        } else {
+            this.switchTo(newPartName, newPart);
+        }
     }
 
     /**
      * @param {SCT|PartName} partName
+     * @param {SCP=} partValue
      */
-    switchTo(partName) {
-        const activeComponent = this.getActiveComponent();
+    switchTo(partName, partValue) {
+        const activeComponent = this.activeComponent;
         const activeState = activeComponent?.getStateCopy();
         const switchToComponent = this.childrenComponents.getChildByPartName(partName);
         activeComponent?.close();
-        switchToComponent.render(activeState);
-    }
-
-    /**
-     * @return {AbstractComponent}
-     */
-    getActiveComponent() {
-        const activePartName = this.activePartName;
-        return this.childrenComponents.getChildByPartName(activePartName);
+        super.replacePart("activePart", partName);
+        switchToComponent.render(partValue ?? activeState);
     }
 }

@@ -1,6 +1,7 @@
 import BasicContainerComponent from "./BasicContainerComponent.js";
 import {isTrue} from "../../util/AssertionUtils.js";
 import ChildrenShellFinder from "../view/ChildrenShellFinder.js";
+import {stateIsEmpty} from "../state/StateHolder.js";
 
 /**
  * @typedef {BasicContainerComponentOptions} StaticContainerComponentOptions
@@ -30,6 +31,23 @@ export default class StaticContainerComponent extends BasicContainerComponent {
         super({...options, ignoreShellTemplateOptions: true});
         this.childrenShellFinder = this.config.childrenShellFinder ?? new ChildrenShellFinder(this.config.elemIdOrJQuery);
         this.ignoreMissingShells = this.config.ignoreMissingShells ?? true;
+    }
+
+    /**
+     * @param {PartName=} previousPartName
+     * @param {SCP=} newPart
+     * @param {PartName=} newPartName
+     * @param {boolean=} dontRecordChanges
+     */
+    replacePart(previousPartName, newPart, newPartName, dontRecordChanges) {
+        const partName = newPartName ?? previousPartName;
+        if (stateIsEmpty(newPart)) {
+            this.childrenComponents.getChildByPartName(partName).close();
+            this._replacePartImpl(previousPartName, newPart, newPartName, dontRecordChanges);
+        } else {
+            this._replacePartImpl(previousPartName, newPart, newPartName, dontRecordChanges);
+            this._createOrUpdateChild(partName);
+        }
     }
 
     /**

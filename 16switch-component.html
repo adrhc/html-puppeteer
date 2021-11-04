@@ -31,13 +31,13 @@
 	<div class="section title">Component's view</div>
 	<div class="section parent fit-content min-width-33-percent"
 	     data-children-removed-css="disabled"
-	     data-initial-state="part1"
+	     data-initial-state='{"activePart": "part1", "part1": "part1 value"}'
 	     data-removed-placeholder='The "MAIN" component is closed!'
 	     data-type="switcher"
 	     id="MAIN">
 		<!-- level 1 children don't need data-owner -->
-		<div class="mb3" data-initial-state="part1 activated!" data-part="part1" data-type="value"></div>
-		<div class="mb3" data-initial-state="part2 activated!" data-part="part2" data-type="value"></div>
+		<div class="mb3 bgc-aliceblue" data-initial-state="part1 is deactivated!" data-part="part1" data-type="value"></div>
+		<div class="mb3 bgc-antiquewhite" data-initial-state="part2 is deactivated!" data-part="part2" data-type="value"></div>
 	</div>
 </div>
 
