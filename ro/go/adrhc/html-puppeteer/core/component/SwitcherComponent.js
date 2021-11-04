@@ -1,6 +1,5 @@
 import StaticContainerComponent from "./StaticContainerComponent.js";
-
-const ACTIVE_COMPONENT = "activePartName";
+import {USE_CSS} from "../view/SimpleView.js";
 
 /**
  * @template SCT, SCP
@@ -16,9 +15,11 @@ export default class SwitcherComponent extends StaticContainerComponent {
 
     /**
      * @param {StaticContainerComponentOptions} options
+     * @param {ViewRemovalStrategy} options.childrenRemovalStrategy
+     * @param {StaticContainerComponentOptions=} restOfOptions
      */
-    constructor(options) {
-        super({...options, dontRenderChildren: true});
+    constructor({childrenRemovalStrategy, ...restOfOptions}) {
+        super({childrenRemovalStrategy: USE_CSS, ...restOfOptions});
     }
 
     /**

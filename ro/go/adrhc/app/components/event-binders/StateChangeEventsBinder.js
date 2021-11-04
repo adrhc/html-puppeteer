@@ -1,7 +1,7 @@
 import EventsBinder from "../../../html-puppeteer/core/component/events-binder/EventsBinder.js";
 import {$btnOf} from "../../../html-puppeteer/util/SelectorUtils.js";
 import {partsOf} from "../../../html-puppeteer/core/state/PartialStateHolder.js";
-import {disable, enable, jsonParsedValOf} from "../../../html-puppeteer/util/DomUtils.js";
+import {activate, deactivate, jsonParsedValOf} from "../../../html-puppeteer/util/DomUtils.js";
 import {when} from "../../../html-puppeteer/helper/DomEventHandlerBuilder.js";
 
 export default class StateChangeEventsBinder extends EventsBinder {
@@ -9,7 +9,7 @@ export default class StateChangeEventsBinder extends EventsBinder {
      * attach DOM event handlers
      */
     attachEventHandlers() {
-        enable($btnOf("change-parent-state"), $btnOf("change-partial-state"));
+        activate($btnOf("change-parent-state"), $btnOf("change-partial-state"));
         when("click").occurOnBtn("change-parent-state").do(() => {
             this._component.replaceState(jsonParsedValOf("main-debugger"));
         });
@@ -22,7 +22,7 @@ export default class StateChangeEventsBinder extends EventsBinder {
      * detach DOM event handlers
      */
     detachEventHandlers() {
-        disable($btnOf("change-parent-state"), $btnOf("change-partial-state"));
+        deactivate($btnOf("change-parent-state"), $btnOf("change-partial-state"));
         $btnOf("change-parent-state").off("click");
         $btnOf("change-partial-state").off("click");
     }

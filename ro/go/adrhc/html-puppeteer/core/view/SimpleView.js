@@ -1,11 +1,15 @@
 import AbstractView from "./AbstractView.js";
 import {alertOrThrow, isTrue} from "../../util/AssertionUtils.js";
 import {jQueryOf} from "../../util/Utils.js";
+import {disable, enable} from "../../util/DomUtils.js";
 
+// removal strategy
 export const REMOVE_ELEMENT = "REMOVE_ELEMENT";
 export const REMOVE_CONTENT = "REMOVE_CONTENT";
 export const USE_HTML = "USE_HTML";
+export const USE_CSS = "USE_CSS";
 
+// rendering strategy
 export const RENDER_VAL = "val";
 export const RENDER_TEXT = "text";
 export const RENDER_HTML = "html";
@@ -27,6 +31,7 @@ export const RENDER_HTML = "html";
  * @property {ViewRemovalStrategy=} viewRenderStrategy
  * @property {ViewRemovalStrategy=} viewRemovalStrategy
  * @property {string=} removedPlaceholder is the text or html to be used when the component is removed
+ * @property {string=} removedCss is the class to add to the $elem when the component is removed
  */
 /**
  * @typedef {function()} LazySetupWorker
@@ -40,6 +45,10 @@ export default class SimpleView extends AbstractView {
      * @type {LazySetupWorker[]}
      */
     lazySetupWorkers = [];
+    /**
+     * @type {string}
+     */
+    removedCss;
     /**
      * @type {string}
      */
@@ -66,7 +75,8 @@ export default class SimpleView extends AbstractView {
                     $elem,
                     viewRenderStrategy,
                     viewRemovalStrategy,
-                    removedPlaceholder
+                    removedPlaceholder,
+                    removedCss
                 }) {
         super();
         this.viewValuesTransformerFn = viewValuesTransformerFn ?? ((values) => values);
@@ -76,6 +86,7 @@ export default class SimpleView extends AbstractView {
             viewRenderStrategy ?? (this.$elem.is("textarea") ? RENDER_VAL : RENDER_HTML));
         this.viewRemovalStrategy = viewRemovalStrategy ?? (removedPlaceholder != null ? USE_HTML : REMOVE_ELEMENT);
         this.removedPlaceholder = removedPlaceholder;
+        this.removedCss = removedCss;
         this.$elem.length && this._execLazySetup(true);
     }
 
@@ -97,6 +108,7 @@ export default class SimpleView extends AbstractView {
      * @param {{}} values
      */
     create(values) {
+        this._removalStrategyIsCss() && this._discardCssRemoval();
         this.replace(values);
     }
 
@@ -126,8 +138,43 @@ export default class SimpleView extends AbstractView {
                 this._execLazySetup();
                 this.$elem.html(this.removedPlaceholder);
                 break;
+            case USE_CSS:
+                this._removeWithCss();
+                break;
             default:
                 alertOrThrow(`Bad viewRemovalStrategy! this.viewRemovalStrategy = ${this.viewRemovalStrategy}`);
+        }
+    }
+
+    /**
+     * @return {boolean}
+     * @protected
+     */
+    _removalStrategyIsCss() {
+        return this.viewRemovalStrategy === USE_CSS;
+    }
+
+    /**
+     * @protected
+     */
+    _discardCssRemoval() {
+        this._execLazySetup();
+        if (this.removedCss) {
+            this.$elem.removeClass(this.removedCss);
+        } else {
+            enable(this.$elem);
+        }
+    }
+
+    /**
+     * @protected
+     */
+    _removeWithCss() {
+        this._execLazySetup();
+        if (this.removedCss) {
+            this.$elem.addClass(this.removedCss);
+        } else {
+            disable(this.$elem);
         }
     }
 }

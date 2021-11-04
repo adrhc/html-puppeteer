@@ -4,6 +4,7 @@ import ChildrenShellFinder from "../view/ChildrenShellFinder.js";
 
 /**
  * @typedef {BasicContainerComponentOptions} StaticContainerComponentOptions
+ * @property {ChildrenShellFinder=} childrenShellFinder
  * @property {boolean=} ignoreMissingShells
  */
 /**
@@ -24,13 +25,10 @@ export default class StaticContainerComponent extends BasicContainerComponent {
      * No children will be dynamically created hence there's no need for a shell template.
      *
      * @param {StaticContainerComponentOptions} options
-     * @param {ElemIdOrJQuery} options.elemIdOrJQuery
-     * @param {ChildrenShellFinder} options.childrenShellFinder
-     * @param {BasicContainerComponentOptions} restOfOptions
      */
-    constructor({elemIdOrJQuery, childrenShellFinder, ...restOfOptions}) {
-        super({...restOfOptions, elemIdOrJQuery, childrenShellFinder, ignoreShellTemplateOptions: true});
-        this.childrenShellFinder = childrenShellFinder ?? new ChildrenShellFinder(elemIdOrJQuery);
+    constructor(options) {
+        super({...options, ignoreShellTemplateOptions: true});
+        this.childrenShellFinder = this.config.childrenShellFinder ?? new ChildrenShellFinder(this.config.elemIdOrJQuery);
         this.ignoreMissingShells = this.config.ignoreMissingShells ?? true;
     }
 

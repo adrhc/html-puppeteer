@@ -6,14 +6,28 @@ import {$of, jQueryOf} from "./Utils.js";
  * @param {jQuery} $elems
  */
 export function disable(...$elems) {
-    $elems.forEach(it => it.attr('disabled', 'disabled'));
+    $elems.forEach(it => it.attr("disabled", "disabled"));
 }
 
 /**
  * @param {jQuery} $elems
  */
 export function enable(...$elems) {
-    $elems.forEach(it => it.removeAttr('disabled'));
+    $elems.forEach(it => it.removeAttr("disabled"));
+}
+
+/**
+ * @param {jQuery} $elems
+ */
+export function deactivate(...$elems) {
+    $elems.forEach(it => it.addClass("deactivated"));
+}
+
+/**
+ * @param {jQuery} $elems
+ */
+export function activate(...$elems) {
+    $elems.forEach(it => it.removeClass("deactivated"));
 }
 
 /**
@@ -34,13 +48,14 @@ export function valOf(elemIdOrJQuery) {
 
 /**
  * @param {ElemIdOrJQuery} elemIdOrJQuery
+ * @param {string=} key
  * @return {Object.<string, string>}
  */
-export function dataOf(elemIdOrJQuery) {
+export function dataOf(elemIdOrJQuery, key) {
     if (elemIdOrJQuery == null) {
         return undefined;
     }
-    return jQueryOf(elemIdOrJQuery).data();
+    return key ? jQueryOf(elemIdOrJQuery).data(key) : jQueryOf(elemIdOrJQuery).data();
 }
 
 /**

@@ -12,6 +12,9 @@ import ComponentIllustrator from "../state-changes-handler/ComponentIllustrator.
 /**
  * @typedef {AbstractComponentOptions & ContainerEventsBinderOptions & ChildrenComponentsOptions} BasicContainerComponentOptions
  * @property {boolean=} dontRenderChildren
+ * @property {ViewRemovalStrategy=} childrenRemovalStrategy
+ * @property {string=} childrenRemovedPlaceholder
+ * @property {string=} childrenRemovedCss
  * @property {Bag=} childrenCreationCommonOptions
  */
 /**
@@ -45,23 +48,28 @@ export default class BasicContainerComponent extends AbstractComponent {
     /**
      * @param {BasicContainerComponentOptions} options
      * @param {ComponentIllustrator=} options.componentIllustrator
-     * @param {boolean=} options.dontRenderChildren
-     * @param {Bag=} options.childrenCreationCommonOptions
      * @param {AbstractComponentOptions=} restOfOptions
      */
-    constructor({componentIllustrator, dontRenderChildren, childrenCreationCommonOptions, ...restOfOptions}) {
+    constructor({componentIllustrator, ...restOfOptions}) {
         super(withDefaults(restOfOptions)
             .withStateHolderProvider(c => new PartialStateHolder(c.config))
             .addStateChangesHandlerProvider((component) =>
                 (componentIllustrator ?? new ComponentIllustrator(component.config)))
             .addEventsBinders(new ContainerEventsBinder())
             .options());
-        const childrenShellFinder = new ChildrenShellFinder(this.config.elemIdOrJQuery);
-        this.childrenShells = new ChildrenShells({componentId: this.id, childrenShellFinder, ...this.config});
+        const childrenShellFinder = this.config.childrenShellFinder ?? new ChildrenShellFinder(this.config.elemIdOrJQuery);
+        this.childrenShells = new ChildrenShells({
+            componentId: this.id, childrenShellFinder, ...this.config
+        });
+        const childrenCreationCommonOptions = _.defaults({}, this.config.childrenCreationCommonOptions, {
+            viewRemovalStrategy: this.config.childrenRemovalStrategy,
+            removedPlaceholder: this.config.childrenRemovedPlaceholder,
+            removedCss: this.config.childrenRemovedCss,
+        });
         this.childrenComponents = new ChildrenComponents({
             parent: this,
             childrenShellFinder,
-            dontRenderChildren,
+            dontRenderChildren: this.config.dontRenderChildren,
             childrenCreationCommonOptions
         });
     }

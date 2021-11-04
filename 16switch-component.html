@@ -30,15 +30,14 @@
 	<!-- the component -->
 	<div class="section title">Component's view</div>
 	<div class="section parent fit-content min-width-33-percent"
+	     data-children-removed-css="disabled"
 	     data-initial-state="part1"
 	     data-removed-placeholder='The "MAIN" component is closed!'
 	     data-type="switcher"
 	     id="MAIN">
 		<!-- level 1 children don't need data-owner -->
-		<div class="mb3" data-initial-state="part1 activated!" data-part="part1" data-removed-placeholder=""
-		     data-type="value"></div>
-		<div class="mb3" data-initial-state="part2 activated!" data-part="part2" data-removed-placeholder=""
-		     data-type="value"></div>
+		<div class="mb3" data-initial-state="part1 activated!" data-part="part1" data-type="value"></div>
+		<div class="mb3" data-initial-state="part2 activated!" data-part="part2" data-type="value"></div>
 	</div>
 </div>
 
@@ -46,7 +45,7 @@
 	<!-- open/close buttons -->
 	<div class="section flex-center fill-available buttons">
 		<button data-close="click" data-owner="MAIN">Close "MAIN"</button>
-		<button class="disabled" data-open="click" data-owner="MAIN">Open "MAIN"</button>
+		<button class="deactivated" data-open="click" data-owner="MAIN">Open "MAIN"</button>
 	</div>
 	<div class="section title">debuggers</div>
 	<!-- state changing buttons -->

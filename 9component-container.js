@@ -27,13 +27,13 @@ class App {
         });
         $(btnSelectorOf("create")).on("click", () => {
             this.parent.replacePart("cats", generateCats(1));
-            $(btnSelectorOf("create")).attr('disabled', 'disabled');
+            $(btnSelectorOf("create")).attr("disabled", "disabled");
             $(btnSelectorOf("remove")).removeAttr('disabled');
             $('textarea').height(getTotalHeight);
         });
         $(btnSelectorOf("remove")).on("click", () => {
             this.parent.replacePart("cats");
-            $(btnSelectorOf("remove")).attr('disabled', 'disabled');
+            $(btnSelectorOf("remove")).attr("disabled", "disabled");
             $(btnSelectorOf("create")).removeAttr('disabled');
             $('textarea').height(0);
             $('textarea').height(getTotalHeight);
