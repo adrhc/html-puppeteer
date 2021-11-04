@@ -3,10 +3,7 @@ import GlobalConfig from "../../util/GlobalConfig.js";
 import AbstractContainerComponent from "./AbstractContainerComponent.js";
 
 /**
- * @typedef {AbstractContainerComponentOptions} SwitcherComponentOptions
- * @property {ViewRemovalStrategy=} childrenRemovalStrategy
- * @property {string=} childrenRemovedPlaceholder
- * @property {string=} childrenRemovedCss
+ * @typedef {AbstractContainerComponent} SwitcherComponentOptions
  * @property {string=} activeNameKey is the partName storing the active-component name (i.e. the name equal to children's "data-part" in html)
  * @property {string=} activeValueKey is the partName where the active-component's value is stored by SwitcherComponent
  * @property {boolean=} [valueKeyIsActiveName=true] indicates that each active-component name is the activeNameKey's value; e.g. activeNameKey="editable" means that replacePart("editable", newState) should set newState into both SwitcherComponent (partial replace) and the active-component (complete replace)

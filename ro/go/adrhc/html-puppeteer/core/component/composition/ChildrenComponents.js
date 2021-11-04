@@ -9,7 +9,7 @@ import {partOf} from "../../../util/GlobalConfig.js";
  * @property {BasicContainerComponent=} parent
  * @property {ChildrenShellFinder=} childrenShellFinder
  * @property {boolean=} dontRenderChildren
- * @property {Bag=} childrenCreationCommonOptions
+ * @property {ChildrenCreationCommonOptions=} childrenCreationCommonOptions
  */
 /**
  * @typedef {{[name: string]: AbstractComponent}} ComponentsCollection
@@ -41,10 +41,11 @@ export default class ChildrenComponents {
 
     /**
      * @param {ChildrenComponentsOptions} options
+     * @param {ElemIdOrJQuery=} options.componentsHolder
      * @param {AbstractComponent=} options.parent
      * @param {ChildrenShellFinder=} options.childrenShellFinder
      * @param {boolean=} options.dontRenderChildren
-     * @param {Object=} options.childrenCreationCommonOptions
+     * @param {ChildrenCreationCommonOptions=} options.childrenCreationCommonOptions
      */
     constructor({componentsHolder, parent, childrenShellFinder, dontRenderChildren, childrenCreationCommonOptions}) {
         this.parent = parent;

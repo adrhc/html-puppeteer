@@ -6,6 +6,9 @@ import ContainerHelper from "../../helper/ContainerHelper.js";
 
 /**
  * @typedef {AbstractComponentOptions & ChildrenComponentsOptions} AbstractContainerComponentOptions
+ * @property {ViewRemovalStrategy=} childrenRemovalStrategy
+ * @property {string=} childrenRemovedPlaceholder
+ * @property {string=} childrenRemovedCss
  */
 /**
  * @template SCT,SCP
