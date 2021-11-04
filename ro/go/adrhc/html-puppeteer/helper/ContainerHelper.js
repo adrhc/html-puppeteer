@@ -68,6 +68,13 @@ export default class ContainerHelper {
     }
 
     /**
+     * @return {ChildrenShells}
+     */
+    createChildrenShells() {
+        return this.childrenShellsOf(this.createChildrenShellFinder());
+    }
+
+    /**
      * @param {ChildrenShellFinder} childrenShellFinder
      * @return {ChildrenShells}
      */

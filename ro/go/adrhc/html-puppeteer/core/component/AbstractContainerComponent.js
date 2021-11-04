@@ -69,4 +69,12 @@ export default class AbstractContainerComponent extends AbstractComponent {
     replaceParts(parts) {
         partsOf(parts).forEach(([key, value]) => this.replacePart(key, value));
     }
+
+    /**
+     * Detach event handlers.
+     */
+    disconnect() {
+        this.childrenComponents.disconnectAndRemoveChildren();
+        super.disconnect();
+    }
 }

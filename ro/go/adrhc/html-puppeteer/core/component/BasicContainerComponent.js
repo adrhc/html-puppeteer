@@ -1,40 +1,20 @@
-import PartialStateHolder, {partsOf} from "../state/PartialStateHolder.js";
+import {partsOf} from "../state/PartialStateHolder.js";
 import {isTrue} from "../../util/AssertionUtils.js";
 import {stateIsEmpty} from "../state/StateHolder.js";
-import AbstractComponent from "./AbstractComponent.js";
-import {withDefaults} from "./options/ComponentOptionsBuilder.js";
-import ComponentIllustrator from "../state-changes-handler/ComponentIllustrator.js";
-import ContainerHelper, {replacePart, replaceParts} from "../../helper/ContainerHelper.js";
+import ContainerHelper from "../../helper/ContainerHelper.js";
+import AbstractContainerComponent from "./AbstractContainerComponent.js";
 
 /**
- * @typedef {AbstractComponentOptions & ChildrenComponentsOptions} BasicContainerComponentOptions
- * @property {boolean=} dontRenderChildren
- * @property {ViewRemovalStrategy=} childrenRemovalStrategy
- * @property {string=} childrenRemovedPlaceholder
- * @property {string=} childrenRemovedCss
- * @property {ChildrenCreationCommonOptions} childrenCreationCommonOptions
+ * @typedef {AbstractContainerComponentOptions} BasicContainerComponentOptions
  */
 /**
  * @template SCT, SCP
- * @extends {AbstractComponent}
  */
-export default class BasicContainerComponent extends AbstractComponent {
-    /**
-     * @type {ChildrenComponents}
-     */
-    childrenComponents;
+export default class BasicContainerComponent extends AbstractContainerComponent {
     /**
      * @type {ChildrenShells}
      */
     childrenShells;
-    /**
-     * @type {ReplacePartsFn}
-     */
-    replaceParts;
-    /**
-     * @type {ReplacePartFn}
-     */
-    statePartReplace;
 
     /**
      * @return {boolean}
@@ -44,29 +24,12 @@ export default class BasicContainerComponent extends AbstractComponent {
     }
 
     /**
-     * @return {PartialStateHolder}
-     */
-    get partialStateHolder() {
-        return /** @type {PartialStateHolder} */ this.stateHolder;
-    }
-
-    /**
      * @param {BasicContainerComponentOptions} options
      */
     constructor(options) {
-        super(withDefaults(options)
-            .withStateHolderProvider(c => new PartialStateHolder(c.config))
-            // partial changes are not changing the container's view - that's
-            // why ComponentIllustrator is used instead of SimplePartsIllustrator
-            .addStateChangesHandlerProvider((component) =>
-                (component.config.componentIllustrator ?? new ComponentIllustrator(component.config)))
-            .options());
+        super(options);
         const helper = new ContainerHelper(this);
-        const childrenShellFinder = helper.createChildrenShellFinder();
-        this.childrenShells = helper.childrenShellsOf(childrenShellFinder);
-        this.childrenComponents = helper.childrenComponentsOf(childrenShellFinder);
-        this.statePartReplace = replacePart.bind(this);
-        this.replaceParts = replaceParts.bind(this);
+        this.childrenShells = helper.createChildrenShells();
     }
 
     /**
@@ -98,20 +61,11 @@ export default class BasicContainerComponent extends AbstractComponent {
         const partName = newPartName ?? previousPartName;
         if (stateIsEmpty(newPart)) {
             this._removeChild(partName);
-            this.statePartReplace(previousPartName, newPart, newPartName, dontRecordChanges);
+            super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
         } else {
-            this.statePartReplace(previousPartName, newPart, newPartName, dontRecordChanges);
+            super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
             this._createOrUpdateChild(partName);
         }
-    }
-
-    /**
-     * @param {PartName} partName
-     * @param {boolean=} dontClone
-     * @return {*}
-     */
-    getPart(partName, dontClone) {
-        return this.partialStateHolder.getPart(partName, dontClone);
     }
 
     /**
@@ -130,14 +84,6 @@ export default class BasicContainerComponent extends AbstractComponent {
     close() {
         this.childrenComponents.closeAndRemoveChildren();
         super.close();
-    }
-
-    /**
-     * Detach event handlers.
-     */
-    disconnect() {
-        this.childrenComponents.disconnectAndRemoveChildren();
-        super.disconnect();
     }
 
     /**
