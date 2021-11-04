@@ -5,8 +5,8 @@ import {REMOVE_CONTENT, USE_CSS} from "../view/SimpleView.js";
  * @template SCT,SCP
  *
  * @typedef {Object} SCT
- * @property {PartName} activePart
- * @property {SCP} partValue
+ * @property {OptionalPartName=} activePart
+ * @property {SCP=} partValue
  */
 /**
  * @extends {StaticContainerComponent}
@@ -16,14 +16,14 @@ export default class SwitcherComponent extends StaticContainerComponent {
      * @return {AbstractComponent}
      */
     get activeComponent() {
-        const activePartName = this.activePartName;
-        return this.childrenComponents.getChildByPartName(activePartName);
+        const activePart = this.activePart;
+        return this.childrenComponents.getChildByPartName(activePart);
     }
 
     /**
      * @return {PartName}
      */
-    get activePartName() {
+    get activePart() {
         return this.getPart("activePart", true);
     }
 
@@ -33,7 +33,7 @@ export default class SwitcherComponent extends StaticContainerComponent {
      * @param {StaticContainerComponentOptions=} restOfOptions
      */
     constructor({childrenRemovalStrategy, ...restOfOptions}) {
-        super({childrenRemovalStrategy: USE_CSS, viewRemovalStrategy: REMOVE_CONTENT, ...restOfOptions});
+        super({childrenRemovalStrategy: USE_CSS, ...restOfOptions});
     }
 
     /**
@@ -41,10 +41,12 @@ export default class SwitcherComponent extends StaticContainerComponent {
      *
      * @param {SCT=} newState
      */
-    replaceState(newState = {}) {
+    replaceState(newState) {
         super.replaceState(newState);
         this.childrenComponents.closeChildren();
-        this.switchTo(newState.activePart, newState.partValue);
+        if (newState?.activePart != null) {
+            this.switchTo(newState.activePart, newState.partValue);
+        }
     }
 
     /**
