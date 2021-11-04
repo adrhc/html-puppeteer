@@ -11,7 +11,7 @@ export default class EventsBinderGroup extends EventsBinder {
      */
     set eventsBinders(eventsBinders) {
         this._eventsBinders = eventsBinders;
-        this._component && this._eventsBinders.forEach(it => it.component = this._component);
+        super.component && this._eventsBinders.forEach(it => it.component = super.component);
     }
 
     /**

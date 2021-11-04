@@ -9,6 +9,13 @@ export default class EventsBinder {
     _component;
 
     /**
+     * @return {AbstractComponent}
+     */
+    get component() {
+        return this._component;
+    }
+
+    /**
      * The corresponding getter won't work in descendent classes!
      *
      * @param {AbstractComponent=} component
