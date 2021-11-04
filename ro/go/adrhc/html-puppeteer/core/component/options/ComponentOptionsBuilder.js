@@ -77,7 +77,8 @@ export class ComponentOptionsBuilder {
             const eventsBinders = pushNotNullMissing([],
                 currentConstructorOptions.eventsBinderProvider,
                 this.descendantComponentClassOptions.eventsBinderProvider)
-                .map(evbProvider => evbProvider(component));
+                .map(evbProvider => evbProvider(component))
+                .filter(it => it != null);
             eventsBinder && eventsBinders.push(eventsBinder);
             return eventsBinders.length ? new EventsBinderGroup(component, eventsBinders) : undefined;
         }
