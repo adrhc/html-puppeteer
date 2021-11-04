@@ -1,18 +1,17 @@
-import BasicContainerComponent from "./BasicContainerComponent.js";
 import {isTrue} from "../../util/AssertionUtils.js";
 import ChildrenShellFinder from "../view/ChildrenShellFinder.js";
 import {stateIsEmpty} from "../state/StateHolder.js";
+import AbstractContainerComponent from "./AbstractContainerComponent.js";
 
 /**
- * @typedef {BasicContainerComponentOptions} StaticContainerComponentOptions
+ * @typedef {AbstractContainerComponentOptions} StaticContainerComponentOptions
  * @property {ChildrenShellFinder=} childrenShellFinder
  * @property {boolean=} ignoreMissingShells
  */
 /**
  * @template SCT, SCP
- * @extends {BasicContainerComponent}
  */
-export default class StaticContainerComponent extends BasicContainerComponent {
+export default class StaticContainerComponent extends AbstractContainerComponent {
     /**
      * @type {ChildrenShellFinder}
      */
@@ -34,6 +33,23 @@ export default class StaticContainerComponent extends BasicContainerComponent {
     }
 
     /**
+     * Completely replaces the component's state and creates the children.
+     *
+     * @param {SCT=} newState
+     */
+    replaceState(newState) {
+        // this must happen before container redraw to give a
+        // chance to the children to unbind their event handlers;
+        // their view will be automatically destroyed when
+        // the parent redraws itself
+        this.childrenComponents.disconnectAndRemoveChildren();
+        // the parent redraws itself
+        super.replaceState(newState);
+        // create children for existing (static) shells
+        this.childrenComponents.createChildrenForExistingShells();
+    }
+
+    /**
      * @param {PartName=} previousPartName
      * @param {SCP=} newPart
      * @param {PartName=} newPartName
@@ -43,9 +59,9 @@ export default class StaticContainerComponent extends BasicContainerComponent {
         const partName = newPartName ?? previousPartName;
         if (stateIsEmpty(newPart)) {
             this.childrenComponents.getChildByPartName(partName).close();
-            this.statePartReplace(previousPartName, newPart, newPartName, dontRecordChanges);
+            super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
         } else {
-            this.statePartReplace(previousPartName, newPart, newPartName, dontRecordChanges);
+            super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
             this._createOrUpdateChild(partName);
         }
     }
