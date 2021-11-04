@@ -1,5 +1,5 @@
 import StaticContainerComponent from "./StaticContainerComponent.js";
-import {REMOVE_CONTENT, USE_CSS} from "../view/SimpleView.js";
+import {USE_CSS} from "../view/SimpleView.js";
 
 /**
  * @template SCT,SCP
@@ -9,6 +9,29 @@ import {REMOVE_CONTENT, USE_CSS} from "../view/SimpleView.js";
  * @property {SCP=} partValue
  */
 /**
+ * Notions:
+ * "active name" or "active-component name" or "switched to name" represents the value specified by "data-part" on a child component.
+ *
+ * Usecase: active-component state is 1x part of SwitcherComponent state
+ * When valueKey or valueKeyIsActiveName is set than SwitcherComponent.replacePart
+ * will do a SwitcherComponent partial state change and possibly a complete
+ * active-component state change, if the changed part name equals the
+ * active-component name. One have to use SwitcherComponent.activeComponent
+ * directly to do partial state changes on the active-component.
+ *
+ * Usecase: SwitcherComponent state is merged with active-component state
+ * When valueKey is missing and valueKeyIsActiveName is false than
+ * active-component's state is the SwitcherComponent's minus switchKey part.
+ * Any partial state change on SwitcherComponent is a partial state change
+ * on active-component too. A complete state change on SwitcherComponent
+ * should translate into a complete state change on active-component too.
+ *
+ * @typedef {Object} SwitcherComponentOptions
+ * @property {string=} switchKey is the partName storing the active-component name (i.e. the name equal to children's "data-part" in html)
+ * @property {string=} valueKey is the partName where the active-component's value is stored by SwitcherComponent
+ * @property {boolean=} valueKeyIsActiveName indicates that each active-component name is the switchKey's value; e.g. switcherKey="editable" means that replacePart("editable", newState) should set newState into both SwitcherComponent (partial replace) and the active-component (complete replace)
+ */
+/**
  * @extends {StaticContainerComponent}
  */
 export default class SwitcherComponent extends StaticContainerComponent {
@@ -16,15 +39,15 @@ export default class SwitcherComponent extends StaticContainerComponent {
      * @return {AbstractComponent}
      */
     get activeComponent() {
-        const activePart = this.activePart;
+        const activePart = this.activeName;
         return this.childrenComponents.getChildByPartName(activePart);
     }
 
     /**
      * @return {PartName}
      */
-    get activePart() {
-        return this.getPart("activePart", true);
+    get activeName() {
+        return this.getPart("activeName", true);
     }
 
     /**
@@ -56,7 +79,7 @@ export default class SwitcherComponent extends StaticContainerComponent {
      * @param {boolean=} dontRecordChanges
      */
     replacePart(previousPartName, newPart, newPartName = previousPartName, dontRecordChanges) {
-        if (newPartName === "activePart") {
+        if (newPartName === "activeName") {
             this.switchTo(newPart);
         } else {
             this.switchTo(newPartName, newPart);
@@ -72,7 +95,7 @@ export default class SwitcherComponent extends StaticContainerComponent {
         const activeState = activeComponent?.getStateCopy();
         const switchToComponent = this.childrenComponents.getChildByPartName(partName);
         activeComponent?.close();
-        super.replacePart("activePart", partName);
+        super.replacePart("activeName", partName);
         switchToComponent.render(partValue ?? activeState);
     }
 }
