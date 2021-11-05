@@ -25,11 +25,3 @@ export default class SimpleTemplateView extends AbstractTemplateView {
         }
     }
 }
-
-/**
- * @param {AbstractTemplateViewOptions} options
- * @return {SimpleTemplateView}
- */
-export function simpleTemplateViewProvider(options) {
-    return new SimpleTemplateView(options);
-}
