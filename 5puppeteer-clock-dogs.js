@@ -10,15 +10,16 @@ $(() => {
     registerComponentType("periodically-state-changing",
         (options) => new PeriodicallyStateChangingComponent(options));
 
-    animate(addDebugger().to({
-        stateGeneratorFn: (componentConfig, clockStateChange) => {
-            setTimeout(() => {
-                $('textarea').height(0);
-                $('textarea').height(getTotalHeight);
-            });
-            return generateAndAppendDogs({
-                interval: (/** @type {ClockState} */ clockStateChange.newState)?.interval
-            }, 2);
-        }
-    }));
+    animate(addDebugger({elemIdOrJQuery: "debugger-component"})
+        .to({
+            stateGeneratorFn: (componentConfig, clockStateChange) => {
+                setTimeout(() => {
+                    $('textarea').height(0);
+                    $('textarea').height(getTotalHeight);
+                });
+                return generateAndAppendDogs({
+                    interval: (/** @type {ClockState} */ clockStateChange.newState)?.interval
+                }, 2);
+            }
+        }));
 });

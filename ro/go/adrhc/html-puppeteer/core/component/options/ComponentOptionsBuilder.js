@@ -2,28 +2,6 @@ import EventsBinderGroup from "../events-binder/EventsBinderGroup.js";
 import {pushNotNullMissing} from "../../../util/ArrayUtils.js";
 import {FunctionComponentConfigurator} from "./FunctionComponentConfigurator.js";
 
-/**
- * @typedef {function(options: AbstractComponent): (StateHolder)} StateHolderProviderFn
- */
-/**
- * @typedef {function(options: AbstractComponent): StateChangesHandler} StateChangesHandlerProviderFn
- */
-/**
- * @typedef {function(options: ComponentOptions)} ComponentOptionsConsumer
- */
-/**
- * @typedef {function(initialState: *): StateInitializer} StateInitializerProviderFn
- */
-/**
- * @typedef {function(): EventsBinder} EventsBinderProviderFn
- */
-
-/**
- * @typedef {function(component: AbstractComponent)} ComponentConfiguratorFn
- */
-/**
- * @typedef {ComponentConfigField | BasicContainerComponentOptions & DebuggerOptions} ComponentOptions
- */
 export class ComponentOptionsBuilder {
     /**
      * @type {ComponentOptions}
@@ -37,7 +15,7 @@ export class ComponentOptionsBuilder {
     descendantComponentClassOptions;
 
     /**
-     * @param {ComponentOptions} descendantComponentClassOptions will be added after this.builderOptions (only for array types, e.g. extraConfigurators).
+     * @param {ComponentOptions} descendantComponentClassOptions
      */
     constructor(descendantComponentClassOptions = {}) {
         this.descendantComponentClassOptions = descendantComponentClassOptions;
@@ -51,32 +29,42 @@ export class ComponentOptionsBuilder {
     }
 
     /**
-     * this.builderOptions will be added after "options" param (only for array types, e.g. extraConfigurators)
+     * Descendant classes options should override everything (aka have 1th priority).
+     * current*Options usually is just an alternative way of passing
+     * descendant classes options that's why should have 2nd priority.
+     * builderOptions are set by base classes, usually as defaults for missing values, that's why this have 3rd priority.
      *
      * @param {ComponentOptions=} currentConstructorOptions could be any constructor in a component class hierarchy
      * @return {ComponentOptions}
      */
     to(currentConstructorOptions = {}) {
+        // componentIllustratorProviders
+        const componentIllustratorProviders = [
+            ...(this.descendantComponentClassOptions.componentIllustratorProviders ?? []),
+            ...(currentConstructorOptions.componentIllustratorProviders ?? []),
+            ...(this.builderOptions.componentIllustratorProviders ?? [])
+        ];
         // extraStateChangesHandlers
         const extraStateChangesHandlers = [
+            ...(this.descendantComponentClassOptions.extraStateChangesHandlers ?? []),
             ...(currentConstructorOptions.extraStateChangesHandlers ?? []),
-            ...(this.builderOptions.extraStateChangesHandlers ?? []),
-            ...(this.descendantComponentClassOptions.extraStateChangesHandlers ?? [])
+            ...(this.builderOptions.extraStateChangesHandlers ?? [])
         ];
         // extraConfigurators
         const extraConfigurators = [
-            ...(currentConstructorOptions.extraConfigurators ?? []),
             ...(this.builderOptions.extraConfigurators ?? []),
+            ...(currentConstructorOptions.extraConfigurators ?? []),
+            // descendant classes have priority: latest might override things
             ...(this.descendantComponentClassOptions.extraConfigurators ?? [])
         ];
         // events binders
-        const eventsBinders = pushNotNullMissing([], currentConstructorOptions.eventsBinder,
-            this.builderOptions.eventsBinder, this.descendantComponentClassOptions.eventsBinder);
+        const eventsBinders = pushNotNullMissing([], this.builderOptions.eventsBinder,
+            currentConstructorOptions.eventsBinder, this.descendantComponentClassOptions.eventsBinder);
         const eventsBinder = eventsBinders.length > 1 ? new EventsBinderGroup(undefined, eventsBinders) : eventsBinders[0];
         const eventsBinderProvider = (component) => {
             const eventsBinders = pushNotNullMissing([],
-                currentConstructorOptions.eventsBinderProvider,
-                this.descendantComponentClassOptions.eventsBinderProvider)
+                this.descendantComponentClassOptions.eventsBinderProvider,
+                currentConstructorOptions.eventsBinderProvider)
                 .map(evbProvider => evbProvider(component))
                 .filter(it => it != null);
             eventsBinder && eventsBinders.push(eventsBinder);
@@ -85,9 +73,10 @@ export class ComponentOptionsBuilder {
         // final options
         return _.defaults({
             extraConfigurators,
+            componentIllustratorProviders,
             extraStateChangesHandlers,
             eventsBinderProvider
-        }, this.builderOptions, currentConstructorOptions, this.descendantComponentClassOptions);
+        }, this.descendantComponentClassOptions, currentConstructorOptions, this.builderOptions);
     }
 
     /**
@@ -101,6 +90,23 @@ export class ComponentOptionsBuilder {
             this.builderOptions.extraStateChangesHandlers.push(stateChangesHandler);
         } else {
             this.builderOptions.extraStateChangesHandlers = [stateChangesHandler];
+        }
+        return this;
+    }
+
+    /**
+     * @param {StateChangesHandlerProviderFn} componentIllustratorProvider
+     * @param {boolean=} doNothing
+     * @return {ComponentOptionsBuilder}
+     */
+    addComponentIllustratorProvider(componentIllustratorProvider, doNothing) {
+        if (doNothing) {
+            return this;
+        }
+        if (this.builderOptions.componentIllustratorProviders) {
+            this.builderOptions.componentIllustratorProviders.push(componentIllustratorProvider);
+        } else {
+            this.builderOptions.componentIllustratorProviders = [componentIllustratorProvider];
         }
         return this;
     }
@@ -157,7 +163,9 @@ export class ComponentOptionsBuilder {
      * @param {StateHolderProviderFn} stateHolderProvider
      */
     withStateHolderProvider(stateHolderProvider) {
-        return this.addConfiguratorProvider(component => component.stateHolder = stateHolderProvider(component));
+        return this.addConfiguratorProvider(component => {
+            component.stateHolder = stateHolderProvider(component)
+        });
     }
 
     /**

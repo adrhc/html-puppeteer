@@ -3,7 +3,8 @@ import SimpleComponent from "./ro/go/adrhc/html-puppeteer/core/component/SimpleC
 import {getTotalHeight} from "./ro/go/adrhc/html-puppeteer/util/DomUtils.js";
 
 $(() => {
-    new SimpleComponent(addDebugger().to({elemIdOrJQuery: "component"})).render();
+    new SimpleComponent(addDebugger({elemIdOrJQuery: "debugger-component"})
+        .to({elemIdOrJQuery: "component"})).render();
 
     $('textarea').height(getTotalHeight);
 })

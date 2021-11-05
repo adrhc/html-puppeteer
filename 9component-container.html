@@ -35,23 +35,23 @@
 	<!-- the component -->
 	<div class="section title">Component's view</div>
 	<div class="section fit-content min-width-33-percent" data-initial-state='{"message1": null,
-	     "message2": "The \"message2\" child was <i>automatically</i> created!<BR>\"message2\" child is initialized from parent state",
+	     "message2": "The \"message2\" initial state is from parent state.",
 	     "cats": [{"id": 0, "name": "cat 0"}]}'
 	     data-removed-placeholder='The "parent-component" is closed!'
 	     data-template-id="parent-template"
-	     data-type="basic-container"
+	     data-type="static-container"
 	     id="parent-component"></div>
 </div>
 
 <script id="parent-template" type="text/x-handlebars-template">
 	<div data-part="message1" data-type="simple"
 	     data-template-id="message1-template"
-	     data-initial-state='The "message1" child was <i>automatically</i> created!<BR>initial state is from <i>data-initial-state</i> attribute'
+	     data-initial-state='The "message1" initial state is from <i>data-initial-state</i> attribute.'
 	     data-removed-placeholder='"message1" child component was removed!'>
 		The "message1" child is not available yet!
 	</div>
 	<div data-part="message2" data-type="simple"
-	     data-initial-state='This "message2" initial state should NOT be visible!<BR>initial state should come from the parent'
+	     data-initial-state='This "message2" initial state should NOT be visible!<BR>initial state should come from the parent.'
 	     data-template-id="message2-template"
 	     data-removed-placeholder='"message2" child component was removed!'>
 		The "message2" child is not available yet!

@@ -136,7 +136,7 @@ class ChildrenShells {
 #childrenShellFinder: ChildrenShellFinder
 #parentId: string
 #place: "append" | "prepend"
-#shellIsParentHtml: boolean
+#shellIsContainerHtml: boolean
 #shellTemplate: string
 +constructor(options)
 +getOrCreateShell(partName)
@@ -311,7 +311,7 @@ class SimpleView implements AbstractView {
 #removedPlaceholder
 #viewRemovalStrategy: \n\tREMOVE_ELEMENT |\n\tREMOVE_CONTENT |\n\tUSE_HTML
 #viewRenderStrategy: \n\tRENDER_VAL |\n\tRENDER_TEXT |\n\tRENDER_HTML
-#viewValuesTransformerFn
+#viewValuesTransformer
 +constructor(options)
 +create(values)
 +remove()
@@ -386,7 +386,7 @@ corresponding <i>view</i> methods.
 end note
 
 class SimplePartsIllustrator extends ComponentIllustrator implements PartialStateChangesHandler {
-+constructor({viewValuesTransformerFn, ...restOfOptions})
++constructor({viewValuesTransformer, ...restOfOptions})
 +partChangeOccurred(partStateChange)
 +partCreated(partStateChange)
 +partRelocated(partStateChange)

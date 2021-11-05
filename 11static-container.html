@@ -25,7 +25,7 @@
 		will be created with the MAIN component (below); at that moment its (debugger) DOM
 		element must already exist (see also SimpleView._execLazySetup).
 	-->
-	<p data-initial-state="{}" data-template-id="debugger-component" data-type="simple"></p>
+	<p data-initial-state="{}" data-template-id="debugger-template" data-type="simple"></p>
 
 	<!-- the component -->
 	<div class="section title">Component's view</div>
@@ -44,7 +44,8 @@
 			The "message0" child is not available yet!
 		</div>
 		<div class="mb3"
-		     data-initial-state='The "message1" parent state is missing, using data attribute based state initialization.'
+		     data-initial-state='The "message1" parent state is missing, using <i>data-initial-state</i>.'
+		     data-dont-escape-html="true"
 		     data-part="message1"
 		     data-removed-placeholder='"message1" child component was removed!'
 		     data-type="value">
@@ -63,7 +64,7 @@
 	</div>
 </div>
 
-<script id="debugger-component" type="text/x-handlebars-template">
+<script id="debugger-template" type="text/x-handlebars-template">
 	<!-- open/close buttons -->
 	<div class="section flex-center fill-available buttons">
 		<button data-close="click" data-owner="MAIN">Close "MAIN"</button>

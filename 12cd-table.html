@@ -32,7 +32,7 @@
 	</div>
 	<div class="section">
 		<div class="flex-center">
-			<textarea class="fill-available" id="main-debugger"
+			<textarea class="fill-available" id="debugger-component"
 			          rows="10">No debugging data available yet!</textarea>
 			<textarea class="fill-available" id="partial-state" rows="10">Write here some partial (aka child/slice) state, e.g.:
 {"kidX": {"id": "X", "name": "kid X"}, "kidY": {"id": "Y", "name": "kid Y"}}
@@ -46,7 +46,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 	     "cats": [{"id": 0, "name": "cat 0"}], "dogs": [{"id": 0, "name": "dog 0"}]}'
 	     data-removed-placeholder='The "parent-component" is closed!'
 	     data-template-id="parent-template"
-	     data-type="basic-container"
+	     data-type="static-container"
 	     id="parent-component">
 		The "parent-component" is not available yet!
 	</div>
@@ -73,20 +73,27 @@ PS: make sure to have a well formatted JSON!</textarea>
 			<th colSpan="2">Generated cats</th>
 		</tr>
 		</thead>
+		<!--
+			@root.componentId is the current-component's id; here the current component is the container (i.e. "parent-component")
+			@root.owner is the current-component parent's id; here the container's parent is none (i.e. no component)
+		-->
 		<tbody data-removed-placeholder='<tr><td colspan="2">The "parent-component" is closed!</td></tr>'
 		       data-shell-occupant-html-tag="tr"
 		       data-shell-occupant-template-id="cats-row-template"
-		       data-owner="parent-component"
-		       data-type="basic-container"
+		       data-owner="{{@root.componentId}}"
+		       data-type="dyna-container"
 		       data-part="cats">
 		</tbody>
 	</table>
+	<!--
+		@root.componentId is the current-component's id; here the current component is the container (i.e. "parent-component")
+		@root.owner is the current-component parent's id; here the container's parent is none (i.e. no component)
+	-->
 	<div class="flex-start parent"
 	     data-removed-placeholder='The "cats" is closed!'
 	     data-shell-occupant-template-id="dogs-row-template"
-	     data-owner="parent-component"
-	     data-type="basic-container"
-	     data-html-template=""
+	     data-owner="{{@root.componentId}}"
+	     data-type="dyna-container"
 	     data-part="dogs">
 		The "dogs" child is not available yet!
 	</div>

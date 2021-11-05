@@ -5,8 +5,8 @@ import {generateString} from "./ro/go/adrhc/app/Generators.js";
 import StateChangeEventsBinder from "./ro/go/adrhc/app/components/event-binders/StateChangeEventsBinder.js";
 
 $(() => {
-    animate(addDebugger({debuggerElemIdOrJQuery: "main-debugger"})
-        .addEventsBinders(new StateChangeEventsBinder(), new OpenCloseEventsBinder())
+    animate(addDebugger({elemIdOrJQuery: "debugger-component"})
+        .addEventsBinders(new StateChangeEventsBinder("debugger-component"), new OpenCloseEventsBinder())
         .to({
             childStateProviderFn: () => ({id: Math.random(), name: generateString("name ")})
         }));

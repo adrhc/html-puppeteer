@@ -18,3 +18,31 @@
 /**
  * @typedef {function(parts?: {[name: PartName]: *})} ReplacePartsFn
  */
+
+/**
+ * @typedef {function(options: AbstractComponent): (StateHolder)} StateHolderProviderFn
+ */
+
+/**
+ * @typedef {function(options: AbstractComponent): StateChangesHandler} StateChangesHandlerProviderFn
+ */
+
+/**
+ * @typedef {function(options: ComponentOptions)} ComponentOptionsConsumer
+ */
+
+/**
+ * @typedef {function(initialState: *): StateInitializer} StateInitializerProviderFn
+ */
+
+/**
+ * @typedef {function(): EventsBinder} EventsBinderProviderFn
+ */
+
+/**
+ * @typedef {function(component: AbstractComponent)} ComponentConfiguratorFn
+ */
+
+/**
+ * @typedef {ComponentConfigField | DynamicContainerComponentOptions & DebuggerOptions} ComponentOptions
+ */

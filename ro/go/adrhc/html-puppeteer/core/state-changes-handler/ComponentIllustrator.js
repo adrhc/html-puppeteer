@@ -1,5 +1,6 @@
 import StateChangesHandler from "./StateChangesHandler.js";
 import SimpleTemplateView from "../view/SimpleTemplateView.js";
+import {hierarchyAwareViewValuesTransformer} from "../state/view-transformers.js";
 
 /**
  * @typedef {function(options: Bag): AbstractView} ViewProviderFn
@@ -7,6 +8,10 @@ import SimpleTemplateView from "../view/SimpleTemplateView.js";
 /**
  * @typedef {AbstractTemplateViewOptions} ComponentIllustratorOptions
  * @property {ViewProviderFn=} viewProviderFn
+ * @property {ViewValuesTransformerFn=} viewValuesTransformer
+ * @property {string=} componentId
+ * @property {AbstractComponent=} parent
+ * @property {PartName=} part
  */
 /**
  * @template SCT, SCP
@@ -19,12 +24,17 @@ export default class ComponentIllustrator extends StateChangesHandler {
 
     /**
      * @param {ComponentIllustratorOptions} options
-     * @param {ComponentIllustratorOptions} options.viewProviderFn
+     * @param {ViewProviderFn=} options.viewProviderFn
+     * @param {string} options.componentId
+     * @param {AbstractComponent=} options.parent
+     * @param {PartName=} options.part
      * @param {AbstractTemplateViewOptions=} restOfOptions
      */
-    constructor({viewProviderFn, ...restOfOptions}) {
+    constructor({viewProviderFn, componentId, parent, part, ...restOfOptions}) {
         super();
-        this.view = viewProviderFn?.(restOfOptions) ?? new SimpleTemplateView(restOfOptions);
+        const viewValuesTransformer = hierarchyAwareViewValuesTransformer(componentId, parent?.id, part)
+        const viewOptions = {viewValuesTransformer, ...restOfOptions}
+        this.view = viewProviderFn?.(viewOptions) ?? new SimpleTemplateView(viewOptions);
     }
 
     /**
@@ -47,4 +57,14 @@ export default class ComponentIllustrator extends StateChangesHandler {
     removed(stateChange) {
         this.view.remove();
     }
+}
+
+/**
+ * @param {AbstractComponent} component
+ * @return {ComponentIllustrator}
+ */
+export function componentIllustratorOf(component) {
+    return new ComponentIllustrator({
+        componentId: component.id, ...component.config
+    });
 }

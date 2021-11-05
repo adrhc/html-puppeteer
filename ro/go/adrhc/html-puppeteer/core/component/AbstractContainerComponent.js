@@ -1,7 +1,7 @@
 import AbstractComponent from "./AbstractComponent.js";
 import {withDefaults} from "./options/ComponentOptionsBuilder.js";
 import PartialStateHolder, {partsOf} from "../state/PartialStateHolder.js";
-import ComponentIllustrator from "../state-changes-handler/ComponentIllustrator.js";
+import {componentIllustratorOf} from "../state-changes-handler/ComponentIllustrator.js";
 import ContainerHelper from "../../helper/ContainerHelper.js";
 
 /**
@@ -29,13 +29,13 @@ export default class AbstractContainerComponent extends AbstractComponent {
     /**
      * @param {AbstractContainerComponentOptions} options
      */
-    constructor(options) {
-        super(withDefaults(options)
+    constructor({componentIllustratorProviders, ...restOfOptions}) {
+        super(withDefaults(restOfOptions)
             .withStateHolderProvider(c => new PartialStateHolder(c.config))
             // partial changes are not changing the container's view - that's
             // why ComponentIllustrator is used instead of SimplePartsIllustrator
-            .addStateChangesHandlerProvider((component) =>
-                (component.config.componentIllustrator ?? new ComponentIllustrator(component.config)))
+            .addComponentIllustratorProvider(component =>
+                componentIllustratorOf(component), !!componentIllustratorProviders?.length)
             .options());
         const helper = new ContainerHelper(this);
         this.childrenComponents = helper.createChildrenComponents();
@@ -59,6 +59,16 @@ export default class AbstractContainerComponent extends AbstractComponent {
     replacePart(previousPartName, newPart, newPartName, dontRecordChanges) {
         this.doWithState(partialStateHolder =>
             partialStateHolder.replacePart(previousPartName, newPart, newPartName, dontRecordChanges));
+    }
+
+    /**
+     * @param {string} childId
+     * @param {SCP=} newPart
+     * @param {PartName=} newPartName
+     */
+    replacePartByChildId(childId, newPart, newPartName) {
+        const partName = this.childrenComponents.getChildById(childId).partName;
+        this.replacePart(partName, newPart, newPartName);
     }
 
     /**

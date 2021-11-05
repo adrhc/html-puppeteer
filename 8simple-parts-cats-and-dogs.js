@@ -6,7 +6,7 @@ import PartialStateHolder from "./ro/go/adrhc/html-puppeteer/core/state/PartialS
 
 $(() => {
     // component creation and rendering
-    const component = animate(addDebugger({debuggerElemIdOrJQuery: "component-debugger"})
+    const component = animate(addDebugger({elemIdOrJQuery: "debugger-component"})
         .withStateHolderProvider(c => new PartialStateHolder(c.config))
         .options());
 

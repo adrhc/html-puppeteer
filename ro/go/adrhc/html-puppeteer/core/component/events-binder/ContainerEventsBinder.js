@@ -7,11 +7,11 @@ import {uniqueId} from "../../../util/StringUtils.js";
  * @typedef {Object} ContainerEventsBinderOptions
  * @property {string} createEvent
  * @property {string} removeEvent
- * @property {function(component: BasicContainerComponent): *} childStateProviderFn
+ * @property {function(component: AbstractContainerComponent): *} childStateProviderFn
  */
 export default class ContainerEventsBinder extends EventsBinder {
     /**
-     * @type {function(component: BasicContainerComponent): *}
+     * @type {function(component: AbstractContainerComponent): *}
      */
     childStateProviderFn;
     /**
@@ -42,10 +42,10 @@ export default class ContainerEventsBinder extends EventsBinder {
     }
 
     /**
-     * @return {BasicContainerComponent}
+     * @return {AbstractContainerComponent}
      */
     get containerComponent() {
-        return /** @type {BasicContainerComponent} */ this._component;
+        return /** @type {AbstractContainerComponent} */ this._component;
     }
 
     /**

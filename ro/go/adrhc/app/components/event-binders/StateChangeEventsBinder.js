@@ -6,16 +6,30 @@ import {when} from "../../../html-puppeteer/helper/DomEventHandlerBuilder.js";
 
 export default class StateChangeEventsBinder extends EventsBinder {
     /**
+     * @type {ElemIdOrJQuery}
+     */
+    debuggerElemIdOrJQuery;
+
+    /**
+     * @param {ElemIdOrJQuery} debuggerElemIdOrJQuery
+     */
+    constructor(debuggerElemIdOrJQuery) {
+        super();
+        this.debuggerElemIdOrJQuery = debuggerElemIdOrJQuery;
+    }
+
+    /**
      * attach DOM event handlers
      */
     attachEventHandlers() {
         activate($btnOf("change-parent-state"), $btnOf("change-partial-state"));
         when("click").occurOnBtn("change-parent-state").do(() => {
-            this._component.replaceState(jsonParsedValOf("main-debugger"));
+            this._component.replaceState(jsonParsedValOf(this.debuggerElemIdOrJQuery));
         });
-        when("click").occurOnBtn("change-partial-state").do(() => {
-            this._replaceParts(jsonParsedValOf("partial-state"));
-        });
+        when("click").occurOnBtn("change-partial-state")
+            .do(() => {
+                this._replaceParts(jsonParsedValOf("partial-state"));
+            });
     }
 
     /**

@@ -2,8 +2,6 @@ import SimpleComponent from "../../../html-puppeteer/core/component/SimpleCompon
 import StateGeneratingOnClockStateChangesHandler from "./StateGeneratingOnClockStateChangesHandler.js";
 import {stateProcessorOf} from "../../../html-puppeteer/core/state-processor/StateProcessorBuilder.js";
 import {StateProcessor} from "../../../html-puppeteer/core/state-processor/StateProcessor.js";
-import {withDefaults} from "../../../html-puppeteer/core/component/options/ComponentOptionsBuilder.js";
-import PartialStateHolder from "../../../html-puppeteer/core/state/PartialStateHolder.js";
 
 /**
  * @typedef {ClockState & StateGeneratingOnClockStateChangesHandlerOptions} ClockStateProcessorOptions
@@ -28,9 +26,7 @@ export default class PeriodicallyStateChangingComponent extends SimpleComponent 
      * @constructor
      */
     constructor(options) {
-        super(withDefaults(options)
-            .withStateHolderProvider(c => new PartialStateHolder(c.config))
-            .options());
+        super(options);
         const stateGeneratorFn = this.config.stateGeneratorFn ??
             PeriodicallyStateChangingComponent.DEFAULT_STATE_GENERATOR_FN;
         this.clockStateProcessor = this.config.clockStateProcessor ??

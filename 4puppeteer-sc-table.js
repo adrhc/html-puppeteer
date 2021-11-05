@@ -3,7 +3,7 @@ import {withDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/options/
 import {getTotalHeight} from "./ro/go/adrhc/html-puppeteer/util/DomUtils.js";
 
 $(() => {
-    animate(withDebugger());
+    animate(withDebugger({elemIdOrJQuery: "debugger-component"}));
 
     $('textarea').height(getTotalHeight);
 })

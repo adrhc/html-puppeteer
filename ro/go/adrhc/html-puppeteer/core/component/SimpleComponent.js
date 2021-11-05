@@ -1,16 +1,18 @@
-import SimplePartsIllustrator from "../state-changes-handler/SimplePartsIllustrator.js";
+import {simplePartsIllustratorOf} from "../state-changes-handler/SimplePartsIllustrator.js";
 import AbstractComponent from "./AbstractComponent.js";
-import {addStateChangesHandlerProvider} from "./options/ComponentOptionsBuilder.js";
+import {withDefaults} from "./options/ComponentOptionsBuilder.js";
+import PartialStateHolder from "../state/PartialStateHolder.js";
 
 export default class SimpleComponent extends AbstractComponent {
     /**
      * @param {AbstractComponentOptions} options
-     * @param {ComponentIllustrator} options.componentIllustrator
+     * @param {StateChangesHandlerProviderFn[]=} options.componentIllustratorProviders
      * @param {AbstractComponentOptions} restOfOptions
      */
-    constructor({componentIllustrator, ...restOfOptions}) {
-        super(addStateChangesHandlerProvider((component) =>
-            (componentIllustrator ?? new SimplePartsIllustrator({componentId: component.id, ...component.config})))
-            .to(restOfOptions));
+    constructor({componentIllustratorProviders, ...restOfOptions}) {
+        super(withDefaults(restOfOptions)
+            .withStateHolderProvider(c => new PartialStateHolder(c.config))
+            .addComponentIllustratorProvider(component =>
+                simplePartsIllustratorOf(component), !!componentIllustratorProviders?.length).options());
     }
 }

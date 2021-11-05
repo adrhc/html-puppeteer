@@ -2,6 +2,7 @@ import SimpleComponent from "./ro/go/adrhc/html-puppeteer/core/component/SimpleC
 import {addDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/options/DebuggerOptionsBuilder.js";
 
 $(() => {
-    new SimpleComponent(addDebugger().to({elemIdOrJQuery: "component"}))
+    new SimpleComponent(addDebugger({elemIdOrJQuery: "debugger-component"})
+        .to({elemIdOrJQuery: "component"}))
         .render({text: "Hello puppeteer!"});
 });

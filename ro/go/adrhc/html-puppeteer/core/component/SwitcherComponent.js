@@ -66,7 +66,7 @@ export default class SwitcherComponent extends AbstractContainerComponent {
      * @param {SwitcherComponentOptions} options
      */
     constructor(options) {
-        super({childrenRemovalStrategy: USE_CSS, ...options, ignoreShellTemplateOptions: true});
+        super({childrenRemovalStrategy: USE_CSS, ignoreShellTemplateOptions: true, ...options});
         this.activeNameKey = this.config.activeNameKey ?? GlobalConfig.ACTIVE_NAME_KEY;
         this.activeValueKey = this.config.activeValueKey;
         this.valueKeyIsActiveName = this.config.valueKeyIsActiveName ?? true;

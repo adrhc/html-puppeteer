@@ -32,7 +32,7 @@
 	</div>
 	<div class="section">
 		<div class="flex-center">
-			<textarea class="fill-available" id="main-debugger"
+			<textarea class="fill-available" id="debugger-component"
 			          rows="10">No debugging data available yet!</textarea>
 			<textarea class="fill-available" id="partial-state" rows="10">Write here some partial (aka child/slice) state, e.g.:
 {"kidX": {"id": "X", "name": "kid X"}, "kidY": {"id": "Y", "name": "kid Y"}}
@@ -49,7 +49,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 	     }'
 	     data-removed-placeholder='The "parent-component" is closed!'
 	     data-template-id="parent-template"
-	     data-type="basic-container"
+	     data-type="static-container"
 	     id="parent-component">
 		The "parent-component" is not available yet!
 	</div>
@@ -77,19 +77,22 @@ PS: make sure to have a well formatted JSON!</textarea>
 		</tr>
 		</thead>
 		<!--
-			Can't use @root.componentId (the container's id) if
-			the parent doesn't have a parent because won't be set.
+			Can't use @root.[owner|componentId] if "data-part" on current
+			component ("parent-component") is missing because they won't be set.
+			See also ComponentIllustrator calling hierarchyAwareViewValuesTransformer(...).
 
-			If wouldn't use data-html-template="" then "The "cats" child is not available yet!"
-			which is the component element's body would become the html template.
+			In static containers the children's shells are not dynamically
+			generated that's why they don't @root.[owner|componentId] set
+			automatically. One could manually set only the owner (from @root.owner, if available)
+			but not the child's "data-component-id" because there's no such thing available like
+			e.g. @root.childComponentId in its parent component (like here, in "parent-component").
 		-->
 		<tbody data-removed-placeholder='<tr><td colspan="2">The "parent-component" is closed!</td></tr>'
-		       data-shell-occupant-type="basic-container"
+		       data-shell-occupant-type="static-container"
 		       data-shell-occupant-html-tag="tr"
 		       data-shell-occupant-template-id="cats-row-template"
 		       data-owner="parent-component"
 		       data-type="dyna-container"
-		       data-html-template=""
 		       data-part="cats">
 		<tr>
 			<td colspan="2">The "cats" child is not available yet!</td>
@@ -99,21 +102,15 @@ PS: make sure to have a well formatted JSON!</textarea>
 </script>
 
 <script id="cats-row-template" type="text/x-handlebars-template">
-	<!-- we are in a basic-container hence root.componentId is the container's id -->
 	<td data-type="value" data-owner="{{@root.componentId}}" data-part="id">
 		The cat's "id" is not available yet!
 	</td>
 	<td>
-		<!--
-			If wouldn't use data-html-template="" then "The "dogs" child is not available yet!"
-			which is the component element's body would become the html template.
-		-->
 		<div class="flex-start parent"
 		     data-owner="{{@root.componentId}}"
 		     data-removed-placeholder='The "dogs" is closed!'
 		     data-shell-occupant-template-id="dogs-row-template"
 		     data-type="dyna-container"
-		     data-html-template=""
 		     data-part="dogs">
 			The "dogs" child is not available yet!
 		</div>

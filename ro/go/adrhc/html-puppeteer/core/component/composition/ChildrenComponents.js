@@ -6,7 +6,7 @@ import {partOf} from "../../../util/GlobalConfig.js";
 /**
  * @typedef {Object} ChildrenComponentsOptions
  * @property {ElemIdOrJQuery=} componentsHolder is the place inside which to search for components
- * @property {BasicContainerComponent=} parent
+ * @property {AbstractContainerComponent=} parent
  * @property {ChildrenShellFinder=} childrenShellFinder
  * @property {boolean=} dontRenderChildren
  * @property {ChildrenCreationCommonOptions=} childrenCreationCommonOptions

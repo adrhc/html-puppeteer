@@ -55,7 +55,9 @@ PS: make sure to have a well formatted JSON!</textarea>
 		<div class="mb3" data-part="message0" data-type="value">
 			The "message0" child is not available yet!
 		</div>
-		<div class="mb3" data-initial-state='This is "message1" initial state from data attribute; its parent state is missing.' data-part="message1"
+		<div class="mb3"
+		     data-initial-state='This is "message1" initial state from data attribute; its parent state is missing.'
+		     data-part="message1"
 		     data-removed-placeholder='"message1" child component was removed!'
 		     data-type="value">
 			The "message1" child is not available yet!
@@ -67,6 +69,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 		     data-type="value">
 			The "message2" child is not available yet!
 		</div>
+		<!-- this inners approach is not capable of updates; see also 11static-container.html approach -->
 		<x data-part="inners" data-type="static-container">
 			<div class="mb3" data-part="innerProperty1" data-type="value">
 				The "innerProperty1" child is not available yet!

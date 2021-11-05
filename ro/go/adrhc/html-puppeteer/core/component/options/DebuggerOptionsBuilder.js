@@ -5,31 +5,33 @@ import SimpleView, {REMOVE_CONTENT} from "../../view/SimpleView.js";
 
 /**
  * @typedef {Object} DebuggerOptions
- * @property {string} [debuggerElemIdOrJQuery="debugger"]
+ * @property {string} elemIdOrJQuery
  */
 export default class DebuggerOptionsBuilder extends ComponentOptionsBuilder {
     /**
      * creates then adds a debugger (CopyStatesChangeHandler) as an extra StateChangesHandler
      *
-     * @param {DebuggerOptions=} debuggerOptions
+     * @param {DebuggerOptions} debuggerOptions
      * @return {DebuggerOptionsBuilder}
      */
-    addDebugger(debuggerOptions = {}) {
+    addDebugger(debuggerOptions) {
         const debuggerStateChangesHandler = this._createDebuggerStateChangesHandler(debuggerOptions);
         this.addStateChangesHandler(debuggerStateChangesHandler);
         return this;
     }
 
     /**
-     * @param {DebuggerOptions=} debuggerOptions
+     * @param {DebuggerOptions} debuggerOptions
+     * @param {Object} debuggerOptions.restOfOptions
      * @return {CopyStatesChangeHandler}
      * @protected
      */
-    _createDebuggerStateChangesHandler({debuggerElemIdOrJQuery} = {}) {
+    _createDebuggerStateChangesHandler({elemIdOrJQuery, ...restOfOptions}) {
         const debuggerComponent = new SimpleComponent({
-            viewProviderFn: (viewConfig) => new SimpleView(viewConfig),
+            elemIdOrJQuery,
             viewRemovalStrategy: REMOVE_CONTENT,
-            elemIdOrJQuery: debuggerElemIdOrJQuery
+            viewProviderFn: viewConfig => new SimpleView(viewConfig),
+            ...restOfOptions
         }).render();
         return new CopyStatesChangeHandler({receiverComponent: debuggerComponent});
     }
@@ -38,7 +40,7 @@ export default class DebuggerOptionsBuilder extends ComponentOptionsBuilder {
 /**
  * creates options with a debugger (CopyStatesChangeHandler) as an extra StateChangesHandler
  *
- * @param {DebuggerOptions=} debuggerOptions
+ * @param {DebuggerOptions} debuggerOptions
  * @return {ComponentOptions}
  */
 export function withDebugger(debuggerOptions) {
@@ -48,9 +50,9 @@ export function withDebugger(debuggerOptions) {
 /**
  * creates then adds a debugger (CopyStatesChangeHandler) as an extra StateChangesHandler
  *
- * @param {DebuggerOptions=} debuggerOptions
+ * @param {DebuggerOptions} debuggerOptions
  * @return {DebuggerOptionsBuilder}
  */
-export function addDebugger(debuggerOptions = {}) {
+export function addDebugger(debuggerOptions) {
     return new DebuggerOptionsBuilder().addDebugger(debuggerOptions);
 }

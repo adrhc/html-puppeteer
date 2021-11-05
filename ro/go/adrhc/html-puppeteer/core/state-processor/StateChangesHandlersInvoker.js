@@ -2,7 +2,8 @@ import {pushNotNull} from "../../util/ArrayUtils.js";
 
 /**
  * @typedef {Object} StateChangesHandlersField
- * @property {ComponentIllustrator=} componentIllustrator
+ * @property {AbstractComponent=} component
+ * @property {StateChangesHandlerProviderFn[]=} componentIllustratorProviders
  * @property {StateChangesHandler[]=} extraStateChangesHandlers
  */
 /**
@@ -37,21 +38,25 @@ export default class StateChangesHandlersInvoker {
         this.partChangeMethodNamePrefix = options.partChangeMethodNamePrefix ?? "part";
         this.handleAllChangesMethodName = options.handleAllChangesMethodName ?? "changeOccurred";
         this.handleAllPartChangesMethodName = options.handleAllPartChangesMethodName ?? "partChangeOccurred";
-        this.stateChangesHandlers = options.stateChangesHandlers ??
-            this._createStateChangesInvokers(options);
+        this.stateChangesHandlers = options.stateChangesHandlers ?? this._createStateChangesInvokers(options);
     }
 
     /**
-     * @param {StateChangesHandlersField} options
+     * @param {AbstractComponent=} component
+     * @param {StateChangesHandlerProviderFn[]=} componentIllustratorProviders
+     * @param {StateChangesHandler[]=} extraStateChangesHandlers
      * @return {StateChangesHandler[]}
      * @protected
      */
     _createStateChangesInvokers({
-                                    componentIllustrator,
+                                    component,
+                                    componentIllustratorProviders,
                                     extraStateChangesHandlers,
                                 }) {
+        const componentIllustrators = (componentIllustratorProviders ?? [])
+            .filter(it => it != null).map(it => it?.(component));
         extraStateChangesHandlers = extraStateChangesHandlers ?? [];
-        return pushNotNull([], componentIllustrator, ...extraStateChangesHandlers);
+        return pushNotNull([], ...componentIllustrators, ...extraStateChangesHandlers);
     }
 
     /**
@@ -63,41 +68,35 @@ export default class StateChangesHandlersInvoker {
 
     /**
      * @param {StateChangesCollector} stateChangesCollector
-     * @return {[]}
-     * @return
      */
     processStateChanges(stateChangesCollector) {
-        return stateChangesCollector.consumeAll()
-            .flatMap(sc => this._processStateChange(sc));
+        stateChangesCollector.consumeAll().flatMap(sc => this._processStateChange(sc));
     }
 
     /**
      * @param {StateChange} typedStateChange
-     * @return {[]}
      * @protected
      */
     _processStateChange(typedStateChange) {
         const methodName = this._methodNameOf(typedStateChange);
-        return this.stateChangesHandlers
-            .flatMap(sch => this._invokeStateChangesHandler(sch, methodName, typedStateChange));
+        this.stateChangesHandlers.flatMap(sch =>
+            this._invokeStateChangesHandler(sch, methodName, typedStateChange));
     }
 
     /**
      * @param {StateChangesHandler} stateChangesHandler
      * @param {string} methodName
      * @param {StateChange} typedStateChange
-     * @return {[]}
      * @protected
      */
     _invokeStateChangesHandler(stateChangesHandler, methodName, typedStateChange) {
-        const result = [stateChangesHandler?.[methodName]?.(typedStateChange)];
+        stateChangesHandler?.[methodName]?.(typedStateChange);
         if (this.handleAllChangesMethodName != null) {
-            result.push(stateChangesHandler[this.handleAllChangesMethodName]?.(typedStateChange));
+            stateChangesHandler[this.handleAllChangesMethodName]?.(typedStateChange);
         }
         if (this.handleAllPartChangesMethodName != null && this._isPartialChange(typedStateChange)) {
-            result.push(stateChangesHandler[this.handleAllPartChangesMethodName]?.(typedStateChange));
+            stateChangesHandler[this.handleAllPartChangesMethodName]?.(typedStateChange);
         }
-        return result.filter(notEmpty);
     }
 
     /**
@@ -142,11 +141,10 @@ export default class StateChangesHandlersInvoker {
     }
 }
 
-
 /**
- * @param {*} value
- * @return {boolean}
+ * @param {AbstractComponent=} component
+ * @return {StateChangesHandlersInvoker}
  */
-function notEmpty(value) {
-    return value != null && (_.isArray(value) && !value.length || value !== {})
+export function stateChangesHandlersInvokerOf(component) {
+    return new StateChangesHandlersInvoker({component, ...component.config});
 }

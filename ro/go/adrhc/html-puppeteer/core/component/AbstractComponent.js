@@ -11,7 +11,7 @@ import {isTrue} from "../../util/AssertionUtils.js";
  * @typedef {StateHolderOptions & ValueStateInitializerOptions & StateChangesHandlersInvokerOptions} AbstractComponentOptions
  * @property {string} elemIdOrJQuery
  * @property {string|number|boolean=} id
- * @property {BasicContainerComponent=} parent
+ * @property {AbstractContainerComponent=} parent
  * @property {StateHolder=} stateHolder
  * @property {StateInitializer=} stateInitializer
  * @property {StateChangesHandlersInvoker=} stateChangesHandlersInvoker
@@ -53,7 +53,7 @@ export default class AbstractComponent extends StateProcessor {
      */
     options;
     /**
-     * @type {BasicContainerComponent}
+     * @type {AbstractContainerComponent}
      */
     parent;
     /**

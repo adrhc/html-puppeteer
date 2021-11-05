@@ -1,7 +1,7 @@
 import ComponentConfigurator from "./ComponentConfigurator.js";
 import ValueStateInitializer from "../state-initializer/ValueStateInitializer.js";
 import {dataOf, idOf} from "../../../util/DomUtils.js";
-import StateChangesHandlersInvoker from "../../state-processor/StateChangesHandlersInvoker.js";
+import {stateChangesHandlersInvokerOf} from "../../state-processor/StateChangesHandlersInvoker.js";
 import {uniqueId} from "../../../util/StringUtils.js";
 import ChildStateInitializer from "../state-initializer/ChildStateInitializer.js";
 import StateHolder from "../../state/StateHolder.js";
@@ -41,7 +41,7 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
         component.parent = this.config.parent;
         component.stateHolder = this.config.stateHolder ?? new StateHolder(this.config);
         component.stateChangesHandlersInvoker =
-            this.config.stateChangesHandlersInvoker ?? new StateChangesHandlersInvoker(this.config);
+            this.config.stateChangesHandlersInvoker ?? stateChangesHandlersInvokerOf(component);
         // very special case for eventsBinder: the provider has priority
         component.eventsBinder = this.config.eventsBinderProvider?.(component) ?? this.config.eventsBinder;
         component.stateInitializer = this.config.stateInitializer ?? this._createStateInitializer(component);
@@ -84,4 +84,13 @@ export function newIdOf(componentConfig) {
  */
 export function newIdImpl(partName, parentId) {
     return uniqueId(partName == null ? undefined : `${parentId}-${partName}`)
+}
+
+/**
+ * @param {Object} options
+ * @param {string} key
+ * @return {*}
+ */
+export function configOf(options, key) {
+    return options[key] ?? dataOf(options.elemIdOrJQuery, key);
 }

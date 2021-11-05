@@ -25,7 +25,7 @@ export const RENDER_HTML = "html";
  */
 /**
  * @typedef {AbstractTemplateViewOptions} SimpleViewOptions
- * @property {ViewValuesTransformerFn=} viewValuesTransformerFn
+ * @property {ViewValuesTransformerFn=} viewValuesTransformer
  * @property {string|jQuery<HTMLElement>=} elemIdOrJQuery
  * @property {jQuery<HTMLElement>=} $elem
  * @property {ViewRemovalStrategy=} viewRenderStrategy
@@ -64,13 +64,13 @@ export default class SimpleView extends AbstractView {
     /**
      * @type {ViewValuesTransformerFn}
      */
-    viewValuesTransformerFn;
+    viewValuesTransformer;
 
     /**
      * @param {SimpleViewOptions} options
      */
     constructor({
-                    viewValuesTransformerFn,
+                    viewValuesTransformer,
                     elemIdOrJQuery,
                     $elem,
                     viewRenderStrategy,
@@ -79,7 +79,7 @@ export default class SimpleView extends AbstractView {
                     removedCss
                 }) {
         super();
-        this.viewValuesTransformerFn = viewValuesTransformerFn ?? ((values) => values);
+        this.viewValuesTransformer = viewValuesTransformer ?? (values => values);
         this.$elem = $elem ?? jQueryOf(elemIdOrJQuery);
         this.lazySetupWorkers.push(() => this.$elem = $elem ?? jQueryOf(elemIdOrJQuery));
         this.lazySetupWorkers.push(() => this.viewRenderStrategy =
@@ -116,7 +116,7 @@ export default class SimpleView extends AbstractView {
      * @param {*} values
      */
     replace(values) {
-        const viewValues = this.viewValuesTransformerFn(values);
+        const viewValues = this.viewValuesTransformer(values);
         this._execLazySetup();
         this.$elem[this.viewRenderStrategy](viewValues != null ? JSON.stringify(viewValues, undefined, 2) : "");
     }

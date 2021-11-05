@@ -4,7 +4,7 @@ import {withDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/options/
 
 $(() => {
     // the puppeteer
-    const component = animate(withDebugger({debuggerElemIdOrJQuery: "main-debugger"}));
+    const component = animate(withDebugger({elemIdOrJQuery: "main-debugger"}));
 
     // the application using the html-puppeteer
     new Scenario13App(component, {innerPart: "dogs"}).run();

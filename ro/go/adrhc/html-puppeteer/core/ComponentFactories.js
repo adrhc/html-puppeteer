@@ -2,7 +2,6 @@ import SimpleComponent from "./component/SimpleComponent.js";
 import ValueComponent from "./component/ValueComponent.js";
 import StaticContainerComponent from "./component/StaticContainerComponent.js";
 import DynamicContainerComponent from "./component/DynamicContainerComponent.js";
-import BasicContainerComponent from "./component/BasicContainerComponent.js";
 import SwitcherComponent from "./component/SwitcherComponent.js";
 
 /**
@@ -16,8 +15,7 @@ const COMPONENT_TYPES = {
     "simple": (options) => new SimpleComponent(options),
     "value": (options) => new ValueComponent(options),
     "static-container": (options) => new StaticContainerComponent(/** @type {StaticContainerComponentOptions} */ options),
-    "dyna-container": (options) => new DynamicContainerComponent(/** @type {BasicContainerComponentOptions} */ options),
-    "basic-container": (options) => new BasicContainerComponent(/** @type {BasicContainerComponentOptions} */ options),
+    "dyna-container": (options) => new DynamicContainerComponent(/** @type {DynamicContainerComponentOptions} */ options),
     "switcher": (options) => new SwitcherComponent(/** @type {StaticContainerComponentOptions} */ options),
 };
 

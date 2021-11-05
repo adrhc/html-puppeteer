@@ -9,7 +9,7 @@ import {generateHtml} from "../../util/HtmlGenerator.js";
 /**
  * @typedef {ChildShellTemplateOptions} ChildrenShellsOptions
  * @property {string} componentId
- * @property {string=} parentHtml
+ * @property {string=} containerHtml
  * @property {ChildrenShellFinder=} childrenShellFinder
  * @property {ElemIdOrJQuery} elemIdOrJQuery is the parent's element id or jQuery<HTMLElement>
  * @property {boolean=} newChildrenGoLast
@@ -38,7 +38,7 @@ export default class ChildrenShells {
     /**
      * @type {boolean}
      */
-    shellIsParentHtml;
+    shellIsContainerHtml;
     /**
      * @type {string}
      */
@@ -50,7 +50,7 @@ export default class ChildrenShells {
      */
     constructor({
                     componentId,
-                    parentHtml,
+                    containerHtml,
                     childrenShellFinder,
                     elemIdOrJQuery,
                     newChildrenGoLast,
@@ -60,8 +60,8 @@ export default class ChildrenShells {
         this.$containerElem = jQueryOf(elemIdOrJQuery);
         this.place = newChildrenGoLast ? "append" : "prepend";
         this.childrenShellFinder = childrenShellFinder ?? new ChildrenShellFinder(elemIdOrJQuery);
-        this.shellIsParentHtml = areShellTemplateOptionsEmpty(restOfOptions);
-        this.shellTemplate = this.shellIsParentHtml ? parentHtml?.trim() : createShellTemplate(componentId, restOfOptions);
+        this.shellIsContainerHtml = areShellTemplateOptionsEmpty(restOfOptions);
+        this.shellTemplate = this.shellIsContainerHtml ? containerHtml?.trim() : createShellTemplate(componentId, restOfOptions);
     }
 
     /**
@@ -100,7 +100,7 @@ export default class ChildrenShells {
             [GlobalConfig.COMPONENT_ID]: newIdImpl(partName, this.parentId),
         };
         let shellTemplate = this.shellTemplate;
-        if (this.shellIsParentHtml) {
+        if (this.shellIsContainerHtml) {
             shellTemplate = this._setPartOwnerAndIdToShellTemplate(viewValues);
         }
         return generateHtml(shellTemplate, viewValues);

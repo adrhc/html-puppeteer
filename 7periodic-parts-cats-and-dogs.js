@@ -46,9 +46,9 @@ $(() => {
     registerComponentType("periodically-state-changing",
         (options) => new PeriodicallyStateChangingComponent(options));
 
-    animate(addClockDebugger({debuggerElemIdOrJQuery: "clock-debugger"})
+    animate(addClockDebugger({elemIdOrJQuery: "clock-debugger"})
         .doPeriodicallyWithStateAndClock(stateAndClockStateChangeConsumer)
-        .addDebugger({debuggerElemIdOrJQuery: "component-debugger"})
+        .addDebugger({elemIdOrJQuery: "debugger-component"})
         .to({
             eventsBinderProvider: (component) => new Scenario6EventsBinder(component)
         }));

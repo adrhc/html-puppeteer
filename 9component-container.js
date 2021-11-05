@@ -6,7 +6,7 @@ import {activate, deactivate, getTotalHeight} from "./ro/go/adrhc/html-puppeteer
 
 class App {
     /**
-     * @type {BasicContainerComponent}
+     * @type {AbstractContainerComponent}
      */
     parent;
 
@@ -48,7 +48,7 @@ class App {
 
 $(() => {
     // the puppeteer
-    const component = animate(withDebugger({debuggerElemIdOrJQuery: "main-debugger"}));
+    const component = animate(withDebugger({elemIdOrJQuery: "main-debugger"}));
 
     // the application using the html-puppeteer
     new App(component).run();

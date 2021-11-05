@@ -13,9 +13,9 @@ export function generateHtml(htmlTemplate, values) {
 
 /**
  * @param {string} string
- * @param {boolean=} escapeHtml
+ * @param {boolean=} dontEscapeHtml
  * @return {string}
  */
-export function handlebarsWrap(string, escapeHtml) {
-    return escapeHtml ? `{{${string}}}` : `{{{${string}}}}`;
+export function handlebarsWrap(string, dontEscapeHtml) {
+    return dontEscapeHtml ? `{{{${string}}}}` : `{{${string}}}`;
 }
