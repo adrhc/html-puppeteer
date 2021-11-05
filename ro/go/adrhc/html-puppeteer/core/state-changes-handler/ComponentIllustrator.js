@@ -1,5 +1,5 @@
 import StateChangesHandler from "./StateChangesHandler.js";
-import {simpleTemplateViewProvider} from "../view/SimpleTemplateView.js";
+import SimpleTemplateView from "../view/SimpleTemplateView.js";
 
 /**
  * @typedef {function(options: Bag): AbstractView} ViewProviderFn
@@ -19,11 +19,12 @@ export default class ComponentIllustrator extends StateChangesHandler {
 
     /**
      * @param {ComponentIllustratorOptions} options
+     * @param {ComponentIllustratorOptions} options.viewProviderFn
      * @param {AbstractTemplateViewOptions=} restOfOptions
      */
-    constructor({view, viewProviderFn, ...restOfOptions}) {
+    constructor({viewProviderFn, ...restOfOptions}) {
         super();
-        this.view = (viewProviderFn ?? simpleTemplateViewProvider)(restOfOptions);
+        this.view = viewProviderFn?.(restOfOptions) ?? new SimpleTemplateView(restOfOptions);
     }
 
     /**
