@@ -26,7 +26,7 @@ export default class Scenario13App extends Scenario10App {
             this._generateThenAppend("cats");
         });
         $(btnSelectorOf("remove")).on("click", () => {
-            this._removeLast("cats");
+            this._removeOldestItem("cats");
         });
     }
 

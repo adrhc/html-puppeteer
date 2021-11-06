@@ -33,9 +33,9 @@ export default class Scenario10App {
             }
         });
         $(btnSelectorOf("remove")).on("click", () => {
-            this._removeLast("cats");
+            this._removeOldestItem("cats");
             if (this.haveDogs) {
-                this._removeLast("dogs");
+                this._removeOldestItem("dogs");
             }
         });
     }
@@ -58,9 +58,9 @@ export default class Scenario10App {
      * @param {string} partName
      * @protected
      */
-    _removeLast(partName) {
+    _removeOldestItem(partName) {
         const items = this.parent.getPart(partName) ?? [];
-        removeByIndex(items, items.length - 1);
+        removeByIndex(items, 0);
         this.parent.replacePart(partName, items);
     }
 
