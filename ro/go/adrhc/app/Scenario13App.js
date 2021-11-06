@@ -1,6 +1,5 @@
 import {btnSelectorOf} from "../html-puppeteer/util/SelectorUtils.js";
 import {generateIdNameBags} from "./Generators.js";
-import {updateOrInsert} from "../html-puppeteer/util/ArrayUtils.js";
 import Scenario10App from "./Scenario10App.js";
 
 export default class Scenario13App extends Scenario10App {
@@ -24,7 +23,7 @@ export default class Scenario13App extends Scenario10App {
     run() {
         this._createParentStateChangingButtons();
         $(btnSelectorOf("create")).on("click", () => {
-            this._createOneAtIndex0("cats");
+            this._generateThenAppend("cats");
         });
         $(btnSelectorOf("remove")).on("click", () => {
             this._removeLast("cats");
@@ -32,16 +31,14 @@ export default class Scenario13App extends Scenario10App {
     }
 
     /**
-     * @param {string} partName
+     * @param {OptionalPartName=} partName
+     * @return {*}
      * @protected
      */
-    _createOneAtIndex0(partName) {
-        const items = this.parent.getPart(partName) ?? [];
-        const newItem = {
+    _generateNewItem(partName) {
+        return {
             id: `${partName}-${Math.random()}`,
             [this.innerPart]: generateIdNameBags(2, this.innerPart)
         };
-        updateOrInsert(items, newItem);
-        this.parent.replacePart(partName, items);
     }
 }

@@ -1,6 +1,6 @@
 import {btnSelectorOf} from "../html-puppeteer/util/SelectorUtils.js";
 import {generateString} from "./Generators.js";
-import {removeByIndex, updateOrInsert} from "../html-puppeteer/util/ArrayUtils.js";
+import {removeByIndex} from "../html-puppeteer/util/ArrayUtils.js";
 
 export default class Scenario10App {
     /**
@@ -27,9 +27,9 @@ export default class Scenario10App {
     run() {
         this._createParentStateChangingButtons();
         $(btnSelectorOf("create")).on("click", () => {
-            this._createOneAtIndex0("cats");
+            this._generateThenAppend("cats");
             if (this.haveDogs) {
-                this._createOneAtIndex0("dogs");
+                this._generateThenAppend("dogs");
             }
         });
         $(btnSelectorOf("remove")).on("click", () => {
@@ -68,9 +68,18 @@ export default class Scenario10App {
      * @param {string} partName
      * @protected
      */
-    _createOneAtIndex0(partName) {
+    _generateThenAppend(partName) {
         const items = this.parent.getPart(partName) ?? [];
-        updateOrInsert(items, {id: Math.random(), name: generateString("name ")});
+        items.push(this._generateNewItem());
         this.parent.replacePart(partName, items);
+    }
+
+    /**
+     * @param {OptionalPartName=} partName
+     * @return {*}
+     * @protected
+     */
+    _generateNewItem(partName) {
+        return {id: Math.random(), name: generateString("name ")};
     }
 }

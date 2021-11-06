@@ -57,25 +57,29 @@ export class ComponentOptionsBuilder {
             // descendant classes have priority: latest might override things
             ...(this.descendantComponentClassOptions.extraConfigurators ?? [])
         ];
-        // events binders
-        const eventsBinders = pushNotNullMissing([], this.builderOptions.eventsBinder,
-            currentConstructorOptions.eventsBinder, this.descendantComponentClassOptions.eventsBinder);
+        // events binders: all provided are used
+        const eventsBinders = pushNotNullMissing([], this.descendantComponentClassOptions.eventsBinder,
+            currentConstructorOptions.eventsBinder, this.builderOptions.eventsBinder);
         const eventsBinder = eventsBinders.length > 1 ? new EventsBinderGroup(undefined, eventsBinders) : eventsBinders[0];
         const eventsBinderProvider = (component) => {
-            const eventsBinders = pushNotNullMissing([],
+            const providedEventsBinders = pushNotNullMissing([],
                 this.descendantComponentClassOptions.eventsBinderProvider,
                 currentConstructorOptions.eventsBinderProvider)
                 .map(evbProvider => evbProvider(component))
                 .filter(it => it != null);
-            eventsBinder && eventsBinders.push(eventsBinder);
-            return eventsBinders.length ? new EventsBinderGroup(component, eventsBinders) : undefined;
+            eventsBinder && providedEventsBinders.push(eventsBinder);
+            return providedEventsBinders.length ? new EventsBinderGroup(component, providedEventsBinders) : undefined;
         }
-        // final options
+        // stateHolderProvider using default priority: descendant, current-constructor, builder
+        const stateHolderProvider = this.descendantComponentClassOptions.stateHolderProvider ??
+            currentConstructorOptions.stateHolderProvider ?? this.builderOptions.stateHolderProvider;
+        // options building
         return _.defaults({
             extraConfigurators,
             componentIllustratorProviders,
             extraStateChangesHandlers,
-            eventsBinderProvider
+            eventsBinderProvider,
+            stateHolderProvider
         }, this.descendantComponentClassOptions, currentConstructorOptions, this.builderOptions);
     }
 
@@ -163,9 +167,8 @@ export class ComponentOptionsBuilder {
      * @param {StateHolderProviderFn} stateHolderProvider
      */
     withStateHolderProvider(stateHolderProvider) {
-        return this.addConfiguratorProvider(component => {
-            component.stateHolder = stateHolderProvider(component)
-        });
+        this.builderOptions.stateHolderProvider = stateHolderProvider;
+        return this;
     }
 
     /**

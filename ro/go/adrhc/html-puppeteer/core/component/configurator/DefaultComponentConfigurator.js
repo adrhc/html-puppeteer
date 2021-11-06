@@ -5,6 +5,7 @@ import {stateChangesHandlersInvokerOf} from "../../state-processor/StateChangesH
 import {uniqueId} from "../../../util/StringUtils.js";
 import ChildStateInitializer from "../state-initializer/ChildStateInitializer.js";
 import StateHolder from "../../state/StateHolder.js";
+import {StateProcessor} from "../../state-processor/StateProcessor.js";
 
 export default class DefaultComponentConfigurator extends ComponentConfigurator {
     /**
@@ -39,12 +40,21 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
         this._setOptionsDataAttributesAndConfig(component);
         component.id = idOf(this.config.elemIdOrJQuery) ?? newIdOf(this.config);
         component.parent = this.config.parent;
-        component.stateHolder = this.config.stateHolder ?? new StateHolder(this.config);
-        component.stateChangesHandlersInvoker =
-            this.config.stateChangesHandlersInvoker ?? stateChangesHandlersInvokerOf(component);
+        component.stateProcessor = this._createStateProcessor(component);
         // very special case for eventsBinder: the provider has priority
         component.eventsBinder = this.config.eventsBinderProvider?.(component) ?? this.config.eventsBinder;
         component.stateInitializer = this.config.stateInitializer ?? this._createStateInitializer(component);
+    }
+
+    /**
+     * @return {StateProcessor}
+     * @protected
+     */
+    _createStateProcessor(component) {
+        const stateHolder = this.config.stateHolderProvider?.(this.config) ?? new StateHolder(this.config);
+        const stateChangesHandlersInvoker =
+            this.config.stateChangesHandlersInvoker ?? stateChangesHandlersInvokerOf(component);
+        return new StateProcessor(stateHolder, stateChangesHandlersInvoker);
     }
 
     /**

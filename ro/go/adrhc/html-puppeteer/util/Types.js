@@ -20,7 +20,7 @@
  */
 
 /**
- * @typedef {function(options: AbstractComponent): (StateHolder)} StateHolderProviderFn
+ * @typedef {function(options: AbstractComponentOptions): StateHolder} StateHolderProviderFn
  */
 
 /**
@@ -45,4 +45,8 @@
 
 /**
  * @typedef {ComponentConfigField | DynamicContainerComponentOptions & DebuggerOptions} ComponentOptions
+ */
+
+/**
+ * @typedef {function(state: StateHolder)} StateUpdaterFn
  */

@@ -11,7 +11,7 @@ export default class SimpleComponent extends AbstractComponent {
      */
     constructor({componentIllustratorProviders, ...restOfOptions}) {
         super(withDefaults(restOfOptions)
-            .withStateHolderProvider(c => new PartialStateHolder(c.config))
+            .withStateHolderProvider(config => new PartialStateHolder(config))
             .addComponentIllustratorProvider(component =>
                 simplePartsIllustratorOf(component), !!componentIllustratorProviders?.length).options());
     }

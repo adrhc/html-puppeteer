@@ -81,8 +81,7 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
      * @protected
      */
     _createMissingShellsAndChildren() {
-        const state = this.getMutableState();
-        partsOf(state, !this.newChildrenGoLast)
+        partsOf(this.getMutableState())
             .filter(([key]) => !this.partialStateHolder.hasEmptyPart(key))
             .filter(([key]) => this.childrenComponents.getChildByPartName(key) == null)
             .forEach(([key]) => this._createOrUpdateChild(key));

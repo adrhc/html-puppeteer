@@ -13,6 +13,7 @@ import {isTrue} from "../../util/AssertionUtils.js";
  * @property {string|number|boolean=} id
  * @property {AbstractContainerComponent=} parent
  * @property {StateHolder=} stateHolder
+ * @property {StateHolderProviderFn=} stateHolderProvider
  * @property {StateInitializer=} stateInitializer
  * @property {StateChangesHandlersInvoker=} stateChangesHandlersInvoker
  * @property {EventsBinder=} eventsBinder
@@ -27,7 +28,7 @@ import {isTrue} from "../../util/AssertionUtils.js";
  * @template SCT, SCP
  * @abstract
  */
-export default class AbstractComponent extends StateProcessor {
+export default class AbstractComponent {
     /**
      * Is options with dataAttributes as defaults.
      *
@@ -60,6 +61,10 @@ export default class AbstractComponent extends StateProcessor {
      * @type {StateInitializer}
      */
     stateInitializer;
+    /**
+     * @type {StateProcessor}
+     */
+    stateProcessor;
 
     /**
      * @return {OptionalPartName} the part name inside parent's state (if any)
@@ -69,10 +74,16 @@ export default class AbstractComponent extends StateProcessor {
     }
 
     /**
+     * @return {StateHolder}
+     */
+    get stateHolder() {
+        return this.stateProcessor.stateHolder;
+    }
+
+    /**
      * @param {AbstractComponentOptions} options
      */
     constructor(options) {
-        super(options.stateHolder, options.stateChangesHandlersInvoker);
         const configurator = options.configurator ?? new DefaultComponentConfigurator(options);
         configurator.configure(this);
         applyExtraConfigurators(this);
@@ -93,21 +104,21 @@ export default class AbstractComponent extends StateProcessor {
      * @return {SCT}
      */
     getMutableState() {
-        return this.stateHolder.mutableState;
+        return this.stateProcessor.getMutableState();
     }
 
     /**
      * @return {SCT}
      */
     getStateCopy() {
-        return this.stateHolder.stateCopy;
+        return this.stateProcessor.getStateCopy();
     }
 
     /**
      * @return {boolean}
      */
     stateIsEmpty() {
-        return this.stateHolder.isEmpty();
+        return this.stateProcessor.stateIsEmpty();
     }
 
     /**
@@ -130,18 +141,6 @@ export default class AbstractComponent extends StateProcessor {
     }
 
     /**
-     * @param {*=} value
-     * @protected
-     */
-    _initializeState(value) {
-        if (value != null) {
-            this.replaceState(value);
-        } else {
-            this.stateInitializer?.load(this);
-        }
-    }
-
-    /**
      * set state to undefined
      */
     close() {
@@ -160,6 +159,27 @@ export default class AbstractComponent extends StateProcessor {
      * @param {StateChangesHandler} stateChangesHandlers
      */
     appendStateChangesHandlers(...stateChangesHandlers) {
-        this.stateChangesHandlersInvoker.appendStateChangesHandlers(...stateChangesHandlers);
+        super.appendStateChangesHandlers(...stateChangesHandlers);
+    }
+
+    /**
+     * Offers the state for manipulation then execute the state changes handlers.
+     *
+     * @param {StateUpdaterFn} stateUpdaterFn
+     */
+    doWithState(stateUpdaterFn) {
+        this.stateProcessor.doWithState(stateUpdaterFn);
+    }
+
+    /**
+     * @param {*=} value
+     * @protected
+     */
+    _initializeState(value) {
+        if (value != null) {
+            this.replaceState(value);
+        } else {
+            this.stateInitializer?.load(this);
+        }
     }
 }
