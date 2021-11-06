@@ -45,7 +45,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 	     data-initial-state='{
 		     "message1": null,
 		     "message2": "The \"message2\" child state comes from the parent&apos;s state.",
-		     "inners": {"innerProperty1": "innerProperty1 value in \"inners\" object"},
+		     "inners": {"innerProperty1": "innerProperty1 value in \"inners\" object (not-updatable approach)"},
 		     "cats": [{"id": 0, "dogs": [{"id": 0, "name": "dog 0"}]}]
 	     }'
 	     data-removed-placeholder='The "parent-component" is closed!'
@@ -72,7 +72,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 		<!-- this inners approach is not capable of updates; see also 11static-container.html approach -->
 		<x data-part="inners" data-type="static-container">
 			<div class="mb3" data-part="innerProperty1" data-type="value">
-				The "innerProperty1" child is not available yet!
+				The "innerProperty1" child is not available yet! (not-updatable approach)
 			</div>
 		</x>
 		<table class="responstable">
