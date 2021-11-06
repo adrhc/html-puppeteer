@@ -9,7 +9,7 @@ import {isTrue} from "../../util/AssertionUtils.js";
  */
 /**
  * @typedef {StateHolderOptions & ValueStateInitializerOptions & StateChangesHandlersInvokerOptions} AbstractComponentOptions
- * @property {string} elemIdOrJQuery
+ * @property {ElemIdOrJQuery} elemIdOrJQuery
  * @property {string|number|boolean=} id
  * @property {AbstractContainerComponent=} parent
  * @property {StateHolder=} stateHolder

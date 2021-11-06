@@ -8,7 +8,7 @@ import {isTrue} from "../../util/AssertionUtils.js";
 import ContainerHelper from "../../helper/ContainerHelper.js";
 
 /**
- * @typedef {AbstractContainerComponent & ContainerEventsBinderOptions} DynamicContainerComponentOptions
+ * @typedef {AbstractContainerComponentOptions & ContainerEventsBinderOptions} DynamicContainerComponentOptions
  */
 /**
  * @template SCT, SCP
