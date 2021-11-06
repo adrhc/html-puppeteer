@@ -12,11 +12,11 @@ import SwitcherComponent from "./component/SwitcherComponent.js";
  * @type {{[key: string]: ComponentProviderFn}}
  */
 const COMPONENT_TYPES = {
-    "simple": (options) => new SimpleComponent(options),
-    "value": (options) => new ValueComponent(options),
+    "simple": (options) => new SimpleComponent(/** @type {SimpleComponentOptions} */ options),
+    "value": (options) => new ValueComponent(/** @type {ValueComponentOptions} */ options),
     "static-container": (options) => new StaticContainerComponent(/** @type {StaticContainerComponentOptions} */ options),
     "dyna-container": (options) => new DynamicContainerComponent(/** @type {DynamicContainerComponentOptions} */ options),
-    "switcher": (options) => new SwitcherComponent(/** @type {StaticContainerComponentOptions} */ options),
+    "switcher": (options) => new SwitcherComponent(/** @type {SwitcherComponentOptions} */ options),
 };
 
 /**

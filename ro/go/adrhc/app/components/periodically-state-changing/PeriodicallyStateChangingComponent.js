@@ -13,7 +13,7 @@ import {StateProcessor} from "../../../html-puppeteer/core/state-processor/State
  * @typedef {StateHolder<ClockState>} ClockStateHolder
  */
 /**
- * @typedef {AbstractComponentOptions & ClockStateProcessorOptions} PeriodicallyStateChangingOptions
+ * @typedef {SimpleComponentOptions & ClockStateProcessorOptions} PeriodicallyStateChangingOptions
  */
 export default class PeriodicallyStateChangingComponent extends SimpleComponent {
     /**

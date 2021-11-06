@@ -3,11 +3,14 @@ import AbstractComponent from "./AbstractComponent.js";
 import {withDefaults} from "./options/ComponentOptionsBuilder.js";
 import PartialStateHolder from "../state/PartialStateHolder.js";
 
+/**
+ * @typedef {AbstractComponentOptions & ComponentIllustratorOptions} SimpleComponentOptions
+ */
 export default class SimpleComponent extends AbstractComponent {
     /**
-     * @param {AbstractComponentOptions} options
+     * @param {SimpleComponentOptions} options
      * @param {StateChangesHandlerProviderFn[]=} options.componentIllustratorProviders
-     * @param {AbstractComponentOptions} restOfOptions
+     * @param {SimpleComponentOptions} restOfOptions
      */
     constructor({componentIllustratorProviders, ...restOfOptions}) {
         super(withDefaults(restOfOptions)

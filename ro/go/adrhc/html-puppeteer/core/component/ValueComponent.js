@@ -5,7 +5,7 @@ import {handlebarsWrap} from "../../util/HtmlGenerator.js";
 import {configOf} from "./configurator/DefaultComponentConfigurator.js";
 
 /**
- * @typedef {AbstractComponentOptions} ValueComponentOptions
+ * @typedef {SimpleComponentOptions} ValueComponentOptions
  * @property {boolean=} dontEscapeHtml
  */
 export default class ValueComponent extends SimpleComponent {

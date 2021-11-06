@@ -5,7 +5,7 @@ import {componentIllustratorOf} from "../state-changes-handler/ComponentIllustra
 import ContainerHelper from "../../helper/ContainerHelper.js";
 
 /**
- * @typedef {AbstractComponentOptions & ChildrenComponentsOptions} AbstractContainerComponentOptions
+ * @typedef {AbstractComponentOptions & ComponentIllustratorOptions & ChildrenComponentsOptions} AbstractContainerComponentOptions
  * @property {ViewRemovalStrategy=} childrenRemovalStrategy
  * @property {string=} childrenRemovedPlaceholder
  * @property {string=} childrenRemovedCss
