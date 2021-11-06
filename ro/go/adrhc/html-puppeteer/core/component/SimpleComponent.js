@@ -12,6 +12,8 @@ export default class SimpleComponent extends AbstractComponent {
     constructor({componentIllustratorProviders, ...restOfOptions}) {
         super(withDefaults(restOfOptions)
             .withStateHolderProvider(config => new PartialStateHolder(config))
+            // the view should be updated when partial changes occur, that's
+            // why SimplePartsIllustrator is used instead of ComponentIllustrator
             .addComponentIllustratorProvider(component =>
                 simplePartsIllustratorOf(component), !!componentIllustratorProviders?.length).options());
     }

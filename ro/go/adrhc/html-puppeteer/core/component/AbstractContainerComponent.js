@@ -32,7 +32,8 @@ export default class AbstractContainerComponent extends AbstractComponent {
     constructor({componentIllustratorProviders, ...restOfOptions}) {
         super(withDefaults(restOfOptions)
             .withStateHolderProvider(config => new PartialStateHolder(config))
-            // partial changes are not changing the container's view - that's
+            // the container's view should not be updated by the container's view
+            // when partial changes occur, that's the children responsibility that's
             // why ComponentIllustrator is used instead of SimplePartsIllustrator
             .addComponentIllustratorProvider(component =>
                 componentIllustratorOf(component), !!componentIllustratorProviders?.length)
