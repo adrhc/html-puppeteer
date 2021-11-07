@@ -3,6 +3,7 @@ import DefaultComponentConfigurator from "./configurator/DefaultComponentConfigu
 import {applyExtraConfigurators} from "./configurator/ComponentConfigurator.js";
 import GlobalConfig from "../../util/GlobalConfig.js";
 import {isTrue} from "../../util/AssertionUtils.js";
+import {viewElemOf} from "../view/SimpleView.js";
 
 /**
  * @typedef {function(component: AbstractComponent): EventsBinder} EventsBinderProviderFn
@@ -65,6 +66,13 @@ export default class AbstractComponent {
      * @type {StateProcessor}
      */
     stateProcessor;
+
+    /**
+     * @return {jQuery<HTMLElement>}
+     */
+    get $elem() {
+        return viewElemOf(this.config);
+    }
 
     /**
      * @return {OptionalPartName} the part name inside parent's state (if any)

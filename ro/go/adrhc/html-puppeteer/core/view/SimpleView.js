@@ -80,7 +80,7 @@ export default class SimpleView extends AbstractView {
                 }) {
         super();
         this.viewValuesTransformer = viewValuesTransformer ?? (values => values);
-        this.$elem = $elem ?? jQueryOf(elemIdOrJQuery);
+        this.$elem = viewElemOf({$elem, elemIdOrJQuery});
         this.lazySetupWorkers.push(() => this.$elem = $elem ?? jQueryOf(elemIdOrJQuery));
         this.lazySetupWorkers.push(() => this.viewRenderStrategy =
             viewRenderStrategy ?? (this.$elem.is("textarea") ? RENDER_VAL : RENDER_HTML));
@@ -177,4 +177,14 @@ export default class SimpleView extends AbstractView {
             disable(this.$elem);
         }
     }
+}
+
+/**
+ * @param {{}} params
+ * @param {jQuery<HTMLElement>=} params.$elem
+ * @param {ElemIdOrJQuery=} params.elemIdOrJQuery
+ * @return {jQuery<HTMLElement>} $elem (if not null) otherwise use elemIdOrJQuery
+ */
+export function viewElemOf(params) {
+    return $elem ?? jQueryOf(elemIdOrJQuery);
 }
