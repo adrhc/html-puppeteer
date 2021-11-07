@@ -1,7 +1,7 @@
 import {isTrue} from "../util/AssertionUtils.js";
 import {btnSelectorOf} from "../util/SelectorUtils.js";
 
-export class DomEventHandlerBuilder {
+export class DomEventsHandlerBuilder {
     /**
      * @type {jQuery<HTMLElement>} is the element to which the event handler is bound to
      * @protected
@@ -25,7 +25,7 @@ export class DomEventHandlerBuilder {
 
     /**
      * @param {string[]} events
-     * @return {DomEventHandlerBuilder}
+     * @return {DomEventsHandlerBuilder}
      */
     whenEvents(events) {
         this.events = events.join(" ");
@@ -34,7 +34,7 @@ export class DomEventHandlerBuilder {
 
     /**
      * @param {string|jQuery<HTMLElement>} $elemOrSelector
-     * @return {DomEventHandlerBuilder}
+     * @return {DomEventsHandlerBuilder}
      */
     occurOn($elemOrSelector) {
         this.$elem = typeof $elemOrSelector === "string" ? $($elemOrSelector) : $elemOrSelector;
@@ -44,7 +44,7 @@ export class DomEventHandlerBuilder {
     /**
      * @param {string} name
      * @param {string=} owner
-     * @return {DomEventHandlerBuilder}
+     * @return {DomEventsHandlerBuilder}
      */
     occurOnBtn(name, owner) {
         return this.occurOn(btnSelectorOf(name, owner));
@@ -52,7 +52,7 @@ export class DomEventHandlerBuilder {
 
     /**
      * @param {function(ev: Event)} fn
-     * @return {DomEventHandlerBuilder}
+     * @return {DomEventsHandlerBuilder}
      */
     do(fn) {
         this.fn = fn;
@@ -62,7 +62,7 @@ export class DomEventHandlerBuilder {
 
     /**
      * @param {boolean=} [once=true]
-     * @return {DomEventHandlerBuilder}
+     * @return {DomEventsHandlerBuilder}
      */
     once(once = true) {
         this.oneTimeOnly = once;
@@ -72,9 +72,9 @@ export class DomEventHandlerBuilder {
 
 /**
  * @param {string} events
- * @return {DomEventHandlerBuilder}
+ * @return {DomEventsHandlerBuilder}
  */
 export function when(...events) {
-    isTrue(!!events?.length, "[DomEventHandlerBuilder] events can't be empty!");
-    return new DomEventHandlerBuilder().whenEvents(events);
+    isTrue(!!events?.length, "[DomEventsHandlerBuilder] events can't be empty!");
+    return new DomEventsHandlerBuilder().whenEvents(events);
 }

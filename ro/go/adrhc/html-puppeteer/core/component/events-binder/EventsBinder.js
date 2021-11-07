@@ -1,6 +1,6 @@
 import {isTrue} from "../../../util/AssertionUtils.js";
 import {css} from "../../../helper/CSSSelectorBuilder.js";
-import {when} from "../../../helper/DomEventHandlerBuilder.js";
+import {when} from "../../../helper/DomEventsHandlerBuilder.js";
 
 export default class EventsBinder {
     /**
