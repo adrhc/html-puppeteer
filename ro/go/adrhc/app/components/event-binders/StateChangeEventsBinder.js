@@ -2,7 +2,7 @@ import EventsBinder from "../../../html-puppeteer/core/component/events-binder/E
 import {$btnOf} from "../../../html-puppeteer/util/SelectorUtils.js";
 import {partsOf} from "../../../html-puppeteer/core/state/PartialStateHolder.js";
 import {activate, deactivate, jsonParsedValOf} from "../../../html-puppeteer/util/DomUtils.js";
-import {when} from "../../../html-puppeteer/helper/DomEventsHandlerBuilder.js";
+import {when} from "../../../html-puppeteer/helper/DomEventsAttachBuilder.js";
 
 export default class StateChangeEventsBinder extends EventsBinder {
     /**
