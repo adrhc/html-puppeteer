@@ -77,3 +77,24 @@ export class CSSSelectorBuilder {
 export function css(options) {
     return new CSSSelectorBuilder(options);
 }
+
+/**
+ * e.g. <div owner="componentX" data-attrY="value" />
+ *
+ * @param {string} owner is a component id
+ * @param {string} dataAttrName is the data attribute of the DOM element having also "owner"
+ * @return {string|number|boolean} the value of the data attribute with the name dataAttrName on the element described above
+ */
+export function dataAttrValueOfOwnedDataAttr(owner, dataAttrName) {
+    return elemOfOwnedDataAttr(owner, dataAttrName)?.data(dataAttrName);
+}
+
+/**
+ * @param {string} owner is a component id
+ * @param {string} dataAttrName is the data attribute of the DOM element having also "owner"
+ * @return {jQuery<HTMLElement>|undefined}
+ */
+export function elemOfOwnedDataAttr(owner, dataAttrName) {
+    const $elem = css().owner(owner).dataAttrName(dataAttrName).$elem();
+    return $elem.length ? $elem : undefined;
+}

@@ -186,5 +186,5 @@ export default class SimpleView extends AbstractView {
  * @return {jQuery<HTMLElement>} $elem (if not null) otherwise use elemIdOrJQuery
  */
 export function viewElemOf(params) {
-    return $elem ?? jQueryOf(elemIdOrJQuery);
+    return params.$elem ?? jQueryOf(params.elemIdOrJQuery);
 }

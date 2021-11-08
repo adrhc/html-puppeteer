@@ -94,12 +94,12 @@ export class DomEventsAttachBuilder {
 
     /**
      * @param {string} dataAttrName
-     * @param {AbstractComponent=} owningComponent might be also provided with useComponent()
+     * @param {string=} owner might be also provided by the component provided with useComponent()
      */
-    occurOnOwnedDataAttr(dataAttrName, owningComponent) {
-        this.component = owningComponent;
+    occurOnOwnedDataAttr(dataAttrName, owner) {
         this.$elemProvider = (component) =>
-            $(css().owner(component?.id ?? owningComponent.id).dataAttrName(dataAttrName).selector());
+            $(css().owner(component?.id ?? owner).dataAttrName(dataAttrName).selector());
+        return this;
     }
 
     /**
@@ -144,12 +144,11 @@ export class DomEventsAttachBuilder {
     /**
      * This is a "builder" method; it actually bind the events handler to the DOM element.
      *
-     * @param {EventsHandler=} fn might be already provided by use(fn)
-     * and this method to be used to actually attach the events handler
+     * @param {EventsHandler} fn must be provided here hence making useless the use of useHandler(); this is intended so for the developers to understand that they have to ignore useHandler() when using this method
      * @return {DomEventsAttachBuilder}
      */
     do(fn) {
-        this.fn = fn ?? this.fn;
+        this.fn = fn;
         return this.attach();
     }
 
@@ -189,25 +188,25 @@ export class DomEventsAttachBuilder {
 }
 
 /**
- * @param {jQuery<HTMLElement>} $elem
- * @param {string} events
- * @param {EventsHandler} fn
- * @param {string} trigger
- * @return {EventsHandlerDetachFn}
- */
-export function detachFnOf({$elem, events, fn, trigger}) {
-    if (trigger) {
-        return () => $elem.off(events, trigger, fn);
-    } else {
-        return () => $elem.off(events, fn);
-    }
-}
-
-/**
  * @param {string} events
  * @return {DomEventsAttachBuilder}
  */
 export function when(...events) {
     isTrue(!!events?.length, "[DomEventsAttachBuilder] events can't be empty!");
     return new DomEventsAttachBuilder().whenEvents(events);
+}
+
+/**
+ * @param {jQuery<HTMLElement>} $elem
+ * @param {string} events
+ * @param {EventsHandler} fn
+ * @param {string} trigger
+ * @return {EventsHandlerDetachFn}
+ */
+function detachFnOf({$elem, events, fn, trigger}) {
+    if (trigger) {
+        return () => $elem.off(events, trigger, fn);
+    } else {
+        return () => $elem.off(events, fn);
+    }
 }
