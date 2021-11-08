@@ -27,6 +27,9 @@ export default class EventsBinderBuilder {
     }
 }
 
+/**
+ * @return {ChainedDomEventsAttachBuilder}
+ */
 export function eventsBinder() {
     return new ChainedDomEventsAttachBuilder(new EventsBinderBuilder());
 }
