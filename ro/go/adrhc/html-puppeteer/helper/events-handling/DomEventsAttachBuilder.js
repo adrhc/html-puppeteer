@@ -210,7 +210,7 @@ export class DomEventsAttachBuilder {
  * @param {string} events
  * @return {DomEventsAttachBuilder}
  */
-export function when(...events) {
+export function whenEvents(...events) {
     isTrue(!!events?.length, "[DomEventsAttachBuilder] events can't be empty!");
     return new DomEventsAttachBuilder().whenEvents(events);
 }

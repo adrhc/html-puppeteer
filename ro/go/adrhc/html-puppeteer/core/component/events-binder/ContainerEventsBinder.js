@@ -2,7 +2,7 @@ import EventsBinder from "./EventsBinder.js";
 import {childIdOf} from "../../../util/GlobalConfig.js";
 import {dataComponentIdSelectorOf, idAttrSelectorOf} from "../../../util/SelectorUtils.js";
 import {uniqueId} from "../../../util/StringUtils.js";
-import {when} from "../../../helper/events-handling/DomEventsAttachBuilder.js";
+import {whenEvents} from "../../../helper/events-handling/DomEventsAttachBuilder.js";
 
 /**
  * @typedef {function(component: AbstractContainerComponent): *} ChildStateProviderFn
@@ -87,13 +87,13 @@ export default class ContainerEventsBinder extends EventsBinder {
      */
     attachEventHandlers() {
         // <button data-owner="componentId" data-createDataAttr />
-        when(this.createEvent).occurOnOwnedDataAttr(this.createDataAttr, this.componentId).do(() => {
+        whenEvents(this.createEvent).occurOnOwnedDataAttr(this.createDataAttr, this.componentId).do(() => {
             this.containerComponent.replacePart(uniqueId(), this.childStateProviderFn(this.containerComponent));
         });
         // <div component-id="componentId">
         //     <button data-child-id="childId" data-owner="componentId" data-removeDataAttr />
         // </div>
-        when(this.removeEvent).occurOnComponent(this.containerComponent)
+        whenEvents(this.removeEvent).occurOnComponent(this.containerComponent)
             .triggeredByOwnedDataAttr(this.removeDataAttr).do((ev) => {
             const $elem = $(ev.target);
             const childId = childIdOf($elem);

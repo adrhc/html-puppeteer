@@ -1,7 +1,7 @@
 import EventsBinder from "../../../html-puppeteer/core/component/events-binder/EventsBinder.js";
 import {activate, deactivate} from "../../../html-puppeteer/util/DomUtils.js";
-import {when} from "../../../html-puppeteer/helper/events-handling/DomEventsAttachBuilder.js";
 import {dataAttrValueOfOwnedDataAttr, elemOfOwnedDataAttr} from "../../../html-puppeteer/helper/CSSSelectorBuilder.js";
+import {whenEvents} from "../../../html-puppeteer/helper/events-handling/DomEventsAttachBuilder.js";
 
 export default class OpenCloseEventsBinder extends EventsBinder {
     /**
@@ -30,7 +30,7 @@ export default class OpenCloseEventsBinder extends EventsBinder {
     attachEventHandlers() {
         // <button data-open="click" data-owner="componentId">Open</button>
         let eventName = this._eventNameOfOwnedDataAttr(this.openDataAttrName);
-        when(eventName).occurOnOwnedDataAttr(this.openDataAttrName, this.componentId)
+        whenEvents(eventName).occurOnOwnedDataAttr(this.openDataAttrName, this.componentId)
             .once().do(() => {
             this._deactivateOwnedDataAttr(this.openDataAttrName);
             this._activateOwnedDataAttr(this.closeDataAttrName);
@@ -38,7 +38,7 @@ export default class OpenCloseEventsBinder extends EventsBinder {
         });
         // <button data-close="click" data-owner="componentId">Close</button>
         eventName = this._eventNameOfOwnedDataAttr(this.closeDataAttrName);
-        when(eventName).occurOnOwnedDataAttr(this.closeDataAttrName, this.componentId)
+        whenEvents(eventName).occurOnOwnedDataAttr(this.closeDataAttrName, this.componentId)
             .once().do(() => {
             this._deactivateOwnedDataAttr(this.closeDataAttrName);
             this._activateOwnedDataAttr(this.openDataAttrName);
