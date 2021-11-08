@@ -23,23 +23,38 @@ export default class StateChangeEventsBinder extends EventsBinder {
      * attach DOM event handlers
      */
     attachEventHandlers() {
-        activate($btnOf("change-parent-state"), $btnOf("change-partial-state"));
+        this._activateButtons("change-parent-state", "change-partial-state");
         when("click").occurOnBtn("change-parent-state").do(() => {
             this._component.replaceState(jsonParsedValOf(this.debuggerElemIdOrJQuery));
         });
-        when("click").occurOnBtn("change-partial-state")
-            .do(() => {
-                this._replaceParts(jsonParsedValOf("partial-state"));
-            });
+        when("click").occurOnBtn("change-partial-state").do(() => {
+            this._replaceParts(jsonParsedValOf("partial-state"));
+        });
     }
 
     /**
      * detach DOM event handlers
      */
     detachEventHandlers() {
-        deactivate($btnOf("change-parent-state"), $btnOf("change-partial-state"));
+        this._deactivateButtons("change-parent-state", "change-partial-state");
         $btnOf("change-parent-state").off("click");
         $btnOf("change-partial-state").off("click");
+    }
+
+    /**
+     * @param {string} names
+     * @protected
+     */
+    _activateButtons(...names) {
+        names.forEach(it => activate($btnOf(it)));
+    }
+
+    /**
+     * @param {string} names
+     * @protected
+     */
+    _deactivateButtons(...names) {
+        names.forEach(it => deactivate($btnOf(it)));
     }
 
     /**
