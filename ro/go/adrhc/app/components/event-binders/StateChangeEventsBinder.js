@@ -12,9 +12,10 @@ export default class StateChangeEventsBinder extends EventsBinder {
 
     /**
      * @param {ElemIdOrJQuery} debuggerElemIdOrJQuery
+     * @param {AbstractComponent=} component
      */
-    constructor(debuggerElemIdOrJQuery) {
-        super();
+    constructor(debuggerElemIdOrJQuery, component) {
+        super(component);
         this.debuggerElemIdOrJQuery = debuggerElemIdOrJQuery;
     }
 

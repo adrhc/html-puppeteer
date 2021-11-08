@@ -14,10 +14,17 @@ export default class EventsBinderBuilder {
         return this;
     }
 
-    /*attachHandlers() {
-        this.domEventsAttachBuilders.forEach(it => it.do());
-        return this;
-    }*/
+    /**
+     * @return {EventsBinderProviderFn}
+     */
+    buildEventsBinderProvider() {
+        return (component) => {
+            const evBinder = {};
+            this.domEventsAttachBuilders.forEach(it => it.useComponent(component));
+            evBinder.attachEventHandlers = attachEventHandlersFnOf(this.domEventsAttachBuilders);
+            evBinder.detachEventHandlers = detachEventHandlersFnOf(this.domEventsAttachBuilders);
+        };
+    }
 }
 
 export function eventsBinder() {
@@ -38,5 +45,25 @@ class ChainedDomEventsAttachBuilder extends DomEventsAttachBuilder {
     and() {
         this.chain.addDomEventsAttachBuilder(this);
         return this.chain;
+    }
+}
+
+/**
+ * @param {DomEventsAttachBuilder[]} domEventsAttachBuilders
+ * @return {(function(): void)}
+ */
+function attachEventHandlersFnOf(domEventsAttachBuilders) {
+    return () => {
+        domEventsAttachBuilders.forEach(it => it.attach());
+    };
+}
+
+/**
+ * @param {DomEventsAttachBuilder[]} domEventsAttachBuilders
+ * @return {(function(): void)}
+ */
+function detachEventHandlersFnOf(domEventsAttachBuilders) {
+    return () => {
+        domEventsAttachBuilders.map(it => it.buildDetachFn()).forEach(detachFn => detachFn());
     }
 }

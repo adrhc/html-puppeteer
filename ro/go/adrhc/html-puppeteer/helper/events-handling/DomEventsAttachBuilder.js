@@ -7,6 +7,10 @@ import {css} from "../CSSSelectorBuilder.js";
  */
 
 /**
+ * @typedef {function(): void} EventsHandlerDetachFn
+ */
+
+/**
  * @typedef {{}} DomEventsAttachParams
  * @property {string} events
  * @property {jQuery<HTMLElement>} $elem
@@ -88,8 +92,14 @@ export class DomEventsAttachBuilder {
         this.$elem = component.$elem;
     }
 
-    occurOnOwnedHavingDataAttr(dataAttrName) {
-        this.$elemProvider = (component) => $(css().owner(component.id).dataAttrName(dataAttrName).selector());
+    /**
+     * @param {string} dataAttrName
+     * @param {AbstractComponent=} owningComponent might be also provided with useComponent()
+     */
+    occurOnOwnedDataAttr(dataAttrName, owningComponent) {
+        this.component = owningComponent;
+        this.$elemProvider = (component) =>
+            $(css().owner(component?.id ?? owningComponent.id).dataAttrName(dataAttrName).selector());
     }
 
     /**
@@ -103,44 +113,12 @@ export class DomEventsAttachBuilder {
     }
 
     /**
-     * This is a "builder" method; it actually bind the events handler to the DOM element.
-     *
-     * @param {EventsHandler=} fn might be already provided by use(fn)
-     * and this method to be used to actually attach the events handler
-     * @return {DomEventsAttachBuilder}
-     */
-    do(fn) {
-        this.fn = fn ?? this.fn;
-        this.attach();
-        return this;
-    }
-
-    /**
      * @param {AbstractComponent} component
+     * @return {DomEventsAttachBuilder}
      */
     useComponent(component) {
         this.component = component;
-    }
-
-    /**
-     * This is a "builder" method; it actually bind the events handler to the DOM element.
-     * Is equivalent to "do" called with a missing "fn" parameter.
-     *
-     * @return {DomEventsAttachBuilder}
-     */
-    attach() {
-        const params = this.params();
-        // e.g. $elem.on("click", "tr", doSomethingFn)
-        params.$elem[params.once ? "one" : "on"](params.events, params.trigger, params.fn);
         return this;
-    }
-
-    /**
-     * @return {DomEventsAttachParams}
-     */
-    params() {
-        const $elem = this.$elem ?? this.$elemProvider(this.component);
-        return {$elem, once: this.oneTimeOnly, events: this.events, trigger: this.trigger, fn: this.fn}
     }
 
     /**
@@ -162,10 +140,67 @@ export class DomEventsAttachBuilder {
         this.oneTimeOnly = once;
         return this;
     }
+
+    /**
+     * This is a "builder" method; it actually bind the events handler to the DOM element.
+     *
+     * @param {EventsHandler=} fn might be already provided by use(fn)
+     * and this method to be used to actually attach the events handler
+     * @return {DomEventsAttachBuilder}
+     */
+    do(fn) {
+        this.fn = fn ?? this.fn;
+        return this.attach();
+    }
+
+    /**
+     * This is a "builder" method; it actually bind the events handler to the DOM element.
+     * Is equivalent to "do" called with a missing "fn" parameter.
+     *
+     * @return {DomEventsAttachBuilder}
+     */
+    attach() {
+        const params = this._computedParams();
+        if (this.trigger) {
+            // e.g. $elem.on("click", "tr", doSomethingFn)
+            params.$elem[params.once ? "one" : "on"](params.events, params.trigger, params.fn);
+        } else {
+            // e.g. $elem.on("click", doSomethingFn)
+            params.$elem[params.once ? "one" : "on"](params.events, params.fn);
+        }
+        return this;
+    }
+
+    /**
+     * @return {EventsHandlerDetachFn}
+     */
+    buildDetachFn() {
+        return detachFnOf(this._computedParams());
+    }
+
+    /**
+     * @return {DomEventsAttachParams}
+     * @protected
+     */
+    _computedParams() {
+        const $elem = this.$elem ?? this.$elemProvider(this.component);
+        return {$elem, once: this.oneTimeOnly, events: this.events, trigger: this.trigger, fn: this.fn}
+    }
 }
 
+/**
+ * @param {jQuery<HTMLElement>} $elem
+ * @param {string} events
+ * @param {EventsHandler} fn
+ * @param {string} trigger
+ * @return {EventsHandlerDetachFn}
+ */
 export function detachFnOf({$elem, events, fn, trigger}) {
-    return () => $elem.off(events, trigger, fn);
+    if (trigger) {
+        return () => $elem.off(events, trigger, fn);
+    } else {
+        return () => $elem.off(events, fn);
+    }
 }
 
 /**
