@@ -59,10 +59,10 @@ export class DomEventsAttachBuilder {
     trigger;
 
     /**
-     * @param {string[]} events
+     * @param {string} events
      * @return {DomEventsAttachBuilder}
      */
-    whenEvents(events) {
+    whenEvents(...events) {
         this.events = events.join(" ");
         return this;
     }
@@ -212,7 +212,7 @@ export class DomEventsAttachBuilder {
  */
 export function whenEvents(...events) {
     isTrue(!!events?.length, "[DomEventsAttachBuilder] events can't be empty!");
-    return new DomEventsAttachBuilder().whenEvents(events);
+    return new DomEventsAttachBuilder().whenEvents(...events);
 }
 
 /**

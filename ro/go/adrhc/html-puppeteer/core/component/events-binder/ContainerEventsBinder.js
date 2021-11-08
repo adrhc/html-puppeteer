@@ -1,8 +1,7 @@
 import EventsBinder from "./EventsBinder.js";
 import {childIdOf} from "../../../util/GlobalConfig.js";
-import {dataComponentIdSelectorOf, idAttrSelectorOf} from "../../../util/SelectorUtils.js";
 import {uniqueId} from "../../../util/StringUtils.js";
-import {whenEvents} from "../../../helper/events-handling/DomEventsAttachBuilder.js";
+import {eventsBinder} from "../../../helper/events-handling/EventsBinderBuilder.js";
 
 /**
  * @typedef {function(component: AbstractContainerComponent): *} ChildStateProviderFn
@@ -14,6 +13,11 @@ import {whenEvents} from "../../../helper/events-handling/DomEventsAttachBuilder
  * @property {ChildStateProviderFn} childStateProviderFn
  */
 export default class ContainerEventsBinder extends EventsBinder {
+    /**
+     * @type {EventsHandlerDetachFn}
+     * @private
+     */
+    _eventsHandlerDetachFn
     /**
      * @type {ChildStateProviderFn}
      * @protected
@@ -41,14 +45,8 @@ export default class ContainerEventsBinder extends EventsBinder {
     removeEvent;
 
     /**
-     * @return {jQuery<HTMLElement>}
-     * @protected
-     */
-    get $container() {
-        return $(`${idAttrSelectorOf(this.componentId)}, ${dataComponentIdSelectorOf(this.componentId)}`);
-    }
-
-    /**
+     * If "get component" is not defined the "super" one will return undefined!
+     *
      * @param {AbstractComponent=} component
      */
     set component(component) {
@@ -86,38 +84,33 @@ export default class ContainerEventsBinder extends EventsBinder {
      * attaches all necessary DOM event handlers
      */
     attachEventHandlers() {
-        // <button data-owner="componentId" data-createDataAttr />
-        whenEvents(this.createEvent).occurOnOwnedDataAttr(this.createDataAttr, this.componentId).do(() => {
-            this.containerComponent.replacePart(uniqueId(), this.childStateProviderFn(this.containerComponent));
-        });
-        // <div component-id="componentId">
-        //     <button data-child-id="childId" data-owner="componentId" data-removeDataAttr />
-        // </div>
-        whenEvents(this.removeEvent).occurOnComponent(this.containerComponent)
-            .triggeredByOwnedDataAttr(this.removeDataAttr).do((ev) => {
-            const $elem = $(ev.target);
-            const childId = childIdOf($elem);
-            this.containerComponent.replacePartByChildId(childId);
-        });
+        this._eventsHandlerDetachFn = eventsBinder()
+            // <button data-owner="componentId" data-createDataAttr />
+            .whenEvents(this.createEvent)
+            .occurOnOwnedDataAttr(this.createDataAttr, this.componentId)
+            .do(() => {
+                this.containerComponent.replacePart(uniqueId(), this.childStateProviderFn(this.containerComponent));
+            })
+            .and()
+            // <div component-id="componentId">
+            //     <button data-child-id="childId" data-owner="componentId" data-removeDataAttr />
+            // </div>
+            .whenEvents(this.removeEvent)
+            .occurOnComponent(this.containerComponent)
+            .triggeredByOwnedDataAttr(this.removeDataAttr)
+            .do((ev) => {
+                const $elem = $(ev.target);
+                const childId = childIdOf($elem);
+                this.containerComponent.replacePartByChildId(childId);
+            })
+            .and()
+            .buildDetachEventHandlersFn();
     }
 
     /**
      * detaches all DOM event handlers
      */
     detachEventHandlers() {
-        this._detachEventsHandlerFromOwnedHavingDataAttr(this.createDataAttr, this.createEvent);
-        this._detachEventsHandlerFromOwnedChildrenHavingDataAttr(this.removeDataAttr);
-    }
-
-    /**
-     * Detaches the this.createEvent handler applied on this.$container
-     * with the selector [data-owner=this.componentId][data-dataAttrName].
-     *
-     * @param {string} dataAttribName
-     * @protected
-     */
-    _detachEventsHandlerFromOwnedChildrenHavingDataAttr(dataAttribName) {
-        const cssSelector = this._ownedHavingDataAttrSelector(dataAttribName);
-        this.$container.off(this.createEvent, cssSelector);
+        this._eventsHandlerDetachFn?.();
     }
 }

@@ -1,10 +1,25 @@
 import {DomEventsAttachBuilder} from "./DomEventsAttachBuilder.js";
 
-export default class EventsBinderBuilder {
+/**
+ * @return {EventsBinderBuilder}
+ */
+export function eventsBinder() {
+    return new EventsBinderBuilder();
+}
+
+class EventsBinderBuilder {
+    /**
+     * @type {DomEventsAttachBuilder}
+     */
+    domEventsAttachBuilder;
     /**
      * @type {DomEventsAttachBuilder[]}
      */
     domEventsAttachBuilders = [];
+
+    constructor() {
+        this.domEventsAttachBuilder = new DomEventsAttachBuilder();
+    }
 
     /**
      * @param {DomEventsAttachBuilder} domEventsAttachBuilder
@@ -15,6 +30,13 @@ export default class EventsBinderBuilder {
     }
 
     /**
+     * @return {EventsHandlerDetachFn}
+     */
+    buildDetachEventHandlersFn() {
+        return detachEventHandlersFnOf(this.domEventsAttachBuilders);
+    }
+
+    /**
      * @return {EventsBinderProviderFn}
      */
     buildEventsBinderProvider() {
@@ -22,32 +44,82 @@ export default class EventsBinderBuilder {
             const evBinder = {};
             this.domEventsAttachBuilders.forEach(it => it.useComponent(component));
             evBinder.attachEventHandlers = attachEventHandlersFnOf(this.domEventsAttachBuilders);
-            evBinder.detachEventHandlers = detachEventHandlersFnOf(this.domEventsAttachBuilders);
+            evBinder.detachEventHandlers = this.buildDetachEventHandlersFn();
         };
     }
-}
 
-/**
- * @return {ChainedDomEventsAttachBuilder}
- */
-export function eventsBinder() {
-    return new ChainedDomEventsAttachBuilder(new EventsBinderBuilder());
-}
-
-class ChainedDomEventsAttachBuilder extends DomEventsAttachBuilder {
     /**
-     * @type {EventsBinderBuilder}
+     * @return {EventsBinderBuilder}
      */
-    chain;
-
-    constructor(chain) {
-        super();
-        this.chain = chain;
+    and() {
+        this.addDomEventsAttachBuilder(this.domEventsAttachBuilder);
+        this.domEventsAttachBuilder = new DomEventsAttachBuilder();
+        return this;
     }
 
-    and() {
-        this.chain.addDomEventsAttachBuilder(this);
-        return this.chain;
+    whenEvents(...events) {
+        this.domEventsAttachBuilder.whenEvents(...events);
+        return this;
+    }
+
+    useComponent(component) {
+        this.domEventsAttachBuilder.useComponent(component);
+        return this;
+    }
+
+    occurOn($elemOrSelector) {
+        this.domEventsAttachBuilder.occurOn($elemOrSelector);
+        return this;
+    }
+
+    occurOnBtn(name, owner) {
+        this.domEventsAttachBuilder.occurOnBtn(name, owner);
+        return this;
+    }
+
+    occurOnComponent(component, useComponent = true) {
+        this.domEventsAttachBuilder.occurOnComponent(component, useComponent);
+        return this;
+    }
+
+    occurOnOwnedDataAttr(dataAttrName, owner, dataAttrValue) {
+        this.domEventsAttachBuilder.occurOnOwnedDataAttr(dataAttrName, owner, dataAttrValue);
+        return this;
+    }
+
+    triggeredBy(selector) {
+        this.domEventsAttachBuilder.triggeredBy(selector);
+        return this;
+    }
+
+    triggeredByOwnedDataAttr(dataAttrName, owner) {
+        this.domEventsAttachBuilder.triggeredByOwnedDataAttr(dataAttrName, owner);
+        return this;
+    }
+
+    useHandler(fn) {
+        this.domEventsAttachBuilder.useHandler(fn);
+        return this;
+    }
+
+    once(once = true) {
+        this.domEventsAttachBuilder.once(once);
+        return this;
+    }
+
+    do(fn) {
+        this.domEventsAttachBuilder.do(fn);
+        return this;
+    }
+
+    attach() {
+        this.domEventsAttachBuilder.attach();
+        return this;
+    }
+
+    buildDetachFn() {
+        this.domEventsAttachBuilder.buildDetachFn();
+        return this;
     }
 }
 
@@ -63,7 +135,7 @@ function attachEventHandlersFnOf(domEventsAttachBuilders) {
 
 /**
  * @param {DomEventsAttachBuilder[]} domEventsAttachBuilders
- * @return {(function(): void)}
+ * @return {EventsHandlerDetachFn}
  */
 function detachEventHandlersFnOf(domEventsAttachBuilders) {
     return () => {
