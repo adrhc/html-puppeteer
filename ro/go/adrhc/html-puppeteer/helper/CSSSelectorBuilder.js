@@ -18,26 +18,24 @@ export class CSSSelectorBuilder {
      * @protected
      */
     dataAttribute;
+    /**
+     * @type {string|number|boolean|undefined}
+     * @protected
+     */
+    dataAttributeValue;
 
     /**
      * @param {CSSSelectorBuilderOptions} options
      */
-    constructor({owner, dataAttrName} = {}) {
+    constructor({owner, dataAttrName, dataAttributeValue} = {}) {
         this.componentId = owner;
         this.dataAttribute = dataAttrName;
+        this.dataAttributeValue = dataAttributeValue;
     }
 
     owner(componentId) {
         this.componentId = componentId;
         return this;
-    }
-
-    /**
-     * @param {string} componentId
-     * @return {CSSSelectorBuilder}
-     */
-    withOwner(componentId) {
-        return this.owner(this.componentId);
     }
 
     /**
@@ -50,19 +48,25 @@ export class CSSSelectorBuilder {
     }
 
     /**
-     * @param {string} dataAttributeName
+     * @param {string} dataAttributeValue
      * @return {CSSSelectorBuilder}
      */
-    withDataAttributeName(dataAttributeName) {
-        return this.dataAttrName(dataAttributeName);
+    dataAttrValue(dataAttributeValue) {
+        this.dataAttributeValue = dataAttributeValue;
+        return this;
     }
 
     /**
      * @return {string} the CSS selector
      */
     selector() {
-        // [data-owner="componentId"][data-dataAttribName]
-        return `${dataOwnerSelectorOf(this.componentId)}${dataSelectorOf(this.dataAttribute)}`;
+        if (this.dataAttributeValue == null) {
+            // [data-owner="componentId"][data-dataAttribName]
+            return `${dataOwnerSelectorOf(this.componentId)}${dataSelectorOf(this.dataAttribute)}`;
+        } else {
+            // [data-owner="componentId"][data-dataAttribName="dataAttributeValue"]
+            return `${dataOwnerSelectorOf(this.componentId)}${dataSelectorOf(this.dataAttribute, this.dataAttributeValue)}`;
+        }
     }
 
     $elem() {
@@ -87,6 +91,15 @@ export function css(options) {
  */
 export function dataAttrValueOfOwnedDataAttr(owner, dataAttrName) {
     return elemOfOwnedDataAttr(owner, dataAttrName)?.data(dataAttrName);
+}
+
+/**
+ * @param {string} owner is a component id
+ * @param {string} dataAttrName is the data attribute of the DOM element having also "owner"
+ * @return {string}
+ */
+export function ownedDataAttrSelectorOf(owner, dataAttrName) {
+    return css().owner(owner).dataAttrName(dataAttrName).selector();
 }
 
 /**

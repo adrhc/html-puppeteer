@@ -1,6 +1,6 @@
 import {isTrue} from "../../util/AssertionUtils.js";
 import {btnSelectorOf} from "../../util/SelectorUtils.js";
-import {css} from "../CSSSelectorBuilder.js";
+import {css, ownedDataAttrSelectorOf} from "../CSSSelectorBuilder.js";
 
 /**
  * @typedef {function(ev: Event)} EventsHandler
@@ -29,10 +29,12 @@ export class DomEventsAttachBuilder {
     $elem;
     /**
      * @type {ElemProviderFn}
+     * @protected
      */
     $elemProvider;
     /**
      * @type {AbstractComponent}
+     * @protected
      */
     component;
     /**
@@ -52,6 +54,7 @@ export class DomEventsAttachBuilder {
     oneTimeOnly;
     /**
      * @type {string}
+     * @protected
      */
     trigger;
 
@@ -61,6 +64,15 @@ export class DomEventsAttachBuilder {
      */
     whenEvents(events) {
         this.events = events.join(" ");
+        return this;
+    }
+
+    /**
+     * @param {AbstractComponent} component
+     * @return {DomEventsAttachBuilder}
+     */
+    useComponent(component) {
+        this.component = component;
         return this;
     }
 
@@ -87,18 +99,22 @@ export class DomEventsAttachBuilder {
 
     /**
      * @param {AbstractComponent} component
+     * @param {boolean=} [useComponent=true]
      */
-    occurOnComponent(component) {
+    occurOnComponent(component, useComponent = true) {
         this.$elem = component.$elem;
+        return useComponent ? this.useComponent(component) : this;
     }
 
     /**
      * @param {string} dataAttrName
      * @param {string=} owner might be also provided by the component provided with useComponent()
+     * @param {string|number|boolean=} dataAttrValue
+     * @return {DomEventsAttachBuilder}
      */
-    occurOnOwnedDataAttr(dataAttrName, owner) {
+    occurOnOwnedDataAttr(dataAttrName, owner, dataAttrValue) {
         this.$elemProvider = (component) =>
-            $(css().owner(component?.id ?? owner).dataAttrName(dataAttrName).selector());
+            $(css().owner(component?.id ?? owner).dataAttrName(dataAttrName).dataAttrValue(dataAttrValue).selector());
         return this;
     }
 
@@ -107,18 +123,21 @@ export class DomEventsAttachBuilder {
      * see https://learn.jquery.com/events/event-delegation/#event-propagation
      *
      * @param {string} selector
+     * @return {DomEventsAttachBuilder}
      */
     triggeredBy(selector) {
         this.trigger = selector;
+        return this;
     }
 
     /**
-     * @param {AbstractComponent} component
+     * @param {string} dataAttrName
+     * @param {string=} owner might be also provided by the component provided with useComponent()
      * @return {DomEventsAttachBuilder}
      */
-    useComponent(component) {
-        this.component = component;
-        return this;
+    triggeredByOwnedDataAttr(dataAttrName, owner) {
+        const selector = ownedDataAttrSelectorOf(owner ?? this.component.id, dataAttrName);
+        return this.triggeredBy(selector);
     }
 
     /**
