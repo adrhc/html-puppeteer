@@ -6,6 +6,7 @@ import {uniqueId} from "../../../util/StringUtils.js";
 import ChildStateInitializer from "../state-initializer/ChildStateInitializer.js";
 import StateHolder from "../../state/StateHolder.js";
 import {StateProcessor} from "../../state-processor/StateProcessor.js";
+import {eventsBinderGroupOf} from "../events-binder/EventsBinderGroup.js";
 
 export default class DefaultComponentConfigurator extends ComponentConfigurator {
     /**
@@ -41,8 +42,7 @@ export default class DefaultComponentConfigurator extends ComponentConfigurator 
         component.id = idOf(this.config.elemIdOrJQuery) ?? newIdOf(this.config);
         component.parent = this.config.parent;
         component.stateProcessor = this._createStateProcessor(component);
-        // very special case for eventsBinder: the provider has priority
-        component.eventsBinder = this.config.eventsBinderProvider?.(component) ?? this.config.eventsBinder;
+        component.eventsBinder = eventsBinderGroupOf(this.config.eventsBinderProviders, component);
         component.stateInitializer = this.config.stateInitializer ?? this._createStateInitializer(component);
     }
 

@@ -50,6 +50,6 @@ $(() => {
         .doPeriodicallyWithStateAndClock(stateAndClockStateChangeConsumer)
         .addDebugger({elemIdOrJQuery: "debugger-component"})
         .to({
-            eventsBinderProvider: (component) => new Scenario6EventsBinder(component)
+            eventsBinderProviders: [component => new Scenario6EventsBinder(component)]
         }));
 });

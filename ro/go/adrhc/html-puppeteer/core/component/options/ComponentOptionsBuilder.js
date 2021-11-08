@@ -1,12 +1,15 @@
-import EventsBinderGroup from "../events-binder/EventsBinderGroup.js";
-import {pushNotNullMissing} from "../../../util/ArrayUtils.js";
 import {FunctionComponentConfigurator} from "./FunctionComponentConfigurator.js";
+import {eventsBinderProviderFnOf} from "../../../util/Types.js";
 
+/**
+ * @typedef {ComponentOptions} ComponentOptionsBuilderOptions
+ * @property {EventsBinderProviderFn[]} eventsBinderProviders
+ */
 export class ComponentOptionsBuilder {
     /**
-     * @type {ComponentOptions}
+     * @type {ComponentOptionsBuilderOptions}
      */
-    builderOptions = {};
+    builderOptions = {eventsBinderProviders: []};
     /**
      * these should come from the descendant class
      *
@@ -58,18 +61,11 @@ export class ComponentOptionsBuilder {
             ...(this.descendantComponentClassOptions.extraConfigurators ?? [])
         ];
         // events binders: all provided are used
-        const eventsBinders = pushNotNullMissing([], this.descendantComponentClassOptions.eventsBinder,
-            currentConstructorOptions.eventsBinder, this.builderOptions.eventsBinder);
-        const eventsBinder = eventsBinders.length > 1 ? new EventsBinderGroup(undefined, eventsBinders) : eventsBinders[0];
-        const eventsBinderProvider = (component) => {
-            const providedEventsBinders = pushNotNullMissing([],
-                this.descendantComponentClassOptions.eventsBinderProvider,
-                currentConstructorOptions.eventsBinderProvider)
-                .map(evbProvider => evbProvider(component))
-                .filter(it => it != null);
-            eventsBinder && providedEventsBinders.push(eventsBinder);
-            return providedEventsBinders.length ? new EventsBinderGroup(component, providedEventsBinders) : undefined;
-        }
+        const eventsBinderProviders = [
+            ...(this.builderOptions.eventsBinderProviders ?? []),
+            ...(currentConstructorOptions.eventsBinderProviders ?? []),
+            ...(this.descendantComponentClassOptions.eventsBinderProviders ?? [])
+        ];
         // stateHolderProvider using default priority: descendant, current-constructor, builder
         const stateHolderProvider = this.descendantComponentClassOptions.stateHolderProvider ??
             currentConstructorOptions.stateHolderProvider ?? this.builderOptions.stateHolderProvider;
@@ -78,7 +74,7 @@ export class ComponentOptionsBuilder {
             extraConfigurators,
             componentIllustratorProviders,
             extraStateChangesHandlers,
-            eventsBinderProvider,
+            eventsBinderProviders,
             stateHolderProvider
         }, this.descendantComponentClassOptions, currentConstructorOptions, this.builderOptions);
     }
@@ -151,15 +147,13 @@ export class ComponentOptionsBuilder {
     }
 
     /**
-     * @param {EventsBinder} eventsBinders
+     * @param {EventsBinder|EventsBinderProviderFn} eventsBinderOrProviders
      * @return {ComponentOptionsBuilder}
      */
-    addEventsBinders(...eventsBinders) {
-        if (this.builderOptions.eventsBinder) {
-            this.builderOptions.eventsBinder.addEventsBinder(...eventsBinders);
-        } else {
-            this.builderOptions.eventsBinder = new EventsBinderGroup(undefined, eventsBinders);
-        }
+    addEventsBinders(...eventsBinderOrProviders) {
+        const eventsBinderProviders = eventsBinderOrProviders
+            .map(it => typeof it === "function" ? it : eventsBinderProviderFnOf(it));
+        this.builderOptions.eventsBinderProviders.push(...eventsBinderProviders);
         return this;
     }
 

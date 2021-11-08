@@ -44,7 +44,7 @@ export default class Scenario10App {
      * @protected
      */
     _createParentStateChangingButtons() {
-        $(btnSelectorOf("change-parent-state")).on("click",
+        $(btnSelectorOf("change-entire-state")).on("click",
             () => {
                 this.parent.replaceState(JSON.parse($("#main-debugger").val()));
             });

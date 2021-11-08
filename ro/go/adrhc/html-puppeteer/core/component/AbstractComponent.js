@@ -6,9 +6,6 @@ import {isTrue} from "../../util/AssertionUtils.js";
 import {viewElemOf} from "../view/SimpleView.js";
 
 /**
- * @typedef {function(component: AbstractComponent): EventsBinder} EventsBinderProviderFn
- */
-/**
  * @typedef {StateHolderOptions & ValueStateInitializerOptions & StateChangesHandlersInvokerOptions} AbstractComponentOptions
  * @property {ElemIdOrJQuery} elemIdOrJQuery
  * @property {string|number|boolean=} id
@@ -17,8 +14,7 @@ import {viewElemOf} from "../view/SimpleView.js";
  * @property {StateHolderProviderFn=} stateHolderProvider
  * @property {StateInitializer=} stateInitializer
  * @property {StateChangesHandlersInvoker=} stateChangesHandlersInvoker
- * @property {EventsBinder=} eventsBinder
- * @property {EventsBinderProviderFn=} eventsBinderProvider has priority against eventsBinder (usually is the opposite)
+ * @property {EventsBinderProviderFn[]=} eventsBinderProviders
  * @property {ComponentConfigurator=} configurator
  * @property {ComponentConfigurator[]=} extraConfigurators
  */

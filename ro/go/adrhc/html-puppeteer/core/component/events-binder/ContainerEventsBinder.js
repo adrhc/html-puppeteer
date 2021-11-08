@@ -5,14 +5,17 @@ import {uniqueId} from "../../../util/StringUtils.js";
 import {when} from "../../../helper/events-handling/DomEventsAttachBuilder.js";
 
 /**
+ * @typedef {function(component: AbstractContainerComponent): *} ChildStateProviderFn
+ */
+/**
  * @typedef {Object} ContainerEventsBinderOptions
  * @property {string} createEvent
  * @property {string} removeEvent
- * @property {function(component: AbstractContainerComponent): *} childStateProviderFn
+ * @property {ChildStateProviderFn} childStateProviderFn
  */
 export default class ContainerEventsBinder extends EventsBinder {
     /**
-     * @type {function(component: AbstractContainerComponent): *}
+     * @type {ChildStateProviderFn}
      * @protected
      */
     childStateProviderFn;
@@ -20,22 +23,22 @@ export default class ContainerEventsBinder extends EventsBinder {
      * @type {string}
      * @protected
      */
-    createDataAttr = "create-child";
+    createDataAttr;
     /**
      * @type {string}
      * @protected
      */
-    createEvent = "click";
+    createEvent;
     /**
      * @type {string}
      * @protected
      */
-    removeDataAttr = "remove-child";
+    removeDataAttr;
     /**
      * @type {string}
      * @protected
      */
-    removeEvent = "click";
+    removeEvent;
 
     /**
      * @return {jQuery<HTMLElement>}
@@ -52,7 +55,7 @@ export default class ContainerEventsBinder extends EventsBinder {
         this._component = component;
         this.createEvent = component.config.createEvent ?? this.createEvent;
         this.removeEvent = component.config.removeEvent ?? this.removeEvent;
-        this.childStateProviderFn = component.config.childStateProviderFn ?? (() => {});
+        this.childStateProviderFn = component.config.childStateProviderFn ?? this.childStateProviderFn;
     }
 
     /**
@@ -60,6 +63,23 @@ export default class ContainerEventsBinder extends EventsBinder {
      */
     get containerComponent() {
         return /** @type {AbstractContainerComponent} */ this._component;
+    }
+
+    /**
+     * @param {ChildStateProviderFn=} childStateProviderFn
+     * @param {string=} createDataAttr
+     * @param {string=} removeDataAttr
+     * @param {string=} createEvent
+     * @param {string=} removeEvent
+     * @param {AbstractComponent=} component
+     */
+    constructor(childStateProviderFn, createDataAttr, removeDataAttr, createEvent, removeEvent, component) {
+        super(component);
+        this.childStateProviderFn = childStateProviderFn ?? (() => {});
+        this.createDataAttr = createDataAttr ?? "create-child";
+        this.createEvent = createEvent ?? "click";
+        this.removeDataAttr = removeDataAttr ?? "remove-child";
+        this.removeEvent = removeEvent ?? "click";
     }
 
     /**
@@ -86,23 +106,7 @@ export default class ContainerEventsBinder extends EventsBinder {
      */
     detachEventHandlers() {
         this._detachEventsHandlerFromOwnedHavingDataAttr(this.createDataAttr, this.createEvent);
-        this._detachEventsHandlerFromOwnedChildrenHavingDataAttr(this.createDataAttr);
-    }
-
-    /**
-     * Attaches this.createEvent handler (i.e. "fn") to this.$container
-     * with the selector [data-owner=this.componentId][data-dataAttrName].
-     *
-     * @param {string} dataAttribName
-     * @param {string} eventName
-     * @param {function} fn is the event handler
-     * @protected
-     */
-    _attachEventsHandlerToOwnedChildrenHavingDataAttr(dataAttribName, eventName, fn) {
-        const cssSelector = this._ownedHavingDataAttrSelector(dataAttribName);
-        // removing previous handler (if any) set by another component
-        this.$container.off(eventName, cssSelector);
-        this.$container.on(eventName, cssSelector, fn);
+        this._detachEventsHandlerFromOwnedChildrenHavingDataAttr(this.removeDataAttr);
     }
 
     /**

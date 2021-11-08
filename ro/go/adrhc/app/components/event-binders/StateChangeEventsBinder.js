@@ -8,27 +8,33 @@ export default class StateChangeEventsBinder extends EventsBinder {
     /**
      * @type {ElemIdOrJQuery}
      */
-    debuggerElemIdOrJQuery;
+    completeStateJsonElemIdOrJQuery;
+    /**
+     * @type {ElemIdOrJQuery}
+     */
+    partialStateJsonElemIdOrJQuery;
 
     /**
-     * @param {ElemIdOrJQuery} debuggerElemIdOrJQuery
+     * @param {ElemIdOrJQuery} completeStateJsonElemIdOrJQuery
+     * @param {ElemIdOrJQuery=} partialStateJsonElemIdOrJQuery
      * @param {AbstractComponent=} component
      */
-    constructor(debuggerElemIdOrJQuery, component) {
+    constructor(completeStateJsonElemIdOrJQuery, partialStateJsonElemIdOrJQuery, component) {
         super(component);
-        this.debuggerElemIdOrJQuery = debuggerElemIdOrJQuery;
+        this.completeStateJsonElemIdOrJQuery = completeStateJsonElemIdOrJQuery ?? "debugger-component";
+        this.partialStateJsonElemIdOrJQuery = partialStateJsonElemIdOrJQuery ?? "partial-state";
     }
 
     /**
      * attach DOM event handlers
      */
     attachEventHandlers() {
-        this._activateButtons("change-parent-state", "change-partial-state");
-        when("click").occurOnBtn("change-parent-state").do(() => {
-            this._component.replaceState(jsonParsedValOf(this.debuggerElemIdOrJQuery));
+        this._activateButtons("change-entire-state", "change-partial-state");
+        when("click").occurOnBtn("change-entire-state").do(() => {
+            this._component.replaceState(jsonParsedValOf(this.completeStateJsonElemIdOrJQuery));
         });
         when("click").occurOnBtn("change-partial-state").do(() => {
-            this._replaceParts(jsonParsedValOf("partial-state"));
+            this._replaceParts(jsonParsedValOf(this.partialStateJsonElemIdOrJQuery));
         });
     }
 
@@ -36,8 +42,8 @@ export default class StateChangeEventsBinder extends EventsBinder {
      * detach DOM event handlers
      */
     detachEventHandlers() {
-        this._deactivateButtons("change-parent-state", "change-partial-state");
-        $btnOf("change-parent-state").off("click");
+        this._deactivateButtons("change-entire-state", "change-partial-state");
+        $btnOf("change-entire-state").off("click");
         $btnOf("change-partial-state").off("click");
     }
 

@@ -28,7 +28,7 @@ export default class OpenCloseEventsBinder extends EventsBinder {
      * attach DOM event handlers
      */
     attachEventHandlers() {
-        // <button data-open data-owner="componentId">Open</button>
+        // <button data-open="click" data-owner="componentId">Open</button>
         let eventName = this._eventNameOfOwnedDataAttr(this.openDataAttrName);
         when(eventName).occurOnOwnedDataAttr(this.openDataAttrName, this.componentId)
             .once().do(() => {
@@ -36,7 +36,7 @@ export default class OpenCloseEventsBinder extends EventsBinder {
             this._activateOwnedDataAttr(this.closeDataAttrName);
             this._component.render();
         });
-        // <button data-close data-owner="componentId">Close</button>
+        // <button data-close="click" data-owner="componentId">Close</button>
         eventName = this._eventNameOfOwnedDataAttr(this.closeDataAttrName);
         when(eventName).occurOnOwnedDataAttr(this.closeDataAttrName, this.componentId)
             .once().do(() => {

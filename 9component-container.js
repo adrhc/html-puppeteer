@@ -20,7 +20,7 @@ class App {
             $('textarea').height(0);
             $('textarea').height(getTotalHeight);
         });
-        $(btnSelectorOf("change-parent-state")).on("click", () => {
+        $(btnSelectorOf("change-entire-state")).on("click", () => {
             this.parent.replaceState(JSON.parse($("#main-debugger").val()));
             $('textarea').height(0);
             $('textarea').height(getTotalHeight);

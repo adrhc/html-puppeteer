@@ -23,6 +23,6 @@ $(() => {
                     interval: (/** @type {ClockState} */ clockStateChange.newState)?.interval
                 }, 2);
             },
-            eventsBinderProvider: (component) => new Scenario6EventsBinder(component)
+            eventsBinderProviders: [component => new Scenario6EventsBinder(component)]
         }));
 });

@@ -23,10 +23,10 @@ export default class EventsBinderGroup extends EventsBinder {
     }
 
     /**
-     * @param {AbstractComponent} component
      * @param {EventsBinder[]} eventsBinders
+     * @param {AbstractComponent=} component could be set later
      */
-    constructor(component, eventsBinders) {
+    constructor(eventsBinders, component) {
         super(component);
         this.eventsBinders = eventsBinders;
     }
@@ -51,4 +51,14 @@ export default class EventsBinderGroup extends EventsBinder {
     detachEventHandlers() {
         this._eventsBinders.reverse().forEach(it => it.detachEventHandlers());
     }
+}
+
+/**
+ * @param {EventsBinderProviderFn[]|undefined} eventsBinderProviders
+ * @param {AbstractComponent=} component
+ * @return {EventsBinderGroup}
+ */
+export function eventsBinderGroupOf(eventsBinderProviders, component) {
+    const eventBinders = eventsBinderProviders.map(it => it());
+    return eventsBinderProviders?.length ? new EventsBinderGroup(eventBinders, component) : undefined;
 }

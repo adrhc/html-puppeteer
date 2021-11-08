@@ -36,7 +36,7 @@
  */
 
 /**
- * @typedef {function(): EventsBinder} EventsBinderProviderFn
+ * @typedef {function(component: AbstractComponent): EventsBinder} EventsBinderProviderFn
  */
 
 /**
@@ -50,3 +50,16 @@
 /**
  * @typedef {function(state: StateHolder)} StateUpdaterFn
  */
+
+/**
+ * @param {EventsBinder} eventsBinder
+ * @return {EventsBinderProviderFn}
+ */
+export function eventsBinderProviderFnOf(eventsBinder) {
+    return component => {
+        if (component) {
+            eventsBinder.component = component;
+        }
+        return eventsBinder;
+    }
+}
