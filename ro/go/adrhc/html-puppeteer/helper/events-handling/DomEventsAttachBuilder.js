@@ -7,6 +7,10 @@ import {css, ownedDataAttrSelectorOf} from "../CSSSelectorBuilder.js";
  */
 
 /**
+ * @typedef {function(component: AbstractComponent): EventsHandler} EventsHandlerProvider
+ */
+
+/**
  * @typedef {function(): void} EventsHandlerDetachFn
  */
 
@@ -47,6 +51,10 @@ export class DomEventsAttachBuilder {
      * @protected
      */
     fn;
+    /**
+     * @type {EventsHandlerProvider}
+     */
+    fnProvider;
     /**
      * @type {boolean} specify whether to handle then forget or keep the events handler bound till manually releasing it
      * @protected
@@ -114,7 +122,7 @@ export class DomEventsAttachBuilder {
      */
     occurOnOwnedDataAttr(dataAttrName, owner, dataAttrValue) {
         this.$elemProvider = (component) =>
-            $(css().owner(component?.id ?? owner).dataAttrName(dataAttrName).dataAttrValue(dataAttrValue).selector());
+            $(css().owner(owner ?? component.id).dataAttrName(dataAttrName).dataAttrValue(dataAttrValue).selector());
         return this;
     }
 
@@ -148,6 +156,17 @@ export class DomEventsAttachBuilder {
      */
     useHandler(fn) {
         this.fn = fn;
+        return this;
+    }
+
+    /**
+     * This is not a "builder" method (it build nothing); it merely gathers data for a later building.
+     *
+     * @param {EventsHandlerProvider} fnProvider
+     * @return {DomEventsAttachBuilder}
+     */
+    useHandlerProvider(fnProvider) {
+        this.fnProvider = fnProvider;
         return this;
     }
 
@@ -205,7 +224,8 @@ export class DomEventsAttachBuilder {
         if (!$elem?.length) {
             console.warn(`[_computedParams] $elem is empty!\nevents = ${this.events}, trigger = ${this.trigger}, componentId = ${this.component?.id}`);
         }
-        return {$elem, once: this.oneTimeOnly, events: this.events, trigger: this.trigger, fn: this.fn}
+        const fn = this.fn ?? this.fnProvider(this.component);
+        return {$elem, once: this.oneTimeOnly, events: this.events, trigger: this.trigger, fn}
     }
 }
 

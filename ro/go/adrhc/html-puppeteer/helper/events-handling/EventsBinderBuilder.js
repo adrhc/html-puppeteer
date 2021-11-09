@@ -35,9 +35,10 @@ class EventsBinderBuilder {
     buildEventsBinderProvider() {
         return (component) => {
             const evBinder = {};
-            this.domEventsAttachBuilders.forEach(it => it.useComponent(component));
+            this.domEventsAttachBuilders.forEach(domEvAttachBuilder => domEvAttachBuilder.useComponent(component));
             evBinder.attachEventHandlers = attachEventHandlersFnOf(this.domEventsAttachBuilders);
             evBinder.detachEventHandlers = this.buildDetachEventsHandlersFn();
+            return /** @type {EventsBinder} */ evBinder;
         };
     }
 
@@ -97,6 +98,11 @@ class EventsBinderBuilder {
 
     useHandler(fn) {
         this.domEventsAttachBuilder.useHandler(fn);
+        return this;
+    }
+
+    useHandlerProvider(fnProvider) {
+        this.domEventsAttachBuilder.useHandlerProvider(fnProvider);
         return this;
     }
 

@@ -13,15 +13,23 @@ export function animateOnReadyDocument(componentIdToDebug) {
 }
 
 /**
+ * @typedef {{[key: string]: ComponentOptions}} SpecificComponentOptions
+ */
+
+/**
  * @param {string=} componentIdToDebug
- * @return {ComponentOptions}
+ * @return {AnimationOptions}
  */
 function animationOptionsOf(componentIdToDebug) {
     const debuggingOptions = debuggingOptionsOf(`${componentIdToDebug}-debugger`);
     return componentIdToDebug ? {[componentIdToDebug]: debuggingOptions} : debuggingOptions;
 }
 
-function debuggingOptionsOf(elemIdOrJQuery) {
+/**
+ * @param {ElemIdOrJQuery} elemIdOrJQuery
+ * @return {ComponentOptions}
+ */
+export function debuggingOptionsOf(elemIdOrJQuery) {
     return addDebugger({elemIdOrJQuery})
         .addEventsBinders(new StateChangeEventsBinder(elemIdOrJQuery), new OpenCloseEventsBinder())
         .options();

@@ -14,9 +14,9 @@
 
 <body>
 <script>const fp = _.noConflict()</script>
-<script src="animate-MAIN.js" type="module"></script>
+<script src="16switch-component.js" type="module"></script>
 
-<div class="container">
+<div class="container scenario16">
 	<div class="section title">StaticContainerComponent</div>
 
 	<!--
@@ -51,7 +51,11 @@
 	</div>
 	<div class="section title">debuggers</div>
 	<!-- state changing buttons -->
-	<div class="section flex-center fill-available buttons">
+	<div class="section flex-column fill-available buttons">
+		<div>
+			<label for="aliceblue" class="bgc-aliceblue">aliceblue</label><input id="aliceblue" name="color" type="radio" value="aliceblue"/>
+			<label for="antiquewhite" class="bgc-antiquewhite">antiquewhite</label><input id="antiquewhite" name="color" type="radio" value="antiquewhite"/>
+		</div>
 		<div>
 			<button name="change-entire-state">Change entire state</button>
 			<button name="change-partial-state">Change partial state</button>

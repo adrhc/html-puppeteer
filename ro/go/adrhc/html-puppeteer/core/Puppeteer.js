@@ -5,10 +5,10 @@ import {isTrue} from "../util/AssertionUtils.js";
 import ChildrenComponents from "./component/composition/ChildrenComponents.js";
 
 /**
- * @param {ChildrenComponentsOptions} options
- * @param {ElemIdOrJQuery=} componentsHolder is the place inside which to search for components
- * @param {boolean=} options.alwaysReturnArray
- * @param {ChildrenComponentsOptions=} options.childrenCreationCommonOptions
+ * @param {AnimationOptions} options
+ * @property {ElemIdOrJQuery=} options.componentsHolder
+ * @property {boolean=} options.alwaysReturnArray
+ * @property {ChildrenComponentsOptions=} options.childrenCreationCommonOptions
  * @return {AbstractComponent|AbstractComponent[]}
  */
 export default function animate({componentsHolder, alwaysReturnArray, ...childrenCreationCommonOptions} = {}) {

@@ -52,6 +52,13 @@
  */
 
 /**
+ * @typedef {SpecificComponentOptions & ComponentOptions} AnimationOptions
+ * @property {ElemIdOrJQuery=} componentsHolder is the place inside which to search for components
+ * @property {boolean=} alwaysReturnArray
+ * @property {ChildrenComponentsOptions=} childrenCreationCommonOptions
+ */
+
+/**
  * @param {EventsBinder} eventsBinder
  * @return {EventsBinderProviderFn}
  */

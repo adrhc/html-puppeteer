@@ -183,6 +183,7 @@ function contentOfElem($elem) {
 
 /**
  * @param {string|jQuery<HTMLElement>=} elemIdOrJQuery
+ * @return {string|undefined}
  */
 export function idOf(elemIdOrJQuery) {
     const $el = jQueryOf(elemIdOrJQuery);

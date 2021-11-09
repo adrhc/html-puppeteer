@@ -59,6 +59,9 @@ export default class EventsBinderGroup extends EventsBinder {
  * @return {EventsBinderGroup}
  */
 export function eventsBinderGroupOf(eventsBinderProviders, component) {
-    const eventBinders = eventsBinderProviders.map(it => it());
+    // evBindProvider might be created by EventsBinderBuilder.buildEventsBinderProvider
+    // which uses "component" for DomEventsAttachBuilder.useComponent(component).
+    const eventBinders = eventsBinderProviders.map(evBindProvider => evBindProvider(component));
+    // todo: remove the component parameter on EventsBinderGroup constructor
     return eventsBinderProviders?.length ? new EventsBinderGroup(eventBinders, component) : undefined;
 }
