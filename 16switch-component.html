@@ -22,8 +22,8 @@
 	<!--
 		Debugger element must be placed before the MAIN component for it (debugger) to work.
 		The debugger component (see DebuggerOptionsBuilder._createDebuggerStateChangesHandler)
-		will be created with the MAIN component (below); at that moment its (debugger) DOM
-		element must already exist (see also SimpleView._execLazySetup).
+		will be created with the MAIN component (below); at that moment its DOM
+		element (debugger) must already exist (see also SimpleView._execLazySetup).
 	-->
 	<p data-initial-state="{}" data-template-id="debugger-template" data-type="simple"></p>
 
@@ -53,8 +53,10 @@
 	<!-- state changing buttons -->
 	<div class="section flex-column fill-available buttons">
 		<div>
-			<label for="aliceblue" class="bgc-aliceblue">aliceblue</label><input id="aliceblue" name="color" type="radio" value="aliceblue"/>
-			<label for="antiquewhite" class="bgc-antiquewhite">antiquewhite</label><input id="antiquewhite" name="color" type="radio" value="antiquewhite"/>
+			<label for="aliceblue" class="bgc-aliceblue">aliceblue</label>
+			<input id="aliceblue" name="color" type="radio" value="aliceblue" checked/>
+			<label for="antiquewhite" class="bgc-antiquewhite">antiquewhite</label>
+			<input id="antiquewhite" name="color" type="radio" value="antiquewhite"/>
 		</div>
 		<div>
 			<button name="change-entire-state">Change entire state</button>

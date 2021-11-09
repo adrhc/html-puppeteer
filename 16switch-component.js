@@ -8,10 +8,12 @@ $(() => {
     const mainOptions = withDefaults(debuggingOptions)
         .addEventsBinders(eventsBinder()
             .whenEvents("click")
-            .occurOn("#aliceblue")
-            .useHandlerProvider((component) => {
-                component.replacePart("state", "aliceblue");
+            .occurOn("[type='radio']")
+            .useHandlerProvider(component => (ev) => {
+                const status = ev.target.value;
+                component.replaceParts({status, [status]: `${status}-${Math.random()}`});
             })
+            .and()
             .buildEventsBinderProvider())
         .options()
     animate({MAIN: mainOptions});

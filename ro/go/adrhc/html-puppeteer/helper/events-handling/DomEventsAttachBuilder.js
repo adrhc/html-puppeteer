@@ -92,7 +92,7 @@ export class DomEventsAttachBuilder {
      * @return {DomEventsAttachBuilder}
      */
     occurOn($elemOrSelector) {
-        this.$elem = typeof $elemOrSelector === "string" ? $($elemOrSelector) : $elemOrSelector;
+        this.$elemProvider = () => typeof $elemOrSelector === "string" ? $($elemOrSelector) : $elemOrSelector;
         return this;
     }
 
