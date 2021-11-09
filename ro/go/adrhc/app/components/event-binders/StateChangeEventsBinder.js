@@ -6,11 +6,6 @@ import {replaceParts} from "../../../html-puppeteer/util/ComponentUtils.js";
 
 export default class StateChangeEventsBinder extends EventsBinder {
     /**
-     * @type {EventsHandlerDetachFn}
-     * @private
-     */
-    _eventsHandlerDetachFn
-    /**
      * @type {ElemIdOrJQuery}
      */
     completeStateJsonElemIdOrJQuery;
@@ -55,7 +50,7 @@ export default class StateChangeEventsBinder extends EventsBinder {
      * detach DOM event handlers
      */
     detachEventHandlers() {
-        this._eventsHandlerDetachFn?.();
+        super.detachEventHandlers();
         this._deactivateButtons("change-entire-state", "change-partial-state");
     }
 

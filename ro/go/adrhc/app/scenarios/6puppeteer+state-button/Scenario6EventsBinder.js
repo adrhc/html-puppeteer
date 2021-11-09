@@ -38,11 +38,4 @@ export default class Scenario6EventsBinder extends EventsBinder {
             .and()
             .buildDetachEventsHandlersFn();
     }
-
-    /**
-     * detach DOM event handlers
-     */
-    detachEventHandlers() {
-        this._eventsHandlerDetachFn?.();
-    }
 }

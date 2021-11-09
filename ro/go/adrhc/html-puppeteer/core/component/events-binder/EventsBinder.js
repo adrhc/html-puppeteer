@@ -1,5 +1,11 @@
 export default class EventsBinder {
     /**
+     * @type {EventsHandlerDetachFn}
+     * @protected
+     */
+    _eventsHandlerDetachFn
+
+    /**
      * @type {AbstractComponent}
      */
     _component;
@@ -42,5 +48,7 @@ export default class EventsBinder {
     /**
      * detach DOM event handlers
      */
-    detachEventHandlers() {}
+    detachEventHandlers() {
+        this._eventsHandlerDetachFn?.();
+    }
 }

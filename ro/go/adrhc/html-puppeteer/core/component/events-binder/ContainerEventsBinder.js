@@ -14,11 +14,6 @@ import {eventsBinder} from "../../../helper/events-handling/EventsBinderBuilder.
  */
 export default class ContainerEventsBinder extends EventsBinder {
     /**
-     * @type {EventsHandlerDetachFn}
-     * @private
-     */
-    _eventsHandlerDetachFn
-    /**
      * @type {ChildStateProviderFn}
      * @protected
      */
@@ -105,12 +100,5 @@ export default class ContainerEventsBinder extends EventsBinder {
             })
             .and()
             .buildDetachEventsHandlersFn();
-    }
-
-    /**
-     * detaches all DOM event handlers
-     */
-    detachEventHandlers() {
-        this._eventsHandlerDetachFn?.();
     }
 }
