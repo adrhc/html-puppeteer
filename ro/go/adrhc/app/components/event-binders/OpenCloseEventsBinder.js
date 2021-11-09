@@ -5,11 +5,6 @@ import {whenEvents} from "../../../html-puppeteer/helper/events-handling/DomEven
 
 export default class OpenCloseEventsBinder extends EventsBinder {
     /**
-     * @type {EventsHandlerDetachFn}
-     * @private
-     */
-    _eventsHandlerDetachFn
-    /**
      * @type {string}
      */
     closeDataAttrName;
