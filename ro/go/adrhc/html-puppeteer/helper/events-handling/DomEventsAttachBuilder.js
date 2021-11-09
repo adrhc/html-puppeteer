@@ -202,6 +202,9 @@ export class DomEventsAttachBuilder {
      */
     _computedParams() {
         const $elem = this.$elem ?? this.$elemProvider(this.component);
+        if (!$elem?.length) {
+            console.warn(`[_computedParams] $elem is empty!\nevents = ${this.events}, trigger = ${this.trigger}, componentId = ${this.component?.id}`);
+        }
         return {$elem, once: this.oneTimeOnly, events: this.events, trigger: this.trigger, fn: this.fn}
     }
 }

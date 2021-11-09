@@ -1,6 +1,7 @@
 import {btnSelectorOf} from "../html-puppeteer/util/SelectorUtils.js";
 import {generateString} from "./Generators.js";
 import {removeByIndex} from "../html-puppeteer/util/ArrayUtils.js";
+import {jsonParsedValOf} from "../html-puppeteer/util/DomUtils.js";
 
 export default class Scenario10App {
     /**
@@ -49,7 +50,7 @@ export default class Scenario10App {
                 this.parent.replaceState(JSON.parse($("#main-debugger").val()));
             });
         $(btnSelectorOf("change-partial-state")).on("click", () => {
-            const guestsState = JSON.parse($("#partial-state").val());
+            const guestsState = jsonParsedValOf("partial-state");
             this.parent.replaceParts(guestsState);
         });
     }
