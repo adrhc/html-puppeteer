@@ -32,7 +32,7 @@ class EventsBinderBuilder {
     /**
      * @return {EventsHandlerDetachFn}
      */
-    buildDetachEventHandlersFn() {
+    buildDetachEventsHandlersFn() {
         return detachEventHandlersFnOf(this.domEventsAttachBuilders);
     }
 
@@ -44,7 +44,7 @@ class EventsBinderBuilder {
             const evBinder = {};
             this.domEventsAttachBuilders.forEach(it => it.useComponent(component));
             evBinder.attachEventHandlers = attachEventHandlersFnOf(this.domEventsAttachBuilders);
-            evBinder.detachEventHandlers = this.buildDetachEventHandlersFn();
+            evBinder.detachEventHandlers = this.buildDetachEventsHandlersFn();
         };
     }
 

@@ -104,7 +104,7 @@ export default class ContainerEventsBinder extends EventsBinder {
                 this.containerComponent.replacePartByChildId(childId);
             })
             .and()
-            .buildDetachEventHandlersFn();
+            .buildDetachEventsHandlersFn();
     }
 
     /**
