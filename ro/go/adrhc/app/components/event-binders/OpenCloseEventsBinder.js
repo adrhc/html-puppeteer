@@ -1,9 +1,14 @@
 import EventsBinder from "../../../html-puppeteer/core/component/events-binder/EventsBinder.js";
 import {activate, deactivate} from "../../../html-puppeteer/util/DomUtils.js";
 import {dataAttrValueOfOwnedDataAttr, elemOfOwnedDataAttr} from "../../../html-puppeteer/helper/CSSSelectorBuilder.js";
-import {whenEvents} from "../../../html-puppeteer/helper/events-handling/DomEventsAttachBuilder.js";
+import {eventsBinder} from "../../../html-puppeteer/helper/events-handling/EventsBinderBuilder.js";
 
 export default class OpenCloseEventsBinder extends EventsBinder {
+    /**
+     * @type {EventsHandlerDetachFn}
+     * @private
+     */
+    _eventsHandlerDetachFn
     /**
      * @type {string}
      */
@@ -29,21 +34,34 @@ export default class OpenCloseEventsBinder extends EventsBinder {
      */
     attachEventHandlers() {
         // <button data-open="click" data-owner="componentId">Open</button>
-        let eventName = this._eventNameOfOwnedDataAttr(this.openDataAttrName);
-        whenEvents(eventName).occurOnOwnedDataAttr(this.openDataAttrName, this.componentId)
-            .once().do(() => {
-            this._deactivateOwnedDataAttr(this.openDataAttrName);
-            this._activateOwnedDataAttr(this.closeDataAttrName);
-            this._component.render();
-        });
-        // <button data-close="click" data-owner="componentId">Close</button>
-        eventName = this._eventNameOfOwnedDataAttr(this.closeDataAttrName);
-        whenEvents(eventName).occurOnOwnedDataAttr(this.closeDataAttrName, this.componentId)
-            .once().do(() => {
-            this._deactivateOwnedDataAttr(this.closeDataAttrName);
-            this._activateOwnedDataAttr(this.openDataAttrName);
-            this._component.close();
-        });
+        this._eventsHandlerDetachFn = eventsBinder()
+            .whenEvents(this._eventNameOfOwnedDataAttr(this.openDataAttrName))
+            .occurOnOwnedDataAttr(this.openDataAttrName, this.componentId)
+            .once()
+            .do(() => {
+                this._deactivateOwnedDataAttr(this.openDataAttrName);
+                this._activateOwnedDataAttr(this.closeDataAttrName);
+                this._component.render();
+            })
+            .and()
+            // <button data-close="click" data-owner="componentId">Close</button>
+            .whenEvents(this._eventNameOfOwnedDataAttr(this.closeDataAttrName))
+            .occurOnOwnedDataAttr(this.closeDataAttrName, this.componentId)
+            .once()
+            .do(() => {
+                this._deactivateOwnedDataAttr(this.closeDataAttrName);
+                this._activateOwnedDataAttr(this.openDataAttrName);
+                this._component.close();
+            })
+            .and()
+            .buildDetachEventsHandlersFn();
+    }
+
+    /**
+     * detaches all DOM event handlers
+     */
+    detachEventHandlers() {
+        // this._eventsHandlerDetachFn?.();
     }
 
     /**
