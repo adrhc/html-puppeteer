@@ -4,8 +4,8 @@ import Scenario10App from "./ro/go/adrhc/app/Scenario10App.js";
 
 $(() => {
     // the puppeteer
-    const component = animate(withDebugger({elemIdOrJQuery: "debugger-component"}));
+    const component = animate(withDebugger({elemIdOrJQuery: "main-debugger"}));
 
     // the application using the html-puppeteer
-    new Scenario10App(component, {haveDogs:true}).run();
+    new Scenario10App(component, {haveDogs: true}).run();
 });
