@@ -65,6 +65,11 @@ class EventsBinderBuilder {
         return this;
     }
 
+    /**
+     * @param {string} name
+     * @param {string=} owner
+     * @return {EventsBinderBuilder}
+     */
     occurOnBtn(name, owner) {
         this.domEventsAttachBuilder.occurOnBtn(name, owner);
         return this;
