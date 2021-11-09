@@ -71,7 +71,7 @@ export default class Scenario10App {
      */
     _generateThenAppend(partName) {
         const items = this.parent.getPart(partName) ?? [];
-        items.push(this._generateNewItem());
+        items.push(this._generateNewItem(partName));
         this.parent.replacePart(partName, items);
     }
 
