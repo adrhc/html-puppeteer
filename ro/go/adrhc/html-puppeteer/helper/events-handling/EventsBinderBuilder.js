@@ -6,9 +6,9 @@ class EventsBinderBuilder {
      */
     domEventsAttachBuilder;
     /**
-     * @type {DomEventsAttachBuilder[]}
+     * @type {Set<DomEventsAttachBuilder>}
      */
-    domEventsAttachBuilders = [];
+    domEventsAttachBuilders = new Set();
 
     constructor() {
         this.domEventsAttachBuilder = new DomEventsAttachBuilder();
@@ -18,7 +18,7 @@ class EventsBinderBuilder {
      * @param {DomEventsAttachBuilder} domEventsAttachBuilder
      */
     addDomEventsAttachBuilder(domEventsAttachBuilder) {
-        this.domEventsAttachBuilders.push(domEventsAttachBuilder);
+        this.domEventsAttachBuilders.add(domEventsAttachBuilder);
         return this;
     }
 
@@ -124,7 +124,7 @@ export function eventsBinder() {
 }
 
 /**
- * @param {DomEventsAttachBuilder[]} domEventsAttachBuilders
+ * @param {Set<DomEventsAttachBuilder>} domEventsAttachBuilders
  * @return {(function(): void)}
  */
 function attachEventHandlersFnOf(domEventsAttachBuilders) {
@@ -134,11 +134,11 @@ function attachEventHandlersFnOf(domEventsAttachBuilders) {
 }
 
 /**
- * @param {DomEventsAttachBuilder[]} domEventsAttachBuilders
+ * @param {Set<DomEventsAttachBuilder>} domEventsAttachBuilders
  * @return {EventsHandlerDetachFn}
  */
 function detachEventHandlersFnOf(domEventsAttachBuilders) {
     return () => {
-        domEventsAttachBuilders.map(it => it.buildDetachFn()).forEach(detachFn => detachFn());
+        [...domEventsAttachBuilders].map(it => it.buildDetachFn()).forEach(detachFn => detachFn());
     }
 }

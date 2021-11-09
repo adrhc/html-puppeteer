@@ -2,7 +2,7 @@ import EventsBinder from "../../../html-puppeteer/core/component/events-binder/E
 import {$btnOf} from "../../../html-puppeteer/util/SelectorUtils.js";
 import {partsOf} from "../../../html-puppeteer/core/state/PartialStateHolder.js";
 import {activate, deactivate, jsonParsedValOf} from "../../../html-puppeteer/util/DomUtils.js";
-import {whenEvents} from "../../../html-puppeteer/helper/events-handling/DomEventsAttachBuilder.js";
+import {eventsBinder} from "../../../html-puppeteer/helper/events-handling/EventsBinderBuilder.js";
 
 export default class StateChangeEventsBinder extends EventsBinder {
     /**
@@ -30,21 +30,28 @@ export default class StateChangeEventsBinder extends EventsBinder {
      */
     attachEventHandlers() {
         this._activateButtons("change-entire-state", "change-partial-state");
-        whenEvents("click").occurOnBtn("change-entire-state").do(() => {
-            this._component.replaceState(jsonParsedValOf(this.completeStateJsonElemIdOrJQuery));
-        });
-        whenEvents("click").occurOnBtn("change-partial-state").do(() => {
-            this._replaceParts(jsonParsedValOf(this.partialStateJsonElemIdOrJQuery));
-        });
+        this._eventsHandlerDetachFn = eventsBinder()
+            .whenEvents("click")
+            .occurOnBtn("change-entire-state")
+            .do(() => {
+                this._component.replaceState(jsonParsedValOf(this.completeStateJsonElemIdOrJQuery));
+            })
+            .and()
+            .whenEvents("click")
+            .occurOnBtn("change-partial-state")
+            .do(() => {
+                this._replaceParts(jsonParsedValOf(this.partialStateJsonElemIdOrJQuery));
+            })
+            .and()
+            .buildDetachEventsHandlersFn();
     }
 
     /**
      * detach DOM event handlers
      */
     detachEventHandlers() {
+        this._eventsHandlerDetachFn?.();
         this._deactivateButtons("change-entire-state", "change-partial-state");
-        $btnOf("change-entire-state").off("click");
-        $btnOf("change-partial-state").off("click");
     }
 
     /**
