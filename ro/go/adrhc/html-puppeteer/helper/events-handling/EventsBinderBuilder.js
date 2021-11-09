@@ -1,12 +1,5 @@
 import {DomEventsAttachBuilder} from "./DomEventsAttachBuilder.js";
 
-/**
- * @return {EventsBinderBuilder}
- */
-export function eventsBinder() {
-    return new EventsBinderBuilder();
-}
-
 class EventsBinderBuilder {
     /**
      * @type {DomEventsAttachBuilder}
@@ -121,6 +114,13 @@ class EventsBinderBuilder {
         this.domEventsAttachBuilder.buildDetachFn();
         return this;
     }
+}
+
+/**
+ * @return {EventsBinderBuilder}
+ */
+export function eventsBinder() {
+    return new EventsBinderBuilder();
 }
 
 /**
