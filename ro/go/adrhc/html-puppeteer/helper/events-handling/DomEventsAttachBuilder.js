@@ -27,11 +27,6 @@ import {css, ownedDataAttrSelectorOf} from "../CSSSelectorBuilder.js";
  */
 export class DomEventsAttachBuilder {
     /**
-     * @type {jQuery<HTMLElement>} is the element to which the event handler is bound to
-     * @protected
-     */
-    $elem;
-    /**
      * @type {ElemProviderFn}
      * @protected
      */
@@ -110,7 +105,7 @@ export class DomEventsAttachBuilder {
      * @param {boolean=} [useComponent=true]
      */
     occurOnComponent(component, useComponent = true) {
-        this.$elem = component.$elem;
+        this.$elemProvider = () => component.$elem;
         return useComponent ? this.useComponent(component) : this;
     }
 
@@ -220,7 +215,7 @@ export class DomEventsAttachBuilder {
      * @protected
      */
     _computedParams() {
-        const $elem = this.$elem ?? this.$elemProvider(this.component);
+        const $elem = this.$elemProvider(this.component);
         if (!$elem?.length) {
             console.warn(`[_computedParams] $elem is empty!\nevents = ${this.events}, trigger = ${this.trigger}, componentId = ${this.component?.id}`);
         }
