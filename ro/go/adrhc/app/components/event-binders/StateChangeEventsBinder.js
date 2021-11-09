@@ -1,10 +1,15 @@
 import EventsBinder from "../../../html-puppeteer/core/component/events-binder/EventsBinder.js";
 import {$btnOf} from "../../../html-puppeteer/util/SelectorUtils.js";
-import {partsOf} from "../../../html-puppeteer/core/state/PartialStateHolder.js";
 import {activate, deactivate, jsonParsedValOf} from "../../../html-puppeteer/util/DomUtils.js";
 import {eventsBinder} from "../../../html-puppeteer/helper/events-handling/EventsBinderBuilder.js";
+import {replaceParts} from "../../../html-puppeteer/util/ComponentUtils.js";
 
 export default class StateChangeEventsBinder extends EventsBinder {
+    /**
+     * @type {EventsHandlerDetachFn}
+     * @private
+     */
+    _eventsHandlerDetachFn
     /**
      * @type {ElemIdOrJQuery}
      */
@@ -40,7 +45,7 @@ export default class StateChangeEventsBinder extends EventsBinder {
             .whenEvents("click")
             .occurOnBtn("change-partial-state")
             .do(() => {
-                this._replaceParts(jsonParsedValOf(this.partialStateJsonElemIdOrJQuery));
+                replaceParts(this._component, jsonParsedValOf(this.partialStateJsonElemIdOrJQuery));
             })
             .and()
             .buildDetachEventsHandlersFn();
@@ -68,21 +73,5 @@ export default class StateChangeEventsBinder extends EventsBinder {
      */
     _deactivateButtons(...names) {
         names.forEach(it => deactivate($btnOf(it)));
-    }
-
-    /**
-     * Replaces some component's state parts; the parts should have no name change!.
-     *
-     * @param {{[name: PartName]: *}[]} parts
-     * @protected
-     */
-    _replaceParts(parts) {
-        if (typeof this._component.replaceParts === "function") {
-            this._component.replaceParts(parts);
-        } else if (typeof this._component.replacePart === "function") {
-            partsOf(parts).forEach(([key, value]) => this._component.replacePart(key, value));
-        } else {
-            alert(`this._component cant do partial replace! config:\n${JSON.stringify(this._component.config)}`);
-        }
     }
 }
