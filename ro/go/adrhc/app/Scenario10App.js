@@ -1,7 +1,6 @@
 import {btnSelectorOf} from "../html-puppeteer/util/SelectorUtils.js";
 import {generateString} from "./Generators.js";
 import {removeByIndex} from "../html-puppeteer/util/ArrayUtils.js";
-import {jsonParsedValOf} from "../html-puppeteer/util/DomUtils.js";
 
 export default class Scenario10App {
     /**
@@ -26,7 +25,6 @@ export default class Scenario10App {
      * execute the application
      */
     run() {
-        this._createParentStateChangingButtons();
         $(btnSelectorOf("create")).on("click", () => {
             this._generateThenAppend("cats");
             if (this.haveDogs) {
@@ -38,20 +36,6 @@ export default class Scenario10App {
             if (this.haveDogs) {
                 this._removeOldestItem("dogs");
             }
-        });
-    }
-
-    /**
-     * @protected
-     */
-    _createParentStateChangingButtons() {
-        $(btnSelectorOf("change-entire-state")).on("click",
-            () => {
-                this.parent.replaceState(JSON.parse($("#MAIN-debugger").val()));
-            });
-        $(btnSelectorOf("change-partial-state")).on("click", () => {
-            const guestsState = jsonParsedValOf("partial-state");
-            this.parent.replaceParts(guestsState);
         });
     }
 
