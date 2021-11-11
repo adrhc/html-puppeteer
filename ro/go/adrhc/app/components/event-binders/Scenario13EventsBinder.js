@@ -1,4 +1,4 @@
-import {generateIdNameBags} from "./Generators.js";
+import {generateIdNameBags} from "../../Generators.js";
 import Scenario10EventsBinder from "./Scenario10EventsBinder.js";
 
 export default class Scenario13EventsBinder extends Scenario10EventsBinder {

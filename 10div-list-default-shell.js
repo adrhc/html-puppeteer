@@ -1,6 +1,6 @@
 import {addDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/options/DebuggerOptionsBuilder.js";
 import animate from "./ro/go/adrhc/html-puppeteer/core/Puppeteer.js";
-import Scenario10EventsBinder from "./ro/go/adrhc/app/Scenario10EventsBinder.js";
+import Scenario10EventsBinder from "./ro/go/adrhc/app/components/event-binders/Scenario10EventsBinder.js";
 import StateChangeEventsBinder from "./ro/go/adrhc/app/components/event-binders/StateChangeEventsBinder.js";
 
 $(() => {

@@ -1,8 +1,8 @@
-import {generateString} from "./Generators.js";
-import {removeByIndex} from "../html-puppeteer/util/ArrayUtils.js";
-import {eventsBinder} from "../html-puppeteer/helper/events-handling/EventsBinderBuilder.js";
+import {generateString} from "../../Generators.js";
+import {removeByIndex} from "../../../html-puppeteer/util/ArrayUtils.js";
+import {eventsBinder} from "../../../html-puppeteer/helper/events-handling/EventsBinderBuilder.js";
 import AbstractContainerEventsBinder
-    from "../html-puppeteer/core/component/events-binder/AbstractContainerEventsBinder.js";
+    from "../../../html-puppeteer/core/component/events-binder/AbstractContainerEventsBinder.js";
 
 export default class Scenario10EventsBinder extends AbstractContainerEventsBinder {
     /**
