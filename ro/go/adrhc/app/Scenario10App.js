@@ -47,7 +47,7 @@ export default class Scenario10App {
     _createParentStateChangingButtons() {
         $(btnSelectorOf("change-entire-state")).on("click",
             () => {
-                this.parent.replaceState(JSON.parse($("#main-debugger").val()));
+                this.parent.replaceState(JSON.parse($("#MAIN-debugger").val()));
             });
         $(btnSelectorOf("change-partial-state")).on("click", () => {
             const guestsState = jsonParsedValOf("partial-state");

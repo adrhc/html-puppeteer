@@ -21,7 +21,6 @@ export default class Scenario13App extends Scenario10App {
      * execute the application
      */
     run() {
-        this._createParentStateChangingButtons();
         $(btnSelectorOf("create")).on("click", () => {
             this._generateThenAppend("cats");
         });

@@ -21,7 +21,7 @@ class App {
             $('textarea').height(getTotalHeight);
         });
         $(btnSelectorOf("change-entire-state")).on("click", () => {
-            this.parent.replaceState(JSON.parse($("#main-debugger").val()));
+            this.parent.replaceState(JSON.parse($("#MAIN-debugger").val()));
             $('textarea').height(0);
             $('textarea').height(getTotalHeight);
         });
@@ -48,7 +48,7 @@ class App {
 
 $(() => {
     // the puppeteer
-    const component = animate(withDebugger({elemIdOrJQuery: "main-debugger"}));
+    const component = animate(withDebugger({elemIdOrJQuery: "MAIN-debugger"}));
 
     // the application using the html-puppeteer
     new App(component).run();
