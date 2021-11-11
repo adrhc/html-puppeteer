@@ -9,7 +9,7 @@ import {partOf} from "../../../util/GlobalConfig.js";
  * @property {AbstractContainerComponent=} parent
  * @property {ChildrenShellFinder=} childrenShellFinder
  * @property {boolean=} dontRenderChildren
- * @property {ChildrenCreationCommonOptions=} childrenCreationCommonOptions
+ * @property {ChildrenComponentsCommonOptions=} childrenComponentsCommonOptions
  */
 /**
  * @typedef {{[name: string]: AbstractComponent}} ComponentsCollection
@@ -25,7 +25,7 @@ export default class ChildrenComponents {
     /**
      * @type {Object}
      */
-    childrenCreationCommonOptions
+    childrenComponentsCommonOptions
     /**
      * @type {ChildrenShellFinder}
      */
@@ -45,12 +45,12 @@ export default class ChildrenComponents {
      * @param {AbstractComponent=} options.parent
      * @param {ChildrenShellFinder=} options.childrenShellFinder
      * @param {boolean=} options.dontRenderChildren
-     * @param {ChildrenCreationCommonOptions=} options.childrenCreationCommonOptions
+     * @param {ChildrenComponentsCommonOptions=} options.childrenComponentsCommonOptions
      */
-    constructor({componentsHolder, parent, childrenShellFinder, dontRenderChildren, childrenCreationCommonOptions}) {
+    constructor({componentsHolder, parent, childrenShellFinder, dontRenderChildren, childrenComponentsCommonOptions}) {
         this.parent = parent;
         this.dontRenderChildren = dontRenderChildren;
-        this.childrenCreationCommonOptions = childrenCreationCommonOptions;
+        this.childrenComponentsCommonOptions = childrenComponentsCommonOptions;
         // Puppeteer.anime() will provide an empty parent and elemIdOrJQuery
         const elemIdOrJQuery = componentsHolder ?? parent?.config.elemIdOrJQuery ?? document;
         this.childrenShellFinder = childrenShellFinder ?? new ChildrenShellFinder(elemIdOrJQuery);
@@ -94,7 +94,7 @@ export default class ChildrenComponents {
      * @protected
      */
     _createComponent($shell, partName = partOf($shell)) {
-        const component = createComponent($shell, {parent: this.parent, ...this.childrenCreationCommonOptions});
+        const component = createComponent($shell, {parent: this.parent, ...this.childrenComponentsCommonOptions});
         isTrue(component != null, "[ChildrenComponents] the child's shell must exist!");
         isTrue(partName != null || this.parent == null,
             "[ChildrenComponents] partName is missing while having a parent!");

@@ -145,7 +145,7 @@ class ChildrenShells {
 
 class ChildrenComponents {
 #children: {partName: AbstractComponent}
-#childrenCreationCommonOptions
+#childrenComponentsCommonOptions
 #childrenShellFinder: ChildrenShellFinder
 #dontRender: boolean
 #parent: AbstractComponent

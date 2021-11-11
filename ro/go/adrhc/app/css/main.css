@@ -162,3 +162,7 @@ p[data-part] {
 .scenario11 textarea {
     margin: 0 5rem;
 }
+
+.hand-over:hover {
+    cursor: pointer;
+}

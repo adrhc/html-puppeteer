@@ -8,11 +8,13 @@ import ChildrenComponents from "./component/composition/ChildrenComponents.js";
  * @param {AnimationOptions} options
  * @property {ElemIdOrJQuery=} options.componentsHolder
  * @property {boolean=} options.alwaysReturnArray
- * @property {ChildrenComponentsOptions=} options.childrenCreationCommonOptions
+ * @property {SpecificComponentOptions=} childrenComponentsCommonOptions
  * @return {AbstractComponent|AbstractComponent[]}
  */
-export default function animate({componentsHolder, alwaysReturnArray, ...childrenCreationCommonOptions} = {}) {
-    const childrenComponents = new ChildrenComponents({componentsHolder, childrenCreationCommonOptions});
+export default function animate({componentsHolder, alwaysReturnArray, ...childrenComponentsCommonOptions} = {}) {
+    const childrenComponents = new ChildrenComponents({
+        /** @type {ElemIdOrJQuery} */ componentsHolder, childrenComponentsCommonOptions
+    });
     const components = childrenComponents.createChildrenForExistingShells();
     const partNames = Object.keys(components);
     console.log(`[Puppeteer.animate] childrenComponents created ${partNames.length} components`);
@@ -24,28 +26,32 @@ export default function animate({componentsHolder, alwaysReturnArray, ...childre
 
 /**
  * @param {jQuery<HTMLElement>=} $el
- * @param {Bag=} commonOptions
+ * @param {ComponentOptions & SpecificComponentOptions=} options
  * @return {AbstractComponent}
  */
-export function createComponent($el, commonOptions) {
+export function createComponent($el, options) {
     isTrue($el.length === 1,
         `[createComponent] bad $el.length = ${$el.length}!`);
     const type = typeOf($el);
     const componentId = idOf($el);
-    const componentOptions = componentOptionsOf(componentId, commonOptions);
+    const componentOptions = componentOptionsOf(componentId, options);
     return instanceOf($el, type, componentOptions);
 }
 
-function componentOptionsOf(componentId, commonOptions) {
-    return _.defaults({}, commonOptions?.[componentId], commonOptions);
+/**
+ * @param {string=} componentId
+ * @param {ComponentOptions & SpecificComponentOptions} options
+ * @return {ComponentOptions}
+ */
+function componentOptionsOf(componentId, options) {
+    return _.defaults({}, options?.[componentId], options);
 }
 
 /**
  * @param {jQuery<HTMLElement>} $el
  * @param {string} type
- * @param {Bag} componentOptions
+ * @param {ComponentOptions} componentOptions
  * @return {AbstractComponent}
- * @protected
  */
 function instanceOf($el, type, componentOptions = {}) {
     return createByType(type, {...componentOptions, [GlobalConfig.ELEM_ID_OR_JQUERY]: $el});

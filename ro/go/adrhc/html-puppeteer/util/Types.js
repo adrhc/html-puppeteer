@@ -44,18 +44,16 @@
  */
 
 /**
- * @typedef {ComponentConfigField | DynamicContainerComponentOptions & DebuggerOptions} ComponentOptions
- */
-
-/**
  * @typedef {function(state: StateHolder)} StateUpdaterFn
  */
 
 /**
- * @typedef {SpecificComponentOptions & ComponentOptions} AnimationOptions
- * @property {ElemIdOrJQuery=} componentsHolder is the place inside which to search for components
+ * @typedef {ComponentConfigField | DynamicContainerComponentOptions & DebuggerOptions} ComponentOptions
+ */
+
+/**
+ * @typedef {ComponentOptions & SpecificComponentOptions} AnimationOptions
  * @property {boolean=} alwaysReturnArray
- * @property {ChildrenComponentsOptions=} childrenCreationCommonOptions
  */
 
 /**
