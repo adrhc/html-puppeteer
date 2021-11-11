@@ -20,8 +20,8 @@
 	<div class="section title">DynamicContainerComponent</div>
 	<!-- open/close buttons -->
 	<div class="section flex-center fill-available buttons">
-		<button data-close="click" data-owner="parent-component">Close "parent-component"</button>
-		<button class="deactivated" data-open="click" data-owner="parent-component">Open "parent-component"</button>
+		<button data-close="click" data-owner="MAIN">Close "MAIN"</button>
+		<button class="deactivated" data-open="click" data-owner="MAIN">Open "MAIN"</button>
 	</div>
 	<div class="section title">debuggers</div>
 	<!-- state changing buttons -->
@@ -34,7 +34,7 @@
 	<!-- state input fields and debuggers -->
 	<div class="section">
 		<div class="flex-center">
-			<textarea class="fill-available" id="debugger-component"
+			<textarea class="fill-available" id="MAIN-debugger"
 			          rows="10">No debugging data available yet!</textarea>
 			<textarea class="fill-available" id="partial-state" rows="10">Write here some partial (aka child/slice) state, e.g.:
 {"kidX": {"id": "X", "name": "kid X"}, "kidY": {"id": "Y", "name": "kid Y"}}
@@ -50,16 +50,16 @@ PS: make sure to have a well formatted JSON!</textarea>
 				<th>Id</th>
 				<th>Name</th>
 				<th class="center">
-					<button data-create-child data-owner="parent-component">Add (on top)</button>
+					<button data-create-child data-owner="MAIN">Add (on top)</button>
 				</th>
 			</tr>
 			</thead>
 			<tbody data-initial-state='{"kid0": {"id": 0, "name": "kid 0"}}'
-			       data-removed-placeholder='<tr><td colspan="3">The "parent-component" is closed!</td></tr>'
+			       data-removed-placeholder='<tr><td colspan="3">The "MAIN" is closed!</td></tr>'
 			       data-shell-occupant-html-tag="tr"
 			       data-shell-occupant-template-id="list-item-template"
 			       data-type="dyna-container"
-			       id="parent-component">
+			       id="MAIN">
 			</tbody>
 		</table>
 	</div>
