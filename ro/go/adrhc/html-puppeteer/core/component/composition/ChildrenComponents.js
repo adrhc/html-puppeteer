@@ -9,7 +9,7 @@ import {partOf} from "../../../util/GlobalConfig.js";
  * @property {AbstractContainerComponent=} parent
  * @property {ChildrenShellFinder=} childrenShellFinder
  * @property {boolean=} dontRenderChildren
- * @property {AnimationOptions=} childrenOptions are the options used to create the components for found shells
+ * @property {CreateComponentParams=} childrenOptions are the options used to create the components for found shells
  */
 
 /**
@@ -24,7 +24,7 @@ export default class ChildrenComponents {
      */
     children = {};
     /**
-     * @type {AnimationOptions}
+     * @type {CreateComponentParams}
      */
     childrenOptions
     /**
@@ -46,7 +46,7 @@ export default class ChildrenComponents {
      * @param {AbstractComponent=} options.parent
      * @param {ChildrenShellFinder=} options.childrenShellFinder
      * @param {boolean=} options.dontRenderChildren
-     * @param {AnimationOptions=} options.childrenOptions
+     * @param {CreateComponentParams=} options.childrenOptions
      */
     constructor({componentsHolder, parent, childrenShellFinder, dontRenderChildren, childrenOptions}) {
         this.parent = parent;

@@ -5,10 +5,10 @@ import {isTrue} from "../util/AssertionUtils.js";
 import ChildrenComponents from "./component/composition/ChildrenComponents.js";
 
 /**
- * @param {AnimationOptions} options
+ * @param {CreateComponentParams} options
  * @param {ElemIdOrJQuery=} options.componentsHolder
  * @param {boolean=} options.alwaysReturnArray
- * @param {AnimationOptions=} componentsOptions are the options used to create the components for found shells
+ * @param {CreateComponentParams=} componentsOptions are the options used to create the components for found shells
  * @return {AbstractComponent|AbstractComponent[]}
  */
 export default function animate({componentsHolder, alwaysReturnArray, ...componentsOptions} = {}) {
@@ -26,21 +26,21 @@ export default function animate({componentsHolder, alwaysReturnArray, ...compone
 
 /**
  * @param {jQuery<HTMLElement>=} $el
- * @param {AnimationOptions=} options
+ * @param {CreateComponentParams=} params
  * @return {AbstractComponent}
  */
-export function createComponent($el, options) {
+export function createComponent($el, params) {
     isTrue($el.length === 1,
         `[createComponent] bad $el.length = ${$el.length}!`);
     const type = typeOf($el);
     const componentId = idOf($el);
-    const componentOptions = componentOptionsOf(componentId, options);
+    const componentOptions = componentOptionsOf(componentId, params);
     return instanceOf($el, type, componentOptions);
 }
 
 /**
  * @param {string=} componentId
- * @param {AnimationOptions=} options
+ * @param {CreateComponentParams=} options
  * @return {ComponentOptions}
  */
 function componentOptionsOf(componentId, options) {

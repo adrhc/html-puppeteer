@@ -8,15 +8,15 @@ import animate from "../../html-puppeteer/core/Puppeteer.js";
  */
 export function animateOnReadyDocument(componentIdToDebug) {
     $(() => {
-        animate(animationOptionsOf(componentIdToDebug));
+        animate(createComponentParamsOf(componentIdToDebug));
     });
 }
 
 /**
  * @param {string=} componentIdToDebug
- * @return {AnimationOptions}
+ * @return {CreateComponentParams}
  */
-function animationOptionsOf(componentIdToDebug) {
+function createComponentParamsOf(componentIdToDebug) {
     const debuggingOptions = debuggingOptionsOf(`${componentIdToDebug}-debugger`);
     return componentIdToDebug ? {[componentIdToDebug]: debuggingOptions} : debuggingOptions;
 }

@@ -56,8 +56,7 @@
  */
 
 /**
- * @typedef {ComponentOptions & SpecificComponentOptions} AnimationOptions
- * @property {boolean=} alwaysReturnArray
+ * @typedef {ComponentOptions & SpecificComponentOptions} CreateComponentParams
  */
 
 /**
