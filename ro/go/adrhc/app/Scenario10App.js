@@ -1,6 +1,6 @@
-import {btnSelectorOf} from "../html-puppeteer/util/SelectorUtils.js";
 import {generateString} from "./Generators.js";
 import {removeByIndex} from "../html-puppeteer/util/ArrayUtils.js";
+import {whenEvents} from "../html-puppeteer/helper/events-handling/DomEventsAttachBuilder.js";
 
 export default class Scenario10App {
     /**
@@ -25,13 +25,13 @@ export default class Scenario10App {
      * execute the application
      */
     run() {
-        $(btnSelectorOf("create")).on("click", () => {
+        whenEvents("click").occurOnBtn("create").do(() => {
             this._generateThenAppend("cats");
             if (this.haveDogs) {
                 this._generateThenAppend("dogs");
             }
         });
-        $(btnSelectorOf("remove")).on("click", () => {
+        whenEvents("click").occurOnBtn("remove").do(() => {
             this._removeOldestItem("cats");
             if (this.haveDogs) {
                 this._removeOldestItem("dogs");
