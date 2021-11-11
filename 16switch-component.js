@@ -5,16 +5,17 @@ import {eventsBinder} from "./ro/go/adrhc/html-puppeteer/helper/events-handling/
 
 $(() => {
     const debuggingOptions = debuggingOptionsOf("MAIN-debugger");
+    const switchEventsBinder = eventsBinder()
+        .whenEvents("click")
+        .occurOn("[type='radio']")
+        .useHandlerProvider(component => (ev) => {
+            const status = ev.target.value;
+            component.replaceParts({status, [status]: `${status}-${Math.random()}`});
+        })
+        .and()
+        .buildEventsBinderProvider();
     const mainOptions = withDefaults(debuggingOptions)
-        .addEventsBinders(eventsBinder()
-            .whenEvents("click")
-            .occurOn("[type='radio']")
-            .useHandlerProvider(component => (ev) => {
-                const status = ev.target.value;
-                component.replaceParts({status, [status]: `${status}-${Math.random()}`});
-            })
-            .and()
-            .buildEventsBinderProvider())
+        .addEventsBinders(switchEventsBinder)
         .options()
     animate({MAIN: mainOptions});
 });
