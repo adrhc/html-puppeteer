@@ -6,14 +6,14 @@ import ChildrenComponents from "./component/composition/ChildrenComponents.js";
 
 /**
  * @param {AnimationOptions} options
- * @property {ElemIdOrJQuery=} options.componentsHolder
- * @property {boolean=} options.alwaysReturnArray
- * @property {ContainerItemsCommonOptions=} containerItemsCommonOptions
+ * @param {ElemIdOrJQuery=} options.componentsHolder
+ * @param {boolean=} options.alwaysReturnArray
+ * @param {AnimationOptions=} componentsOptions are the options used to create the components for found shells
  * @return {AbstractComponent|AbstractComponent[]}
  */
-export default function animate({componentsHolder, alwaysReturnArray, ...containerItemsCommonOptions} = {}) {
+export default function animate({componentsHolder, alwaysReturnArray, ...componentsOptions} = {}) {
     const childrenComponents = new ChildrenComponents({
-        /** @type {ElemIdOrJQuery} */ componentsHolder, containerItemsCommonOptions
+        /** @type {ElemIdOrJQuery} */ componentsHolder, childrenOptions: componentsOptions
     });
     const components = childrenComponents.createChildrenForExistingShells();
     const partNames = Object.keys(components);
@@ -26,7 +26,7 @@ export default function animate({componentsHolder, alwaysReturnArray, ...contain
 
 /**
  * @param {jQuery<HTMLElement>=} $el
- * @param {ComponentOptions & SpecificComponentOptions=} options
+ * @param {AnimationOptions=} options
  * @return {AbstractComponent}
  */
 export function createComponent($el, options) {
@@ -40,7 +40,7 @@ export function createComponent($el, options) {
 
 /**
  * @param {string=} componentId
- * @param {ComponentOptions & SpecificComponentOptions} options
+ * @param {AnimationOptions=} options
  * @return {ComponentOptions}
  */
 function componentOptionsOf(componentId, options) {

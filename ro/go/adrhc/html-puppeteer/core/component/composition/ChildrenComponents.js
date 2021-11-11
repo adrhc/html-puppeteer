@@ -4,19 +4,12 @@ import ChildrenShellFinder from "../../view/ChildrenShellFinder.js";
 import {partOf} from "../../../util/GlobalConfig.js";
 
 /**
- * @typedef {SpecificComponentOptions} ContainerItemsCommonOptions
- * @property {ViewRemovalStrategy=} viewRemovalStrategy
- * @property {string=} removedPlaceholder
- * @property {string=} removedCss
- */
-
-/**
  * @typedef {Object} ChildrenComponentsOptions
  * @property {ElemIdOrJQuery=} componentsHolder is the place inside which to search for components
  * @property {AbstractContainerComponent=} parent
  * @property {ChildrenShellFinder=} childrenShellFinder
  * @property {boolean=} dontRenderChildren
- * @property {ContainerItemsCommonOptions=} containerItemsCommonOptions
+ * @property {AnimationOptions=} childrenOptions are the options used to create the components for found shells
  */
 
 /**
@@ -31,13 +24,13 @@ export default class ChildrenComponents {
      */
     children = {};
     /**
+     * @type {AnimationOptions}
+     */
+    childrenOptions
+    /**
      * @type {ChildrenShellFinder}
      */
     childrenShellFinder;
-    /**
-     * @type {Object}
-     */
-    containerItemsCommonOptions
     /**
      * @type {boolean}
      */
@@ -53,12 +46,12 @@ export default class ChildrenComponents {
      * @param {AbstractComponent=} options.parent
      * @param {ChildrenShellFinder=} options.childrenShellFinder
      * @param {boolean=} options.dontRenderChildren
-     * @param {ContainerItemsCommonOptions=} options.containerItemsCommonOptions
+     * @param {AnimationOptions=} options.childrenOptions
      */
-    constructor({componentsHolder, parent, childrenShellFinder, dontRenderChildren, containerItemsCommonOptions}) {
+    constructor({componentsHolder, parent, childrenShellFinder, dontRenderChildren, childrenOptions}) {
         this.parent = parent;
         this.dontRenderChildren = dontRenderChildren;
-        this.containerItemsCommonOptions = containerItemsCommonOptions;
+        this.childrenOptions = {parent, ...childrenOptions};
         // Puppeteer.anime() will provide an empty parent and elemIdOrJQuery
         const elemIdOrJQuery = componentsHolder ?? parent?.config.elemIdOrJQuery ?? document;
         this.childrenShellFinder = childrenShellFinder ?? new ChildrenShellFinder(elemIdOrJQuery);
@@ -102,7 +95,7 @@ export default class ChildrenComponents {
      * @protected
      */
     _createComponent($shell, partName = partOf($shell)) {
-        const component = createComponent($shell, {parent: this.parent, ...this.containerItemsCommonOptions});
+        const component = createComponent($shell, this.childrenOptions);
         isTrue(component != null, "[ChildrenComponents] the child's shell must exist!");
         isTrue(partName != null || this.parent == null,
             "[ChildrenComponents] partName is missing while having a parent!");
