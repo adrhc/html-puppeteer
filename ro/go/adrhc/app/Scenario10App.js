@@ -1,42 +1,44 @@
 import {generateString} from "./Generators.js";
 import {removeByIndex} from "../html-puppeteer/util/ArrayUtils.js";
-import {whenEvents} from "../html-puppeteer/helper/events-handling/DomEventsAttachBuilder.js";
+import {eventsBinder} from "../html-puppeteer/helper/events-handling/EventsBinderBuilder.js";
+import AbstractContainerEventsBinder
+    from "../html-puppeteer/core/component/events-binder/AbstractContainerEventsBinder.js";
 
-export default class Scenario10App {
+export default class Scenario10App extends AbstractContainerEventsBinder {
     /**
      * @type {boolean}
      */
     haveDogs;
-    /**
-     * @type {AbstractContainerComponent}
-     */
-    parent;
 
     /**
-     * @param {AbstractContainerComponent} parent
+     * @param {AbstractContainerComponent} container
      * @param {boolean=} haveDogs
      */
-    constructor(parent, {haveDogs} = {}) {
-        this.parent = parent;
+    constructor(container, {haveDogs} = {}) {
+        super(container);
         this.haveDogs = haveDogs;
     }
 
     /**
      * execute the application
      */
-    run() {
-        whenEvents("click").occurOnBtn("create").do(() => {
-            this._generateThenAppend("cats");
-            if (this.haveDogs) {
-                this._generateThenAppend("dogs");
-            }
-        });
-        whenEvents("click").occurOnBtn("remove").do(() => {
-            this._removeOldestItem("cats");
-            if (this.haveDogs) {
-                this._removeOldestItem("dogs");
-            }
-        });
+    attachEventHandlers() {
+        this._eventsHandlerDetachFn = eventsBinder()
+            .whenEvents("click").occurOnBtn("create").do(() => {
+                this._generateThenAppend("cats");
+                if (this.haveDogs) {
+                    this._generateThenAppend("dogs");
+                }
+            })
+            .and()
+            .whenEvents("click").occurOnBtn("remove").do(() => {
+                this._removeOldestItem("cats");
+                if (this.haveDogs) {
+                    this._removeOldestItem("dogs");
+                }
+            })
+            .and()
+            .buildDetachEventsHandlersFn();
     }
 
     /**
@@ -44,9 +46,9 @@ export default class Scenario10App {
      * @protected
      */
     _removeOldestItem(partName) {
-        const items = this.parent.getPart(partName) ?? [];
+        const items = this.container.getPart(partName) ?? [];
         removeByIndex(items, 0);
-        this.parent.replacePart(partName, items);
+        this.container.replacePart(partName, items);
     }
 
     /**
@@ -54,9 +56,9 @@ export default class Scenario10App {
      * @protected
      */
     _generateThenAppend(partName) {
-        const items = this.parent.getPart(partName) ?? [];
+        const items = this.container.getPart(partName) ?? [];
         items.push(this._generateNewItem(partName));
-        this.parent.replacePart(partName, items);
+        this.container.replacePart(partName, items);
     }
 
     /**
@@ -65,6 +67,6 @@ export default class Scenario10App {
      * @protected
      */
     _generateNewItem(partName) {
-        return {id: Math.random(), name: generateString("name ")};
+        return {id: Math.random(), name: generateString(`${partName} `)};
     }
 }

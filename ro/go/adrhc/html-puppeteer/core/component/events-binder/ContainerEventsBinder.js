@@ -1,7 +1,7 @@
-import EventsBinder from "./EventsBinder.js";
 import {childIdOf} from "../../../util/GlobalConfig.js";
 import {uniqueId} from "../../../util/StringUtils.js";
 import {eventsBinder} from "../../../helper/events-handling/EventsBinderBuilder.js";
+import AbstractContainerEventsBinder from "./AbstractContainerEventsBinder.js";
 
 /**
  * @typedef {function(component: AbstractContainerComponent): *} ChildStateProviderFn
@@ -12,7 +12,7 @@ import {eventsBinder} from "../../../helper/events-handling/EventsBinderBuilder.
  * @property {string} removeEvent
  * @property {ChildStateProviderFn} childStateProviderFn
  */
-export default class ContainerEventsBinder extends EventsBinder {
+export default class ContainerEventsBinder extends AbstractContainerEventsBinder {
     /**
      * @type {ChildStateProviderFn}
      * @protected
@@ -52,13 +52,6 @@ export default class ContainerEventsBinder extends EventsBinder {
     }
 
     /**
-     * @return {AbstractContainerComponent}
-     */
-    get containerComponent() {
-        return /** @type {AbstractContainerComponent} */ this._component;
-    }
-
-    /**
      * @param {ChildStateProviderFn=} childStateProviderFn
      * @param {string=} createDataAttr
      * @param {string=} removeDataAttr
@@ -84,19 +77,19 @@ export default class ContainerEventsBinder extends EventsBinder {
             .whenEvents(this.createEvent)
             .occurOnOwnedDataAttr(this.createDataAttr, this.componentId)
             .do(() => {
-                this.containerComponent.replacePart(uniqueId(), this.childStateProviderFn(this.containerComponent));
+                this.container.replacePart(uniqueId(), this.childStateProviderFn(this.container));
             })
             .and()
             // <div component-id="componentId">
             //     <button data-child-id="childId" data-owner="componentId" data-removeDataAttr />
             // </div>
             .whenEvents(this.removeEvent)
-            .occurOnComponent(this.containerComponent)
+            .occurOnComponent(this.container)
             .triggeredByOwnedDataAttr(this.removeDataAttr)
             .do((ev) => {
                 const $elem = $(ev.target);
                 const childId = childIdOf($elem);
-                this.containerComponent.replacePartByChildId(childId);
+                this.container.replacePartByChildId(childId);
             })
             .and()
             .buildDetachEventsHandlersFn();

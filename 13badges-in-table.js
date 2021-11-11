@@ -4,10 +4,10 @@ import Scenario13App from "./ro/go/adrhc/app/Scenario13App.js";
 import StateChangeEventsBinder from "./ro/go/adrhc/app/components/event-binders/StateChangeEventsBinder.js";
 
 $(() => {
-    // the puppeteer
-    const component = animate(addDebugger({elemIdOrJQuery: "MAIN-debugger"})
-        .addEventsBinders(new StateChangeEventsBinder("MAIN-debugger")).options());
-
-    // the application using the html-puppeteer
-    new Scenario13App(component, {innerPart: "dogs"}).run();
+    const eventsBinders = [new StateChangeEventsBinder("MAIN-debugger"),
+        component => new Scenario13App(/** @type {AbstractContainerComponent} */ component, "dogs")
+    ];
+    const options = addDebugger({elemIdOrJQuery: "MAIN-debugger"})
+        .addEventsBinders(...eventsBinders).options();
+    animate(options);
 });

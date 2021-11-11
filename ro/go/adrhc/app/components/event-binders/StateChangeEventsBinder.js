@@ -34,13 +34,13 @@ export default class StateChangeEventsBinder extends EventsBinder {
             .whenEvents("click")
             .occurOnBtn("change-entire-state")
             .do(() => {
-                this._component.replaceState(jsonParsedValOf(this.completeStateJsonElemIdOrJQuery));
+                this.component.replaceState(jsonParsedValOf(this.completeStateJsonElemIdOrJQuery));
             })
             .and()
             .whenEvents("click")
             .occurOnBtn("change-partial-state")
             .do(() => {
-                replaceParts(this._component, jsonParsedValOf(this.partialStateJsonElemIdOrJQuery));
+                replaceParts(this.component, jsonParsedValOf(this.partialStateJsonElemIdOrJQuery));
             })
             .and()
             .buildDetachEventsHandlersFn();

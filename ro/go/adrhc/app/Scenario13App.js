@@ -1,4 +1,3 @@
-import {btnSelectorOf} from "../html-puppeteer/util/SelectorUtils.js";
 import {generateIdNameBags} from "./Generators.js";
 import Scenario10App from "./Scenario10App.js";
 
@@ -9,24 +8,12 @@ export default class Scenario13App extends Scenario10App {
     innerPart;
 
     /**
-     * @param {AbstractContainerComponent} parent
+     * @param {AbstractContainerComponent} container
      * @param {string} innerPart
      */
-    constructor(parent, {innerPart}) {
-        super(parent);
+    constructor(container, innerPart) {
+        super(container);
         this.innerPart = innerPart;
-    }
-
-    /**
-     * execute the application
-     */
-    run() {
-        $(btnSelectorOf("create")).on("click", () => {
-            this._generateThenAppend("cats");
-        });
-        $(btnSelectorOf("remove")).on("click", () => {
-            this._removeOldestItem("cats");
-        });
     }
 
     /**
