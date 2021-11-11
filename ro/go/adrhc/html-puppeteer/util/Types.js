@@ -52,6 +52,10 @@
  */
 
 /**
+ * @typedef {{[key: string]: ComponentOptions}} SpecificComponentOptions
+ */
+
+/**
  * @typedef {ComponentOptions & SpecificComponentOptions} AnimationOptions
  * @property {boolean=} alwaysReturnArray
  */

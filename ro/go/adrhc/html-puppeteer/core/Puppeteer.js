@@ -8,12 +8,12 @@ import ChildrenComponents from "./component/composition/ChildrenComponents.js";
  * @param {AnimationOptions} options
  * @property {ElemIdOrJQuery=} options.componentsHolder
  * @property {boolean=} options.alwaysReturnArray
- * @property {SpecificComponentOptions=} childrenComponentsCommonOptions
+ * @property {ContainerItemsCommonOptions=} containerItemsCommonOptions
  * @return {AbstractComponent|AbstractComponent[]}
  */
-export default function animate({componentsHolder, alwaysReturnArray, ...childrenComponentsCommonOptions} = {}) {
+export default function animate({componentsHolder, alwaysReturnArray, ...containerItemsCommonOptions} = {}) {
     const childrenComponents = new ChildrenComponents({
-        /** @type {ElemIdOrJQuery} */ componentsHolder, childrenComponentsCommonOptions
+        /** @type {ElemIdOrJQuery} */ componentsHolder, containerItemsCommonOptions
     });
     const components = childrenComponents.createChildrenForExistingShells();
     const partNames = Object.keys(components);

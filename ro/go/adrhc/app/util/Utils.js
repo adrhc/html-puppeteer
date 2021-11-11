@@ -13,10 +13,6 @@ export function animateOnReadyDocument(componentIdToDebug) {
 }
 
 /**
- * @typedef {{[key: string]: ComponentOptions}} SpecificComponentOptions
- */
-
-/**
  * @param {string=} componentIdToDebug
  * @return {AnimationOptions}
  */

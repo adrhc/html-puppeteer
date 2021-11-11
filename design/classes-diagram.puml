@@ -72,7 +72,7 @@ class ChildrenShells {
 
 class ChildrenComponents {
 #children: {partName: AbstractComponent}
-#childrenComponentsCommonOptions
+#containerItemsCommonOptions
 #childrenShellFinder: ChildrenShellFinder
 #dontRender: boolean
 #parent: AbstractComponent

@@ -3,12 +3,6 @@ import ChildrenShells from "../core/view/ChildrenShells.js";
 import ChildrenShellFinder from "../core/view/ChildrenShellFinder.js";
 import {partsOf} from "../core/state/PartialStateHolder.js";
 
-/**
- * @typedef {Object} ChildrenComponentsCommonOptions
- * @property {ViewRemovalStrategy=} viewRemovalStrategy
- * @property {string=} removedPlaceholder
- * @property {string=} removedCss
- */
 export default class ContainerHelper {
     /**
      * @type {AbstractComponent}
@@ -30,14 +24,14 @@ export default class ContainerHelper {
     }
 
     /**
-     * @return {ChildrenComponentsCommonOptions}
+     * @return {ContainerItemsCommonOptions}
      */
-    createChildrenComponentsCommonOptions() {
+    createContainerItemsCommonOptions() {
         return _.defaults({
             viewRemovalStrategy: this.config.childrenRemovalStrategy,
             removedPlaceholder: this.config.childrenRemovedPlaceholder,
             removedCss: this.config.childrenRemovedCss,
-        }, this.config.childrenComponentsCommonOptions);
+        }, this.config.containerItemsCommonOptions);
     }
 
     /**
@@ -63,7 +57,7 @@ export default class ContainerHelper {
             parent: this.component,
             childrenShellFinder,
             dontRenderChildren: this.config.dontRenderChildren,
-            childrenComponentsCommonOptions: this.createChildrenComponentsCommonOptions()
+            containerItemsCommonOptions: this.createContainerItemsCommonOptions()
         });
     }
 
