@@ -4,7 +4,7 @@ import {eventsBinder} from "../html-puppeteer/helper/events-handling/EventsBinde
 import AbstractContainerEventsBinder
     from "../html-puppeteer/core/component/events-binder/AbstractContainerEventsBinder.js";
 
-export default class Scenario10App extends AbstractContainerEventsBinder {
+export default class Scenario10EventsBinder extends AbstractContainerEventsBinder {
     /**
      * @type {boolean}
      */
