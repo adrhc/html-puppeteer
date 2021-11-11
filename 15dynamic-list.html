@@ -18,29 +18,15 @@
 
 <div class="container scenario15">
 	<div class="section title">DynamicContainerComponent</div>
-	<!-- open/close buttons -->
-	<div class="section flex-center fill-available buttons">
-		<button data-close="click" data-owner="MAIN">Close "MAIN"</button>
-		<button class="deactivated" data-open="click" data-owner="MAIN">Open "MAIN"</button>
-	</div>
-	<div class="section title">debuggers</div>
-	<!-- state changing buttons -->
-	<div class="section flex-center fill-available buttons">
-		<div>
-			<button name="change-entire-state">Change entire state</button>
-			<button name="change-partial-state">Change partial state</button>
-		</div>
-	</div>
-	<!-- state input fields and debuggers -->
-	<div class="section">
-		<div class="flex-center">
-			<textarea class="fill-available" id="MAIN-debugger"
-			          rows="10">No debugging data available yet!</textarea>
-			<textarea class="fill-available" id="partial-state" rows="10">Write here some partial (aka child/slice) state, e.g.:
-{"kidX": {"id": "X", "name": "kid X"}, "kidY": {"id": "Y", "name": "kid Y"}}
-PS: make sure to have a well formatted JSON!</textarea>
-		</div>
-	</div>
+
+	<!--
+		Debugger element must be placed before the MAIN component for it (debugger) to work.
+		The debugger component (see DebuggerOptionsBuilder._createDebuggerStateChangesHandler)
+		will be created with the MAIN component (below); at that moment its DOM
+		element (debugger) must already exist (see also SimpleView._execLazySetup).
+	-->
+	<p data-initial-state="{}" data-template-id="debugger-template" data-type="simple"></p>
+
 	<!-- the component -->
 	<div class="section title">Component's view</div>
 	<div class="section fit-content min-width-33-percent">
@@ -55,7 +41,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 			</tr>
 			</thead>
 			<tbody data-initial-state='{"kid0": {"id": 0, "name": "kid 0"}}'
-			       data-removed-placeholder='<tr><td colspan="3">The "MAIN" is closed!</td></tr>'
+			       data-removed-placeholder='<tr><td colspan="3">The "MAIN" component is closed!</td></tr>'
 			       data-shell-occupant-html-tag="tr"
 			       data-shell-occupant-template-id="list-item-template"
 			       data-type="dyna-container"
@@ -79,6 +65,32 @@ PS: make sure to have a well formatted JSON!</textarea>
 			</button>
 		</td>
 	{{/with}}
+</script>
+
+<script id="debugger-template" type="text/x-handlebars-template">
+	<!-- open/close buttons -->
+	<div class="section flex-center fill-available buttons">
+		<button data-close="click" data-owner="MAIN">Close "MAIN"</button>
+		<button class="deactivated" data-open="click" data-owner="MAIN">Open "MAIN"</button>
+	</div>
+	<div class="section title">debuggers</div>
+	<!-- state changing buttons -->
+	<div class="section flex-center fill-available buttons">
+		<div>
+			<button name="change-entire-state">Change entire state</button>
+			<button name="change-partial-state">Change partial state</button>
+		</div>
+	</div>
+	<!-- state input fields and debuggers -->
+	<div class="section">
+		<div class="flex-center">
+			<textarea class="fill-available" id="MAIN-debugger"
+			          rows="10">No debugging data available yet!</textarea>
+			<textarea class="fill-available" id="partial-state" rows="10">Write here some partial (aka child/slice) state, e.g.:
+{"kidX": {"id": "X", "name": "kid X"}, "kidY": {"id": "Y", "name": "kid Y"}}
+PS: make sure to have a well formatted JSON!</textarea>
+		</div>
+	</div>
 </script>
 
 </body>

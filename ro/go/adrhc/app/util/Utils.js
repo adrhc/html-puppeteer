@@ -17,7 +17,7 @@ export function animateOnReadyDocument(componentIdToDebug) {
  * @return {CreateComponentParams}
  */
 function createComponentParamsOf(componentIdToDebug) {
-    const debuggingOptions = debuggingOptionsOf(`${componentIdToDebug}-debugger`);
+    const debuggingOptions = commonOptionsOf(`${componentIdToDebug}-debugger`);
     return componentIdToDebug ? {[componentIdToDebug]: debuggingOptions} : debuggingOptions;
 }
 
@@ -25,7 +25,7 @@ function createComponentParamsOf(componentIdToDebug) {
  * @param {ElemIdOrJQuery} elemIdOrJQuery
  * @return {ComponentOptions}
  */
-export function debuggingOptionsOf(elemIdOrJQuery) {
+export function commonOptionsOf(elemIdOrJQuery) {
     return addDebugger({elemIdOrJQuery})
         .addEventsBinders(new StateChangeEventsBinder(elemIdOrJQuery), new OpenCloseEventsBinder())
         .options();
