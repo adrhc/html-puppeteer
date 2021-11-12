@@ -43,6 +43,16 @@ class EventsBinderBuilder {
     }
 
     /**
+     * @return {EventsBinder}
+     */
+    buildEventsBinder() {
+        const evBinder = {};
+        evBinder.attachEventHandlers = attachEventHandlersFnOf(this.domEventsAttachBuilders);
+        evBinder.detachEventHandlers = this.buildDetachEventsHandlersFn();
+        return /** @type {EventsBinder} */ evBinder;
+    }
+
+    /**
      * @return {EventsBinderBuilder}
      */
     and() {
