@@ -11,7 +11,7 @@ $(() => {
     registerComponentType("periodically-state-changing",
         (options) => new PeriodicallyStateChangingComponent(options));
 
-    animate(addClockDebugger({elemIdOrJQuery: "clock-debugger"})
+    const mainOptions = addClockDebugger({elemIdOrJQuery: "clock-debugger"})
         .addDebugger({elemIdOrJQuery: "debugger-component"})
         .to({
             stateGeneratorFn: (componentConfig, clockStateChange) => {
@@ -24,5 +24,7 @@ $(() => {
                 }, 2);
             },
             eventsBinderProviders: [component => new ClockEventsBinder(component)]
-        }));
+        });
+
+    animate({MAIN: mainOptions});
 });
