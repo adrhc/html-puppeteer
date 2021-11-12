@@ -18,27 +18,15 @@
 
 <div class="container scenario12">
 	<div class="section title">BasicContainerComponent</div>
-	<div class="section flex-center fill-available buttons">
-		<button name="create">Create a child (on top)</button>
-		<button name="remove">Remove oldest child</button>
-	</div>
-	<!-- debuggers -->
-	<div class="section title">debuggers</div>
-	<div class="section flex-center fill-available buttons">
-		<div>
-			<button name="change-entire-state">Change entire state</button>
-			<button name="change-partial-state">Change partial state</button>
-		</div>
-	</div>
-	<div class="section">
-		<div class="flex-center">
-			<textarea class="fill-available" id="MAIN-debugger"
-			          rows="10">No debugging data available yet!</textarea>
-			<textarea class="fill-available" id="partial-state" rows="10">Write here some partial (aka child/slice) state, e.g.:
-{"kidX": {"id": "X", "name": "kid X"}, "kidY": {"id": "Y", "name": "kid Y"}}
-PS: make sure to have a well formatted JSON!</textarea>
-		</div>
-	</div>
+
+	<!--
+		Debugger element must be placed before the MAIN component for it (debugger) to work.
+		The debugger component (see DebuggerOptionsBuilder._createDebuggerStateChangesHandler)
+		will be created with the MAIN component (below); at that moment its DOM
+		element (debugger) must already exist (see also SimpleView._execLazySetup).
+	-->
+	<p data-initial-state="{}" data-template-id="debugger-template" data-type="simple"></p>
+
 	<!-- the component -->
 	<div class="section title">Component's view</div>
 	<div class="section parent fit-content min-width-33-percent" data-initial-state='{"message1": null,
@@ -124,6 +112,29 @@ PS: make sure to have a well formatted JSON!</textarea>
 		<div><label>Id:</label> {{id}}</div>
 		<div><label>Name:</label> {{name}}</div>
 	{{/with}}
+</script>
+
+<script id="debugger-template" type="text/x-handlebars-template">
+	<div class="section flex-center fill-available buttons">
+		<button name="create">Create a child (on top)</button>
+		<button name="remove">Remove oldest child</button>
+	</div>
+	<div class="section title">debuggers</div>
+	<div class="section flex-center fill-available buttons">
+		<div>
+			<button name="change-entire-state">Change entire state</button>
+			<button name="change-partial-state">Change partial state</button>
+		</div>
+	</div>
+	<div class="section">
+		<div class="flex-center">
+			<textarea class="fill-available" id="MAIN-debugger"
+			          rows="10">No debugging data available yet!</textarea>
+			<textarea class="fill-available" id="partial-state" rows="10">Write here some partial (aka child/slice) state, e.g.:
+{"kidX": {"id": "X", "name": "kid X"}, "kidY": {"id": "Y", "name": "kid Y"}}
+PS: make sure to have a well formatted JSON!</textarea>
+		</div>
+	</div>
 </script>
 
 </body>
