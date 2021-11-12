@@ -14,7 +14,7 @@
 
 <body>
 <script>const fp = _.noConflict()</script>
-<script src="14badges-in-table-inline-template.js" type="module"></script>
+<script src="13badges-in-table.js" type="module"></script>
 
 <div class="container scenario12">
 	<div class="section title">StaticContainerComponent and DynamicContainerComponent</div>
@@ -46,7 +46,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 		     "message1": null,
 		     "message2": "The \"message2\" child state comes from the parent&apos;s state.",
 		     "inners": {"innerProperty1": "innerProperty1 value in \"inners\" object (not-updatable approach)"},
-		     "cats": [{"id": 0, "dogs": [{"id": 0, "name": "dog 0"}]}]
+		     "cats": [{"id": 0, "kittens": [{"id": 0, "name": "kitten 0"}]}]
 	     }'
 	     data-removed-placeholder='The "parent-component" is closed!'
 	     data-type="static-container"
@@ -94,8 +94,8 @@ PS: make sure to have a well formatted JSON!</textarea>
 				</td>
 				<td>
 					<div class="flex-start parent"
-					     data-part="dogs"
-					     data-removed-placeholder='The "dogs" is closed!'
+					     data-part="kittens"
+					     data-removed-placeholder='The "kittens" is closed!'
 					     data-type="dyna-container">
 						<div data-type="static-container">
 							<div><label>Id:</label>

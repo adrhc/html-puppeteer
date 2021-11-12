@@ -45,7 +45,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 	     data-initial-state='{
 		     "message1": null,
 		     "message2": "The \"message2\" child state comes from the parent&apos;s state.",
-		     "cats": [{"id": 0, "dogs": [{"id": 0, "name": "dog 0"}]}]
+		     "cats": [{"id": 0, "kittens": [{"id": 0, "name": "kitten 0"}]}]
 	     }'
 	     data-removed-placeholder='The "parent-component" is closed!'
 	     data-template-id="parent-template"
@@ -108,16 +108,16 @@ PS: make sure to have a well formatted JSON!</textarea>
 	<td>
 		<div class="flex-start parent"
 		     data-owner="{{@root.componentId}}"
-		     data-removed-placeholder='The "dogs" is closed!'
-		     data-shell-occupant-template-id="dogs-row-template"
+		     data-removed-placeholder='The "kittens" is closed!'
+		     data-shell-occupant-template-id="kittens-row-template"
 		     data-type="dyna-container"
-		     data-part="dogs">
-			The "dogs" child is not available yet!
+		     data-part="kittens">
+			The "kittens" child is not available yet!
 		</div>
 	</td>
 </script>
 
-<script id="dogs-row-template" type="text/x-handlebars-template">
+<script id="kittens-row-template" type="text/x-handlebars-template">
 	{{#with value}}
 		<div><label>Id:</label> {{id}}</div>
 		<div><label>Name:</label> {{name}}</div>

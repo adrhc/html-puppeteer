@@ -114,21 +114,23 @@ div[data-part], .parent {
 }
 
 .scenario10 [data-part="cats"] [data-type],
-.scenario12 [data-part="dogs"] [data-type] {
+.scenario12 [data-part="dogs"] [data-type],
+.scenario12 [data-part="kittens"] [data-type] {
     display: flex;
     justify-content: center;
 }
 
 /* space between "badge" items */
 .scenario10 .flex-start [data-part="cats"] [data-type]:not(:last-child),
-.scenario12 .flex-start [data-part="dogs"] [data-type]:not(:last-child) {
-    margin-right: 0.3rem;
+.scenario12 .flex-start [data-part="dogs"] [data-type]:not(:last-child),
+.scenario12 .flex-start [data-part="kittens"] [data-type]:not(:last-child){
+    margin-right: 0.2rem;
 }
 
 /* Id and Name space */
 .scenario10 [data-part] div:not(:first-child),
 .scenario12 [data-part] div:not(:first-child) {
-    margin-left: 0.5rem;
+    margin-left: 0.4rem;
 }
 
 .scenario10 [data-part] label,

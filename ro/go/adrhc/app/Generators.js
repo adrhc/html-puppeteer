@@ -67,7 +67,7 @@ export function generateIdNameBags(max, name) {
     const items = [];
     rangeIterator(1, count, (i) => {
         const indexAndGeneration = `${i}${generation}`;
-        items.push({id: `${indexAndGeneration}`, name: `[generation=${generation}] ${name}${indexAndGeneration}`});
+        items.push({id: `${indexAndGeneration}`, name: `[generation=${generation}] ${name} ${indexAndGeneration}`});
     });
     return items;
 }

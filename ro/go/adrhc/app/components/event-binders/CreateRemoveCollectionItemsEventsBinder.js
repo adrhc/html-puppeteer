@@ -1,22 +1,22 @@
-import {generateString} from "../../Generators.js";
 import {removeByIndex} from "../../../html-puppeteer/util/ArrayUtils.js";
-import {eventsBinder} from "../../../html-puppeteer/helper/events-handling/EventsBinderBuilder.js";
+import {generateString} from "../../Generators.js";
 import AbstractContainerEventsBinder
     from "../../../html-puppeteer/core/component/events-binder/AbstractContainerEventsBinder.js";
+import {eventsBinder} from "../../../html-puppeteer/helper/events-handling/EventsBinderBuilder.js";
 
-export default class Scenario10EventsBinder extends AbstractContainerEventsBinder {
+export default class CreateRemoveCollectionItemsEventsBinder extends AbstractContainerEventsBinder {
     /**
-     * @type {boolean}
+     * @type {string}
      */
-    haveDogs;
+    collectionPartName;
 
     /**
-     * @param {AbstractContainerComponent} container
-     * @param {boolean=} haveDogs
+     * @param {AbstractComponent} component
+     * @param {string} collectionPartName
      */
-    constructor(container, {haveDogs} = {}) {
-        super(container);
-        this.haveDogs = haveDogs;
+    constructor(component, collectionPartName) {
+        super(component);
+        this.collectionPartName = collectionPartName;
     }
 
     /**
@@ -24,21 +24,25 @@ export default class Scenario10EventsBinder extends AbstractContainerEventsBinde
      */
     attachEventHandlers() {
         this._eventsHandlerDetachFn = eventsBinder()
-            .whenEvents("click").occurOnBtn("create").do(() => {
-                this._generateThenAppend("cats");
-                if (this.haveDogs) {
-                    this._generateThenAppend("dogs");
-                }
-            })
+            .whenEvents("click").occurOnBtn("create").do(() => this._onClickCreate())
             .and()
-            .whenEvents("click").occurOnBtn("remove").do(() => {
-                this._removeOldestItem("cats");
-                if (this.haveDogs) {
-                    this._removeOldestItem("dogs");
-                }
-            })
+            .whenEvents("click").occurOnBtn("remove").do(() => this._onClickRemove())
             .and()
             .buildDetachEventsHandlersFn();
+    }
+
+    /**
+     * @protected
+     */
+    _onClickCreate() {
+        this._generateThenAppend(this.collectionPartName);
+    }
+
+    /**
+     * @protected
+     */
+    _onClickRemove() {
+        this._removeOldestItem(this.collectionPartName);
     }
 
     /**
