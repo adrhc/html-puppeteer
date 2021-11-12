@@ -18,20 +18,15 @@
 
 <div class="container">
 	<div class="section title">BasicContainerComponent</div>
-	<!-- state changing buttons -->
-	<div class="section flex-center fill-available buttons">
-		<button name="generate-message1">Generate a value for "message1" child</button>
-		<button name="close">Close "cats"</button>
-		<button class="deactivated" name="open">Open "cats"</button>
-	</div>
-	<!-- state input field, button and debugger -->
-	<div class="section title">parent debugger</div>
-	<div class="section">
-		<div class="mb3">
-			<button name="change-entire-state">Change entire state</button>
-		</div>
-		<textarea class="fill-available" id="MAIN-debugger" rows="10">No debugging data available yet!</textarea>
-	</div>
+
+	<!--
+		Debugger element must be placed before the MAIN component for it (debugger) to work.
+		The debugger component (see DebuggerOptionsBuilder._createDebuggerStateChangesHandler)
+		will be created with the MAIN component (below); at that moment its DOM
+		element (debugger) must already exist (see also SimpleView._execLazySetup).
+	-->
+	<p data-initial-state="{}" data-template-id="debugger-template" data-type="simple"></p>
+
 	<!-- the component -->
 	<div class="section title">Component's view</div>
 	<div class="section fit-content min-width-33-percent" data-initial-state='{"message1": null,
@@ -90,6 +85,23 @@
 			</tr>
 		{{/each}}
 	</table>
+</script>
+
+<script id="debugger-template" type="text/x-handlebars-template">
+	<!-- state changing buttons -->
+	<div class="section flex-center fill-available buttons">
+		<button name="generate-message1">Generate a value for "message1" child</button>
+		<button name="close">Close "cats"</button>
+		<button class="deactivated" name="open">Open "cats"</button>
+	</div>
+	<!-- state input field, button and debugger -->
+	<div class="section title">parent debugger</div>
+	<div class="section">
+		<div class="mb3">
+			<button name="change-entire-state">Change entire state</button>
+		</div>
+		<textarea class="fill-available" id="MAIN-debugger" rows="10">No debugging data available yet!</textarea>
+	</div>
 </script>
 
 </body>
