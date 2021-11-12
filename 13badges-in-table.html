@@ -47,11 +47,11 @@ PS: make sure to have a well formatted JSON!</textarea>
 		     "message2": "The \"message2\" child state comes from the parent&apos;s state.",
 		     "cats": [{"id": 0, "kittens": [{"id": 0, "name": "kitten 0"}]}]
 	     }'
-	     data-removed-placeholder='The "parent-component" is closed!'
+	     data-removed-placeholder='The "MAIN" component is closed!'
 	     data-template-id="parent-template"
 	     data-type="static-container"
-	     id="parent-component">
-		The "parent-component" is not available yet!
+	     id="MAIN">
+		The "MAIN" component is not available yet!
 	</div>
 </div>
 
@@ -78,20 +78,20 @@ PS: make sure to have a well formatted JSON!</textarea>
 		</thead>
 		<!--
 			Can't use @root.[owner|componentId] if "data-part" on current
-			component ("parent-component") is missing because they won't be set.
+			component ("MAIN") is missing because they won't be set.
 			See also ComponentIllustrator calling hierarchyAwareViewValuesTransformer(...).
 
 			In static containers the children's shells are not dynamically
 			generated that's why they don't @root.[owner|componentId] set
 			automatically. One could manually set only the owner (from @root.owner, if available)
 			but not the child's "data-component-id" because there's no such thing available like
-			e.g. @root.childComponentId in its parent component (like here, in "parent-component").
+			e.g. @root.childComponentId in its parent component (like here, in "cats").
 		-->
-		<tbody data-removed-placeholder='<tr><td colspan="2">The "parent-component" is closed!</td></tr>'
+		<tbody data-removed-placeholder='<tr><td colspan="2">The "cats" component is closed!</td></tr>'
 		       data-shell-occupant-type="static-container"
 		       data-shell-occupant-html-tag="tr"
 		       data-shell-occupant-template-id="cats-row-template"
-		       data-owner="parent-component"
+		       data-owner="MAIN"
 		       data-type="dyna-container"
 		       data-part="cats">
 		<tr>

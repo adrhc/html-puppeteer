@@ -48,9 +48,9 @@ PS: make sure to have a well formatted JSON!</textarea>
 		     "inners": {"innerProperty1": "innerProperty1 value in \"inners\" object (not-updatable approach)"},
 		     "cats": [{"id": 0, "kittens": [{"id": 0, "name": "kitten 0"}]}]
 	     }'
-	     data-removed-placeholder='The "parent-component" is closed!'
+	     data-removed-placeholder='The "MAIN" component is closed!'
 	     data-type="static-container"
-	     id="parent-component">
+	     id="MAIN">
 		<!-- level 1 children don't need data-owner -->
 		<div class="mb3" data-part="message0" data-type="value">
 			The "message0" child is not available yet!
@@ -86,7 +86,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 				the parent doesn't have a parent because won't be set.
 			-->
 			<tbody data-part="cats"
-			       data-removed-placeholder='<tr><td colspan="2">The "parent-component" is closed!</td></tr>'
+			       data-removed-placeholder='<tr><td colspan="2">The "cats" component is closed!</td></tr>'
 			       data-type="dyna-container">
 			<tr data-type="static-container">
 				<td data-part="id" data-type="value">
