@@ -44,11 +44,11 @@ PS: make sure to have a well formatted JSON!</textarea>
 	<div class="section parent fit-content min-width-33-percent" data-initial-state='{"message1": null,
 	     "message2": "\"message2\" child is initialized from parent state",
 	     "cats": [{"id": 0, "name": "cat 0"}], "dogs": [{"id": 0, "name": "dog 0"}]}'
-	     data-removed-placeholder='The "parent-component" is closed!'
+	     data-removed-placeholder='The "MAIN" component is closed!'
 	     data-template-id="parent-template"
 	     data-type="static-container"
-	     id="parent-component">
-		The "parent-component" is not available yet!
+	     id="MAIN">
+		The "MAIN" component is not available yet!
 	</div>
 </div>
 
@@ -74,10 +74,10 @@ PS: make sure to have a well formatted JSON!</textarea>
 		</tr>
 		</thead>
 		<!--
-			@root.componentId is the current-component's id; here the current component is the container (i.e. "parent-component")
+			@root.componentId is the current-component's id; here the current component is the container (i.e. "MAIN")
 			@root.owner is the current-component parent's id; here the container's parent is none (i.e. no component)
 		-->
-		<tbody data-removed-placeholder='<tr><td colspan="2">The "parent-component" is closed!</td></tr>'
+		<tbody data-removed-placeholder='<tr><td colspan="2">The "MAIN" component is closed!</td></tr>'
 		       data-shell-occupant-html-tag="tr"
 		       data-shell-occupant-template-id="cats-row-template"
 		       data-owner="{{@root.componentId}}"
@@ -86,7 +86,7 @@ PS: make sure to have a well formatted JSON!</textarea>
 		</tbody>
 	</table>
 	<!--
-		@root.componentId is the current-component's id; here the current component is the container (i.e. "parent-component")
+		@root.componentId is the current-component's id; here the current component is the container (i.e. "MAIN")
 		@root.owner is the current-component parent's id; here the container's parent is none (i.e. no component)
 	-->
 	<div class="flex-start parent"

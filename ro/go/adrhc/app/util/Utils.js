@@ -17,8 +17,8 @@ export function animateOnReadyDocument(componentIdToDebug) {
  * @return {CreateComponentParams}
  */
 function createComponentParamsOf(componentIdToDebug) {
-    const debuggingOptions = commonOptionsOf(`${componentIdToDebug}-debugger`);
-    return componentIdToDebug ? {[componentIdToDebug]: debuggingOptions} : debuggingOptions;
+    const commonOptions = commonOptionsOf(`${componentIdToDebug}-debugger`);
+    return componentIdToDebug ? {[componentIdToDebug]: commonOptions} : commonOptions;
 }
 
 /**

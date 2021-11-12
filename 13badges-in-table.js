@@ -4,8 +4,8 @@ import {commonOptionsOf} from "./ro/go/adrhc/app/util/Utils.js";
 import {withDefaults} from "./ro/go/adrhc/html-puppeteer/core/component/options/ComponentOptionsBuilder.js";
 
 $(() => {
-    const debuggingOptions = commonOptionsOf("MAIN-debugger")
-    const mainOptions = withDefaults(debuggingOptions)
+    const commonOptions = commonOptionsOf("MAIN-debugger");
+    const mainOptions = withDefaults(commonOptions)
         .addEventsBinders(component => new CatsWithKittensEventsBinder(component))
         .options();
     animate({MAIN: mainOptions});

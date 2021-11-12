@@ -4,7 +4,7 @@ import {withDefaults} from "./ro/go/adrhc/html-puppeteer/core/component/options/
 import {eventsBinder} from "./ro/go/adrhc/html-puppeteer/helper/events-handling/EventsBinderBuilder.js";
 
 $(() => {
-    const debuggingOptions = commonOptionsOf("MAIN-debugger");
+    const commonOptions = commonOptionsOf("MAIN-debugger");
     const switchEventsBinder = eventsBinder()
         .whenEvents("click")
         .occurOn("[type='radio']")
@@ -14,7 +14,7 @@ $(() => {
         })
         .and()
         .buildEventsBinderProvider();
-    const mainOptions = withDefaults(debuggingOptions)
+    const mainOptions = withDefaults(commonOptions)
         .addEventsBinders(switchEventsBinder)
         .options()
     animate({MAIN: mainOptions});
