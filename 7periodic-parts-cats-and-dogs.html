@@ -2,14 +2,14 @@
 <html lang="en">
 
 <head>
-    <title>HTML puppeteer</title>
-    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-    <script src="libraries/jquery-3.6.0.js"></script>
-    <script src="libraries/handlebars.min-v4.7.7.js"></script>
-    <!-- see https://github.com/lodash/lodash/wiki/FP-Guide#installation -->
-    <script src="libraries/lodash4_lodash.min.js_lodash.fp.min.js"></script>
-    <link href="ro/go/adrhc/app/css/main.css" rel="stylesheet">
-    <link href="ro/go/adrhc/app/css/responstable.css" rel="stylesheet">
+	<title>HTML puppeteer</title>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<script src="libraries/jquery-3.6.0.js"></script>
+	<script src="libraries/handlebars.min-v4.7.7.js"></script>
+	<!-- see https://github.com/lodash/lodash/wiki/FP-Guide#installation -->
+	<script src="libraries/lodash4_lodash.min.js_lodash.fp.min.js"></script>
+	<link href="ro/go/adrhc/app/css/main.css" rel="stylesheet">
+	<link href="ro/go/adrhc/app/css/responstable.css" rel="stylesheet">
 </head>
 
 <body>
@@ -17,54 +17,66 @@
 <script src="7periodic-parts-cats-and-dogs.js" type="module"></script>
 
 <div class="container">
-    <div class="section title">PeriodicallyStateChangingComponent</div>
-    <div class="section flex-center fill-available buttons">
-        <button name="stop">Stop</button>
-        <button name="start">Start</button>
-    </div>
-    <div class="section title">Clock state</div>
-    <div class="section" id="clock-debugger">No debugging data available yet!</div>
-    <div class="section clock-internal-state">
-        <div>
-            <button name="change">Change clock state</button>
-        </div>
-        <div><input name="clock-state" placeholder="fill in the Clock state" type="text"></div>
-    </div>
-    <div class="section title">Generated state</div>
-    <div class="section">
-        <textarea class="fill-available" id="debugger-component">No debugging data available yet!</textarea>
-    </div>
-    <div class="section flex-center fill-available" data-interval="1000" data-template-id="table-template"
-         data-type="periodically-state-changing"></div>
+	<div class="section title">PeriodicallyStateChangingComponent</div>
+
+	<!--
+		Debugger element must be placed before the MAIN component for it (debugger) to work.
+		The debugger component (see DebuggerOptionsBuilder._createDebuggerStateChangesHandler)
+		will be created with the MAIN component (below); at that moment its DOM
+		element (debugger) must already exist (see also SimpleView._execLazySetup).
+	-->
+	<p data-initial-state="{}" data-template-id="debugger-template" data-type="simple"></p>
+
+	<div class="section flex-center fill-available" data-interval="1000" data-template-id="table-template"
+	     data-type="periodically-state-changing" id="MAIN"></div>
 </div>
 
 <script id="table-template" type="text/x-handlebars-template">
-    <table class="responstable">
-        <thead>
-        <tr>
-            <th colSpan="2">Generating new dogs each {{interval}} ms</th>
-        </tr>
-        </thead>
-        {{#each dogs}}
-            <tr>
-                <td>{{id}}</td>
-                <td>{{name}}</td>
-            </tr>
-        {{/each}}
-    </table>
-    <table class="responstable">
-        <thead>
-        <tr>
-            <th colSpan="2">Generating new cats each {{interval}} ms</th>
-        </tr>
-        </thead>
-        {{#each cats}}
-            <tr>
-                <td>{{id}}</td>
-                <td>{{name}}</td>
-            </tr>
-        {{/each}}
-    </table>
+	<table class="responstable">
+		<thead>
+		<tr>
+			<th colSpan="2">Generating new dogs each {{interval}} ms</th>
+		</tr>
+		</thead>
+		{{#each dogs}}
+			<tr>
+				<td>{{id}}</td>
+				<td>{{name}}</td>
+			</tr>
+		{{/each}}
+	</table>
+	<table class="responstable">
+		<thead>
+		<tr>
+			<th colSpan="2">Generating new cats each {{interval}} ms</th>
+		</tr>
+		</thead>
+		{{#each cats}}
+			<tr>
+				<td>{{id}}</td>
+				<td>{{name}}</td>
+			</tr>
+		{{/each}}
+	</table>
+</script>
+
+<script id="debugger-template" type="text/x-handlebars-template">
+	<div class="section flex-center fill-available buttons">
+		<button name="stop">Stop</button>
+		<button name="start">Start</button>
+	</div>
+	<div class="section title">Clock state</div>
+	<div class="section" id="clock-debugger">No debugging data available yet!</div>
+	<div class="section clock-internal-state">
+		<div>
+			<button name="change">Change clock state</button>
+		</div>
+		<div><input name="clock-state" placeholder="fill in the Clock state" type="text"></div>
+	</div>
+	<div class="section title">Generated state</div>
+	<div class="section">
+		<textarea class="fill-available" id="debugger-component">No debugging data available yet!</textarea>
+	</div>
 </script>
 
 </body>

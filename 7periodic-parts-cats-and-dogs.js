@@ -3,7 +3,7 @@ import {registerComponentType} from "./ro/go/adrhc/html-puppeteer/core/Component
 import PeriodicallyStateChangingComponent
     from "./ro/go/adrhc/app/components/periodically-state-changing/PeriodicallyStateChangingComponent.js";
 import {generateDogsOrCats} from "./ro/go/adrhc/app/Generators.js";
-import Scenario6EventsBinder from "./ro/go/adrhc/app/scenarios/6puppeteer+state-button/Scenario6EventsBinder.js";
+import ClockEventsBinder from "./ro/go/adrhc/app/components/event-binders/ClockEventsBinder.js";
 import {addClockDebugger} from "./ro/go/adrhc/app/components/periodically-state-changing/PeriodicallyStateChangingOptionsBuilder.js";
 import {getTotalHeight} from "./ro/go/adrhc/html-puppeteer/util/DomUtils.js";
 
@@ -46,10 +46,12 @@ $(() => {
     registerComponentType("periodically-state-changing",
         (options) => new PeriodicallyStateChangingComponent(options));
 
-    animate(addClockDebugger({elemIdOrJQuery: "clock-debugger"})
+    const mainOptions = addClockDebugger({elemIdOrJQuery: "clock-debugger"})
         .doPeriodicallyWithStateAndClock(stateAndClockStateChangeConsumer)
         .addDebugger({elemIdOrJQuery: "debugger-component"})
         .to({
-            eventsBinderProviders: [component => new Scenario6EventsBinder(component)]
-        }));
+            eventsBinderProviders: [component => new ClockEventsBinder(component)]
+        });
+    
+    animate({MAIN: mainOptions});
 });

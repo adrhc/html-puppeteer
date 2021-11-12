@@ -1,7 +1,7 @@
 import EventsBinder from "../../../html-puppeteer/core/component/events-binder/EventsBinder.js";
 import {eventsBinder} from "../../../html-puppeteer/helper/events-handling/EventsBinderBuilder.js";
 
-export default class Scenario6EventsBinder extends EventsBinder {
+export default class ClockEventsBinder extends EventsBinder {
     /**
      * @return {PeriodicallyStateChangingComponent}
      */
@@ -14,15 +14,15 @@ export default class Scenario6EventsBinder extends EventsBinder {
      */
     attachEventHandlers() {
         this._eventsHandlerDetachFn = eventsBinder()
-            .whenEvents("click.Scenario6EventsBinder")
+            .whenEvents("click.ClockEventsBinder")
             .occurOnBtn("start")
             .do(() => this.clock.startClock())
             .and()
-            .whenEvents("click.Scenario6EventsBinder")
+            .whenEvents("click.ClockEventsBinder")
             .occurOnBtn("stop")
             .do(() => this.clock.stopClock())
             .and()
-            .whenEvents("click.Scenario6EventsBinder")
+            .whenEvents("click.ClockEventsBinder")
             .occurOnBtn("change")
             .do(() => {
                 const json = $("input[name='clock-state']").val();
