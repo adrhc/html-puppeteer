@@ -1,8 +1,9 @@
-import {withDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/options/DebuggerOptionsBuilder.js";
+import {addDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/options/DebuggerOptionsBuilder.js";
 import animate from "./ro/go/adrhc/html-puppeteer/core/Puppeteer.js";
 import {generateCats} from "./ro/go/adrhc/app/Generators.js";
 import {$btnOf, btnSelectorOf} from "./ro/go/adrhc/html-puppeteer/util/SelectorUtils.js";
 import {activate, deactivate, getTotalHeight} from "./ro/go/adrhc/html-puppeteer/util/DomUtils.js";
+import StateChangeEventsBinder from "./ro/go/adrhc/app/components/event-binders/StateChangeEventsBinder.js";
 
 class App {
     /**
@@ -20,21 +21,16 @@ class App {
             $('textarea').height(0);
             $('textarea').height(getTotalHeight);
         });
-        $(btnSelectorOf("change-entire-state")).on("click", () => {
-            this.parent.replaceState(JSON.parse($("#MAIN-debugger").val()));
-            $('textarea').height(0);
-            $('textarea').height(getTotalHeight);
-        });
-        $(btnSelectorOf("create")).on("click", () => {
+        $(btnSelectorOf("open")).on("click", () => {
             this.parent.replacePart("cats", generateCats(1));
-            deactivate($btnOf("create"));
-            activate($btnOf("remove"));
+            deactivate($btnOf("open"));
+            activate($btnOf("close"));
             $('textarea').height(getTotalHeight);
         });
-        $(btnSelectorOf("remove")).on("click", () => {
+        $(btnSelectorOf("close")).on("click", () => {
             this.parent.replacePart("cats");
-            deactivate($btnOf("remove"));
-            activate($btnOf("create"));
+            deactivate($btnOf("close"));
+            activate($btnOf("open"));
             $('textarea').height(0);
             $('textarea').height(getTotalHeight);
         });
@@ -48,7 +44,8 @@ class App {
 
 $(() => {
     // the puppeteer
-    const component = animate(withDebugger({elemIdOrJQuery: "MAIN-debugger"}));
+    const component = animate(addDebugger({elemIdOrJQuery: "MAIN-debugger"})
+        .addEventsBinders(new StateChangeEventsBinder("MAIN-debugger")).options());
 
     // the application using the html-puppeteer
     new App(component).run();
