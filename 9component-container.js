@@ -1,10 +1,10 @@
-import {addDebugger} from "./ro/go/adrhc/html-puppeteer/core/component/options/DebuggerOptionsBuilder.js";
 import animate from "./ro/go/adrhc/html-puppeteer/core/Puppeteer.js";
 import {generateCats} from "./ro/go/adrhc/app/Generators.js";
 import {$btnOf} from "./ro/go/adrhc/html-puppeteer/util/SelectorUtils.js";
 import {activate, deactivate, getTotalHeight} from "./ro/go/adrhc/html-puppeteer/util/DomUtils.js";
-import StateChangeEventsBinder from "./ro/go/adrhc/app/components/event-binders/StateChangeEventsBinder.js";
 import {eventsBinder} from "./ro/go/adrhc/html-puppeteer/helper/events-handling/EventsBinderBuilder.js";
+import {commonOptionsOf} from "./ro/go/adrhc/app/util/Utils.js";
+import {withDefaults} from "./ro/go/adrhc/html-puppeteer/core/component/options/ComponentOptionsBuilder.js";
 
 const eventsBinderProvider = component => eventsBinder()
     .whenEvents("click").occurOnBtn("generate-message1").useHandler(() => {
@@ -39,10 +39,9 @@ function resizeTextAreaOnInput() {
 }
 
 $(() => {
-    // the puppeteer
-    animate(addDebugger({elemIdOrJQuery: "MAIN-debugger"})
-        .addEventsBinders(new StateChangeEventsBinder("MAIN-debugger"), eventsBinderProvider)
-        .options());
+    const commonOptions = commonOptionsOf("MAIN-debugger");
+    const mainOptions = withDefaults(commonOptions).addEventsBinders(eventsBinderProvider).options();
+    animate({MAIN: mainOptions});
 
     // the application using the html-puppeteer
     resizeTextAreaOnInput();
