@@ -97,6 +97,10 @@ div[data-part], .parent {
     border-width: thin;
 }
 
+.mt3 {
+    margin-top: .3rem !important;
+}
+
 .mb3 {
     margin-bottom: .3rem !important;
 }

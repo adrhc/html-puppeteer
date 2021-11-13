@@ -66,7 +66,11 @@ export default class SwitcherComponent extends AbstractContainerComponent {
      * @param {SwitcherComponentOptions} options
      */
     constructor(options) {
-        super({childrenRemovalStrategy: USE_CSS, ignoreShellTemplateOptions: true, ...options});
+        super({
+            childrenRemovalStrategy: USE_CSS,
+            ignoreShellTemplateOptions: true,
+            dontRenderChildren: true, ...options
+        });
         this.activeNameKey = this.config.activeNameKey ?? GlobalConfig.ACTIVE_NAME_KEY;
         this.activeValueKey = this.config.activeValueKey;
         this.valueKeyIsActiveName = this.config.valueKeyIsActiveName ?? true;
@@ -81,8 +85,14 @@ export default class SwitcherComponent extends AbstractContainerComponent {
         this.childrenComponents.disconnectAndRemoveChildren();
         super.replaceState(newState);
         this.childrenComponents.createChildrenForExistingShells();
-        this.childrenComponents.closeChildren();
         this._switchUsingCurrentState();
+    }
+
+    /**
+     * @param {PartName} activeName
+     */
+    switchTo(activeName) {
+        this._switchTo(activeName, this.activeComponent?.getMutableState());
     }
 
     /**
@@ -92,37 +102,15 @@ export default class SwitcherComponent extends AbstractContainerComponent {
      * @param {boolean=} dontRecordChanges
      */
     replacePart(previousPartName, newPart, newPartName = previousPartName, dontRecordChanges) {
-        // check for active name change
+        // check for active name (aka the property/part that indicates the current status) change
         if (newPartName === this.activeNameKey) {
             // active name changed while the value is the previous one
-            this._switchTo(newPart, this.activeComponent?.getMutableState());
+            this.switchTo(newPart);
             return;
         }
+        // active name (aka the property/part that indicates the current status) not changed
         super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
-        // active name not changed
-        if (this.valueKeyIsActiveName) {
-            // active value is the state part pointed by the active name, e.g. switcherState["editable"]
-            if (newPartName === this.activeName) {
-                // only the active value changed while the active name remains untouched
-                this.activeComponent.replaceState(newPart);
-            } else {
-                // both active value and name changed
-                this._switchTo(newPartName, newPart);
-            }
-        } else if (this.activeValueKey != null) {
-            // active value is a fixed state part, the one specified by activeValueKey
-            if (newPartName === this.activeValueKey) {
-                // only the active value changed while the active name remains untouched
-                this.activeComponent.replaceState(newPart);
-            } else {
-                // both active value and name changed
-                this._switchTo(newPartName, newPart);
-            }
-        } else {
-            // active value is blended into SwitcherComponent state
-            // replacing partially only if the child is capable to perform partial changes (aka: has replacePart method)
-            this.activeComponent?.replacePart?.(previousPartName, newPart, newPartName, dontRecordChanges);
-        }
+        this._switchUsingCurrentState();
     }
 
     /**
@@ -161,6 +149,6 @@ export default class SwitcherComponent extends AbstractContainerComponent {
         }
         // active value is blended into SwitcherComponent state
         // all but SwitcherComponent's specific state-parts (i.e. activeNameKey) represent the active value
-        return _.omit(completeSwitcherState, this.activeNameKey);
+        return completeSwitcherState;
     }
 }
