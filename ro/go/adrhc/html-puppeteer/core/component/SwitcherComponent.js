@@ -128,11 +128,7 @@ export default class SwitcherComponent extends AbstractContainerComponent {
     _switchUsingCurrentState() {
         const stateCopy = this.getStateCopy();
         const activeName = stateCopy?.[this.activeNameKey];
-        if (typeof activeName === "string") {
-            this._switchTo(activeName, this._getActiveValueFromState(stateCopy));
-        } else if (activeName != null) {
-            activeName.forEach(name => this._switchTo(name, this._getActiveValueFromState(stateCopy)))
-        }
+        this._switchTo(activeName, this._getActiveValueFromState(stateCopy));
     }
 
     /**
