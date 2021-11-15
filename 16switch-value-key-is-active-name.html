@@ -39,10 +39,12 @@
 	     data-type="switcher"
 	     data-value-key-is-active-name="true"
 	     id="MAIN">
-		<!-- level 1 children don't need data-owner -->
+		<!-- data-part can be used instead of data-active-name -->
 		<div class="mb3 bgc-aliceblue" data-initial-state="aliceblue is deactivated!" data-part="aliceblue"
 		     data-type="value"></div>
-		<div class="mb3 bgc-antiquewhite" data-initial-state="antiquewhite is deactivated!" data-part="antiquewhite"
+		<!-- data-active-name specify the active name of the component -->
+		<div class="mb3 bgc-antiquewhite" data-active-name="antiquewhite"
+		     data-initial-state="antiquewhite is deactivated!"
 		     data-type="value"></div>
 	</div>
 </div>

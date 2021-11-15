@@ -1,6 +1,7 @@
 export default class GlobalConfig {
     /* switch component */
-    static ACTIVE_NAME_KEY = "status"
+    static ACTIVE_CHILD_NAME = "activeName";
+    static ACTIVE_NAME_KEY = "status";
     static ALERT_ON_FAILED_ASSERTION = true;
     /**
      * Used when rendering the component's shell.

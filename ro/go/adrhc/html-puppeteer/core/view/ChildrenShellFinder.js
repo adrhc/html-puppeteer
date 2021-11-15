@@ -1,4 +1,4 @@
-import {dataPartSelector, dataPartSelectorOf, dataTypeSelector} from "../../util/SelectorUtils.js";
+import {dataPartSelectorOf, dataTypeSelector} from "../../util/SelectorUtils.js";
 import {jQueryOf} from "../../util/Utils.js";
 import {typeOf} from "../../util/GlobalConfig.js";
 
@@ -53,7 +53,11 @@ export default class ChildrenShellFinder {
      */
     $containerChildrenShells(partName) {
         return this.$containerElem
-            .find(`${partName == null ? dataPartSelector() : dataPartSelectorOf(partName)}`)
+            // one could use dataPartSelector() instead of dataTypeSelector() because a child
+            // component is supposed to have "data-part" set; for switcher though "data-part"
+            // will most likely miss, being replaced by "data-active-name" hence is better to
+            // use dataTypeSelector() here
+            .find(`${partName == null ? dataTypeSelector() : dataPartSelectorOf(partName)}`)
             .toArray()
             .map(shell => [shell, $(shell).parents(dataTypeSelector())])
             .filter(([, $parents]) => $parents[0] === this.$containerElem[0])

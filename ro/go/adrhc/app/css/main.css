@@ -84,11 +84,11 @@ td.center, th.center {
     border-color: firebrick !important;
 }
 
-div[data-part] {
+div[data-part], div[data-active-name] {
     border-color: firebrick;
 }
 
-div[data-part], .parent {
+div[data-part], div[data-active-name], .parent {
     padding-left: .3rem;
     padding-right: .3rem;
     margin-bottom: .3rem !important;

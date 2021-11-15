@@ -38,8 +38,7 @@ export default class AbstractContainerComponent extends AbstractComponent {
             .addComponentIllustratorProvider(component =>
                 componentIllustratorOf(component), !!componentIllustratorProviders?.length)
             .options());
-        const helper = new ContainerHelper(this);
-        this.childrenComponents = helper.createChildrenComponents();
+        this.childrenComponents = this._createChildrenComponents();
     }
 
     /**
@@ -87,5 +86,18 @@ export default class AbstractContainerComponent extends AbstractComponent {
     disconnect() {
         this.childrenComponents.disconnectAndRemoveChildren();
         super.disconnect();
+    }
+
+    /**
+     * @return {ChildrenComponents}
+     * @protected
+     */
+    _createChildrenComponents() {
+        if (this.config.childrenComponentsProvider) {
+            return this.config.childrenComponentsProvider(this);
+        } else {
+            const helper = new ContainerHelper(this);
+            return helper.createChildrenComponents();
+        }
     }
 }

@@ -2,6 +2,7 @@ import ChildrenComponents from "../core/component/composition/ChildrenComponents
 import ChildrenShells from "../core/view/ChildrenShells.js";
 import ChildrenShellFinder from "../core/view/ChildrenShellFinder.js";
 import {partsOf} from "../core/state/PartialStateHolder.js";
+import SwitcherChildren from "../core/component/composition/SwitcherChildren.js";
 
 /**
  * @typedef {Object} ContainerChildrenCommonOptions
@@ -55,11 +56,31 @@ export default class ContainerHelper {
     }
 
     /**
+     * @return {SwitcherChildren}
+     */
+    createSwitcherChildren() {
+        return this.switcherChildrenOf(this.createChildrenShellFinder());
+    }
+
+    /**
      * @param {ChildrenShellFinder} childrenShellFinder
      * @return {ChildrenComponents}
      */
     childrenComponentsOf(childrenShellFinder) {
         return new ChildrenComponents({
+            parent: this.component,
+            childrenShellFinder,
+            dontRenderChildren: this.config.dontRenderChildren,
+            childrenOptions: this.createContainerChildrenCommonOptions()
+        });
+    }
+
+    /**
+     * @param {ChildrenShellFinder} childrenShellFinder
+     * @return {SwitcherChildren}
+     */
+    switcherChildrenOf(childrenShellFinder) {
+        return new SwitcherChildren({
             parent: this.component,
             childrenShellFinder,
             dontRenderChildren: this.config.dontRenderChildren,

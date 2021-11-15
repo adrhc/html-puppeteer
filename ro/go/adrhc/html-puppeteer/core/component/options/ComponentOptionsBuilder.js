@@ -4,6 +4,7 @@ import {eventsBinderProviderFnOf} from "../../../util/Types.js";
 /**
  * @typedef {ComponentOptions} ComponentOptionsBuilderOptions
  * @property {EventsBinderProviderFn[]} eventsBinderProviders
+ * @property {ChildrenComponentsProviderFn} childrenComponentsProvider
  */
 export class ComponentOptionsBuilder {
     /**
@@ -69,13 +70,17 @@ export class ComponentOptionsBuilder {
         // stateHolderProvider using default priority: descendant, current-constructor, builder
         const stateHolderProvider = this.descendantComponentClassOptions.stateHolderProvider ??
             currentConstructorOptions.stateHolderProvider ?? this.builderOptions.stateHolderProvider;
+        // stateHolderProvider using default priority: descendant, current-constructor, builder
+        const childrenComponentsProvider = this.descendantComponentClassOptions.childrenComponentsProvider ??
+            currentConstructorOptions.childrenComponentsProvider ?? this.builderOptions.childrenComponentsProvider;
         // options building
         return _.defaults({
             extraConfigurators,
             componentIllustratorProviders,
             extraStateChangesHandlers,
             eventsBinderProviders,
-            stateHolderProvider
+            stateHolderProvider,
+            childrenComponentsProvider
         }, this.descendantComponentClassOptions, currentConstructorOptions, this.builderOptions);
     }
 
@@ -162,6 +167,14 @@ export class ComponentOptionsBuilder {
      */
     withStateHolderProvider(stateHolderProvider) {
         this.builderOptions.stateHolderProvider = stateHolderProvider;
+        return this;
+    }
+
+    /**
+     * @param {ChildrenComponentsProviderFn} childrenComponentsProvider
+     */
+    withChildrenComponentsProvider(childrenComponentsProvider) {
+        this.builderOptions.childrenComponentsProvider = childrenComponentsProvider;
         return this;
     }
 

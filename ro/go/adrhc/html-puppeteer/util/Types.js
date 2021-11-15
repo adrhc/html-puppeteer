@@ -3,7 +3,11 @@
  */
 
 /**
- * @typedef {{[key: string]: (string[]|string|number[]|number|boolean[]|boolean|null|undefined)}} DataAttributes
+ * @typedef {function(c: AbstractComponent): *} ComponentBasedProviderFn
+ */
+
+/**
+ * @typedef {{[key: string]: (string[]|string|number[]|number|boolean[]|boolean|ComponentBasedProviderFn|null|undefined)}} DataAttributes
  * @property {string|null|undefined} initialState
  */
 
@@ -21,6 +25,10 @@
 
 /**
  * @typedef {function(options: AbstractComponentOptions): StateHolder} StateHolderProviderFn
+ */
+
+/**
+ * @typedef {function(options: AbstractContainerComponent): ChildrenComponents} ChildrenComponentsProviderFn
  */
 
 /**

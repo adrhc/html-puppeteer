@@ -1,6 +1,7 @@
 import {USE_CSS} from "../view/SimpleView.js";
 import GlobalConfig from "../../util/GlobalConfig.js";
 import AbstractContainerComponent from "./AbstractContainerComponent.js";
+import ContainerHelper from "../../helper/ContainerHelper.js";
 
 /**
  * @typedef {AbstractContainerComponentOptions} SwitcherComponentOptions
@@ -51,7 +52,7 @@ export default class SwitcherComponent extends AbstractContainerComponent {
      * @return {AbstractComponent}
      */
     get activeComponent() {
-        return this.childrenComponents.getChildByPartName(this.activeName);
+        return this.switcherChildren.getChildByActiveName(this.activeName);
     }
 
     /**
@@ -62,13 +63,21 @@ export default class SwitcherComponent extends AbstractContainerComponent {
     }
 
     /**
+     * @return {SwitcherChildren}
+     */
+    get switcherChildren() {
+        return /** @type {SwitcherChildren} */ this.childrenComponents;
+    }
+
+    /**
      * @param {SwitcherComponentOptions} options
      */
     constructor(options) {
         super({
             childrenRemovalStrategy: USE_CSS,
             ignoreShellTemplateOptions: true,
-            dontRenderChildren: true, ...options
+            dontRenderChildren: true, ...options,
+            childrenComponentsProvider: c => new ContainerHelper(c).createSwitcherChildren()
         });
         this.activeNameKey = this.config.activeNameKey ?? GlobalConfig.ACTIVE_NAME_KEY;
         this.activeValueKey = this.config.activeValueKey;
@@ -132,7 +141,7 @@ export default class SwitcherComponent extends AbstractContainerComponent {
      */
     _switchTo(newActiveName, newActiveValue) {
         this.activeComponent?.close();
-        const switchToComponent = this.childrenComponents.getChildByPartName(newActiveName);
+        const switchToComponent = this.switcherChildren.getChildByActiveName(newActiveName);
         super.replacePart(this.activeNameKey, newActiveName);
         switchToComponent?.render(newActiveValue);
     }

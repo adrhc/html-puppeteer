@@ -97,8 +97,10 @@ export default class ChildrenComponents {
     _createComponent($shell, partName = partOf($shell)) {
         const component = createComponent($shell, this.childrenOptions);
         isTrue(component != null, "[ChildrenComponents] the child's shell must exist!");
-        isTrue(partName != null || this.parent == null,
-            "[ChildrenComponents] partName is missing while having a parent!");
+        if (this.parent != null && partName == null) {
+            // switcher (usually) uses children without "data-part"
+            console.warn("[ChildrenComponents] partName is missing though parent is set!");
+        }
         this.children[partName ?? component.id] = this.dontRenderChildren ? component : component.render();
     }
 
