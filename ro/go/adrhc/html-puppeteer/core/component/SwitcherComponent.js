@@ -51,8 +51,7 @@ export default class SwitcherComponent extends AbstractContainerComponent {
      * @return {AbstractComponent}
      */
     get activeComponent() {
-        const activeName = this.activeName;
-        return this.childrenComponents.getChildByPartName(activeName);
+        return this.childrenComponents.getChildByPartName(this.activeName);
     }
 
     /**
