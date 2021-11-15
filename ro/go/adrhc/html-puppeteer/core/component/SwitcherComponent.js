@@ -5,7 +5,7 @@ import ContainerHelper from "../../helper/ContainerHelper.js";
 
 /**
  * @typedef {AbstractContainerComponentOptions} SwitcherComponentOptions
- * @property {string=} activeNameKey is the partName storing the active-component name (i.e. the name equal to children's "data-part" in html)
+ * @property {string=} activeNameKey is the partName storing the active-component name (i.e. the name equal to children's "data-active-name" in html)
  * @property {string=} activeValueKey is the partName where the active-component's value is stored by SwitcherComponent
  * @property {boolean=} [valueKeyIsActiveName=true] indicates that each active-component name is the activeNameKey's value; e.g. activeNameKey="editable" means that replacePart("editable", newState) should set newState into both SwitcherComponent (partial replace) and the active-component (complete replace)
  */
@@ -17,7 +17,6 @@ import ContainerHelper from "../../helper/ContainerHelper.js";
  * @property {SCP=} partValue
  */
 /**
- * Notions:
  * "active name" or "active-component name" or "switched to name" represents the value specified by "data-part" on a child component.
  *
  * Usecase: active-component state is 1x part of SwitcherComponent state
@@ -91,17 +90,21 @@ export default class SwitcherComponent extends AbstractContainerComponent {
      */
     replaceState(newState) {
         this.childrenComponents.disconnectAndRemoveChildren();
-        super.replaceState(newState);
+        super.replaceState(_.omit(newState, this.activeNameKey));
         this.childrenComponents.createChildrenForExistingShells();
         this.childrenComponents.closeChildren();
-        this._switchUsingCurrentState();
+        this.switchTo(newState[this.activeNameKey], this._getActiveValueFromState());
     }
 
     /**
      * @param {PartName} activeName
+     * @param {{[key: string|number]: SCP}=} value
      */
-    switchTo(activeName) {
-        this._switchTo(activeName, this.activeComponent?.getMutableState());
+    switchTo(activeName, value) {
+        const previousActiveState = this.activeComponent?.getStateCopy();
+        this.activeComponent?.close();
+        super.replacePart(this.activeNameKey, activeName);
+        this.activeComponent?.render(value ?? previousActiveState);
     }
 
     /**
@@ -119,45 +122,26 @@ export default class SwitcherComponent extends AbstractContainerComponent {
         }
         // active name (aka the property/part that indicates the current status) not changed
         super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
-        this._switchUsingCurrentState();
+        // the entire state minus activeNameKey *is* the active component's state
+        this.switchTo(this.activeName, this._getActiveValueFromState());
     }
 
     /**
-     * @protected
-     */
-    _switchUsingCurrentState() {
-        const stateCopy = this.getStateCopy();
-        const activeName = stateCopy?.[this.activeNameKey];
-        this._switchTo(activeName, this._getActiveValueFromState(stateCopy));
-    }
-
-    /**
-     * @param {PartName} newActiveName
-     * @param {*} newActiveValue
-     */
-    _switchTo(newActiveName, newActiveValue) {
-        this.activeComponent?.close();
-        const switchToComponent = this.switcherChildren.getChildByActiveName(newActiveName);
-        super.replacePart(this.activeNameKey, newActiveName);
-        switchToComponent?.render(newActiveValue);
-    }
-
-    /**
-     * @param {SCT} completeSwitcherState
      * @return {*}
      * @protected
      */
-    _getActiveValueFromState(completeSwitcherState) {
+    _getActiveValueFromState() {
+        const switcherState = this.getStateCopy();
         if (this.valueKeyIsActiveName) {
             // active value is the state part pointed by the active name
-            const activeName = completeSwitcherState?.[this.activeNameKey];
-            return activeName == null ? undefined : completeSwitcherState[activeName];
+            const activeName = switcherState?.[this.activeNameKey];
+            return activeName == null ? undefined : switcherState[activeName];
         } else if (this.activeValueKey != null) {
             // active value is a fixed state part, the one specified by activeValueKey
-            return completeSwitcherState?.[this.activeValueKey];
+            return switcherState?.[this.activeValueKey];
         }
         // active value is blended into SwitcherComponent state
         // all but SwitcherComponent's specific state-parts (i.e. activeNameKey) represent the active value
-        return completeSwitcherState;
+        return switcherState;
     }
 }
