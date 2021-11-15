@@ -109,12 +109,16 @@ div[data-part], div[data-active-name], .parent {
     margin-left: .3rem;
 }
 
-.bgc-aliceblue {
+.bg-aliceblue {
     background-color: aliceblue;
 }
 
-.bgc-antiquewhite {
+.bg-antiquewhite {
     background-color: antiquewhite;
+}
+
+.bg-blueviolet {
+    background-color: blueviolet;
 }
 
 .scenario10 [data-part="cats"] [data-type],

@@ -3,6 +3,7 @@ import ValueComponent from "./component/ValueComponent.js";
 import StaticContainerComponent from "./component/StaticContainerComponent.js";
 import DynamicContainerComponent from "./component/DynamicContainerComponent.js";
 import SwitcherComponent from "./component/SwitcherComponent.js";
+import OnOffComponent from "./component/OnOffComponent.js";
 
 /**
  * @typedef {function(options: AbstractComponentOptions): AbstractComponent} ComponentProviderFn
@@ -17,6 +18,7 @@ const COMPONENT_TYPES = {
     "static-container": (options) => new StaticContainerComponent(/** @type {StaticContainerComponentOptions} */ options),
     "dyna-container": (options) => new DynamicContainerComponent(/** @type {DynamicContainerComponentOptions} */ options),
     "switcher": (options) => new SwitcherComponent(/** @type {SwitcherComponentOptions} */ options),
+    "on-off": (options) => new OnOffComponent(/** @type {OnOffComponentOptions} */ options)
 };
 
 /**
