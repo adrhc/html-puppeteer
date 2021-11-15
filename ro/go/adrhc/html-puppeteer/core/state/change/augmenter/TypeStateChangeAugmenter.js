@@ -1,6 +1,5 @@
 import StateChangeAugmenter from "./StateChangeAugmenter.js";
 import {CREATED, RELOCATED, REMOVED, REPLACED} from "../StateChangeTypes.js";
-import {isTrue} from "../../../../util/AssertionUtils.js";
 /**
  * @typedef {string|number|boolean} PartName
  */
@@ -29,7 +28,9 @@ export default class TypeStateChangeAugmenter extends StateChangeAugmenter {
      * @protected
      */
     _changeTypeOf(change) {
-        isTrue((change.previousState ?? change.newState) != null);
+        if (change.previousState ?? change.newState == null) {
+            console.warn(`[_changeTypeOf] both previousState and newState are null!`);
+        }
         if (change.previousPartName ?? change.newPartName != null) {
             return this._partChangeTypeOf(change);
         } else {
@@ -58,7 +59,9 @@ export default class TypeStateChangeAugmenter extends StateChangeAugmenter {
      * @protected
      */
     _partChangeTypeOf(change) {
-        isTrue((change.previousPart ?? change.newPart) != null);
+        if (change.previousPart ?? change.newPart == null) {
+            console.warn(`[_partChangeTypeOf] both previousPart and newPart are null!`);
+        }
         if (this._isPartPristine(change.newPart, change.newPartName)) {
             return REMOVED;
         } else if (this._isPartPristine(change.previousPart, change.previousPartName)) {

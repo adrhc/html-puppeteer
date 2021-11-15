@@ -31,6 +31,10 @@ export default class StateHolder {
         return this._stateChangesCollector;
     }
 
+    get ignoreDuplicatedUpdates() {
+        return this.config.ignoreDuplicatedUpdates;
+    }
+
     /**
      * @return {SCT}
      */
@@ -68,7 +72,7 @@ export default class StateHolder {
      * @return {StateChange<SCT>[]} the newly created StateChange or, if dontRecordChanges = true, whether a state change occurred
      */
     replace(newState, dontRecordChanges) {
-        if (this._currentStateEquals(newState)) {
+        if (this.ignoreDuplicatedUpdates && this._currentStateEquals(newState)) {
             return [];
         }
 

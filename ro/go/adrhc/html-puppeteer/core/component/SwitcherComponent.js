@@ -85,6 +85,7 @@ export default class SwitcherComponent extends AbstractContainerComponent {
         this.childrenComponents.disconnectAndRemoveChildren();
         super.replaceState(newState);
         this.childrenComponents.createChildrenForExistingShells();
+        this.childrenComponents.closeChildren();
         this._switchUsingCurrentState();
     }
 
@@ -119,7 +120,11 @@ export default class SwitcherComponent extends AbstractContainerComponent {
     _switchUsingCurrentState() {
         const stateCopy = this.getStateCopy();
         const activeName = stateCopy?.[this.activeNameKey];
-        this._switchTo(activeName, this._getActiveValueFromState(stateCopy));
+        if (typeof activeName === "string") {
+            this._switchTo(activeName, this._getActiveValueFromState(stateCopy));
+        } else if (activeName != null) {
+            activeName.forEach(name => this._switchTo(name, this._getActiveValueFromState(stateCopy)))
+        }
     }
 
     /**

@@ -3,7 +3,7 @@
  */
 
 /**
- * @typedef {{[key: string]: (string|number|boolean|null|undefined)}} DataAttributes
+ * @typedef {{[key: string]: (string[]|string|number[]|number|boolean[]|boolean|null|undefined)}} DataAttributes
  * @property {string|null|undefined} initialState
  */
 
