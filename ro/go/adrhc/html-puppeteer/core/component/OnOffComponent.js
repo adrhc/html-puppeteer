@@ -2,7 +2,6 @@ import AbstractContainerComponent from "./AbstractContainerComponent.js";
 import {USE_CSS} from "../view/SimpleView.js";
 import GlobalConfig, {activeNameOf} from "../../util/GlobalConfig.js";
 import {isTrue} from "../../util/AssertionUtils.js";
-import ContainerHelper from "../../helper/ContainerHelper.js";
 
 /**
  * @typedef {AbstractContainerComponentOptions} OnOffComponentOptions
@@ -43,8 +42,7 @@ export default class OnOffComponent extends AbstractContainerComponent {
         super({
             childrenRemovalStrategy: USE_CSS,
             ignoreShellTemplateOptions: true,
-            dontRenderChildren: true, ...options,
-            childrenCollectionProvider: c => new ContainerHelper(c).createDuplicatedPartsChildren()
+            dontRenderChildren: true, ...options
         });
         this.activeNamesKey = this.config.activeNamesKey ?? GlobalConfig.ACTIVE_NAME_KEY;
     }

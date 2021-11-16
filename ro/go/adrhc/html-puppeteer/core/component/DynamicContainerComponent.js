@@ -15,6 +15,13 @@ import ContainerHelper from "../../helper/ContainerHelper.js";
  */
 export default class DynamicContainerComponent extends AbstractContainerComponent {
     /**
+     * @return {UniquePartsChildren}
+     */
+    get uniquePartsChildren() {
+        return /** @type {UniquePartsChildren} */ this.childrenCollection;
+    }
+
+    /**
      * ChildrenShells have the chance to use containerHtml for children shells.
      * We have to set htmlTemplate to something not null (by default "") to
      * avoid the drawing of the parent's html which by now is a candidate
@@ -25,7 +32,8 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
     constructor(options) {
         super(withDefaults({
             containerHtml: jQueryOf(options.elemIdOrJQuery).html(),
-            htmlTemplate: "", ...options
+            htmlTemplate: "", ...options,
+            childrenCollectionProvider: c => new ContainerHelper(c).createUniquePartsChildren()
         }).addEventsBinders(new ContainerEventsBinder()).options());
         const helper = new ContainerHelper(this);
         this.childrenShells = helper.createChildrenShells();
@@ -103,7 +111,7 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
      * @protected
      */
     _removeChild(partName) {
-        this.childrenCollection.closeAndRemoveChild(partName);
+        this.uniquePartsChildren.closeAndRemoveChild(partName);
         // the shell might actually be removed already by the closing child
         this.childrenShells.removeShell(partName);
     }

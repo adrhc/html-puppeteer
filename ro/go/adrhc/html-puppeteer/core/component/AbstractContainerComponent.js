@@ -5,7 +5,7 @@ import {componentIllustratorOf} from "../state-changes-handler/ComponentIllustra
 import ContainerHelper from "../../helper/ContainerHelper.js";
 
 /**
- * @typedef {AbstractComponentOptions & ComponentIllustratorOptions & UniquePartsChildrenOptions} AbstractContainerComponentOptions
+ * @typedef {AbstractComponentOptions & ComponentIllustratorOptions & ChildrenCollectionOptions} AbstractContainerComponentOptions
  * @property {ViewRemovalStrategy=} childrenRemovalStrategy
  * @property {string=} childrenRemovedPlaceholder
  * @property {string=} childrenRemovedCss
@@ -15,7 +15,7 @@ import ContainerHelper from "../../helper/ContainerHelper.js";
  */
 export default class AbstractContainerComponent extends AbstractComponent {
     /**
-     * @type {UniquePartsChildren}
+     * @type {DuplicatedPartsChildren}
      */
     childrenCollection;
 
@@ -38,7 +38,7 @@ export default class AbstractContainerComponent extends AbstractComponent {
             .addComponentIllustratorProvider(component =>
                 componentIllustratorOf(component), !!componentIllustratorProviders?.length)
             .options());
-        this.childrenCollection = this._createUniquePartsChildren();
+        this.childrenCollection = this._createDuplicatedPartsChildren();
     }
 
     /**
@@ -89,15 +89,15 @@ export default class AbstractContainerComponent extends AbstractComponent {
     }
 
     /**
-     * @return {UniquePartsChildren}
+     * @return {DuplicatedPartsChildren}
      * @protected
      */
-    _createUniquePartsChildren() {
+    _createDuplicatedPartsChildren() {
         if (this.config.childrenCollectionProvider) {
             return this.config.childrenCollectionProvider(this);
         } else {
             const helper = new ContainerHelper(this);
-            return helper.createUniquePartsChildren();
+            return helper.createDuplicatedPartsChildren();
         }
     }
 }

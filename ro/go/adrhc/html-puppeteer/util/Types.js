@@ -28,7 +28,7 @@
  */
 
 /**
- * @typedef {function(options: AbstractContainerComponent): UniquePartsChildren} ChildrenCollectionProviderFn
+ * @typedef {function(options: AbstractContainerComponent): ChildrenCollection} ChildrenCollectionProviderFn
  */
 
 /**
