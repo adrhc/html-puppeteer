@@ -1,21 +1,14 @@
-import {isTrue} from "../../util/AssertionUtils.js";
-import ChildrenShellFinder from "../view/ChildrenShellFinder.js";
 import {stateIsEmpty} from "../state/StateHolder.js";
 import AbstractContainerComponent from "./AbstractContainerComponent.js";
 
 /**
  * @typedef {AbstractContainerComponentOptions} StaticContainerComponentOptions
- * @property {ChildrenShellFinder=} childrenShellFinder
  * @property {boolean=} ignoreMissingShells
  */
 /**
  * @template SCT, SCP
  */
 export default class StaticContainerComponent extends AbstractContainerComponent {
-    /**
-     * @type {ChildrenShellFinder}
-     */
-    childrenShellFinder;
     /**
      * @type {boolean}
      */
@@ -28,7 +21,6 @@ export default class StaticContainerComponent extends AbstractContainerComponent
      */
     constructor(options) {
         super({ignoreShellTemplateOptions: true, ...options});
-        this.childrenShellFinder = this.config.childrenShellFinder ?? new ChildrenShellFinder(this.config.elemIdOrJQuery);
         this.ignoreMissingShells = this.config.ignoreMissingShells ?? true;
     }
 
@@ -58,24 +50,20 @@ export default class StaticContainerComponent extends AbstractContainerComponent
     replacePart(previousPartName, newPart, newPartName, dontRecordChanges) {
         const partName = newPartName ?? previousPartName;
         if (stateIsEmpty(newPart)) {
-            this.childrenCollection.getChildByPartName(partName).forEach(it => it.close());
+            this.childrenCollection.closeAndRemoveChildrenByPartName(partName);
+            this.childrenCollection.getChildrenByPartName(partName).forEach(it => it.close());
             super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
         } else {
             super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
-            this._createOrUpdateChild(partName);
+            this.childrenCollection.createOrUpdateChildrenForPartName(partName, this.ignoreMissingShells);
         }
     }
 
     /**
-     * @param {PartName} partName
-     * @protected
+     * set state to undefined
      */
-    _createOrUpdateChild(partName) {
-        const $shells = this.childrenShellFinder.$childShellsByPartName(partName);
-        if (!$shells.length) {
-            isTrue(this.ignoreMissingShells, `$shells is empty for part named ${partName}!`);
-            return;
-        }
-        $shells.forEach($el => this.childrenCollection.createOrUpdateChild($el));
+    close() {
+        this.childrenCollection.closeChildren();
+        super.close();
     }
 }

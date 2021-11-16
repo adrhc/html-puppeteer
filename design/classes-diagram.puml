@@ -70,7 +70,7 @@ class ChildrenShells {
 +removeShell(partName)
 }
 
-class UniquePartsChildren {
+class ChildrenCollection {
 #children: {partName: AbstractComponent}
 #childrenOptions
 #childrenShellFinder: ChildrenShellFinder
@@ -186,7 +186,7 @@ missing but the whole exists.
 end note
 
 class BasicContainerComponent extends AbstractComponent {
-  #childrenCollection: UniquePartsChildren
+  #childrenCollection: ChildrenCollection
   #childrenShells: ChildrenShells
   +close()
   +constructor(options)
@@ -198,7 +198,7 @@ class BasicContainerComponent extends AbstractComponent {
   +replaceState(newState)
 }
 
-BasicContainerComponent *-- UniquePartsChildren
+BasicContainerComponent *-- ChildrenCollection
 BasicContainerComponent *-- ChildrenShells
 
 /'interface ErrorsHandler {

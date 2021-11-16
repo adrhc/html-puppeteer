@@ -29,13 +29,6 @@ export default class OnOffComponent extends AbstractContainerComponent {
     }
 
     /**
-     * @return {DuplicatedPartsChildren}
-     */
-    get duplicatedPartsChildren() {
-        return /** @type {DuplicatedPartsChildren} */ this.childrenCollection;
-    }
-
-    /**
      * @param {OnOffComponentOptions} options
      */
     constructor(options) {
@@ -77,7 +70,7 @@ export default class OnOffComponent extends AbstractContainerComponent {
         // active name (aka the property/part that indicates the current status) not changed
         super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
         if (this.activeNames?.includes(previousPartName)) {
-            this.duplicatedPartsChildren.getChildByPartName(previousPartName).forEach(it => it.replaceState(newPart));
+            this.childrenCollection.getChildrenByPartName(previousPartName).forEach(it => it.replaceState(newPart));
         }
     }
 
@@ -87,7 +80,7 @@ export default class OnOffComponent extends AbstractContainerComponent {
     switchTo(newActiveNames) {
         const previousActiveNames = this.activeNames;
         super.replacePart(this.activeNamesKey, newActiveNames);
-        this.duplicatedPartsChildren.accept(c => {
+        this.childrenCollection.accept(c => {
             const activeName = activeNameOf(c);
             if (!newActiveNames.includes(activeName)) {
                 this._switchOff(activeName);
@@ -102,7 +95,7 @@ export default class OnOffComponent extends AbstractContainerComponent {
      * @protected
      */
     _switchOff(activeName) {
-        this.duplicatedPartsChildren.accept(it => {
+        this.childrenCollection.accept(it => {
             if (activeName === activeNameOf(it)) {
                 it.close()
             }
@@ -115,7 +108,7 @@ export default class OnOffComponent extends AbstractContainerComponent {
      * @protected
      */
     _switchOn(activeName, partValue) {
-        this.duplicatedPartsChildren.accept(it => {
+        this.childrenCollection.accept(it => {
             if (activeName === activeNameOf(it)) {
                 it.render(partValue);
             }

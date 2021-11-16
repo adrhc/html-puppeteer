@@ -2,7 +2,7 @@ import GlobalConfig, {typeOf} from "../util/GlobalConfig.js";
 import {createByType} from "./ComponentFactories.js";
 import {idOf} from "../util/DomUtils.js";
 import {isTrue} from "../util/AssertionUtils.js";
-import DuplicatedPartsChildren from "./component/composition/DuplicatedPartsChildren.js";
+import ChildrenCollection from "./component/composition/ChildrenCollection.js";
 
 /**
  * @param {CreateComponentParams} options
@@ -12,7 +12,7 @@ import DuplicatedPartsChildren from "./component/composition/DuplicatedPartsChil
  * @return {AbstractComponent|AbstractComponent[]}
  */
 export default function animate({componentsHolder, alwaysReturnArray, ...componentsOptions} = {}) {
-    const childrenCollection = new DuplicatedPartsChildren({
+    const childrenCollection = new ChildrenCollection({
         /** @type {ElemIdOrJQuery} */ componentsHolder, childrenOptions: componentsOptions
     });
     const components = childrenCollection.createChildrenForExistingShells();

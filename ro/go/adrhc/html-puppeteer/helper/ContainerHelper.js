@@ -1,8 +1,6 @@
-import UniquePartsChildren from "../core/component/composition/UniquePartsChildren.js";
-import ChildrenShells from "../core/view/ChildrenShells.js";
 import ChildrenShellFinder from "../core/view/ChildrenShellFinder.js";
-import {partsOf} from "../core/state/PartialStateHolder.js";
-import DuplicatedPartsChildren from "../core/component/composition/DuplicatedPartsChildren.js";
+import ChildrenCollection from "../core/component/composition/ChildrenCollection.js";
+import ChildrenShells from "../core/view/ChildrenShells.js";
 
 /**
  * @typedef {Object} ContainerChildrenCommonOptions
@@ -49,38 +47,18 @@ export default class ContainerHelper {
     }
 
     /**
-     * @return {UniquePartsChildren}
+     * @return {ChildrenCollection}
      */
-    createUniquePartsChildren() {
-        return this.uniquePartsChildrenOf(this.createChildrenShellFinder());
-    }
-
-    /**
-     * @return {DuplicatedPartsChildren}
-     */
-    createDuplicatedPartsChildren() {
-        return this.duplicatedPartsChildrenOf(this.createChildrenShellFinder());
+    createChildrenCollection() {
+        return this.childrenCollectionOf(this.createChildrenShellFinder());
     }
 
     /**
      * @param {ChildrenShellFinder} childrenShellFinder
-     * @return {UniquePartsChildren}
+     * @return {ChildrenCollection}
      */
-    uniquePartsChildrenOf(childrenShellFinder) {
-        return new UniquePartsChildren({
-            parent: this.component,
-            childrenShellFinder,
-            dontRenderChildren: this.config.dontRenderChildren,
-            childrenOptions: this.createContainerChildrenCommonOptions()
-        });
-    }
-
-    /**
-     * @param {ChildrenShellFinder} childrenShellFinder
-     * @return {DuplicatedPartsChildren}
-     */
-    duplicatedPartsChildrenOf(childrenShellFinder) {
-        return new DuplicatedPartsChildren({
+    childrenCollectionOf(childrenShellFinder) {
+        return new ChildrenCollection({
             parent: this.component,
             childrenShellFinder,
             dontRenderChildren: this.config.dontRenderChildren,
@@ -104,24 +82,4 @@ export default class ContainerHelper {
             componentId: this.component.id, childrenShellFinder, ...this.config
         });
     }
-}
-
-/**
- * @param {PartName=} previousPartName
- * @param {*=} newPart
- * @param {PartName=} newPartName
- * @param {boolean=} dontRecordChanges
- */
-export function replacePart(previousPartName, newPart, newPartName, dontRecordChanges) {
-    this.doWithState(partialStateHolder =>
-        partialStateHolder.replacePart(previousPartName, newPart, newPartName, dontRecordChanges));
-}
-
-/**
- * Replaces some component's state parts; the parts should have no name change!.
- *
- * @param {{[name: PartName]: *}} parts
- */
-export function replaceParts(parts) {
-    partsOf(parts).forEach(([key, value]) => this.replacePart(key, value));
 }

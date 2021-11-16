@@ -8,18 +8,16 @@ import {isTrue} from "../../util/AssertionUtils.js";
 import ContainerHelper from "../../helper/ContainerHelper.js";
 
 /**
- * @typedef {AbstractContainerComponentOptions & ContainerEventsBinderOptions} DynamicContainerComponentOptions
+ * @typedef {AbstractContainerComponentOptions} DynamicContainerComponentOptions
  */
 /**
  * @template SCT, SCP
  */
 export default class DynamicContainerComponent extends AbstractContainerComponent {
     /**
-     * @return {UniquePartsChildren}
+     * @type {ChildrenShells}
      */
-    get uniquePartsChildren() {
-        return /** @type {UniquePartsChildren} */ this.childrenCollection;
-    }
+    childrenShells;
 
     /**
      * ChildrenShells have the chance to use containerHtml for children shells.
@@ -32,8 +30,7 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
     constructor(options) {
         super(withDefaults({
             containerHtml: jQueryOf(options.elemIdOrJQuery).html(),
-            htmlTemplate: "", ...options,
-            childrenCollectionProvider: c => new ContainerHelper(c).createUniquePartsChildren()
+            htmlTemplate: "", ...options
         }).addEventsBinders(new ContainerEventsBinder()).options());
         const helper = new ContainerHelper(this);
         this.childrenShells = helper.createChildrenShells();
@@ -67,7 +64,7 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
     replacePart(previousPartName, newPart, newPartName, dontRecordChanges) {
         const partName = newPartName ?? previousPartName;
         if (stateIsEmpty(newPart)) {
-            this.uniquePartsChildren.closeAndRemoveChild(partName);
+            this.childrenCollection.closeAndRemoveChildrenByPartName(partName);
             super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
         } else {
             super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
@@ -91,7 +88,7 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
     _createMissingShellsAndChildren() {
         partsOf(this.getMutableState())
             .filter(([key]) => !this.partialStateHolder.hasEmptyPart(key))
-            .filter(([key]) => this.childrenCollection.getChildByPartName(key) == null)
+            .filter(([key]) => !this.childrenCollection.getChildrenByPartName(key).length)
             .forEach(([key]) => this._createOrUpdateChild(key));
     }
 
@@ -102,6 +99,6 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
     _createOrUpdateChild(partName) {
         const $shells = this.childrenShells.getOrCreateShell(partName);
         isTrue(!!$shells.length, `$shells is empty for part named ${partName}!`)
-        $shells.forEach($el => this.childrenCollection.createOrUpdateChild($el))
+        $shells.forEach($el => this.childrenCollection.createOrUpdateChildForElem($el))
     }
 }

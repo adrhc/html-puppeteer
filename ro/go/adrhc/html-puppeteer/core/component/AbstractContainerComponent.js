@@ -15,7 +15,7 @@ import ContainerHelper from "../../helper/ContainerHelper.js";
  */
 export default class AbstractContainerComponent extends AbstractComponent {
     /**
-     * @type {DuplicatedPartsChildren}
+     * @type {ChildrenCollection}
      */
     childrenCollection;
 
@@ -38,7 +38,7 @@ export default class AbstractContainerComponent extends AbstractComponent {
             .addComponentIllustratorProvider(component =>
                 componentIllustratorOf(component), !!componentIllustratorProviders?.length)
             .options());
-        this.childrenCollection = this._createDuplicatedPartsChildren();
+        this.childrenCollection = this._createChildrenCollection();
     }
 
     /**
@@ -89,15 +89,15 @@ export default class AbstractContainerComponent extends AbstractComponent {
     }
 
     /**
-     * @return {DuplicatedPartsChildren}
+     * @return {ChildrenCollection}
      * @protected
      */
-    _createDuplicatedPartsChildren() {
+    _createChildrenCollection() {
         if (this.config.childrenCollectionProvider) {
             return this.config.childrenCollectionProvider(this);
         } else {
             const helper = new ContainerHelper(this);
-            return helper.createDuplicatedPartsChildren();
+            return helper.createChildrenCollection();
         }
     }
 }

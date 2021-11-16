@@ -91,9 +91,22 @@ export default class ChildrenCollection {
     }
 
     /**
+     * @param {PartName} partName
+     * @param {boolean=} ignoreMissingShells
+     */
+    createOrUpdateChildrenForPartName(partName, ignoreMissingShells) {
+        const $shells = this.childrenShellFinder.$childShellsByPartName(partName);
+        if (!$shells.length) {
+            isTrue(ignoreMissingShells, `$shells is empty for part named ${partName}!`);
+            return;
+        }
+        $shells.forEach($el => this.createOrUpdateChildForElem($el));
+    }
+
+    /**
      * @param {jQuery<HTMLElement>} $shell
      */
-    createOrUpdateChild($shell) {
+    createOrUpdateChildForElem($shell) {
         if (!$shell.length) {
             console.warn(`[AbstractChildrenCollection.createOrUpdateChild] missing $shell!`);
             return;
@@ -142,6 +155,31 @@ export default class ChildrenCollection {
      */
     closeChildren() {
         this.childrenArray.forEach(c => c.close());
+    }
+
+    /**
+     * @param {PartName} partName
+     * @return {AbstractComponent[]}
+     */
+    closeAndRemoveChildrenByPartName(partName) {
+        const childrenByPartName = this.getChildrenByPartName(partName);
+        if (!childrenByPartName.length) {
+            console.error(`Trying to close missing child: ${partName}!`);
+            return undefined;
+        }
+        childrenByPartName.forEach(it => {
+            delete this.children[it.id];
+            it.close();
+        })
+        return childrenByPartName;
+    }
+
+    /**
+     * @param {PartName} partName
+     * @return {AbstractComponent[]}
+     */
+    getChildrenByPartName(partName) {
+        return this.childrenArray.filter(it => partName === it.partName);
     }
 
     /**
