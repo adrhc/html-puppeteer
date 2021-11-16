@@ -63,9 +63,8 @@ export default class ChildrenCollection {
 
     /**
      * @param {jQuery<HTMLElement>} $shell
-     * @protected
      */
-    _createComponent($shell) {
+    createComponentForShell($shell) {
         const component = createComponent($shell, this.childrenOptions);
         isTrue(component != null, "[ChildrenCollection] the child's shell must exist!");
         if (this.parent != null && partOf($shell) == null) {
@@ -86,7 +85,7 @@ export default class ChildrenCollection {
      */
     createChildrenForExistingShells() {
         this.children = {};
-        this.childrenShellFinder.$childrenShells().forEach($shell => this._createComponent($shell));
+        this.childrenShellFinder.$childrenShells().forEach($shell => this.createComponentForShell($shell));
         return this.childrenArray;
     }
 
@@ -172,7 +171,7 @@ export default class ChildrenCollection {
 
     /**
      * @param {jQuery<HTMLElement>} $shell
-     * @return {AbstractComponent}
+     * @return {AbstractComponent | undefined}
      */
     getChildByShell($shell) {
         return this.childrenArray.find(it => it.$elem[0] === $shell[0]);

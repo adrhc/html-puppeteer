@@ -99,6 +99,19 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
     _createOrUpdateChild(partName) {
         const $shells = this.childrenShells.getOrCreateShell(partName);
         isTrue(!!$shells.length, `$shells is empty for part named ${partName}!`)
-        $shells.forEach($el => this.childrenCollection.createOrUpdateChildForElem($el))
+        $shells.forEach($el => this._createOrUpdateChildForElem($el))
+    }
+
+    /**
+     * @param {jQuery<HTMLElement>} $shell
+     */
+    _createOrUpdateChildForElem($shell) {
+        const child = this.childrenCollection.getChildByShell($shell);
+        if (child) {
+            child.replaceFromParent();
+        } else {
+            // at this point the item component's id is available as data-GlobalConfig.COMPONENT_ID on $shell
+            this.childrenCollection.createComponentForShell($shell);
+        }
     }
 }
