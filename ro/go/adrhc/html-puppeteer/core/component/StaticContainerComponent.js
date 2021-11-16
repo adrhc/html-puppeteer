@@ -58,7 +58,7 @@ export default class StaticContainerComponent extends AbstractContainerComponent
     replacePart(previousPartName, newPart, newPartName, dontRecordChanges) {
         const partName = newPartName ?? previousPartName;
         if (stateIsEmpty(newPart)) {
-            this.childrenCollection.getChildByPartName(partName).close();
+            this.childrenCollection.getChildByPartName(partName).forEach(it => it.close());
             super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
         } else {
             super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);

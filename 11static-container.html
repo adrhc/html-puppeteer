@@ -32,7 +32,7 @@
 	<div class="section parent fit-content min-width-33-percent"
 	     data-initial-state='{
 		     "message1": null,
-		     "message2": "The \"message2\" child state comes from the parent&apos;s state.",
+		     "message2": "The \"message2\" (displayed twice) child state comes from the parent&apos;s state.",
 		     "missingShell": "missing shell: this message should not be visible",
 		     "inners": {"innerProperty1": "innerProperty1 value in \"inners\" object"}
 	     }'
@@ -56,6 +56,13 @@
 		     data-removed-placeholder='"message2" child component was removed!'
 		     data-type="value">
 			The "message2" child is not available yet!
+		</div>
+		<div class="mb3"
+		     data-initial-state='This 2nd "message2" initial state should only briefly be visible!<BR>initial state should come from the parent.'
+		     data-part="message2"
+		     data-removed-placeholder='2nd "message2" child component was removed!'
+		     data-type="value">
+			The 2nd "message2" child is not available yet!
 		</div>
 		<div class="mb3" data-part="inners.innerProperty1" data-type="value">
 			The "inners.innerProperty1" child is not available yet!
