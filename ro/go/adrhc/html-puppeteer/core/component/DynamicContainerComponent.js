@@ -100,10 +100,9 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
      * @protected
      */
     _createOrUpdateChild(partName) {
-        const $shell = this.childrenShells.getOrCreateShell(partName);
-        isTrue($shell.length === 1,
-            `$shell is null for part named ${partName}!`)
-        this.childrenCollection.createOrUpdateChild($shell[0]);
+        const $shells = this.childrenShells.getOrCreateShell(partName);
+        isTrue(!$shells?.length, `$shell is null for part named ${partName}!`)
+        $shells.forEach($el => this.childrenCollection.createOrUpdateChild($el))
     }
 
     /**
