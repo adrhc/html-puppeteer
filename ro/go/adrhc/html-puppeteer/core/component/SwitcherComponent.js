@@ -65,7 +65,7 @@ export default class SwitcherComponent extends AbstractContainerComponent {
      * @return {SwitcherChildren}
      */
     get switcherChildren() {
-        return /** @type {SwitcherChildren} */ this.uniquePartsChildren;
+        return /** @type {SwitcherChildren} */ this.childrenCollection;
     }
 
     /**
@@ -76,7 +76,7 @@ export default class SwitcherComponent extends AbstractContainerComponent {
             childrenRemovalStrategy: USE_CSS,
             ignoreShellTemplateOptions: true,
             dontRenderChildren: true, ...options,
-            uniquePartsChildrenProvider: c => new ContainerHelper(c).createSwitcherChildren()
+            childrenCollectionProvider: c => new ContainerHelper(c).createSwitcherChildren()
         });
         this.activeNameKey = this.config.activeNameKey ?? GlobalConfig.ACTIVE_NAME_KEY;
         this.activeValueKey = this.config.activeValueKey;
@@ -89,10 +89,10 @@ export default class SwitcherComponent extends AbstractContainerComponent {
      * @param {SCT=} newState
      */
     replaceState(newState) {
-        this.uniquePartsChildren.disconnectAndRemoveChildren();
+        this.childrenCollection.disconnectAndRemoveChildren();
         super.replaceState(_.omit(newState, this.activeNameKey));
-        this.uniquePartsChildren.createChildrenForExistingShells();
-        this.uniquePartsChildren.closeChildren();
+        this.childrenCollection.createChildrenForExistingShells();
+        this.childrenCollection.closeChildren();
         this.switchTo(newState[this.activeNameKey], this._getActiveValueFromState());
     }
 

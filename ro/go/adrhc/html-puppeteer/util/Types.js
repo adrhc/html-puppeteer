@@ -28,7 +28,7 @@
  */
 
 /**
- * @typedef {function(options: AbstractContainerComponent): UniquePartsChildren} UniquePartsChildrenProviderFn
+ * @typedef {function(options: AbstractContainerComponent): UniquePartsChildren} ChildrenCollectionProviderFn
  */
 
 /**
@@ -65,6 +65,10 @@
 
 /**
  * @typedef {ComponentOptions & SpecificComponentOptions} CreateComponentParams
+ */
+
+/**
+ * @typedef {{[name: string]: AbstractComponent}} ComponentsCollection
  */
 
 /**

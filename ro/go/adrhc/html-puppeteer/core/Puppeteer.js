@@ -2,7 +2,7 @@ import GlobalConfig, {typeOf} from "../util/GlobalConfig.js";
 import {createByType} from "./ComponentFactories.js";
 import {idOf} from "../util/DomUtils.js";
 import {isTrue} from "../util/AssertionUtils.js";
-import UniquePartsChildren from "./component/composition/UniquePartsChildren.js";
+import DuplicatedPartsChildren from "./component/composition/DuplicatedPartsChildren.js";
 
 /**
  * @param {CreateComponentParams} options
@@ -12,11 +12,11 @@ import UniquePartsChildren from "./component/composition/UniquePartsChildren.js"
  * @return {AbstractComponent|AbstractComponent[]}
  */
 export default function animate({componentsHolder, alwaysReturnArray, ...componentsOptions} = {}) {
-    const uniquePartsChildren = new UniquePartsChildren({
+    const childrenCollection = new DuplicatedPartsChildren({
         /** @type {ElemIdOrJQuery} */ componentsHolder, childrenOptions: componentsOptions
     });
-    const components = uniquePartsChildren.createChildrenForExistingShells();
-    console.log(`[Puppeteer.animate] uniquePartsChildren created ${components.length} components`);
+    const components = childrenCollection.createChildrenForExistingShells();
+    console.log(`[Puppeteer.animate] childrenCollection created ${components.length} components`);
     if (components.length === 1 && !alwaysReturnArray) {
         return components[0];
     }

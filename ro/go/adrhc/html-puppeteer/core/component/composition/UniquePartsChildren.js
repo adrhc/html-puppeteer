@@ -13,10 +13,6 @@ import {partOf} from "../../../util/GlobalConfig.js";
  */
 
 /**
- * @typedef {{[name: string]: AbstractComponent}} ComponentsCollection
- */
-
-/**
  * @template SCT, SCP
  */
 export default class UniquePartsChildren {
@@ -82,30 +78,29 @@ export default class UniquePartsChildren {
 
     /**
      * @param {jQuery<HTMLElement>} $shell
-     * @param {OptionalPartName=} partName
      */
-    createOrUpdateChild($shell, partName = partOf($shell)) {
+    createOrUpdateChild($shell) {
+        const partName = partOf($shell);
         if (!$shell.length) {
-            console.warn(`Missing child element for ${partName}!`);
+            console.warn(`[UniquePartsChildren.createOrUpdateChild] missing child element for ${partName}!`);
             return;
         }
-        if (this.hasChildrenHaving(partName)) {
-            this._updateFromParent(partName);
+        if (this.hasChildrenHaving($shell)) {
+            this._updateFromParent($shell);
             return;
         }
         // at this point the item component's id is available as data-GlobalConfig.COMPONENT_ID on $shell
-        this._createComponent($shell, partName);
+        this._createComponent($shell);
     }
 
     /**
      * @param {jQuery<HTMLElement>} $shell
-     * @param {OptionalPartName=} partName
      * @protected
      */
-    _createComponent($shell, partName = partOf($shell)) {
+    _createComponent($shell) {
         const component = createComponent($shell, this.childrenOptions);
         isTrue(component != null, "[UniquePartsChildren] the child's shell must exist!");
-        if (this.parent != null && partName == null) {
+        if (this.parent != null && partOf($shell) == null) {
             // switcher (usually) uses children without "data-part"
             console.warn("[UniquePartsChildren] partName is missing though parent is set!");
         }
@@ -167,11 +162,19 @@ export default class UniquePartsChildren {
     }
 
     /**
-     * @param {PartName} partName
+     * @param {jQuery<HTMLElement>} $shell
+     * @return {AbstractComponent}
+     */
+    getChildByShell($shell) {
+        return this.childrenArray.find(it => it.$elem === $shell);
+    }
+
+    /**
+     * @param {jQuery<HTMLElement>} $shell
      * @return {boolean}
      */
-    hasChildrenHaving(partName) {
-        return !!this.childrenArray.find(it => it.partName === partName);
+    hasChildrenHaving($shell) {
+        return !!this.childrenArray.find(it => it.$elem === $shell);
     }
 
     /**
@@ -182,10 +185,9 @@ export default class UniquePartsChildren {
     }
 
     /**
-     * @param {PartName} partName
-     * @protected
+     * @param {jQuery<HTMLElement>} $shell
      */
-    _updateFromParent(partName) {
-        this.getChildByPartName(partName).replaceFromParent();
+    _updateFromParent($shell) {
+        this.getChildByShell($shell).replaceFromParent();
     }
 }

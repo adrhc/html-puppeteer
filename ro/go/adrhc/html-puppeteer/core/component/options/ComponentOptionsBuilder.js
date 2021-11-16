@@ -4,7 +4,7 @@ import {eventsBinderProviderFnOf} from "../../../util/Types.js";
 /**
  * @typedef {ComponentOptions} ComponentOptionsBuilderOptions
  * @property {EventsBinderProviderFn[]} eventsBinderProviders
- * @property {UniquePartsChildrenProviderFn} uniquePartsChildrenProvider
+ * @property {ChildrenCollectionProviderFn} childrenCollectionProvider
  */
 export class ComponentOptionsBuilder {
     /**
@@ -71,8 +71,8 @@ export class ComponentOptionsBuilder {
         const stateHolderProvider = this.descendantComponentClassOptions.stateHolderProvider ??
             currentConstructorOptions.stateHolderProvider ?? this.builderOptions.stateHolderProvider;
         // stateHolderProvider using default priority: descendant, current-constructor, builder
-        const uniquePartsChildrenProvider = this.descendantComponentClassOptions.uniquePartsChildrenProvider ??
-            currentConstructorOptions.uniquePartsChildrenProvider ?? this.builderOptions.uniquePartsChildrenProvider;
+        const childrenCollectionProvider = this.descendantComponentClassOptions.childrenCollectionProvider ??
+            currentConstructorOptions.childrenCollectionProvider ?? this.builderOptions.childrenCollectionProvider;
         // options building
         return _.defaults({
             extraConfigurators,
@@ -80,7 +80,7 @@ export class ComponentOptionsBuilder {
             extraStateChangesHandlers,
             eventsBinderProviders,
             stateHolderProvider,
-            uniquePartsChildrenProvider
+            childrenCollectionProvider
         }, this.descendantComponentClassOptions, currentConstructorOptions, this.builderOptions);
     }
 
@@ -171,10 +171,10 @@ export class ComponentOptionsBuilder {
     }
 
     /**
-     * @param {UniquePartsChildrenProviderFn} uniquePartsChildrenProvider
+     * @param {ChildrenCollectionProviderFn} childrenCollectionProvider
      */
-    withUniquePartsChildrenProvider(uniquePartsChildrenProvider) {
-        this.builderOptions.uniquePartsChildrenProvider = uniquePartsChildrenProvider;
+    withChildrenCollectionProvider(childrenCollectionProvider) {
+        this.builderOptions.childrenCollectionProvider = childrenCollectionProvider;
         return this;
     }
 

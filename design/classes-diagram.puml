@@ -186,7 +186,7 @@ missing but the whole exists.
 end note
 
 class BasicContainerComponent extends AbstractComponent {
-  #uniquePartsChildren: UniquePartsChildren
+  #childrenCollection: UniquePartsChildren
   #childrenShells: ChildrenShells
   +close()
   +constructor(options)

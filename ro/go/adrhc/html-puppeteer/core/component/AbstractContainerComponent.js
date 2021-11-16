@@ -17,7 +17,7 @@ export default class AbstractContainerComponent extends AbstractComponent {
     /**
      * @type {UniquePartsChildren}
      */
-    uniquePartsChildren;
+    childrenCollection;
 
     /**
      * @return {PartialStateHolder}
@@ -38,7 +38,7 @@ export default class AbstractContainerComponent extends AbstractComponent {
             .addComponentIllustratorProvider(component =>
                 componentIllustratorOf(component), !!componentIllustratorProviders?.length)
             .options());
-        this.uniquePartsChildren = this._createUniquePartsChildren();
+        this.childrenCollection = this._createUniquePartsChildren();
     }
 
     /**
@@ -67,7 +67,7 @@ export default class AbstractContainerComponent extends AbstractComponent {
      * @param {PartName=} newPartName
      */
     replacePartByChildId(childId, newPart, newPartName) {
-        const partName = this.uniquePartsChildren.getChildById(childId).partName;
+        const partName = this.childrenCollection.getChildById(childId).partName;
         this.replacePart(partName, newPart, newPartName);
     }
 
@@ -84,7 +84,7 @@ export default class AbstractContainerComponent extends AbstractComponent {
      * Detach event handlers.
      */
     disconnect() {
-        this.uniquePartsChildren.disconnectAndRemoveChildren();
+        this.childrenCollection.disconnectAndRemoveChildren();
         super.disconnect();
     }
 
@@ -93,8 +93,8 @@ export default class AbstractContainerComponent extends AbstractComponent {
      * @protected
      */
     _createUniquePartsChildren() {
-        if (this.config.uniquePartsChildrenProvider) {
-            return this.config.uniquePartsChildrenProvider(this);
+        if (this.config.childrenCollectionProvider) {
+            return this.config.childrenCollectionProvider(this);
         } else {
             const helper = new ContainerHelper(this);
             return helper.createUniquePartsChildren();

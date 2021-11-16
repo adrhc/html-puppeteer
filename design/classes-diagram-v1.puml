@@ -267,7 +267,7 @@ missing but the whole exists.
 end note
 
 class SimpleContainerComponent extends AbstractComponent {
-#uniquePartsChildren: UniquePartsChildren
+#childrenCollection: UniquePartsChildren
 +close()
 +constructor(options)
 +disconnect()

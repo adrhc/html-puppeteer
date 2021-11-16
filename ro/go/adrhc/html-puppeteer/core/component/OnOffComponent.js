@@ -30,10 +30,10 @@ export default class OnOffComponent extends AbstractContainerComponent {
     }
 
     /**
-     * @return {SwitcherChildren}
+     * @return {DuplicatedPartsChildren}
      */
     get switcherChildren() {
-        return /** @type {SwitcherChildren} */ this.uniquePartsChildren;
+        return /** @type {DuplicatedPartsChildren} */ this.childrenCollection;
     }
 
     /**
@@ -44,7 +44,7 @@ export default class OnOffComponent extends AbstractContainerComponent {
             childrenRemovalStrategy: USE_CSS,
             ignoreShellTemplateOptions: true,
             dontRenderChildren: true, ...options,
-            uniquePartsChildrenProvider: c => new ContainerHelper(c).createSwitcherChildren()
+            childrenCollectionProvider: c => new ContainerHelper(c).createDuplicatedPartsChildren()
         });
         this.activeNamesKey = this.config.activeNamesKey ?? GlobalConfig.ACTIVE_NAME_KEY;
     }
@@ -55,10 +55,10 @@ export default class OnOffComponent extends AbstractContainerComponent {
      * @param {SCT=} newState
      */
     replaceState(newState) {
-        this.uniquePartsChildren.disconnectAndRemoveChildren();
+        this.childrenCollection.disconnectAndRemoveChildren();
         super.replaceState(_.omit(newState, this.activeNamesKey));
-        this.uniquePartsChildren.createChildrenForExistingShells();
-        this.uniquePartsChildren.closeChildren();
+        this.childrenCollection.createChildrenForExistingShells();
+        this.childrenCollection.closeChildren();
         this.switchTo(newState[this.activeNamesKey]);
     }
 
@@ -79,7 +79,7 @@ export default class OnOffComponent extends AbstractContainerComponent {
         // active name (aka the property/part that indicates the current status) not changed
         super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
         if (this.activeNames?.includes(previousPartName)) {
-            this.uniquePartsChildren.getChildByPartName(previousPartName).replaceState(newPart);
+            this.childrenCollection.getChildByPartName(previousPartName).replaceState(newPart);
         }
     }
 
