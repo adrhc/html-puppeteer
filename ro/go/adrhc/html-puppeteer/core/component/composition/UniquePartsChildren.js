@@ -185,6 +185,14 @@ export default class UniquePartsChildren {
     }
 
     /**
+     * @param {function(c: AbstractComponent)} filterFn
+     * @return {AbstractComponent[]}
+     */
+    filter(filterFn) {
+        return this.childrenArray.filter(filterFn);
+    }
+
+    /**
      * @param {jQuery<HTMLElement>} $shell
      */
     _updateFromParent($shell) {

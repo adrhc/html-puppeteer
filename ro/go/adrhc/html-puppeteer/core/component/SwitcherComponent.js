@@ -1,7 +1,7 @@
 import {USE_CSS} from "../view/SimpleView.js";
-import GlobalConfig from "../../util/GlobalConfig.js";
+import GlobalConfig, {activeNameOf} from "../../util/GlobalConfig.js";
 import AbstractContainerComponent from "./AbstractContainerComponent.js";
-import ContainerHelper from "../../helper/ContainerHelper.js";
+import {isTrue} from "../../util/AssertionUtils.js";
 
 /**
  * @typedef {AbstractContainerComponentOptions} SwitcherComponentOptions
@@ -51,7 +51,9 @@ export default class SwitcherComponent extends AbstractContainerComponent {
      * @return {AbstractComponent}
      */
     get activeComponent() {
-        return this.switcherChildren.getChildByActiveName(this.activeName);
+        const activeComponents = this.childrenCollection.filter(c => this.activeName === activeNameOf(c));
+        isTrue(activeComponents.length <= 1);
+        return activeComponents[0];
     }
 
     /**
@@ -62,21 +64,13 @@ export default class SwitcherComponent extends AbstractContainerComponent {
     }
 
     /**
-     * @return {SwitcherChildren}
-     */
-    get switcherChildren() {
-        return /** @type {SwitcherChildren} */ this.childrenCollection;
-    }
-
-    /**
      * @param {SwitcherComponentOptions} options
      */
     constructor(options) {
         super({
             childrenRemovalStrategy: USE_CSS,
             ignoreShellTemplateOptions: true,
-            dontRenderChildren: true, ...options,
-            childrenCollectionProvider: c => new ContainerHelper(c).createSwitcherChildren()
+            dontRenderChildren: true, ...options
         });
         this.activeNameKey = this.config.activeNameKey ?? GlobalConfig.ACTIVE_NAME_KEY;
         this.activeValueKey = this.config.activeValueKey;

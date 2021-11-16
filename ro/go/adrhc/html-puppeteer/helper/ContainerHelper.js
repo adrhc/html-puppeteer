@@ -2,7 +2,6 @@ import UniquePartsChildren from "../core/component/composition/UniquePartsChildr
 import ChildrenShells from "../core/view/ChildrenShells.js";
 import ChildrenShellFinder from "../core/view/ChildrenShellFinder.js";
 import {partsOf} from "../core/state/PartialStateHolder.js";
-import SwitcherChildren from "../core/component/composition/SwitcherChildren.js";
 import DuplicatedPartsChildren from "../core/component/composition/DuplicatedPartsChildren.js";
 
 /**
@@ -57,13 +56,6 @@ export default class ContainerHelper {
     }
 
     /**
-     * @return {SwitcherChildren}
-     */
-    createSwitcherChildren() {
-        return this.switcherChildrenOf(this.createChildrenShellFinder());
-    }
-
-    /**
      * @return {DuplicatedPartsChildren}
      */
     createDuplicatedPartsChildren() {
@@ -76,19 +68,6 @@ export default class ContainerHelper {
      */
     uniquePartsChildrenOf(childrenShellFinder) {
         return new UniquePartsChildren({
-            parent: this.component,
-            childrenShellFinder,
-            dontRenderChildren: this.config.dontRenderChildren,
-            childrenOptions: this.createContainerChildrenCommonOptions()
-        });
-    }
-
-    /**
-     * @param {ChildrenShellFinder} childrenShellFinder
-     * @return {SwitcherChildren}
-     */
-    switcherChildrenOf(childrenShellFinder) {
-        return new SwitcherChildren({
             parent: this.component,
             childrenShellFinder,
             dontRenderChildren: this.config.dontRenderChildren,
