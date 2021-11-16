@@ -71,11 +71,11 @@ export default class StaticContainerComponent extends AbstractContainerComponent
      * @protected
      */
     _createOrUpdateChild(partName) {
-        const $shell = this.childrenShellFinder.$childShellByName(partName);
-        if (!$shell) {
-            isTrue(this.ignoreMissingShells, `$shell is null for part named ${partName}!`);
+        const $shells = this.childrenShellFinder.$childShellsByPartName(partName);
+        if (!$shells.length) {
+            isTrue(this.ignoreMissingShells, `$shells is empty for part named ${partName}!`);
             return;
         }
-        this.childrenCollection.createOrUpdateChild($shell);
+        $shells.forEach($el => this.childrenCollection.createOrUpdateChild($el));
     }
 }

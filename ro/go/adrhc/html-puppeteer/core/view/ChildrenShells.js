@@ -69,23 +69,24 @@ export default class ChildrenShells {
      */
     removeShell(partName) {
         if (this.shellTemplate != null) {
-            this.childrenShellFinder.$childShellByName(partName)?.remove();
+            this.childrenShellFinder.$childShellsByPartName(partName).forEach($el => $el.remove());
         }
     }
 
     /**
      * @param {PartName} partName
+     * @return {jQuery<HTMLElement>[]}
      */
     getOrCreateShell(partName) {
-        const $shell = this.childrenShellFinder.$childShellByName(partName);
-        if ($shell) {
+        const $shell = this.childrenShellFinder.$childShellsByPartName(partName);
+        if ($shell.length) {
             return $shell;
         }
         isTrue(this.shellTemplate != null,
             `"${partName}" shell is missing from "${this.parentId}"!\n\n"${this.parentId}" content is:\n${this.$containerElem.html()}\n"${this.parentId}" text is:\n${this.$containerElem.text()}`);
         const kidShell = this._createShell(partName);
         this.$containerElem[this.place](kidShell);
-        return this.childrenShellFinder.$childShellByName(partName);
+        return this.childrenShellFinder.$childShellsByPartName(partName);
     }
 
     /**

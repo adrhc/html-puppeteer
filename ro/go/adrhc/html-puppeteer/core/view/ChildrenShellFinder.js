@@ -66,9 +66,9 @@ export default class ChildrenShellFinder {
 
     /**
      * @param {PartName} partName
-     * @return {jQuery<HTMLElement>|undefined}
+     * @return {jQuery<HTMLElement>[]}
      */
-    $childShellByName(partName) {
-        return this.$childrenShells(partName)[0];
+    $childShellsByPartName(partName) {
+        return this.$childrenShells(partName);
     }
 }

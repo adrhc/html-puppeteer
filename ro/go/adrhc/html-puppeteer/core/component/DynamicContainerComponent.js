@@ -101,9 +101,9 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
      */
     _createOrUpdateChild(partName) {
         const $shell = this.childrenShells.getOrCreateShell(partName);
-        isTrue($shell != null,
+        isTrue($shell.length === 1,
             `$shell is null for part named ${partName}!`)
-        this.childrenCollection.createOrUpdateChild($shell);
+        this.childrenCollection.createOrUpdateChild($shell[0]);
     }
 
     /**
