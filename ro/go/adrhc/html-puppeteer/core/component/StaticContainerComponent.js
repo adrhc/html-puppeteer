@@ -42,11 +42,11 @@ export default class StaticContainerComponent extends AbstractContainerComponent
         // chance to the children to unbind their event handlers;
         // their view will be automatically destroyed when
         // the parent redraws itself
-        this.childrenComponents.disconnectAndRemoveChildren();
+        this.uniquePartsChildren.disconnectAndRemoveChildren();
         // the parent redraws itself
         super.replaceState(newState);
         // create children for existing (static) shells
-        this.childrenComponents.createChildrenForExistingShells();
+        this.uniquePartsChildren.createChildrenForExistingShells();
     }
 
     /**
@@ -58,7 +58,7 @@ export default class StaticContainerComponent extends AbstractContainerComponent
     replacePart(previousPartName, newPart, newPartName, dontRecordChanges) {
         const partName = newPartName ?? previousPartName;
         if (stateIsEmpty(newPart)) {
-            this.childrenComponents.getChildByPartName(partName).close();
+            this.uniquePartsChildren.getChildByPartName(partName).close();
             super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
         } else {
             super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
@@ -76,6 +76,6 @@ export default class StaticContainerComponent extends AbstractContainerComponent
             isTrue(this.ignoreMissingShells, `$shell is null for part named ${partName}!`);
             return;
         }
-        this.childrenComponents.createOrUpdateChild($shell);
+        this.uniquePartsChildren.createOrUpdateChild($shell);
     }
 }

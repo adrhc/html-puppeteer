@@ -41,11 +41,11 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
         // chance to the children to unbind their event handlers;
         // their view will be automatically destroyed when
         // the parent redraws itself
-        this.childrenComponents.disconnectAndRemoveChildren();
+        this.uniquePartsChildren.disconnectAndRemoveChildren();
         // the parent redraws itself
         super.replaceState(newState);
         // create children for existing (static) shells
-        this.childrenComponents.createChildrenForExistingShells();
+        this.uniquePartsChildren.createChildrenForExistingShells();
         // create dynamic children
         this._createMissingShellsAndChildren();
     }
@@ -71,7 +71,7 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
      * set state to undefined
      */
     close() {
-        this.childrenComponents.closeAndRemoveChildren();
+        this.uniquePartsChildren.closeAndRemoveChildren();
         super.close();
     }
 
@@ -83,7 +83,7 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
     _createMissingShellsAndChildren() {
         partsOf(this.getMutableState())
             .filter(([key]) => !this.partialStateHolder.hasEmptyPart(key))
-            .filter(([key]) => this.childrenComponents.getChildByPartName(key) == null)
+            .filter(([key]) => this.uniquePartsChildren.getChildByPartName(key) == null)
             .forEach(([key]) => this._createOrUpdateChild(key));
     }
 
@@ -95,7 +95,7 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
         const $shell = this.childrenShells.getOrCreateShell(partName);
         isTrue($shell != null,
             `$shell is null for part named ${partName}!`)
-        this.childrenComponents.createOrUpdateChild($shell);
+        this.uniquePartsChildren.createOrUpdateChild($shell);
     }
 
     /**
@@ -103,7 +103,7 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
      * @protected
      */
     _removeChild(partName) {
-        this.childrenComponents.closeAndRemoveChild(partName);
+        this.uniquePartsChildren.closeAndRemoveChild(partName);
         // the shell might actually be removed already by the closing child
         this.childrenShells.removeShell(partName);
     }

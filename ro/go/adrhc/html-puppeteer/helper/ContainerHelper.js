@@ -1,4 +1,4 @@
-import ChildrenComponents from "../core/component/composition/ChildrenComponents.js";
+import UniquePartsChildren from "../core/component/composition/UniquePartsChildren.js";
 import ChildrenShells from "../core/view/ChildrenShells.js";
 import ChildrenShellFinder from "../core/view/ChildrenShellFinder.js";
 import {partsOf} from "../core/state/PartialStateHolder.js";
@@ -49,10 +49,10 @@ export default class ContainerHelper {
     }
 
     /**
-     * @return {ChildrenComponents}
+     * @return {UniquePartsChildren}
      */
-    createChildrenComponents() {
-        return this.childrenComponentsOf(this.createChildrenShellFinder());
+    createUniquePartsChildren() {
+        return this.uniquePartsChildrenOf(this.createChildrenShellFinder());
     }
 
     /**
@@ -64,10 +64,10 @@ export default class ContainerHelper {
 
     /**
      * @param {ChildrenShellFinder} childrenShellFinder
-     * @return {ChildrenComponents}
+     * @return {UniquePartsChildren}
      */
-    childrenComponentsOf(childrenShellFinder) {
-        return new ChildrenComponents({
+    uniquePartsChildrenOf(childrenShellFinder) {
+        return new UniquePartsChildren({
             parent: this.component,
             childrenShellFinder,
             dontRenderChildren: this.config.dontRenderChildren,

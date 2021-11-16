@@ -100,10 +100,10 @@ export default class ChildrenWithPartDuplicates {
      */
     _createComponent($shell, partName = partOf($shell)) {
         const component = createComponent($shell, this.childrenOptions);
-        isTrue(component != null, "[ChildrenComponents] the child's shell must exist!");
+        isTrue(component != null, "[UniquePartsChildren] the child's shell must exist!");
         if (this.parent != null && partName == null) {
             // switcher (usually) uses children without "data-part"
-            console.warn("[ChildrenComponents] partName is missing though parent is set!");
+            console.warn("[UniquePartsChildren] partName is missing though parent is set!");
         }
         this.children[component.id] = this.dontRenderChildren ? component : component.render();
     }

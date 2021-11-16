@@ -5,7 +5,7 @@ import {componentIllustratorOf} from "../state-changes-handler/ComponentIllustra
 import ContainerHelper from "../../helper/ContainerHelper.js";
 
 /**
- * @typedef {AbstractComponentOptions & ComponentIllustratorOptions & ChildrenComponentsOptions} AbstractContainerComponentOptions
+ * @typedef {AbstractComponentOptions & ComponentIllustratorOptions & UniquePartsChildrenOptions} AbstractContainerComponentOptions
  * @property {ViewRemovalStrategy=} childrenRemovalStrategy
  * @property {string=} childrenRemovedPlaceholder
  * @property {string=} childrenRemovedCss
@@ -15,9 +15,9 @@ import ContainerHelper from "../../helper/ContainerHelper.js";
  */
 export default class AbstractContainerComponent extends AbstractComponent {
     /**
-     * @type {ChildrenComponents}
+     * @type {UniquePartsChildren}
      */
-    childrenComponents;
+    uniquePartsChildren;
 
     /**
      * @return {PartialStateHolder}
@@ -38,7 +38,7 @@ export default class AbstractContainerComponent extends AbstractComponent {
             .addComponentIllustratorProvider(component =>
                 componentIllustratorOf(component), !!componentIllustratorProviders?.length)
             .options());
-        this.childrenComponents = this._createChildrenComponents();
+        this.uniquePartsChildren = this._createUniquePartsChildren();
     }
 
     /**
@@ -67,7 +67,7 @@ export default class AbstractContainerComponent extends AbstractComponent {
      * @param {PartName=} newPartName
      */
     replacePartByChildId(childId, newPart, newPartName) {
-        const partName = this.childrenComponents.getChildById(childId).partName;
+        const partName = this.uniquePartsChildren.getChildById(childId).partName;
         this.replacePart(partName, newPart, newPartName);
     }
 
@@ -84,20 +84,20 @@ export default class AbstractContainerComponent extends AbstractComponent {
      * Detach event handlers.
      */
     disconnect() {
-        this.childrenComponents.disconnectAndRemoveChildren();
+        this.uniquePartsChildren.disconnectAndRemoveChildren();
         super.disconnect();
     }
 
     /**
-     * @return {ChildrenComponents}
+     * @return {UniquePartsChildren}
      * @protected
      */
-    _createChildrenComponents() {
-        if (this.config.childrenComponentsProvider) {
-            return this.config.childrenComponentsProvider(this);
+    _createUniquePartsChildren() {
+        if (this.config.uniquePartsChildrenProvider) {
+            return this.config.uniquePartsChildrenProvider(this);
         } else {
             const helper = new ContainerHelper(this);
-            return helper.createChildrenComponents();
+            return helper.createUniquePartsChildren();
         }
     }
 }

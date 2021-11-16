@@ -143,7 +143,7 @@ class ChildrenShells {
 +removeShell(partName)
 }
 
-class ChildrenComponents {
+class UniquePartsChildren {
 #children: {partName: AbstractComponent}
 #childrenOptions
 #childrenShellFinder: ChildrenShellFinder
@@ -160,7 +160,7 @@ class ChildrenComponents {
 +updateFromParent(partName)
 }
 
-SimpleContainerIllustrator -down-> ChildrenComponents
+SimpleContainerIllustrator -down-> UniquePartsChildren
 SimpleContainerIllustrator *-down- ChildrenShells
 
 abstract EventsBinder {
@@ -267,14 +267,14 @@ missing but the whole exists.
 end note
 
 class SimpleContainerComponent extends AbstractComponent {
-#childrenComponents: ChildrenComponents
+#uniquePartsChildren: UniquePartsChildren
 +close()
 +constructor(options)
 +disconnect()
 +replacePartByChildId(childId, newPart, newPartName)
 }
 
-SimpleContainerComponent *-down- ChildrenComponents
+SimpleContainerComponent *-down- UniquePartsChildren
 
 /'interface ErrorsHandler {
 +accept(error)

@@ -4,7 +4,7 @@ import {eventsBinderProviderFnOf} from "../../../util/Types.js";
 /**
  * @typedef {ComponentOptions} ComponentOptionsBuilderOptions
  * @property {EventsBinderProviderFn[]} eventsBinderProviders
- * @property {ChildrenComponentsProviderFn} childrenComponentsProvider
+ * @property {UniquePartsChildrenProviderFn} uniquePartsChildrenProvider
  */
 export class ComponentOptionsBuilder {
     /**
@@ -71,8 +71,8 @@ export class ComponentOptionsBuilder {
         const stateHolderProvider = this.descendantComponentClassOptions.stateHolderProvider ??
             currentConstructorOptions.stateHolderProvider ?? this.builderOptions.stateHolderProvider;
         // stateHolderProvider using default priority: descendant, current-constructor, builder
-        const childrenComponentsProvider = this.descendantComponentClassOptions.childrenComponentsProvider ??
-            currentConstructorOptions.childrenComponentsProvider ?? this.builderOptions.childrenComponentsProvider;
+        const uniquePartsChildrenProvider = this.descendantComponentClassOptions.uniquePartsChildrenProvider ??
+            currentConstructorOptions.uniquePartsChildrenProvider ?? this.builderOptions.uniquePartsChildrenProvider;
         // options building
         return _.defaults({
             extraConfigurators,
@@ -80,7 +80,7 @@ export class ComponentOptionsBuilder {
             extraStateChangesHandlers,
             eventsBinderProviders,
             stateHolderProvider,
-            childrenComponentsProvider
+            uniquePartsChildrenProvider
         }, this.descendantComponentClassOptions, currentConstructorOptions, this.builderOptions);
     }
 
@@ -171,10 +171,10 @@ export class ComponentOptionsBuilder {
     }
 
     /**
-     * @param {ChildrenComponentsProviderFn} childrenComponentsProvider
+     * @param {UniquePartsChildrenProviderFn} uniquePartsChildrenProvider
      */
-    withChildrenComponentsProvider(childrenComponentsProvider) {
-        this.builderOptions.childrenComponentsProvider = childrenComponentsProvider;
+    withUniquePartsChildrenProvider(uniquePartsChildrenProvider) {
+        this.builderOptions.uniquePartsChildrenProvider = uniquePartsChildrenProvider;
         return this;
     }
 

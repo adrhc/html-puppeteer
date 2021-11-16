@@ -4,7 +4,7 @@ import ChildrenShellFinder from "../../view/ChildrenShellFinder.js";
 import {partOf} from "../../../util/GlobalConfig.js";
 
 /**
- * @typedef {Object} ChildrenComponentsOptions
+ * @typedef {Object} UniquePartsChildrenOptions
  * @property {ElemIdOrJQuery=} componentsHolder is the place inside which to search for components
  * @property {AbstractContainerComponent=} parent
  * @property {ChildrenShellFinder=} childrenShellFinder
@@ -19,7 +19,7 @@ import {partOf} from "../../../util/GlobalConfig.js";
 /**
  * @template SCT, SCP
  */
-export default class ChildrenComponents {
+export default class UniquePartsChildren {
     /**
      * @type {ComponentsCollection}
      */
@@ -49,7 +49,7 @@ export default class ChildrenComponents {
     }
 
     /**
-     * @param {ChildrenComponentsOptions} options
+     * @param {UniquePartsChildrenOptions} options
      * @param {ElemIdOrJQuery=} options.componentsHolder
      * @param {AbstractComponent=} options.parent
      * @param {ChildrenShellFinder=} options.childrenShellFinder
@@ -90,7 +90,7 @@ export default class ChildrenComponents {
             return;
         }
         if (this.hasChildrenHaving(partName)) {
-            this.updateFromParent(partName);
+            this._updateFromParent(partName);
             return;
         }
         // at this point the item component's id is available as data-GlobalConfig.COMPONENT_ID on $shell
@@ -104,19 +104,12 @@ export default class ChildrenComponents {
      */
     _createComponent($shell, partName = partOf($shell)) {
         const component = createComponent($shell, this.childrenOptions);
-        isTrue(component != null, "[ChildrenComponents] the child's shell must exist!");
+        isTrue(component != null, "[UniquePartsChildren] the child's shell must exist!");
         if (this.parent != null && partName == null) {
             // switcher (usually) uses children without "data-part"
-            console.warn("[ChildrenComponents] partName is missing though parent is set!");
+            console.warn("[UniquePartsChildren] partName is missing though parent is set!");
         }
         this.children[component.id] = this.dontRenderChildren ? component : component.render();
-    }
-
-    /**
-     * @param {PartName} partName
-     */
-    updateFromParent(partName) {
-        this.getChildByPartName(partName).replaceFromParent();
     }
 
     /**
@@ -138,7 +131,8 @@ export default class ChildrenComponents {
      * close and remove each item
      */
     closeAndRemoveChildren() {
-        Object.keys(this.children).forEach(partName => this.closeAndRemoveChild(partName));
+        this.closeChildren();
+        this.children = {};
     }
 
     /**
@@ -185,5 +179,13 @@ export default class ChildrenComponents {
      */
     accept(visitFn) {
         this.childrenArray.forEach(c => visitFn(c));
+    }
+
+    /**
+     * @param {PartName} partName
+     * @protected
+     */
+    _updateFromParent(partName) {
+        this.getChildByPartName(partName).replaceFromParent();
     }
 }

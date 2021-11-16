@@ -1,7 +1,7 @@
-import ChildrenComponents from "./ChildrenComponents.js";
+import UniquePartsChildren from "./UniquePartsChildren.js";
 import GlobalConfig from "../../../util/GlobalConfig.js";
 
-export default class SwitcherChildren extends ChildrenComponents {
+export default class SwitcherChildren extends UniquePartsChildren {
     /**
      * @param {string|number|boolean} name
      * @return {AbstractComponent}

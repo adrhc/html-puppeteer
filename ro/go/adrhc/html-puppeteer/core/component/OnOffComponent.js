@@ -33,7 +33,7 @@ export default class OnOffComponent extends AbstractContainerComponent {
      * @return {SwitcherChildren}
      */
     get switcherChildren() {
-        return /** @type {SwitcherChildren} */ this.childrenComponents;
+        return /** @type {SwitcherChildren} */ this.uniquePartsChildren;
     }
 
     /**
@@ -44,7 +44,7 @@ export default class OnOffComponent extends AbstractContainerComponent {
             childrenRemovalStrategy: USE_CSS,
             ignoreShellTemplateOptions: true,
             dontRenderChildren: true, ...options,
-            childrenComponentsProvider: c => new ContainerHelper(c).createSwitcherChildren()
+            uniquePartsChildrenProvider: c => new ContainerHelper(c).createSwitcherChildren()
         });
         this.activeNamesKey = this.config.activeNamesKey ?? GlobalConfig.ACTIVE_NAME_KEY;
     }
@@ -55,10 +55,10 @@ export default class OnOffComponent extends AbstractContainerComponent {
      * @param {SCT=} newState
      */
     replaceState(newState) {
-        this.childrenComponents.disconnectAndRemoveChildren();
+        this.uniquePartsChildren.disconnectAndRemoveChildren();
         super.replaceState(_.omit(newState, this.activeNamesKey));
-        this.childrenComponents.createChildrenForExistingShells();
-        this.childrenComponents.closeChildren();
+        this.uniquePartsChildren.createChildrenForExistingShells();
+        this.uniquePartsChildren.closeChildren();
         this.switchTo(newState[this.activeNamesKey]);
     }
 
@@ -79,7 +79,7 @@ export default class OnOffComponent extends AbstractContainerComponent {
         // active name (aka the property/part that indicates the current status) not changed
         super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
         if (this.activeNames?.includes(previousPartName)) {
-            this.childrenComponents.getChildByPartName(previousPartName).replaceState(newPart);
+            this.uniquePartsChildren.getChildByPartName(previousPartName).replaceState(newPart);
         }
     }
 
