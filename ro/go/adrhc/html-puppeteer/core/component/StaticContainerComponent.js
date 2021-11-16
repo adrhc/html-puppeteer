@@ -1,5 +1,7 @@
 import {stateIsEmpty} from "../state/StateHolder.js";
 import AbstractContainerComponent from "./AbstractContainerComponent.js";
+import {isTrue} from "../../util/AssertionUtils.js";
+import ChildrenShellFinder from "../view/ChildrenShellFinder.js";
 
 /**
  * @typedef {AbstractContainerComponentOptions} StaticContainerComponentOptions
@@ -9,6 +11,10 @@ import AbstractContainerComponent from "./AbstractContainerComponent.js";
  * @template SCT, SCP
  */
 export default class StaticContainerComponent extends AbstractContainerComponent {
+    /**
+     * @type {ChildrenShellFinder}
+     */
+    childrenShellFinder;
     /**
      * @type {boolean}
      */
@@ -21,6 +27,7 @@ export default class StaticContainerComponent extends AbstractContainerComponent
      */
     constructor(options) {
         super({ignoreShellTemplateOptions: true, ...options});
+        this.childrenShellFinder = this.config.childrenShellFinder ?? new ChildrenShellFinder(this.config.elemIdOrJQuery);
         this.ignoreMissingShells = this.config.ignoreMissingShells ?? true;
     }
 
@@ -55,8 +62,22 @@ export default class StaticContainerComponent extends AbstractContainerComponent
             super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
         } else {
             super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
-            this.childrenCollection.createOrUpdateChildrenForPartName(partName, this.ignoreMissingShells);
+            this._updateChildrenByPartName(partName, this.ignoreMissingShells);
         }
+    }
+
+    /**
+     * @param {PartName} partName
+     * @param {boolean=} ignoreMissingShells
+     * @protected
+     */
+    _updateChildrenByPartName(partName, ignoreMissingShells) {
+        const $shells = this.childrenShellFinder.$childShellsByPartName(partName);
+        if (!$shells.length) {
+            isTrue(ignoreMissingShells, `$shells is empty for part named ${partName}!`);
+            return;
+        }
+        $shells.forEach($el => this.childrenCollection.getChildByShell($el).replaceFromParent());
     }
 
     /**

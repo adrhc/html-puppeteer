@@ -91,35 +91,6 @@ export default class ChildrenCollection {
     }
 
     /**
-     * @param {PartName} partName
-     * @param {boolean=} ignoreMissingShells
-     */
-    createOrUpdateChildrenForPartName(partName, ignoreMissingShells) {
-        const $shells = this.childrenShellFinder.$childShellsByPartName(partName);
-        if (!$shells.length) {
-            isTrue(ignoreMissingShells, `$shells is empty for part named ${partName}!`);
-            return;
-        }
-        $shells.forEach($el => this.createOrUpdateChildForElem($el));
-    }
-
-    /**
-     * @param {jQuery<HTMLElement>} $shell
-     */
-    createOrUpdateChildForElem($shell) {
-        if (!$shell.length) {
-            console.warn(`[AbstractChildrenCollection.createOrUpdateChild] missing $shell!`);
-            return;
-        }
-        if (this._hasChildrenHaving($shell)) {
-            this._updateFromParent($shell);
-            return;
-        }
-        // at this point the item component's id is available as data-GlobalConfig.COMPONENT_ID on $shell
-        this._createComponent($shell);
-    }
-
-    /**
      * @param {string} itemId
      * @return {AbstractComponent|undefined}
      */
@@ -196,22 +167,14 @@ export default class ChildrenCollection {
      * @protected
      */
     _hasChildrenHaving($shell) {
-        return !!this.childrenArray.find(it => it.$elem === $shell);
-    }
-
-    /**
-     * @param {jQuery<HTMLElement>} $shell
-     * @protected
-     */
-    _updateFromParent($shell) {
-        this._getChildByShell($shell).replaceFromParent();
+        return !!this.childrenArray.find(it => it.$elem[0] === $shell[0]);
     }
 
     /**
      * @param {jQuery<HTMLElement>} $shell
      * @return {AbstractComponent}
      */
-    _getChildByShell($shell) {
-        return this.childrenArray.find(it => it.$elem === $shell);
+    getChildByShell($shell) {
+        return this.childrenArray.find(it => it.$elem[0] === $shell[0]);
     }
 }
