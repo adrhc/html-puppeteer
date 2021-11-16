@@ -1,7 +1,6 @@
 import {stateIsEmpty} from "../state/StateHolder.js";
 import AbstractContainerComponent from "./AbstractContainerComponent.js";
 import {isTrue} from "../../util/AssertionUtils.js";
-import ChildrenShellFinder from "../view/ChildrenShellFinder.js";
 
 /**
  * @typedef {AbstractContainerComponentOptions} StaticContainerComponentOptions
@@ -11,10 +10,6 @@ import ChildrenShellFinder from "../view/ChildrenShellFinder.js";
  * @template SCT, SCP
  */
 export default class StaticContainerComponent extends AbstractContainerComponent {
-    /**
-     * @type {ChildrenShellFinder}
-     */
-    childrenShellFinder;
     /**
      * @type {boolean}
      */
@@ -27,7 +22,6 @@ export default class StaticContainerComponent extends AbstractContainerComponent
      */
     constructor(options) {
         super({ignoreShellTemplateOptions: true, ...options});
-        this.childrenShellFinder = this.config.childrenShellFinder ?? new ChildrenShellFinder(this.config.elemIdOrJQuery);
         this.ignoreMissingShells = this.config.ignoreMissingShells ?? true;
     }
 
@@ -57,7 +51,6 @@ export default class StaticContainerComponent extends AbstractContainerComponent
     replacePart(previousPartName, newPart, newPartName, dontRecordChanges) {
         const partName = newPartName ?? previousPartName;
         if (stateIsEmpty(newPart)) {
-            this.childrenCollection.closeAndRemoveChildrenByPartName(partName);
             this.childrenCollection.getChildrenByPartName(partName).forEach(it => it.close());
             super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
         } else {
@@ -72,12 +65,12 @@ export default class StaticContainerComponent extends AbstractContainerComponent
      * @protected
      */
     _updateChildrenByPartName(partName, ignoreMissingShells) {
-        const $shells = this.childrenShellFinder.$childShellsByPartName(partName);
-        if (!$shells.length) {
-            isTrue(ignoreMissingShells, `$shells is empty for part named ${partName}!`);
+        const childrenByPartName = this.childrenCollection.getChildrenByPartName(partName);
+        if (!childrenByPartName.length) {
+            isTrue(ignoreMissingShells, `[_updateChildrenByPartName] childrenByPartName is empty for part named ${partName}!`);
             return;
         }
-        $shells.forEach($el => this.childrenCollection.getChildByShell($el).replaceFromParent());
+        childrenByPartName.forEach(it => it.replaceFromParent());
     }
 
     /**
