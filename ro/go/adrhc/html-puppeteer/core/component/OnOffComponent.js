@@ -1,8 +1,8 @@
 import AbstractContainerComponent from "./AbstractContainerComponent.js";
 import {USE_CSS} from "../view/SimpleView.js";
-import GlobalConfig from "../../util/GlobalConfig.js";
-import {partsOf} from "../state/PartialStateHolder.js";
+import GlobalConfig, {activeNameOf} from "../../util/GlobalConfig.js";
 import {isTrue} from "../../util/AssertionUtils.js";
+import ContainerHelper from "../../helper/ContainerHelper.js";
 
 /**
  * @typedef {AbstractContainerComponentOptions} OnOffComponentOptions
@@ -30,13 +30,21 @@ export default class OnOffComponent extends AbstractContainerComponent {
     }
 
     /**
+     * @return {SwitcherChildren}
+     */
+    get switcherChildren() {
+        return /** @type {SwitcherChildren} */ this.childrenComponents;
+    }
+
+    /**
      * @param {OnOffComponentOptions} options
      */
     constructor(options) {
         super({
             childrenRemovalStrategy: USE_CSS,
             ignoreShellTemplateOptions: true,
-            dontRenderChildren: true, ...options
+            dontRenderChildren: true, ...options,
+            childrenComponentsProvider: c => new ContainerHelper(c).createSwitcherChildren()
         });
         this.activeNamesKey = this.config.activeNamesKey ?? GlobalConfig.ACTIVE_NAME_KEY;
     }
@@ -81,29 +89,30 @@ export default class OnOffComponent extends AbstractContainerComponent {
     switchTo(newActiveNames) {
         const previousActiveNames = this.activeNames;
         super.replacePart(this.activeNamesKey, newActiveNames);
-        partsOf(this.getStateCopy()).filter(([key]) => key !== this.activeNamesKey).forEach(([key, value]) => {
-            if (!newActiveNames.includes(key)) {
-                this._switchOff(key);
-            } else if (!previousActiveNames?.includes(key)) {
-                this._switchOn(key, value);
+        this.switcherChildren.accept(c => {
+            const activeName = activeNameOf(c);
+            if (!newActiveNames.includes(activeName)) {
+                this._switchOff(activeName);
+            } else if (!previousActiveNames?.includes(activeName)) {
+                this._switchOn(activeName, this.getPart(c.partName));
             }
         })
     }
 
     /**
-     * @param {PartName} partName
+     * @param {PartName} activeName
      * @protected
      */
-    _switchOff(partName) {
-        this.childrenComponents.getChildByPartName(partName)?.close();
+    _switchOff(activeName) {
+        this.switcherChildren.getChildByActiveName(activeName)?.close();
     }
 
     /**
-     * @param {PartName} partName
+     * @param {PartName} activeName
      * @param {SCP} partValue
      * @protected
      */
-    _switchOn(partName, partValue) {
-        this.childrenComponents.getChildByPartName(partName).render(partValue);
+    _switchOn(activeName, partValue) {
+        this.switcherChildren.getChildByActiveName(activeName).render(partValue);
     }
 }

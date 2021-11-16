@@ -1,10 +1,10 @@
-import {createComponent} from "../../Puppeteer.js";
-import {isTrue} from "../../../util/AssertionUtils.js";
 import ChildrenShellFinder from "../../view/ChildrenShellFinder.js";
 import {partOf} from "../../../util/GlobalConfig.js";
+import {createComponent} from "../../Puppeteer.js";
+import {isTrue} from "../../../util/AssertionUtils.js";
 
 /**
- * @typedef {Object} ChildrenComponentsOptions
+ * @typedef {Object} ChildrenWithPartDuplicatesOptions
  * @property {ElemIdOrJQuery=} componentsHolder is the place inside which to search for components
  * @property {AbstractContainerComponent=} parent
  * @property {ChildrenShellFinder=} childrenShellFinder
@@ -13,15 +13,11 @@ import {partOf} from "../../../util/GlobalConfig.js";
  */
 
 /**
- * @typedef {{[name: string]: AbstractComponent}} ComponentsCollection
- */
-
-/**
  * @template SCT, SCP
  */
-export default class ChildrenComponents {
+export default class ChildrenWithPartDuplicates {
     /**
-     * @type {ComponentsCollection}
+     * @type {AbstractComponent[]}
      */
     children = {};
     /**
@@ -49,7 +45,7 @@ export default class ChildrenComponents {
     }
 
     /**
-     * @param {ChildrenComponentsOptions} options
+     * @param {ChildrenWithPartDuplicatesOptions} options
      * @param {ElemIdOrJQuery=} options.componentsHolder
      * @param {AbstractComponent=} options.parent
      * @param {ChildrenShellFinder=} options.childrenShellFinder
@@ -75,7 +71,7 @@ export default class ChildrenComponents {
      * @return {AbstractComponent[]}
      */
     createChildrenForExistingShells() {
-        this.children = {};
+        this.children = [];
         this.childrenShellFinder.$childrenShells().forEach($shell => this._createComponent($shell));
         return this.childrenArray;
     }
@@ -116,7 +112,7 @@ export default class ChildrenComponents {
      * @param {PartName} partName
      */
     updateFromParent(partName) {
-        this.getChildByPartName(partName).replaceFromParent();
+        this.getChildByPartName(partName).forEach(it => it.replaceFromParent());
     }
 
     /**
@@ -124,13 +120,15 @@ export default class ChildrenComponents {
      * @return {boolean}
      */
     closeAndRemoveChild(partName) {
-        const childrenByPartName = this.getChildByPartName(partName)
-        if (!childrenByPartName) {
+        const childrenWithSamePartName = this.getChildByPartName(partName)
+        if (!childrenWithSamePartName?.length) {
             console.error(`Trying to close missing child: ${partName}!`);
             return false;
         }
-        childrenByPartName.close();
-        delete this.children[childrenByPartName.id];
+        childrenWithSamePartName.forEach(it => {
+            delete this.children[it.id];
+            it.close();
+        });
         return true;
     }
 
@@ -138,7 +136,7 @@ export default class ChildrenComponents {
      * close and remove each item
      */
     closeAndRemoveChildren() {
-        Object.keys(this.children).forEach(partName => this.closeAndRemoveChild(partName));
+        this.childrenArray.forEach(it => this.closeAndRemoveChild(it.partName));
     }
 
     /**
@@ -166,10 +164,10 @@ export default class ChildrenComponents {
 
     /**
      * @param {PartName} partName
-     * @return {AbstractComponent}
+     * @return {AbstractComponent[]}
      */
     getChildByPartName(partName) {
-        return this.childrenArray.find(it => it.partName === partName);
+        return this.childrenArray.filter(it => it.partName === partName);
     }
 
     /**

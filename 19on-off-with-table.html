@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>HTML puppeteer</title>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<script src="libraries/jquery-3.6.0.js"></script>
+	<script src="libraries/handlebars.min-v4.7.7.js"></script>
+	<!-- see https://github.com/lodash/lodash/wiki/FP-Guide#installation -->
+	<script src="libraries/lodash4_lodash.min.js_lodash.fp.min.js"></script>
+	<link href="ro/go/adrhc/app/css/main.css" rel="stylesheet">
+	<link href="ro/go/adrhc/app/css/responstable.css" rel="stylesheet">
+</head>
+
+<body>
+<script>const fp = _.noConflict()</script>
+<script src="19on-off-with-table.js" type="module"></script>
+
+<div class="container scenario15">
+	<div class="section title">DynamicContainerComponent</div>
+
+	<!--
+		Debugger element must be placed before the MAIN component for it (debugger) to work.
+		The debugger component (see DebuggerOptionsBuilder._createDebuggerStateChangesHandler)
+		will be created with the MAIN component (below); at that moment its DOM
+		element (debugger) must already exist (see also SimpleView._execLazySetup).
+	-->
+	<p data-initial-state="{}" data-template-id="debugger-template" data-type="simple"></p>
+
+	<!-- the component -->
+	<div class="section title">Component's view</div>
+	<div class="section fit-content min-width-33-percent">
+		<table class="responstable">
+			<thead>
+			<tr>
+				<th>Id</th>
+				<th>Name</th>
+				<th class="center">
+					<button data-create-child data-owner="MAIN">Add (on top)</button>
+				</th>
+			</tr>
+			</thead>
+			<tbody data-initial-state='{"kid0": {"id": 0, "name": "kid 0", "status": "readonly"}}'
+			       data-removed-placeholder='<tr><td colspan="3">The "MAIN" component is closed!</td></tr>'
+			       data-type="dyna-container"
+			       id="MAIN">
+			<tr data-active-name="readonly" data-children-removed-css="disabled" data-type="on-off">
+				<td class="bgc-aliceblue" data-part="id" data-type="value"></td>
+				<td class="bgc-aliceblue" data-part="name" data-type="value"></td>
+				<td class="bgc-antiquewhite" data-part="id" data-type="value"></td>
+				<td class="bgc-antiquewhite" data-part="name" data-type="value"></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<script id="list-item-template" type="text/x-handlebars-template">
+	{{#with value}}
+		<td>{{id}}</td>
+		<td>{{name}}</td>
+		<td class="center">
+			<!--
+				@root.componentId is the current component's id; here the current component is <tr>
+				@root.owner is the parent's id; here the parent component is <tbody>
+			-->
+			<button data-child-id="{{@root.componentId}}" data-owner="{{@root.owner}}" data-remove-child>
+				Remove
+			</button>
+		</td>
+	{{/with}}
+</script>
+
+<script id="debugger-template" type="text/x-handlebars-template">
+	<!-- open/close buttons -->
+	<div class="section flex-center fill-available buttons">
+		<button data-close="click" data-owner="MAIN">Close "MAIN"</button>
+		<button class="deactivated" data-open="click" data-owner="MAIN">Open "MAIN"</button>
+	</div>
+	<div class="section title">debuggers</div>
+	<!-- state changing buttons -->
+	<div class="section flex-center fill-available buttons">
+		<div>
+			<button name="change-entire-state">Change entire state</button>
+			<button name="change-partial-state">Change partial state</button>
+		</div>
+	</div>
+	<!-- state input fields and debuggers -->
+	<div class="section">
+		<div class="flex-center">
+			<textarea class="fill-available" id="MAIN-debugger"
+			          rows="10">No debugging data available yet!</textarea>
+			<textarea class="fill-available" id="partial-state" rows="10">Write here some partial (aka child/slice) state, e.g.:
+{"kidX": {"id": "X", "name": "kid X"}, "kidY": {"id": "Y", "name": "kid Y"}}
+PS: make sure to have a well formatted JSON!</textarea>
+		</div>
+	</div>
+</script>
+
+</body>
+
+</html>

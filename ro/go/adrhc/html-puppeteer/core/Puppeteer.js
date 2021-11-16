@@ -16,12 +16,11 @@ export default function animate({componentsHolder, alwaysReturnArray, ...compone
         /** @type {ElemIdOrJQuery} */ componentsHolder, childrenOptions: componentsOptions
     });
     const components = childrenComponents.createChildrenForExistingShells();
-    const partNames = Object.keys(components);
-    console.log(`[Puppeteer.animate] childrenComponents created ${partNames.length} components`);
-    if (partNames.length === 1 && !alwaysReturnArray) {
-        return components[partNames[0]];
+    console.log(`[Puppeteer.animate] childrenComponents created ${components.length} components`);
+    if (components.length === 1 && !alwaysReturnArray) {
+        return components[0];
     }
-    return partNames.map(p => components[p]);
+    return components;
 }
 
 /**

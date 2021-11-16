@@ -16,6 +16,6 @@ export default class SwitcherChildren extends ChildrenComponents {
      * @return {AbstractComponent}
      */
     _get1thChildrenHavingConfig(property, value) {
-        return Object.values(this.children).find(it => it.config?.[property] === value);
+        return this.childrenArray.find(it => it.config?.[property] === value);
     }
 }

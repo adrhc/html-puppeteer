@@ -113,3 +113,11 @@ export function childIdOf($elem) {
 export function componentIdOf($elem) {
     return $elem.data(GlobalConfig.DATA_COMPONENT_ID);
 }
+
+/**
+ * @param {AbstractComponent} component
+ * @return {PartName}
+ */
+export function activeNameOf(component) {
+    return component.config?.[GlobalConfig.ACTIVE_CHILD_NAME] ?? component.partName;
+}
