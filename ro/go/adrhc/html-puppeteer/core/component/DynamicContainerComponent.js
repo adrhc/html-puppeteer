@@ -67,7 +67,7 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
     replacePart(previousPartName, newPart, newPartName, dontRecordChanges) {
         const partName = newPartName ?? previousPartName;
         if (stateIsEmpty(newPart)) {
-            this._removeChild(partName);
+            this.uniquePartsChildren.closeAndRemoveChild(partName);
             super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
         } else {
             super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
@@ -101,17 +101,7 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
      */
     _createOrUpdateChild(partName) {
         const $shells = this.childrenShells.getOrCreateShell(partName);
-        isTrue(!$shells?.length, `$shell is null for part named ${partName}!`)
+        isTrue(!!$shells.length, `$shells is empty for part named ${partName}!`)
         $shells.forEach($el => this.childrenCollection.createOrUpdateChild($el))
-    }
-
-    /**
-     * @param {PartName} partName
-     * @protected
-     */
-    _removeChild(partName) {
-        this.uniquePartsChildren.closeAndRemoveChild(partName);
-        // the shell might actually be removed already by the closing child
-        this.childrenShells.removeShell(partName);
     }
 }
