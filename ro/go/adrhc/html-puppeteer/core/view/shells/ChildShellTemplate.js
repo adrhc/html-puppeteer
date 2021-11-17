@@ -1,5 +1,5 @@
-import {templateOfTemplateId} from "../../util/DomUtils.js";
-import GlobalConfig, {dataComponentIdOf, dataOwnerOf, dataPartOf, dataTypeOf} from "../../util/GlobalConfig.js";
+import {templateOfTemplateId} from "../../../util/DomUtils.js";
+import GlobalConfig, {dataComponentIdOf, dataOwnerOf, dataPartOf, dataTypeOf} from "../../../util/GlobalConfig.js";
 
 /**
  * @typedef {Bag} ShellAttributes

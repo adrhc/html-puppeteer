@@ -3,7 +3,7 @@ import {createByType} from "./ComponentFactories.js";
 import {idOf} from "../util/DomUtils.js";
 import {isTrue} from "../util/AssertionUtils.js";
 import ChildrenCollection from "./component/composition/ChildrenCollection.js";
-import ChildrenShellFinder from "./view/ChildrenShellFinder.js";
+import ChildrenShellFinder from "./view/shells/ChildrenShellFinder.js";
 
 /**
  * @param {CreateComponentParams} options

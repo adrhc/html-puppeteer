@@ -1,6 +1,6 @@
-import ChildrenShellFinder from "../core/view/ChildrenShellFinder.js";
+import ChildrenShellFinder from "../core/view/shells/ChildrenShellFinder.js";
 import ChildrenCollection from "../core/component/composition/ChildrenCollection.js";
-import ShellCreator from "../core/view/ShellCreator.js";
+import ShellCreator from "../core/view/shells/ShellCreator.js";
 import ShellsManager from "../core/view/shells/ShellsManager.js";
 
 /**

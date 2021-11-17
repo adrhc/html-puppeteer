@@ -1,6 +1,6 @@
-import {dataPartSelectorOf, dataTypeSelector} from "../../util/SelectorUtils.js";
-import {jQueryOf} from "../../util/Utils.js";
-import {typeOf} from "../../util/GlobalConfig.js";
+import {dataPartSelectorOf, dataTypeSelector} from "../../../util/SelectorUtils.js";
+import {jQueryOf} from "../../../util/Utils.js";
+import {typeOf} from "../../../util/GlobalConfig.js";
 
 /**
  * Dealing with shell queries.

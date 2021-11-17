@@ -1,8 +1,8 @@
-import GlobalConfig from "../../util/GlobalConfig.js";
+import GlobalConfig from "../../../util/GlobalConfig.js";
 import createShellTemplate, {areShellTemplateOptionsEmpty} from "./ChildShellTemplate.js";
-import {newIdImpl} from "../component/configurator/DefaultComponentConfigurator.js";
-import {isTrue} from "../../util/AssertionUtils.js";
-import {generateHtml} from "../../util/HtmlGenerator.js";
+import {newIdImpl} from "../../component/configurator/DefaultComponentConfigurator.js";
+import {isTrue} from "../../../util/AssertionUtils.js";
+import {generateHtml} from "../../../util/HtmlGenerator.js";
 
 /**
  * @typedef {ChildShellTemplateOptions} ShellCreatorOptions
