@@ -35,7 +35,7 @@ export default class StaticContainerComponent extends AbstractContainerComponent
         // chance to the children to unbind their event handlers;
         // their view will be automatically destroyed when
         // the parent redraws itself
-        this.childrenCollection.disconnectAndRemoveChildren();
+        this.childrenCollection.disconnectAndRemoveAll();
         // the parent redraws itself
         super.replaceState(newState);
         // create children for existing (static) shells
@@ -77,7 +77,7 @@ export default class StaticContainerComponent extends AbstractContainerComponent
      * set state to undefined
      */
     close() {
-        this.childrenCollection.closeChildren();
+        this.childrenCollection.closeAll();
         super.close();
     }
 }

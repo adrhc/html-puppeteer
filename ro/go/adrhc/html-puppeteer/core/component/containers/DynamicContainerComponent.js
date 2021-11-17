@@ -44,7 +44,7 @@ export default class DynamicContainerComponent extends AbstractDynamicContainerC
         // chance to the children to unbind their event handlers;
         // their view will be automatically destroyed when
         // the parent redraws itself
-        this.childrenCollection.disconnectAndRemoveChildren();
+        this.childrenCollection.disconnectAndRemoveAll();
         // the parent redraws itself
         super.replaceState(newState);
         // create children for existing (static) shells
@@ -62,7 +62,7 @@ export default class DynamicContainerComponent extends AbstractDynamicContainerC
     replacePart(previousPartName, newPart, newPartName, dontRecordChanges) {
         const partName = newPartName ?? previousPartName;
         if (stateIsEmpty(newPart)) {
-            this.childrenCollection.closeAndRemoveChildrenByPartName(partName);
+            this.childrenCollection.closeAndRemoveByPartName(partName);
             super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
         } else {
             super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
@@ -74,7 +74,7 @@ export default class DynamicContainerComponent extends AbstractDynamicContainerC
      * set state to undefined
      */
     close() {
-        this.childrenCollection.closeAndRemoveChildren();
+        this.childrenCollection.closeAndRemoveAll();
         super.close();
     }
 

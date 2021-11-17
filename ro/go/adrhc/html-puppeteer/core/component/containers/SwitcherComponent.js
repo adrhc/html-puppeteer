@@ -83,10 +83,10 @@ export default class SwitcherComponent extends AbstractDynamicContainerComponent
      * @param {SCT=} newState
      */
     replaceState(newState) {
-        this.childrenCollection.disconnectAndRemoveChildren();
+        this.childrenCollection.disconnectAndRemoveAll();
         super.replaceState(_.omit(newState, this.activeNameKey));
         this.createChildrenForAllShells();
-        this.childrenCollection.closeChildren();
+        this.childrenCollection.closeAll();
         this.switchTo(newState[this.activeNameKey], this._getActiveValueFromState());
     }
 

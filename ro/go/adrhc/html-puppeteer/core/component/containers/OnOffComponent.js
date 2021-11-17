@@ -47,10 +47,10 @@ export default class OnOffComponent extends AbstractDynamicContainerComponent {
      * @param {SCT=} newState
      */
     replaceState(newState) {
-        this.childrenCollection.disconnectAndRemoveChildren();
+        this.childrenCollection.disconnectAndRemoveAll();
         super.replaceState(_.omit(newState, this.activeNamesKey));
         this.createChildrenForAllShells();
-        this.childrenCollection.closeChildren();
+        this.childrenCollection.closeAll();
         this.switchTo(newState[this.activeNamesKey]);
     }
 

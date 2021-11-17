@@ -64,6 +64,14 @@ export default class ChildrenCollection {
     }
 
     /**
+     * @param {PartName} partName
+     * @return {AbstractComponent[]}
+     */
+    getChildrenByPartName(partName) {
+        return this.childrenArray.filter(it => partName === it.partName);
+    }
+
+    /**
      * @param {string} itemId
      * @return {AbstractComponent|undefined}
      */
@@ -72,10 +80,18 @@ export default class ChildrenCollection {
     }
 
     /**
-     * @param {function(c: AbstractComponent)} visitFn
+     * @param {jQuery<HTMLElement>} $shell
+     * @return {AbstractComponent | undefined}
      */
-    accept(visitFn) {
-        this.childrenArray.forEach(c => visitFn(c));
+    getChildByShell($shell) {
+        return this.childrenArray.find(it => it.$elem[0] === $shell[0]);
+    }
+
+    /**
+     * @param {function(c: AbstractComponent)} visitorFn
+     */
+    accept(visitorFn) {
+        this.childrenArray.forEach(c => visitorFn(c));
     }
 
     /**
@@ -87,25 +103,10 @@ export default class ChildrenCollection {
     }
 
     /**
-     * close and remove each item
-     */
-    closeAndRemoveChildren() {
-        this.closeChildren();
-        this.removeChildren();
-    }
-
-    /**
-     * close all children
-     */
-    closeChildren() {
-        this.childrenArray.forEach(c => c.close());
-    }
-
-    /**
      * @param {PartName} partName
      * @return {AbstractComponent[]}
      */
-    closeAndRemoveChildrenByPartName(partName) {
+    closeAndRemoveByPartName(partName) {
         const childrenByPartName = this.getChildrenByPartName(partName);
         if (!childrenByPartName.length) {
             console.error(`Trying to close missing child: ${partName}!`);
@@ -119,33 +120,32 @@ export default class ChildrenCollection {
     }
 
     /**
-     * @param {PartName} partName
-     * @return {AbstractComponent[]}
+     * close and remove each item
      */
-    getChildrenByPartName(partName) {
-        return this.childrenArray.filter(it => partName === it.partName);
+    closeAndRemoveAll() {
+        this.closeAll();
+        this.removeAll();
     }
 
     /**
      * Detach event handlers then remove all children.
      */
-    disconnectAndRemoveChildren() {
+    disconnectAndRemoveAll() {
         this.childrenArray.forEach(child => child.disconnect());
-        this.removeChildren();
+        this.removeAll();
+    }
+
+    /**
+     * close all children
+     */
+    closeAll() {
+        this.childrenArray.forEach(c => c.close());
     }
 
     /**
      * Removes all children.
      */
-    removeChildren() {
+    removeAll() {
         this.children = {};
-    }
-
-    /**
-     * @param {jQuery<HTMLElement>} $shell
-     * @return {AbstractComponent | undefined}
-     */
-    getChildByShell($shell) {
-        return this.childrenArray.find(it => it.$elem[0] === $shell[0]);
     }
 }

@@ -94,7 +94,7 @@ export default class AbstractContainerComponent extends AbstractComponent {
      * Detach event handlers.
      */
     disconnect() {
-        this.childrenCollection.disconnectAndRemoveChildren();
+        this.childrenCollection.disconnectAndRemoveAll();
         super.disconnect();
     }
 
@@ -102,7 +102,7 @@ export default class AbstractContainerComponent extends AbstractComponent {
      * Creates the children for all existing shells.
      */
     createChildrenForAllShells() {
-        this.childrenCollection.removeChildren();
+        this.childrenCollection.removeAll();
         this.childrenShellFinder.$getAllChildrenShells()
             .forEach($shell => this.childrenCollection.createComponentForShell($shell));
     }
