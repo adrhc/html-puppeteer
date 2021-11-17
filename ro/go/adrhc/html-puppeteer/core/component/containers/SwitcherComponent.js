@@ -1,10 +1,10 @@
 import {USE_CSS} from "../../view/SimpleView.js";
 import GlobalConfig, {activeNameOf} from "../../../util/GlobalConfig.js";
 import {isTrue} from "../../../util/AssertionUtils.js";
-import AbstractDynamicContainerComponent from "./AbstractDynamicContainerComponent.js";
+import AbstractContainerComponent from "./AbstractContainerComponent.js";
 
 /**
- * @typedef {AbstractDynamicContainerComponentOptions} SwitcherComponentOptions
+ * @typedef {AbstractContainerComponentOptions} SwitcherComponentOptions
  * @property {string=} activeNameKey is the partName storing the active-component name (i.e. the name equal to children's "data-active-name" in html)
  * @property {string=} activeValueKey is the partName where the active-component's value is stored by SwitcherComponent
  * @property {boolean=} [valueKeyIsActiveName=true] indicates that each active-component name is the activeNameKey's value; e.g. activeNameKey="editable" means that replacePart("editable", newState) should set newState into both SwitcherComponent (partial replace) and the active-component (complete replace)
@@ -33,7 +33,7 @@ import AbstractDynamicContainerComponent from "./AbstractDynamicContainerCompone
  * on active-component too. A complete state change on SwitcherComponent
  * should translate into a complete state change on active-component too.
  */
-export default class SwitcherComponent extends AbstractDynamicContainerComponent {
+export default class SwitcherComponent extends AbstractContainerComponent {
     /**
      * @type {string}
      */
@@ -70,7 +70,8 @@ export default class SwitcherComponent extends AbstractDynamicContainerComponent
         super({
             childrenRemovalStrategy: USE_CSS,
             ignoreShellTemplateOptions: true,
-            dontRenderChildren: true, ...options
+            dontRenderChildren: true,
+            ...options
         });
         this.activeNameKey = this.config.activeNameKey ?? GlobalConfig.ACTIVE_NAME_KEY;
         this.activeValueKey = this.config.activeValueKey;
@@ -83,9 +84,10 @@ export default class SwitcherComponent extends AbstractDynamicContainerComponent
      * @param {SCT=} newState
      */
     replaceState(newState) {
-        this.childrenCollection.disconnectAndRemoveAll();
+        this.childrenCollection.closeAndRemoveAll();
         super.replaceState(_.omit(newState, this.activeNameKey));
         this.createChildrenForAllShells();
+        // the children render as "closed"
         this.childrenCollection.closeAll();
         this.switchTo(newState[this.activeNameKey], this._getActiveValueFromState());
     }
@@ -95,10 +97,10 @@ export default class SwitcherComponent extends AbstractDynamicContainerComponent
      * @param {{[key: string|number]: SCP}=} value
      */
     switchTo(activeName, value) {
-        const previousActiveState = this.activeComponent?.getStateCopy();
+        const activeState = value ?? this.activeComponent?.getStateCopy();
         this.activeComponent?.close();
         super.replacePart(this.activeNameKey, activeName);
-        this.activeComponent?.render(value ?? previousActiveState);
+        this.activeComponent?.render(activeState);
     }
 
     /**

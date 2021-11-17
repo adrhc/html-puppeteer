@@ -1,10 +1,10 @@
 import {USE_CSS} from "../../view/SimpleView.js";
 import GlobalConfig, {activeNameOf} from "../../../util/GlobalConfig.js";
 import {isTrue} from "../../../util/AssertionUtils.js";
-import AbstractDynamicContainerComponent from "./AbstractDynamicContainerComponent.js";
+import AbstractContainerComponent from "./AbstractContainerComponent.js";
 
 /**
- * @typedef {AbstractDynamicContainerComponentOptions} OnOffComponentOptions
+ * @typedef {AbstractContainerComponentOptions} OnOffComponentOptions
  * @property {string=} activeNamesKey identify the part storing the active-component names
  */
 
@@ -15,7 +15,7 @@ import AbstractDynamicContainerComponent from "./AbstractDynamicContainerCompone
  * @property {OptionalPartName=} activeNames
  * @property {SCP=} partValue
  */
-export default class OnOffComponent extends AbstractDynamicContainerComponent {
+export default class OnOffComponent extends AbstractContainerComponent {
     /**
      * @type {string}
      */
@@ -47,9 +47,10 @@ export default class OnOffComponent extends AbstractDynamicContainerComponent {
      * @param {SCT=} newState
      */
     replaceState(newState) {
-        this.childrenCollection.disconnectAndRemoveAll();
+        this.childrenCollection.closeAndRemoveAll();
         super.replaceState(_.omit(newState, this.activeNamesKey));
         this.createChildrenForAllShells();
+        // the children render as "closed"
         this.childrenCollection.closeAll();
         this.switchTo(newState[this.activeNamesKey]);
     }

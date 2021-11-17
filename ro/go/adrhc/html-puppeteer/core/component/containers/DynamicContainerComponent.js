@@ -4,15 +4,15 @@ import ContainerEventsBinder from "../events-binder/ContainerEventsBinder.js";
 import {stateIsEmpty} from "../../state/StateHolder.js";
 import {partsOf} from "../../state/PartialStateHolder.js";
 import {isTrue} from "../../../util/AssertionUtils.js";
-import AbstractDynamicContainerComponent from "./AbstractDynamicContainerComponent.js";
+import AbstractContainerComponent from "./AbstractContainerComponent.js";
 
 /**
- * @typedef {AbstractDynamicContainerComponentOptions} DynamicContainerComponentOptions
+ * @typedef {AbstractContainerComponentOptions} DynamicContainerComponentOptions
  */
 /**
  * @template SCT, SCP
  */
-export default class DynamicContainerComponent extends AbstractDynamicContainerComponent {
+export default class DynamicContainerComponent extends AbstractContainerComponent {
     /**
      * @type {ShellsManager}
      */
@@ -41,10 +41,8 @@ export default class DynamicContainerComponent extends AbstractDynamicContainerC
      */
     replaceState(newState) {
         // this must happen before container redraw to give a
-        // chance to the children to unbind their event handlers;
-        // their view will be automatically destroyed when
-        // the parent redraws itself
-        this.childrenCollection.disconnectAndRemoveAll();
+        // chance to the children to unbind their event handlers
+        this.childrenCollection.closeAndRemoveAll();
         // the parent redraws itself
         super.replaceState(newState);
         // create children for existing (static) shells
@@ -68,14 +66,6 @@ export default class DynamicContainerComponent extends AbstractDynamicContainerC
             super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
             this._createOrUpdateChild(partName);
         }
-    }
-
-    /**
-     * set state to undefined
-     */
-    close() {
-        this.childrenCollection.closeAndRemoveAll();
-        super.close();
     }
 
     /**

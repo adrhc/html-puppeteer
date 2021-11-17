@@ -103,7 +103,7 @@ export default class AbstractContainerComponent extends AbstractComponent {
      * set state to undefined
      */
     close() {
-        this.childrenCollection.closeAll();
+        this.childrenCollection.closeAndRemoveAll();
         super.close();
     }
 
@@ -111,7 +111,7 @@ export default class AbstractContainerComponent extends AbstractComponent {
      * Detach event handlers.
      */
     disconnect() {
-        this.childrenCollection.disconnectAndRemoveAll();
+        this.childrenCollection.disconnectAll();
         super.disconnect();
     }
 }

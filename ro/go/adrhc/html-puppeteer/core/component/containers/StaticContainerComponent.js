@@ -32,10 +32,8 @@ export default class StaticContainerComponent extends AbstractContainerComponent
      */
     replaceState(newState) {
         // this must happen before container redraw to give a
-        // chance to the children to unbind their event handlers;
-        // their view will be automatically destroyed when
-        // the parent redraws itself
-        this.childrenCollection.disconnectAndRemoveAll();
+        // chance to the children to unbind their event handlers
+        this.childrenCollection.closeAndRemoveAll();
         // the parent redraws itself
         super.replaceState(newState);
         // create children for existing (static) shells

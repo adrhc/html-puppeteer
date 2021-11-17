@@ -122,18 +122,10 @@ export default class ChildrenCollection {
     }
 
     /**
-     * close and remove each item
+     * Close then remove all children.
      */
     closeAndRemoveAll() {
         this.closeAll();
-        this.removeAll();
-    }
-
-    /**
-     * Detach event handlers then remove all children.
-     */
-    disconnectAndRemoveAll() {
-        this.childrenArray.forEach(child => child.disconnect());
         this.removeAll();
     }
 
@@ -142,6 +134,13 @@ export default class ChildrenCollection {
      */
     closeAll() {
         this.childrenArray.forEach(c => c.close());
+    }
+
+    /**
+     * Detach event handlers then remove all children.
+     */
+    disconnectAll() {
+        this.childrenArray.forEach(child => child.disconnect());
     }
 
     /**
