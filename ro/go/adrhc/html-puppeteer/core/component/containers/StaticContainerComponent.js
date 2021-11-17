@@ -72,12 +72,4 @@ export default class StaticContainerComponent extends AbstractContainerComponent
         }
         childrenByPartName.forEach(it => it.replaceFromParent());
     }
-
-    /**
-     * set state to undefined
-     */
-    close() {
-        this.childrenCollection.closeAll();
-        super.close();
-    }
 }
