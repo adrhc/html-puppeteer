@@ -82,14 +82,6 @@ export default class ChildrenCollection {
     }
 
     /**
-     * @param {jQuery<HTMLElement>} $shell
-     * @return {AbstractComponent | undefined}
-     */
-    getChildByShell($shell) {
-        return this.childrenArray.find(it => it.$elem[0] === $shell[0]);
-    }
-
-    /**
      * @param {function(c: AbstractComponent)} visitorFn
      */
     accept(visitorFn) {

@@ -7,13 +7,15 @@ export function isUndefined(value) {
  * @return {jQuery<HTMLElement>} elemIdOrJQuery if *is* jQuery, $(`#${elemIdOrJQuery}`) if *is* string otherwise $(elemIdOrJQuery)
  */
 export function jQueryOf(elemIdOrJQuery) {
+    let $elem;
     if (elemIdOrJQuery instanceof jQuery) {
-        return elemIdOrJQuery;
+        $elem = elemIdOrJQuery;
     } else if (typeof elemIdOrJQuery === "string") {
-        return $(`#${elemIdOrJQuery}`);
+        $elem = $(`#${elemIdOrJQuery}`);
     } else {
-        return $(elemIdOrJQuery);
+        $elem = $(elemIdOrJQuery);
     }
+    return $elem.length ? $elem : undefined;
 }
 
 /**

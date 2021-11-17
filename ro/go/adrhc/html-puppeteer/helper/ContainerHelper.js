@@ -2,6 +2,7 @@ import ChildrenShellFinder from "../core/view/shells/ChildrenShellFinder.js";
 import ChildrenCollection from "../core/component/composition/ChildrenCollection.js";
 import ShellCreator from "../core/view/shells/ShellCreator.js";
 import ShellsManager from "../core/view/shells/ShellsManager.js";
+import {renderOrConfigElemOf} from "../core/view/SimpleView.js";
 
 /**
  * @typedef {Object} ContainerChildrenCommonOptions
@@ -44,7 +45,7 @@ export default class ContainerHelper {
      * @return {ChildrenShellFinder}
      */
     createChildrenShellFinder() {
-        return this.config.childrenShellFinder ?? new ChildrenShellFinder(this.config.elemIdOrJQuery);
+        return this.config.childrenShellFinder ?? new ChildrenShellFinder(renderOrConfigElemOf(this.config));
     }
 
     /**

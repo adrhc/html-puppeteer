@@ -9,8 +9,7 @@ $(() => {
         .whenEvents("click")
         .occurOn("[type='radio'][name='status']")
         .useHandlerProvider(component => (ev) => {
-            const status = ev.target.value;
-            component.replaceParts({status});
+            /** @type {SwitcherComponent} */ component.switchTo(ev.target.value);
         })
         .and()
         .whenEvents("click")

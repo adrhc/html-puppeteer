@@ -105,7 +105,7 @@ export class DomEventsAttachBuilder {
      * @param {boolean=} [useComponent=true]
      */
     occurOnComponent(component, useComponent = true) {
-        this.$elemProvider = () => component.$elem;
+        this.$elemProvider = () => component.$renderElem;
         return useComponent ? this.useComponent(component) : this;
     }
 

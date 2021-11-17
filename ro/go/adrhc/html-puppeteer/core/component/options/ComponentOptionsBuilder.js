@@ -74,8 +74,8 @@ export class ComponentOptionsBuilder {
         const childrenCollectionProvider = this.descendantComponentClassOptions.childrenCollectionProvider ??
             currentConstructorOptions.childrenCollectionProvider ?? this.builderOptions.childrenCollectionProvider;
         // childrenCollectionProvider using default priority: descendant, current-constructor, builder
-        const $elem = this.descendantComponentClassOptions.$elem ??
-            currentConstructorOptions.$elem ?? this.builderOptions.$elem;
+        const $renderElem = this.descendantComponentClassOptions.$renderElem ??
+            currentConstructorOptions.$renderElem ?? this.builderOptions.$renderElem;
         // options building
         return _.defaults({
             extraConfigurators,
@@ -84,7 +84,7 @@ export class ComponentOptionsBuilder {
             eventsBinderProviders,
             stateHolderProvider,
             childrenCollectionProvider,
-            $elem
+            $renderElem
         }, this.descendantComponentClassOptions, currentConstructorOptions, this.builderOptions);
     }
 
@@ -168,10 +168,10 @@ export class ComponentOptionsBuilder {
     }
 
     /**
-     * @param {ElemIdOrJQuery} $elem
+     * @param {ElemIdOrJQuery} $renderElem
      */
-    withElem($elem) {
-        this.builderOptions.$elem = $elem;
+    withRenderElem($renderElem) {
+        this.builderOptions.$renderElem = $renderElem;
         return this;
     }
 
@@ -250,9 +250,9 @@ export function addConfigurator(configurator) {
 }
 
 /**
- * @param {ElemIdOrJQuery} $elem will go into SimpleView.$elem
+ * @param {ElemIdOrJQuery} elemIdOrJQuery will go into SimpleView.$renderElem
  * @return {ComponentOptionsBuilder}
  */
-export function withElem($elem) {
-    return new ComponentOptionsBuilder().withElem($elem);
+export function withRenderElem(elemIdOrJQuery) {
+    return new ComponentOptionsBuilder().withRenderElem(elemIdOrJQuery);
 }

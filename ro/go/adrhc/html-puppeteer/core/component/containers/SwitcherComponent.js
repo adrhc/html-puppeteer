@@ -1,7 +1,8 @@
 import {USE_CSS} from "../../view/SimpleView.js";
-import GlobalConfig, {activeNameOf} from "../../../util/GlobalConfig.js";
+import GlobalConfig, {activeNameOf, elemIdOrJQueryOf} from "../../../util/GlobalConfig.js";
 import {isTrue} from "../../../util/AssertionUtils.js";
 import AbstractContainerComponent from "./AbstractContainerComponent.js";
+import {withRenderElem} from "../options/ComponentOptionsBuilder.js";
 
 /**
  * @typedef {AbstractContainerComponentOptions} SwitcherComponentOptions
@@ -71,6 +72,7 @@ export default class SwitcherComponent extends AbstractContainerComponent {
             childrenRemovalStrategy: USE_CSS,
             ignoreShellTemplateOptions: true,
             dontRenderChildren: true,
+            childrenOptions: withRenderElem(elemIdOrJQueryOf(options)).options(),
             ...options
         });
         this.activeNameKey = this.config.activeNameKey ?? GlobalConfig.ACTIVE_NAME_KEY;

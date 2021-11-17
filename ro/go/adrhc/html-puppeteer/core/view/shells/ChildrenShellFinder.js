@@ -1,5 +1,4 @@
 import {dataPartSelectorOf, dataTypeSelector} from "../../../util/SelectorUtils.js";
-import {jQueryOf} from "../../../util/Utils.js";
 import {typeOf} from "../../../util/GlobalConfig.js";
 
 /**
@@ -16,10 +15,10 @@ export default class ChildrenShellFinder {
     containerIsComponent;
 
     /**
-     * @param {ElemIdOrJQuery} elemIdOrJQuery
+     * @param {jQuery<HTMLElement>} $containerElem
      */
-    constructor(elemIdOrJQuery) {
-        this.$containerElem = jQueryOf(elemIdOrJQuery);
+    constructor($containerElem) {
+        this.$containerElem = $containerElem;
         this.containerIsComponent = typeOf(this.$containerElem) != null;
     }
 

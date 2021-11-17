@@ -4,6 +4,7 @@ import {idOf} from "../util/DomUtils.js";
 import {isTrue} from "../util/AssertionUtils.js";
 import ChildrenCollection from "./component/composition/ChildrenCollection.js";
 import ChildrenShellFinder from "./view/shells/ChildrenShellFinder.js";
+import {jQueryOf} from "../util/Utils.js";
 
 /**
  * @param {CreateComponentParams} options
@@ -14,7 +15,7 @@ import ChildrenShellFinder from "./view/shells/ChildrenShellFinder.js";
  * @return {AbstractComponent|AbstractComponent[]}
  */
 export default function animate({componentsHolder, dontRender, alwaysReturnArray, ...componentsOptions} = {}) {
-    const childrenShellFinder = new ChildrenShellFinder(componentsHolder ?? document);
+    const childrenShellFinder = new ChildrenShellFinder(jQueryOf(componentsHolder ?? document));
     const childrenCollection = new ChildrenCollection({
         dontRenderChildren: dontRender,
         childrenOptions: componentsOptions

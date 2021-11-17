@@ -9,7 +9,7 @@ export default class SimpleTemplateView extends AbstractTemplateView {
      */
     replace(values) {
         const viewValues = this.viewValuesTransformer(values);
-        this.$elem.html(generateHtml(this.htmlTemplate, viewValues) ?? "")
+        this.$renderElem.html(generateHtml(this.htmlTemplate, viewValues) ?? "")
     }
 
     /**
@@ -18,7 +18,7 @@ export default class SimpleTemplateView extends AbstractTemplateView {
     remove() {
         switch (this.viewRemovalStrategy) {
             case USE_HTML_TEMPLATE:
-                this.$elem.html(generateHtml(this.htmlTemplate) ?? "");
+                this.$renderElem.html(generateHtml(this.htmlTemplate) ?? "");
                 break;
             default:
                 super.remove();

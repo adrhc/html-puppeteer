@@ -3,7 +3,7 @@ import DefaultComponentConfigurator from "./configurator/DefaultComponentConfigu
 import {applyExtraConfigurators} from "./configurator/ComponentConfigurator.js";
 import GlobalConfig from "../../util/GlobalConfig.js";
 import {isTrue} from "../../util/AssertionUtils.js";
-import {viewElemOf} from "../view/SimpleView.js";
+import {renderOrConfigElemOf} from "../view/SimpleView.js";
 
 /**
  * @typedef {StateHolderOptions & ValueStateInitializerOptions & StateChangesHandlersInvokerOptions} AbstractComponentOptions
@@ -37,6 +37,10 @@ export default class AbstractComponent {
      */
     dataAttributes;
     /**
+     * @type {boolean}
+     */
+    eventHandlersBound;
+    /**
      * @type {EventsBinder}
      */
     eventsBinder;
@@ -66,8 +70,8 @@ export default class AbstractComponent {
     /**
      * @return {jQuery<HTMLElement>}
      */
-    get $elem() {
-        return viewElemOf(this.config);
+    get $renderElem() {
+        return renderOrConfigElemOf(this.config);
     }
 
     /**
@@ -140,8 +144,20 @@ export default class AbstractComponent {
      */
     render(value) {
         this._initializeState(value);
-        this.eventsBinder?.attachEventHandlers();
+        this._attachEventHandlers();
         return this;
+    }
+
+    /**
+     * @protected
+     */
+    _attachEventHandlers() {
+        if (this.eventHandlersBound) {
+            console.warn(`[render] event handlers already bound! id = ${this.id}, partName = ${this.partName}, parentId = ${this.parent?.id}`)
+        } else {
+            this.eventsBinder?.attachEventHandlers();
+            this.eventHandlersBound = true;
+        }
     }
 
     /**
@@ -150,6 +166,7 @@ export default class AbstractComponent {
     close() {
         this.disconnect();
         this.replaceState();
+        this.rendered = false;
     }
 
     /**
@@ -157,6 +174,7 @@ export default class AbstractComponent {
      */
     disconnect() {
         this.eventsBinder?.detachEventHandlers();
+        this.eventHandlersBound = false;
     }
 
     /**
