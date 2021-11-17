@@ -38,11 +38,7 @@ export default class ShellsManager {
      * @param {PartName} partName
      * @return {jQuery<HTMLElement>[]}
      */
-    getOrCreateShell(partName) {
-        const $shell = this.childrenShellFinder.$getChildShellsByPartName(partName);
-        if ($shell.length) {
-            return $shell;
-        }
+    createAndPlaceShell(partName) {
         isTrue(this.shellCreator.shellTemplate != null,
             `"${partName}" shell is missing from "${this.shellCreator.parentId}"!\n\n"${this.shellCreator.parentId}" content is:\n${this.$containerElem.html()}\n"${this.shellCreator.parentId}" text is:\n${this.$containerElem.text()}`);
         const kidShell = this.shellCreator.createShell(partName);

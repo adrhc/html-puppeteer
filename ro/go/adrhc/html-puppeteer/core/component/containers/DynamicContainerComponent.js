@@ -69,6 +69,29 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
     }
 
     /**
+     * @param {PartName} partName
+     * @protected
+     */
+    _createOrUpdateChild(partName) {
+        const childrenByPartName = this.childrenCollection.getChildrenByPartName(partName);
+        if (childrenByPartName.length) {
+            childrenByPartName.forEach(it => it.replaceFromParent());
+        } else {
+            this._createChild(partName)
+        }
+    }
+
+    /**
+     * @param {PartName} partName
+     * @protected
+     */
+    _createChild(partName) {
+        const $shells = this.shellsManager.createAndPlaceShell(partName);
+        isTrue(!!$shells.length, `$shells is empty for part named ${partName}!`)
+        $shells.forEach($el => this.childrenCollection.createComponentForShell($el))
+    }
+
+    /**
      * Creates the children and shells for parts not already having the related child created.
      *
      * @protected
@@ -77,29 +100,6 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
         partsOf(this.getMutableState())
             .filter(([key]) => !this.partialStateHolder.hasEmptyPart(key))
             .filter(([key]) => !this.childrenCollection.getChildrenByPartName(key).length)
-            .forEach(([key]) => this._createOrUpdateChild(key));
-    }
-
-    /**
-     * @param {PartName} partName
-     * @protected
-     */
-    _createOrUpdateChild(partName) {
-        const $shells = this.shellsManager.getOrCreateShell(partName);
-        isTrue(!!$shells.length, `$shells is empty for part named ${partName}!`)
-        $shells.forEach($el => this._createOrUpdateChildForElem($el))
-    }
-
-    /**
-     * @param {jQuery<HTMLElement>} $shell
-     */
-    _createOrUpdateChildForElem($shell) {
-        const child = this.childrenCollection.getChildByShell($shell);
-        if (child) {
-            child.replaceFromParent();
-        } else {
-            // at this point the item component's id is available as data-GlobalConfig.COMPONENT_ID on $shell
-            this.childrenCollection.createComponentForShell($shell);
-        }
+            .forEach(([key]) => this._createChild(key));
     }
 }

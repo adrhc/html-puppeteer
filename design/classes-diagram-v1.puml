@@ -139,7 +139,7 @@ class ChildrenShells {
 #shellIsContainerHtml: boolean
 #shellTemplate: string
 +constructor(options)
-+getOrCreateShell(partName)
++createAndPlaceShell(partName)
 }
 
 class ChildrenCollection {
