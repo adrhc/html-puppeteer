@@ -1,10 +1,10 @@
-import AbstractContainerComponent from "./AbstractContainerComponent.js";
 import {USE_CSS} from "../../view/SimpleView.js";
 import GlobalConfig, {activeNameOf} from "../../../util/GlobalConfig.js";
 import {isTrue} from "../../../util/AssertionUtils.js";
+import AbstractDynamicContainerComponent from "./AbstractDynamicContainerComponent.js";
 
 /**
- * @typedef {AbstractContainerComponentOptions} OnOffComponentOptions
+ * @typedef {AbstractDynamicContainerComponentOptions} OnOffComponentOptions
  * @property {string=} activeNamesKey identify the part storing the active-component names
  */
 
@@ -15,7 +15,7 @@ import {isTrue} from "../../../util/AssertionUtils.js";
  * @property {OptionalPartName=} activeNames
  * @property {SCP=} partValue
  */
-export default class OnOffComponent extends AbstractContainerComponent {
+export default class OnOffComponent extends AbstractDynamicContainerComponent {
     /**
      * @type {string}
      */
@@ -49,7 +49,7 @@ export default class OnOffComponent extends AbstractContainerComponent {
     replaceState(newState) {
         this.childrenCollection.disconnectAndRemoveChildren();
         super.replaceState(_.omit(newState, this.activeNamesKey));
-        this.childrenCollection.createChildrenForAllShells();
+        this.createChildrenForAllShells();
         this.childrenCollection.closeChildren();
         this.switchTo(newState[this.activeNamesKey]);
     }

@@ -54,7 +54,6 @@ export default class ContainerHelper {
         return new ChildrenCollection({
             parent: this.component,
             dontRenderChildren: this.config.dontRenderChildren,
-            childrenShellFinder: this.createChildrenShellFinder(),
             childrenOptions: this.createContainerChildrenCommonOptions()
         });
     }

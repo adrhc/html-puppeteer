@@ -1,10 +1,10 @@
 import {USE_CSS} from "../../view/SimpleView.js";
 import GlobalConfig, {activeNameOf} from "../../../util/GlobalConfig.js";
-import AbstractContainerComponent from "./AbstractContainerComponent.js";
 import {isTrue} from "../../../util/AssertionUtils.js";
+import AbstractDynamicContainerComponent from "./AbstractDynamicContainerComponent.js";
 
 /**
- * @typedef {AbstractContainerComponentOptions} SwitcherComponentOptions
+ * @typedef {AbstractDynamicContainerComponentOptions} SwitcherComponentOptions
  * @property {string=} activeNameKey is the partName storing the active-component name (i.e. the name equal to children's "data-active-name" in html)
  * @property {string=} activeValueKey is the partName where the active-component's value is stored by SwitcherComponent
  * @property {boolean=} [valueKeyIsActiveName=true] indicates that each active-component name is the activeNameKey's value; e.g. activeNameKey="editable" means that replacePart("editable", newState) should set newState into both SwitcherComponent (partial replace) and the active-component (complete replace)
@@ -33,7 +33,7 @@ import {isTrue} from "../../../util/AssertionUtils.js";
  * on active-component too. A complete state change on SwitcherComponent
  * should translate into a complete state change on active-component too.
  */
-export default class SwitcherComponent extends AbstractContainerComponent {
+export default class SwitcherComponent extends AbstractDynamicContainerComponent {
     /**
      * @type {string}
      */
@@ -85,7 +85,7 @@ export default class SwitcherComponent extends AbstractContainerComponent {
     replaceState(newState) {
         this.childrenCollection.disconnectAndRemoveChildren();
         super.replaceState(_.omit(newState, this.activeNameKey));
-        this.childrenCollection.createChildrenForAllShells();
+        this.createChildrenForAllShells();
         this.childrenCollection.closeChildren();
         this.switchTo(newState[this.activeNameKey], this._getActiveValueFromState());
     }

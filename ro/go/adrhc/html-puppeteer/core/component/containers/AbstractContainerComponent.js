@@ -89,6 +89,15 @@ export default class AbstractContainerComponent extends AbstractComponent {
     }
 
     /**
+     * Creates the children for all existing shells.
+     */
+    createChildrenForAllShells() {
+        this.childrenCollection.removeChildren();
+        this.childrenShellFinder.$getAllChildrenShells()
+            .forEach($shell => this.childrenCollection.createComponentForShell($shell));
+    }
+
+    /**
      * @return {ChildrenCollection}
      * @protected
      */

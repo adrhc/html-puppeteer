@@ -1,19 +1,19 @@
 import {jQueryOf} from "../../../util/Utils.js";
 import {withDefaults} from "../options/ComponentOptionsBuilder.js";
 import ContainerEventsBinder from "../events-binder/ContainerEventsBinder.js";
-import AbstractContainerComponent from "./AbstractContainerComponent.js";
 import {stateIsEmpty} from "../../state/StateHolder.js";
 import {partsOf} from "../../state/PartialStateHolder.js";
 import {isTrue} from "../../../util/AssertionUtils.js";
 import ContainerHelper from "../../../helper/ContainerHelper.js";
+import AbstractDynamicContainerComponent from "./AbstractDynamicContainerComponent.js";
 
 /**
- * @typedef {AbstractContainerComponentOptions} DynamicContainerComponentOptions
+ * @typedef {AbstractDynamicContainerComponentOptions} DynamicContainerComponentOptions
  */
 /**
  * @template SCT, SCP
  */
-export default class DynamicContainerComponent extends AbstractContainerComponent {
+export default class DynamicContainerComponent extends AbstractDynamicContainerComponent {
     /**
      * @type {ChildrenShellFinder}
      */
@@ -55,7 +55,7 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
         // the parent redraws itself
         super.replaceState(newState);
         // create children for existing (static) shells
-        this.childrenCollection.createChildrenForAllShells();
+        this.createChildrenForAllShells();
         // create dynamic children
         this._createMissingShellsAndChildren();
     }

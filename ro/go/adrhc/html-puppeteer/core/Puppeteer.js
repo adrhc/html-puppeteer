@@ -14,12 +14,13 @@ import ChildrenShellFinder from "./view/shells/ChildrenShellFinder.js";
  * @return {AbstractComponent|AbstractComponent[]}
  */
 export default function animate({componentsHolder, dontRender, alwaysReturnArray, ...componentsOptions} = {}) {
+    const childrenShellFinder = new ChildrenShellFinder(componentsHolder ?? document);
     const childrenCollection = new ChildrenCollection({
         dontRenderChildren: dontRender,
-        childrenShellFinder: new ChildrenShellFinder(componentsHolder ?? document),
         childrenOptions: componentsOptions
     });
-    const components = childrenCollection.createChildrenForAllShells();
+    childrenShellFinder.$getAllChildrenShells().forEach($shell => childrenCollection.createComponentForShell($shell));
+    const components = childrenCollection.childrenArray;
     console.log(`[Puppeteer.animate] childrenCollection created ${components.length} components`);
     if (components.length === 1 && !alwaysReturnArray) {
         return components[0];

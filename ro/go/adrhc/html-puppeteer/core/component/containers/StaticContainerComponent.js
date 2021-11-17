@@ -39,7 +39,7 @@ export default class StaticContainerComponent extends AbstractContainerComponent
         // the parent redraws itself
         super.replaceState(newState);
         // create children for existing (static) shells
-        this.childrenCollection.createChildrenForAllShells();
+        this.createChildrenForAllShells();
     }
 
     /**

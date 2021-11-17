@@ -1,17 +1,20 @@
-/**
- * @typedef {Object} ChildrenCollectionOptions
- * @property {AbstractContainerComponent=} parent
- * @property {ChildrenShellFinder=} childrenShellFinder
- * @property {boolean=} dontRenderChildren
- * @property {CreateComponentParams=} childrenOptions are the options used to create the components for found shells
- */
-
 import {createComponent} from "../../Puppeteer.js";
 import {isTrue} from "../../../util/AssertionUtils.js";
 import {partOf} from "../../../util/GlobalConfig.js";
 
 /**
+ * @typedef {Object} ChildrenCollectionOptions
+ * @property {AbstractContainerComponent=} parent
+ * @property {boolean=} dontRenderChildren
+ * @property {CreateComponentParams=} childrenOptions are the options used to create the components for found shells
+ */
+
+/**
  * @template SCT, SCP
+ */
+
+/**
+ * Manages the container's children
  */
 export default class ChildrenCollection {
     /**
@@ -22,10 +25,6 @@ export default class ChildrenCollection {
      * @type {CreateComponentParams}
      */
     childrenOptions
-    /**
-     * @type {ChildrenShellFinder}
-     */
-    childrenShellFinder;
     /**
      * @type {boolean}
      */
@@ -45,11 +44,10 @@ export default class ChildrenCollection {
     /**
      * @param {ChildrenCollectionOptions} options
      */
-    constructor({parent, dontRenderChildren, childrenShellFinder, childrenOptions}) {
+    constructor({parent, dontRenderChildren, childrenOptions}) {
         this.parent = parent;
         this.dontRenderChildren = dontRenderChildren;
         this.childrenOptions = {parent, ...childrenOptions};
-        this.childrenShellFinder = childrenShellFinder;
     }
 
     /**
@@ -63,21 +61,6 @@ export default class ChildrenCollection {
             console.warn("[ChildrenCollection] partName is missing though parent is set!");
         }
         this.children[component.id] = this.dontRenderChildren ? component : component.render();
-    }
-
-    /**
-     * - purge this.children collection
-     * - detect existing shells
-     * - create the components corresponding to shells
-     * - store the components into this.children collection
-     * - render all children
-     *
-     * @return {AbstractComponent[]}
-     */
-    createChildrenForAllShells() {
-        this.children = {};
-        this.childrenShellFinder.$getAllChildrenShells().forEach($shell => this.createComponentForShell($shell));
-        return this.childrenArray;
     }
 
     /**
@@ -108,7 +91,7 @@ export default class ChildrenCollection {
      */
     closeAndRemoveChildren() {
         this.closeChildren();
-        this.children = {};
+        this.removeChildren();
     }
 
     /**
@@ -148,16 +131,14 @@ export default class ChildrenCollection {
      */
     disconnectAndRemoveChildren() {
         this.childrenArray.forEach(child => child.disconnect());
-        this.children = {};
+        this.removeChildren();
     }
 
     /**
-     * @param {jQuery<HTMLElement>} $shell
-     * @return {boolean}
-     * @protected
+     * Removes all children.
      */
-    _hasChildrenHaving($shell) {
-        return !!this.childrenArray.find(it => it.$elem[0] === $shell[0]);
+    removeChildren() {
+        this.children = {};
     }
 
     /**
