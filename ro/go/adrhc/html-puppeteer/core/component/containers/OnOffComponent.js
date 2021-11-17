@@ -52,7 +52,7 @@ export default class OnOffComponent extends AbstractContainerComponent {
         this.createChildrenForAllShells();
         // the children render as "closed"
         this.childrenCollection.closeAll();
-        this.switchTo(newState[this.activeNamesKey]);
+        this.switchTo(newState?.[this.activeNamesKey]);
     }
 
     /**
@@ -84,7 +84,7 @@ export default class OnOffComponent extends AbstractContainerComponent {
         super.replacePart(this.activeNamesKey, newActiveNames);
         this.childrenCollection.accept(c => {
             const activeName = activeNameOf(c);
-            if (!newActiveNames.includes(activeName)) {
+            if (!newActiveNames?.includes(activeName)) {
                 this._switchOff(activeName);
             } else if (!previousActiveNames?.includes(activeName)) {
                 this._switchOn(activeName, this.getPart(c.partName));
