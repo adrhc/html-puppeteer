@@ -51,11 +51,13 @@ export default class ContainerHelper {
      * @return {ChildrenCollection}
      */
     createChildrenCollection() {
-        return new ChildrenCollection({
-            parent: this.component,
-            dontRenderChildren: this.config.dontRenderChildren,
-            childrenOptions: this.createContainerChildrenCommonOptions()
-        });
+        return this.config.childrenCollectionProvider ?
+            this.config.childrenCollectionProvider(this.component) :
+            new ChildrenCollection({
+                parent: this.component,
+                dontRenderChildren: this.config.dontRenderChildren,
+                childrenOptions: this.createContainerChildrenCommonOptions()
+            });
     }
 
     /**

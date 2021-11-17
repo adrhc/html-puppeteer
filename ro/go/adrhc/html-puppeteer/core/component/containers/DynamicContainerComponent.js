@@ -4,7 +4,6 @@ import ContainerEventsBinder from "../events-binder/ContainerEventsBinder.js";
 import {stateIsEmpty} from "../../state/StateHolder.js";
 import {partsOf} from "../../state/PartialStateHolder.js";
 import {isTrue} from "../../../util/AssertionUtils.js";
-import ContainerHelper from "../../../helper/ContainerHelper.js";
 import AbstractDynamicContainerComponent from "./AbstractDynamicContainerComponent.js";
 
 /**
@@ -14,10 +13,6 @@ import AbstractDynamicContainerComponent from "./AbstractDynamicContainerCompone
  * @template SCT, SCP
  */
 export default class DynamicContainerComponent extends AbstractDynamicContainerComponent {
-    /**
-     * @type {ChildrenShellFinder}
-     */
-    childrenShellFinder;
     /**
      * @type {ShellsManager}
      */
@@ -36,9 +31,7 @@ export default class DynamicContainerComponent extends AbstractDynamicContainerC
             containerHtml: jQueryOf(options.elemIdOrJQuery).html(),
             htmlTemplate: "", ...options
         }).addEventsBinders(new ContainerEventsBinder()).options());
-        const helper = new ContainerHelper(this);
-        this.shellsManager = helper.createShellsManager();
-        this.childrenShellFinder = helper.createChildrenShellFinder();
+        this.shellsManager = this.containerHelper.createShellsManager();
     }
 
     /**

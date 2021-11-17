@@ -18,6 +18,14 @@ export default class AbstractContainerComponent extends AbstractComponent {
      * @type {ChildrenCollection}
      */
     childrenCollection;
+    /**
+     * @type {ChildrenShellFinder}
+     */
+    childrenShellFinder;
+    /**
+     * @type {ContainerHelper}
+     */
+    containerHelper;
 
     /**
      * @return {PartialStateHolder}
@@ -38,7 +46,9 @@ export default class AbstractContainerComponent extends AbstractComponent {
             .addComponentIllustratorProvider(component =>
                 componentIllustratorOf(component), !!componentIllustratorProviders?.length)
             .options());
-        this.childrenCollection = this._createChildrenCollection();
+        this.containerHelper = new ContainerHelper(this);
+        this.childrenShellFinder = this.containerHelper.createChildrenShellFinder();
+        this.childrenCollection = this.containerHelper.createChildrenCollection();
     }
 
     /**
@@ -95,18 +105,5 @@ export default class AbstractContainerComponent extends AbstractComponent {
         this.childrenCollection.removeChildren();
         this.childrenShellFinder.$getAllChildrenShells()
             .forEach($shell => this.childrenCollection.createComponentForShell($shell));
-    }
-
-    /**
-     * @return {ChildrenCollection}
-     * @protected
-     */
-    _createChildrenCollection() {
-        if (this.config.childrenCollectionProvider) {
-            return this.config.childrenCollectionProvider(this);
-        } else {
-            const helper = new ContainerHelper(this);
-            return helper.createChildrenCollection();
-        }
     }
 }
