@@ -16,7 +16,7 @@ $(() => {
         .occurOn("button[data-value]")
         .useHandlerProvider(component => (ev) => {
             const value = ev.target.name;
-            component.replaceParts({[value]: `${value}-${Math.random()}`});
+            component.replacePart([value], `${value}-${Math.random()}`);
         })
         .and()
         .buildEventsBinderProvider();
