@@ -37,14 +37,14 @@ export default class AbstractContainerComponent extends AbstractComponent {
     /**
      * @param {AbstractContainerComponentOptions} options
      */
-    constructor({componentIllustratorProviders, ...restOfOptions}) {
-        super(withDefaults(restOfOptions)
+    constructor(options) {
+        super(withDefaults(options)
             .withStateHolderProvider(config => new PartialStateHolder(config))
             // the container's view should not be updated by the container's view
-            // when partial changes occur, that's the children responsibility that's
-            // why ComponentIllustrator is used instead of SimplePartsIllustrator
-            .addComponentIllustratorProvider(component =>
-                componentIllustratorOf(component), !!componentIllustratorProviders?.length)
+            // when partial changes occur; that's the children responsibility hence
+            // ComponentIllustrator is used instead of SimplePartsIllustrator
+            .addIfMissingComponentIllustratorProvider(
+                component => componentIllustratorOf(component))
             .options());
         this.containerHelper = new ContainerHelper(this);
         this.childrenShellFinder = this.containerHelper.createChildrenShellFinder();

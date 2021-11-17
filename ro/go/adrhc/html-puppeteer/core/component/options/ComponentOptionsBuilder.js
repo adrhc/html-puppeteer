@@ -18,6 +18,13 @@ export class ComponentOptionsBuilder {
      */
     descendantComponentClassOptions;
 
+    get descendantAndBuilderComponentIllustratorProviders() {
+        return undefinedIfEmpty([
+            ...(this.descendantComponentClassOptions.componentIllustratorProviders ?? []),
+            ...(this.builderOptions.componentIllustratorProviders ?? [])
+        ]);
+    }
+
     /**
      * @param {ComponentOptions} descendantComponentClassOptions
      */
@@ -118,6 +125,11 @@ export class ComponentOptionsBuilder {
             this.builderOptions.componentIllustratorProviders = [componentIllustratorProvider];
         }
         return this;
+    }
+
+    addIfMissingComponentIllustratorProvider(componentIllustratorProvider) {
+        return this.addComponentIllustratorProvider(componentIllustratorProvider,
+            !!this.descendantAndBuilderComponentIllustratorProviders?.length);
     }
 
     /**

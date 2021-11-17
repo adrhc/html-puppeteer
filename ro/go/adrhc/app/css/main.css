@@ -109,11 +109,11 @@ div[data-part], div[data-active-name], .parent {
     margin-left: .3rem;
 }
 
-.bg-aliceblue {
+.bg-aliceblue, .aliceblue {
     background-color: aliceblue;
 }
 
-.bg-antiquewhite {
+.bg-antiquewhite, .antiquewhite {
     background-color: antiquewhite;
 }
 
@@ -131,7 +131,7 @@ div[data-part], div[data-active-name], .parent {
 /* space between "badge" items */
 .scenario10 .flex-start [data-part="cats"] [data-type]:not(:last-child),
 .scenario12 .flex-start [data-part="dogs"] [data-type]:not(:last-child),
-.scenario12 .flex-start [data-part="kittens"] [data-type]:not(:last-child){
+.scenario12 .flex-start [data-part="kittens"] [data-type]:not(:last-child) {
     margin-right: 0.2rem;
 }
 

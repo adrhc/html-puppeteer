@@ -2,7 +2,8 @@ import {USE_CSS} from "../../view/SimpleView.js";
 import GlobalConfig, {activeNameOf, elemIdOrJQueryOf} from "../../../util/GlobalConfig.js";
 import {isTrue} from "../../../util/AssertionUtils.js";
 import AbstractContainerComponent from "./AbstractContainerComponent.js";
-import {withRenderElem} from "../options/ComponentOptionsBuilder.js";
+import {withDefaults, withRenderElem} from "../options/ComponentOptionsBuilder.js";
+import SwitcherIllustrator from "../../state-changes-handler/SwitcherIllustrator.js";
 
 /**
  * @typedef {AbstractContainerComponentOptions} SwitcherComponentOptions
@@ -58,7 +59,7 @@ export default class SwitcherComponent extends AbstractContainerComponent {
     }
 
     /**
-     * @return {PartName}
+     * @return {string|undefined}
      */
     get activeName() {
         return this.getPart(this.activeNameKey, true);
@@ -67,14 +68,17 @@ export default class SwitcherComponent extends AbstractContainerComponent {
     /**
      * @param {SwitcherComponentOptions} options
      */
-    constructor(options) {
-        super({
+    constructor({componentIllustratorProviders, ...restOfOptions}) {
+        super(withDefaults({
             childrenRemovalStrategy: USE_CSS,
             ignoreShellTemplateOptions: true,
             dontRenderChildren: true,
-            childrenOptions: withRenderElem(elemIdOrJQueryOf(options)).options(),
-            ...options
-        });
+            childrenOptions: withRenderElem(elemIdOrJQueryOf(restOfOptions)).options(),
+            ...restOfOptions
+        })
+            .addIfMissingComponentIllustratorProvider(component =>
+                new SwitcherIllustrator({activeNameKey: GlobalConfig.ACTIVE_NAME_KEY, ...component.config}))
+            .options());
         this.activeNameKey = this.config.activeNameKey ?? GlobalConfig.ACTIVE_NAME_KEY;
         this.activeValueKey = this.config.activeValueKey;
         this.valueKeyIsActiveName = this.config.valueKeyIsActiveName ?? true;
@@ -91,7 +95,8 @@ export default class SwitcherComponent extends AbstractContainerComponent {
         this.createChildrenForAllShells();
         // the children render as "closed"
         this.childrenCollection.closeAll();
-        this.switchTo(newState[this.activeNameKey], this._getActiveValueFromState());
+        const activeName = newState[this.activeNameKey];
+        this.switchTo(activeName, this._getActiveValueFromState(activeName));
     }
 
     /**
@@ -125,14 +130,15 @@ export default class SwitcherComponent extends AbstractContainerComponent {
     }
 
     /**
+     * @param {string=} activeName
      * @return {*}
      * @protected
      */
-    _getActiveValueFromState() {
+    _getActiveValueFromState(activeName) {
         const switcherState = this.getStateCopy();
         if (this.valueKeyIsActiveName) {
             // active value is the state part pointed by the active name
-            const activeName = switcherState?.[this.activeNameKey];
+            activeName ??= switcherState?.[this.activeNameKey];
             return activeName == null ? undefined : switcherState[activeName];
         } else if (this.activeValueKey != null) {
             // active value is a fixed state part, the one specified by activeValueKey
