@@ -58,5 +58,5 @@ function componentOptionsOf(componentId, options) {
  * @return {AbstractComponent}
  */
 function instanceOf($el, type, componentOptions = {}) {
-    return createByType(type, {...componentOptions, [GlobalConfig.ELEM_ID_OR_JQUERY]: $el});
+    return createByType(type, {[GlobalConfig.ELEM_ID_OR_JQUERY]: $el, ...componentOptions});
 }

@@ -10,7 +10,7 @@ export class ComponentOptionsBuilder {
     /**
      * @type {ComponentOptionsBuilderOptions}
      */
-    builderOptions = {eventsBinderProviders: []};
+    builderOptions = {};
     /**
      * these should come from the descendant class
      *
@@ -43,36 +43,39 @@ export class ComponentOptionsBuilder {
      */
     to(currentConstructorOptions = {}) {
         // componentIllustratorProviders
-        const componentIllustratorProviders = [
+        const componentIllustratorProviders = undefinedIfEmpty([
             ...(this.descendantComponentClassOptions.componentIllustratorProviders ?? []),
             ...(currentConstructorOptions.componentIllustratorProviders ?? []),
             ...(this.builderOptions.componentIllustratorProviders ?? [])
-        ];
+        ]);
         // extraStateChangesHandlers
-        const extraStateChangesHandlers = [
+        const extraStateChangesHandlers = undefinedIfEmpty([
             ...(this.descendantComponentClassOptions.extraStateChangesHandlers ?? []),
             ...(currentConstructorOptions.extraStateChangesHandlers ?? []),
             ...(this.builderOptions.extraStateChangesHandlers ?? [])
-        ];
+        ]);
         // extraConfigurators
-        const extraConfigurators = [
+        const extraConfigurators = undefinedIfEmpty([
             ...(this.builderOptions.extraConfigurators ?? []),
             ...(currentConstructorOptions.extraConfigurators ?? []),
             // descendant classes have priority: latest might override things
             ...(this.descendantComponentClassOptions.extraConfigurators ?? [])
-        ];
+        ]);
         // events binders: all provided are used
-        const eventsBinderProviders = [
+        const eventsBinderProviders = undefinedIfEmpty([
             ...(this.builderOptions.eventsBinderProviders ?? []),
             ...(currentConstructorOptions.eventsBinderProviders ?? []),
             ...(this.descendantComponentClassOptions.eventsBinderProviders ?? [])
-        ];
+        ]);
         // stateHolderProvider using default priority: descendant, current-constructor, builder
         const stateHolderProvider = this.descendantComponentClassOptions.stateHolderProvider ??
             currentConstructorOptions.stateHolderProvider ?? this.builderOptions.stateHolderProvider;
-        // stateHolderProvider using default priority: descendant, current-constructor, builder
+        // childrenCollectionProvider using default priority: descendant, current-constructor, builder
         const childrenCollectionProvider = this.descendantComponentClassOptions.childrenCollectionProvider ??
             currentConstructorOptions.childrenCollectionProvider ?? this.builderOptions.childrenCollectionProvider;
+        // childrenCollectionProvider using default priority: descendant, current-constructor, builder
+        const $elem = this.descendantComponentClassOptions.$elem ??
+            currentConstructorOptions.$elem ?? this.builderOptions.$elem;
         // options building
         return _.defaults({
             extraConfigurators,
@@ -80,7 +83,8 @@ export class ComponentOptionsBuilder {
             extraStateChangesHandlers,
             eventsBinderProviders,
             stateHolderProvider,
-            childrenCollectionProvider
+            childrenCollectionProvider,
+            $elem
         }, this.descendantComponentClassOptions, currentConstructorOptions, this.builderOptions);
     }
 
@@ -158,7 +162,16 @@ export class ComponentOptionsBuilder {
     addEventsBinders(...eventsBinderOrProviders) {
         const eventsBinderProviders = eventsBinderOrProviders
             .map(it => typeof it === "function" ? it : eventsBinderProviderFnOf(it));
+        this.builderOptions.eventsBinderProviders ??= [];
         this.builderOptions.eventsBinderProviders.push(...eventsBinderProviders);
+        return this;
+    }
+
+    /**
+     * @param {ElemIdOrJQuery} $elem
+     */
+    withElem($elem) {
+        this.builderOptions.$elem = $elem;
         return this;
     }
 
@@ -188,6 +201,10 @@ export class ComponentOptionsBuilder {
         optionsConsumer(this.builderOptions);
         return this;
     }
+}
+
+function undefinedIfEmpty(array) {
+    return array.length ? array : undefined;
 }
 
 export function withDefaults(options) {
@@ -226,7 +243,16 @@ export function addStateChangesHandler(stateChangesHandler) {
  * adds an extra ComponentConfigurator
  *
  * @param {ComponentConfigurator} configurator
+ * @return {ComponentOptionsBuilder}
  */
 export function addConfigurator(configurator) {
     return new ComponentOptionsBuilder().addConfigurator(configurator);
+}
+
+/**
+ * @param {ElemIdOrJQuery} $elem will go into SimpleView.$elem
+ * @return {ComponentOptionsBuilder}
+ */
+export function withElem($elem) {
+    return new ComponentOptionsBuilder().withElem($elem);
 }

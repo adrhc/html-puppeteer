@@ -1,5 +1,5 @@
 import AbstractView from "./AbstractView.js";
-import {alertOrThrow, isTrue} from "../../util/AssertionUtils.js";
+import {alertOrThrow} from "../../util/AssertionUtils.js";
 import {jQueryOf} from "../../util/Utils.js";
 import {disable, enable} from "../../util/DomUtils.js";
 
@@ -15,6 +15,10 @@ export const RENDER_TEXT = "text";
 export const RENDER_HTML = "html";
 
 /**
+ * @typedef {function(): jQuery<HTMLElement>} ElemFactory
+ */
+
+/**
  * @typedef {function(values: *): *} ViewValuesTransformerFn
  */
 /**
@@ -24,11 +28,14 @@ export const RENDER_HTML = "html";
  * @typedef {"RENDER_VAL"|"RENDER_TEXT"|"RENDER_HTML"} ViewRenderStrategy
  */
 /**
- * @typedef {AbstractTemplateViewOptions} SimpleViewOptions
- * @property {ViewValuesTransformerFn=} viewValuesTransformer
+ * @typedef {Object} ViewConfig
  * @property {string|jQuery<HTMLElement>=} elemIdOrJQuery
  * @property {jQuery<HTMLElement>=} $elem
  * @property {ViewRenderStrategy=} viewRenderStrategy
+ */
+/**
+ * @typedef {ViewConfig & AbstractTemplateViewOptions} SimpleViewOptions
+ * @property {ViewValuesTransformerFn=} viewValuesTransformer
  * @property {ViewRemovalStrategy=} viewRemovalStrategy
  * @property {string=} removedPlaceholder is the text or html to be used when the component is removed
  * @property {string=} removedCss is the class to add to the $elem when the component is removed
@@ -38,14 +45,6 @@ export const RENDER_HTML = "html";
  */
 export default class SimpleView extends AbstractView {
     /**
-     * @type {jQuery<HTMLElement>}
-     */
-    $elem;
-    /**
-     * @type {LazySetupWorker[]}
-     */
-    lazySetupWorkers = [];
-    /**
      * @type {string}
      */
     removedCss;
@@ -54,54 +53,50 @@ export default class SimpleView extends AbstractView {
      */
     removedPlaceholder;
     /**
+     * @type {ViewConfig}
+     */
+    viewConfig
+    /**
      * @type {ViewRemovalStrategy}
      */
     viewRemovalStrategy;
-    /**
-     * @type {ViewRenderStrategy}
-     */
-    viewRenderStrategy;
     /**
      * @type {ViewValuesTransformerFn}
      */
     viewValuesTransformer;
 
     /**
-     * @param {SimpleViewOptions} options
+     * @return {jQuery<HTMLElement>}
      */
-    constructor({
-                    viewValuesTransformer,
-                    elemIdOrJQuery,
-                    $elem,
-                    viewRenderStrategy,
-                    viewRemovalStrategy,
-                    removedPlaceholder,
-                    removedCss
-                }) {
-        super();
-        this.viewValuesTransformer = viewValuesTransformer ?? (values => values);
-        this.$elem = viewElemOf({$elem, elemIdOrJQuery});
-        this.lazySetupWorkers.push(() => this.$elem = $elem ?? jQueryOf(elemIdOrJQuery));
-        this.lazySetupWorkers.push(() => this.viewRenderStrategy =
-            viewRenderStrategy ?? (this.$elem.is("textarea") ? RENDER_VAL : RENDER_HTML));
-        this.viewRemovalStrategy = viewRemovalStrategy ?? (removedPlaceholder != null ? USE_HTML : REMOVE_ELEMENT);
-        this.removedPlaceholder = removedPlaceholder;
-        this.removedCss = removedCss;
-        this.$elem.length && this._execLazySetup(true);
+    get $elem() {
+        return viewElemOf(this.viewConfig);
     }
 
     /**
-     * The setup depending on DOM $elem can be executed later when maybe the DOM $elem is finally available.
-     * This will work for some limited use cases, e.g. debugger component.
-     *
-     * @param {boolean=} forced
+     * @return {ViewRenderStrategy}
      */
-    _execLazySetup(forced) {
-        if (!forced && this.$elem.length) {
-            return;
-        }
-        this.lazySetupWorkers.forEach(it => it());
-        isTrue(!!this.$elem.length, `Missing view $elem!`);
+    get viewRenderStrategy() {
+        return this.viewConfig.viewRenderStrategy ??
+            (this.$elem.is("textarea") ? RENDER_VAL : RENDER_HTML);
+    }
+
+    /**
+     * @param {SimpleViewOptions} options
+     * @param {ViewConfig} viewConfig
+     */
+    constructor({
+                    viewValuesTransformer,
+                    viewRemovalStrategy,
+                    removedPlaceholder,
+                    removedCss,
+                    ...viewConfig
+                }) {
+        super();
+        this.viewValuesTransformer = viewValuesTransformer ?? (values => values);
+        this.viewRemovalStrategy = viewRemovalStrategy ?? (removedPlaceholder != null ? USE_HTML : REMOVE_ELEMENT);
+        this.removedPlaceholder = removedPlaceholder;
+        this.removedCss = removedCss;
+        this.viewConfig = viewConfig;
     }
 
     /**
@@ -117,7 +112,6 @@ export default class SimpleView extends AbstractView {
      */
     replace(values) {
         const viewValues = this.viewValuesTransformer(values);
-        this._execLazySetup();
         this.$elem[this.viewRenderStrategy](viewValues != null ? JSON.stringify(viewValues, undefined, 2) : "");
     }
 
@@ -127,15 +121,12 @@ export default class SimpleView extends AbstractView {
     remove() {
         switch (this.viewRemovalStrategy) {
             case REMOVE_ELEMENT:
-                this._execLazySetup();
                 this.$elem.remove();
                 break;
             case REMOVE_CONTENT:
-                this._execLazySetup();
                 this.$elem[this.viewRenderStrategy]("");
                 break;
             case USE_HTML:
-                this._execLazySetup();
                 this.$elem.html(this.removedPlaceholder);
                 break;
             case USE_CSS:
@@ -158,7 +149,6 @@ export default class SimpleView extends AbstractView {
      * @protected
      */
     _discardCssRemoval() {
-        this._execLazySetup();
         if (this.removedCss) {
             this.$elem.removeClass(this.removedCss);
         } else {
@@ -170,7 +160,6 @@ export default class SimpleView extends AbstractView {
      * @protected
      */
     _removeWithCss() {
-        this._execLazySetup();
         if (this.removedCss) {
             this.$elem.addClass(this.removedCss);
         } else {

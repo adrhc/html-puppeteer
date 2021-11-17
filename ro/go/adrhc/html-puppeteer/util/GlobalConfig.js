@@ -121,3 +121,11 @@ export function componentIdOf($elem) {
 export function activeNameOf(component) {
     return component.config?.[GlobalConfig.ACTIVE_CHILD_NAME] ?? component.partName;
 }
+
+/**
+ * @param {Object} object
+ * @return {ElemIdOrJQuery}
+ */
+export function elemIdOrJQueryOf(object) {
+    return object[GlobalConfig.ELEM_ID_OR_JQUERY]
+}
