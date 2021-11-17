@@ -14,7 +14,9 @@ import {partOf} from "../../../util/GlobalConfig.js";
  */
 
 /**
- * Manages the container's children
+ * - creates/removes container's children
+ * - queries to find specific children
+ * - operations valid on all or some children (e.g. close and disconnect)
  */
 export default class ChildrenCollection {
     /**
