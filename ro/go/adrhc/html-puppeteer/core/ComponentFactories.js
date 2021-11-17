@@ -1,9 +1,9 @@
 import SimpleComponent from "./component/SimpleComponent.js";
 import ValueComponent from "./component/ValueComponent.js";
-import StaticContainerComponent from "./component/StaticContainerComponent.js";
-import DynamicContainerComponent from "./component/DynamicContainerComponent.js";
-import SwitcherComponent from "./component/SwitcherComponent.js";
-import OnOffComponent from "./component/OnOffComponent.js";
+import StaticContainerComponent from "./component/containers/StaticContainerComponent.js";
+import DynamicContainerComponent from "./component/containers/DynamicContainerComponent.js";
+import SwitcherComponent from "./component/containers/SwitcherComponent.js";
+import OnOffComponent from "./component/containers/OnOffComponent.js";
 
 /**
  * @typedef {function(options: AbstractComponentOptions): AbstractComponent} ComponentProviderFn

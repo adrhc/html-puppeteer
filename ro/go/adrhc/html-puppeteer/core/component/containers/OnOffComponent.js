@@ -1,7 +1,7 @@
 import AbstractContainerComponent from "./AbstractContainerComponent.js";
-import {USE_CSS} from "../view/SimpleView.js";
-import GlobalConfig, {activeNameOf} from "../../util/GlobalConfig.js";
-import {isTrue} from "../../util/AssertionUtils.js";
+import {USE_CSS} from "../../view/SimpleView.js";
+import GlobalConfig, {activeNameOf} from "../../../util/GlobalConfig.js";
+import {isTrue} from "../../../util/AssertionUtils.js";
 
 /**
  * @typedef {AbstractContainerComponentOptions} OnOffComponentOptions

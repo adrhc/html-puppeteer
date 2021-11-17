@@ -1,8 +1,8 @@
-import AbstractComponent from "./AbstractComponent.js";
-import {withDefaults} from "./options/ComponentOptionsBuilder.js";
-import PartialStateHolder, {partsOf} from "../state/PartialStateHolder.js";
-import {componentIllustratorOf} from "../state-changes-handler/ComponentIllustrator.js";
-import ContainerHelper from "../../helper/ContainerHelper.js";
+import AbstractComponent from "../AbstractComponent.js";
+import {withDefaults} from "../options/ComponentOptionsBuilder.js";
+import PartialStateHolder, {partsOf} from "../../state/PartialStateHolder.js";
+import {componentIllustratorOf} from "../../state-changes-handler/ComponentIllustrator.js";
+import ContainerHelper from "../../../helper/ContainerHelper.js";
 
 /**
  * @typedef {AbstractComponentOptions & ComponentIllustratorOptions & ChildrenCollectionOptions} AbstractContainerComponentOptions

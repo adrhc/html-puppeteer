@@ -1,11 +1,11 @@
-import {jQueryOf} from "../../util/Utils.js";
-import {withDefaults} from "./options/ComponentOptionsBuilder.js";
-import ContainerEventsBinder from "./events-binder/ContainerEventsBinder.js";
+import {jQueryOf} from "../../../util/Utils.js";
+import {withDefaults} from "../options/ComponentOptionsBuilder.js";
+import ContainerEventsBinder from "../events-binder/ContainerEventsBinder.js";
 import AbstractContainerComponent from "./AbstractContainerComponent.js";
-import {stateIsEmpty} from "../state/StateHolder.js";
-import {partsOf} from "../state/PartialStateHolder.js";
-import {isTrue} from "../../util/AssertionUtils.js";
-import ContainerHelper from "../../helper/ContainerHelper.js";
+import {stateIsEmpty} from "../../state/StateHolder.js";
+import {partsOf} from "../../state/PartialStateHolder.js";
+import {isTrue} from "../../../util/AssertionUtils.js";
+import ContainerHelper from "../../../helper/ContainerHelper.js";
 
 /**
  * @typedef {AbstractContainerComponentOptions} DynamicContainerComponentOptions

@@ -1,7 +1,7 @@
-import {USE_CSS} from "../view/SimpleView.js";
-import GlobalConfig, {activeNameOf} from "../../util/GlobalConfig.js";
+import {USE_CSS} from "../../view/SimpleView.js";
+import GlobalConfig, {activeNameOf} from "../../../util/GlobalConfig.js";
 import AbstractContainerComponent from "./AbstractContainerComponent.js";
-import {isTrue} from "../../util/AssertionUtils.js";
+import {isTrue} from "../../../util/AssertionUtils.js";
 
 /**
  * @typedef {AbstractContainerComponentOptions} SwitcherComponentOptions

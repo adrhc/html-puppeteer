@@ -1,6 +1,6 @@
-import {stateIsEmpty} from "../state/StateHolder.js";
+import {stateIsEmpty} from "../../state/StateHolder.js";
 import AbstractContainerComponent from "./AbstractContainerComponent.js";
-import {isTrue} from "../../util/AssertionUtils.js";
+import {isTrue} from "../../../util/AssertionUtils.js";
 
 /**
  * @typedef {AbstractContainerComponentOptions} StaticContainerComponentOptions
