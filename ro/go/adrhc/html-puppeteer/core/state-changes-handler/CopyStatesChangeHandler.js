@@ -5,15 +5,14 @@ import PartialStateChangesHandler from "./PartialStateChangesHandler.js";
  */
 /**
  * @typedef {Object} CopyStatesChangeHandlerOptions
- * @property {ReceiverComponentFactory=} receiverComponentFn is used to lazy create the receiverComponent
+ * @property {ReceiverComponentFactory=} receiverComponentFactory is used to lazy create the receiverComponent
  * @property {AbstractComponent=} receiverComponent
  */
 export default class CopyStatesChangeHandler extends PartialStateChangesHandler {
     /**
      * @type {ReceiverComponentFactory}
      */
-    receiverComponentFn;
-
+    receiverComponentFactory;
     /**
      * @type {AbstractComponent}
      */
@@ -23,15 +22,16 @@ export default class CopyStatesChangeHandler extends PartialStateChangesHandler 
      * @return {AbstractComponent}
      */
     get receiverComponent() {
-        return this._receiverComponent ?? this.receiverComponentFn().render();
+        this._receiverComponent ??= this.receiverComponentFactory().render();
+        return this._receiverComponent;
     }
 
     /**
      * @param {CopyStatesChangeHandlerOptions} options
      */
-    constructor({receiverComponent, receiverComponentFn}) {
+    constructor({receiverComponent, receiverComponentFactory}) {
         super();
-        this.receiverComponentFn = receiverComponentFn;
+        this.receiverComponentFactory = receiverComponentFactory;
         this._receiverComponent = receiverComponent;
     }
 
