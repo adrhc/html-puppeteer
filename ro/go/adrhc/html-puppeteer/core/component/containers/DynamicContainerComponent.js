@@ -48,7 +48,7 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
         // create children for existing (static) shells
         this.createChildrenForAllShells();
         // create dynamic children
-        this._createMissingShellsAndChildren();
+        this._createMissingChildren();
     }
 
     /**
@@ -64,7 +64,7 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
             super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
         } else {
             super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
-            this._createOrUpdateChild(partName);
+            this._createOrUpdateChildrenByPartName(partName);
         }
     }
 
@@ -72,12 +72,12 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
      * @param {PartName} partName
      * @protected
      */
-    _createOrUpdateChild(partName) {
+    _createOrUpdateChildrenByPartName(partName) {
         const childrenByPartName = this.childrenCollection.getChildrenByPartName(partName);
         if (childrenByPartName.length) {
             childrenByPartName.forEach(it => it.replaceFromParent());
         } else {
-            this._createChild(partName)
+            this._createChildrenByPartName(partName)
         }
     }
 
@@ -85,7 +85,7 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
      * @param {PartName} partName
      * @protected
      */
-    _createChild(partName) {
+    _createChildrenByPartName(partName) {
         const $shells = this.shellsManager.createAndPlaceShell(partName);
         isTrue(!!$shells.length, `$shells is empty for part named ${partName}!`)
         $shells.forEach($el => this.childrenCollection.createComponentForShell($el))
@@ -96,10 +96,10 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
      *
      * @protected
      */
-    _createMissingShellsAndChildren() {
+    _createMissingChildren() {
         partsOf(this.getMutableState())
             .filter(([key]) => !this.partialStateHolder.hasEmptyPart(key))
             .filter(([key]) => !this.childrenCollection.getChildrenByPartName(key).length)
-            .forEach(([key]) => this._createChild(key));
+            .forEach(([key]) => this._createChildrenByPartName(key));
     }
 }
