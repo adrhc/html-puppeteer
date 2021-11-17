@@ -15,12 +15,16 @@ import ContainerHelper from "../../helper/ContainerHelper.js";
  */
 export default class DynamicContainerComponent extends AbstractContainerComponent {
     /**
-     * @type {ChildrenShells}
+     * @type {ChildrenShellFinder}
      */
-    childrenShells;
+    childrenShellFinder;
+    /**
+     * @type {ShellsManager}
+     */
+    shellsManager;
 
     /**
-     * ChildrenShells have the chance to use containerHtml for children shells.
+     * ShellsManager have the chance to use containerHtml for children shells.
      * We have to set htmlTemplate to something not null (by default "") to
      * avoid the drawing of the parent's html which by now is a candidate
      * for the children shell template.
@@ -33,7 +37,8 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
             htmlTemplate: "", ...options
         }).addEventsBinders(new ContainerEventsBinder()).options());
         const helper = new ContainerHelper(this);
-        this.childrenShells = helper.createChildrenShells();
+        this.shellsManager = helper.createShellsManager();
+        this.childrenShellFinder = helper.createChildrenShellFinder();
     }
 
     /**
@@ -50,7 +55,7 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
         // the parent redraws itself
         super.replaceState(newState);
         // create children for existing (static) shells
-        this.childrenCollection.createChildrenForExistingShells();
+        this.childrenCollection.createChildrenForAllShells();
         // create dynamic children
         this._createMissingShellsAndChildren();
     }
@@ -97,7 +102,7 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
      * @protected
      */
     _createOrUpdateChild(partName) {
-        const $shells = this.childrenShells.getOrCreateShell(partName);
+        const $shells = this.shellsManager.getOrCreateShell(partName);
         isTrue(!!$shells.length, `$shells is empty for part named ${partName}!`)
         $shells.forEach($el => this._createOrUpdateChildForElem($el))
     }

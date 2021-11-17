@@ -1,6 +1,7 @@
 import ChildrenShellFinder from "../core/view/ChildrenShellFinder.js";
 import ChildrenCollection from "../core/component/composition/ChildrenCollection.js";
-import ChildrenShells from "../core/view/ChildrenShells.js";
+import ShellCreator from "../core/view/ShellCreator.js";
+import ShellsManager from "../core/view/shells/ShellsManager.js";
 
 /**
  * @typedef {Object} ContainerChildrenCommonOptions
@@ -50,36 +51,26 @@ export default class ContainerHelper {
      * @return {ChildrenCollection}
      */
     createChildrenCollection() {
-        return this.childrenCollectionOf(this.createChildrenShellFinder());
-    }
-
-    /**
-     * @param {ChildrenShellFinder} childrenShellFinder
-     * @return {ChildrenCollection}
-     */
-    childrenCollectionOf(childrenShellFinder) {
         return new ChildrenCollection({
             parent: this.component,
-            childrenShellFinder,
             dontRenderChildren: this.config.dontRenderChildren,
+            childrenShellFinder: this.createChildrenShellFinder(),
             childrenOptions: this.createContainerChildrenCommonOptions()
         });
     }
 
     /**
-     * @return {ChildrenShells}
+     * @return {ShellCreator}
      */
-    createChildrenShells() {
-        return this.childrenShellsOf(this.createChildrenShellFinder());
+    createShellCreator() {
+        return this.config.shellCreator ?? new ShellCreator({parentId: this.component.id, ...this.config});
     }
 
     /**
-     * @param {ChildrenShellFinder} childrenShellFinder
-     * @return {ChildrenShells}
+     * @return {ShellsManager}
      */
-    childrenShellsOf(childrenShellFinder) {
-        return new ChildrenShells({
-            componentId: this.component.id, childrenShellFinder, ...this.config
-        });
+    createShellsManager() {
+        return new ShellsManager(this.createChildrenShellFinder(), this.createShellCreator(),
+            this.config.elemIdOrJQuery, this.config.newChildrenGoLast);
     }
 }

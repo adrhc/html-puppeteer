@@ -3,19 +3,23 @@ import {createByType} from "./ComponentFactories.js";
 import {idOf} from "../util/DomUtils.js";
 import {isTrue} from "../util/AssertionUtils.js";
 import ChildrenCollection from "./component/composition/ChildrenCollection.js";
+import ChildrenShellFinder from "./view/ChildrenShellFinder.js";
 
 /**
  * @param {CreateComponentParams} options
  * @param {ElemIdOrJQuery=} options.componentsHolder
+ * @param {boolean=} options.dontRender
  * @param {boolean=} options.alwaysReturnArray
  * @param {CreateComponentParams=} componentsOptions are the options used to create the components for found shells
  * @return {AbstractComponent|AbstractComponent[]}
  */
-export default function animate({componentsHolder, alwaysReturnArray, ...componentsOptions} = {}) {
+export default function animate({componentsHolder, dontRender, alwaysReturnArray, ...componentsOptions} = {}) {
     const childrenCollection = new ChildrenCollection({
-        /** @type {ElemIdOrJQuery} */ componentsHolder, childrenOptions: componentsOptions
+        dontRenderChildren: dontRender,
+        childrenShellFinder: new ChildrenShellFinder(componentsHolder ?? document),
+        childrenOptions: componentsOptions
     });
-    const components = childrenCollection.createChildrenForExistingShells();
+    const components = childrenCollection.createChildrenForAllShells();
     console.log(`[Puppeteer.animate] childrenCollection created ${components.length} components`);
     if (components.length === 1 && !alwaysReturnArray) {
         return components[0];

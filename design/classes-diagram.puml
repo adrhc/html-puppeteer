@@ -67,7 +67,6 @@ class ChildrenShells {
 #shellTemplate: string
 +constructor(options)
 +getOrCreateShell(partName)
-+removeShell(partName)
 }
 
 class ChildrenCollection {

@@ -85,7 +85,7 @@ export default class SwitcherComponent extends AbstractContainerComponent {
     replaceState(newState) {
         this.childrenCollection.disconnectAndRemoveChildren();
         super.replaceState(_.omit(newState, this.activeNameKey));
-        this.childrenCollection.createChildrenForExistingShells();
+        this.childrenCollection.createChildrenForAllShells();
         this.childrenCollection.closeChildren();
         this.switchTo(newState[this.activeNameKey], this._getActiveValueFromState());
     }

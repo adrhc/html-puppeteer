@@ -1,13 +1,11 @@
 /**
  * @typedef {Object} ChildrenCollectionOptions
- * @property {ElemIdOrJQuery=} componentsHolder is the place inside which to search for components
  * @property {AbstractContainerComponent=} parent
  * @property {ChildrenShellFinder=} childrenShellFinder
  * @property {boolean=} dontRenderChildren
  * @property {CreateComponentParams=} childrenOptions are the options used to create the components for found shells
  */
 
-import ChildrenShellFinder from "../../view/ChildrenShellFinder.js";
 import {createComponent} from "../../Puppeteer.js";
 import {isTrue} from "../../../util/AssertionUtils.js";
 import {partOf} from "../../../util/GlobalConfig.js";
@@ -46,19 +44,12 @@ export default class ChildrenCollection {
 
     /**
      * @param {ChildrenCollectionOptions} options
-     * @param {ElemIdOrJQuery=} options.componentsHolder
-     * @param {AbstractComponent=} options.parent
-     * @param {ChildrenShellFinder=} options.childrenShellFinder
-     * @param {boolean=} options.dontRenderChildren
-     * @param {CreateComponentParams=} options.childrenOptions
      */
-    constructor({componentsHolder, parent, childrenShellFinder, dontRenderChildren, childrenOptions}) {
+    constructor({parent, dontRenderChildren, childrenShellFinder, childrenOptions}) {
         this.parent = parent;
         this.dontRenderChildren = dontRenderChildren;
         this.childrenOptions = {parent, ...childrenOptions};
-        // Puppeteer.anime() will provide an empty parent and elemIdOrJQuery
-        const elemIdOrJQuery = componentsHolder ?? parent?.config.elemIdOrJQuery ?? document;
-        this.childrenShellFinder = childrenShellFinder ?? new ChildrenShellFinder(elemIdOrJQuery);
+        this.childrenShellFinder = childrenShellFinder;
     }
 
     /**
@@ -83,9 +74,9 @@ export default class ChildrenCollection {
      *
      * @return {AbstractComponent[]}
      */
-    createChildrenForExistingShells() {
+    createChildrenForAllShells() {
         this.children = {};
-        this.childrenShellFinder.$childrenShells().forEach($shell => this.createComponentForShell($shell));
+        this.childrenShellFinder.$getAllChildrenShells().forEach($shell => this.createComponentForShell($shell));
         return this.childrenArray;
     }
 

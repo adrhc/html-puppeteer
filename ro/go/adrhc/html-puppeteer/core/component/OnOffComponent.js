@@ -35,7 +35,8 @@ export default class OnOffComponent extends AbstractContainerComponent {
         super({
             childrenRemovalStrategy: USE_CSS,
             ignoreShellTemplateOptions: true,
-            dontRenderChildren: true, ...options
+            dontRenderChildren: true,
+            ...options
         });
         this.activeNamesKey = this.config.activeNamesKey ?? GlobalConfig.ACTIVE_NAME_KEY;
     }
@@ -48,7 +49,7 @@ export default class OnOffComponent extends AbstractContainerComponent {
     replaceState(newState) {
         this.childrenCollection.disconnectAndRemoveChildren();
         super.replaceState(_.omit(newState, this.activeNamesKey));
-        this.childrenCollection.createChildrenForExistingShells();
+        this.childrenCollection.createChildrenForAllShells();
         this.childrenCollection.closeChildren();
         this.switchTo(newState[this.activeNamesKey]);
     }

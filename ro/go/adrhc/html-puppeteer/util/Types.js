@@ -12,7 +12,7 @@
  */
 
 /**
- * @typedef {string|jQuery<HTMLElement>} ElemIdOrJQuery
+ * @typedef {string|Element|Document|jQuery<HTMLElement>} ElemIdOrJQuery
  */
 
 /**

@@ -3,8 +3,8 @@ export function isUndefined(value) {
 }
 
 /**
- * @param {string|jQuery<HTMLElement>} elemIdOrJQuery
- * @return {jQuery<HTMLElement>} elemIdOrJQuery (if *is* jQuery), $(elemIdOrJQuery) otherwise $(`#${elemIdOrJQuery}`)
+ * @param {ElemIdOrJQuery} elemIdOrJQuery
+ * @return {jQuery<HTMLElement>} elemIdOrJQuery if *is* jQuery, $(`#${elemIdOrJQuery}`) if *is* string otherwise $(elemIdOrJQuery)
  */
 export function jQueryOf(elemIdOrJQuery) {
     if (elemIdOrJQuery instanceof jQuery) {

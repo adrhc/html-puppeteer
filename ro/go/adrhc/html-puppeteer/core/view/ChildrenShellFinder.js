@@ -2,6 +2,9 @@ import {dataPartSelectorOf, dataTypeSelector} from "../../util/SelectorUtils.js"
 import {jQueryOf} from "../../util/Utils.js";
 import {typeOf} from "../../util/GlobalConfig.js";
 
+/**
+ * Dealing with shell queries.
+ */
 export default class ChildrenShellFinder {
     /**
      * @type {jQuery<HTMLElement>}
@@ -13,7 +16,7 @@ export default class ChildrenShellFinder {
     containerIsComponent;
 
     /**
-     * @param {string|jQuery<HTMLElement>} elemIdOrJQuery
+     * @param {ElemIdOrJQuery} elemIdOrJQuery
      */
     constructor(elemIdOrJQuery) {
         this.$containerElem = jQueryOf(elemIdOrJQuery);
@@ -21,14 +24,21 @@ export default class ChildrenShellFinder {
     }
 
     /**
+     * @return {jQuery<HTMLElement>[]}
+     */
+    $getAllChildrenShells() {
+        return this.$getChildShellsByPartName();
+    }
+
+    /**
      * @param {OptionalPartName=} partName
      * @return {jQuery<HTMLElement>[]}
      */
-    $childrenShells(partName) {
+    $getChildShellsByPartName(partName) {
         if (this.containerIsComponent) {
-            return this.$containerChildrenShells(partName);
+            return this._$getContainerChildrenShells(partName);
         } else {
-            return this.$childrenShellsForContainerElem(partName);
+            return this._$getLevel1ShellsInContainerElem(partName);
         }
     }
 
@@ -37,7 +47,7 @@ export default class ChildrenShellFinder {
      * @return {jQuery<HTMLElement>[]}
      * @protected
      */
-    $childrenShellsForContainerElem(partName) {
+    _$getLevel1ShellsInContainerElem(partName) {
         return this.$containerElem
             .find(`${partName == null ? dataTypeSelector() : dataPartSelectorOf(partName)}`)
             .toArray()
@@ -51,7 +61,7 @@ export default class ChildrenShellFinder {
      * @return {jQuery<HTMLElement>[]}
      * @protected
      */
-    $containerChildrenShells(partName) {
+    _$getContainerChildrenShells(partName) {
         return this.$containerElem
             // one could use dataPartSelector() instead of dataTypeSelector() because a child
             // component is supposed to have "data-part" set; for switcher though "data-part"
@@ -62,13 +72,5 @@ export default class ChildrenShellFinder {
             .map(shell => [shell, $(shell).parents(dataTypeSelector())])
             .filter(([, $parents]) => $parents[0] === this.$containerElem[0])
             .map(([shell]) => $(shell));
-    }
-
-    /**
-     * @param {PartName} partName
-     * @return {jQuery<HTMLElement>[]}
-     */
-    $childShellsByPartName(partName) {
-        return this.$childrenShells(partName);
     }
 }
