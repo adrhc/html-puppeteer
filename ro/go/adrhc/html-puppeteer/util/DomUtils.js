@@ -5,15 +5,15 @@ import {$of, jQueryOf} from "./Utils.js";
 /**
  * @param {jQuery} $elems
  */
-export function disable(...$elems) {
-    $elems.forEach(it => it.attr("disabled", "disabled"));
+export function switchOff(...$elems) {
+    $elems.forEach(it => it.addClass("switched-off"));
 }
 
 /**
  * @param {jQuery} $elems
  */
-export function enable(...$elems) {
-    $elems.forEach(it => it.removeAttr("disabled"));
+export function cancelSwitchOff(...$elems) {
+    $elems.forEach(it => it.removeClass("switched-off"));
 }
 
 /**

@@ -33,7 +33,8 @@ export default class GlobalConfig {
     static ID_ATTR = "id";
     static OWNER = "owner";
     static PART = "part";
-    static VIEW_VALUE_FIELD = "value";
+    static SWITCHER = {deactivatedClass: "removed"};
+    static TRANSFORMED_VALUE_FIELD = "value";
 }
 
 export function dataPartOf(partName, useDoubleQuotes) {

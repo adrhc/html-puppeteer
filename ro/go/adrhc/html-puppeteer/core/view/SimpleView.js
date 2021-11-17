@@ -1,7 +1,7 @@
 import AbstractView from "./AbstractView.js";
 import {alertOrThrow, isTrue} from "../../util/AssertionUtils.js";
 import {jQueryOf} from "../../util/Utils.js";
-import {disable, enable} from "../../util/DomUtils.js";
+import {cancelSwitchOff, switchOff} from "../../util/DomUtils.js";
 
 // removal strategy
 export const REMOVE_ELEMENT = "REMOVE_ELEMENT";
@@ -110,7 +110,7 @@ export default class SimpleView extends AbstractView {
      * @param {{}} values
      */
     create(values) {
-        this._removalStrategyIsCss() && this._discardCssRemoval();
+        this._removalStrategyIsCss() && this._cancelCssRemoval();
         this.replace(values);
     }
 
@@ -155,11 +155,11 @@ export default class SimpleView extends AbstractView {
     /**
      * @protected
      */
-    _discardCssRemoval() {
+    _cancelCssRemoval() {
         if (this.removedCss) {
             this.$renderElem.removeClass(this.removedCss);
         } else {
-            enable(this.$renderElem);
+            cancelSwitchOff(this.$renderElem);
         }
     }
 
@@ -170,7 +170,7 @@ export default class SimpleView extends AbstractView {
         if (this.removedCss) {
             this.$renderElem.addClass(this.removedCss);
         } else {
-            disable(this.$renderElem);
+            switchOff(this.$renderElem);
         }
     }
 }

@@ -14,7 +14,7 @@ export function hierarchyAwareViewValuesTransformer(componentId, parentId, partN
 
 export function componentAwareViewValuesTransformer(componentId, parentId, partName, value) {
     return {
-        [GlobalConfig.VIEW_VALUE_FIELD]: value,
+        [GlobalConfig.TRANSFORMED_VALUE_FIELD]: value,
         [GlobalConfig.COMPONENT_ID]: componentId,
         [GlobalConfig.OWNER]: parentId,
         [GlobalConfig.PART]: partName

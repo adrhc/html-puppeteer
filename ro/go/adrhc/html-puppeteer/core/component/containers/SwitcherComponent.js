@@ -1,4 +1,4 @@
-import {USE_CSS} from "../../view/SimpleView.js";
+import {REMOVE_CONTENT} from "../../view/SimpleView.js";
 import GlobalConfig, {activeNameOf, elemIdOrJQueryOf} from "../../../util/GlobalConfig.js";
 import {isTrue} from "../../../util/AssertionUtils.js";
 import AbstractContainerComponent from "./AbstractContainerComponent.js";
@@ -14,7 +14,7 @@ import SwitcherIllustrator from "../../state-changes-handler/SwitcherIllustrator
 /**
  * @template SCT,SCP
  *
- * @typedef {Object} SCT
+ * @typedef {Object|undefined} SCT
  * @property {OptionalPartName=} activeName
  * @property {SCP=} partValue
  */
@@ -59,7 +59,7 @@ export default class SwitcherComponent extends AbstractContainerComponent {
     }
 
     /**
-     * @return {string|undefined}
+     * @return {OptionalPartName}
      */
     get activeName() {
         return this.getPart(this.activeNameKey, true);
@@ -70,7 +70,7 @@ export default class SwitcherComponent extends AbstractContainerComponent {
      */
     constructor({componentIllustratorProviders, ...restOfOptions}) {
         super(withDefaults({
-            childrenRemovalStrategy: USE_CSS,
+            childrenRemovalStrategy: REMOVE_CONTENT,
             ignoreShellTemplateOptions: true,
             dontRenderChildren: true,
             childrenOptions: withRenderElem(elemIdOrJQueryOf(restOfOptions)).options(),
@@ -90,17 +90,22 @@ export default class SwitcherComponent extends AbstractContainerComponent {
      * @param {SCT=} newState
      */
     replaceState(newState) {
+        if (newState == null) {
+            this.switchTo();
+            super.replaceState(newState);
+            return;
+        }
         this.childrenCollection.closeAndRemoveAll();
         super.replaceState(_.omit(newState, this.activeNameKey));
         this.createChildrenForAllShells();
         // the children render as "closed"
         this.childrenCollection.closeAll();
-        const activeName = newState[this.activeNameKey];
+        const activeName = newState?.[this.activeNameKey];
         this.switchTo(activeName, this._getActiveValueFromState(activeName));
     }
 
     /**
-     * @param {PartName} activeName
+     * @param {OptionalPartName=} activeName
      * @param {{[key: string|number]: SCP}=} value
      */
     switchTo(activeName, value) {
@@ -130,7 +135,7 @@ export default class SwitcherComponent extends AbstractContainerComponent {
     }
 
     /**
-     * @param {string=} activeName
+     * @param {OptionalPartName=} activeName
      * @return {*}
      * @protected
      */

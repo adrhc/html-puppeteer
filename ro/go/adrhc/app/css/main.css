@@ -155,7 +155,7 @@ p[data-part] {
     padding: .1rem .2rem .2rem;
 }
 
-.disabled {
+.disabled, .removed, .switched-off {
     display: none;
 }
 

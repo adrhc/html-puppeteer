@@ -33,7 +33,6 @@
 	<div class="section title">Component's view</div>
 	<div class="section parent fit-content min-width-33-percent"
 	     data-active-name-key="status"
-	     data-children-removed-css="disabled"
 	     data-initial-state='{"status": "aliceblue", "aliceblue": "aliceblue value", "ignored": "aliceblue vs antiquewhite"}'
 	     data-removed-placeholder='The "MAIN" component is closed!'
 	     data-type="switcher"
@@ -43,12 +42,8 @@
 			data-active-name specify the active name of the component
 			data-part can be used instead of data-active-name
 		-->
-		<div class="bg-aliceblue" data-active-name="aliceblue"
-		     data-initial-state="aliceblue is deactivated!"
-		     data-type="value"></div>
-		<div class="bg-antiquewhite" data-active-name="antiquewhite"
-		     data-initial-state="antiquewhite is deactivated!"
-		     data-type="value"></div>
+		<div data-active-name="aliceblue" data-initial-state="aliceblue is deactivated!" data-type="value"></div>
+		<div data-active-name="antiquewhite" data-initial-state="antiquewhite is deactivated!" data-type="value"></div>
 	</div>
 </div>
 

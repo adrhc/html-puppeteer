@@ -100,7 +100,7 @@ export default class AbstractContainerComponent extends AbstractComponent {
     }
 
     /**
-     * set state to undefined
+     * closes the component
      */
     close() {
         this.childrenCollection.closeAndRemoveAll();

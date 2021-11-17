@@ -22,5 +22,5 @@ function htmlTemplateOf({dontEscapeHtml, elemIdOrJQuery}) {
     // this relates to ComponentIllustrator calling hierarchyAwareViewValuesTransformer(...)
     return partOf(jQueryOf(elemIdOrJQuery)) == null ?
         handlebarsWrap("this", dontEscapeHtml) :
-        handlebarsWrap(GlobalConfig.VIEW_VALUE_FIELD, dontEscapeHtml);
+        handlebarsWrap(GlobalConfig.TRANSFORMED_VALUE_FIELD, dontEscapeHtml);
 }
