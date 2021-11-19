@@ -65,7 +65,7 @@ export default class ChildrenShellFinder {
             // one could use dataPartSelector() instead of dataTypeSelector() because a child
             // component is supposed to have "data-part" set; for switcher though "data-part"
             // will most likely miss, being replaced by "data-active-name" hence is better to
-            // use dataTypeSelector() here
+            // use dataTypeSelector()
             .find(`${partName == null ? dataTypeSelector() : dataPartSelectorOf(partName)}`)
             .toArray()
             .map(shell => [shell, $(shell).parents(dataTypeSelector())])
