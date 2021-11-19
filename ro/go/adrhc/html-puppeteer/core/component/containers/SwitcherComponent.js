@@ -108,28 +108,23 @@ export default class SwitcherComponent extends AbstractContainerComponent {
      * @param {OptionalPartName=} activeName
      */
     switchTo(activeName) {
-        // const activeState = this.activeComponent?.getStateCopy();
         this.activeComponent?.close();
         super.replacePart(this.activeNameKey, activeName);
         this.activeComponent?.render();
     }
 
     /**
-     * @param {PartName=} previousPartName
-     * @param {SCP|PartName=} newPart
-     * @param {PartName=} [newPartName=previousPartName] indicates the new active name
+     * @param {OptionalPartName=} previousPartName
+     * @param {SCP|OptionalPartName=} newPart
+     * @param {OptionalPartName=} [newPartName=previousPartName] indicates the new active name
      * @param {boolean=} dontRecordChanges
      */
     replacePart(previousPartName, newPart, newPartName = previousPartName, dontRecordChanges) {
-        // check for active name (aka the property/part that indicates the current status) change
         if (newPartName === this.activeNameKey) {
-            // active name changed while the value is the previous one
             this.switchTo(newPart);
-            return;
+        } else {
+            super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
+            this.activeComponent?.replaceFromParent();
         }
-        // active name (aka the property/part that indicates the current status) not changed
-        super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
-        // the entire state minus activeNameKey *is* the active component's state
-        this.switchTo(this.activeName);
     }
 }
