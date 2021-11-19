@@ -32,14 +32,14 @@
 	 -->
 	<div class="section title">Component's view</div>
 	<div class="section parent fit-content min-width-33-percent"
-	     data-active-name-key="status"
+	     data-active-names-key="status"
 	     data-children-removed-css="disabled"
 	     data-initial-state='{"status": ["aliceblue", "blueviolet"], "ignored": "colors",
 	        "aliceblue": "aliceblue", "antiquewhite": "antiquewhite", "blueviolet": "blueviolet"}'
 	     data-removed-placeholder='The "MAIN" component is closed!'
 	     data-type="on-off"
-	     data-value-key-is-active-name="false"
 	     id="MAIN">
+		<!-- when not set, data-active-name falls back to data-part -->
 		<div class="bg-aliceblue mb3" data-part="aliceblue" data-type="value">aliceblue not set</div>
 		<div class="bg-antiquewhite" data-part="antiquewhite" data-type="value">antiquewhite not set</div>
 		<div class="bg-blueviolet mb3" data-part="blueviolet" data-type="value">blueviolet not set</div>

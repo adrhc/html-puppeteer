@@ -39,11 +39,10 @@
 	     data-value-key-is-active-name="true"
 	     id="MAIN">
 		<!--
-			data-active-name specify the active name of the component
-			data-part can be used instead of data-active-name
+			data-part must be used instead of data-active-name when data-value-key-is-active-name is true
 		-->
-		<div data-active-name="aliceblue" data-initial-state="aliceblue is deactivated!" data-type="value"></div>
-		<div data-active-name="antiquewhite" data-initial-state="antiquewhite is deactivated!" data-type="value"></div>
+		<div data-initial-state="aliceblue is deactivated!" data-part="aliceblue" data-type="value"></div>
+		<div data-initial-state="antiquewhite is deactivated!" data-part="antiquewhite" data-type="value"></div>
 	</div>
 </div>
 

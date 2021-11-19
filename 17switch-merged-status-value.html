@@ -36,14 +36,17 @@
 	     data-initial-state='{"status": "aliceblue", "ignored": "aliceblue vs antiquewhite", "value1": "aliceblue 1"}'
 	     data-removed-placeholder='The "MAIN" component is closed!'
 	     data-type="switcher"
-	     data-value-key-is-active-name="false"
 	     id="MAIN">
-		<!-- data-part can also be used instead of data-active-name -->
-		<div data-part="aliceblue" data-type="static-container">
+		<!--
+			data-active-name specify the active name of the component.
+			When data-active-value-key is not set and data-value-key-is-active-name
+			is false than data-part must not be specified on children!
+			Because data-part is not specified than the entire parent's state will become child's state.
+		-->
+		<div data-active-name="aliceblue" data-type="static-container">
 			<div data-part="value1" data-type="value">value1 not set</div>
 			<div data-part="value2" data-type="value">value2 not set</div>
 		</div>
-		<!-- data-active-name specify the active name of the component -->
 		<div data-active-name="antiquewhite" data-type="static-container">
 			<div data-part="value1" data-type="value">value1 not set</div>
 			<div data-part="value2" data-type="value">value2 not set</div>

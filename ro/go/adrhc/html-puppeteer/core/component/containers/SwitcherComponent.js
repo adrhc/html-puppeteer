@@ -8,8 +8,8 @@ import SwitcherIllustrator from "../../state-changes-handler/SwitcherIllustrator
 /**
  * @typedef {AbstractContainerComponentOptions} SwitcherComponentOptions
  * @property {string=} activeNameKey is the partName storing the active-component name (i.e. the name equal to children's "data-active-name" in html)
- * @property {string=} activeValueKey is the partName where the active-component's value is stored by SwitcherComponent
- * @property {boolean=} [valueKeyIsActiveName=true] indicates that each active-component name is the activeNameKey's value; e.g. activeNameKey="editable" means that replacePart("editable", newState) should set newState into both SwitcherComponent (partial replace) and the active-component (complete replace)
+ * @property {string=} activeValueKey is the partName where the active-component's value is stored by SwitcherComponent; when true, the data-part must be specified on children with the same value as activeValueKey and data-active-name must be specified too
+ * @property {boolean=} [valueKeyIsActiveName=true] indicates that each active-component name is the activeNameKey's value; e.g. activeNameKey="editable" means that replacePart("editable", newState) should set newState into both SwitcherComponent (partial replace) and the active-component (complete replace); when true, the data-part must be specified on children
  */
 /**
  * @template SCT,SCP
@@ -19,6 +19,7 @@ import SwitcherIllustrator from "../../state-changes-handler/SwitcherIllustrator
  * @property {SCP=} partValue
  */
 /**
+ * When activeValueKey is not set and valueKeyIsActiveName is false than data-part must not be specified on children!
  * "active name" or "active-component name" or "switched to name" represents the value specified by "data-part" on a child component.
  *
  * Usecase: active-component state is 1x part of SwitcherComponent state
@@ -81,7 +82,7 @@ export default class SwitcherComponent extends AbstractContainerComponent {
             .options());
         this.activeNameKey = this.config.activeNameKey ?? GlobalConfig.ACTIVE_NAME_KEY;
         this.activeValueKey = this.config.activeValueKey;
-        this.valueKeyIsActiveName = this.config.valueKeyIsActiveName ?? true;
+        this.valueKeyIsActiveName = this.config.valueKeyIsActiveName;
     }
 
     /**
