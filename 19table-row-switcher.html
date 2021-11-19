@@ -50,7 +50,7 @@
 				<td data-active-name="updatable" data-part="" data-template-id="updatable-row"
 				    data-type="static-container"></td>
 				<td data-active-name="removable" data-part="" data-template-id="removable-row"
-				    data-type="static-container"></td>
+				    data-type="removable-switch"></td>
 			</tr>
 			</tbody>
 		</table>
@@ -59,8 +59,8 @@
 
 <!--
 	Can't have <td> in <td> hence we use a template.
-	@root.componentId is the current component's id; here the current component is <tr>
-	@root.owner is the parent's id; here the parent component is <tbody>
+	@root.componentId is the current component's id; here the current component is <td>
+	@root.owner is the parent's id; here the parent component is <tr>
 -->
 <script id="readonly-row" type="text/x-handlebars-template">
 	<td data-part="id" data-type="value"></td>
