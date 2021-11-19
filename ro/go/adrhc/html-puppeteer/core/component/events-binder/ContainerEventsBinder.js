@@ -59,7 +59,7 @@ export default class ContainerEventsBinder extends AbstractContainerEventsBinder
      * @param {string=} removeEvent
      * @param {AbstractComponent=} component
      */
-    constructor(childStateProviderFn, createDataAttr, removeDataAttr, createEvent, removeEvent, component) {
+    constructor(component, childStateProviderFn, createDataAttr, removeDataAttr, createEvent, removeEvent) {
         super(component);
         this.childStateProviderFn = childStateProviderFn ?? (() => {});
         this.createDataAttr = createDataAttr ?? "create-child";

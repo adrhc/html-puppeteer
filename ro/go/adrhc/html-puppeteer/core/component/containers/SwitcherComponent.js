@@ -4,6 +4,7 @@ import {isTrue} from "../../../util/AssertionUtils.js";
 import AbstractContainerComponent from "./AbstractContainerComponent.js";
 import {withDefaults, withRenderElem} from "../options/ComponentOptionsBuilder.js";
 import SwitcherIllustrator from "../../state-changes-handler/SwitcherIllustrator.js";
+import SwitcherEventsBinder from "../events-binder/SwitcherEventsBinder.js";
 
 /**
  * @typedef {AbstractContainerComponentOptions} SwitcherComponentOptions
@@ -77,6 +78,7 @@ export default class SwitcherComponent extends AbstractContainerComponent {
             childrenOptions: withRenderElem(elemIdOrJQueryOf(restOfOptions)).options(),
             ...restOfOptions
         })
+            .addEventsBinders((c) => new SwitcherEventsBinder(c))
             .addIfMissingComponentIllustratorProvider(component =>
                 new SwitcherIllustrator({activeNameKey: GlobalConfig.ACTIVE_NAME_KEY, ...component.config}))
             .options());
@@ -106,8 +108,12 @@ export default class SwitcherComponent extends AbstractContainerComponent {
 
     /**
      * @param {OptionalPartName=} activeName
+     * @param {boolean=} [ignoreIfAlreadyActive=true]
      */
-    switchTo(activeName) {
+    switchTo(activeName, ignoreIfAlreadyActive = true) {
+        if (ignoreIfAlreadyActive && this.activeName === activeName) {
+            return;
+        }
         this.activeComponent?.close();
         super.replacePart(this.activeNameKey, activeName);
         this.activeComponent?.render();

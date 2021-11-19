@@ -14,7 +14,7 @@
 
 <body>
 <script>const fp = _.noConflict()</script>
-<script src="19on-off-with-table.js" type="module"></script>
+<script src="19table-row-switcher.js" type="module"></script>
 
 <div class="container scenario15">
 	<div class="section title">DynamicContainerComponent</div>
@@ -44,16 +44,62 @@
 			       data-removed-placeholder='<tr><td colspan="3">The "MAIN" component is closed!</td></tr>'
 			       data-type="dyna-container"
 			       id="MAIN">
-			<tr data-active-name="readonly" data-children-removed-css="disabled" data-type="on-off">
-				<td class="bgc-aliceblue" data-part="id" data-type="value"></td>
-				<td class="bgc-aliceblue" data-part="name" data-type="value"></td>
-				<td class="bgc-antiquewhite" data-part="id" data-type="value"></td>
-				<td class="bgc-antiquewhite" data-part="name" data-type="value"></td>
+			<tr data-type="switcher">
+				<td data-active-name="readonly" data-part="" data-template-id="readonly-row"
+				    data-type="static-container"></td>
+				<td data-active-name="updatable" data-part="" data-template-id="updatable-row"
+				    data-type="static-container"></td>
+				<td data-active-name="removable" data-part="" data-template-id="removable-row"
+				    data-type="static-container"></td>
 			</tr>
 			</tbody>
 		</table>
 	</div>
 </div>
+
+<!--
+	Can't have <td> in <td> hence we use a template.
+	@root.componentId is the current component's id; here the current component is <tr>
+	@root.owner is the parent's id; here the parent component is <tbody>
+-->
+<script id="readonly-row" type="text/x-handlebars-template">
+	<td data-part="id" data-type="value"></td>
+	<td data-part="name" data-type="value"></td>
+	<td class="center">
+		<button data-child-id="{{@root.componentId}}" data-owner="{{@root.owner}}" data-switch-to="removable">
+			Got to remove
+		</button>
+		<button data-child-id="{{@root.componentId}}" data-owner="{{@root.owner}}" data-switch-to="updatable">
+			Got to update
+		</button>
+	</td>
+</script>
+
+<script id="removable-row" type="text/x-handlebars-template">
+	<td data-part="id" data-type="value"></td>
+	<td data-part="name" data-type="value"></td>
+	<td class="center">
+		<button data-child-id="{{@root.componentId}}" data-owner="{{@root.owner}}" data-switch-to="readonly">
+			Cancel
+		</button>
+		<button data-child-id="{{@root.componentId}}" data-owner="{{@root.owner}}" data-remove-child>
+			Update
+		</button>
+	</td>
+</script>
+
+<script id="updatable-row" type="text/x-handlebars-template">
+	<td data-part="id" data-type="value"></td>
+	<td data-part="name" data-type="value"></td>
+	<td class="center">
+		<button data-child-id="{{@root.componentId}}" data-owner="{{@root.owner}}" data-switch-to="readonly">
+			Cancel
+		</button>
+		<button data-child-id="{{@root.componentId}}" data-owner="{{@root.owner}}" data-update-child>
+			Update
+		</button>
+	</td>
+</script>
 
 <script id="list-item-template" type="text/x-handlebars-template">
 	{{#with value}}
