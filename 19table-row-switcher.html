@@ -83,7 +83,7 @@
 			Cancel
 		</button>
 		<button data-child-id="{{@root.componentId}}" data-owner="{{@root.owner}}" data-remove-child>
-			Update
+			Remove
 		</button>
 	</td>
 </script>
@@ -99,22 +99,6 @@
 			Update
 		</button>
 	</td>
-</script>
-
-<script id="list-item-template" type="text/x-handlebars-template">
-	{{#with value}}
-		<td>{{id}}</td>
-		<td>{{name}}</td>
-		<td class="center">
-			<!--
-				@root.componentId is the current component's id; here the current component is <tr>
-				@root.owner is the parent's id; here the parent component is <tbody>
-			-->
-			<button data-child-id="{{@root.componentId}}" data-owner="{{@root.owner}}" data-remove-child>
-				Remove
-			</button>
-		</td>
-	{{/with}}
 </script>
 
 <script id="debugger-template" type="text/x-handlebars-template">
