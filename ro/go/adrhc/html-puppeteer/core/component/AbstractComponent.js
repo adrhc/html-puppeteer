@@ -105,7 +105,11 @@ export default class AbstractComponent {
             `partName is null! componentId = ${this.id}`);
         isTrue(this.parent != null,
             `parent is null! partName = ${this.partName}, componentId = ${this.id}`);
-        this.replaceState(this.parent.getPart(this.partName));
+        if (this.partName === "") {
+            this.replaceState(this.parent.getStateCopy());
+        } else {
+            this.replaceState(this.parent.getPart(this.partName));
+        }
     }
 
     /**
