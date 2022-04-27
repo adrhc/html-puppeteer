@@ -1,7 +1,7 @@
 import {jQueryOf} from "../../../util/Utils.js";
 import {withDefaults} from "../options/ComponentOptionsBuilder.js";
 import ContainerEventsBinder from "../events-binder/ContainerEventsBinder.js";
-import {stateIsEmpty} from "../../state/StateHolder.js";
+import {isStateEmpty} from "../../state/StateHolder.js";
 import {partsOf} from "../../state/PartialStateHolder.js";
 import {isTrue} from "../../../util/AssertionUtils.js";
 import AbstractContainerComponent from "./AbstractContainerComponent.js";
@@ -59,7 +59,7 @@ export default class DynamicContainerComponent extends AbstractContainerComponen
      */
     replacePart(previousPartName, newPart, newPartName, dontRecordChanges) {
         const partName = newPartName ?? previousPartName;
-        if (stateIsEmpty(newPart)) {
+        if (isStateEmpty(newPart)) {
             this.childrenCollection.closeAndRemoveByPartName(partName);
             super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
         } else {

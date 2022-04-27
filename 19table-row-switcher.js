@@ -6,8 +6,13 @@ import {registerComponentType} from "./ro/go/adrhc/html-puppeteer/core/Component
 import StaticContainerComponent
     from "./ro/go/adrhc/html-puppeteer/core/component/containers/StaticContainerComponent.js";
 import RemovableSwitchEventsBinder from "./ro/go/adrhc/app/components/event-binders/RemovableSwitchEventsBinder.js";
+import UpdatableSwitchEventsBinder from "./ro/go/adrhc/app/components/event-binders/UpdatableSwitchEventsBinder.js";
 
 $(() => {
+    registerComponentType("updatable-switch", (options =>
+        new StaticContainerComponent(withDefaults(options)
+            .addEventsBinders(c => new UpdatableSwitchEventsBinder(c))
+            .options())));
     registerComponentType("removable-switch", (options =>
         new StaticContainerComponent(withDefaults(options)
             .addEventsBinders(c => new RemovableSwitchEventsBinder(c))

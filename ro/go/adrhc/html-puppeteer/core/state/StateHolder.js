@@ -31,6 +31,9 @@ export default class StateHolder {
         return this._stateChangesCollector;
     }
 
+    /** 
+     * @return {boolean}
+     */
     get ignoreDuplicatedUpdates() {
         return this.config.ignoreDuplicatedUpdates;
     }
@@ -63,7 +66,7 @@ export default class StateHolder {
      * @return {boolean}
      */
     isEmpty() {
-        return stateIsEmpty(this._currentState);
+        return isStateEmpty(this._currentState);
     }
 
     /**
@@ -131,6 +134,6 @@ export default class StateHolder {
     }
 }
 
-export function stateIsEmpty(state) {
+export function isStateEmpty(state) {
     return state == null;
 }

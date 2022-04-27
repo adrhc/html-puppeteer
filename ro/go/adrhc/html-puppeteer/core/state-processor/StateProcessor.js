@@ -35,7 +35,7 @@ export class StateProcessor {
     /**
      * @return {boolean}
      */
-    stateIsEmpty() {
+    isStateEmpty() {
         return this.stateHolder.isEmpty();
     }
 

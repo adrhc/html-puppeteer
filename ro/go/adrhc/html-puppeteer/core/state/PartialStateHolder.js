@@ -1,4 +1,4 @@
-import StateHolder, {stateIsEmpty} from "./StateHolder.js";
+import StateHolder, {isStateEmpty} from "./StateHolder.js";
 import {isTrue} from "../../util/AssertionUtils.js";
 import {removeByIndex, updateOrInsert} from "../../util/ArrayUtils.js";
 import PartStateChange from "./change/PartStateChange.js";
@@ -22,7 +22,7 @@ export default class PartialStateHolder extends StateHolder {
      * @return {boolean}
      */
     hasEmptyPart(partName) {
-        return stateIsEmpty(_.get(this._currentState, partName));
+        return isStateEmpty(_.get(this._currentState, partName));
     }
 
     /**

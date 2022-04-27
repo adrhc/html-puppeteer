@@ -37,6 +37,7 @@ export default class AbstractComponent {
      */
     dataAttributes;
     /**
+     * specify whether eventsBinder?.attachEventHandlers() was called or not
      * @type {boolean}
      */
     eventHandlersBound;
@@ -129,8 +130,8 @@ export default class AbstractComponent {
     /**
      * @return {boolean}
      */
-    stateIsEmpty() {
-        return this.stateProcessor.stateIsEmpty();
+    isStateEmpty() {
+        return this.stateProcessor.isStateEmpty();
     }
 
     /**

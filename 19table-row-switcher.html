@@ -48,7 +48,7 @@
 				<td data-active-name="readonly" data-part="" data-template-id="readonly-row"
 				    data-type="static-container"></td>
 				<td data-active-name="updatable" data-part="" data-template-id="updatable-row"
-				    data-type="static-container"></td>
+				    data-type="updatable-switch"></td>
 				<td data-active-name="removable" data-part="" data-template-id="removable-row"
 				    data-type="removable-switch"></td>
 			</tr>
@@ -67,10 +67,10 @@
 	<td data-part="name" data-type="value"></td>
 	<td class="center">
 		<button data-child-id="{{@root.componentId}}" data-owner="{{@root.owner}}" data-switch-to="removable">
-			Got to remove
+			Go to remove
 		</button>
 		<button data-child-id="{{@root.componentId}}" data-owner="{{@root.owner}}" data-switch-to="updatable">
-			Got to update
+			Go to update
 		</button>
 	</td>
 </script>

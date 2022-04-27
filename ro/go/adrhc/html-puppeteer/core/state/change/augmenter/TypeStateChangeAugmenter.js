@@ -12,14 +12,14 @@ import {CREATED, RELOCATED, REMOVED, REPLACED} from "../StateChangeTypes.js";
  */
 export default class TypeStateChangeAugmenter extends StateChangeAugmenter {
     /**
-     * @param {PartStateChange<SCT, SCP>} stateChange
+     * @param {PartStateChange<SCT, SCP>} partStateChange
      * @return {PartStateChange<SCT, SCP>}
      */
-    augment(stateChange) {
-        if (stateChange) {
-            stateChange.changeType = stateChange.changeType ?? this._changeTypeOf(stateChange);
+    augment(partStateChange) {
+        if (partStateChange) {
+            partStateChange.changeType = partStateChange.changeType ?? this._changeTypeOf(partStateChange);
         }
-        return stateChange;
+        return partStateChange;
     }
 
     /**

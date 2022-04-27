@@ -42,25 +42,11 @@ export default class StateChangesCollector {
     }
 
     /**
-     * @return {StateChange<SCT>}
-     */
-    consumeOne() {
-        return this.stateChanges.shift();
-    }
-
-    /**
      * @return {StateChange<SCT>[]}
      */
     consumeAll() {
         const changes = this.stateChanges;
         this.stateChanges = [];
         return changes;
-    }
-
-    /**
-     * @param {StateChangesCollector} stateChangesCollector
-     */
-    collectByConsumingChanges(stateChangesCollector) {
-        stateChangesCollector.consumeAll().forEach(stateChange => this.collect(stateChange));
     }
 }

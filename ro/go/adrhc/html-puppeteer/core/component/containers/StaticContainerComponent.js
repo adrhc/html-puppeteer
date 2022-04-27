@@ -1,4 +1,4 @@
-import {stateIsEmpty} from "../../state/StateHolder.js";
+import {isStateEmpty} from "../../state/StateHolder.js";
 import AbstractContainerComponent from "./AbstractContainerComponent.js";
 import {isTrue} from "../../../util/AssertionUtils.js";
 
@@ -48,7 +48,7 @@ export default class StaticContainerComponent extends AbstractContainerComponent
      */
     replacePart(previousPartName, newPart, newPartName, dontRecordChanges) {
         const partName = newPartName ?? previousPartName;
-        if (stateIsEmpty(newPart)) {
+        if (isStateEmpty(newPart)) {
             this.childrenCollection.getChildrenByPartName(partName).forEach(it => it.close());
             super.replacePart(previousPartName, newPart, newPartName, dontRecordChanges);
         } else {
